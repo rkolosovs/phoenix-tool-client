@@ -13,7 +13,7 @@
 	var moveX = 0;
 	var moveY = 0;
 
-	$.getScript("map.js", function(){}); //use jQuery to load scripts from another .js file
+	$.getScript("map.js", function(){ drawStuff(); }); //use jQuery to load scripts from another .js file
 
 
 	// resize the canvas to fill browser window dynamically
