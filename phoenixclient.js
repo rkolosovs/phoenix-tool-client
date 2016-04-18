@@ -1,8 +1,8 @@
 (function () {
 	'use strict';
 
-	var canvas = document.getElementById('hexCanvas');
-	var ctx = canvas.getContext('2d');
+	var canvas = document.getElementById('hexCanvas'); //get the canvas element from the HTML document
+	var ctx = canvas.getContext('2d'); //get the context of the canvas
 
 	var mousePressed = false; //was the mouse button klicked but not yet released?
 	var isDragging = false; //was the mouse moved while the button is down?
@@ -20,19 +20,21 @@
 	window.addEventListener('resize', resizeCanvas, false);
 
 	window.addEventListener('mousedown', function(event){
+		//TODO: only do the following on left click
     	mousePressed = true;
     	clickX = event.pageX; //record the x coordinate of the mouse when it was clicked
     	clickY = event.pageY; //record the y coordinate of the mouse when it was clicked
 	});
 
 	window.addEventListener('mouseup', function(){
-    	mousePressed = false;
-    	isDragging = false;
-    	clickX = 0;
+		//TODO: only do the following on left click
+    	mousePressed = false; //mouse is no longer pressed
+    	isDragging = false; //mouse is no longer being dragged; click detection goes before this!
+    	clickX = 0; //reset click registration
     	clickY = 0;
     	originX += moveX; //add the x offset from dragged mouse to the current x origin for drawing
     	originY += moveY; //add the y offset from dragged mouse to the current y origin for drawing
-    	moveX = 0;
+    	moveX = 0; //reset move registration
     	moveY = 0;
 	});
 
@@ -68,41 +70,41 @@
 		var x = originX + moveX; //current x origin for drawing + x offset from dragged mouse
 		var y = originY + moveY; //current y origin for drawing + y offset from dragged mouse
 
-		// for (var i = 0; i < 51; i++) {
-		// 	for (var j = 0; j < 45; j++) {
-		// 		switch((i+j)%7){
-		// 			case 0: ctx.fillStyle=test;
-		// 			break;
+		for (var i = 0; i < 51; i++) {
+			for (var j = 0; j < 45; j++) {
+				switch((i+j)%7){
+					case 0: ctx.fillStyle=test;
+					break;
 
-		// 			case 1: ctx.fillStyle="orange";
-		// 			break;
+					case 1: ctx.fillStyle="orange";
+					break;
 
-		// 			case 2: ctx.fillStyle="yellow";
-		// 			break;
+					case 2: ctx.fillStyle="yellow";
+					break;
 
-		// 			case 3: ctx.fillStyle="green";
-		// 			break;
+					case 3: ctx.fillStyle="green";
+					break;
 
-		// 			case 4: ctx.fillStyle="blue";
-		// 			break;
+					case 4: ctx.fillStyle="blue";
+					break;
 
-		// 			case 5: ctx.fillStyle="indigo";
-		// 			break;
+					case 5: ctx.fillStyle="indigo";
+					break;
 
-		// 			case 6: ctx.fillStyle="purple";
-		// 			break;
+					case 6: ctx.fillStyle="purple";
+					break;
 
-		// 			default: ctx.fillStyle="black";
-		// 			break;
-		// 		}
-		// 		if (i%2 === 0) {
-		// 			ctx.fillRect(x+(i*50), y+25+(j*50), 50, 50);
-		// 		}
-		// 		else {	
-		// 			ctx.fillRect(x+(i*50), y+(j*50), 50, 50);
-		// 		}
+					default: ctx.fillStyle="black";
+					break;
+				}
+				if (i%2 === 0) {
+					ctx.fillRect(x+(i*50), y+25+(j*50), 50, 50);
+				}
+				else {	
+					ctx.fillRect(x+(i*50), y+(j*50), 50, 50);
+				}
 
-		// 	}
-		// }
+			}
+		}
 	}
 })();
