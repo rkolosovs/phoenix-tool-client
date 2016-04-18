@@ -4,14 +4,14 @@
 	var canvas = document.getElementById('hexCanvas');
 	var ctx = canvas.getContext('2d');
 
-	var mousePressed = false;
-	var isDragging = false;
-	var originX = 0;
-	var originY = 0;
-	var clickX = 0;
-	var clickY = 0;
-	var moveX = 0;
-	var moveY = 0;
+	var mousePressed = false; //was the mouse button klicked but not yet released?
+	var isDragging = false; //was the mouse moved while the button is down?
+	var originX = 0; //x coordinate of the origin in respect to which all drawing is done
+	var originY = 0; //y coodrinate of the origin in respect to which all drawing is done
+	var clickX = 0; //x coordinate of the point where the mouse was clicked
+	var clickY = 0; //y coordinate of the point where the mouse was clicked
+	var moveX = 0; //x distance the mouse was dragged
+	var moveY = 0; //y distance the mouse was dragged
 
 	$.getScript("map.js", function(){ drawStuff(); }); //use jQuery to load scripts from another .js file
 
@@ -62,7 +62,7 @@
 
     //all the stuff to be drawn goes in this method
 	function drawStuff() {
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.clearRect(0, 0, canvas.width, canvas.height); //clear 
 
 		//do all drawing/element selection in respect to these coordinates
 		var x = originX + moveX; //current x origin for drawing + x offset from dragged mouse
