@@ -12,9 +12,9 @@
 	var clickY = 0; //y coordinate of the point where the mouse was clicked
 	var moveX = 0; //x distance the mouse was dragged
 	var moveY = 0; //y distance the mouse was dragged
+	var scale = 25; //the scale of the elements, specifically the width
 
 	$.getScript("map.js", function(){ drawStuff(); }); //use jQuery to load scripts from another .js file
-
 
 	// resize the canvas to fill browser window dynamically
 	window.addEventListener('resize', resizeCanvas, false);
@@ -45,6 +45,19 @@
     		moveY = event.pageY - clickY; //compute the y offset from dragged mouse
     		drawStuff();
     	}
+	});
+
+	window.addEventListener('wheel', function(event) {
+		//TODO: center the scroll on the mouse
+		var deltaY = event.deltaY;
+		if (deltaY < 0) {
+			scale += 5;
+			drawStuff();
+		}
+		else {
+			scale -= 5;
+			drawStuff();
+		}
 	});
 
 	// window.addEventListener('keydown', function (event) {
@@ -98,10 +111,10 @@
 					break;
 				}
 				if (i%2 === 0) {
-					ctx.fillRect(x+(i*50), y+25+(j*50), 50, 50);
+					ctx.fillRect(x+(i*scale), y+(scale/2)+(j*scale), scale, scale);
 				}
 				else {	
-					ctx.fillRect(x+(i*50), y+(j*50), 50, 50);
+					ctx.fillRect(x+(i*scale), y+(j*scale), scale, scale);
 				}
 
 			}
