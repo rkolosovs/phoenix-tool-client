@@ -43,14 +43,12 @@
     				}
     			});
 
+    			// window.addEventListener('keydown', function (event) {
+    			// 	drawStuff();
+    			// });
 
-
-    			window.addEventListener('keydown', function (event) {
-    				drawStuff();
-    			});
-
-    			window.addEventListener('keyup', function () {
-    			});
+    			// window.addEventListener('keyup', function () {
+    			// });
 
     			function resizeCanvas() {
     	        	canvas.width = window.innerWidth;
