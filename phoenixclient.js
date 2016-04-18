@@ -13,7 +13,7 @@
 	var moveX = 0;
 	var moveY = 0;
 
-	// var test = map.color;
+	$.getScript("map.js", function(){}); //use jQuery to load scripts from another .js file
 
 
 	// resize the canvas to fill browser window dynamically
@@ -69,7 +69,7 @@
 		for (var i = 0; i < 51; i++) {
 			for (var j = 0; j < 45; j++) {
 				switch((i+j)%7){
-					case 0: ctx.fillStyle="red";
+					case 0: ctx.fillStyle=test;
 					break;
 
 					case 1: ctx.fillStyle="orange";

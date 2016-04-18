@@ -1,1 +1,1 @@
-var color = "teal";
+var test = "teal";

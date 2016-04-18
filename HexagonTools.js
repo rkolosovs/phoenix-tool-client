@@ -2,9 +2,6 @@
  * Author: Matt Palmerlee
  * http://www.mattpalmerlee.com/
  */
-/*(function(){
-	'use strict';
-	var app = angular.module('hextools', []);*/
 
 var HT = HT || {};
 /**
