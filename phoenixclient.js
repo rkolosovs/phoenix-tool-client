@@ -48,27 +48,27 @@
 	});
 
 	window.addEventListener('wheel', function(event) {
-		//TODO: center the scroll on the mouse
-		var deltaY = event.deltaY;
-		var mouseX = event.pageX;
+		var deltaY = event.deltaY; //get amount scrolled
+		var mouseX = event.pageX; //get current mouse position
 		var mouseY = event.pageY;
-		var posX = (mouseX - originX) / scale;
+		var posX = (mouseX - originX) / scale; //get the tile the mouse is currently in (and the position in the tile)
 		var posY = (mouseY - originY) / scale;
-		if (deltaY < 0) {
+
+		if (deltaY < 0) { //do the actuall scrolling
 			scale += 5;
-			// drawStuff();
 		}
 		else {
 			scale -= 5;
-			// drawStuff();
 		}
-		var newX = posX * scale;
+
+		var newX = posX * scale; //compute the new distance of mouse from origin
 		var newY = posY * scale;
-		originX = mouseX - newX;
+		originX = mouseX - newX; //move origin so that the tile stays the same with the new scaling
 		originY = mouseY - newY;
 		drawStuff();
 	});
 
+	//TODO: implement scrolling with keyboard
 	// window.addEventListener('keydown', function (event) {
 	// 	drawStuff();
 	// });
