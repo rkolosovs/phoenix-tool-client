@@ -71,7 +71,6 @@
 
 	//TODO: implement scrolling with keyboard
 	// window.addEventListener('keydown', function (event) {
-	// 	drawStuff();
 	// });
 
 	// window.addEventListener('keyup', function () {
