@@ -1,3 +1,4 @@
+// (function () {
 var terrain = {
 	shallows: 0, //"Wasser" in Erkenfara rules
 	deepsea: 1, //"Tiefsee" in Erkenfara rules
@@ -95,7 +96,7 @@ function drawMap(ctx, x, y, scale) {
 
 			case terrain.swamp: ctx.fillStyle="purple";
 			break;
-			
+
 			default: ctx.fillStyle="black";
 			break;
 		}
@@ -105,4 +106,4 @@ function drawMap(ctx, x, y, scale) {
 		ctx.fillRect(xpos, ypos, scale, scale); //draw field; TODO: actually draw hexagons instead of squares
 	}
 }
-
+// })();
