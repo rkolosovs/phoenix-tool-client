@@ -50,14 +50,23 @@
 	window.addEventListener('wheel', function(event) {
 		//TODO: center the scroll on the mouse
 		var deltaY = event.deltaY;
+		var mouseX = event.pageX;
+		var mouseY = event.pageY;
+		var posX = (mouseX - originX) / scale;
+		var posY = (mouseY - originY) / scale;
 		if (deltaY < 0) {
 			scale += 5;
-			drawStuff();
+			// drawStuff();
 		}
 		else {
 			scale -= 5;
-			drawStuff();
+			// drawStuff();
 		}
+		var newX = posX * scale;
+		var newY = posY * scale;
+		originX = mouseX - newX;
+		originY = mouseY - newY;
+		drawStuff();
 	});
 
 	// window.addEventListener('keydown', function (event) {
