@@ -13,7 +13,7 @@
 	var clickY = 0; //y coordinate of the point where the mouse was clicked
 	var moveX = 0; //x distance the mouse was dragged
 	var moveY = 0; //y distance the mouse was dragged
-	var scale = 25; //the scale of the elements, specifically the width
+	var scale = 30; //the scale of the elements, specifically the width
 
 	$.getScript("map.js", function(){ drawStuff(); }); //use jQuery to load scripts from another .js file
 
@@ -92,41 +92,34 @@
 		var x = originX + moveX; //current x origin for drawing + x offset from dragged mouse
 		var y = originY + moveY; //current y origin for drawing + y offset from dragged mouse
 
-		for (var i = 0; i < 51; i++) {
-			for (var j = 0; j < 45; j++) {
-				switch((i+j)%7){
-					case 0: ctx.fillStyle=test;
-					break;
-
-					case 1: ctx.fillStyle="orange";
-					break;
-
-					case 2: ctx.fillStyle="yellow";
-					break;
-
-					case 3: ctx.fillStyle="green";
-					break;
-
-					case 4: ctx.fillStyle="blue";
-					break;
-
-					case 5: ctx.fillStyle="indigo";
-					break;
-
-					case 6: ctx.fillStyle="purple";
-					break;
-
-					default: ctx.fillStyle="black";
-					break;
-				}
-				if (i%2 === 0) {
-					ctx.fillRect(x+(i*scale), y+(scale/2)+(j*scale), scale, scale);
-				}
-				else {	
-					ctx.fillRect(x+(i*scale), y+(j*scale), scale, scale);
-				}
-
+		for (var i = 0; i < field.length; i++) {
+			var currentField = field[i]; //get the current field to draw
+			switch(currentField.type){ //set the field color to match the field type; change color here
+				case terrain.shallows: ctx.fillStyle="blue";
+				break;
+				case terrain.deepsea: ctx.fillStyle="darkblue";
+				break;
+				case terrain.lowlands: ctx.fillStyle="lightgreen";
+				break;
+				case terrain.woods: ctx.fillStyle="darkgreen";
+				break;
+				case terrain.hills: ctx.fillStyle="sandybrown";
+				break;
+				case terrain.highlands: ctx.fillStyle="saddlebrown";
+				break;
+				case terrain.mountains: ctx.fillStyle="grey";
+				break;
+				case terrain.desert: ctx.fillStyle="yellow";
+				break;
+				case terrain.swamp: ctx.fillStyle="purple";
+				break;
+				default: ctx.fillStyle="black";
+				break;
 			}
+			var xpos = x+(currentField.x * scale); //get the current field's position
+			var ypos = y+(currentField.y * scale);
+			if (currentField.y % 2 === 1) {xpos -= scale/2;} //shift every odd row half width to the left
+			ctx.fillRect(xpos, ypos, scale, scale); //draw field; TODO: actually draw hexagons instead of squares
 		}
 	}
 })();
