@@ -4,6 +4,7 @@
 	var canvas = document.getElementById('hexCanvas'); //get the canvas element from the HTML document
 	var ctx = canvas.getContext('2d'); //get the context of the canvas
 
+	var scrollSpeed = 3; //increment to scroll with each step
 	var mousePressed = false; //was the mouse button klicked but not yet released?
 	var isDragging = false; //was the mouse moved while the button is down?
 	var originX = 0; //x coordinate of the origin in respect to which all drawing is done
@@ -55,10 +56,10 @@
 		var posY = (mouseY - originY) / scale;
 
 		if (deltaY < 0) { //do the actuall scrolling
-			scale += 5;
+			scale += scrollSpeed;
 		}
 		else {
-			scale -= 5;
+			scale -= scrollSpeed;
 		}
 
 		var newX = posX * scale; //compute the new distance of mouse from origin
