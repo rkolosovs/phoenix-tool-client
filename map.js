@@ -11,10 +11,11 @@ var terrain = {
 };
 
 var field = [
+//central triangle
 {type: this.terrain.hills,		x: 4,	y: 3},
 {type: this.terrain.highlands,	x: 3,	y: 4},
 {type: this.terrain.woods,		x: 4,	y: 4},
-
+//inner ring
 {type: this.terrain.lowlands,	x: 3,	y: 2},
 {type: this.terrain.lowlands,	x: 4,	y: 2},
 {type: this.terrain.lowlands,	x: 4,	y: 5},
@@ -24,7 +25,7 @@ var field = [
 {type: this.terrain.lowlands,	x: 3,	y: 3},
 {type: this.terrain.lowlands,	x: 5,	y: 3},
 {type: this.terrain.lowlands,	x: 5,	y: 4},
-
+//middle ring
 {type: this.terrain.shallows,	x: 1,	y: 4},
 {type: this.terrain.shallows,	x: 2,	y: 3},
 {type: this.terrain.shallows,	x: 2,	y: 2},
@@ -40,7 +41,7 @@ var field = [
 {type: this.terrain.shallows,	x: 3,	y: 6},
 {type: this.terrain.shallows,	x: 2,	y: 6},
 {type: this.terrain.shallows,	x: 2,	y: 5},
-
+//outer ring
 {type: this.terrain.deepsea,	x: 0,	y: 4},
 {type: this.terrain.deepsea,	x: 1,	y: 3},
 {type: this.terrain.deepsea,	x: 1,	y: 2},
