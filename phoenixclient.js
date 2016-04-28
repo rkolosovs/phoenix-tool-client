@@ -92,34 +92,6 @@
 		var x = originX + moveX; //current x origin for drawing + x offset from dragged mouse
 		var y = originY + moveY; //current y origin for drawing + y offset from dragged mouse
 
-		for (var i = 0; i < field.length; i++) {
-			var currentField = field[i]; //get the current field to draw
-			switch(currentField.type){ //set the field color to match the field type; change color here
-				case terrain.shallows: ctx.fillStyle="blue";
-				break;
-				case terrain.deepsea: ctx.fillStyle="darkblue";
-				break;
-				case terrain.lowlands: ctx.fillStyle="lightgreen";
-				break;
-				case terrain.woods: ctx.fillStyle="darkgreen";
-				break;
-				case terrain.hills: ctx.fillStyle="sandybrown";
-				break;
-				case terrain.highlands: ctx.fillStyle="saddlebrown";
-				break;
-				case terrain.mountains: ctx.fillStyle="grey";
-				break;
-				case terrain.desert: ctx.fillStyle="yellow";
-				break;
-				case terrain.swamp: ctx.fillStyle="purple";
-				break;
-				default: ctx.fillStyle="black";
-				break;
-			}
-			var xpos = x+(currentField.x * scale); //get the current field's position
-			var ypos = y+(currentField.y * scale);
-			if (currentField.y % 2 === 1) {xpos -= scale/2;} //shift every odd row half width to the left
-			ctx.fillRect(xpos, ypos, scale, scale); //draw field; TODO: actually draw hexagons instead of squares
-		}
+		drawMap(ctx, x, y, scale);
 	}
 })();
