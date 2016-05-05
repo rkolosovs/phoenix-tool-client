@@ -66,7 +66,7 @@ var field = [
 {type: this.terrain.deepsea,	x: 1,	y: 5}
 ];
 
-function drawMap(ctx, x, y, scale) {
+function drawMap(ctx, x, y, scale, tileset) {
 	for (var i = 0; i < field.length; i++) {
 		var currentField = field[i]; //get the current field to draw
 		var tileImg = new Image(); //shift every odd row half width to the left
@@ -74,7 +74,7 @@ function drawMap(ctx, x, y, scale) {
 		var ypos = y+(currentField.y * (scale * 0.75)); //only offset 3/4 of the scale in the y direction 
 		if (currentField.y % 2 === 1) {xpos -= scale/2;} //offset each even row half a hex to the left
         	
-      	var imgSource = './tilesets/'+'erkenfara_folienzug'; //start of the image source path; kept in two parts for changable tilests later
+      	var imgSource = './tilesets/'+tileset; //start of the image source path
 		switch(currentField.type){ //extend the field image source to match the field type
 			case terrain.shallows: imgSource += '/shallows.svg';
 			break;

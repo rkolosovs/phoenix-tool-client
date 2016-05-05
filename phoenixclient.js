@@ -4,7 +4,10 @@
 	var canvas = document.getElementById('hexCanvas'); //get the canvas element from the HTML document
 	var ctx = canvas.getContext('2d'); //get the context of the canvas
 
-	var scrollSpeed = 3; //increment to scroll with each step
+	//settings; TODO: let the user change these in game
+	var tileset = "erkenfara_folienzug"; //tileset name
+	var scrollSpeed = 4; //increment to scroll with each step
+
 	var mousePressed = false; //was the mouse button klicked but not yet released?
 	var isDragging = false; //was the mouse moved while the button is down?
 	var originX = 0; //x coordinate of the origin in respect to which all drawing is done
@@ -92,6 +95,6 @@
 		var x = originX + moveX; //current x origin for drawing + x offset from dragged mouse
 		var y = originY + moveY; //current y origin for drawing + y offset from dragged mouse
 
-		drawMap(ctx, x, y, scale);
+		drawMap(ctx, x, y, scale, tileset);
 	}
 })();
