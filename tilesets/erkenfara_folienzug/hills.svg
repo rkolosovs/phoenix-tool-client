@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   version="1.1"
+   id="svg2"
+   viewBox="0 0 9.1776499 8.7941963"
+   height="2.4819176mm"
+   width="2.5901368mm">
+  <defs
+     id="defs4">
+    <pattern
+       id="EMFhbasepattern"
+       patternUnits="userSpaceOnUse"
+       width="6"
+       height="6"
+       x="0"
+       y="0" />
+    <pattern
+       id="EMFhbasepattern-2"
+       patternUnits="userSpaceOnUse"
+       width="6"
+       height="6"
+       x="0"
+       y="0" />
+    <pattern
+       id="EMFhbasepattern-0"
+       patternUnits="userSpaceOnUse"
+       width="6"
+       height="6"
+       x="0"
+       y="0" />
+    <pattern
+       id="EMFhbasepattern-8"
+       patternUnits="userSpaceOnUse"
+       width="6"
+       height="6"
+       x="0"
+       y="0" />
+    <pattern
+       id="EMFhbasepattern-23"
+       patternUnits="userSpaceOnUse"
+       width="6"
+       height="6"
+       x="0"
+       y="0" />
+    <pattern
+       id="EMFhbasepattern-1"
+       patternUnits="userSpaceOnUse"
+       width="6"
+       height="6"
+       x="0"
+       y="0" />
+  </defs>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-332.55404,-330.64508)"
+     id="layer1">
+    <image
+       y="330.41556"
+       x="332.478"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFMAAABfCAIAAAAbEmwsAAACIElEQVR4nO2c0ZLDIAhFTWf//5ftQ2YzqUkUQQFzuU87s1vhBNK1Ntwt55wg9WcYe9u2/QeTq7/ZRP1nPks5E+2aF3W+vQRKmahd6UpvF/w6KSmRU25pZf7p5GeeZixN+InkXcxPL+x9bUeUWeuK/2PN5h9Pzi51fSn5auXiA5cbyKyx7JC1FO7M4fwDyCfVpB5IHktErsb8FFQSl09ugn0bnZcAh9yW+TaNXX27BvYew8kHe3bxqeQmHyroYqTXJnfOfKg3zwa5w/aui87/SL5KqW9FKdgN+dLMh5rv/CX5O7APVXB+yJe7q4m65fpcf51zfhN2eqjih/JHr1RJjqMgf7uudzEK+VVBjqcgx1OQ4ynI8RTkeApyPAU5noIcT7jkoudeDZ9aPcQ+LMatOS65qNuX/loCt+ZBjqcgx1OQ4ynI8RTkeApyPAU5noJ88WMGhlBqfj0sRSHfde7r8hxuvzZv6vwnotqT/avz1yfBG9Mc68I3m5c0wbMWP3Hovza1teJMC/19qm9SzzN8r78DaTrTefF5nhYdE7k++dlWHt1T2H6aX2hfIp0/ZwcWSr7jGuM5IEyCF9fSZyLpNv9YP7nxripuTYnKBYctNK35J1kHTnRPcu5UM8Uxa0jGs10ivbukTUxPze+o18RkeU/AROZXNkE1cMBMV8sHE/8pzb1n/WlR5V2wgdOtB5vbZHLq7MTHwsbd2IOwvmk46wsEOqQTU3YZJQAAAABJRU5ErkJggg=="
+       height="9.1786737"
+       width="9.4824553"
+       preserveAspectRatio="none"
+       id="image4206" />
+  </g>
+</svg>

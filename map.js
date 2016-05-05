@@ -69,41 +69,45 @@ var field = [
 function drawMap(ctx, x, y, scale) {
 	for (var i = 0; i < field.length; i++) {
 		var currentField = field[i]; //get the current field to draw
-		switch(currentField.type){ //set the field color to match the field type; change color here
-			case terrain.shallows: ctx.fillStyle="blue";
+		var tileImg = new Image(); //shift every odd row half width to the left
+		var xpos = x+(currentField.x * scale); //get the current field's position
+		var ypos = y+(currentField.y * (scale * 0.75)); //only offset 3/4 of the scale in the y direction 
+		if (currentField.y % 2 === 1) {xpos -= scale/2;} //offset each even row half a hex to the left
+        	
+      	var imgSource = './tilesets/'+'erkenfara_folienzug'; //start of the image source path; kept in two parts for changable tilests later
+		switch(currentField.type){ //extend the field image source to match the field type
+			case terrain.shallows: imgSource += '/shallows.svg';
 			break;
 
-			case terrain.deepsea: ctx.fillStyle="darkblue";
+			case terrain.deepsea: imgSource += '/deepsea.svg';
 			break;
 
-			case terrain.lowlands: ctx.fillStyle="lightgreen";
+			case terrain.lowlands: imgSource += '/lowlands.svg';
 			break;
 
-			case terrain.woods: ctx.fillStyle="darkgreen";
+			case terrain.woods: imgSource += '/woods.svg';
 			break;
 
-			case terrain.hills: ctx.fillStyle="sandybrown";
+			case terrain.hills: imgSource += '/hills.svg';
 			break;
 
-			case terrain.highlands: ctx.fillStyle="saddlebrown";
+			case terrain.highlands: imgSource += '/highlands.svg';
 			break;
 
-			case terrain.mountains: ctx.fillStyle="grey";
+			case terrain.mountains: imgSource += '/mountains.svg';
 			break;
 
-			case terrain.desert: ctx.fillStyle="yellow";
+			case terrain.desert: imgSource += '/desert.svg';
 			break;
 
-			case terrain.swamp: ctx.fillStyle="purple";
+			case terrain.swamp: imgSource += '/swamp.svg';
 			break;
 
-			default: ctx.fillStyle="black";
+			default: imgSource += '/default.svg';
 			break;
 		}
-		var xpos = x+(currentField.x * scale); //get the current field's position
-		var ypos = y+(currentField.y * scale);
-		if (currentField.y % 2 === 1) {xpos -= scale/2;} //shift every odd row half width to the left
-		ctx.fillRect(xpos, ypos, scale, scale); //draw field; TODO: actually draw hexagons instead of squares
+		tileImg.src = imgSource; //assign the source to the image object
+		ctx.drawImage(tileImg, xpos, ypos, scale, scale); //draw the image
 	}
 }
 // })();
