@@ -1,6 +1,6 @@
 (function () {
 	'use strict';
-
+//Hallo, Julia!
 	var canvas = document.getElementById('hexCanvas'); //get the canvas element from the HTML document
 	var ctx = canvas.getContext('2d'); //get the context of the canvas
 
