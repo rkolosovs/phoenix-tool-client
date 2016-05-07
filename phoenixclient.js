@@ -89,7 +89,7 @@
 	// });
 
 	function registerLeftClick(){
-		//TODO
+		//TODO: Detect the hex in which the click happened and set (or unset) the field selection
 	}
 
 	//canvas resizing method
