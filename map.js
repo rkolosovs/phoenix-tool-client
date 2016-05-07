@@ -10,12 +10,17 @@ var terrain = {
 	swamp: 8 //"Sumpf" in Erkenfara rules
 };
 
-var field; //declare field variable
-$.getJSON("map.json", function(json){
-	field = json; //load the field variable with the json from the map file
-});
+var field = -1; //declare field variable
+
+function loadMap() {
+	$.getJSON("map.json", function(json){
+		field = json; //load the field variable with the json from the map file
+	});
+}
 
 function drawMap(ctx, x, y, scale, tileset) {
+	if (field === -1) {loadMap();}
+
 	for (var i = 0; i < field.length; i++) {
 		var currentField = field[i]; //get the current field to draw
 		var tileImg = new Image(); //shift every odd row half width to the left

@@ -18,16 +18,17 @@
 	var moveY = 0; //y distance the mouse was dragged
 	var scale = 30; //the scale of the elements, specifically the width
 
-	$.getScript("map.js", function(){ drawStuff(); }); //use jQuery to load scripts from another .js file
+	$.getScript("map.js", function(){ drawStuff();}); //use jQuery to load scripts from another .js file
 
 	// resize the canvas to fill browser window dynamically
 	window.addEventListener('resize', resizeCanvas, false);
 
 	window.addEventListener('mousedown', function(event){
-		//TODO: only do the following on left click
-    	mousePressed = true;
-    	clickX = event.pageX; //record the x coordinate of the mouse when it was clicked
-    	clickY = event.pageY; //record the y coordinate of the mouse when it was clicked
+		if (event.button === 0) {
+    		mousePressed = true;
+    		clickX = event.pageX; //record the x coordinate of the mouse when it was clicked
+    		clickY = event.pageY; //record the y coordinate of the mouse when it was clicked
+    	}
 	});
 
 	window.addEventListener('mouseup', function(){
