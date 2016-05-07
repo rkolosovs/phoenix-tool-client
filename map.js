@@ -76,8 +76,7 @@ function drawSelection(ctx, x, y, scale, selectedFields) {
 		if (selectY % 2 === 1) {centerX -= scale/2;}
 
 		ctx.beginPath();
-      	ctx.rect(centerX, centerY, scale, scale);
-      	// ctx.arc(centerX, centerY, scale/2, 0, 2 * Math.PI, false);
+      	ctx.arc(centerX+(scale/2), centerY+(scale/2), scale/2, 0, 2 * Math.PI, false);
       	ctx.lineWidth = 5;
       	ctx.strokeStyle = 'green';
       	ctx.stroke();
