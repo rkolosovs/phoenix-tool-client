@@ -64,3 +64,22 @@ function drawMap(ctx, x, y, scale, tileset) {
 		ctx.drawImage(tileImg, xpos, ypos, scale, scale); //draw the image
 	}
 }
+
+function drawSelection(ctx, x, y, scale, selectedFields) {
+	for (var i = 0; i < selectedFields.length; i++) {
+		var selectedField = selectedFields[i];
+		var selectX = selectedField[0];
+		var selectY = selectedField[1];
+
+		var centerX = x+(selectX*scale);
+		var centerY = y+(selectY*(scale*0.75));
+		if (selectY % 2 === 1) {centerX -= scale/2;}
+
+		ctx.beginPath();
+      	ctx.rect(centerX, centerY, scale, scale);
+      	// ctx.arc(centerX, centerY, scale/2, 0, 2 * Math.PI, false);
+      	ctx.lineWidth = 5;
+      	ctx.strokeStyle = 'green';
+      	ctx.stroke();
+	}
+}

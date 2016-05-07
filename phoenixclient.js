@@ -10,13 +10,14 @@
 
 	var mousePressed = false; //was the mouse button klicked but not yet released?
 	var isDragging = false; //was the mouse moved while the button is down?
+	var scale = 30; //the scale of the elements, specifically the width
+	var selectedFields = [[4, 3],[3, 4],[4, 4]];
 	var originX = 0; //x coordinate of the origin in respect to which all drawing is done
 	var originY = 0; //y coodrinate of the origin in respect to which all drawing is done
 	var clickX = 0; //x coordinate of the point where the mouse was clicked
 	var clickY = 0; //y coordinate of the point where the mouse was clicked
 	var moveX = 0; //x distance the mouse was dragged
 	var moveY = 0; //y distance the mouse was dragged
-	var scale = 30; //the scale of the elements, specifically the width
 
 	$.getScript("map.js", function(){ drawStuff();}); //use jQuery to load scripts from another .js file
 
@@ -33,12 +34,18 @@
 
 	window.addEventListener('mouseup', function(event){
 		if (event.button === 0) {
+			if (isDragging) { //mouse was dragged; run panning finish routine
+    			originX += moveX; //add the x offset from dragged mouse to the current x origin for drawing
+    			originY += moveY; //add the y offset from dragged mouse to the current y origin for drawing
+			}
+			else {
+				registerLeftClick(); //do whatever has to be done on leftclick
+			}
+			//reset mouse click parameters
     		mousePressed = false; //mouse is no longer pressed
-    		isDragging = false; //mouse is no longer being dragged; click detection goes before this!
+    		isDragging = false; //mouse is no longer being dragged
     		clickX = 0; //reset click registration
     		clickY = 0;
-    		originX += moveX; //add the x offset from dragged mouse to the current x origin for drawing
-    		originY += moveY; //add the y offset from dragged mouse to the current y origin for drawing
     		moveX = 0; //reset move registration
     		moveY = 0;
     	}
@@ -67,10 +74,10 @@
 			scale -= scrollSpeed;
 		}
 
-		var newX = posX * scale; //compute the new distance of mouse from origin
-		var newY = posY * scale;
-		originX = mouseX - newX; //move origin so that the tile stays the same with the new scaling
-		originY = mouseY - newY;
+		var newPosX = posX * scale; //compute the new distance of mouse from origin
+		var newPosY = posY * scale;
+		originX = mouseX - newPosX; //move origin so that the tile stays the same with the new scaling
+		originY = mouseY - newPosY;
 		drawStuff();
 	});
 
@@ -78,8 +85,12 @@
 	// window.addEventListener('keydown', function (event) {
 	// });
 
-	// window.addEventListener('keyup', function () {
+	// window.addEventListener('keyup', function (event) {
 	// });
+
+	function registerLeftClick(){
+		//TODO
+	}
 
 	//canvas resizing method
 	function resizeCanvas() {
@@ -98,5 +109,6 @@
 		var y = originY + moveY; //current y origin for drawing + y offset from dragged mouse
 
 		drawMap(ctx, x, y, scale, tileset);
+		drawSelection(ctx, x, y, scale, selectedFields);
 	}
 })();
