@@ -31,16 +31,17 @@
     	}
 	});
 
-	window.addEventListener('mouseup', function(){
-		//TODO: only do the following on left click
-    	mousePressed = false; //mouse is no longer pressed
-    	isDragging = false; //mouse is no longer being dragged; click detection goes before this!
-    	clickX = 0; //reset click registration
-    	clickY = 0;
-    	originX += moveX; //add the x offset from dragged mouse to the current x origin for drawing
-    	originY += moveY; //add the y offset from dragged mouse to the current y origin for drawing
-    	moveX = 0; //reset move registration
-    	moveY = 0;
+	window.addEventListener('mouseup', function(event){
+		if (event.button === 0) {
+    		mousePressed = false; //mouse is no longer pressed
+    		isDragging = false; //mouse is no longer being dragged; click detection goes before this!
+    		clickX = 0; //reset click registration
+    		clickY = 0;
+    		originX += moveX; //add the x offset from dragged mouse to the current x origin for drawing
+    		originY += moveY; //add the y offset from dragged mouse to the current y origin for drawing
+    		moveX = 0; //reset move registration
+    		moveY = 0;
+    	}
 	});
 
 	window.addEventListener('mousemove', function(event) {
