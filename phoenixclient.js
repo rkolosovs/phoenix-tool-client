@@ -29,9 +29,8 @@
     		mousePressed = true;
     		clickX = event.pageX; //record the x coordinate of the mouse when it was clicked
     		clickY = event.pageY; //record the y coordinate of the mouse when it was clicked
-
-    		drawStuff();
     	}
+		drawStuff();
 	});
 
 	window.addEventListener('mouseup', function(event){
@@ -50,9 +49,8 @@
     		clickY = 0;
     		moveX = 0; //reset move registration
     		moveY = 0;
-
-    		drawStuff();
     	}
+    	drawStuff();
 	});
 
 	window.addEventListener('mousemove', function(event) {
@@ -60,8 +58,8 @@
     		isDragging = true; //for later click detection; no click if mouse was previously dragged
     		moveX = event.pageX - clickX; //compute the x offset from dragged mouse
     		moveY = event.pageY - clickY; //compute the y offset from dragged mouse
-    		drawStuff();
     	}
+    	drawStuff();
 	});
 
 	window.addEventListener('wheel', function(event) {
