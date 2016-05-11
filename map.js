@@ -23,10 +23,8 @@ function drawMap(ctx, x, y, scale, tileset) {
 
 	for (var i = 0; i < field.length; i++) {
 		var currentField = field[i]; //get the current field to draw
-		var tileImg = new Image(); //shift every odd row half width to the left
-		var xpos = x+(currentField.x * (scale * 0.866) ); //get the current field's position
-		var ypos = y+(currentField.y * (scale * 1.366/2)); //only offset 3/4 of the scale in the y direction 
-		if (currentField.y % 2 === 1) {xpos -= (scale * 0.866 /2);} //offset each even row half a hex to the left
+		var tileImg = new Image();
+		var pos = computePosition(x, y, currentField.x, currentField.y, scale); //get the fields position
         	
       	var imgSource = './tilesets/'+tileset; //start of the image source path
 		switch(currentField.type){ //extend the field image source to match the field type
@@ -61,24 +59,25 @@ function drawMap(ctx, x, y, scale, tileset) {
 			break;
 		}
 		tileImg.src = imgSource; //assign the source to the image object
-		ctx.drawImage(tileImg, xpos, ypos, (scale*0.866), scale); //draw the image
+		ctx.drawImage(tileImg, pos[0], pos[1], (scale*0.866), scale); //draw the image
 	}
 }
 
 function drawSelection(ctx, x, y, scale, selectedFields) {
 	for (var i = 0; i < selectedFields.length; i++) {
-		var selectedField = selectedFields[i];
-		var selectX = selectedField[0];
-		var selectY = selectedField[1];
+		var selectedField = selectedFields[i]; //get selected field
+		var pos = computePosition(x, y, selectedField[0], selectedField[1], scale); //get fields position
 
-		var centerX = x+(selectX*scale * 0.866);
-		var centerY = y+(selectY*(scale*1.366/2));
-		if (selectY % 2 === 1) {centerX -= scale* 0.866/2;}
-
+		//draw a simple circle; TODO: draw propper selection
 		ctx.beginPath();
-      	ctx.arc(centerX+((scale * 0.866)/2), centerY+(scale /2), scale/2, 0, 2 * Math.PI, false);
+      	ctx.arc(pos[0]+((scale * 0.866)/2), pos[1]+(scale /2), scale/2, 0, 2 * Math.PI, false);
       	ctx.lineWidth = 5;
       	ctx.strokeStyle = 'green';
       	ctx.stroke();
 	}
+}
+
+function computePosition(xOrig, yOrig, xCurr, yCurr, scale) { //computes a fields position
+	var xpos = xOrig + (xCurr * scale * 0.866); //get the current field's x position
+	return [ (yCurr%2===1?(xpos - (scale*0.866/2)):(xpos)), yOrig+(yCurr * scale * 1.366 / 2)]; //each even row is offset half a hex to the left
 }
