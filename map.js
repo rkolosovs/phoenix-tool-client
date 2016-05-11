@@ -79,5 +79,5 @@ function drawSelection(ctx, x, y, scale, selectedFields) {
 
 function computePosition(xOrig, yOrig, xCurr, yCurr, scale) { //computes a fields position
 	var xpos = xOrig + (xCurr * scale * 0.866); //get the current field's x position
-	return [ (yCurr%2===1?(xpos - (scale*0.866/2)):(xpos)), yOrig+(yCurr * scale * 1.366 / 2)]; //each even row is offset half a hex to the left
+	return [ (yCurr%2===1?(xpos - (scale*0.866/2)):(xpos)), yOrig+(yCurr * scale * 1.366 / 2)]; //each odd row is offset half a hex to the left
 }
