@@ -29,11 +29,13 @@
     		mousePressed = true;
     		clickX = event.pageX; //record the x coordinate of the mouse when it was clicked
     		clickY = event.pageY; //record the y coordinate of the mouse when it was clicked
+
+    		drawStuff();
     	}
 	});
 
 	window.addEventListener('mouseup', function(event){
-		if (event.button === 0) {
+		if (mousePressed && event.button === 0) {
 			if (isDragging) { //mouse was dragged; run panning finish routine
     			originX += moveX; //add the x offset from dragged mouse to the current x origin for drawing
     			originY += moveY; //add the y offset from dragged mouse to the current y origin for drawing
@@ -48,6 +50,8 @@
     		clickY = 0;
     		moveX = 0; //reset move registration
     		moveY = 0;
+
+    		drawStuff();
     	}
 	});
 
@@ -89,7 +93,15 @@
 	// });
 
 	function registerLeftClick(){
-		//TODO: Detect the hex in which the click happened and set (or unset) the field selection
+		var clickedField = getClickedField();
+		var index = selectedFields.findIndex(clickedField);
+		if (index === undefined) {selectedFields.push(clickedField);}
+		else {selectedFields.splice(index, 1);}
+	}
+
+	function getClickedField(){
+		//TODO: actually get a field
+		return [4, 3]; //dummy field for testing
 	}
 
 	//canvas resizing method
