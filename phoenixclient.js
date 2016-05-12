@@ -109,8 +109,30 @@
 	}
 
 	function getClickedField(){
-		//TODO: actually get a field
-		return [5, 2]; //dummy field for testing
+		var x = clickX - originX;
+		var y = clickY - originY;
+		var gridHeight = (1.366/2)*scale;
+		var gridWidth = 0.866*scale;
+		var halfWidth = gridWidth/2;
+		var c = scale - gridHeight;
+		var m = c/halfWidth;
+
+		var row = Math.round(y/gridHeight);
+		var rowIsOdd = (row%2 === 1);
+		var column = Math.round((rowIsOdd ? ((x+halfWidth)/gridWidth) : (x/gridWidth)));
+
+		var relY = y - (row * gridHeight);
+		var relX = rowIsOdd ? (x-(column*gridWidth)+halfWidth) : (x-(column*gridWidth));
+
+		if (relY < (-m*relX)+c) {
+			row--;
+			if (rowIsOdd) {column--;}
+		} else if (relY < (m*relX)-c) {
+			row--;
+			if (!rowIsOdd) {column++;}
+		}
+
+		return [column, row]; //return result
 	}
 
 	//canvas resizing method
