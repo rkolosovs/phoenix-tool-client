@@ -11,7 +11,7 @@
 	var mousePressed = false; //was the mouse button klicked but not yet released?
 	var isDragging = false; //was the mouse moved while the button is down?
 	var scale = 30; //the scale of the elements, specifically the width
-	var selectedFields = [[4, 3],[3, 4],[4, 4]];
+	var selectedFields = []; //list of fields to be highlighted
 	var originX = 0; //x coordinate of the origin in respect to which all drawing is done
 	var originY = 0; //y coodrinate of the origin in respect to which all drawing is done
 	var clickX = 0; //x coordinate of the point where the mouse was clicked
@@ -38,6 +38,9 @@
 			if (isDragging) { //mouse was dragged; run panning finish routine
     			originX += moveX; //add the x offset from dragged mouse to the current x origin for drawing
     			originY += moveY; //add the y offset from dragged mouse to the current y origin for drawing
+			}
+			else {
+				registerLeftClick(); //do whatever has to be done on leftclick
 			}
 			//reset mouse click parameters
     		mousePressed = false; //mouse is no longer pressed
@@ -68,8 +71,7 @@
 
 		if (deltaY < 0) { //do the actuall scrolling
 			scale += scrollSpeed;
-		}
-		else {
+		} else {
 			scale -= scrollSpeed;
 		}
 
@@ -86,6 +88,52 @@
 
 	// window.addEventListener('keyup', function (event) {
 	// });
+
+	function registerLeftClick(){
+		var clickedField = getClickedField(); //get selected field
+		var index = -1;
+
+		for (var i = 0; i < selectedFields.length; i++) { //find out, if clickedField is allready selected
+			var sf = selectedFields[i];
+			if ((sf[0] === clickedField[0]) && (sf[1] === clickedField[1])){
+				index = i;
+				break;
+			}
+		}
+
+		if (index === -1) { //if field not yet selected
+			selectedFields.push(clickedField); //add to selection
+		} else { //if allready selected
+			selectedFields.splice(index, 1); //deselect
+		}
+	}
+
+	function getClickedField(){
+		var x = clickX - originX; //reverse our x/y origin offset
+		var y = clickY - originY;
+		var gridHeight = (1.366/2)*scale; //a hexes height minus the lower tip triangle
+		var gridWidth = 0.866*scale; //a hexes width
+		var halfWidth = gridWidth/2; //half a hexes width
+		var c = scale - gridHeight; //the vertical offset of a hexes upper triangle side
+		var m = c/halfWidth; //the inclination of the hexes upper triangle side
+
+		var row = Math.round(y/gridHeight); //get the rectangle clicked in
+		var rowIsOdd = (row%2 === 1);
+		var column = Math.round((rowIsOdd ? ((x+halfWidth)/gridWidth) : (x/gridWidth)));
+
+		var relY = y - (row * gridHeight); //compute relative position of the click in respect to the rectangle
+		var relX = rowIsOdd ? (x-(column*gridWidth)+halfWidth) : (x-(column*gridWidth));
+
+		if (relY < (-m*relX)+c) { //click is in upper left corner
+			row--;
+			if (rowIsOdd) {column--;}
+		} else if (relY < (m*relX)-c) { //click is in upper right corner
+			row--;
+			if (!rowIsOdd) {column++;}
+		}
+
+		return [column, row]; //return result
+	}
 
 	//canvas resizing method
 	function resizeCanvas() {
@@ -104,5 +152,6 @@
 		var y = originY + moveY; //current y origin for drawing + y offset from dragged mouse
 
 		drawMap(ctx, x, y, scale, tileset);
+		drawSelection(ctx, x, y, scale, selectedFields);
 	}
 })();
