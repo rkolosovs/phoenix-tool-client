@@ -39,9 +39,9 @@
     			originX += moveX; //add the x offset from dragged mouse to the current x origin for drawing
     			originY += moveY; //add the y offset from dragged mouse to the current y origin for drawing
 			}
-			else {
-				registerLeftClick(); //do whatever has to be done on leftclick
-			}
+			// else {
+			// 	registerLeftClick(); //do whatever has to be done on leftclick
+			// }
 			//reset mouse click parameters
     		mousePressed = false; //mouse is no longer pressed
     		isDragging = false; //mouse is no longer being dragged
@@ -90,17 +90,17 @@
 	// window.addEventListener('keyup', function (event) {
 	// });
 
-	function registerLeftClick(){
-		var clickedField = getClickedField();
-		var index = selectedFields.findIndex(clickedField);
-		if (index === undefined) {selectedFields.push(clickedField);}
-		else {selectedFields.splice(index, 1);}
-	}
+	// function registerLeftClick(){
+	// 	var clickedField = getClickedField();
+	// 	var index = selectedFields.findIndex(clickedField);
+	// 	if (index === undefined) {selectedFields.push(clickedField);}
+	// 	else {selectedFields.splice(index, 1);}
+	// }
 
-	function getClickedField(){
-		//TODO: actually get a field
-		return [4, 3]; //dummy field for testing
-	}
+	// function getClickedField(){
+	// 	//TODO: actually get a field
+	// 	return [4, 3]; //dummy field for testing
+	// }
 
 	//canvas resizing method
 	function resizeCanvas() {
@@ -119,6 +119,6 @@
 		var y = originY + moveY; //current y origin for drawing + y offset from dragged mouse
 
 		drawMap(ctx, x, y, scale, tileset);
-		drawSelection(ctx, x, y, scale, selectedFields);
+		// drawSelection(ctx, x, y, scale, selectedFields);
 	}
 })();
