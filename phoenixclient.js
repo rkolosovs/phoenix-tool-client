@@ -35,13 +35,13 @@
 
 	window.addEventListener('mouseup', function(event){
 		if (mousePressed && event.button === 0) {
-			if (isDragging) { //mouse was dragged; run panning finish routine
-    			originX += moveX; //add the x offset from dragged mouse to the current x origin for drawing
-    			originY += moveY; //add the y offset from dragged mouse to the current y origin for drawing
-			}
-			else {
+			// if (isDragging) { //mouse was dragged; run panning finish routine
+   //  			originX += moveX; //add the x offset from dragged mouse to the current x origin for drawing
+   //  			originY += moveY; //add the y offset from dragged mouse to the current y origin for drawing
+			// }
+			// else {
 				registerLeftClick(); //do whatever has to be done on leftclick
-			}
+			// }
 			//reset mouse click parameters
     		mousePressed = false; //mouse is no longer pressed
     		isDragging = false; //mouse is no longer being dragged
@@ -56,8 +56,8 @@
 	window.addEventListener('mousemove', function(event) {
     	if (mousePressed === true) {
     		isDragging = true; //for later click detection; no click if mouse was previously dragged
-    		moveX = event.pageX - clickX; //compute the x offset from dragged mouse
-    		moveY = event.pageY - clickY; //compute the y offset from dragged mouse
+    		// moveX = event.pageX - clickX; //compute the x offset from dragged mouse
+    		// moveY = event.pageY - clickY; //compute the y offset from dragged mouse
     	}
     	drawStuff();
 	});
@@ -71,8 +71,7 @@
 
 		if (deltaY < 0) { //do the actuall scrolling
 			scale += scrollSpeed;
-		}
-		else {
+		} else {
 			scale -= scrollSpeed;
 		}
 
@@ -92,14 +91,26 @@
 
 	function registerLeftClick(){
 		var clickedField = getClickedField();
-		var index = selectedFields.findIndex(clickedField);
-		if (index === undefined) {selectedFields.push(clickedField);}
-		else {selectedFields.splice(index, 1);}
+		var index = -1;
+		
+		for (var i = 0; i < selectedFields.length; i++) {
+			var sf = selectedFields[i];
+			if ((sf[0] === clickedField[0]) && (sf[1] === clickedField[1])){
+				index = i;
+				break;
+			}
+		}
+
+		if (index === -1) {
+			selectedFields.push(clickedField);
+		} else {
+			selectedFields.splice(index, 1);
+		}
 	}
 
 	function getClickedField(){
 		//TODO: actually get a field
-		return [4, 3]; //dummy field for testing
+		return [5, 2]; //dummy field for testing
 	}
 
 	//canvas resizing method
