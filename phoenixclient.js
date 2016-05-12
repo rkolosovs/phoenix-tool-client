@@ -109,25 +109,25 @@
 	}
 
 	function getClickedField(){
-		var x = clickX - originX;
+		var x = clickX - originX; //reverse our x/y origin offset
 		var y = clickY - originY;
-		var gridHeight = (1.366/2)*scale;
-		var gridWidth = 0.866*scale;
-		var halfWidth = gridWidth/2;
-		var c = scale - gridHeight;
-		var m = c/halfWidth;
+		var gridHeight = (1.366/2)*scale; //a hexes height minus the lower tip triangle
+		var gridWidth = 0.866*scale; //a hexes width
+		var halfWidth = gridWidth/2; //half a hexes width
+		var c = scale - gridHeight; //the vertical offset of a hexes upper triangle side
+		var m = c/halfWidth; //the inclination of the hexes upper triangle side
 
-		var row = Math.round(y/gridHeight);
+		var row = Math.round(y/gridHeight); //get the rectangle clicked in
 		var rowIsOdd = (row%2 === 1);
 		var column = Math.round((rowIsOdd ? ((x+halfWidth)/gridWidth) : (x/gridWidth)));
 
-		var relY = y - (row * gridHeight);
+		var relY = y - (row * gridHeight); //compute relative position of the click in respect to the rectangle
 		var relX = rowIsOdd ? (x-(column*gridWidth)+halfWidth) : (x-(column*gridWidth));
 
-		if (relY < (-m*relX)+c) {
+		if (relY < (-m*relX)+c) { //click is in upper left corner
 			row--;
 			if (rowIsOdd) {column--;}
-		} else if (relY < (m*relX)-c) {
+		} else if (relY < (m*relX)-c) { //click is in upper right corner
 			row--;
 			if (!rowIsOdd) {column++;}
 		}
