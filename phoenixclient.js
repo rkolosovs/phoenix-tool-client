@@ -19,7 +19,12 @@
 	var moveX = 0; //x distance the mouse was dragged
 	var moveY = 0; //y distance the mouse was dragged
 
-	$.getScript("map.js", function(){ drawStuff();}); //use jQuery to load scripts from another .js file
+	$.getScript("map.js", //use jQuery to load scripts from another .js file
+		function(){ 	//after loading script, run all initialization methods
+			loadMap();
+			loadImages(tileset);
+			drawStuff();
+		}); 
 
 	// resize the canvas to fill browser window dynamically
 	window.addEventListener('resize', resizeCanvas, false);

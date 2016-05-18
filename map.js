@@ -11,6 +11,17 @@ var terrain = {
 };
 
 var field = -1; //declare field variable
+var shallowsImg = new Image(); //declare variables for all used images; TODO: organize them properly
+var deepseaImg = new Image();
+var lowlandsImg = new Image();
+var woodsImg = new Image();
+var hillsImg = new Image();
+var highlandsImg = new Image();
+var mountainsImg = new Image();
+var desertImg = new Image();
+var swampImg = new Image();
+var defaultImg = new Image();
+
 
 function loadMap() {
 	$.getJSON("map.json", function(json){
@@ -18,47 +29,58 @@ function loadMap() {
 	});
 }
 
-function drawMap(ctx, x, y, scale, tileset) {
-	if (field === -1) {loadMap();}
+function loadImages(tileset) { //load the images needed for visualization
+	var pathPrefix = './tilesets/'+tileset; //build the path prefix common to all tile images
 
+	shallowsImg.src = pathPrefix+'/shallows.svg';
+	deepseaImg.src = pathPrefix+'/deepsea.svg';
+	lowlandsImg.src = pathPrefix+'/lowlands.svg';
+	woodsImg.src = pathPrefix+'/woods.svg';
+	hillsImg.src = pathPrefix+'/hills.svg';
+	highlandsImg.src = pathPrefix+'/highlands.svg';
+	mountainsImg.src = pathPrefix+'/mountains.svg';
+	desertImg.src = pathPrefix+'/desert.svg';
+	swampImg.src = pathPrefix+'/swamp.svg';
+	defaultImg.src = pathPrefix+'/default.svg';	
+}
+
+function drawMap(ctx, x, y, scale, tileset) {
 	for (var i = 0; i < field.length; i++) {
 		var currentField = field[i]; //get the current field to draw
-		var tileImg = new Image();
+		var tileImg; //declare the tile image variable
 		var pos = computePosition(x, y, currentField.x, currentField.y, scale); //get the fields position
         	
-      	var imgSource = './tilesets/'+tileset; //start of the image source path
-		switch(currentField.type){ //extend the field image source to match the field type
-			case terrain.shallows: imgSource += '/shallows.svg';
+		switch(currentField.type){ //set the tileImg to match the field type
+			case terrain.shallows: tileImg = shallowsImg;
 			break;
 
-			case terrain.deepsea: imgSource += '/deepsea.svg';
+			case terrain.deepsea: tileImg = deepseaImg;
 			break;
 
-			case terrain.lowlands: imgSource += '/lowlands.svg';
+			case terrain.lowlands: tileImg = lowlandsImg;
 			break;
 
-			case terrain.woods: imgSource += '/woods.svg';
+			case terrain.woods: tileImg = woodsImg;
 			break;
 
-			case terrain.hills: imgSource += '/hills.svg';
+			case terrain.hills: tileImg = hillsImg;
 			break;
 
-			case terrain.highlands: imgSource += '/highlands.svg';
+			case terrain.highlands: tileImg = highlandsImg;
 			break;
 
-			case terrain.mountains: imgSource += '/mountains.svg';
+			case terrain.mountains: tileImg = mountainsImg;
 			break;
 
-			case terrain.desert: imgSource += '/desert.svg';
+			case terrain.desert: tileImg = desertImg;
 			break;
 
-			case terrain.swamp: imgSource += '/swamp.svg';
+			case terrain.swamp: tileImg = swampImg;
 			break;
 
-			default: imgSource += '/default.svg';
+			default: tileImg = defaultImg;
 			break;
 		}
-		tileImg.src = imgSource; //assign the source to the image object
 		ctx.drawImage(tileImg, pos[0], pos[1], (scale*0.866), scale); //draw the image
 	}
 }
