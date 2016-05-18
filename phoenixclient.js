@@ -6,7 +6,7 @@
 
 	//settings; TODO: let the user change these in game
 	var tileset = "erkenfara_folienzug"; //tileset name
-	var scrollSpeed = 4; //increment to scroll with each step
+	var scrollSpeed = 0.3; //increment to scroll with each step
 
 	var mousePressed = false; //was the mouse button klicked but not yet released?
 	var isDragging = false; //was the mouse moved while the button is down?
@@ -75,9 +75,9 @@
 		var posY = (mouseY - originY) / scale;
 
 		if (deltaY < 0) { //do the actuall scrolling
-			scale += scrollSpeed;
+			scale *= 1+scrollSpeed;
 		} else {
-			scale -= scrollSpeed;
+			scale *= 1-scrollSpeed;
 		}
 
 		var newPosX = posX * scale; //compute the new distance of mouse from origin
