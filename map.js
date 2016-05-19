@@ -28,7 +28,7 @@ function loadMap() {
 	$.getJSON("map.json", function(json){
 		var map = json; //load the map from the map.json file
 		fields = map.fields;
-		rivers = map.rivers;
+		rivers = map.rivers; //rivers are the coordinates of two fields on either side of the river
 	});
 }
 
@@ -53,8 +53,45 @@ function drawMap(ctx, x, y, scale) {
 }
 
 function drawRivers(ctx, x, y, scale) {
+	var gridWidth = 0.866*scale; //same measures as in field clicked in detection
+	var halfWidth = gridWidth/2;
+	var gridHeight = (1.366/2)*scale;
+	var c = scale-gridHeight;
+
+	ctx.lineWidth = (scale/8);
+	ctx.strokeStyle="#0099FF";
+	ctx.lineCap="round";
+
 	for (var i = 0; i < rivers.length; i++) {
-		//TODO
+		var river = rivers[i];
+		var pos = computePosition(x, y, (river[0][0]), (river[0][1]), scale);
+		var points = [pos, pos];
+		var rowOdd = (river[0][1])%2 === 1;
+
+		if((river[0][1]) === (river[1][1])) { //same row (w/e)
+			if ((river[0][0]) > (river[1][0])) { //second field left (w)
+				points = [[(pos[0]), (pos[1]+c)], [(pos[0]), (pos[1]+gridHeight)]];
+			} else { //second field right (e)
+				points = [[(pos[0]+gridWidth), (pos[1]+c)], [(pos[0]+gridWidth), (pos[1]+gridHeight)]];
+			}
+		} else if ((river[0][1]) > (river[1][1])) { //second field above (nw/ne)
+			if ((rowOdd && (river[0][0])===(river[1][0])) || (!rowOdd && (river[0][0])<(river[1][0]))) { //second field right (ne)
+				points = [[(pos[0]+halfWidth), (pos[1])], [(pos[0]+gridWidth), (pos[1]+c)]];
+			} else { //second field left (nw)
+				points = [[(pos[0]), (pos[1]+c)], [(pos[0]+halfWidth), (pos[1])]];
+			}
+		} else { //second field below (sw/se)
+			if ((rowOdd && (river[0][0])===(river[1][0])) || (!rowOdd && (river[0][0])<(river[1][0]))) { //second field right (se)
+				points = [[(pos[0]+halfWidth), (pos[1]+scale)], [(pos[0]+gridWidth), (pos[1]+gridHeight)]];
+			} else { //second field left (sw)
+				points = [[(pos[0]), (pos[1]+gridHeight)], [(pos[0]+halfWidth), (pos[1]+scale)]];
+			}
+		}
+
+		ctx.beginPath();
+		ctx.moveTo((points[0][0]), (points[0][1]));
+		ctx.lineTo((points[1][0]), (points[1][1]));
+		ctx.stroke();
 	}
 }
 
@@ -100,6 +137,8 @@ function drawFields(ctx, x, y, scale) { //draw the terrain fields
 }
 
 function drawSelection(ctx, x, y, scale, selectedFields) {
+	ctx.lineWidth = 5;
+	ctx.strokeStyle="green";
 	for (var i = 0; i < selectedFields.length; i++) {
 		var selectedField = selectedFields[i]; //get selected field
 		var pos = computePosition(x, y, selectedField[0], selectedField[1], scale); //get fields position
@@ -107,13 +146,11 @@ function drawSelection(ctx, x, y, scale, selectedFields) {
 		//draw a simple circle; TODO: draw propper selection
 		ctx.beginPath();
       	ctx.arc(pos[0]+((scale * 0.866)/2), pos[1]+(scale /2), scale/2, 0, 2 * Math.PI, false);
-      	ctx.lineWidth = 5;
-      	ctx.strokeStyle = 'green';
       	ctx.stroke();
 	}
 }
 
-function computePosition(xOrig, yOrig, xCurr, yCurr, scale) { //computes a fields position
+function computePosition(xOrig, yOrig, xCurr, yCurr, scale) { //computes a fields position (upper left corner of inscribing rectangle)
 	var xpos = xOrig + (xCurr * scale * 0.866); //get the current field's x position
 	return [ (yCurr%2===1?(xpos - (scale*0.866/2)):(xpos)), yOrig+(yCurr * scale * 1.366 / 2)]; //each odd row is offset half a hex to the left
 }
