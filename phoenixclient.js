@@ -156,7 +156,7 @@
 		var x = originX + moveX; //current x origin for drawing + x offset from dragged mouse
 		var y = originY + moveY; //current y origin for drawing + y offset from dragged mouse
 
-		drawMap(ctx, x, y, scale, tileset);
+		drawMap(ctx, x, y, scale);
 		drawSelection(ctx, x, y, scale, selectedFields);
 	}
 })();

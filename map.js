@@ -10,7 +10,8 @@ var terrain = {
 	swamp: 8 //"Sumpf" in Erkenfara rules
 };
 
-var field = -1; //declare field variable
+var fields; //declare fields variable; holds the terrain fields
+var rivers; //declare rivers variable; holds the rivers
 var shallowsImg = new Image(); //declare variables for all used images; TODO: organize them properly
 var deepseaImg = new Image();
 var lowlandsImg = new Image();
@@ -25,7 +26,9 @@ var defaultImg = new Image();
 
 function loadMap() {
 	$.getJSON("map.json", function(json){
-		field = json; //load the field variable with the json from the map file
+		var map = json; //load the map from the map.json file
+		fields = map.fields;
+		rivers = map.rivers;
 	});
 }
 
@@ -44,9 +47,13 @@ function loadImages(tileset) { //load the images needed for visualization
 	defaultImg.src = pathPrefix+'/default.svg';	
 }
 
-function drawMap(ctx, x, y, scale, tileset) {
-	for (var i = 0; i < field.length; i++) {
-		var currentField = field[i]; //get the current field to draw
+function drawMap(ctx, x, y, scale) {
+	drawFields(ctx, x, y, scale);
+}
+
+function drawFields(ctx, x, y, scale) {
+	for (var i = 0; i < fields.length; i++) {
+		var currentField = fields[i]; //get the current field to draw
 		var tileImg; //declare the tile image variable
 		var pos = computePosition(x, y, currentField.x, currentField.y, scale); //get the fields position
         	
