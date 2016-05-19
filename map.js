@@ -49,9 +49,16 @@ function loadImages(tileset) { //load the images needed for visualization
 
 function drawMap(ctx, x, y, scale) {
 	drawFields(ctx, x, y, scale);
+	drawRivers(ctx, x, y, scale);
 }
 
-function drawFields(ctx, x, y, scale) {
+function drawRivers(ctx, x, y, scale) {
+	for (var i = 0; i < rivers.length; i++) {
+		//TODO
+	}
+}
+
+function drawFields(ctx, x, y, scale) { //draw the terrain fields
 	for (var i = 0; i < fields.length; i++) {
 		var currentField = fields[i]; //get the current field to draw
 		var tileImg; //declare the tile image variable
