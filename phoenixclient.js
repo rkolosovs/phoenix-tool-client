@@ -19,13 +19,6 @@
 	var moveX = 0; //x distance the mouse was dragged
 	var moveY = 0; //y distance the mouse was dragged
 
-	$.getScript("map.js", //use jQuery to load scripts from another .js file
-		function(){ 	//after loading script, run all initialization methods
-			loadMap();
-			loadImages(tileset);
-			drawStuff();
-		}); 
-
 	// resize the canvas to fill browser window dynamically
 	window.addEventListener('resize', resizeCanvas, false);
 
@@ -140,13 +133,21 @@
 		return [column, row]; //return result
 	}
 
+	function init() {
+		$.getScript("map.js", //use jQuery to load scripts from another .js file
+			function(){ 	//after loading script, run all initialization methods
+				loadMap();
+				loadImages(tileset);
+				resizeCanvas();
+			}); 
+	}
+
 	//canvas resizing method
 	function resizeCanvas() {
     	canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
     	drawStuff(); 
 	}
-	resizeCanvas();
 
     //all the stuff to be drawn goes in this method
 	function drawStuff() {
@@ -159,4 +160,6 @@
 		drawMap(ctx, x, y, scale);
 		drawSelection(ctx, x, y, scale, selectedFields);
 	}
+
+	init();
 })();
