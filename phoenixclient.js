@@ -10,7 +10,7 @@
 
 	var mousePressed = false; //was the mouse button klicked but not yet released?
 	var isDragging = false; //was the mouse moved while the button is down?
-	var scale = 100; //the scale of the elements, specifically the width
+	var scale = 30; //the scale of the elements, specifically the width
 	var selectedFields = []; //list of fields to be highlighted
 	var originX = 0; //x coordinate of the origin in respect to which all drawing is done
 	var originY = 0; //y coodrinate of the origin in respect to which all drawing is done
