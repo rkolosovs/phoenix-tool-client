@@ -66,7 +66,7 @@ function drawRivers(ctx, x, y, scale) {
 		var river = rivers[i];
 		var pos = computePosition(x, y, (river[0][0]), (river[0][1]), scale);
 		var points = [pos, pos];
-		var rowOdd = (river[0][1])%2 === 1;
+		var rowOdd = (river[0][1])%2 !== 0;
 
 		if((river[0][1]) === (river[1][1])) { //same row (w/e)
 			if ((river[0][0]) > (river[1][0])) { //second field left (w)
@@ -152,5 +152,5 @@ function drawSelection(ctx, x, y, scale, selectedFields) {
 
 function computePosition(xOrig, yOrig, xCurr, yCurr, scale) { //computes a fields position (upper left corner of inscribing rectangle)
 	var xpos = xOrig + (xCurr * scale * 0.866); //get the current field's x position
-	return [ (yCurr%2===1?(xpos - (scale*0.866/2)):(xpos)), yOrig+(yCurr * scale * 1.366 / 2)]; //each odd row is offset half a hex to the left
+	return [ (yCurr%2!==0?(xpos - (scale*0.866/2)):(xpos)), yOrig+(yCurr * scale * 1.366 / 2)]; //each odd row is offset half a hex to the left
 }

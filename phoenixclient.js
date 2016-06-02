@@ -116,7 +116,7 @@
 		var m = c/halfWidth; //the inclination of the hexes upper triangle side
 
 		var row = Math.round(y/gridHeight); //get the rectangle clicked in
-		var rowIsOdd = (row%2 === 1);
+		var rowIsOdd = (row%2 !== 0);
 		var column = Math.round((rowIsOdd ? ((x+halfWidth)/gridWidth) : (x/gridWidth)));
 
 		var relY = y - (row * gridHeight); //compute relative position of the click in respect to the rectangle
