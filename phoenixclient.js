@@ -5,7 +5,7 @@
 	var ctx = canvas.getContext('2d'); //get the context of the canvas
 
 	//settings; TODO: let the user change these in game
-	var tileset = "erkenfara_folienzug"; //tileset name
+	var tileset = "erkenfara_altestool"; //tileset name
 	var scrollSpeed = 0.3; //increment to scroll with each step
 
 	var mousePressed = false; //was the mouse button klicked but not yet released?
