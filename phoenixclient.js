@@ -6,14 +6,14 @@
 
 	//settings; TODO: let the user change these in game
 	var tileset = "erkenfara_altestool"; //tileset name
-	var scrollSpeed = 0.3; //increment to scroll with each step
+	var scrollSpeed = 0.2; //increment to scroll with each step
 
 	var mousePressed = false; //was the mouse button klicked but not yet released?
 	var isDragging = false; //was the mouse moved while the button is down?
-	var scale = 30; //the scale of the elements, specifically the width
+	var scale = 16; //the scale of the elements, specifically the width
 	var selectedFields = []; //list of fields to be highlighted
-	var originX = 0; //x coordinate of the origin in respect to which all drawing is done
-	var originY = 0; //y coodrinate of the origin in respect to which all drawing is done
+	var originX = 900; //x coordinate of the origin in respect to which all drawing is done
+	var originY = 490; //y coodrinate of the origin in respect to which all drawing is done
 	var clickX = 0; //x coordinate of the point where the mouse was clicked
 	var clickY = 0; //y coordinate of the point where the mouse was clicked
 	var moveX = 0; //x distance the mouse was dragged
