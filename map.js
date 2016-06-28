@@ -155,7 +155,7 @@ function computePosition(xOrig, yOrig, xCurr, yCurr, scale) { //computes a field
 	return [ (yCurr%2===1?(xpos - (scale*0.866/2)):(xpos)), yOrig+(yCurr * scale * 1.366 / 2)]; //each odd row is offset half a hex to the left
 }
 
-function showHex (positionX, positionY) {
+function showHex(positionX, positionY) {
     this.id = function(){
 		//TODO: GroßhexKleinhex Zahl bestimmen.
 	}
