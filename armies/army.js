@@ -130,7 +130,7 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere) {
         }
         return damageBP;
     }
-    //array der Würfelergebnisse, badConditions("far"/"high"/null)
+    //array der Würfelergebnisse, badConditions("far"/"farAndUp"/"high"/null)
     //return BPschaden
     this.fireSkp = function(dicerolls, badConditions){
         var rollLen = dicerolls.length;
@@ -185,7 +185,7 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere) {
                     break;
                 }
             }
-        } else if(badConditions == "far"){
+        } else if(badConditions == "farAndUp"){
             for (var i = 0; i < rollLen; i++){
                 switch(dicerolls[i]){
                     case 9: damageBP += 5;
@@ -205,6 +205,31 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere) {
                     case 2: damageBP += 100;
                     break;
                     case 1: damageBP += 120;
+                    break;
+                    case 0: damageBP += 150;
+                    break;
+                }
+            } 
+        } else if(badConditions == "far"){
+            for (var i = 0; i < rollLen; i++){
+                switch(dicerolls[i]){
+                    case 9: damageBP += 0;
+                    break;
+                    case 8: damageBP += 5;
+                    break;
+                    case 7: damageBP += 10;
+                    break;
+                    case 6: damageBP += 30;
+                    break;
+                    case 5: damageBP += 50;
+                    break;
+                    case 4: damageBP += 70;
+                    break;
+                    case 3: damageBP += 90;
+                    break;
+                    case 2: damageBP += 110;
+                    break;
+                    case 1: damageBP += 130;
                     break;
                     case 0: damageBP += 150;
                     break;
@@ -401,7 +426,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere) {
         return damageBP;
     }
 
-    //array der Würfelergebnisse, badConditions("far"/"high"/null)
+    //array der Würfelergebnisse, badConditions("far"/"farAndUp"/"high"/null)
     //return BPschaden
     this.fireSkp = function(dicerolls, badConditions){
         var rollLen = dicerolls.length;
@@ -456,7 +481,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere) {
                     break;
                 }
             }
-        } else if(badConditions == "far"){
+        } else if(badConditions == "farAndUp"){
             for (var i = 0; i < rollLen; i++){
                 switch(dicerolls[i]){
                     case 9: damageBP += 0;
@@ -478,6 +503,31 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere) {
                     case 1: damageBP += 100;
                     break;
                     case 0: damageBP += 120;
+                    break;
+                }
+            }
+        } else if(badConditions == "far"){
+            for (var i = 0; i < rollLen; i++){
+                switch(dicerolls[i]){
+                    case 9: damageBP += 0;
+                    break;
+                    case 8: damageBP += 0;
+                    break;
+                    case 7: damageBP += 0;
+                    break;
+                    case 6: damageBP += 5;
+                    break;
+                    case 5: damageBP += 10;
+                    break;
+                    case 4: damageBP += 20;
+                    break;
+                    case 3: damageBP += 40;
+                    break;
+                    case 2: damageBP += 60;
+                    break;
+                    case 1: damageBP += 80;
+                    break;
+                    case 0: damageBP += 100;
                     break;
                 }
             }
