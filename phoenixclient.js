@@ -5,26 +5,19 @@
 	var ctx = canvas.getContext('2d'); //get the context of the canvas
 
 	//settings; TODO: let the user change these in game
-	var tileset = "erkenfara_folienzug"; //tileset name
-	var scrollSpeed = 0.3; //increment to scroll with each step
+	var tileset = "erkenfara_altestool"; //tileset name
+	var scrollSpeed = 0.2; //increment to scroll with each step
 
 	var mousePressed = false; //was the mouse button klicked but not yet released?
 	var isDragging = false; //was the mouse moved while the button is down?
-	var scale = 30; //the scale of the elements, specifically the width
+	var scale = 16; //the scale of the elements, specifically the width
 	var selectedFields = []; //list of fields to be highlighted
-	var originX = 0; //x coordinate of the origin in respect to which all drawing is done
-	var originY = 0; //y coodrinate of the origin in respect to which all drawing is done
+	var originX = 900; //x coordinate of the origin in respect to which all drawing is done
+	var originY = 490; //y coodrinate of the origin in respect to which all drawing is done
 	var clickX = 0; //x coordinate of the point where the mouse was clicked
 	var clickY = 0; //y coordinate of the point where the mouse was clicked
 	var moveX = 0; //x distance the mouse was dragged
 	var moveY = 0; //y distance the mouse was dragged
-
-	$.getScript("map.js", //use jQuery to load scripts from another .js file
-		function(){ 	//after loading script, run all initialization methods
-			loadMap();
-			loadImages(tileset);
-			drawStuff();
-		}); 
 
 	// resize the canvas to fill browser window dynamically
 	window.addEventListener('resize', resizeCanvas, false);
@@ -123,21 +116,30 @@
 		var m = c/halfWidth; //the inclination of the hexes upper triangle side
 
 		var row = Math.round(y/gridHeight); //get the rectangle clicked in
-		var rowIsOdd = (row%2 === 1);
+		var rowIsOdd = (row%2 !== 0);
 		var column = Math.round((rowIsOdd ? ((x+halfWidth)/gridWidth) : (x/gridWidth)));
 
 		var relY = y - (row * gridHeight); //compute relative position of the click in respect to the rectangle
 		var relX = rowIsOdd ? (x-(column*gridWidth)+halfWidth) : (x-(column*gridWidth));
 
-		if (relY < (-m*relX)+c) { //click is in upper left corner
+		if (relY < -m*relX+c) { //click is in upper left corner
 			row--;
 			if (rowIsOdd) {column--;}
-		} else if (relY < (m*relX)-c) { //click is in upper right corner
+		} else if (relY < m*relX-c) { //click is in upper right corner
 			row--;
 			if (!rowIsOdd) {column++;}
 		}
 
 		return [column, row]; //return result
+	}
+
+	function init() {
+		$.getScript("map.js", //use jQuery to load scripts from another .js file
+			function(){ 	//after loading script, run all initialization methods
+				loadMap();
+				loadImages(tileset);
+				resizeCanvas();
+			}); 
 	}
 
 	//canvas resizing method
@@ -146,7 +148,6 @@
 		canvas.height = window.innerHeight;
     	drawStuff(); 
 	}
-	resizeCanvas();
 
     //all the stuff to be drawn goes in this method
 	function drawStuff() {
@@ -159,4 +160,6 @@
 		drawMap(ctx, x, y, scale);
 		drawSelection(ctx, x, y, scale, selectedFields);
 	}
+
+	init();
 })();
