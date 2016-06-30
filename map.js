@@ -177,7 +177,12 @@ function showHex(positionX, positionY) {
     	}
 		return flussAcc;
 	}
-	this.neighbors =  function(){
+	this.fieldType = function(){
+		for (var i = 0; i < fields.length; i++) {
+			if((fields[i].x == this.x) && (fields[i].y == this.y)){return fields[i].type;}
+		}
+	}
+	this.neighbors = function(){
 		//reihenfolge NW,NO,O,SO,SW,W
 		if(this.y % 2 == 0){
 			return [[this.x,this.y-1],[this.x+1,this.y-1],[this.x+1,this.y],[this.x+1,this.y+1],[this.x,this.y+1],[this.x-1,this.y]];
