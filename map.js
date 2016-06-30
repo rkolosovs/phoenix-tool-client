@@ -66,7 +66,7 @@ function drawRivers(ctx, x, y, scale) {
 		var river = rivers[i];
 		var pos = computePosition(x, y, (river[0][0]), (river[0][1]), scale);
 		var points = [pos, pos];
-		var rowOdd = (river[0][1])%2 === 1;
+		var rowOdd = (river[0][1])%2 !== 0;
 
 		if((river[0][1]) === (river[1][1])) { //same row (w/e)
 			if ((river[0][0]) > (river[1][0])) { //second field left (w)

@@ -73,7 +73,7 @@ function schlacht(army1, army2, mountedArmy1, mountedArmy2, chars1, chars2, posX
                 factor = ((countSum2 - countSum1)/10)/countSum1+0.1;
                 var verluste = countSum2 * (1 + factor);
             } else {
-                var verluste = countSum2 * 0.9;
+                var verluste = countSum2;
             }
             console.log(verluste);
             var gpDiffHeer = ((this.a1.leaderGp() + this.charGp1() + diceroll1)/2 - gpSchnitt)/100
@@ -104,7 +104,7 @@ function schlacht(army1, army2, mountedArmy1, mountedArmy2, chars1, chars2, posX
                 factor = ((countSum1 - countSum2)/10)/countSum2+0.1;
                 var verluste = countSum1 * (1 + factor);
             } else {
-                var verluste = countSum1 * 0.9;
+                var verluste = countSum1;
             }
             var gpDiffHeer = ((this.a2.leaderGp() + this.charGp2() + diceroll2)/2 - gpSchnitt)/100
             var gpDiffReiter = ((this.ma2.leaderGp() + this.charGp2() + diceroll2)/2 - gpSchnitt)/100
