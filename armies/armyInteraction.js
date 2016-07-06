@@ -125,13 +125,13 @@ function schlacht(army1, army2, mountedArmy1, mountedArmy2, chars1, chars2, posX
             return results;
         } else if(power1 == power2){
             // unentschieden:
-                return [null, this.countSum1 + this.countSum2]
+                return [null, null]
         }
     }
 }
 // TODO schiffskampf
 
-// array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"high"/null), schießende Armee, ziel Armee, Charaktere und Zauberer auf dem Zielfeld
+// array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null), schießende Armee, ziel Armee, Charaktere und Zauberer auf dem Zielfeld
 // TODO rüstorte vermindern Schaden
 function fernkampf(dicerollsL, dicerollsS, badConditions, shooter, target, chars) {
     var charGpSum = 0;      

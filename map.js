@@ -22,7 +22,8 @@ var mountainsImg = new Image();
 var desertImg = new Image();
 var swampImg = new Image();
 var defaultImg = new Image();
-
+var troopsImg = new Image();
+var mountsImg = new Image();
 
 function loadMap() {
 	$.getJSON("map.json", function(json){
@@ -44,7 +45,9 @@ function loadImages(tileset) { //load the images needed for visualization
 	mountainsImg.src = pathPrefix+'/mountains.svg';
 	desertImg.src = pathPrefix+'/desert.svg';
 	swampImg.src = pathPrefix+'/swamp.svg';
-	defaultImg.src = pathPrefix+'/default.svg';	
+	defaultImg.src = pathPrefix+'/default.svg';
+	troopsImg.src = pathPrefix+'/troops.svg';
+	mountsImg.src = pathPrefix+'/mounts.svg';	
 }
 
 function drawMap(ctx, x, y, scale) {
@@ -153,4 +156,21 @@ function drawSelection(ctx, x, y, scale, selectedFields) {
 function computePosition(xOrig, yOrig, xCurr, yCurr, scale) { //computes a fields position (upper left corner of inscribing rectangle)
 	var xpos = xOrig + (xCurr * scale * 0.866); //get the current field's x position
 	return [ (yCurr%2!==0?(xpos - (scale*0.866/2)):(xpos)), yOrig+(yCurr * scale * 1.366 / 2)]; //each odd row is offset half a hex to the left
+}
+
+function drawArmies(ctx, x, y, scale, armyCoordinates) {
+	for (var i = 0; i < armyCoordinates.length; i++) {
+		var armyData = armyCoordinates[i]; // get army coordinates
+		pos = computePosition(x, y, armyCoordinates[i].x, armyCoordinates[i].y, scale);
+		ctx.fillStyle = 'black';
+		ctx.textAlign = 'center';
+    	ctx.textBaseline = 'middle';
+		//ctx.fillText(armyData.a.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
+		if(Math.floor(armyData.a.armyId/100) == 1)
+		{		
+			ctx.drawImage(troopsImg, pos[0], pos[1], (scale*0.866), scale); 
+		} else if(Math.floor(armyData.a.armyId/100) == 2) {
+			ctx.drawImage(mountsImg, pos[0], pos[1], (scale*0.866), scale);
+		}
+	}
 }

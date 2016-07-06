@@ -159,6 +159,7 @@
 
 		drawMap(ctx, x, y, scale);
 		drawSelection(ctx, x, y, scale, selectedFields);
+		drawArmies(ctx, x, y, scale, listOfArmyCoordinates);
 	}
 
 	init();
