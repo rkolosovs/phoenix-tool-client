@@ -15,7 +15,9 @@ var buildingTypes = {
 	city: 1, //"Stadt" in Erkenfara rules
 	fortress: 2, //"Festung" in Erkenfara rules
 	capital: 3, //"Hauptstadt" in Erkenfara rules
-	capitalFort: 4 //"Festungshauptstadt" in Erkenfara rules
+	capitalFort: 4, //"Festungshauptstadt" in Erkenfara rules
+	wall: 5, //"Wall" in Erkenfara rules
+	harbor: 6 //"Kaianlage" in Erkenfara rules
 };
 
 var fields; //declare fields variable; holds the terrain fields
@@ -36,6 +38,8 @@ var cityImg = new Image();
 var fortressImg = new Image();
 var capitalImg = new Image();
 var capitalFortImg = new Image();
+var wallImg = new Image();
+var harborImg = new Image();
 
 
 function loadMap() {
@@ -66,6 +70,8 @@ function loadImages(tileset) { //load the images needed for visualization
 	fortressImg.src = pathPrefix+'/fortress.svg';
 	capitalImg.src = pathPrefix+'/capital_city.svg';
 	capitalFortImg.src = pathPrefix+'/capital_fortress.svg';
+	wallImg.src = pathPrefix+'/wall.svg';
+	harborImg.src = pathPrefix+'harbor.svg';
 }
 
 function drawMap(ctx, x, y, scale) {
@@ -98,7 +104,12 @@ function drawBuildings(ctx, x, y, scale) {
 			default: tileImg = defaultImg;
 			break;
 		}
-		ctx.drawImage(tileImg, pos[0], pos[1], scale, scale); //draw the image
+		if (building.type <= 4) { //regular one tile buildings
+			ctx.drawImage(tileImg, pos[0], pos[1], scale*0.85, scale*0.85); //draw the image
+		}
+		else if (building.type <= 6) { //buildings with orientation
+
+		}
 	}
 }
 
