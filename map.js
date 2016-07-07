@@ -74,7 +74,7 @@ function loadImages(tileset) { //load the images needed for visualization
 	capitalImg.src = pathPrefix+'/capital_city.svg';
 	capitalFortImg.src = pathPrefix+'/capital_fortress.svg';
 	wallImg.src = pathPrefix+'/wall.svg';
-	harborImg.src = pathPrefix+'harbor.svg';
+	harborImg.src = pathPrefix+'/harbor.svg';
 }
 
 function drawMap(ctx, x, y, scale) {
@@ -84,6 +84,8 @@ function drawMap(ctx, x, y, scale) {
 }
 
 function drawBuildings(ctx, x, y, scale) {
+	var gridHeight = (1.377/2)*scale;
+	var c = scale-gridHeight;
 	for (var i = 0; i < buildings.length; i++) {
 		var building = buildings[i];
 		var pos = computePosition(x, y, building.x, building.y, scale);
@@ -104,6 +106,12 @@ function drawBuildings(ctx, x, y, scale) {
 			case buildingTypes.capitalFort: tileImg = capitalFortImg;
 			break;
 
+			case buildingTypes.wall: tileImg = wallImg;
+			break;
+
+			case buildingTypes.harbor: tileImg = harborImg;
+			break;
+
 			default: tileImg = defaultImg;
 			break;
 		}
@@ -111,7 +119,7 @@ function drawBuildings(ctx, x, y, scale) {
 			ctx.drawImage(tileImg, pos[0], pos[1], scale*0.85, scale*0.85); //draw the image
 		}
 		else if (building.type <= 6) { //buildings with orientation
-
+			ctx.drawImage(tileImg, pos[0], pos[1]+c, gridHeight-c, gridHeight-c); //draw the image on the west side of the tile
 		}
 	}
 }
