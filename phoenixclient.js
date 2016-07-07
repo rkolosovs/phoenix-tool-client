@@ -138,6 +138,7 @@
 			function(){ 	//after loading script, run all initialization methods
 				loadMap();
 				loadImages(tileset);
+				loadArmies();
 				resizeCanvas();
 			}); 
 	}
