@@ -49,7 +49,10 @@ function loadMap() {
 		rivers = map.rivers; //rivers are the coordinates of two fields on either side of the river
 	});
 	//temporary building array loading
-	buildings = [{type: 0, x: 6, y: 6}, {type: 1, x: 6, y: 7}, {type: 2, x: 5, y: 8}, {type: 3, x: 23, y: 7}, {type: 4, x: 13, y: 22}];
+	buildings = [{type: 0, x: 6, y: 6}, {type: 1, x: 6, y: 7}, {type: 2, x: 5, y: 8}, {type: 3, x: 23, y: 7}, {type: 4, x: 13, y: 22}, 
+	{type: 5, x: 6, y: 20, direction: 'w'}, {type: 5, x: 6, y: 20, direction: 'nw'}, {type: 5, x: 6, y: 20, direction: 'ne'}, {type: 5, x: 6, y: 20, direction: 'e'}, {type: 5, x: 6, y: 20, direction: 'sw'}, 
+	{type: 5, x: 7, y: 21, direction: 'w'}, {type: 5, x: 7, y: 21, direction: 'sw'}, {type: 5, x: 7, y: 21, direction: 'se'}, {type: 5, x: 7, y: 21, direction: 'e'}, {type: 5, x: 7, y: 21, direction: 'ne'}, 
+	{type: 6, x: 13, y: 22, direction: 'w'}, {type: 6, x: 13, y: 22, direction: 'se'}];
 }
 
 function loadImages(tileset) { //load the images needed for visualization
