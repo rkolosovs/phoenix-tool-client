@@ -10,8 +10,17 @@ var terrain = {
 	swamp: 8 //"Sumpf" in Erkenfara rules
 };
 
+var buildingTypes = {
+	castle: 0, //"Burg" in Erkenfara rules
+	city: 1, //"Stadt" in Erkenfara rules
+	fortress: 2, //"Festung" in Erkenfara rules
+	capital: 3, //"Hauptstadt" in Erkenfara rules
+	capitalFort: 4 //"Festungshauptstadt" in Erkenfara rules
+};
+
 var fields; //declare fields variable; holds the terrain fields
 var rivers; //declare rivers variable; holds the rivers
+var buildings; //declare buildings variable; holds the buildings
 var shallowsImg = new Image(); //declare variables for all used images; TODO: organize them properly
 var deepseaImg = new Image();
 var lowlandsImg = new Image();
@@ -22,6 +31,11 @@ var mountainsImg = new Image();
 var desertImg = new Image();
 var swampImg = new Image();
 var defaultImg = new Image();
+var castleImg = new Image(); //buildings
+var cityImg = new Image();
+var fortressImg = new Image();
+var capitalImg = new Image();
+var capitalFortImg = new Image();
 
 
 function loadMap() {
@@ -30,12 +44,14 @@ function loadMap() {
 		fields = map.fields;
 		rivers = map.rivers; //rivers are the coordinates of two fields on either side of the river
 	});
+	//temporary building array loading
+	buildings = [{type: 0, x: 6, y: 6}, {type: 1, x: 6, y: 7}, {type: 2, x: 5, y: 8}, {type: 3, x: 23, y: 7}, {type: 4, x: 13, y: 22}];
 }
 
 function loadImages(tileset) { //load the images needed for visualization
 	var pathPrefix = './tilesets/'+tileset; //build the path prefix common to all tile images
 
-	shallowsImg.src = pathPrefix+'/shallows.svg';
+	shallowsImg.src = pathPrefix+'/shallows.svg'; //terrain
 	deepseaImg.src = pathPrefix+'/deepsea.svg';
 	lowlandsImg.src = pathPrefix+'/lowlands.svg';
 	woodsImg.src = pathPrefix+'/woods.svg';
@@ -45,11 +61,45 @@ function loadImages(tileset) { //load the images needed for visualization
 	desertImg.src = pathPrefix+'/desert.svg';
 	swampImg.src = pathPrefix+'/swamp.svg';
 	defaultImg.src = pathPrefix+'/default.svg';	
+	castleImg.src = pathPrefix+'/castle.svg'; //buildings
+	cityImg.src = pathPrefix+'/city.svg';
+	fortressImg.src = pathPrefix+'/fortress.svg';
+	capitalImg.src = pathPrefix+'/capital_city.svg';
+	capitalFortImg.src = pathPrefix+'/capital_fortress.svg';
 }
 
 function drawMap(ctx, x, y, scale) {
 	drawFields(ctx, x, y, scale);
 	drawRivers(ctx, x, y, scale);
+	drawBuildings(ctx, x, y, scale);
+}
+
+function drawBuildings(ctx, x, y, scale) {
+	for (var i = 0; i < buildings.length; i++) {
+		var building = buildings[i];
+		var pos = computePosition(x, y, building.x, building.y, scale);
+		var tileImg; //declare the tile image variable
+		switch(building.type){ //set the tileImg to match the building type
+			case buildingTypes.castle: tileImg = castleImg;
+			break;
+
+			case buildingTypes.city: tileImg = cityImg;
+			break;
+
+			case buildingTypes.fortress: tileImg = fortressImg;
+			break;
+
+			case buildingTypes.capital: tileImg = capitalImg;
+			break;
+
+			case buildingTypes.capitalFort: tileImg = capitalFortImg;
+			break;
+
+			default: tileImg = defaultImg;
+			break;
+		}
+		ctx.drawImage(tileImg, pos[0], pos[1], scale, scale); //draw the image
+	}
 }
 
 function drawRivers(ctx, x, y, scale) {
