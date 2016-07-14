@@ -38,7 +38,12 @@ var cityImg = new Image();
 var fortressImg = new Image();
 var capitalImg = new Image();
 var capitalFortImg = new Image();
-var wallImg = new Image();
+var wallWImg = new Image();
+var wallEImg = new Image();
+var wallNWImg = new Image();
+var wallSWImg = new Image();
+var wallNEImg = new Image();
+var wallSEImg = new Image();
 var harborImg = new Image();
 
 
@@ -73,7 +78,12 @@ function loadImages(tileset) { //load the images needed for visualization
 	fortressImg.src = pathPrefix+'/fortress.svg';
 	capitalImg.src = pathPrefix+'/capital_city.svg';
 	capitalFortImg.src = pathPrefix+'/capital_fortress.svg';
-	wallImg.src = pathPrefix+'/wall.svg';
+	wallWImg.src = pathPrefix+'/wall_w.svg';
+	wallEImg.src = pathPrefix+'/wall_e.svg';
+	wallNWImg.src = pathPrefix+'/wall_nw.svg';
+	wallSWImg.src = pathPrefix+'/wall_sw.svg';
+	wallNEImg.src = pathPrefix+'/wall_ne.svg';
+	wallSEImg.src = pathPrefix+'/wall_se.svg';
 	harborImg.src = pathPrefix+'/harbor.svg';
 }
 
@@ -86,6 +96,7 @@ function drawMap(ctx, x, y, scale) {
 function drawBuildings(ctx, x, y, scale) {
 	var gridHeight = (1.377/2)*scale;
 	var c = scale-gridHeight;
+	var gridWidth = 0.866 * scale;
 	for (var i = 0; i < buildings.length; i++) {
 		var building = buildings[i];
 		var pos = computePosition(x, y, building.x, building.y, scale);
@@ -106,7 +117,12 @@ function drawBuildings(ctx, x, y, scale) {
 			case buildingTypes.capitalFort: tileImg = capitalFortImg;
 			break;
 
-			case buildingTypes.wall: tileImg = wallImg;
+			case buildingTypes.wall: if (building.direction === 'w'){tileImg = wallWImg;}
+			else if (building.direction === 'e'){tileImg = wallEImg;}
+			else if (building.direction === 'nw'){tileImg = wallNWImg;}
+			else if (building.direction === 'sw'){tileImg = wallSWImg;}
+			else if (building.direction === 'ne'){tileImg = wallNEImg;}
+			else if (building.direction === 'se'){tileImg = wallSEImg;}
 			break;
 
 			case buildingTypes.harbor: tileImg = harborImg;
@@ -116,10 +132,10 @@ function drawBuildings(ctx, x, y, scale) {
 			break;
 		}
 		if (building.type <= 4) { //regular one tile buildings
-			ctx.drawImage(tileImg, pos[0], pos[1], scale*0.85, scale*0.85); //draw the image
+			ctx.drawImage(tileImg, pos[0], pos[1], scale*0.866, scale*0.866); //draw the image
 		}
-		else if (building.type <= 6) { //buildings with orientation
-			ctx.drawImage(tileImg, pos[0], pos[1]+c, gridHeight-c, gridHeight-c); //draw the image on the west side of the tile
+		else if (building.type === 5) { //walls
+			ctx.drawImage(tileImg, pos[0], pos[1], (scale*0.866), scale); //draw the image
 		}
 	}
 }
