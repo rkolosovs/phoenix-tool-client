@@ -17,7 +17,9 @@ var buildingTypes = {
 	capital: 3, //"Hauptstadt" in Erkenfara rules
 	capitalFort: 4, //"Festungshauptstadt" in Erkenfara rules
 	wall: 5, //"Wall" in Erkenfara rules
-	harbor: 6 //"Kaianlage" in Erkenfara rules
+	harbor: 6, //"Kaianlage" in Erkenfara rules
+	bridge: 7, //"Brücke" in Erkenfara rules
+	street: 8 //"Straße" in Erkenfara rules
 };
 
 var fields; //declare fields variable; holds the terrain fields
@@ -50,6 +52,12 @@ var harborSWImg = new Image();
 var harborNWImg = new Image();
 var harborSEImg = new Image();
 var harborNEImg = new Image();
+var bridgeWImg = new Image();
+var bridgeEImg = new Image();
+var bridgeSWImg = new Image();
+var bridgeNWImg = new Image();
+var bridgeSEImg = new Image();
+var bridgeNEImg = new Image();
 
 
 function loadMap() {
@@ -59,11 +67,14 @@ function loadMap() {
 		rivers = map.rivers; //rivers are the coordinates of two fields on either side of the river
 	});
 	//temporary building array loading
-	buildings = [{type: 0, x: 6, y: 6}, {type: 1, x: 6, y: 7}, {type: 2, x: 5, y: 8}, {type: 3, x: 23, y: 7}, {type: 4, x: 13, y: 22}, 
+	buildings = [{type: 6, x: 9, y: 40, direction: 'w'}, {type: 6, x: 9, y: 40, direction: 'e'}, {type: 6, x: 9, y: 40, direction: 'sw'}, {type: 6, x: 9, y: 40, direction: 'se'}, {type: 6, x: 9, y: 40, direction: 'ne'}, 
+	{type: 6, x: 9, y: 40, direction: 'nw'}, {type: 7, x: 23, y: 7, direction: 'w'}, {type: 7, x: 22, y: 22, direction: 'e'}, {type: 7, x: 22, y: 22, direction: 'se'}, {type: 7, x: 22, y: 22, direction: 'ne'}, 
+	{type: 7, x: 23, y: 25, direction: 'nw'}, {type: 7, x: 23, y: 25, direction: 'sw'}, 
+	{type: 8, first: [22, 7], second: [23, 7]}, {type: 8, first: [16, 22], second: [15, 22]}, {type: 8, first: [16, 22], second: [16, 21]}, 
+	{type: 8, first: [16, 22], second: [17, 21]}, {type: 8, first: [16, 22], second: [17, 23]}, {type: 8, first: [16, 22], second: [16, 23]}, 
+	{type: 0, x: 6, y: 6}, {type: 1, x: 6, y: 7}, {type: 2, x: 5, y: 8}, {type: 3, x: 23, y: 7}, {type: 4, x: 13, y: 22}, 
 	{type: 5, x: 6, y: 20, direction: 'w'}, {type: 5, x: 6, y: 20, direction: 'nw'}, {type: 5, x: 6, y: 20, direction: 'ne'}, {type: 5, x: 6, y: 20, direction: 'e'}, {type: 5, x: 6, y: 20, direction: 'sw'}, 
-	{type: 5, x: 7, y: 21, direction: 'w'}, {type: 5, x: 7, y: 21, direction: 'sw'}, {type: 5, x: 7, y: 21, direction: 'se'}, {type: 5, x: 7, y: 21, direction: 'e'}, {type: 5, x: 7, y: 21, direction: 'ne'}, 
-	{type: 6, x: 9, y: 40, direction: 'w'}, {type: 6, x: 9, y: 40, direction: 'e'}, {type: 6, x: 9, y: 40, direction: 'sw'}, {type: 6, x: 9, y: 40, direction: 'se'}, {type: 6, x: 9, y: 40, direction: 'ne'}, 
-	{type: 6, x: 9, y: 40, direction: 'nw'}];
+	{type: 5, x: 7, y: 21, direction: 'w'}, {type: 5, x: 7, y: 21, direction: 'sw'}, {type: 5, x: 7, y: 21, direction: 'se'}, {type: 5, x: 7, y: 21, direction: 'e'}, {type: 5, x: 7, y: 21, direction: 'ne'}];
 }
 
 function loadImages(tileset) { //load the images needed for visualization
@@ -96,6 +107,12 @@ function loadImages(tileset) { //load the images needed for visualization
 	harborSWImg.src = pathPrefix+'/harbor_sw.svg';
 	harborNEImg.src = pathPrefix+'/harbor_ne.svg';
 	harborSEImg.src = pathPrefix+'/harbor_se.svg';
+	bridgeWImg.src = pathPrefix+'/bridge_w.svg';
+	bridgeEImg.src = pathPrefix+'/bridge_e.svg';
+	bridgeNWImg.src = pathPrefix+'/bridge_nw.svg';
+	bridgeSWImg.src = pathPrefix+'/bridge_sw.svg';
+	bridgeNEImg.src = pathPrefix+'/bridge_ne.svg';
+	bridgeSEImg.src = pathPrefix+'/bridge_se.svg';
 }
 
 function drawMap(ctx, x, y, scale) {
@@ -108,9 +125,16 @@ function drawBuildings(ctx, x, y, scale) {
 	var gridHeight = (1.377/2)*scale;
 	var c = scale-gridHeight;
 	var gridWidth = 0.866 * scale;
+
+	ctx.lineWidth = (scale/8); //line style for roads
+	ctx.strokeStyle="#C8AB37";
+	ctx.lineCap="round";
+
 	for (var i = 0; i < buildings.length; i++) {
 		var building = buildings[i];
-		var pos = computePosition(x, y, building.x, building.y, scale);
+		if(building.type !== 8){
+			var pos = computePosition(x, y, building.x, building.y, scale);
+		}
 		var tileImg; //declare the tile image variable
 		switch(building.type){ //set the tileImg to match the building type
 			case buildingTypes.castle: tileImg = castleImg;
@@ -144,6 +168,16 @@ function drawBuildings(ctx, x, y, scale) {
 			else if (building.direction === 'se'){tileImg = harborSEImg;}
 			break;
 
+			case buildingTypes.bridge: if (building.direction === 'w'){tileImg = bridgeWImg;}
+			else if (building.direction === 'e'){tileImg = bridgeEImg;}
+			else if (building.direction === 'nw'){tileImg = bridgeNWImg;}
+			else if (building.direction === 'sw'){tileImg = bridgeSWImg;}
+			else if (building.direction === 'ne'){tileImg = bridgeNEImg;}
+			else if (building.direction === 'se'){tileImg = bridgeSEImg;}
+			break;
+
+
+
 			default: tileImg = defaultImg;
 			break;
 		}
@@ -152,6 +186,13 @@ function drawBuildings(ctx, x, y, scale) {
 		}
 		else if (building.type <= 7) { //harbors and bridges - "oversized" buildings
 			ctx.drawImage(tileImg, pos[0]-gridWidth, pos[1]-(0.5*scale), 3*gridWidth, 2*scale); //draw the image
+		} else if (building.type === 8) { //streets
+			var posFirst = computePosition(x, y, building.first[0], building.first[1], scale);
+			var posSecond = computePosition(x, y, building.second[0], building.second[1], scale);
+			ctx.beginPath();
+			ctx.moveTo((posFirst[0]+(0.5*gridWidth)), (posFirst[1]+c+(0.25*scale)));
+			ctx.lineTo((posSecond[0]+(0.5*gridWidth)), (posSecond[1]+c+(0.25*scale)));
+			ctx.stroke();
 		}
 	}
 }
