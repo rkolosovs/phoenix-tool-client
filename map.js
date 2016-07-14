@@ -147,14 +147,11 @@ function drawBuildings(ctx, x, y, scale) {
 			default: tileImg = defaultImg;
 			break;
 		}
-		if (building.type <= 4) { //regular one tile buildings
-			ctx.drawImage(tileImg, pos[0], pos[1], scale*0.866, scale*0.866); //draw the image
+		if (building.type <= 5) { //regular one tile buildings including walls
+			ctx.drawImage(tileImg, pos[0], pos[1], scale*0.866, scale); //draw the image
 		}
-		else if (building.type === 5) { //walls
-			ctx.drawImage(tileImg, pos[0], pos[1], (scale*0.866), scale); //draw the image
-		}
-		else if (building.type === 6) { //harbors
-			ctx.drawImage(tileImg, pos[0]-gridWidth, pos[1]-(0.5*scale), (gridWidth*3), 2*scale); //draw the image
+		else if (building.type <= 7) { //harbors and bridges - "oversized" buildings
+			ctx.drawImage(tileImg, pos[0]-gridWidth, pos[1]-(0.5*scale), 3*gridWidth, 2*scale); //draw the image
 		}
 	}
 }
