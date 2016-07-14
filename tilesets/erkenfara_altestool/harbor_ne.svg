@@ -10,11 +10,11 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="64"
-   height="64"
+   width="166.5"
+   height="128"
    id="svg2985"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="harbor.svg">
+   sodipodi:docname="harbor_ne.svg">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -26,13 +26,13 @@
      inkscape:pageshadow="2"
      inkscape:window-width="640"
      inkscape:window-height="480"
-     id="namedview7"
+     id="namedview4132"
      showgrid="false"
-     inkscape:zoom="3.6875"
-     inkscape:cx="32"
-     inkscape:cy="32"
-     inkscape:window-x="2516"
-     inkscape:window-y="260"
+     inkscape:zoom="1.7537538"
+     inkscape:cx="83.250002"
+     inkscape:cy="64.000002"
+     inkscape:window-x="2640"
+     inkscape:window-y="229"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg2985" />
   <defs
@@ -50,12 +50,11 @@
     </rdf:RDF>
   </metadata>
   <g
-     id="layer1"
-     transform="matrix(-1,0,0,1,64.649168,0.27118644)">
+     transform="matrix(0.2576215,-0.44621352,0.44621352,0.2576215,81.52284,35.410133)"
+     id="layer1">
     <path
        d="M 0.43894792,0.23507149 0.18181818,63.818182 8.5454545,63.636364 8.5587678,34.677939 44.399553,34.284412 44.370741,28.619725 8.4435163,28.989755 c 0.00888,-10.563206 0.146316,-18.16942 0.1551915,-28.73262526 z"
        id="path3004"
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       inkscape:connector-curvature="0" />
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
 </svg>

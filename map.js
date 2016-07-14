@@ -44,7 +44,12 @@ var wallNWImg = new Image();
 var wallSWImg = new Image();
 var wallNEImg = new Image();
 var wallSEImg = new Image();
-var harborImg = new Image();
+var harborWImg = new Image();
+var harborEImg = new Image();
+var harborSWImg = new Image();
+var harborNWImg = new Image();
+var harborSEImg = new Image();
+var harborNEImg = new Image();
 
 
 function loadMap() {
@@ -57,7 +62,8 @@ function loadMap() {
 	buildings = [{type: 0, x: 6, y: 6}, {type: 1, x: 6, y: 7}, {type: 2, x: 5, y: 8}, {type: 3, x: 23, y: 7}, {type: 4, x: 13, y: 22}, 
 	{type: 5, x: 6, y: 20, direction: 'w'}, {type: 5, x: 6, y: 20, direction: 'nw'}, {type: 5, x: 6, y: 20, direction: 'ne'}, {type: 5, x: 6, y: 20, direction: 'e'}, {type: 5, x: 6, y: 20, direction: 'sw'}, 
 	{type: 5, x: 7, y: 21, direction: 'w'}, {type: 5, x: 7, y: 21, direction: 'sw'}, {type: 5, x: 7, y: 21, direction: 'se'}, {type: 5, x: 7, y: 21, direction: 'e'}, {type: 5, x: 7, y: 21, direction: 'ne'}, 
-	{type: 6, x: 13, y: 22, direction: 'w'}, {type: 6, x: 13, y: 22, direction: 'se'}];
+	{type: 6, x: 9, y: 40, direction: 'w'}, {type: 6, x: 9, y: 40, direction: 'e'}, {type: 6, x: 9, y: 40, direction: 'sw'}, {type: 6, x: 9, y: 40, direction: 'se'}, {type: 6, x: 9, y: 40, direction: 'ne'}, 
+	{type: 6, x: 9, y: 40, direction: 'nw'}];
 }
 
 function loadImages(tileset) { //load the images needed for visualization
@@ -84,7 +90,12 @@ function loadImages(tileset) { //load the images needed for visualization
 	wallSWImg.src = pathPrefix+'/wall_sw.svg';
 	wallNEImg.src = pathPrefix+'/wall_ne.svg';
 	wallSEImg.src = pathPrefix+'/wall_se.svg';
-	harborImg.src = pathPrefix+'/harbor.svg';
+	harborWImg.src = pathPrefix+'/harbor_w.svg';
+	harborEImg.src = pathPrefix+'/harbor_e.svg';
+	harborNWImg.src = pathPrefix+'/harbor_nw.svg';
+	harborSWImg.src = pathPrefix+'/harbor_sw.svg';
+	harborNEImg.src = pathPrefix+'/harbor_ne.svg';
+	harborSEImg.src = pathPrefix+'/harbor_se.svg';
 }
 
 function drawMap(ctx, x, y, scale) {
@@ -125,7 +136,12 @@ function drawBuildings(ctx, x, y, scale) {
 			else if (building.direction === 'se'){tileImg = wallSEImg;}
 			break;
 
-			case buildingTypes.harbor: tileImg = harborImg;
+			case buildingTypes.harbor: if (building.direction === 'w'){tileImg = harborWImg;}
+			else if (building.direction === 'e'){tileImg = harborEImg;}
+			else if (building.direction === 'nw'){tileImg = harborNWImg;}
+			else if (building.direction === 'sw'){tileImg = harborSWImg;}
+			else if (building.direction === 'ne'){tileImg = harborNEImg;}
+			else if (building.direction === 'se'){tileImg = harborSEImg;}
 			break;
 
 			default: tileImg = defaultImg;
@@ -136,6 +152,9 @@ function drawBuildings(ctx, x, y, scale) {
 		}
 		else if (building.type === 5) { //walls
 			ctx.drawImage(tileImg, pos[0], pos[1], (scale*0.866), scale); //draw the image
+		}
+		else if (building.type === 6) { //harbors
+			ctx.drawImage(tileImg, pos[0]-gridWidth, pos[1]-(0.5*scale), (gridWidth*3), 2*scale); //draw the image
 		}
 	}
 }
