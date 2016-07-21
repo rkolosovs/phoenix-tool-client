@@ -25,6 +25,7 @@ var buildingTypes = {
 var fields; //declare fields variable; holds the terrain fields
 var rivers; //declare rivers variable; holds the rivers
 var buildings; //declare buildings variable; holds the buildings
+
 var shallowsImg = new Image(); //declare variables for all used images; TODO: organize them properly
 var deepseaImg = new Image();
 var lowlandsImg = new Image();
@@ -66,15 +67,18 @@ function loadMap() {
 		fields = map.fields;
 		rivers = map.rivers; //rivers are the coordinates of two fields on either side of the river
 	});
+	$.getJSON("buildings.json", function(json){
+		buildings = json; //load the buildings from the buildings.json file
+	});
 	//temporary building array loading
-	buildings = [{type: 6, x: 9, y: 40, direction: 'w'}, {type: 6, x: 9, y: 40, direction: 'e'}, {type: 6, x: 9, y: 40, direction: 'sw'}, {type: 6, x: 9, y: 40, direction: 'se'}, {type: 6, x: 9, y: 40, direction: 'ne'}, 
-	{type: 6, x: 9, y: 40, direction: 'nw'}, {type: 7, x: 23, y: 7, direction: 'w'}, {type: 7, x: 22, y: 22, direction: 'e'}, {type: 7, x: 22, y: 22, direction: 'se'}, {type: 7, x: 22, y: 22, direction: 'ne'}, 
-	{type: 7, x: 23, y: 25, direction: 'nw'}, {type: 7, x: 23, y: 25, direction: 'sw'}, 
-	{type: 8, first: [22, 7], second: [23, 7]}, {type: 8, first: [16, 22], second: [15, 22]}, {type: 8, first: [16, 22], second: [16, 21]}, 
-	{type: 8, first: [16, 22], second: [17, 21]}, {type: 8, first: [16, 22], second: [17, 23]}, {type: 8, first: [16, 22], second: [16, 23]}, 
-	{type: 0, x: 6, y: 6}, {type: 1, x: 6, y: 7}, {type: 2, x: 5, y: 8}, {type: 3, x: 23, y: 7}, {type: 4, x: 13, y: 22}, 
-	{type: 5, x: 6, y: 20, direction: 'w'}, {type: 5, x: 6, y: 20, direction: 'nw'}, {type: 5, x: 6, y: 20, direction: 'ne'}, {type: 5, x: 6, y: 20, direction: 'e'}, {type: 5, x: 6, y: 20, direction: 'sw'}, 
-	{type: 5, x: 7, y: 21, direction: 'w'}, {type: 5, x: 7, y: 21, direction: 'sw'}, {type: 5, x: 7, y: 21, direction: 'se'}, {type: 5, x: 7, y: 21, direction: 'e'}, {type: 5, x: 7, y: 21, direction: 'ne'}];
+	// buildings = [{type: 6, x: 9, y: 40, direction: 'w'}, {type: 6, x: 9, y: 40, direction: 'e'}, {type: 6, x: 9, y: 40, direction: 'sw'}, {type: 6, x: 9, y: 40, direction: 'se'}, {type: 6, x: 9, y: 40, direction: 'ne'}, 
+	// {type: 6, x: 9, y: 40, direction: 'nw'}, {type: 7, x: 23, y: 7, direction: 'w'}, {type: 7, x: 22, y: 22, direction: 'e'}, {type: 7, x: 22, y: 22, direction: 'se'}, {type: 7, x: 22, y: 22, direction: 'ne'}, 
+	// {type: 7, x: 23, y: 25, direction: 'nw'}, {type: 7, x: 23, y: 25, direction: 'sw'}, 
+	// {type: 8, first: [22, 7], second: [23, 7]}, {type: 8, first: [16, 22], second: [15, 22]}, {type: 8, first: [16, 22], second: [16, 21]}, 
+	// {type: 8, first: [16, 22], second: [17, 21]}, {type: 8, first: [16, 22], second: [17, 23]}, {type: 8, first: [16, 22], second: [16, 23]}, 
+	// {type: 0, x: 6, y: 6}, {type: 1, x: 6, y: 7}, {type: 2, x: 5, y: 8}, {type: 3, x: 23, y: 7}, {type: 4, x: 13, y: 22}, 
+	// {type: 5, x: 6, y: 20, direction: 'w'}, {type: 5, x: 6, y: 20, direction: 'nw'}, {type: 5, x: 6, y: 20, direction: 'ne'}, {type: 5, x: 6, y: 20, direction: 'e'}, {type: 5, x: 6, y: 20, direction: 'sw'}, 
+	// {type: 5, x: 7, y: 21, direction: 'w'}, {type: 5, x: 7, y: 21, direction: 'sw'}, {type: 5, x: 7, y: 21, direction: 'se'}, {type: 5, x: 7, y: 21, direction: 'e'}, {type: 5, x: 7, y: 21, direction: 'ne'}];
 }
 
 function loadImages(tileset) { //load the images needed for visualization
