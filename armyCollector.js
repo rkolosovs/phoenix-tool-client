@@ -13,6 +13,5 @@ function loadArmies() {
                 listOfArmyCoordinates.push(armyCoords);
             }
         }
-
 	});
 }

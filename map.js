@@ -24,13 +24,15 @@ var swampImg = new Image();
 var defaultImg = new Image();
 var troopsImg = new Image();
 var mountsImg = new Image();
+var gamestate; //abstract turn structure
 
 function loadMap() {
+	gamestate = new gameState(0, [0], [0], 0);
 	$.getJSON("map.json", function(json){
 		var map = json; //load the map from the map.json file
-		fields = map.fields;
-		rivers = map.rivers; //rivers are the coordinates of two fields on either side of the river
-	});
+			fields = map.fields;
+			rivers = map.rivers; //rivers are the coordinates of two fields on either side of the river
+		});
 }
 
 function loadImages(tileset) { //load the images needed for visualization

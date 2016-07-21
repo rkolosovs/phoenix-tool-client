@@ -1,3 +1,4 @@
+// count = spielzugnr, factions anzahl an Fraktionen 0-.., order = zugreihenfolge für den derzeitigen Spielzug, subTurns = wie weit in der zugreihenfolge sind wir schon fortgeschritten.
 function gameState(count, factions, order, subTurns){
     this.turnCount = count;
     this.factionsInGame = factions;
@@ -7,22 +8,24 @@ function gameState(count, factions, order, subTurns){
     this.startNewTurn = function(){
         var armyCount = listOfArmyCoordinates.length;
         for(var i = 0; i< armyCount; i++){
-            if(listOfArmyCoordinates[i].owner == currentPlayer){
-                if(Math.floor(listOfArmyCoordinates[i].army.armyId/100) == 1){
-                    listOfArmyCoordinates[i].army.remainingMovePoints = 9;
-                } else if(Math.floor(listOfArmyCoordinates[i].army.armyId/100) == 2){
-                    listOfArmyCoordinates[i].army.remainingMovePoints = 21;
+            if(listOfArmyCoordinates[i].owner == this.currentPlayer){
+                if(Math.floor(listOfArmyCoordinates[i].a.armyId/100) == 1){
+                    listOfArmyCoordinates[i].setRemainingMovePoints(9);
+                } else if(Math.floor(listOfArmyCoordinates[i].a.armyId/100) == 2){
+                    listOfArmyCoordinates[i].setRemainingMovePoints(21);
+                } else if(Math.floor(listOfArmyCoordinates[i].a.armyId/100) == 3){
+                    listOfArmyCoordinates[i].setRemainingMovePoints(42);
                 }
             }
         }
     }
     this.endTurn = function(){
-        if(this.turnOrder.length-1 == subTurnNr){
+        if(this.turnOrder.length-1 == this.subTurnNr){
             this.turnCount++;
             this.subTurnNr = 0;
         } else {
             this.subTurnNr++;
         }
-        this.currentPlayer = turnOrder[this.subTurnNr];
+        this.currentPlayer = this.turnOrder[this.subTurnNr];
     }
 }

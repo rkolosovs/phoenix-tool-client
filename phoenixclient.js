@@ -12,6 +12,7 @@
 	var isDragging = false; //was the mouse moved while the button is down?
 	var scale = 16; //the scale of the elements, specifically the width
 	var selectedFields = []; //list of fields to be highlighted
+	var selectedArmy; //currently selected armyCoordinates
 	var originX = 900; //x coordinate of the origin in respect to which all drawing is done
 	var originY = 490; //y coodrinate of the origin in respect to which all drawing is done
 	var clickX = 0; //x coordinate of the point where the mouse was clicked
@@ -23,7 +24,7 @@
 	window.addEventListener('resize', resizeCanvas, false);
 
 	window.addEventListener('mousedown', function(event){
-		if (event.button === 0) {
+		if (event.button === 0 || event.button === 2) {
     		mousePressed = true;
     		clickX = event.pageX; //record the x coordinate of the mouse when it was clicked
     		clickY = event.pageY; //record the y coordinate of the mouse when it was clicked
@@ -36,7 +37,7 @@
 			if (isDragging) { //mouse was dragged; run panning finish routine
     			originX += moveX; //add the x offset from dragged mouse to the current x origin for drawing
     			originY += moveY; //add the y offset from dragged mouse to the current y origin for drawing
-			}
+			} 
 			else {
 				registerLeftClick(); //do whatever has to be done on leftclick
 			}
@@ -47,7 +48,18 @@
     		clickY = 0;
     		moveX = 0; //reset move registration
     		moveY = 0;
-    	}
+    	} else if (event.button === 2) {
+			registerRightClick();
+			//reset mouse click parameters
+    		mousePressed = false; //mouse is no longer pressed
+    		isDragging = false; //mouse is no longer being dragged
+    		clickX = 0; //reset click registration
+    		clickY = 0;
+    		moveX = 0; //reset move registration
+    		moveY = 0;
+		} else if(event.button === 1){
+			gamestate.startNewTurn();
+		}
     	drawStuff();
 	});
 
@@ -103,6 +115,28 @@
 			selectedFields.push(clickedField); //add to selection
 		} else { //if allready selected
 			selectedFields.splice(index, 1); //deselect
+		}
+		selectedArmy = undefined;
+		for(var i = 0; i < listOfArmyCoordinates.length; i++){
+			if(listOfArmyCoordinates[i].x == clickedField[0] && listOfArmyCoordinates[i].y == clickedField[1]){
+				selectedArmy = i;
+			}
+		}
+		console.log(selectedArmy);
+	}
+
+	function registerRightClick(){
+		if(selectedArmy != undefined){
+			var clickedField = getClickedField();
+			console.log(listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y);
+			var clickedArmyCoords = new showHex(listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y);
+			console.log(clickedArmyCoords.neighbors(), clickedField);
+			var neighbors = clickedArmyCoords.neighbors();
+			for (var i = 0; i < neighbors.length; i++){
+				if(neighbors[i][0] == clickedField[0] && neighbors[i][1] == clickedField[1]){
+					console.log(listOfArmyCoordinates[selectedArmy].move(i));
+				}
+			}
 		}
 	}
 
