@@ -5,14 +5,31 @@ html, body { width:100%; height:100%; } /* just to be sure these are full screen
 canvas { display:block; } /* To remove the scrollbars */
 
 div {
+    bottom:0;
     position:fixed;
     padding:0;
     margin:0;
+    background:rgba(180,180,180,0.7);
 
-    bottom:0;
+    border-style: groove;
+    border-color: gold;
+    border-width: 3px;
+}
+
+#infoBox {
     right:0;
+    width: 15%;
+    height: 25%;
+}
 
-    width: 25%;
-    height: 35%;
-    background:rgba(225,100,100,1);
+#buttonsBox {
+    right: calc(15% + 3px);
+    width: calc(70% - 12px);
+    height: 10%;
+}
+
+#minimapBox {
+    left:0;
+    width: 15%;
+    height: 25%;
 }
