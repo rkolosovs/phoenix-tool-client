@@ -23,7 +23,7 @@
 	// resize the canvas to fill browser window dynamically
 	window.addEventListener('resize', resizeCanvas, false);
 
-	window.addEventListener('mousedown', function(event){
+	canvas.addEventListener('mousedown', function(event){
 		if (event.button === 0 || event.button === 2) {
     		mousePressed = true;
     		clickX = event.pageX; //record the x coordinate of the mouse when it was clicked
@@ -32,7 +32,7 @@
 		drawStuff();
 	});
 
-	window.addEventListener('mouseup', function(event){
+	canvas.addEventListener('mouseup', function(event){
 		if (mousePressed && event.button === 0) {
 			if (isDragging) { //mouse was dragged; run panning finish routine
     			originX += moveX; //add the x offset from dragged mouse to the current x origin for drawing
@@ -63,7 +63,7 @@
     	drawStuff();
 	});
 
-	window.addEventListener('mousemove', function(event) {
+	canvas.addEventListener('mousemove', function(event) {
     	if (mousePressed === true) {
     		isDragging = true; //for later click detection; no click if mouse was previously dragged
     		moveX = event.pageX - clickX; //compute the x offset from dragged mouse
@@ -72,7 +72,7 @@
     	drawStuff();
 	});
 
-	window.addEventListener('wheel', function(event) {
+	canvas.addEventListener('wheel', function(event) {
 		var deltaY = event.deltaY; //get amount scrolled
 		var mouseX = event.pageX; //get current mouse position
 		var mouseY = event.pageY;
