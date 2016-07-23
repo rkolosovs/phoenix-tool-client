@@ -10,11 +10,11 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="64"
-   height="64"
+   width="166.5"
+   height="128"
    id="svg2985"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="castle.svg">
+   sodipodi:docname="harbor_nw.svg">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -24,15 +24,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="929"
-     inkscape:window-height="668"
-     id="namedview7"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview4191"
      showgrid="false"
-     inkscape:zoom="7.375"
-     inkscape:cx="32.851655"
-     inkscape:cy="35.01555"
-     inkscape:window-x="2617"
-     inkscape:window-y="195"
+     inkscape:zoom="1.7537538"
+     inkscape:cx="83.250002"
+     inkscape:cy="64.000002"
+     inkscape:window-x="2458"
+     inkscape:window-y="174"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg2985" />
   <defs
@@ -49,14 +49,12 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <path
-     sodipodi:type="arc"
-     style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.50000000000000000;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     id="path2984"
-     sodipodi:cx="37.830509"
-     sodipodi:cy="37.694916"
-     sodipodi:rx="26.033897"
-     sodipodi:ry="26.033897"
-     d="m 63.864407,37.694916 a 26.033897,26.033897 0 1 1 -52.067795,0 26.033897,26.033897 0 1 1 52.067795,0 z"
-     transform="translate(-5.559322,-5.8305085)" />
+  <g
+     transform="matrix(-0.2576215,-0.44621352,-0.44621352,0.2576215,86.303812,35.681319)"
+     id="layer1">
+    <path
+       d="M 0.43894792,0.23507149 0.18181818,63.818182 8.5454545,63.636364 8.5587678,34.677939 44.399553,34.284412 44.370741,28.619725 8.4435163,28.989755 c 0.00888,-10.563206 0.146316,-18.16942 0.1551915,-28.73262526 z"
+       id="path3004"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  </g>
 </svg>

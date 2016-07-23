@@ -10,11 +10,11 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="64"
+   width="56"
    height="64"
    id="svg2985"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="castle.svg">
+   sodipodi:docname="wall_sw.svg">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -24,15 +24,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="929"
-     inkscape:window-height="668"
-     id="namedview7"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview8"
      showgrid="false"
-     inkscape:zoom="7.375"
-     inkscape:cx="32.851655"
-     inkscape:cy="35.01555"
-     inkscape:window-x="2617"
-     inkscape:window-y="195"
+     inkscape:zoom="3.6875"
+     inkscape:cx="28"
+     inkscape:cy="32"
+     inkscape:window-x="2602"
+     inkscape:window-y="368"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg2985" />
   <defs
@@ -49,14 +49,12 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <path
-     sodipodi:type="arc"
-     style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.50000000000000000;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     id="path2984"
-     sodipodi:cx="37.830509"
-     sodipodi:cy="37.694916"
-     sodipodi:rx="26.033897"
-     sodipodi:ry="26.033897"
-     d="m 63.864407,37.694916 a 26.033897,26.033897 0 1 1 -52.067795,0 26.033897,26.033897 0 1 1 52.067795,0 z"
-     transform="translate(-5.559322,-5.8305085)" />
+  <g
+     transform="matrix(0.24623622,-0.42961736,-0.42961736,-0.24623622,27.485215,63.80531)"
+     id="layer1">
+    <path
+       d="M 0.12856487,0.10325994 0.25712974,63.74287 l 22.49885226,0 -0.128565,-7.842457 -11.442273,0.128565 -0.128565,-6.428243 11.827968,-0.128565 c 0,-0.06054 0,-0.472407 0,-3.856946 l -12.085098,0.128565 -0.128565,-6.171114 12.085098,0 0,-3.728381 -12.213663,0 0,-5.52829 12.085098,0 0,-3.728381 -12.342227,-0.128565 0.128564,-4.628335 12.342228,0.25713 0,-3.342687 -12.470792,-0.25713 0,-4.7569 12.599357,-0.128565 -0.128565,-2.828427 -12.599357,-0.128565 0.128565,-4.2426405 12.470792,10e-8 0,-6.17111379 z"
+       id="path3793"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  </g>
 </svg>

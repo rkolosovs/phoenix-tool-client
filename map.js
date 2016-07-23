@@ -10,9 +10,26 @@ var terrain = {
 	swamp: 8 //"Sumpf" in Erkenfara rules
 };
 
+var buildingTypes = {
+	castle: 0, //"Burg" in Erkenfara rules
+	city: 1, //"Stadt" in Erkenfara rules
+	fortress: 2, //"Festung" in Erkenfara rules
+	capital: 3, //"Hauptstadt" in Erkenfara rules
+	capitalFort: 4, //"Festungshauptstadt" in Erkenfara rules
+	wall: 5, //"Wall" in Erkenfara rules
+	harbor: 6, //"Kaianlage" in Erkenfara rules
+	bridge: 7, //"Brücke" in Erkenfara rules
+	street: 8 //"Straße" in Erkenfara rules
+};
+
+var gamestate; //abstract turn structure
+
 var fields; //declare fields variable; holds the terrain fields
 var rivers; //declare rivers variable; holds the rivers
-var shallowsImg = new Image(); //declare variables for all used images; TODO: organize them properly
+var buildings; //declare buildings variable; holds the buildings
+
+//declare variables for all used images
+var shallowsImg = new Image(); //tiles
 var deepseaImg = new Image();
 var lowlandsImg = new Image();
 var woodsImg = new Image();
@@ -22,23 +39,51 @@ var mountainsImg = new Image();
 var desertImg = new Image();
 var swampImg = new Image();
 var defaultImg = new Image();
-var troopsImg = new Image();
+
+var troopsImg = new Image(); //troops
 var mountsImg = new Image();
-var gamestate; //abstract turn structure
+
+var castleImg = new Image(); //buildings
+var cityImg = new Image();
+var fortressImg = new Image();
+var capitalImg = new Image();
+var capitalFortImg = new Image();
+var wallWImg = new Image();
+var wallEImg = new Image();
+var wallNWImg = new Image();
+var wallSWImg = new Image();
+var wallNEImg = new Image();
+var wallSEImg = new Image();
+var harborWImg = new Image();
+var harborEImg = new Image();
+var harborSWImg = new Image();
+var harborNWImg = new Image();
+var harborSEImg = new Image();
+var harborNEImg = new Image();
+var bridgeWImg = new Image();
+var bridgeEImg = new Image();
+var bridgeSWImg = new Image();
+var bridgeNWImg = new Image();
+var bridgeSEImg = new Image();
+var bridgeNEImg = new Image();
+
 
 function loadMap() {
 	gamestate = new gameState(0, [0], [0], 0);
 	$.getJSON("map.json", function(json){
 		var map = json; //load the map from the map.json file
-			fields = map.fields;
-			rivers = map.rivers; //rivers are the coordinates of two fields on either side of the river
-		});
+		fields = map.fields;
+		rivers = map.rivers; //rivers are the coordinates of two fields on either side of the river
+	});
+	$.getJSON("buildings.json", function(json){
+		buildings = json; //load the buildings from the buildings.json file
+	});
 }
 
 function loadImages(tileset) { //load the images needed for visualization
 	var pathPrefix = './tilesets/'+tileset; //build the path prefix common to all tile images
 
-	shallowsImg.src = pathPrefix+'/shallows.svg';
+	shallowsImg.src = pathPrefix+'/shallows.svg'; //terrain
 	deepseaImg.src = pathPrefix+'/deepsea.svg';
 	lowlandsImg.src = pathPrefix+'/lowlands.svg';
 	woodsImg.src = pathPrefix+'/woods.svg';
@@ -48,13 +93,118 @@ function loadImages(tileset) { //load the images needed for visualization
 	desertImg.src = pathPrefix+'/desert.svg';
 	swampImg.src = pathPrefix+'/swamp.svg';
 	defaultImg.src = pathPrefix+'/default.svg';
-	troopsImg.src = pathPrefix+'/troops.svg';
+
+	troopsImg.src = pathPrefix+'/troops.svg'; //troops
 	mountsImg.src = pathPrefix+'/mounts.svg';	
+
+	castleImg.src = pathPrefix+'/castle.svg'; //buildings
+	cityImg.src = pathPrefix+'/city.svg';
+	fortressImg.src = pathPrefix+'/fortress.svg';
+	capitalImg.src = pathPrefix+'/capital_city.svg';
+	capitalFortImg.src = pathPrefix+'/capital_fortress.svg';
+	wallWImg.src = pathPrefix+'/wall_w.svg';
+	wallEImg.src = pathPrefix+'/wall_e.svg';
+	wallNWImg.src = pathPrefix+'/wall_nw.svg';
+	wallSWImg.src = pathPrefix+'/wall_sw.svg';
+	wallNEImg.src = pathPrefix+'/wall_ne.svg';
+	wallSEImg.src = pathPrefix+'/wall_se.svg';
+	harborWImg.src = pathPrefix+'/harbor_w.svg';
+	harborEImg.src = pathPrefix+'/harbor_e.svg';
+	harborNWImg.src = pathPrefix+'/harbor_nw.svg';
+	harborSWImg.src = pathPrefix+'/harbor_sw.svg';
+	harborNEImg.src = pathPrefix+'/harbor_ne.svg';
+	harborSEImg.src = pathPrefix+'/harbor_se.svg';
+	bridgeWImg.src = pathPrefix+'/bridge_w.svg';
+	bridgeEImg.src = pathPrefix+'/bridge_e.svg';
+	bridgeNWImg.src = pathPrefix+'/bridge_nw.svg';
+	bridgeSWImg.src = pathPrefix+'/bridge_sw.svg';
+	bridgeNEImg.src = pathPrefix+'/bridge_ne.svg';
+	bridgeSEImg.src = pathPrefix+'/bridge_se.svg';
 }
 
 function drawMap(ctx, x, y, scale) {
 	drawFields(ctx, x, y, scale);
 	drawRivers(ctx, x, y, scale);
+	drawBuildings(ctx, x, y, scale);
+}
+
+function drawBuildings(ctx, x, y, scale) {
+	var gridHeight = (1.377/2)*scale;
+	var c = scale-gridHeight;
+	var gridWidth = 0.866 * scale;
+
+	ctx.lineWidth = (scale/8); //line style for roads
+	ctx.strokeStyle="#C8AB37";
+	ctx.lineCap="round";
+
+	for (var i = 0; i < buildings.length; i++) {
+		var building = buildings[i];
+		if(building.type !== 8){
+			var pos = computePosition(x, y, building.x, building.y, scale);
+		}
+		var tileImg; //declare the tile image variable
+		switch(building.type){ //set the tileImg to match the building type
+			case buildingTypes.castle: tileImg = castleImg;
+			break;
+
+			case buildingTypes.city: tileImg = cityImg;
+			break;
+
+			case buildingTypes.fortress: tileImg = fortressImg;
+			break;
+
+			case buildingTypes.capital: tileImg = capitalImg;
+			break;
+
+			case buildingTypes.capitalFort: tileImg = capitalFortImg;
+			break;
+
+			case buildingTypes.wall: if (building.direction === 'w'){tileImg = wallWImg;}
+			else if (building.direction === 'e'){tileImg = wallEImg;}
+			else if (building.direction === 'nw'){tileImg = wallNWImg;}
+			else if (building.direction === 'sw'){tileImg = wallSWImg;}
+			else if (building.direction === 'ne'){tileImg = wallNEImg;}
+			else if (building.direction === 'se'){tileImg = wallSEImg;}
+			break;
+
+			case buildingTypes.harbor: if (building.direction === 'w'){tileImg = harborWImg;}
+			else if (building.direction === 'e'){tileImg = harborEImg;}
+			else if (building.direction === 'nw'){tileImg = harborNWImg;}
+			else if (building.direction === 'sw'){tileImg = harborSWImg;}
+			else if (building.direction === 'ne'){tileImg = harborNEImg;}
+			else if (building.direction === 'se'){tileImg = harborSEImg;}
+			break;
+
+			case buildingTypes.bridge: if (building.direction === 'w'){tileImg = bridgeWImg;}
+			else if (building.direction === 'e'){tileImg = bridgeEImg;}
+			else if (building.direction === 'nw'){tileImg = bridgeNWImg;}
+			else if (building.direction === 'sw'){tileImg = bridgeSWImg;}
+			else if (building.direction === 'ne'){tileImg = bridgeNEImg;}
+			else if (building.direction === 'se'){tileImg = bridgeSEImg;}
+			break;
+
+
+
+			default: tileImg = defaultImg;
+			break;
+		}
+		if (building.type <= 4) { //regular one tile buildings excluding walls
+			ctx.drawImage(tileImg, pos[0], pos[1]-c, scale*0.866, scale); //draw the image
+		}
+		else if (building.type === 5) { //walls - one tile buildings handled differently from cities
+			ctx.drawImage(tileImg, pos[0], pos[1], scale*0.866, scale); //draw the image
+		}
+		else if (building.type <= 7) { //harbors and bridges - "oversized" buildings
+			ctx.drawImage(tileImg, pos[0]-gridWidth, pos[1]-(0.5*scale), 3*gridWidth, 2*scale); //draw the image
+		} else if (building.type === 8) { //streets - currently drawn as simple lines
+			var posFirst = computePosition(x, y, building.first[0], building.first[1], scale);
+			var posSecond = computePosition(x, y, building.second[0], building.second[1], scale);
+			ctx.beginPath();
+			ctx.moveTo((posFirst[0]+(0.5*gridWidth)), (posFirst[1]+c+(0.25*scale)));
+			ctx.lineTo((posSecond[0]+(0.5*gridWidth)), (posSecond[1]+c+(0.25*scale)));
+			ctx.stroke();
+		}
+	}
 }
 
 function drawRivers(ctx, x, y, scale) {
