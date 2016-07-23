@@ -185,12 +185,15 @@ function drawBuildings(ctx, x, y, scale) {
 			default: tileImg = defaultImg;
 			break;
 		}
-		if (building.type <= 5) { //regular one tile buildings including walls
+		if (building.type <= 4) { //regular one tile buildings excluding walls
+			ctx.drawImage(tileImg, pos[0], pos[1]-c, scale*0.866, scale); //draw the image
+		}
+		else if (building.type === 5) { //walls - one tile buildings handled differently from cities
 			ctx.drawImage(tileImg, pos[0], pos[1], scale*0.866, scale); //draw the image
 		}
 		else if (building.type <= 7) { //harbors and bridges - "oversized" buildings
 			ctx.drawImage(tileImg, pos[0]-gridWidth, pos[1]-(0.5*scale), 3*gridWidth, 2*scale); //draw the image
-		} else if (building.type === 8) { //streets
+		} else if (building.type === 8) { //streets - currently drawn as simple lines
 			var posFirst = computePosition(x, y, building.first[0], building.first[1], scale);
 			var posSecond = computePosition(x, y, building.second[0], building.second[1], scale);
 			ctx.beginPath();
