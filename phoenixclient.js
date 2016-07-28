@@ -59,6 +59,7 @@
     		moveY = 0;
 		} else if(event.button === 1){
 			gamestate.startNewTurn();
+			updateInfoBox();
 		}
     	drawStuff();
 	});
@@ -117,27 +118,80 @@
 			selectedFields.splice(index, 1); //deselect
 		}
 		selectedArmy = undefined;
+		var possibleSelections = [];
 		for(var i = 0; i < listOfArmyCoordinates.length; i++){
 			if(listOfArmyCoordinates[i].x == clickedField[0] && listOfArmyCoordinates[i].y == clickedField[1]){
+				possibleSelections.push(i);
 				selectedArmy = i;
 			}
 		}
-		console.log(selectedArmy);
+		if(document.getElementById("buttonsBox").childElementCount >= 2){
+			var d = document.getElementById("buttonsBox");
+			d.removeChild(d.lastChild);
+		}
+		if(possibleSelections.length != 0){
+			var x = document.createElement("SECTION");
+			x.setAttribute("id", "btnSection")
+			for (var i = 0; i < possibleSelections.length; i++){
+				var btn = document.createElement("BUTTON");
+				btn.id = listOfArmyCoordinates[possibleSelections[i]].a.armyId;
+				var t = document.createTextNode(listOfArmyCoordinates[possibleSelections[i]].a.armyId);
+				btn.appendChild(t);
+				btn.addEventListener('click', function(event) {
+					for (var j = 0; j < listOfArmyCoordinates.length ; j++){
+						if(listOfArmyCoordinates[j].a.armyId == this.id){
+							selectedArmy = j;
+						}
+					}
+					updateInfoBox();
+				});
+				x.appendChild(btn);
+			}
+			document.getElementById("buttonsBox").appendChild(x);
+		}
+		updateInfoBox();
+	}
+
+	function selectArmy(placeInList){
+		selectedArmy = placeInList; 
+		updateInfoBox();
 	}
 
 	function registerRightClick(){
 		if(selectedArmy != undefined){
 			var clickedField = getClickedField();
-			console.log(listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y);
 			var clickedArmyCoords = new showHex(listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y);
-			console.log(clickedArmyCoords.neighbors(), clickedField);
 			var neighbors = clickedArmyCoords.neighbors();
 			for (var i = 0; i < neighbors.length; i++){
 				if(neighbors[i][0] == clickedField[0] && neighbors[i][1] == clickedField[1]){
-					console.log(listOfArmyCoordinates[selectedArmy].move(i));
+					listOfArmyCoordinates[selectedArmy].move(i)
 				}
 			}
+			updateInfoBox();
 		}
+	}
+
+	function updateInfoBox(){
+		if(selectedArmy != undefined){
+			document.getElementById("armyId").innerHTML = "HeeresId: " + listOfArmyCoordinates[selectedArmy].a.armyId;
+			document.getElementById("count").innerHTML = "anzahl Truppen: " + listOfArmyCoordinates[selectedArmy].a.count;
+			document.getElementById("leaders").innerHTML = "anzahl Heerführer: " + listOfArmyCoordinates[selectedArmy].a.leaders;
+			document.getElementById("mounts").innerHTML = "mitgeführte Reittiere: " + listOfArmyCoordinates[selectedArmy].a.mounts;
+			document.getElementById("lkp").innerHTML = "leichte Katapulte: " + listOfArmyCoordinates[selectedArmy].a.lkp;
+			document.getElementById("skp").innerHTML = "schwere Katapulte: " + listOfArmyCoordinates[selectedArmy].a.skp;
+			document.getElementById("movePoints").innerHTML = "Verbleibende Bewegungspunkte: " + listOfArmyCoordinates[selectedArmy].remainingMovePoints;
+		} else {
+			document.getElementById("armyId").innerHTML = null;
+			document.getElementById("count").innerHTML = null;
+			document.getElementById("leaders").innerHTML = null;
+			document.getElementById("mounts").innerHTML = null;
+			document.getElementById("lkp").innerHTML = null;
+			document.getElementById("skp").innerHTML = null;
+			document.getElementById("movePoints").innerHTML = null;
+		};
+	}
+
+	function updateButtonBox(){
 	}
 
 	function getClickedField(){
