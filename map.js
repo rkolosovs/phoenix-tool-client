@@ -22,12 +22,17 @@ var buildingTypes = {
 	street: 8 //"Straße" in Erkenfara rules
 };
 
+var realmColors = [
+	{tag: "usa", color: "#FF8C00"},
+	{tag: "vvh", color: "#006400"}
+];
+
 var gamestate; //abstract turn structure
 
 var fields; //declare fields variable; holds the terrain fields
 var rivers; //declare rivers variable; holds the rivers
 var buildings; //declare buildings variable; holds the buildings
-var borders;
+var borders; //declare borders variable; holds the borders
 
 //declare variables for all used images
 var shallowsImg = new Image(); //tiles
@@ -80,7 +85,7 @@ function loadMap() {
 		buildings = json; //load the buildings from the buildings.json file
 	});
 	$.getJSON("borders.json", function(json){
-		borders = json;
+		borders = json; //load the borders from the borders.json file
 	});
 }
 
@@ -134,7 +139,20 @@ function drawMap(ctx, x, y, scale) {
 }
 
 function drawBorders(ctx, x, y, scale) {
-	
+	for (var i = 0; i < borders.length; i++) {
+		var tag = borders[i].tag;
+		var land = borders[i].land;
+		var color;
+		for (var i = 0; i < realmColors.length; i++) { //find the color corresponding to the tag
+			if(realmColors[i].tag === tag){
+				color = realmColors[i].color;
+				break;
+			}
+		}
+		//TODO: determine if the hex is a border hex or a inland hex
+		//TODO: color all hexes in the realms color
+		//TODO: draw a border line along the border hexes
+	}
 }
 
 function drawBuildings(ctx, x, y, scale) {
