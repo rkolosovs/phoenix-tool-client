@@ -27,6 +27,7 @@ var gamestate; //abstract turn structure
 var fields; //declare fields variable; holds the terrain fields
 var rivers; //declare rivers variable; holds the rivers
 var buildings; //declare buildings variable; holds the buildings
+var borders;
 
 //declare variables for all used images
 var shallowsImg = new Image(); //tiles
@@ -78,6 +79,9 @@ function loadMap() {
 	$.getJSON("buildings.json", function(json){
 		buildings = json; //load the buildings from the buildings.json file
 	});
+	$.getJSON("borders.json", function(json){
+		borders = json;
+	});
 }
 
 function loadImages(tileset) { //load the images needed for visualization
@@ -126,6 +130,11 @@ function drawMap(ctx, x, y, scale) {
 	drawFields(ctx, x, y, scale);
 	drawRivers(ctx, x, y, scale);
 	drawBuildings(ctx, x, y, scale);
+	drawBorders(ctx, x, y, scale);
+}
+
+function drawBorders(ctx, x, y, scale) {
+	
 }
 
 function drawBuildings(ctx, x, y, scale) {
