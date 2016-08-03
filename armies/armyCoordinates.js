@@ -7,12 +7,26 @@ function armyCoordinates(army, coordX, coordY, owner) {
     this.setRemainingMovePoints = function(points){
         this.remainingMovePoints = points;
     }
+    this.remainingHeightPoints = 0;
+    this.setRemainingHeightPoints = function(points){
+        this.remainingHeightPoints = points;
+    }
     // direction as a number, 0 = NW, 1 = NO, 2 = O, 3 = SO, 4 = SW, 5 = W
     //TODO: Alles was nicht standart Bewegung auf ein benachbartes Feld ist.
     this.move = function(direction) {
         var destination = new showHex(this.x, this.y);
         var neighborCoords = destination.neighbors();
         var target = new showHex(neighborCoords[direction][0],neighborCoords[direction][1]);
+        var changeInHeight = false;
+        if(destination.height() != target.height()){
+            if((destination.height() - target.height()) >= 2 || target.height() - destination.height() >= 2){
+                return "The height difference is too big."
+            } else if(this.remainingHeightPoints < 2){
+                return "No height points left."
+            } else {
+                changeInHeight = true;
+            }
+        }
         if(Math.floor(this.a.armyId / 100) == 3){
             switch(target.fieldType()){
                 case 0: 
@@ -21,6 +35,9 @@ function armyCoordinates(army, coordX, coordY, owner) {
                             this.remainingMovePoints -= 12;
                             this.x = target.x;
                             this.y = target.y;
+                            if(changeInHeight){
+                                this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
+                            }
                             return "ok";
                         } else {
                             return "You don't have enough movement Points.";
@@ -30,6 +47,9 @@ function armyCoordinates(army, coordX, coordY, owner) {
                             this.remainingMovePoints -= 21;
                             this.x = target.x;
                             this.y = target.y;
+                            if(changeInHeight){
+                                this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
+                            }
                             return "ok";
                         } else {
                             return "You don't have enough movement Points.";
@@ -39,6 +59,9 @@ function armyCoordinates(army, coordX, coordY, owner) {
                             this.remainingMovePoints -= 21;
                             this.x = target.x;
                             this.y = target.y;
+                            if(changeInHeight){
+                                this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
+                            }
                             return "ok";
                         } else {
                             return "You don't have enough movement Points.";
@@ -50,6 +73,9 @@ function armyCoordinates(army, coordX, coordY, owner) {
                             this.remainingMovePoints -= 7;
                             this.x = target.x;
                             this.y = target.y;
+                            if(changeInHeight){
+                                this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
+                            }
                             return "ok";
                         } else {
                             return "You don't have enough movement Points.";
@@ -59,6 +85,9 @@ function armyCoordinates(army, coordX, coordY, owner) {
                             this.remainingMovePoints -= 10;
                             this.x = target.x;
                             this.y = target.y;
+                            if(changeInHeight){
+                                this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
+                            }
                             return "ok";
                         } else {
                             return "You don't have enough movement Points.";
@@ -68,6 +97,9 @@ function armyCoordinates(army, coordX, coordY, owner) {
                             this.remainingMovePoints -= 8;
                             this.x = target.x;
                             this.y = target.y;
+                            if(changeInHeight){
+                                this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
+                            }
                             return "ok";
                         } else {
                             return "You don't have enough movement Points.";
@@ -91,6 +123,9 @@ function armyCoordinates(army, coordX, coordY, owner) {
                     this.remainingMovePoints -= 7;
                     this.x = target.x;
                     this.y = target.y;
+                    if(changeInHeight){
+                        this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
+                    }
                     return "ok";
                 } else {
                     return "You don't have enough movement Points.";
@@ -99,6 +134,9 @@ function armyCoordinates(army, coordX, coordY, owner) {
                     this.remainingMovePoints -= 21;
                     this.x = target.x;
                     this.y = target.y;
+                    if(changeInHeight){
+                        this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
+                    }
                     return "ok";
                 } else {
                     return "You don't have enough movement Points.";
@@ -109,6 +147,9 @@ function armyCoordinates(army, coordX, coordY, owner) {
                     this.remainingMovePoints -= 10;
                     this.x = target.x;
                     this.y = target.y;
+                    if(changeInHeight){
+                        this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
+                    }
                     return "ok";
                 } else {
                     return "You don't have enough movement Points.";
@@ -124,6 +165,9 @@ function armyCoordinates(army, coordX, coordY, owner) {
                     this.remainingMovePoints -= 7;
                     this.x = target.x;
                     this.y = target.y;
+                    if(changeInHeight){
+                        this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
+                    }
                     return "ok";
                 } else {
                     return "You don't have enough movement Points.";
@@ -134,6 +178,9 @@ function armyCoordinates(army, coordX, coordY, owner) {
                     this.remainingMovePoints -= 7;
                     this.x = target.x;
                     this.y = target.y;
+                    if(changeInHeight){
+                        this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
+                    }
                     return "ok";
                 } else {
                     return "You don't have enough movement Points.";
@@ -148,6 +195,9 @@ function armyCoordinates(army, coordX, coordY, owner) {
                     this.remainingMovePoints -= 7;
                     this.x = target.x;
                     this.y = target.y;
+                    if(changeInHeight){
+                        this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
+                    }
                     return "ok";
                 } else {
                     return "You don't have enough movement Points.";
@@ -184,6 +234,19 @@ function showHex(positionX, positionY) {
 			if((fields[i].x == this.x) && (fields[i].y == this.y)){return fields[i].type;}
 		}
 	}
+    this.height = function(){
+        switch(this.fieldType()){
+            case 0:
+            case 1: return 0;
+            case 2:
+            case 7:
+            case 8: 
+            case 3: return 1;
+            case 4: return 2;
+            case 5: return 3;
+            case 6: return 4;
+        }
+    }
 	this.neighbors = function(){
 		//reihenfolge NW,NO,O,SO,SW,W
 		if(this.y % 2 == 0){

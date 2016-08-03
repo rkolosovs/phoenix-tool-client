@@ -164,7 +164,10 @@
 			var neighbors = clickedArmyCoords.neighbors();
 			for (var i = 0; i < neighbors.length; i++){
 				if(neighbors[i][0] == clickedField[0] && neighbors[i][1] == clickedField[1]){
-					listOfArmyCoordinates[selectedArmy].move(i)
+					var out = listOfArmyCoordinates[selectedArmy].move(i)
+					if(out != "ok"){
+						alert(out);
+					}
 				}
 			}
 			updateInfoBox();
@@ -180,6 +183,7 @@
 			document.getElementById("lkp").innerHTML = "leichte Katapulte: " + listOfArmyCoordinates[selectedArmy].a.lkp;
 			document.getElementById("skp").innerHTML = "schwere Katapulte: " + listOfArmyCoordinates[selectedArmy].a.skp;
 			document.getElementById("movePoints").innerHTML = "Verbleibende Bewegungspunkte: " + listOfArmyCoordinates[selectedArmy].remainingMovePoints;
+			document.getElementById("heightPoints").innerHTML = "Verbleibende Höhenstufen: " + listOfArmyCoordinates[selectedArmy].remainingHeightPoints;
 		} else {
 			document.getElementById("armyId").innerHTML = null;
 			document.getElementById("count").innerHTML = null;
@@ -188,6 +192,7 @@
 			document.getElementById("lkp").innerHTML = null;
 			document.getElementById("skp").innerHTML = null;
 			document.getElementById("movePoints").innerHTML = null;
+			document.getElementById("heightPoints").innerHTML = null;
 		};
 	}
 
