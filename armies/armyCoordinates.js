@@ -32,7 +32,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
         if(destination.height() != target.height()){
             if((destination.height() - target.height()) >= 2 || target.height() - destination.height() >= 2){
                 return "The height difference is too big."
-            } else if(this.remainingHeightPoints < 2){
+            } else if((this.remainingHeightPoints < 2 && !thereIsAStreet)||this.remainingHeightPoints < 1){
                 return "No height points left."
             } else {
                 changeInHeight = true;

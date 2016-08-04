@@ -117,6 +117,7 @@
 		} else { //if allready selected
 			selectedFields.splice(index, 1); //deselect
 		}
+		// armeeauswahl
 		selectedArmy = undefined;
 		var possibleSelections = [];
 		for(var i = 0; i < listOfArmyCoordinates.length; i++){
@@ -149,11 +150,6 @@
 			}
 			document.getElementById("buttonsBox").appendChild(x);
 		}
-		updateInfoBox();
-	}
-
-	function selectArmy(placeInList){
-		selectedArmy = placeInList; 
 		updateInfoBox();
 	}
 
