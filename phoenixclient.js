@@ -102,6 +102,7 @@
 
 	function registerLeftClick(){
 		var clickedField = getClickedField(); //get selected field
+		console.log(clickedField);
 		var index = -1;
 		var sf = selectedFields[0];
 		if (sf != undefined && (sf[0] === clickedField[0]) && (sf[1] === clickedField[1])){
@@ -183,9 +184,6 @@
 			document.getElementById("movePoints").innerHTML = null;
 			document.getElementById("heightPoints").innerHTML = null;
 		};
-	}
-
-	function updateButtonBox(){
 	}
 
 	function getClickedField(){
