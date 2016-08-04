@@ -103,20 +103,13 @@
 	function registerLeftClick(){
 		var clickedField = getClickedField(); //get selected field
 		var index = -1;
-
-		for (var i = 0; i < selectedFields.length; i++) { //find out, if clickedField is allready selected
-			var sf = selectedFields[i];
-			if ((sf[0] === clickedField[0]) && (sf[1] === clickedField[1])){
-				index = i;
-				break;
-			}
+		var sf = selectedFields[0];
+		if (sf != undefined && (sf[0] === clickedField[0]) && (sf[1] === clickedField[1])){
+			selectedFields = [];
+		} else {
+			selectedFields[0] = clickedField;
 		}
 
-		if (index === -1) { //if field not yet selected
-			selectedFields.push(clickedField); //add to selection
-		} else { //if allready selected
-			selectedFields.splice(index, 1); //deselect
-		}
 		// armeeauswahl
 		selectedArmy = undefined;
 		var possibleSelections = [];
