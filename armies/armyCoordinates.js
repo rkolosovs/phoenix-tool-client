@@ -18,10 +18,21 @@ function armyCoordinates(army, coordX, coordY, owner) {
         var neighborCoords = destination.neighbors();
         var target = new showHex(neighborCoords[direction][0],neighborCoords[direction][1]);
         var changeInHeight = false;
+        var thereIsAStreet = false;
+        for(var i = 0; i < buildings.length; i++){
+            var building = buildings[i];
+            if(building.type == 8){
+                if(((building.first[0] == this.x && building.first[1] == this.y) && (building.second[0] == target.x && building.second[1] == target.y)) || 
+                ((building.second[0] == this.x && building.second[1] == this.y) && (building.first[0] == target.x && building.first[1] == target.y))){
+                    thereIsAStreet = true;
+                    break;
+                }
+            }
+        }
         if(destination.height() != target.height()){
             if((destination.height() - target.height()) >= 2 || target.height() - destination.height() >= 2){
                 return "The height difference is too big."
-            } else if(this.remainingHeightPoints < 2){
+            } else if((this.remainingHeightPoints < 2 && !thereIsAStreet)||this.remainingHeightPoints < 1){
                 return "No height points left."
             } else {
                 changeInHeight = true;
@@ -119,7 +130,19 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 case 1: return "You can't walk on Water."; // can't
                 case 2:
                 case 4:
-                case 7: if(this.remainingMovePoints >= 7 ){// 7
+                case 7: if(thereIsAStreet){
+                    if(this.remainingMovePoints >= 4 ){// 4
+                        this.remainingMovePoints -= 4;
+                        this.x = target.x;
+                        this.y = target.y;
+                        if(changeInHeight){
+                            this.setRemainingHeightPoints(this.remainingHeightPoints - 1);
+                        }
+                        return "ok";
+                    } else {
+                        return "You don't have enough movement Points.";
+                    }
+                } else if(this.remainingMovePoints >= 7 ){// 7
                     this.remainingMovePoints -= 7;
                     this.x = target.x;
                     this.y = target.y;
@@ -130,7 +153,19 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 } else {
                     return "You don't have enough movement Points.";
                 }
-                case 5: if(this.remainingMovePoints >= 21 ){// 21
+                case 5: if(thereIsAStreet){
+                    if(this.remainingMovePoints >= 7 ){// 7
+                        this.remainingMovePoints -= 7;
+                        this.x = target.x;
+                        this.y = target.y;
+                        if(changeInHeight){
+                            this.setRemainingHeightPoints(this.remainingHeightPoints - 1);
+                        }
+                    return "ok";
+                } else {
+                    return "You don't have enough movement Points.";
+                }
+                } else if(this.remainingMovePoints >= 21 ){// 21
                     this.remainingMovePoints -= 21;
                     this.x = target.x;
                     this.y = target.y;
@@ -143,7 +178,19 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 }
                 case 6: return "Cavalry can not move through the mountains. "// can't
                 case 3:
-                case 8: if(this.remainingMovePoints >= 10 ){// 10
+                case 8: if(thereIsAStreet){
+                    if(this.remainingMovePoints >= 5 ){// 5
+                        this.remainingMovePoints -= 5;
+                        this.x = target.x;
+                        this.y = target.y;
+                        if(changeInHeight){
+                            this.setRemainingHeightPoints(this.remainingHeightPoints - 1);
+                        }
+                        return "ok";
+                    } else {
+                        return "You don't have enough movement Points.";
+                    }
+                } else if(this.remainingMovePoints >= 10 ){// 10
                     this.remainingMovePoints -= 10;
                     this.x = target.x;
                     this.y = target.y;
@@ -161,7 +208,19 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 case 1: return "You can't walk on Water.";
                 case 2:
                 case 4:
-                case 7: if(this.remainingMovePoints >= 7 ){
+                case 7: if(thereIsAStreet){
+                    if(this.remainingMovePoints >= 4){
+                    this.remainingMovePoints -= 4;
+                    this.x = target.x;
+                    this.y = target.y;
+                    if(changeInHeight){
+                        this.setRemainingHeightPoints(this.remainingHeightPoints - 1);
+                    }
+                    return "ok";
+                } else {
+                    return "You don't have enough movement Points.";
+                }
+                } else if(this.remainingMovePoints >= 7){
                     this.remainingMovePoints -= 7;
                     this.x = target.x;
                     this.y = target.y;
@@ -172,9 +231,33 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 } else {
                     return "You don't have enough movement Points.";
                 }
-                case 5: if(this.a.skp != 0){
+                case 5: if(thereIsAStreet){
+                        if(this.a.skp != 0){
+                            if(this.remainingMovePoints >= 7){
+                                this.remainingMovePoints -= 7;
+                                this.x = target.x;
+                                this.y = target.y;
+                                if(changeInHeight){
+                                    this.setRemainingHeightPoints(this.remainingHeightPoints - 1);
+                                }
+                                return "ok";
+                            } else {
+                                return "You don't have enough movement Points.";
+                            }
+                        } if(this.remainingMovePoints >= 4){
+                            this.remainingMovePoints -= 4;
+                            this.x = target.x;
+                            this.y = target.y;
+                            if(changeInHeight){
+                                this.setRemainingHeightPoints(this.remainingHeightPoints - 1);
+                            }
+                            return "ok";
+                        } else {
+                            return "You don't have enough movement Points.";
+                        }
+                    } else if(this.a.skp != 0){
                     return "You you need streets to move heavy catapults into the highlands.";
-                } if(this.remainingMovePoints >= 7 ){
+                } if(this.remainingMovePoints >= 7){
                     this.remainingMovePoints -= 7;
                     this.x = target.x;
                     this.y = target.y;
@@ -185,11 +268,61 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 } else {
                     return "You don't have enough movement Points.";
                 }
-                case 6: if(this.a.lkp != 0 || this.a.skp != 0){
+                case 6: if(thereIsAStreet){
+                    if(this.a.skp != 0){
+                        return "You can't move into the mountains with heavy catapults.";
+                    } else if(this.a.lkp != 0){
+                        if(this.remainingMovePoints >= 7 ){
+                            this.remainingMovePoints -= 7;
+                            this.x = target.x;
+                            this.y = target.y;
+                            if(changeInHeight){
+                                this.setRemainingHeightPoints(this.remainingHeightPoints - 1);
+                            }
+                            return "ok";
+                        } else {
+                            return "You don't have enough movement Points.";
+                        }
+                    } else if(this.remainingMovePoints >= 4 ){
+                        this.remainingMovePoints -= 4;
+                        this.x = target.x;
+                        this.y = target.y;
+                        if(changeInHeight){
+                            this.setRemainingHeightPoints(this.remainingHeightPoints - 1);
+                        }
+                        return "ok";
+                    } else {
+                        return "You don't have enough movement Points.";
+                    }
+                } else if(this.a.lkp != 0 || this.a.skp != 0){
                     return "You can't move into the mountains with catapults.";
                 }
                 case 3:
-                case 8: if(this.a.skp != 0){
+                case 8: if(thereIsAStreet){
+                    if(this.a.skp != 0){
+                        if(this.remainingMovePoints >= 7 ){
+                            this.remainingMovePoints -= 7;
+                            this.x = target.x;
+                            this.y = target.y;
+                            if(changeInHeight){
+                                this.setRemainingHeightPoints(this.remainingHeightPoints - 1);
+                            }
+                            return "ok";
+                        } else {
+                            return "You don't have enough movement Points.";
+                        }
+                    } else if(this.remainingMovePoints >= 4 ){
+                        this.remainingMovePoints -= 4;
+                        this.x = target.x;
+                        this.y = target.y;
+                        if(changeInHeight){
+                            this.setRemainingHeightPoints(this.remainingHeightPoints - 1);
+                        }
+                        return "ok";
+                    } else {
+                        return "You don't have enough movement Points.";
+                    }
+                } else if(this.a.skp != 0){
                     return "You can't move into deserts or swamps with heavy catapults unless you have streets.";
                 } else if(this.remainingMovePoints >= 7 ){
                     this.remainingMovePoints -= 7;

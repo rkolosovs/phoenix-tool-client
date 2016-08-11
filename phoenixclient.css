@@ -33,3 +33,9 @@ div {
     width: 15%;
     height: 25%;
 }
+
+#godmodeBox {
+    top:0;
+    height: 10%;
+    width: 100%;
+}

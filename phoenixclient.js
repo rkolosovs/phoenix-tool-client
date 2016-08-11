@@ -102,21 +102,16 @@
 
 	function registerLeftClick(){
 		var clickedField = getClickedField(); //get selected field
+		console.log(clickedField);
 		var index = -1;
-
-		for (var i = 0; i < selectedFields.length; i++) { //find out, if clickedField is allready selected
-			var sf = selectedFields[i];
-			if ((sf[0] === clickedField[0]) && (sf[1] === clickedField[1])){
-				index = i;
-				break;
-			}
+		var sf = selectedFields[0];
+		if (sf != undefined && (sf[0] === clickedField[0]) && (sf[1] === clickedField[1])){
+			selectedFields = [];
+		} else {
+			selectedFields[0] = clickedField;
 		}
 
-		if (index === -1) { //if field not yet selected
-			selectedFields.push(clickedField); //add to selection
-		} else { //if allready selected
-			selectedFields.splice(index, 1); //deselect
-		}
+		// armeeauswahl
 		selectedArmy = undefined;
 		var possibleSelections = [];
 		for(var i = 0; i < listOfArmyCoordinates.length; i++){
@@ -127,7 +122,7 @@
 		}
 		if(document.getElementById("buttonsBox").childElementCount >= 2){
 			var d = document.getElementById("buttonsBox");
-			d.removeChild(d.lastChild);
+			d.removeChild(document.getElementById("btnSection"));
 		}
 		if(possibleSelections.length != 0){
 			var x = document.createElement("SECTION");
@@ -149,11 +144,6 @@
 			}
 			document.getElementById("buttonsBox").appendChild(x);
 		}
-		updateInfoBox();
-	}
-
-	function selectArmy(placeInList){
-		selectedArmy = placeInList; 
 		updateInfoBox();
 	}
 
@@ -194,9 +184,6 @@
 			document.getElementById("movePoints").innerHTML = null;
 			document.getElementById("heightPoints").innerHTML = null;
 		};
-	}
-
-	function updateButtonBox(){
 	}
 
 	function getClickedField(){
