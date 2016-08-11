@@ -9,5 +9,6 @@
 	{"type": 5, "x": 6, "y": 20, "direction": "w"}, {"type": 5, "x": 6, "y": 20, "direction": "nw"}, {"type": 5, "x": 6, "y": 20, "direction": "ne"}, 
 	{"type": 5, "x": 6, "y": 20, "direction": "e"}, {"type": 5, "x": 6, "y": 20, "direction": "sw"}, {"type": 5, "x": 7, "y": 21, "direction": "w"}, 
 	{"type": 5, "x": 7, "y": 21, "direction": "sw"}, {"type": 5, "x": 7, "y": 21, "direction": "se"}, {"type": 5, "x": 7, "y": 21, "direction": "e"}, 
-	{"type": 5, "x": 7, "y": 21, "direction": "ne"}
+	{"type": 5, "x": 7, "y": 21, "direction": "ne"}, {"type": 8, "first": [17, 21], "second": [18, 21]}, {"type": 8, "first": [18, 21], "second": [19, 21]},
+	{"type": 8, "first": [19, 21], "second": [20, 21]}, {"type": 8, "first": [20, 21], "second": [21, 21]}, {"type": 8, "first": [21, 21], "second": [21, 20]}
 ]

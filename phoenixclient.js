@@ -122,7 +122,6 @@
 		}
 		if(document.getElementById("buttonsBox").childElementCount >= 2){
 			var d = document.getElementById("buttonsBox");
-			//d.removeChild(d.lastChild);
 			d.removeChild(document.getElementById("btnSection"));
 		}
 		if(possibleSelections.length != 0){
