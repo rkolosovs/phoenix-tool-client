@@ -1,3 +1,7 @@
+//constants
+const SQRT3 = Math.sqrt(3);
+const SIN60 = 0.5 * SQRT3;
+
 var terrain = {
 	shallows: 0, //"Wasser" in Erkenfara rules
 	deepsea: 1, //"Tiefsee" in Erkenfara rules
@@ -26,6 +30,12 @@ var realmColors = [
 	{tag: "usa", color: "#FF8C00"},
 	{tag: "vvh", color: "#006400"}
 ];
+
+//hex parts: values used to compute coordinates of a hexes corners 
+//when given upper left point of inscribing rectangle
+var c;
+var gH;
+var gW;
 
 var gamestate; //abstract turn structure
 
@@ -139,9 +149,6 @@ function drawMap(ctx, x, y, scale) {
 }
 
 function drawBorders(ctx, x, y, scale) {
-	var gridHeight = (1.377/2)*scale;
-	var c = scale-gridHeight;
-	var gridWidth = 0.866 * scale;
 	var offset = (scale/15)
 	for (var i = 0; i < borders.length; i++) {
 		var tag = borders[i].tag;
@@ -163,30 +170,30 @@ function drawBorders(ctx, x, y, scale) {
 			var point = computePosition(x, y, hex[0], hex[1], scale);
 			var isEven = (hex[1]%2 === 0);
 			ctx.beginPath();
-			ctx.moveTo((point[0]+0.866*offset), (point[1]+c+0.5*offset)); //goto upper left corner
+			ctx.moveTo((point[0]+SIN60*offset), (point[1]+c+0.5*offset)); //goto upper left corner
 			if (contains(land, (isEven?[hex[0], (hex[1]-1)]:[(hex[0]-1), (hex[1]-1)]))) //to top corner
-				{ctx.moveTo((point[0]+0.5*gridWidth), (point[1]+offset));} //draw line if nw neighbour square isn't in the territory
-			else {ctx.lineTo((point[0]+0.5*gridWidth), (point[1]+offset));} //just move if nw neighbour square is in the territory
+				{ctx.moveTo((point[0]+0.5*gW), (point[1]+offset));} //draw line if nw neighbour square isn't in the territory
+			else {ctx.lineTo((point[0]+0.5*gW), (point[1]+offset));} //just move if nw neighbour square is in the territory
 
 			if (contains(land, isEven?[(hex[0]+1), (hex[1]-1)]:[hex[0], (hex[1]-1)])) //to upper right corner
-				{ctx.moveTo((point[0]+gridWidth-0.866*offset), (point[1]+c+0.5*offset));} //draw line if ne neighbour square isn't in the territory
-			else {ctx.lineTo((point[0]+gridWidth-0.866*offset), (point[1]+c+0.5*offset));} //just move if ne neighbour square is in the territory
+				{ctx.moveTo((point[0]+gW-SIN60*offset), (point[1]+c+0.5*offset));} //draw line if ne neighbour square isn't in the territory
+			else {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+c+0.5*offset));} //just move if ne neighbour square is in the territory
 
 			if (contains(land, [(hex[0]+1), hex[1]])) //to lower right corner
-				{ctx.moveTo((point[0]+gridWidth-0.866*offset), (point[1]+gridHeight-0.5*offset));} //draw line if e neighbour square isn't in the territory
-			else {ctx.lineTo((point[0]+gridWidth-0.866*offset), (point[1]+gridHeight-0.5*offset));} //just move if e neighbour square is in the territory
+				{ctx.moveTo((point[0]+gW-SIN60*offset), (point[1]+gH-0.5*offset));} //draw line if e neighbour square isn't in the territory
+			else {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+gH-0.5*offset));} //just move if e neighbour square is in the territory
 
 			if (contains(land, isEven?[(hex[0]+1), (hex[1]+1)]:[hex[0], (hex[1]+1)])) //to bottom corner
-				{ctx.moveTo((point[0]+0.5*gridWidth), (point[1]+scale-offset));} //draw line if se neighbour square isn't in the territory
-			else {ctx.lineTo((point[0]+0.5*gridWidth), (point[1]+scale-offset));} //just move if se neighbour square is in the territory
+				{ctx.moveTo((point[0]+0.5*gW), (point[1]+scale-offset));} //draw line if se neighbour square isn't in the territory
+			else {ctx.lineTo((point[0]+0.5*gW), (point[1]+scale-offset));} //just move if se neighbour square is in the territory
 
 			if (contains(land, isEven?[hex[0], (hex[1]+1)]:[(hex[0]-1), (hex[1]+1)])) //to lower left corner
-				{ctx.moveTo((point[0]+0.866*offset), (point[1]+gridHeight-0.5*offset));} //draw line if sw neighbour square isn't in the territory
-			else {ctx.lineTo((point[0]+0.866*offset), (point[1]+gridHeight-0.5*offset));} //just move if sw neighbour square is in the territory
+				{ctx.moveTo((point[0]+SIN60*offset), (point[1]+gH-0.5*offset));} //draw line if sw neighbour square isn't in the territory
+			else {ctx.lineTo((point[0]+SIN60*offset), (point[1]+gH-0.5*offset));} //just move if sw neighbour square is in the territory
 
 			if (contains(land, [(hex[0]-1), hex[1]])) //back to upper right corner
-				{ctx.moveTo((point[0]+0.866*offset), (point[1]+c+0.5*offset));} //draw line if w neighbour square isn't in the territory
-			else {ctx.lineTo((point[0]+0.866*offset), (point[1]+c+0.5*offset));} //just move if w neighbour square is in the territory
+				{ctx.moveTo((point[0]+SIN60*offset), (point[1]+c+0.5*offset));} //draw line if w neighbour square isn't in the territory
+			else {ctx.lineTo((point[0]+SIN60*offset), (point[1]+c+0.5*offset));} //just move if w neighbour square is in the territory
 			ctx.stroke();
 			// ctx.fill();
 		}
@@ -402,4 +409,10 @@ function contains(array, point) {
 			}
 		}
 	return result;
+}
+
+function setHexParts(scale) {
+	c = 0.25 * scale;
+	gH = 0.75 * scale;
+	gW = SIN60 * scale;
 }

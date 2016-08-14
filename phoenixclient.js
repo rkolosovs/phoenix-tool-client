@@ -86,6 +86,7 @@
 			scale *= 1-scrollSpeed;
 		}
 
+		setHexParts(scale); //compute the scale dependant values used for map drawing
 		var newPosX = posX * scale; //compute the new distance of mouse from origin
 		var newPosY = posY * scale;
 		originX = mouseX - newPosX; //move origin so that the tile stays the same with the new scaling
