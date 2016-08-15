@@ -233,6 +233,7 @@
 				loadMap();
 				loadImages(tileset);
 				loadArmies();
+				setHexParts(scale);
 				resizeCanvas();
 			}); 
 	}
