@@ -150,7 +150,7 @@ function drawMap(ctx, x, y, scale) {
 }
 
 function drawBorders(ctx, x, y, scale) {
-	var offset = (scale/13);
+	var offset = (scale/13); //set offset of a border from the actual border of two hexes
 	for (var i = 0; i < borders.length; i++) {
 		var tag = borders[i].tag;
 		var land = borders[i].land;
@@ -161,10 +161,11 @@ function drawBorders(ctx, x, y, scale) {
 				break;
 			}
 		}
-		ctx.lineWidth = (scale/14); //line style for borders
-		ctx.strokeStyle = 'rgb('+color[0]+', '+color[1]+', '+color[2]+')';
-		// ctx.fillStyle='rgba(255, 140, 0, 0.5)';
+
+		ctx.lineWidth = (scale/14); //line thickness for borders
+		ctx.strokeStyle = 'rgb('+color[0]+', '+color[1]+', '+color[2]+')'; //set line color
 		ctx.lineCap="round";
+		ctx.fillStyle='rgba('+color[0]+', '+color[1]+', '+color[2]+', 0.5)'; //set fill color
 		for (var j = 0; j < land.length; j++) {
 			var hex = land[j];
 			var point = computePosition(x, y, hex[0], hex[1], scale);
@@ -179,7 +180,7 @@ function drawBorders(ctx, x, y, scale) {
 				else {start = [(point[0]+0.5*gW), (point[1]+offset)];}
 			}
 
-			ctx.beginPath();
+			ctx.beginPath(); //begin border drawing
 			ctx.moveTo(start[0], start[1]);
 
 			if (neighbours[0]) { //go to upper right corner
@@ -224,8 +225,55 @@ function drawBorders(ctx, x, y, scale) {
 
 			if (neighbours[5]) {ctx.moveTo(start[0], start[1]);} //back to top corner
 			else {ctx.lineTo(start[0], start[1]);}
-
 			ctx.stroke();
+
+
+			ctx.beginPath(); //begin area filling
+			ctx.moveTo(start[0], start[1]);
+
+			if (neighbours[0]) { //go to upper right corner
+				if (neighbours[1]) {ctx.lineTo((point[0]+gW), (point[1]+c));} 
+				else {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+c-0.5*offset));}
+			} else {
+				if (neighbours[1]) {ctx.lineTo((point[0]+gW), (point[1]+c+offset));} 
+				else {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+c+0.5*offset));}
+			}
+
+			if (neighbours[1]) { //go to lower right corner
+				if (neighbours[2]) {ctx.lineTo((point[0]+gW), (point[1]+gH));} 
+				else {ctx.lineTo((point[0]+gW), (point[1]+gH-offset));}
+			} else {
+				if (neighbours[2]) {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+gH+0.5*offset));} 
+				else {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+gH-0.5*offset));}
+			}
+
+			if (neighbours[2]) { //go to bottom corner
+				if (neighbours[3]) {ctx.lineTo((point[0]+0.5*gW), (point[1]+scale));} 
+				else {ctx.lineTo((point[0]+0.5*gW+SIN60*offset), (point[1]+scale-0.5*offset));}
+			} else {
+				if (neighbours[3]) {ctx.lineTo((point[0]+0.5*gW-SIN60*offset), (point[1]+scale-0.5*offset));} 
+				else {ctx.lineTo((point[0]+0.5*gW), (point[1]+scale-offset));}
+			}
+
+			if (neighbours[3]) { //go to lower left corner
+				if (neighbours[4]) {ctx.lineTo(point[0], (point[1]+gH));} 
+				else {ctx.lineTo((point[0]+SIN60*offset), (point[1]+gH+0.5*offset));}
+			} else {
+				if (neighbours[4]) {ctx.lineTo(point[0], (point[1]+gH-offset));} 
+				else {ctx.lineTo((point[0]+SIN60*offset), (point[1]+gH-0.5*offset));}
+			}
+
+			if (neighbours[4]) { //go to upper left corner
+				if (neighbours[5]) {ctx.lineTo(point[0], (point[1]+c));} 
+				else {ctx.lineTo(point[0], (point[1]+c+offset));}
+			} else {
+				if (neighbours[5]) {ctx.lineTo((point[0]+SIN60*offset), (point[1]+c-0.5*offset));} 
+				else {ctx.lineTo((point[0]+SIN60*offset), (point[1]+c+0.5*offset));}
+			}
+
+			if (neighbours[5]) {ctx.lineTo(start[0], start[1]);} //back to top corner
+			else {ctx.lineTo(start[0], start[1]);}
+			ctx.fill();
 		}
 	}
 }
