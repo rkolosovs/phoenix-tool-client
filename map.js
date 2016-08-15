@@ -150,7 +150,7 @@ function drawMap(ctx, x, y, scale) {
 }
 
 function drawBorders(ctx, x, y, scale) {
-	var offset = (scale/10);
+	var offset = (scale/13);
 	for (var i = 0; i < borders.length; i++) {
 		var tag = borders[i].tag;
 		var land = borders[i].land;
@@ -161,7 +161,7 @@ function drawBorders(ctx, x, y, scale) {
 				break;
 			}
 		}
-		ctx.lineWidth = (scale/15); //line style for borders
+		ctx.lineWidth = (scale/14); //line style for borders
 		ctx.strokeStyle = color;
 		// ctx.fillStyle=color;
 		// rgba(255, 140, 0, 0.5);
@@ -371,7 +371,7 @@ function drawSelection(ctx, x, y, scale, selectedFields) {
 
 function computePosition(xOrig, yOrig, xCurr, yCurr, scale) { //computes a fields position (upper left corner of inscribing rectangle)
 	var xpos = xOrig + (xCurr * scale * SIN60); //get the current field's x position
-	return [ (((yCurr%2)!==0)?(xpos - (scale*SIN60/2)):(xpos)), yOrig+(yCurr * scale * 1.366 / 2)]; //each odd row is offset half a hex to the left
+	return [ (((yCurr%2)!==0)?(xpos - (0.5*scale*SIN60)):(xpos)), yOrig+(yCurr * gH)]; //each odd row is offset half a hex to the left
 }
 
 function drawArmies(ctx, x, y, scale, armyCoordinates) {
