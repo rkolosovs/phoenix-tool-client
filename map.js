@@ -163,8 +163,7 @@ function drawBorders(ctx, x, y, scale) {
 		}
 		ctx.lineWidth = (scale/14); //line style for borders
 		ctx.strokeStyle = color;
-		// ctx.fillStyle=color;
-		// rgba(255, 140, 0, 0.5);
+		// ctx.fillStyle='rgba(255, 140, 0, 0.5)';
 		ctx.lineCap="round";
 		for (var j = 0; j < land.length; j++) {
 			var hex = land[j];
@@ -362,7 +361,7 @@ function drawSelection(ctx, x, y, scale, selectedFields) {
 		var selectedField = selectedFields[i]; //get selected field
 		var pos = computePosition(x, y, selectedField[0], selectedField[1], scale); //get fields position
 
-		//draw a simple circle; TODO: draw propper selection
+		//draw a simple circle; TODO: draw propper selection (if desired)
 		ctx.beginPath();
       	ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/2, 0, 2 * Math.PI, false);
       	ctx.stroke();
@@ -387,6 +386,45 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 			ctx.drawImage(troopsImg, pos[0], pos[1], (scale*SIN60), scale); 
 		} else if(Math.floor(armyData.a.armyId/100) == 2) {
 			ctx.drawImage(mountsImg, pos[0], pos[1], (scale*SIN60), scale);
+		}
+	}
+}
+
+function getAdjacency(field, land) {
+	var result = [0, 0, 0, 0, 0, 0];
+	if ((field[1]%2 === 0)) { //if the field is in an even row
+		for (var i = 0; i < land.length; i++) { //check each field of real land for adjacency
+			var candidate = land[i];
+			if ((candidate[0] === (field[0]+1)) && (candidate[1] === (field[1]-1))) { //ne neighbour
+				result[0] = 1;
+			} else if ((candidate[0] === (field[0]+1)) && (candidate[1] === (field[1]))) { //e neighbour
+				result[1] = 1;
+			} else if ((candidate[0] === (field[0]+1)) && (candidate[1] === (field[1]+1))) { //se neighbour
+				result[2] = 1;
+			} else if ((candidate[0] === (field[0])) && (candidate[1] === (field[1]+1))) { //sw neighbour
+				result[3] = 1;
+			} else if ((candidate[0] === (field[0]-1)) && (candidate[1] === (field[1]))) { //w neighbour
+				result[4] = 1;
+			} else if ((candidate[0] === (field[0])) && (candidate[1] === (field[1]-1))) { //nw neighbour
+				result[5] = 1;
+			}
+		}
+	} else { //if the field is in an odd row
+		for (var i = 0; i < land.length; i++) { //check each field of real land for adjacency
+			var candidate = land[i];
+			if ((candidate[0] === (field[0])) && (candidate[1] === (field[1]-1))) { //ne neighbour
+				result[0] = 1;
+			} else if ((candidate[0] === (field[0]+1)) && (candidate[1] === (field[1]))) { //e neighbour
+				result[1] = 1;
+			} else if ((candidate[0] === (field[0])) && (candidate[1] === (field[1]+1))) { //se neighbour
+				result[2] = 1;
+			} else if ((candidate[0] === (field[0]-1)) && (candidate[1] === (field[1]+1))) { //sw neighbour
+				result[3] = 1;
+			} else if ((candidate[0] === (field[0]-1)) && (candidate[1] === (field[1]))) { //w neighbour
+				result[4] = 1;
+			} else if ((candidate[0] === (field[0]-1)) && (candidate[1] === (field[1]-1))) { //nw neighbour
+				result[5] = 1;
+			}
 		}
 	}
 }
