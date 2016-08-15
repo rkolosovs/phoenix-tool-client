@@ -27,9 +27,9 @@ var buildingTypes = {
 };
 
 var realmColors = [
-	{tag: "usa", color: "#FF8C00"},
-	{tag: "vvh", color: "#006400"},
-	{tag: "eos", color: "#800080"}
+	{tag: "usa", color: [255, 140, 0]},
+	{tag: "vvh", color: [0, 100, 0]},
+	{tag: "eos", color: [128, 0, 128]}
 ];
 
 //hex parts: values used to compute coordinates of a hexes corners 
@@ -162,7 +162,7 @@ function drawBorders(ctx, x, y, scale) {
 			}
 		}
 		ctx.lineWidth = (scale/14); //line style for borders
-		ctx.strokeStyle = color;
+		ctx.strokeStyle = 'rgb('+color[0]+', '+color[1]+', '+color[2]+')';
 		// ctx.fillStyle='rgba(255, 140, 0, 0.5)';
 		ctx.lineCap="round";
 		for (var j = 0; j < land.length; j++) {
