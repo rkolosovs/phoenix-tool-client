@@ -1,3 +1,7 @@
+//constants
+const SQRT3 = Math.sqrt(3); //about 1.732050808...
+const SIN60 = 0.5 * SQRT3; //about 0.8660254037...
+
 var terrain = {
 	shallows: 0, //"Wasser" in Erkenfara rules
 	deepsea: 1, //"Tiefsee" in Erkenfara rules
@@ -22,11 +26,24 @@ var buildingTypes = {
 	street: 8 //"Straße" in Erkenfara rules
 };
 
+var realmColors = [
+	{tag: "usa", color: [255, 140, 0]},
+	{tag: "vvh", color: [0, 100, 0]},
+	{tag: "eos", color: [128, 0, 128]}
+];
+
+//hex parts: values used to compute coordinates of a hexes corners 
+//when given upper left point of inscribing rectangle
+var c;
+var gH;
+var gW;
+
 var gamestate; //abstract turn structure
 
 var fields; //declare fields variable; holds the terrain fields
 var rivers; //declare rivers variable; holds the rivers
 var buildings; //declare buildings variable; holds the buildings
+var borders; //declare borders variable; holds the borders
 
 //declare variables for all used images
 var shallowsImg = new Image(); //tiles
@@ -78,6 +95,9 @@ function loadMap() {
 	$.getJSON("buildings.json", function(json){
 		buildings = json; //load the buildings from the buildings.json file
 	});
+	$.getJSON("borders.json", function(json){
+		borders = json; //load the borders from the borders.json file
+	});
 }
 
 function loadImages(tileset) { //load the images needed for visualization
@@ -125,14 +145,140 @@ function loadImages(tileset) { //load the images needed for visualization
 function drawMap(ctx, x, y, scale) {
 	drawFields(ctx, x, y, scale);
 	drawRivers(ctx, x, y, scale);
+	drawBorders(ctx, x, y, scale);
 	drawBuildings(ctx, x, y, scale);
 }
 
-function drawBuildings(ctx, x, y, scale) {
-	var gridHeight = (1.377/2)*scale;
-	var c = scale-gridHeight;
-	var gridWidth = 0.866 * scale;
+function drawBorders(ctx, x, y, scale) {
+	var offset = (scale/13); //set offset of a border from the actual border of two hexes
+	for (var i = 0; i < borders.length; i++) {
+		var tag = borders[i].tag;
+		var land = borders[i].land;
+		var color;
+		for (var j = 0; j < realmColors.length; j++) { //find the color corresponding to the tag
+			if(realmColors[j].tag === tag){
+				color = realmColors[j].color;
+				break;
+			}
+		}
 
+		ctx.lineWidth = (scale/14); //line thickness for borders
+		ctx.strokeStyle = 'rgb('+color[0]+', '+color[1]+', '+color[2]+')'; //set line color
+		ctx.lineCap="round";
+		ctx.fillStyle='rgba('+color[0]+', '+color[1]+', '+color[2]+', 0.5)'; //set fill color
+		for (var j = 0; j < land.length; j++) {
+			var hex = land[j];
+			var point = computePosition(x, y, hex[0], hex[1], scale);
+			var neighbours = getAdjacency(hex, land);
+
+			var start;
+			if (neighbours[5]) { //determine start in the top corner
+				if (neighbours[0]) {start = [(point[0]+0.5*gW), point[1]];} 
+				else {start = [(point[0]+0.5*gW-SIN60*offset), (point[1]+0.5*offset)];}
+			} else {
+				if (neighbours[0]) {start = [(point[0]+0.5*gW+SIN60*offset), (point[1]+0.5*offset)];} 
+				else {start = [(point[0]+0.5*gW), (point[1]+offset)];}
+			}
+
+			ctx.beginPath(); //begin border drawing
+			ctx.moveTo(start[0], start[1]);
+
+			if (neighbours[0]) { //go to upper right corner
+				if (neighbours[1]) {ctx.moveTo((point[0]+gW), (point[1]+c));} 
+				else {ctx.moveTo((point[0]+gW-SIN60*offset), (point[1]+c-0.5*offset));}
+			} else {
+				if (neighbours[1]) {ctx.lineTo((point[0]+gW), (point[1]+c+offset));} 
+				else {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+c+0.5*offset));}
+			}
+
+			if (neighbours[1]) { //go to lower right corner
+				if (neighbours[2]) {ctx.moveTo((point[0]+gW), (point[1]+gH));} 
+				else {ctx.moveTo((point[0]+gW), (point[1]+gH-offset));}
+			} else {
+				if (neighbours[2]) {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+gH+0.5*offset));} 
+				else {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+gH-0.5*offset));}
+			}
+
+			if (neighbours[2]) { //go to bottom corner
+				if (neighbours[3]) {ctx.moveTo((point[0]+0.5*gW), (point[1]+scale));} 
+				else {ctx.moveTo((point[0]+0.5*gW+SIN60*offset), (point[1]+scale-0.5*offset));}
+			} else {
+				if (neighbours[3]) {ctx.lineTo((point[0]+0.5*gW-SIN60*offset), (point[1]+scale-0.5*offset));} 
+				else {ctx.lineTo((point[0]+0.5*gW), (point[1]+scale-offset));}
+			}
+
+			if (neighbours[3]) { //go to lower left corner
+				if (neighbours[4]) {ctx.moveTo(point[0], (point[1]+gH));} 
+				else {ctx.moveTo((point[0]+SIN60*offset), (point[1]+gH+0.5*offset));}
+			} else {
+				if (neighbours[4]) {ctx.lineTo(point[0], (point[1]+gH-offset));} 
+				else {ctx.lineTo((point[0]+SIN60*offset), (point[1]+gH-0.5*offset));}
+			}
+
+			if (neighbours[4]) { //go to upper left corner
+				if (neighbours[5]) {ctx.moveTo(point[0], (point[1]+c));} 
+				else {ctx.moveTo(point[0], (point[1]+c+offset));}
+			} else {
+				if (neighbours[5]) {ctx.lineTo((point[0]+SIN60*offset), (point[1]+c-0.5*offset));} 
+				else {ctx.lineTo((point[0]+SIN60*offset), (point[1]+c+0.5*offset));}
+			}
+
+			if (neighbours[5]) {ctx.moveTo(start[0], start[1]);} //back to top corner
+			else {ctx.lineTo(start[0], start[1]);}
+			ctx.stroke();
+
+
+			ctx.beginPath(); //begin area filling
+			ctx.moveTo(start[0], start[1]);
+
+			if (neighbours[0]) { //go to upper right corner
+				if (neighbours[1]) {ctx.lineTo((point[0]+gW), (point[1]+c));} 
+				else {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+c-0.5*offset));}
+			} else {
+				if (neighbours[1]) {ctx.lineTo((point[0]+gW), (point[1]+c+offset));} 
+				else {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+c+0.5*offset));}
+			}
+
+			if (neighbours[1]) { //go to lower right corner
+				if (neighbours[2]) {ctx.lineTo((point[0]+gW), (point[1]+gH));} 
+				else {ctx.lineTo((point[0]+gW), (point[1]+gH-offset));}
+			} else {
+				if (neighbours[2]) {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+gH+0.5*offset));} 
+				else {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+gH-0.5*offset));}
+			}
+
+			if (neighbours[2]) { //go to bottom corner
+				if (neighbours[3]) {ctx.lineTo((point[0]+0.5*gW), (point[1]+scale));} 
+				else {ctx.lineTo((point[0]+0.5*gW+SIN60*offset), (point[1]+scale-0.5*offset));}
+			} else {
+				if (neighbours[3]) {ctx.lineTo((point[0]+0.5*gW-SIN60*offset), (point[1]+scale-0.5*offset));} 
+				else {ctx.lineTo((point[0]+0.5*gW), (point[1]+scale-offset));}
+			}
+
+			if (neighbours[3]) { //go to lower left corner
+				if (neighbours[4]) {ctx.lineTo(point[0], (point[1]+gH));} 
+				else {ctx.lineTo((point[0]+SIN60*offset), (point[1]+gH+0.5*offset));}
+			} else {
+				if (neighbours[4]) {ctx.lineTo(point[0], (point[1]+gH-offset));} 
+				else {ctx.lineTo((point[0]+SIN60*offset), (point[1]+gH-0.5*offset));}
+			}
+
+			if (neighbours[4]) { //go to upper left corner
+				if (neighbours[5]) {ctx.lineTo(point[0], (point[1]+c));} 
+				else {ctx.lineTo(point[0], (point[1]+c+offset));}
+			} else {
+				if (neighbours[5]) {ctx.lineTo((point[0]+SIN60*offset), (point[1]+c-0.5*offset));} 
+				else {ctx.lineTo((point[0]+SIN60*offset), (point[1]+c+0.5*offset));}
+			}
+
+			if (neighbours[5]) {ctx.lineTo(start[0], start[1]);} //back to top corner
+			else {ctx.lineTo(start[0], start[1]);}
+			ctx.fill();
+		}
+	}
+}
+
+function drawBuildings(ctx, x, y, scale) {
 	ctx.lineWidth = (scale/8); //line style for roads
 	ctx.strokeStyle="#C8AB37";
 	ctx.lineCap="round";
@@ -189,30 +335,25 @@ function drawBuildings(ctx, x, y, scale) {
 			break;
 		}
 		if (building.type <= 4) { //regular one tile buildings excluding walls
-			ctx.drawImage(tileImg, pos[0], pos[1]-c, scale*0.866, scale); //draw the image
+			ctx.drawImage(tileImg, pos[0], pos[1]-c, scale*SIN60, scale); //draw the image
 		}
 		else if (building.type === 5) { //walls - one tile buildings handled differently from cities
-			ctx.drawImage(tileImg, pos[0], pos[1], scale*0.866, scale); //draw the image
+			ctx.drawImage(tileImg, pos[0], pos[1], scale*SIN60, scale); //draw the image
 		}
 		else if (building.type <= 7) { //harbors and bridges - "oversized" buildings
-			ctx.drawImage(tileImg, pos[0]-gridWidth, pos[1]-(0.5*scale), 3*gridWidth, 2*scale); //draw the image
+			ctx.drawImage(tileImg, pos[0]-gW, pos[1]-(0.5*scale), 3*gW, 2*scale); //draw the image
 		} else if (building.type === 8) { //streets - currently drawn as simple lines
 			var posFirst = computePosition(x, y, building.first[0], building.first[1], scale);
 			var posSecond = computePosition(x, y, building.second[0], building.second[1], scale);
 			ctx.beginPath();
-			ctx.moveTo((posFirst[0]+(0.5*gridWidth)), (posFirst[1]+c+(0.25*scale)));
-			ctx.lineTo((posSecond[0]+(0.5*gridWidth)), (posSecond[1]+c+(0.25*scale)));
+			ctx.moveTo((posFirst[0]+(0.5*gW)), (posFirst[1]+2*c));
+			ctx.lineTo((posSecond[0]+(0.5*gW)), (posSecond[1]+2*c));
 			ctx.stroke();
 		}
 	}
 }
 
 function drawRivers(ctx, x, y, scale) {
-	var gridWidth = 0.866*scale; //same measures as in field clicked in detection
-	var halfWidth = gridWidth/2;
-	var gridHeight = (1.366/2)*scale;
-	var c = scale-gridHeight;
-
 	ctx.lineWidth = (scale/8);
 	ctx.strokeStyle="#0099FF";
 	ctx.lineCap="round";
@@ -221,25 +362,25 @@ function drawRivers(ctx, x, y, scale) {
 		var river = rivers[i];
 		var pos = computePosition(x, y, (river[0][0]), (river[0][1]), scale);
 		var points = [pos, pos];
-		var rowOdd = (river[0][1])%2 !== 0;
+		var rowOdd = (((river[0][1])%2) !== 0);
 
 		if((river[0][1]) === (river[1][1])) { //same row (w/e)
 			if ((river[0][0]) > (river[1][0])) { //second field left (w)
-				points = [[(pos[0]), (pos[1]+c)], [(pos[0]), (pos[1]+gridHeight)]];
+				points = [[(pos[0]), (pos[1]+c)], [(pos[0]), (pos[1]+gH)]];
 			} else { //second field right (e)
-				points = [[(pos[0]+gridWidth), (pos[1]+c)], [(pos[0]+gridWidth), (pos[1]+gridHeight)]];
+				points = [[(pos[0]+gW), (pos[1]+c)], [(pos[0]+gW), (pos[1]+gH)]];
 			}
 		} else if ((river[0][1]) > (river[1][1])) { //second field above (nw/ne)
 			if ((rowOdd && (river[0][0])===(river[1][0])) || (!rowOdd && (river[0][0])<(river[1][0]))) { //second field right (ne)
-				points = [[(pos[0]+halfWidth), (pos[1])], [(pos[0]+gridWidth), (pos[1]+c)]];
+				points = [[(pos[0]+0.5*gW), (pos[1])], [(pos[0]+gW), (pos[1]+c)]];
 			} else { //second field left (nw)
-				points = [[(pos[0]), (pos[1]+c)], [(pos[0]+halfWidth), (pos[1])]];
+				points = [[(pos[0]), (pos[1]+c)], [(pos[0]+0.5*gW), (pos[1])]];
 			}
 		} else { //second field below (sw/se)
 			if ((rowOdd && (river[0][0])===(river[1][0])) || (!rowOdd && (river[0][0])<(river[1][0]))) { //second field right (se)
-				points = [[(pos[0]+halfWidth), (pos[1]+scale)], [(pos[0]+gridWidth), (pos[1]+gridHeight)]];
+				points = [[(pos[0]+0.5*gW), (pos[1]+scale)], [(pos[0]+gW), (pos[1]+gH)]];
 			} else { //second field left (sw)
-				points = [[(pos[0]), (pos[1]+gridHeight)], [(pos[0]+halfWidth), (pos[1]+scale)]];
+				points = [[(pos[0]), (pos[1]+gH)], [(pos[0]+0.5*gW), (pos[1]+scale)]];
 			}
 		}
 
@@ -287,7 +428,7 @@ function drawFields(ctx, x, y, scale) { //draw the terrain fields
 			default: tileImg = defaultImg;
 			break;
 		}
-		ctx.drawImage(tileImg, pos[0], pos[1], (scale*0.866), scale); //draw the image
+		ctx.drawImage(tileImg, pos[0], pos[1], (scale*SIN60), scale); //draw the image
 	}
 }
 
@@ -298,16 +439,16 @@ function drawSelection(ctx, x, y, scale, selectedFields) {
 		var selectedField = selectedFields[i]; //get selected field
 		var pos = computePosition(x, y, selectedField[0], selectedField[1], scale); //get fields position
 
-		//draw a simple circle; TODO: draw propper selection
+		//draw a simple circle; TODO: draw propper selection (if desired)
 		ctx.beginPath();
-      	ctx.arc(pos[0]+((scale * 0.866)/2), pos[1]+(scale /2), scale/2, 0, 2 * Math.PI, false);
+      	ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/2, 0, 2 * Math.PI, false);
       	ctx.stroke();
 	}
 }
 
 function computePosition(xOrig, yOrig, xCurr, yCurr, scale) { //computes a fields position (upper left corner of inscribing rectangle)
-	var xpos = xOrig + (xCurr * scale * 0.866); //get the current field's x position
-	return [ (yCurr%2!==0?(xpos - (scale*0.866/2)):(xpos)), yOrig+(yCurr * scale * 1.366 / 2)]; //each odd row is offset half a hex to the left
+	var xpos = xOrig + (xCurr * scale * SIN60); //get the current field's x position
+	return [ (((yCurr%2)!==0)?(xpos - (0.5*scale*SIN60)):(xpos)), yOrig+(yCurr * gH)]; //each odd row is offset half a hex to the left
 }
 
 function drawArmies(ctx, x, y, scale, armyCoordinates) {
@@ -320,9 +461,67 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 		//ctx.fillText(armyData.a.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
 		if(Math.floor(armyData.a.armyId/100) == 1)
 		{		
-			ctx.drawImage(troopsImg, pos[0], pos[1], (scale*0.866), scale); 
+			ctx.drawImage(troopsImg, pos[0], pos[1], (scale*SIN60), scale); 
 		} else if(Math.floor(armyData.a.armyId/100) == 2) {
-			ctx.drawImage(mountsImg, pos[0], pos[1], (scale*0.866), scale);
+			ctx.drawImage(mountsImg, pos[0], pos[1], (scale*SIN60), scale);
 		}
 	}
+}
+
+function getAdjacency(field, land) { //returns adjacencies of the field amoung the hexes in land numbered from ne clockwise
+	var result = [0, 0, 0, 0, 0, 0];
+	if ((field[1]%2 === 0)) { //if the field is in an even row
+		for (var i = 0; i < land.length; i++) { //check each field of real land for adjacency
+			var candidate = land[i];
+			if ((candidate[0] === (field[0]+1)) && (candidate[1] === (field[1]-1))) { //ne neighbour
+				result[0] = 1;
+			} else if ((candidate[0] === (field[0]+1)) && (candidate[1] === (field[1]))) { //e neighbour
+				result[1] = 1;
+			} else if ((candidate[0] === (field[0]+1)) && (candidate[1] === (field[1]+1))) { //se neighbour
+				result[2] = 1;
+			} else if ((candidate[0] === (field[0])) && (candidate[1] === (field[1]+1))) { //sw neighbour
+				result[3] = 1;
+			} else if ((candidate[0] === (field[0]-1)) && (candidate[1] === (field[1]))) { //w neighbour
+				result[4] = 1;
+			} else if ((candidate[0] === (field[0])) && (candidate[1] === (field[1]-1))) { //nw neighbour
+				result[5] = 1;
+			}
+		}
+	} else { //if the field is in an odd row
+		for (var i = 0; i < land.length; i++) { //check each field of real land for adjacency
+			var candidate = land[i];
+			if ((candidate[0] === (field[0])) && (candidate[1] === (field[1]-1))) { //ne neighbour
+				result[0] = 1;
+			} else if ((candidate[0] === (field[0]+1)) && (candidate[1] === (field[1]))) { //e neighbour
+				result[1] = 1;
+			} else if ((candidate[0] === (field[0])) && (candidate[1] === (field[1]+1))) { //se neighbour
+				result[2] = 1;
+			} else if ((candidate[0] === (field[0]-1)) && (candidate[1] === (field[1]+1))) { //sw neighbour
+				result[3] = 1;
+			} else if ((candidate[0] === (field[0]-1)) && (candidate[1] === (field[1]))) { //w neighbour
+				result[4] = 1;
+			} else if ((candidate[0] === (field[0]-1)) && (candidate[1] === (field[1]-1))) { //nw neighbour
+				result[5] = 1;
+			}
+		}
+	}
+	return result;
+}
+
+function contains(array, point) {
+	var result = false;
+	for (var i = 0; i < array.length; i++) {
+			var sf = array[i];
+			if ((sf[0] === point[0]) && (sf[1] === point[1])){
+				result = true;
+				break;
+			}
+		}
+	return result;
+}
+
+function setHexParts(scale) {
+	c = 0.25 * scale;
+	gH = 0.75 * scale;
+	gW = SIN60 * scale;
 }
