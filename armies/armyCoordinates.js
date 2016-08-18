@@ -362,6 +362,11 @@ function showHex(positionX, positionY) {
     	}
 		return flussAcc;
 	}
+    this.positionInList = function(){
+        for (var i = 0; i < fields.length; i++) {
+			if((fields[i].x == this.x) && (fields[i].y == this.y)){return i;}
+		}
+    }
 	this.fieldType = function(){
 		for (var i = 0; i < fields.length; i++) {
 			if((fields[i].x == this.x) && (fields[i].y == this.y)){return fields[i].type;}

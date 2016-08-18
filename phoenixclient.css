@@ -28,6 +28,42 @@ div {
     height: 10%;
 }
 
+#worldBenderBox {
+    right: calc(15% + 3px);
+    width: calc(70% - 12px);
+    height: 10%;
+}
+
+#buildingCreationBox {
+    right: calc(15% + 3px);
+    width: calc(70% - 12px);
+    height: 10%;
+}
+
+#streetCreationBox {
+    right: calc(15% + 3px);
+    width: calc(70% - 12px);
+    height: 10%;
+}
+
+#bridgeCreationBox {
+    right: calc(15% + 3px);
+    width: calc(70% - 12px);
+    height: 10%;
+}
+
+#wallCreationBox {
+    right: calc(15% + 3px);
+    width: calc(70% - 12px);
+    height: 10%;
+}
+
+#harborCreationBox {
+    right: calc(15% + 3px);
+    width: calc(70% - 12px);
+    height: 10%;
+}
+
 #minimapBox {
     left:0;
     width: 15%;
