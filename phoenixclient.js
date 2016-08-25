@@ -1,3 +1,5 @@
+	var selectedFields = []; //list of fields to be highlighted
+	var selectedArmy; //currently selected armyCoordinates
 (function () {
 	'use strict';
 
@@ -11,8 +13,6 @@
 	var mousePressed = false; //was the mouse button klicked but not yet released?
 	var isDragging = false; //was the mouse moved while the button is down?
 	var scale = 16; //the scale of the elements, specifically the width
-	var selectedFields = []; //list of fields to be highlighted
-	var selectedArmy; //currently selected armyCoordinates
 	var originX = 900; //x coordinate of the origin in respect to which all drawing is done
 	var originY = 490; //y coodrinate of the origin in respect to which all drawing is done
 	var clickX = 0; //x coordinate of the point where the mouse was clicked
@@ -104,65 +104,88 @@
 	function registerLeftClick(){
 		var clickedField = getClickedField(); //get selected field
 		console.log(clickedField);
-		var index = -1;
-		var sf = selectedFields[0];
-		if (sf != undefined && (sf[0] === clickedField[0]) && (sf[1] === clickedField[1])){
-			selectedFields = [];
+		if(worldCreationModeOnClick){
+			var clickedHex = new showHex(clickedField[0], clickedField[1]);
+			var posi = clickedHex.positionInList();
+			if(fields[posi].type == 8 || fields[posi].type == 9){
+				fields[posi].type = 0;
+			} else {
+				fields[posi].type++;
+			}
 		} else {
-			selectedFields[0] = clickedField;
-		}
-
-		// armeeauswahl
-		selectedArmy = undefined;
-		var possibleSelections = [];
-		for(var i = 0; i < listOfArmyCoordinates.length; i++){
-			if(listOfArmyCoordinates[i].x == clickedField[0] && listOfArmyCoordinates[i].y == clickedField[1]){
-				possibleSelections.push(i);
-				selectedArmy = i;
+			// Feldauswahl
+			var index = -1;
+			var sf = selectedFields[0];
+			if (sf != undefined && (sf[0] === clickedField[0]) && (sf[1] === clickedField[1])){
+				selectedFields = [];
+			} else {
+				selectedFields[0] = clickedField;
 			}
-		}
-		if(document.getElementById("buttonsBox").childElementCount >= 2){
-			var d = document.getElementById("buttonsBox");
-			d.removeChild(document.getElementById("btnSection"));
-		}
-		if(possibleSelections.length != 0){
-			var x = document.createElement("SECTION");
-			x.setAttribute("id", "btnSection")
-			for (var i = 0; i < possibleSelections.length; i++){
-				var btn = document.createElement("BUTTON");
-				btn.id = listOfArmyCoordinates[possibleSelections[i]].a.armyId;
-				var t = document.createTextNode(listOfArmyCoordinates[possibleSelections[i]].a.armyId);
-				btn.appendChild(t);
-				btn.addEventListener('click', function(event) {
-					for (var j = 0; j < listOfArmyCoordinates.length ; j++){
-						if(listOfArmyCoordinates[j].a.armyId == this.id){
-							selectedArmy = j;
-						}
-					}
-					updateInfoBox();
-				});
-				x.appendChild(btn);
-			}
-			document.getElementById("buttonsBox").appendChild(x);
-		}
-		updateInfoBox();
-	}
-
-	function registerRightClick(){
-		if(selectedArmy != undefined){
-			var clickedField = getClickedField();
-			var clickedArmyCoords = new showHex(listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y);
-			var neighbors = clickedArmyCoords.neighbors();
-			for (var i = 0; i < neighbors.length; i++){
-				if(neighbors[i][0] == clickedField[0] && neighbors[i][1] == clickedField[1]){
-					var out = listOfArmyCoordinates[selectedArmy].move(i)
-					if(out != "ok"){
-						alert(out);
-					}
+			// Armeeauswahl
+			selectedArmy = undefined;
+			var possibleSelections = [];
+			for(var i = 0; i < listOfArmyCoordinates.length; i++){
+				if(listOfArmyCoordinates[i].x == clickedField[0] && listOfArmyCoordinates[i].y == clickedField[1]){
+					possibleSelections.push(i);
+					selectedArmy = i;
 				}
+			}
+			if(document.getElementById("btnSection") != null){
+				var d = document.getElementById("buttonsBox");
+				d.removeChild(document.getElementById("btnSection"));
+			}
+			if(possibleSelections.length != 0){
+				var x = document.createElement("SECTION");
+				x.setAttribute("id", "btnSection")
+				for (var i = 0; i < possibleSelections.length; i++){
+					var btn = document.createElement("BUTTON");
+					btn.id = listOfArmyCoordinates[possibleSelections[i]].a.armyId;
+					var t = document.createTextNode(listOfArmyCoordinates[possibleSelections[i]].a.armyId);
+					btn.appendChild(t);
+					btn.addEventListener('click', function(event) {
+						for (var j = 0; j < listOfArmyCoordinates.length ; j++){
+							if(listOfArmyCoordinates[j].a.armyId == this.id){
+								selectedArmy = j;
+							}
+						}
+						updateInfoBox();
+					});
+					x.appendChild(btn);
+				}
+				document.getElementById("buttonsBox").appendChild(x);
 			}
 			updateInfoBox();
 		}
+		
+	}
+
+	function registerRightClick(){
+		var clickedField = getClickedField();
+		console.log(clickedField);
+		if(worldCreationModeOnClick){
+			var clickedHex = new showHex(clickedField[0], clickedField[1]);
+			var posi = clickedHex.positionInList();
+			if(fields[posi].type == 0 || fields[posi].type == 9){
+				fields[posi].type = 8;
+			} else {
+				fields[posi].type--;
+			}
+		} else {
+			if(selectedArmy != undefined){
+				var clickedArmyCoords = new showHex(listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y);
+				var neighbors = clickedArmyCoords.neighbors();
+				for (var i = 0; i < neighbors.length; i++){
+					if(neighbors[i][0] == clickedField[0] && neighbors[i][1] == clickedField[1]){
+						var out = listOfArmyCoordinates[selectedArmy].move(i)
+						if(out != "ok"){
+							alert(out);
+						}
+					}
+				}
+				updateInfoBox();
+			}
+		}
+		
 	}
 
 	function updateInfoBox(){
@@ -222,7 +245,7 @@
 				loadArmies();
 				setHexParts(scale);
 				resizeCanvas();
-			}); 
+			});
 	}
 
 	//canvas resizing method
