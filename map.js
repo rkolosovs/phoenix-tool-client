@@ -392,10 +392,12 @@ function drawRivers(ctx, x, y, scale) {
 }
 
 function drawFields(ctx, x, y, scale) { //draw the terrain fields
+	var currentField;
+	var tileImg; //declare the tile image variable
+	var pos;
 	for (var i = 0; i < fields.length; i++) {
-		var currentField = fields[i]; //get the current field to draw
-		var tileImg; //declare the tile image variable
-		var pos = computePosition(x, y, currentField.x, currentField.y, scale); //get the fields position
+		currentField = fields[i]; //get the current field to draw
+		pos = computePosition(x, y, currentField.x, currentField.y, scale); //get the fields position
         	
 		switch(currentField.type){ //set the tileImg to match the field type
 			case terrain.shallows: tileImg = shallowsImg;
