@@ -30,7 +30,7 @@
     		clickY = event.pageY; //record the y coordinate of the mouse when it was clicked
     	}
 		drawStuff();
-	});
+	}, {passive: true});
 
 	canvas.addEventListener('mouseup', function(event){
 		if (mousePressed && event.button === 0) {
@@ -62,7 +62,7 @@
 			updateInfoBox();
 		}
     	drawStuff();
-	});
+	}, {passive: true});
 
 	canvas.addEventListener('mousemove', function(event) {
     	if (mousePressed === true) {
@@ -71,7 +71,7 @@
     		moveY = event.pageY - clickY; //compute the y offset from dragged mouse
     	}
     	drawStuff();
-	});
+	}, {passive: true});
 
 	canvas.addEventListener('wheel', function(event) {
 		var deltaY = event.deltaY; //get amount scrolled
@@ -92,7 +92,7 @@
 		originX = mouseX - newPosX; //move origin so that the tile stays the same with the new scaling
 		originY = mouseY - newPosY;
 		drawStuff();
-	});
+	}, {passive: true});
 
 	//TODO: implement scrolling with keyboard
 	// window.addEventListener('keydown', function (event) {
