@@ -395,42 +395,75 @@ function drawFields(ctx, x, y, scale) { //draw the terrain fields
 	var currentField;
 	var tileImg; //declare the tile image variable
 	var pos;
-	for (var i = 0; i < fields.length; i++) {
+	var sortedFields = [[], [], [], [], [], [], [], [], [], []];
+	for (var i = 0; i < fields.length; i++) { //gather and sort all fields
 		currentField = fields[i]; //get the current field to draw
-		pos = computePosition(x, y, currentField.x, currentField.y, scale); //get the fields position
+		// pos = computePosition(x, y, currentField.x, currentField.y, scale); //get the fields position
         	
 		switch(currentField.type){ //set the tileImg to match the field type
-			case terrain.shallows: tileImg = shallowsImg;
+			case terrain.shallows: sortedFields[0].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
-			case terrain.deepsea: tileImg = deepseaImg;
+			case terrain.deepsea: sortedFields[1].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
-			case terrain.lowlands: tileImg = lowlandsImg;
+			case terrain.lowlands: sortedFields[2].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
-			case terrain.woods: tileImg = woodsImg;
+			case terrain.woods: sortedFields[3].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
-			case terrain.hills: tileImg = hillsImg;
+			case terrain.hills: sortedFields[4].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
-			case terrain.highlands: tileImg = highlandsImg;
+			case terrain.highlands: sortedFields[5].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
-			case terrain.mountains: tileImg = mountainsImg;
+			case terrain.mountains: sortedFields[6].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
-			case terrain.desert: tileImg = desertImg;
+			case terrain.desert: sortedFields[7].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
-			case terrain.swamp: tileImg = swampImg;
+			case terrain.swamp: sortedFields[8].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
+			default: sortedFields[9].push(computePosition(x, y, currentField.x, currentField.y, scale));
+			break;
+		}
+		// ctx.drawImage(tileImg, pos[0], pos[1], (scale*SIN60), scale); //draw the image
+	}
+
+	var currFields;
+	for (var i = 0; i < sortedFields.length; i++) {
+		currFields = sortedFields[i];
+		switch(i){
+			case 0: tileImg = shallowsImg;
+			break;
+			case 1: tileImg = deepseaImg;
+			break;
+			case 2: tileImg = lowlandsImg;
+			break;
+			case 3: tileImg = woodsImg;
+			break;
+			case 4: tileImg = hillsImg;
+			break;
+			case 5: tileImg = highlandsImg;
+			break;
+			case 6: tileImg = mountainsImg;
+			break;
+			case 7: tileImg = desertImg;
+			break;
+			case 8: tileImg = swampImg;
+			break;
 			default: tileImg = defaultImg;
 			break;
 		}
-		ctx.drawImage(tileImg, pos[0], pos[1], (scale*SIN60), scale); //draw the image
+
+		for (var j = 0; j < currFields.length; j++) {
+			currentField = currFields[j];
+			ctx.drawImage(tileImg, currentField[0], currentField[1], (scale*SIN60), scale); //draw the image
+		}
 	}
 }
 
