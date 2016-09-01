@@ -392,13 +392,14 @@ function drawRivers(ctx, x, y, scale) {
 }
 
 function drawFields(ctx, x, y, scale) { //draw the terrain fields
+	// var drawingMode = 'image';
+	var drawingMode = 'primitives';
 	var currentField;
 	var tileImg; //declare the tile image variable
 	var pos;
 	var sortedFields = [[], [], [], [], [], [], [], [], [], []];
 	for (var i = 0; i < fields.length; i++) { //gather and sort all fields
 		currentField = fields[i]; //get the current field to draw
-		// pos = computePosition(x, y, currentField.x, currentField.y, scale); //get the fields position
         	
 		switch(currentField.type){ //set the tileImg to match the field type
 			case terrain.shallows: sortedFields[0].push(computePosition(x, y, currentField.x, currentField.y, scale));
@@ -431,38 +432,79 @@ function drawFields(ctx, x, y, scale) { //draw the terrain fields
 			default: sortedFields[9].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 		}
-		// ctx.drawImage(tileImg, pos[0], pos[1], (scale*SIN60), scale); //draw the image
 	}
 
-	var currFields;
-	for (var i = 0; i < sortedFields.length; i++) {
-		currFields = sortedFields[i];
-		switch(i){
-			case 0: tileImg = shallowsImg;
-			break;
-			case 1: tileImg = deepseaImg;
-			break;
-			case 2: tileImg = lowlandsImg;
-			break;
-			case 3: tileImg = woodsImg;
-			break;
-			case 4: tileImg = hillsImg;
-			break;
-			case 5: tileImg = highlandsImg;
-			break;
-			case 6: tileImg = mountainsImg;
-			break;
-			case 7: tileImg = desertImg;
-			break;
-			case 8: tileImg = swampImg;
-			break;
-			default: tileImg = defaultImg;
-			break;
-		}
+	if (drawingMode === 'image') {
+		var currFields;
+		for (var i = 0; i < sortedFields.length; i++) {
+			currFields = sortedFields[i];
+			switch(i){
+				case 0: tileImg = shallowsImg;
+				break;
+				case 1: tileImg = deepseaImg;
+				break;
+				case 2: tileImg = lowlandsImg;
+				break;
+				case 3: tileImg = woodsImg;
+				break;
+				case 4: tileImg = hillsImg;
+				break;
+				case 5: tileImg = highlandsImg;
+				break;
+				case 6: tileImg = mountainsImg;
+				break;
+				case 7: tileImg = desertImg;
+				break;
+				case 8: tileImg = swampImg;
+				break;
+				default: tileImg = defaultImg;
+				break;
+			}
 
-		for (var j = 0; j < currFields.length; j++) {
-			currentField = currFields[j];
-			ctx.drawImage(tileImg, currentField[0], currentField[1], (scale*SIN60), scale); //draw the image
+			for (var j = 0; j < currFields.length; j++) {
+				currentField = currFields[j];
+				ctx.drawImage(tileImg, currentField[0], currentField[1], (scale*SIN60), scale); //draw the image
+			}
+		}
+	} else if (drawingMode === 'primitives') {
+		var currFields;
+		for (var i = 0; i < sortedFields.length; i++) {
+			currFields = sortedFields[i];
+			switch(i){
+				case 0: ctx.fillStyle = 'Aqua';
+				break;
+				case 1: ctx.fillStyle = 'DarkBlue';
+				break;
+				case 2: ctx.fillStyle = 'LawnGreen';
+				break;
+				case 3: ctx.fillStyle = 'ForestGreen';
+				break;
+				case 4: ctx.fillStyle = 'SandyBrown';
+				break;
+				case 5: ctx.fillStyle = 'SaddleBrown';
+				break;
+				case 6: ctx.fillStyle = 'LightGray';
+				break;
+				case 7: ctx.fillStyle = 'Khaki';
+				break;
+				case 8: ctx.fillStyle = 'DarkViolet';
+				break;
+				default: ctx.fillStyle = 'Black';
+				break;
+			}
+
+			ctx.beginPath();
+			for (var j = 0; j < currFields.length; j++) {
+				currentField = currFields[j];
+				ctx.moveTo((currentField[0]+0.5*gW), currentField[1]);
+				ctx.lineTo((currentField[0]+gW), (currentField[1]+c));
+				ctx.lineTo((currentField[0]+gW), (currentField[1]+gH));
+				ctx.lineTo((currentField[0]+0.5*gW), (currentField[1]+scale));
+				ctx.lineTo(currentField[0], (currentField[1]+gH));
+				ctx.lineTo(currentField[0], (currentField[1]+c));
+				ctx.lineTo((currentField[0]+0.5*gW), currentField[1]);
+			}
+			ctx.fill();
 		}
 	}
 }
