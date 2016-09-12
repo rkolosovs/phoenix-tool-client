@@ -1,5 +1,7 @@
 	var selectedFields = []; //list of fields to be highlighted
 	var selectedArmy; //currently selected armyCoordinates
+	var switchScale = 50;
+
 (function () {
 	'use strict';
 

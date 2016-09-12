@@ -392,8 +392,10 @@ function drawRivers(ctx, x, y, scale) {
 }
 
 function drawFields(ctx, x, y, scale) { //draw the terrain fields
-	// var drawingMode = 'image';
-	var drawingMode = 'primitives';
+	var drawingMode = 'image';
+	// var drawingMode = 'primitives';
+	if (scale < switchScale) {drawingMode = 'primitives';}
+	else {drawingMode = 'image';}
 	var currentField;
 	var tileImg; //declare the tile image variable
 	var pos;
