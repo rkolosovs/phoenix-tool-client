@@ -92,7 +92,7 @@ function loadMap() {
 		fields = map.fields;
 		rivers = map.rivers; //rivers are the coordinates of two fields on either side of the river
 	});
-	$.getJSON("buildings.json", function(json){
+	$.getJSON("http://127.0.0.1:8000/databaseLink/buildingdata/", function(json){
 		buildings = json; //load the buildings from the buildings.json file
 	});
 	$.getJSON("borders.json", function(json){
@@ -343,8 +343,8 @@ function drawBuildings(ctx, x, y, scale) {
 		else if (building.type <= 7) { //harbors and bridges - "oversized" buildings
 			ctx.drawImage(tileImg, pos[0]-gW, pos[1]-(0.5*scale), 3*gW, 2*scale); //draw the image
 		} else if (building.type === 8) { //streets - currently drawn as simple lines
-			var posFirst = computePosition(x, y, building.first[0], building.first[1], scale);
-			var posSecond = computePosition(x, y, building.second[0], building.second[1], scale);
+			var posFirst = computePosition(x, y, building.firstX, building.firstY, scale);
+			var posSecond = computePosition(x, y, building.secondX, building.secondY, scale);
 			ctx.beginPath();
 			ctx.moveTo((posFirst[0]+(0.5*gW)), (posFirst[1]+2*c));
 			ctx.lineTo((posSecond[0]+(0.5*gW)), (posSecond[1]+2*c));
