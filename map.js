@@ -87,16 +87,53 @@ var bridgeNEImg = new Image();
 
 function loadMap() {
 	gamestate = new gameState(0, [0], [0], 0);
-	$.getJSON("map.json", function(json){
-		var map = json; //load the map from the map.json file
-		fields = map.fields;
-		rivers = map.rivers; //rivers are the coordinates of two fields on either side of the river
+	$.getJSON("http://127.0.0.1:8000/databaseLink/gettoken/", function(json){// funtioniert nicht !!!
+		currentCSRFToken = json;
+	});
+	$.getJSON("http://127.0.0.1:8000/databaseLink/fielddata/", function(json){// loads the fields from the database
+		fields = json;
+	});
+	$.getJSON("http://127.0.0.1:8000/databaseLink/getriverdata/", function(json){//load the rivers from the database
+		var fluesse = json; 
+		var collector = [];
+		fluesse.forEach(function(element) {
+			collector.push([[element.firstX, element.firstY],[element.secondX,element.secondY]]);
+		}, this);
+		rivers = collector; //rivers are the coordinates of two fields on either side of the river
 	});
 	$.getJSON("http://127.0.0.1:8000/databaseLink/buildingdata/", function(json){
 		buildings = json; //load the buildings from the buildings.json file
 	});
-	$.getJSON("borders.json", function(json){
-		borders = json; //load the borders from the borders.json file
+	$.getJSON("http://127.0.0.1:8000/databaseLink/getborderdata/", function(json){ //load the borders from the database
+		var fromServer = json; //load the borders from the borders.json file
+		var accumulator = []
+		for(var i = 0; i < fromServer.length; i++){
+			if(accumulator.length == 0){
+				accumulator.push({"tag":fromServer[i].reich,"land":[[fromServer[i].x,fromServer[i].y]]})
+				console.log(accumulator);
+			} else {
+				var neuesReich = false;
+				for(var j = 0; j < accumulator.length; j++){
+					if(fromServer[i].reich == accumulator[j].tag){
+						accumulator[j].land.push([fromServer[i].x,fromServer[i].y]);
+					} else if (j == accumulator.length-1){
+						neuesReich = true;
+					}
+				}
+				if(neuesReich == true){
+					accumulator.push({"tag":fromServer[i].reich,"land":[[fromServer[i].x,fromServer[i].y]]})
+				}
+			}
+		}
+		for(var i =0; i < accumulator.length; i++){
+			switch(accumulator[i].tag){
+				case 1: accumulator[i].tag = "usa"; break;
+				case 3: accumulator[i].tag = "vvh"; break;
+				case 4: accumulator[i].tag = "eos"; break;
+			}
+		}
+		console.log(accumulator);
+		borders = accumulator;
 	});
 }
 
