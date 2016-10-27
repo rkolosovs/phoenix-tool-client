@@ -85,15 +85,15 @@ var bridgeSEImg = new Image();
 var bridgeNEImg = new Image();
 
 
-function loadMap() {
+function loadMap(url) {
 	gamestate = new gameState(0, [0], [0], 0);
-	$.getJSON("http://127.0.0.1:8000/databaseLink/gettoken/", function(json){// funtioniert nicht !!!
+	$.getJSON(url +"/databaseLink/gettoken/", function(json){// funtioniert nicht !!!
 		currentCSRFToken = json;
 	});
-	$.getJSON("http://127.0.0.1:8000/databaseLink/fielddata/", function(json){// loads the fields from the database
+	$.getJSON(url +"/databaseLink/fielddata/", function(json){// loads the fields from the database
 		fields = json;
 	});
-	$.getJSON("http://127.0.0.1:8000/databaseLink/getriverdata/", function(json){//load the rivers from the database
+	$.getJSON(url +"/databaseLink/getriverdata/", function(json){//load the rivers from the database
 		var fluesse = json; 
 		var collector = [];
 		fluesse.forEach(function(element) {
@@ -101,10 +101,10 @@ function loadMap() {
 		}, this);
 		rivers = collector; //rivers are the coordinates of two fields on either side of the river
 	});
-	$.getJSON("http://127.0.0.1:8000/databaseLink/buildingdata/", function(json){
+	$.getJSON(url +"/databaseLink/buildingdata/", function(json){
 		buildings = json; //load the buildings from the buildings.json file
 	});
-	$.getJSON("http://127.0.0.1:8000/databaseLink/getborderdata/", function(json){ //load the borders from the database
+	$.getJSON(url +"/databaseLink/getborderdata/", function(json){ //load the borders from the database
 		var fromServer = json; //load the borders from the borders.json file
 		var accumulator = []
 		for(var i = 0; i < fromServer.length; i++){

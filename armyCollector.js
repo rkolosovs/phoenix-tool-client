@@ -1,5 +1,5 @@
-function loadArmies() {
-	$.getJSON("http://127.0.0.1:8000/databaseLink/armydata/", function(json){
+function loadArmies(url) {
+	$.getJSON(url +"/databaseLink/armydata/", function(json){
 		var armies = json; //load the armies from the armies.json file
         listOfArmyCoordinates = [];
         for(var i = 0; i < armies.length; i++){

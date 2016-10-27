@@ -12,6 +12,8 @@
 	var tileset = "erkenfara_altestool"; //tileset name
 	var scrollSpeed = 0.2; //increment to scroll with each step
 
+	var url = "http://h2610265.stratoserver.net"; //put the url (or the IP adress) for the remote game server here
+
 	var mousePressed = false; //was the mouse button klicked but not yet released?
 	var isDragging = false; //was the mouse moved while the button is down?
 	var scale = 16; //the scale of the elements, specifically the width
@@ -242,9 +244,9 @@
 	function init() {
 		$.getScript("map.js", //use jQuery to load scripts from another .js file
 			function(){ 	//after loading script, run all initialization methods
-				loadMap();
+				loadMap(url);
 				loadImages(tileset);
-				loadArmies();
+				loadArmies(url);
 				setHexParts(scale);
 				resizeCanvas();
 			});
