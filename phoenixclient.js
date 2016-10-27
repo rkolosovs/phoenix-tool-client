@@ -12,7 +12,7 @@
 	var tileset = "erkenfara_altestool"; //tileset name
 	var scrollSpeed = 0.2; //increment to scroll with each step
 
-	var url = "http://h2610265.stratoserver.net"; //put the url (or the IP adress) for the remote game server here
+	var url = "http://h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
 
 	var mousePressed = false; //was the mouse button klicked but not yet released?
 	var isDragging = false; //was the mouse moved while the button is down?

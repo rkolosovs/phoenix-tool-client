@@ -154,7 +154,8 @@
 	</div>
 
 	<script>
-		var  adress = "http://h2610265.stratoserver.net";
+		//TODO: Move all of this out of the .html file.
+		var  address = "http://h2610265.stratoserver.net"; //the address of the remote server goes here
 		var worldCreationModeOn = false;
 		var worldCreationModeOnClick = false;
 		var buildingCreationModeOn = false;
@@ -584,7 +585,7 @@
 			console.log(fields);
 			$.ajax({
 				type: 'post',
-				url: adress+"/databaseLink/savefielddata/",
+				url: address+"/databaseLink/savefielddata/",
 				data: {map: dataToServerString},
 				success: console.log("success"),
 				error: console.log("error"),
@@ -611,7 +612,7 @@
 			console.log(rivers);
 			$.ajax({
 				type:'post',
-				url: adress + "/databaseLink/saveriverdata/",
+				url: address + "/databaseLink/saveriverdata/",
 				data: {river: dataToServerString},
 				success: console.log("success"),
 				error: console.log("error"),
@@ -683,7 +684,7 @@
 			console.log(buildings);
 			$.ajax({
 				type:'post',
-				url: adress + "/databaseLink/savebuildingdata/",
+				url: address + "/databaseLink/savebuildingdata/",
 				data: {buildings: dataToServerString},
 				success: console.log("success"),
 				error: console.log("error"),
@@ -720,7 +721,7 @@
 			console.log(listOfArmyCoordinates);
 			$.ajax({
 				type:'post',
-				url: adress + "/databaseLink/savearmydata/",
+				url: address + "/databaseLink/savearmydata/",
 				data: {armies: dataToServerString},
 				success: console.log("success"),
 				error: console.log("error"),
@@ -759,7 +760,7 @@
 			console.log(borders);
 			$.ajax({
 				type:'post',
-				url: adress + "/databaseLink/saveborderdata/",
+				url: address + "/databaseLink/saveborderdata/",
 				data: {borders: dataToServerString},
 				success: console.log("success"),
 				error: console.log("error"),
