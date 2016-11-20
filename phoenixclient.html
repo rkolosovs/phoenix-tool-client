@@ -29,6 +29,15 @@
 		<p id="skp"></p>
 		<p id="movePoints"></p>
 		<p id ="heightPoints"></p>
+		<button id="logoutBtn" onclick="logoutFromServer()">Logout</button>
+	</div>
+	<div id="loginBox">
+		<h3 align="center">Login</h3>
+		<label for="loginName">Name:</label>
+		<input id="loginName">
+		<label for="loginPassword">Passwort:</label>
+		<input id="loginPassword" type="password">
+		<button id="loginBtn" onclick="loginToServer()">Login</button>
 	</div>
 	<div id="minimapBox">
 		<h3 align="center">Minimap Goes Here!</h3>
@@ -172,6 +181,7 @@
 		document.getElementById("bridgeCreationBox").style.display = "none";
 		var wallBuildingModeOn = false;
 		document.getElementById("wallCreationBox").style.display = "none";
+		document.getElementById("infoBox").style.display = "none";
 
 		function toggleGodModeBar(){
 			if(document.getElementById("godmodeBox").style.visibility == "hidden"){
@@ -768,6 +778,32 @@
 			});
 			console.log("end");
 		}
+
+		function loginToServer(){
+			var username = document.getElementById("loginName").value;
+			var password = document.getElementById("loginPassword").value;
+			$.post({
+				url: address + "/databaseLink/login/",
+				data: {username:username, password:password},
+				success: function(data){
+					console.log(data);
+					authenticationToken = data.token;
+					console.log(authenticationToken);
+				},
+				dataType: "json"
+			});
+			document.getElementById("infoBox").style.display = "";
+			document.getElementById("loginBox").style.display = "none";
+		}
+
+		function logoutFromServer(){
+			$.post({
+				url: address + "/databaseLink/logout/"
+			});
+			document.getElementById("infoBox").style.display = "none";
+			document.getElementById("loginBox").style.display = "";
+		}
+
 	</script>
 
 	
