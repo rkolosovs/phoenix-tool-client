@@ -75,3 +75,9 @@ div {
     height: 10%;
     width: 100%;
 }
+
+#loginBox {
+    right:0;
+    width: 15%;
+    height: 25%;
+}
