@@ -1,7 +1,7 @@
 function loadArmies(url) {
     $.post({
 			url: url +"/databaseLink/armydata/",
-            authorization: authenticationToken ,
+            data: {authorization: authenticationToken},
             success: function(data){
 				var armies = data; //load the armies from the armies.json file
                 listOfArmyCoordinates = [];
@@ -17,6 +17,9 @@ function loadArmies(url) {
                     }
                 }
 			},
-			dataType: "json"
+			dataType: "json",
+            //headers: {
+            //    "Authorization" :"Token " + authenticationToken,
+            //}
 		});
 }
