@@ -8,6 +8,8 @@
 	var canvas = document.getElementById('hexCanvas'); //get the canvas element from the HTML document
 	var ctx = canvas.getContext('2d'); //get the context of the canvas
 
+	var turn = [];//year, month, realm, phase
+
 	//settings; TODO: let the user change these in game
 	var tileset = "mbits_painted"; //tileset name
 	var scrollSpeed = 0.2; //increment to scroll with each step
