@@ -5,10 +5,13 @@
 (function () {
 	'use strict';
 
+	var months = ['Agul', 'Hawar', 'Rim', 'Naliv', 'Larn', 'Hel', 'Jawan', 'Lud'];
+
 	var canvas = document.getElementById('hexCanvas'); //get the canvas element from the HTML document
 	var ctx = canvas.getContext('2d'); //get the context of the canvas
+	// var topBar = document.getElementById('topBar'); //get the top bar element from the HTML document
 
-	var turn = [];//year, month, realm, phase
+	var turn = [146, 'usa'];//turn, realm (sl, proper reals, or build)
 
 	//settings; TODO: let the user change these in game
 	var tileset = "mbits_painted"; //tileset name
@@ -251,6 +254,7 @@
 				loadImages(tileset);
 				loadArmies(url);
 				setHexParts(scale);
+				writeTurnNumber();
 				resizeCanvas();
 			});
 	}
@@ -273,6 +277,23 @@
 		drawMap(ctx, x, y, scale);
 		drawSelection(ctx, x, y, scale, selectedFields);
 		drawArmies(ctx, x, y, scale, listOfArmyCoordinates);
+	}
+
+	function writeTurnNumber() {
+		var topBar = document.getElementById('topBar'); //get the top bar element from the HTML document
+
+		var btn = document.createElement("BUTTON");
+		btn.id = "nextTurnButton";
+		btn.style = "float:left;"
+
+		var txt = document.createElement("P");
+		txt.align = "right";
+		txt.id = "date_text";
+		txt.innerHTML =  "Month " + months[turn[0]%8] + " of the Year "+ Math.ceil(turn[0]/8) + " (turn " + turn[0] + ", " + turn[1] + ") ";
+		txt.style="width:340px;float:left;line-height:30px;"
+
+		topBar.appendChild(txt);
+		topBar.appendChild(btn);
 	}
 
 	init();

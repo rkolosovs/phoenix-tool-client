@@ -16,6 +16,16 @@ div {
     border-width: 3px;
 }
 
+#nextTurnButton {
+    background-image: url("nextturn_button.svg");
+    height: 30px;
+    width: 30px;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 2px solid #4CAF50;
+    border-radius: 50%;
+}
+
 #infoBox {
     right:0;
     width: 15%;
@@ -27,6 +37,8 @@ div {
     top: 0;
     height: 3%;
     width: 40%;
+    min-width: 370px;
+    min-height: 30px;
 }
 
 #buttonsBox {
