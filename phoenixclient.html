@@ -14,15 +14,15 @@
 	<script src="armyCollector.js"></script>
 	<script src="gameState.js"></script>
 
-	<div id="buttonsBox">
+	<div id="buttonsBox" class="prettyBox">
 		<h3 align="center">Some Controll Buttons Go Here!</h3>
 		<button id="ToggleGodModeBar" onclick="toggleGodModeBar()">toggle GodMode Bar</button>
 	</div>
 
-	<div id="topBar">
+	<div id="topBar" class="prettyBox">
 	</div>
-	
-	<div id="infoBox">
+
+	<div id="infoBox" class="prettyBox">
 		<h3 align="center">Army Info Goes Here!</h3>
 		<p id="armySelectBtns"></p>
 		<p id="armyId"></p>
@@ -35,7 +35,7 @@
 		<p id ="heightPoints"></p>
 		<button id="logoutBtn" onclick="logoutFromServer()">Logout</button>
 	</div>
-	<div id="loginBox">
+	<div id="loginBox" class="prettyBox">
 		<h3 align="center">Login</h3>
 		<label for="loginName">Name:</label>
 		<input id="loginName">
@@ -43,10 +43,10 @@
 		<input id="loginPassword" type="password">
 		<button id="loginBtn" onclick="loginToServer()">Login</button>
 	</div>
-	<div id="minimapBox">
+	<div id="minimapBox" class="prettyBox">
 		<h3 align="center">Minimap Goes Here!</h3>
 	</div>
-	<div id="godmodeBox">
+	<div id="godmodeBox" class="prettyBox">
 		<h3 align="center">Godmode Box</h3>
 		<button id="ToggleWorldCreationMode" onclick="toggleWorldCreationMode()">toggle World Creation Mode</button>
 		<button id="ToggleBuildingCreationMode" onclick="toggleBuildingCreationMode()">toggle Building Creation Mode</button>
@@ -61,7 +61,7 @@
 		<button id="saveFactionsTerritories" onclick="saveFactionsTerritories()">save Factions Territories</button>
 
 	</div>
-	<div id="worldBenderBox">
+	<div id="worldBenderBox" class="prettyBox">
 		<h3 id="creationWarning" align="center">WARNING: WORLD CREATION ON CLICK MODE IS ACTIVE !!!</h3>
 		<button id="ToggleOnClickWorldCreationMode" onclick="toggleOnClickWorldCreationMode()">toggle on click World Creation Mode</button>
 		<section id="buildRiverSection">
@@ -81,7 +81,7 @@
 			<button id="removeRiverW" onclick="removeRiver(5)">Remove a River at the west border</button>
 		</section>
 	</div>
-	<div id="buildingCreationBox">
+	<div id="buildingCreationBox" class="prettyBox">
 		<button id="addCastle" onclick="addCastle()">Build a castle</button>
 		<button id="addCity" onclick="addCity()">Build a city</button>
 		<button id="addFortress" onclick="addFortress()">Build a fortress</button>
@@ -89,7 +89,7 @@
 		<button id="addCapitalFortress" onclick="addCapitalFortress()">Build a capital fortress</button>
 		<button id="deleteBuilding" onclick="deleteBuilding()">Delete a building</button>
 	</div>
-	<div id="wallCreationBox">
+	<div id="wallCreationBox" class="prettyBox">
 		<h3 align="center">Wall Builder</h3>
 		<section id="buildWall">
 			<button id="addWallNW" onclick="manipulateBorderBuilding(5, 'nw', true)">Build a Wall in north west direction</button>
@@ -108,7 +108,7 @@
 			<button id="removeWallW" onclick="manipulateBorderBuilding(5, 'w', false)">Remove a Wall in west direction</button>
 		</section>
 	</div>
-	<div id="harborCreationBox">
+	<div id="harborCreationBox" class="prettyBox">
 		<h3 align="center">Harbor Builder</h3>
 		<section id="buildHarbor">
 			<button id="addHarborNW" onclick="manipulateBorderBuilding(6, 'nw', true)">Build a Harbor in north west direction</button>
@@ -127,7 +127,7 @@
 			<button id="removeHarborW" onclick="manipulateBorderBuilding(6, 'w', false)">Remove a Harbor in west direction</button>
 		</section>
 	</div>
-	<div id="bridgeCreationBox">
+	<div id="bridgeCreationBox" class="prettyBox">
 		<h3 align="center">Bridge Builder</h3>
 		<section id="buildBridge">
 			<button id="addBridgeNW" onclick="manipulateBorderBuilding(7, 'nw', true)">Build a Bridge in north west direction</button>
@@ -146,7 +146,7 @@
 			<button id="removeBridgeW" onclick="manipulateBorderBuilding(7, 'w', false)">Remove a Bridge in west direction</button>
 		</section>
 	</div>
-	<div id="streetCreationBox">
+	<div id="streetCreationBox" class="prettyBox">
 		<h3 align="center">Street Builder</h3>
 		<section id="buildStreetSection">
 			<button id="addStreetNW" onclick="addStreet(0)">Build a Street in north west direction</button>
