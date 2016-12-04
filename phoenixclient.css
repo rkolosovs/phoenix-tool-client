@@ -38,7 +38,7 @@ canvas { display:block; } /* To remove the scrollbars */
     top: 0;
     height: 3%;
     width: 40%;
-    min-width: 370px;
+    min-width: 540px;
     min-height: 30px;
 }
 

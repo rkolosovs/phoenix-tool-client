@@ -11,7 +11,7 @@
 	var ctx = canvas.getContext('2d'); //get the context of the canvas
 	// var topBar = document.getElementById('topBar'); //get the top bar element from the HTML document
 
-	var turn = [146, 'usa'];//turn, realm (sl, proper reals, or build)
+	var turn = [149, 'usa'];//turn, realm (sl, proper reals, or build)
 
 	//settings; TODO: let the user change these in game
 	var tileset = "mbits_painted"; //tileset name
@@ -286,14 +286,27 @@
 		btn.id = "nextTurnButton";
 		btn.style = "float:left;"
 
-		var txt = document.createElement("P");
-		txt.align = "right";
-		txt.id = "date_text";
-		txt.innerHTML =  "Month " + months[turn[0]%8] + " of the Year "+ Math.ceil(turn[0]/8) + " (turn " + turn[0] + ", " + turn[1] + ") ";
-		txt.style="width:340px;float:left;line-height:30px;"
+		var date = document.createElement("P");
+		date.align = "right";
+		date.id = "date_text";
+		date.innerHTML =  "Monat " + months[turn[0]%8] + " des Jahres "+ Math.ceil(turn[0]/8) + " (Zug " + turn[0] + ", " + turn[1] + ") ";
+		date.style="width:340px;float:left;line-height:30px;"
 
-		topBar.appendChild(txt);
+		var spec = document.createElement("P");
+		spec.align = "left";
+		spec.id = "special_text";
+		if (turn[0]%8 === 1 || turn[0]%8 === 5) {
+			spec.innerHTML =  " Rüstmonat";
+		spec.style="width:100px;float:left;line-height:30px;"
+		} else if (turn[0]%8 === 4 || turn[0]%8 === 0) {
+			spec.innerHTML =  " Einkommensmonat";
+		spec.style="width:160px;float:left;line-height:30px;"
+		}
+		spec.style="width:0px;float:left;line-height:30px;"
+
+		topBar.appendChild(date);
 		topBar.appendChild(btn);
+		topBar.appendChild(spec);
 	}
 
 	init();
