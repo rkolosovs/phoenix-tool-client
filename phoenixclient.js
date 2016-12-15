@@ -1,6 +1,7 @@
 	var selectedFields = []; //list of fields to be highlighted
 	var selectedArmy; //currently selected armyCoordinates
 	var switchScale = 50;
+	var tempturn; //TODO: temporary. plz remove
 
 (function () {
 	'use strict';
@@ -254,6 +255,7 @@
 				loadImages(tileset);
 				loadArmies(url);
 				setHexParts(scale);
+				loadTurnNumber(url);
 				writeTurnNumber();
 				resizeCanvas();
 			});

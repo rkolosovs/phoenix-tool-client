@@ -84,6 +84,12 @@ var bridgeNWImg = new Image();
 var bridgeSEImg = new Image();
 var bridgeNEImg = new Image();
 
+function loadTurnNumber(url) {
+	$.getJSON(url + "/databaseLink/getturn/", function(json){
+		tempturn = json;
+		console.log(tempturn);
+	}
+}
 
 function loadMap(url) {
 	gamestate = new gameState(0, [0], [0], 0);
