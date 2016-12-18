@@ -166,6 +166,7 @@
 		//TODO: Move all of this out of the .html file.
 		var address = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
 		// var address = "http://localhost:8000"; //the address of the remote server goes here
+		var changedFields = []; // Fields that were changes with World Builder
 		authenticationToken = 0; // the session Token, default = 0.
 		var worldCreationModeOn = false;
 		var worldCreationModeOnClick = false;
@@ -582,19 +583,19 @@
     			});
 			});
 			var dataToServerString = "";
-			for(var i = 0; i < fields.length; i++){
-				if(i != fields.length-1){
-					dataToServerString = dataToServerString + fields[i].type + ","
-					dataToServerString = dataToServerString + fields[i].x + ","
-					dataToServerString = dataToServerString + fields[i].y + ";"
+			for(var i = 0; i < changedFields.length; i++){
+				if(i != changedFields.length-1){
+					dataToServerString = dataToServerString + changedFields[i].type + ","
+					dataToServerString = dataToServerString + changedFields[i].x + ","
+					dataToServerString = dataToServerString + changedFields[i].y + ";"
 				} else {
-					dataToServerString = dataToServerString + fields[i].type + ","
-					dataToServerString = dataToServerString + fields[i].x + ","
-					dataToServerString = dataToServerString + fields[i].y
+					dataToServerString = dataToServerString + changedFields[i].type + ","
+					dataToServerString = dataToServerString + changedFields[i].x + ","
+					dataToServerString = dataToServerString + changedFields[i].y
 				}
 			}
 			console.log("start");
-			console.log(fields);
+			console.log(changedFields);
 			$.ajax({
 				type: 'post',
 				url: address+"/databaseLink/savefielddata/",
