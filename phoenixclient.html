@@ -44,22 +44,34 @@
 	</div>
 	<div id="godmodeBox">
 		<h3 align="center">Godmode Box</h3>
-		<button id="ToggleWorldCreationMode" onclick="toggleWorldCreationMode()">toggle World Creation Mode</button>
-		<button id="ToggleBuildingCreationMode" onclick="toggleBuildingCreationMode()">toggle Building Creation Mode</button>
-		<button id="ToggleStreetBuildingMode" onclick="toggleStreetBuildingMode()">toggle Street Building Mode</button>
-		<button id="ToggleWallBuildingMode" onclick="toggleWallBuildingMode()">toggle Wall Building Mode</button>
-		<button id="ToggleHarborBuildingMode" onclick="toggleHarborBuildingMode()">toggle Harbor Building Mode</button>
-		<button id="ToggleBridgeBuildingMode" onclick="toggleBridgeBuildingMode()">toggle Bridge Building Mode</button>
-		<button id="SaveFields" onclick="saveFields()">save Fields</button>
-		<button id="SaveRivers" onclick="saveRivers()">save Rivers</button>
-		<button id="SaveBuildings" onclick="saveBuildings()">save Buildings</button>
-		<button id="SaveArmies" onclick="saveArmies()">save Armies</button>
-		<button id="saveFactionsTerritories" onclick="saveFactionsTerritories()">save Factions Territories</button>
-
+		<button id="ToggleWorldCreationMode" onclick="toggleWorldCreationMode()">modify fields</button>
+		<button id="ToggleRiverCreationMode" onclick="toggleRiverCreationMode()">modify rivers</button>
+		<button id="ToggleBuildingCreationMode" onclick="toggleBuildingCreationMode()">modify buildings</button>
+		<button id="ToggleStreetBuildingMode" onclick="toggleStreetBuildingMode()">Modify streets</button>
+		<button id="ToggleWallBuildingMode" onclick="toggleWallBuildingMode()">modify walls</button>
+		<button id="ToggleHarborBuildingMode" onclick="toggleHarborBuildingMode()">modify harbours</button>
+		<button id="ToggleBridgeBuildingMode" onclick="toggleBridgeBuildingMode()">modify bridges</button>
+		<button id="SaveArmies" onclick="saveArmies()">save armies</button>
+		<button id="saveFactionsTerritories" onclick="saveFactionsTerritories()">save faction territories</button>
 	</div>
 	<div id="worldBenderBox">
 		<h3 id="creationWarning" align="center">WARNING: WORLD CREATION ON CLICK MODE IS ACTIVE !!!</h3>
 		<button id="ToggleOnClickWorldCreationMode" onclick="toggleOnClickWorldCreationMode()">toggle on click World Creation Mode</button>
+		<button id="SaveFields" onclick="saveFields()">save fields</button>
+		<section id="changeFieldSection">
+			<button id="ChangeFieldClickedTo0" onclick="changeFieldClickedTo(0)"> change field clicked to shallows</button>
+			<button id="ChangeFieldClickedTo1" onclick="changeFieldClickedTo(1)"> change field clicked to deepsea</button>
+			<button id="ChangeFieldClickedTo2" onclick="changeFieldClickedTo(2)"> change field clicked to lowlands</button>
+			<button id="ChangeFieldClickedTo3" onclick="changeFieldClickedTo(3)"> change field clicked to woods</button>
+			<button id="ChangeFieldClickedTo4" onclick="changeFieldClickedTo(4)"> change field clicked to hills</button>
+			<button id="ChangeFieldClickedTo5" onclick="changeFieldClickedTo(5)"> change field clicked to highlands</button>
+			<button id="ChangeFieldClickedTo6" onclick="changeFieldClickedTo(6)"> change field clicked to mountains</button>
+			<button id="ChangeFieldClickedTo7" onclick="changeFieldClickedTo(7)"> change field clicked to desert</button>
+			<button id="ChangeFieldClickedTo8" onclick="changeFieldClickedTo(8)"> change field clicked to swamp</button>
+			<button id="ChangeFieldClickedTo9" onclick="changeFieldClickedTo(9)"> change field clicked to undefined</button>
+		</section>
+	</div>
+	<div id="riverBenderBox">
 		<section id="buildRiverSection">
 			<button id="addRiverNW" onclick="addRiver(0)">Add a River at the north west border</button>
 			<button id="addRiverNE" onclick="addRiver(1)">Add a River at the north east border</button>
@@ -76,17 +88,20 @@
 			<button id="removeRiverSW" onclick="removeRiver(4)">Remove a River at the south west border</button>
 			<button id="removeRiverW" onclick="removeRiver(5)">Remove a River at the west border</button>
 		</section>
+		<button id="SaveRivers" onclick="saveRivers()">save rivers</button>
 	</div>
 	<div id="buildingCreationBox">
-		<button id="addCastle" onclick="addCastle()">Build a castle</button>
-		<button id="addCity" onclick="addCity()">Build a city</button>
-		<button id="addFortress" onclick="addFortress()">Build a fortress</button>
-		<button id="addCapital" onclick="addCapital()">Build a capital</button>
-		<button id="addCapitalFortress" onclick="addCapitalFortress()">Build a capital fortress</button>
-		<button id="deleteBuilding" onclick="deleteBuilding()">Delete a building</button>
+		<section id="buildingSection">
+			<button id="addCastle" onclick="addCastle()">Build a castle</button>
+			<button id="addCity" onclick="addCity()">Build a city</button>
+			<button id="addFortress" onclick="addFortress()">Build a fortress</button>
+			<button id="addCapital" onclick="addCapital()">Build a capital</button>
+			<button id="addCapitalFortress" onclick="addCapitalFortress()">Build a capital fortress</button>
+			<button id="deleteBuilding" onclick="deleteBuilding()">Delete a building</button>
+		</section>
+		<button id="SaveBuildings" onclick="saveBuildings()">save buildings</button>
 	</div>
 	<div id="wallCreationBox">
-		<h3 align="center">Wall Builder</h3>
 		<section id="buildWall">
 			<button id="addWallNW" onclick="manipulateBorderBuilding(5, 'nw', true)">Build a Wall in north west direction</button>
 			<button id="addWallNE" onclick="manipulateBorderBuilding(5, 'ne', true)">Build a Wall in north east direction</button>
@@ -103,9 +118,9 @@
 			<button id="removeWallSW" onclick="manipulateBorderBuilding(5, 'sw', false)">Remove a Wall in south west direction</button>
 			<button id="removeWallW" onclick="manipulateBorderBuilding(5, 'w', false)">Remove a Wall in west direction</button>
 		</section>
+		<button id="SaveBuildings" onclick="saveBuildings()">save buildings</button>
 	</div>
 	<div id="harborCreationBox">
-		<h3 align="center">Harbor Builder</h3>
 		<section id="buildHarbor">
 			<button id="addHarborNW" onclick="manipulateBorderBuilding(6, 'nw', true)">Build a Harbor in north west direction</button>
 			<button id="addHarborNE" onclick="manipulateBorderBuilding(6, 'ne', true)">Build a Harbor in north east direction</button>
@@ -122,9 +137,9 @@
 			<button id="removeHarborSW" onclick="manipulateBorderBuilding(6, 'sw', false)">Remove a Harbor in south west direction</button>
 			<button id="removeHarborW" onclick="manipulateBorderBuilding(6, 'w', false)">Remove a Harbor in west direction</button>
 		</section>
+		<button id="SaveBuildings" onclick="saveBuildings()">save buildings</button>
 	</div>
 	<div id="bridgeCreationBox">
-		<h3 align="center">Bridge Builder</h3>
 		<section id="buildBridge">
 			<button id="addBridgeNW" onclick="manipulateBorderBuilding(7, 'nw', true)">Build a Bridge in north west direction</button>
 			<button id="addBridgeNE" onclick="manipulateBorderBuilding(7, 'ne', true)">Build a Bridge in north east direction</button>
@@ -141,9 +156,9 @@
 			<button id="removeBridgeSW" onclick="manipulateBorderBuilding(7, 'sw', false)">Remove a Bridge in south west direction</button>
 			<button id="removeBridgeW" onclick="manipulateBorderBuilding(7, 'w', false)">Remove a Bridge in west direction</button>
 		</section>
+		<button id="SaveBuildings" onclick="saveBuildings()">save buildings</button>
 	</div>
 	<div id="streetCreationBox">
-		<h3 align="center">Street Builder</h3>
 		<section id="buildStreetSection">
 			<button id="addStreetNW" onclick="addStreet(0)">Build a Street in north west direction</button>
 			<button id="addStreetNE" onclick="addStreet(1)">Build a Street in north east direction</button>
@@ -160,6 +175,7 @@
 			<button id="removeStreetSW" onclick="removeStreet(4)">Remove a Street in south west direction</button>
 			<button id="removeStreetW" onclick="removeStreet(5)">Remove a Street in west direction</button>
 		</section>
+		<button id="SaveBuildings" onclick="saveBuildings()">save buildings</button>
 	</div>
 
 	<script>
@@ -170,10 +186,12 @@
 		authenticationToken = 0; // the session Token, default = 0.
 		var worldCreationModeOn = false;
 		var worldCreationModeOnClick = false;
+		var riverCreationModeOn = false;
 		var buildingCreationModeOn = false;
 		var streetBuildingModeOn = false;
 		document.getElementById("godmodeBox").style.visibility = "hidden";
 		document.getElementById("worldBenderBox").style.display = "none";
+		document.getElementById("riverBenderBox").style.display = "none";
 		document.getElementById("creationWarning").style.display = "none";
 		document.getElementById("buildingCreationBox").style.display = "none";
 		document.getElementById("streetCreationBox").style.display = "none";
@@ -185,6 +203,47 @@
 		document.getElementById("wallCreationBox").style.display = "none";
 		document.getElementById("infoBox").style.display = "none";
 
+		// switches bunttonBoxContent.style.visibility to "" and all others to "none"
+		function switchBtnBoxTo(bunttonBoxContent){
+			document.getElementById("worldBenderBox").style.display = "none";
+			document.getElementById("riverBenderBox").style.display = "none";
+			document.getElementById("creationWarning").style.display = "none";
+			document.getElementById("buildingCreationBox").style.display = "none";
+			document.getElementById("streetCreationBox").style.display = "none";
+			document.getElementById("harborCreationBox").style.display = "none";
+			document.getElementById("bridgeCreationBox").style.display = "none";
+			document.getElementById("wallCreationBox").style.display = "none";
+			document.getElementById("buttonsBox").style.display = "none";
+			document.getElementById(bunttonBoxContent).style.display = "";
+		}
+
+		// switches activeMode to True and all others to false
+		function switchModeTo(activeMode){
+			worldCreationModeOn = false;
+			worldCreationModeOnClick = false;
+			riverCreationModeOn = false;
+			buildingCreationModeOn = false;
+			streetBuildingModeOn = false;
+			harborBuildingModeOn = false;
+			bridgeBuildingModeOn = false;
+			wallBuildingModeOn = false;
+			switch(activeMode){
+				case "worldCreationModeOnClick": worldCreationModeOnClick = true;
+				case "worldCreationModeOn": worldCreationModeOn = true; break;
+				case "riverCreationModeOn": riverCreationModeOn = true; break;
+				case "buildingCreationModeOn": buildingCreationModeOn = true; break;
+				case "streetBuildingModeOn": streetBuildingModeOn = true; break;
+				case "harborBuildingModeOn": harborBuildingModeOn = true; break;
+				case "bridgeBuildingModeOn": bridgeBuildingModeOn = true; break;
+				case "wallBuildingModeOn": wallBuildingModeOn = true; break;
+				case "none": break;
+				}
+		}
+
+		function changeFieldClickedTo(number){
+			//TODO
+		}
+
 		function toggleGodModeBar(){
 			if(document.getElementById("godmodeBox").style.visibility == "hidden"){
 				document.getElementById("godmodeBox").style.visibility = "visible";
@@ -195,25 +254,11 @@
 
 		function toggleWorldCreationMode(){
 			if(worldCreationModeOn){
-				worldCreationModeOn = false;
-				worldCreationModeOnClick = false;
-				document.getElementById("worldBenderBox").style.display = "none";
-				document.getElementById("buttonsBox").style.display = "";
+				switchModeTo("none");
+				switchBtnBoxTo("buttonsBox");
 			} else if (!worldCreationModeOn){
-				worldCreationModeOn = true;
-				buildingCreationModeOn = false;
-				streetBuildingModeOn = false;
-				document.getElementById("worldBenderBox").style.display = "";
-				document.getElementById("buildingCreationBox").style.display = "none";
-				document.getElementById("buttonsBox").style.display = "none";
-				document.getElementById("streetCreationBox").style.display = "none";
-				document.getElementById("creationWarning").style.display = "none";
-				var harborBuildingModeOn = false;
-				document.getElementById("harborCreationBox").style.display = "none";
-				var bridgeBuildingModeOn = false;
-				document.getElementById("bridgeCreationBox").style.display = "none";
-				var wallBuildingModeOn = false;
-				document.getElementById("wallCreationBox").style.display = "none";
+				switchModeTo("worldCreationModeOn");
+				switchBtnBoxTo("worldBenderBox");
 			}
 		}
 
@@ -227,123 +272,63 @@
 			}
 		}
 
+		function toggleRiverCreationMode(){
+			if(riverCreationModeOn){
+				switchModeTo("none");
+				switchBtnBoxTo("buttonsBox");
+			} else if (!riverCreationModeOn){
+				switchModeTo("riverCreationModeOn");
+				switchBtnBoxTo("riverBenderBox");
+			}
+		}
+
 		function toggleBuildingCreationMode(){
 			if(buildingCreationModeOn){
-				buildingCreationModeOn = false;
-				document.getElementById("buildingCreationBox").style.display = "none";
-				document.getElementById("buttonsBox").style.display = "";
+				switchModeTo("none");
+				switchBtnBoxTo("buttonsBox");
 			} else if (!buildingCreationModeOn){
-				buildingCreationModeOn = true;
-				worldCreationModeOn = false;
-				worldCreationModeOnClick = false;
-				streetBuildingModeOn = false;
-				document.getElementById("buildingCreationBox").style.display = "";
-				document.getElementById("worldBenderBox").style.display = "none";
-				document.getElementById("buttonsBox").style.display = "none";
-				document.getElementById("streetCreationBox").style.display = "none";
-				document.getElementById("creationWarning").style.display = "none";
-				var harborBuildingModeOn = false;
-				document.getElementById("harborCreationBox").style.display = "none";
-				var bridgeBuildingModeOn = false;
-				document.getElementById("bridgeCreationBox").style.display = "none";
-				var wallBuildingModeOn = false;
-				document.getElementById("wallCreationBox").style.display = "none";
+				switchBtnBoxTo("buildingCreationBox");
+				switchModeTo("buildingCreationModeOn");
 			}
 		}
 		
 		function toggleStreetBuildingMode(){
 			if(streetBuildingModeOn){
-				streetBuildingModeOn = false;
-				document.getElementById("streetCreationBox").style.display = "none";
-				document.getElementById("buttonsBox").style.display = "";
+				switchModeTo("none");
+				switchBtnBoxTo("buttonsBox");
 			} else if (!streetBuildingModeOn){
-				buildingCreationModeOn = false;
-				worldCreationModeOn = false;
-				worldCreationModeOnClick = false;
-				streetBuildingModeOn = true;
-				document.getElementById("buildingCreationBox").style.display = "none";
-				document.getElementById("worldBenderBox").style.display = "none";
-				document.getElementById("buttonsBox").style.display = "none";
-				document.getElementById("streetCreationBox").style.display = "";
-				document.getElementById("creationWarning").style.display = "none";
-				var harborBuildingModeOn = false;
-				document.getElementById("harborCreationBox").style.display = "none";
-				var bridgeBuildingModeOn = false;
-				document.getElementById("bridgeCreationBox").style.display = "none";
-				var wallBuildingModeOn = false;
-				document.getElementById("wallCreationBox").style.display = "none";
+				switchModeTo("streetBuildingModeOn");
+				switchBtnBoxTo("streetCreationBox");
 			}
 		}
 
 		function toggleHarborBuildingMode(){
 			if(harborBuildingModeOn){
-				harborBuildingModeOn = false;
-				document.getElementById("harborCreationBox").style.display = "none";
-				document.getElementById("buttonsBox").style.display = "";
+				switchModeTo("none");
+				switchBtnBoxTo("buttonsBox");
 			} else if (!harborBuildingModeOn){
-				buildingCreationModeOn = false;
-				worldCreationModeOn = false;
-				worldCreationModeOnClick = false;
-				streetBuildingModeOn = false;
-				document.getElementById("buildingCreationBox").style.display = "none";
-				document.getElementById("worldBenderBox").style.display = "none";
-				document.getElementById("buttonsBox").style.display = "none";
-				document.getElementById("streetCreationBox").style.display = "none";
-				document.getElementById("creationWarning").style.display = "none";
-				var harborBuildingModeOn = true;
-				document.getElementById("harborCreationBox").style.display = "";
-				var bridgeBuildingModeOn = false;
-				document.getElementById("bridgeCreationBox").style.display = "none";
-				var wallBuildingModeOn = false;
-				document.getElementById("wallCreationBox").style.display = "none";
+				switchModeTo("harborBuildingModeOn");
+				switchBtnBoxTo("harborCreationBox");
 			}
 		}
 
 		function toggleBridgeBuildingMode(){
 			if(bridgeBuildingModeOn){
-				bridgeBuildingModeOn = false;
-				document.getElementById("bridgeCreationBox").style.display = "none";
-				document.getElementById("buttonsBox").style.display = "";
+				switchModeTo("none");
+				switchBtnBoxTo("buttonsBox");
 			} else if (!bridgeBuildingModeOn){
-				buildingCreationModeOn = false;
-				worldCreationModeOn = false;
-				worldCreationModeOnClick = false;
-				streetBuildingModeOn = false;
-				document.getElementById("buildingCreationBox").style.display = "none";
-				document.getElementById("worldBenderBox").style.display = "none";
-				document.getElementById("buttonsBox").style.display = "none";
-				document.getElementById("streetCreationBox").style.display = "none";
-				document.getElementById("creationWarning").style.display = "none";
-				var harborBuildingModeOn = false;
-				document.getElementById("harborCreationBox").style.display = "none";
-				var bridgeBuildingModeOn = true;
-				document.getElementById("bridgeCreationBox").style.display = "";
-				var wallBuildingModeOn = false;
-				document.getElementById("wallCreationBox").style.display = "none";
+				switchModeTo("bridgeBuildingModeOn");
+				switchBtnBoxTo("bridgeCreationBox");
 			}
 		}
 
 		function toggleWallBuildingMode(){
 			if(wallBuildingModeOn){
-				wallBuildingModeOn = false;
-				document.getElementById("wallCreationBox").style.display = "none";
-				document.getElementById("buttonsBox").style.display = "";
+				switchModeTo("none");
+				switchBtnBoxTo("buttonsBox");
 			} else if (!wallBuildingModeOn){
-				buildingCreationModeOn = false;
-				worldCreationModeOn = false;
-				worldCreationModeOnClick = false;
-				streetBuildingModeOn = false;
-				document.getElementById("buildingCreationBox").style.display = "none";
-				document.getElementById("worldBenderBox").style.display = "none";
-				document.getElementById("buttonsBox").style.display = "none";
-				document.getElementById("streetCreationBox").style.display = "none";
-				document.getElementById("creationWarning").style.display = "none";
-				var harborBuildingModeOn = false;
-				document.getElementById("harborCreationBox").style.display = "none";
-				var bridgeBuildingModeOn = false;
-				document.getElementById("bridgeCreationBox").style.display = "none";
-				var wallBuildingModeOn = true;
-				document.getElementById("wallCreationBox").style.display = "";
+				switchModeTo("wallBuildingModeOn");
+				switchBtnBoxTo("wallCreationBox");
 			}
 		}
 
@@ -560,21 +545,21 @@
 		}
 		
 
-		function getCookie(c_name)
-		{
-   			if (document.cookie.length > 0)
-    		{
-        		c_start = document.cookie.indexOf(c_name + "=");
-        		if (c_start != -1)
-        		{
-        			c_start = c_start + c_name.length + 1;
-        		    c_end = document.cookie.indexOf(";", c_start);
-        		    if (c_end == -1) c_end = document.cookie.length;
-        		    return unescape(document.cookie.substring(c_start,c_end));
-        		}
-    		}
-    		return "";
- 		}
+		//function getCookie(c_name)
+		//{
+   		//	if (document.cookie.length > 0)
+    	//	{
+        //		c_start = document.cookie.indexOf(c_name + "=");
+        //		if (c_start != -1)
+        //		{
+        // 			c_start = c_start + c_name.length + 1;
+        //		    c_end = document.cookie.indexOf(";", c_start);
+        //		    if (c_end == -1) c_end = document.cookie.length;
+        //		    return unescape(document.cookie.substring(c_start,c_end));
+        //		}
+    	//	}
+    	//	return "";
+ 		//}
 
 		function saveFields(){ // saves the current fields on the server
 			$(function () {

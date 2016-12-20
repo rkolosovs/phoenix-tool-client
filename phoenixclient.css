@@ -34,6 +34,12 @@ div {
     height: 10%;
 }
 
+#riverBenderBox {
+    right: calc(15% + 3px);
+    width: calc(70% - 12px);
+    height: 10%;
+}
+
 #buildingCreationBox {
     right: calc(15% + 3px);
     width: calc(70% - 12px);
