@@ -189,17 +189,18 @@
 		var riverCreationModeOn = false;
 		var buildingCreationModeOn = false;
 		var streetBuildingModeOn = false;
+		var harborBuildingModeOn = false;
+		var bridgeBuildingModeOn = false;
+		var wallBuildingModeOn = false;
+		var changeFieldToType = -1;
 		document.getElementById("godmodeBox").style.visibility = "hidden";
 		document.getElementById("worldBenderBox").style.display = "none";
 		document.getElementById("riverBenderBox").style.display = "none";
 		document.getElementById("creationWarning").style.display = "none";
 		document.getElementById("buildingCreationBox").style.display = "none";
 		document.getElementById("streetCreationBox").style.display = "none";
-		var harborBuildingModeOn = false;
 		document.getElementById("harborCreationBox").style.display = "none";
-		var bridgeBuildingModeOn = false;
 		document.getElementById("bridgeCreationBox").style.display = "none";
-		var wallBuildingModeOn = false;
 		document.getElementById("wallCreationBox").style.display = "none";
 		document.getElementById("infoBox").style.display = "none";
 
@@ -228,6 +229,7 @@
 			bridgeBuildingModeOn = false;
 			wallBuildingModeOn = false;
 			switch(activeMode){
+				//worldCreationModeOnClick also has worldCreationModeOn enabled
 				case "worldCreationModeOnClick": worldCreationModeOnClick = true;
 				case "worldCreationModeOn": worldCreationModeOn = true; break;
 				case "riverCreationModeOn": riverCreationModeOn = true; break;
@@ -241,7 +243,15 @@
 		}
 
 		function changeFieldClickedTo(number){
-			//TODO
+			if(changeFieldToType != number){
+				changeFieldToType = number;
+				switchModeTo("worldCreationModeOnClick");
+				document.getElementById("creationWarning").style.display = "";
+			} else {
+				changeFieldToType = -1;
+				switchModeTo("worldCreationModeOn");
+				document.getElementById("creationWarning").style.display = "none";
+			}
 		}
 
 		function toggleGodModeBar(){
@@ -263,10 +273,11 @@
 		}
 
 		function toggleOnClickWorldCreationMode(){
-			if(worldCreationModeOnClick){
+			if(worldCreationModeOnClick && (changeFieldToType == -1)){
 				worldCreationModeOnClick = false;
 				document.getElementById("creationWarning").style.display = "none";
-			} else if (!worldCreationModeOnClick){
+			} else if (!worldCreationModeOnClick || (worldCreationModeOnClick && (changeFieldToType != -1))){
+				changeFieldToType = -1;
 				worldCreationModeOnClick = true;
 				document.getElementById("creationWarning").style.display = "";
 			}

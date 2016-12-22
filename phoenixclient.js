@@ -112,10 +112,14 @@
 		if(worldCreationModeOnClick){
 			var clickedHex = new showHex(clickedField[0], clickedField[1]);
 			var posi = clickedHex.positionInList();
-			if(fields[posi].type == 8 || fields[posi].type == 9){
-				fields[posi].type = 0;
-			} else {
-				fields[posi].type++;
+			if(changeFieldToType == -1){// checks if Field should be changed to a specific type, if not use normal world creation mode on click
+				if(fields[posi].type == 8 || fields[posi].type == 9){
+					fields[posi].type = 0;
+				} else {
+					fields[posi].type++;
+				}
+			} else if((changeFieldToType <= 9) && (changeFieldToType >= 0)){
+				fields[posi].type = changeFieldToType
 			}
 			var found = false;
 			for(var i = 0; i < window.changedFields.length; i++){
@@ -181,22 +185,24 @@
 		if(worldCreationModeOnClick){
 			var clickedHex = new showHex(clickedField[0], clickedField[1]);
 			var posi = clickedHex.positionInList();
-			if(fields[posi].type == 0 || fields[posi].type == 9){
-				fields[posi].type = 8;
-			} else {
-				fields[posi].type--;
-			}
-			var found = false;
-			for(var i = 0; i < window.changedFields.length; i++){
-				if((window.changedFields[i].x == fields[posi].x) && (window.changedFields[i].y == fields[posi].y )){
-					window.changedFields[i].type = fields[posi].type;
-					found = true;
+			if(changeFieldToType == -1){// checks if Field should be changed to a specific type (then rightclick is disabled)
+				if(fields[posi].type == 0 || fields[posi].type == 9){
+					fields[posi].type = 8;
+				} else {
+					fields[posi].type--;
 				}
+				var found = false;
+				for(var i = 0; i < window.changedFields.length; i++){
+					if((window.changedFields[i].x == fields[posi].x) && (window.changedFields[i].y == fields[posi].y )){
+						window.changedFields[i].type = fields[posi].type;
+						found = true;
+					}
+				}
+				if(!found){
+					window.changedFields.push({"type": fields[posi].type,"x": fields[posi].x,"y": fields[posi].y});
+				}
+				console.log(window.changedFields);
 			}
-			if(!found){
-				window.changedFields.push({"type": fields[posi].type,"x": fields[posi].x,"y": fields[posi].y});
-			}
-			console.log(window.changedFields);
 		} else {
 			if(selectedArmy != undefined){
 				var clickedArmyCoords = new showHex(listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y);
