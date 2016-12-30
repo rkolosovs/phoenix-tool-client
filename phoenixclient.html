@@ -598,7 +598,6 @@
 				}
 			}
 			console.log("start");
-			console.log(fields);
 			$.ajax({
 				type: 'post',
 				url: address+"/databaseLink/savefielddata/",
@@ -646,7 +645,7 @@
 						case 3:
 						case 4:
 							dataToServerString = dataToServerString + buildings[i].type + ","
-							dataToServerString = dataToServerString + buildings[i].reich + ","
+							dataToServerString = dataToServerString + buildings[i].realm + ","
 							dataToServerString = dataToServerString + buildings[i].x + ","
 							dataToServerString = dataToServerString + buildings[i].y + ";"
 							break
@@ -654,14 +653,14 @@
 						case 6:
 						case 7:
 							dataToServerString = dataToServerString + buildings[i].type + ","
-							dataToServerString = dataToServerString + buildings[i].reich + ","
+							dataToServerString = dataToServerString + buildings[i].realm + ","
 							dataToServerString = dataToServerString + buildings[i].x + ","
 							dataToServerString = dataToServerString + buildings[i].y + ","
 							dataToServerString = dataToServerString + buildings[i].direction + ";"
 							break
 						case 8:
 							dataToServerString = dataToServerString + buildings[i].type + ","
-							dataToServerString = dataToServerString + buildings[i].reich + ","
+							dataToServerString = dataToServerString + buildings[i].realm + ","
 							dataToServerString = dataToServerString + buildings[i].firstX + ","
 							dataToServerString = dataToServerString + buildings[i].firstY + ","
 							dataToServerString = dataToServerString + buildings[i].secondX + ","
@@ -673,7 +672,7 @@
 						case 3:
 						case 4:
 							dataToServerString = dataToServerString + buildings[i].type + ","
-							dataToServerString = dataToServerString + buildings[i].reich + ","
+							dataToServerString = dataToServerString + buildings[i].realm + ","
 							dataToServerString = dataToServerString + buildings[i].x + ","
 							dataToServerString = dataToServerString + buildings[i].y
 							break
@@ -681,14 +680,14 @@
 						case 6:
 						case 7:
 							dataToServerString = dataToServerString + buildings[i].type + ","
-							dataToServerString = dataToServerString + buildings[i].reich + ","
+							dataToServerString = dataToServerString + buildings[i].realm + ","
 							dataToServerString = dataToServerString + buildings[i].x + ","
 							dataToServerString = dataToServerString + buildings[i].y + ","
 							dataToServerString = dataToServerString + buildings[i].direction
 							break
 						case 8:
 							dataToServerString = dataToServerString + buildings[i].type + ","
-							dataToServerString = dataToServerString + buildings[i].reich + ","
+							dataToServerString = dataToServerString + buildings[i].realm + ","
 							dataToServerString = dataToServerString + buildings[i].firstX + ","
 							dataToServerString = dataToServerString + buildings[i].firstY + ","
 							dataToServerString = dataToServerString + buildings[i].secondX + ","

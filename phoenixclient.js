@@ -1,7 +1,8 @@
 	var selectedFields = []; //list of fields to be highlighted
 	var selectedArmy; //currently selected armyCoordinates
+	var listOfArmyCoordinates;
 	var switchScale = 50;
-	var tempturn; //TODO: temporary. plz remove
+	var turn = [149, 'usa', 'st']; //turn, realm (tag), status (st/fi) (e.g. [149, 'usa', 'st'])
 
 (function () {
 	'use strict';
@@ -11,8 +12,6 @@
 	var canvas = document.getElementById('hexCanvas'); //get the canvas element from the HTML document
 	var ctx = canvas.getContext('2d'); //get the context of the canvas
 	// var topBar = document.getElementById('topBar'); //get the top bar element from the HTML document
-
-	var turn = [149, 'usa'];//turn, realm (sl, proper reals, or build)
 
 	//settings; TODO: let the user change these in game
 	var tileset = "mbits_painted"; //tileset name
@@ -254,8 +253,8 @@
 				loadMap(url);
 				loadImages(tileset);
 				loadArmies(url);
-				setHexParts(scale);
 				loadTurnNumber(url);
+				setHexParts(scale);
 				writeTurnNumber();
 				resizeCanvas();
 			});

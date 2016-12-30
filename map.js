@@ -1,3 +1,4 @@
+'use strict';
 //constants
 var SQRT3 = Math.sqrt(3); //about 1.732050808...
 var SIN60 = 0.5 * SQRT3; //about 0.8660254037...
@@ -38,6 +39,7 @@ var c;
 var gH;
 var gW;
 
+var currentCSRFToken;
 var gamestate; //abstract turn structure
 
 var fields; //declare fields variable; holds the terrain fields
@@ -84,11 +86,11 @@ var bridgeNWImg = new Image();
 var bridgeSEImg = new Image();
 var bridgeNEImg = new Image();
 
+
 function loadTurnNumber(url) {
 	$.getJSON(url + "/databaseLink/getturn/", function(json){
-		tempturn = json;
-		console.log(tempturn);
-	}
+		turn = json;
+	});
 }
 
 function loadMap(url) {
@@ -115,19 +117,18 @@ function loadMap(url) {
 		var accumulator = []
 		for(var i = 0; i < fromServer.length; i++){
 			if(accumulator.length == 0){
-				accumulator.push({"tag":fromServer[i].reich,"land":[[fromServer[i].x,fromServer[i].y]]})
-				console.log(accumulator);
+				accumulator.push({"tag":fromServer[i].realm,"land":[[fromServer[i].x,fromServer[i].y]]})
 			} else {
 				var neuesReich = false;
 				for(var j = 0; j < accumulator.length; j++){
-					if(fromServer[i].reich == accumulator[j].tag){
+					if(fromServer[i].realm == accumulator[j].tag){
 						accumulator[j].land.push([fromServer[i].x,fromServer[i].y]);
 					} else if (j == accumulator.length-1){
 						neuesReich = true;
 					}
 				}
 				if(neuesReich == true){
-					accumulator.push({"tag":fromServer[i].reich,"land":[[fromServer[i].x,fromServer[i].y]]})
+					accumulator.push({"tag":fromServer[i].realm,"land":[[fromServer[i].x,fromServer[i].y]]})
 				}
 			}
 		}
@@ -138,7 +139,6 @@ function loadMap(url) {
 				case 4: accumulator[i].tag = "eos"; break;
 			}
 		}
-		console.log(accumulator);
 		borders = accumulator;
 	});
 }
