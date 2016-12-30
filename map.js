@@ -27,7 +27,7 @@ var buildingTypes = {
 	street: 8 //"Straße" in Erkenfara rules
 };
 
-var realmColors = [
+var realmColors = [ //TODO: This should be dynamically fetched form the server
 	{tag: "usa", color: [255, 140, 0]},
 	{tag: "vvh", color: [0, 100, 0]},
 	{tag: "eos", color: [128, 0, 128]}
@@ -115,26 +115,26 @@ function loadMap(url) {
 	$.getJSON(url +"/databaseLink/getborderdata/", function(json){ //load the borders from the database
 		var fromServer = json; //load the borders from the borders.json file
 		var accumulator = []
-		for(var i = 0; i < fromServer.length; i++){
+		for(var i = 0; i < fromServer.length; i++){ //TODO: This whole thing should probaly happen serverside!
 			if(accumulator.length == 0){
 				accumulator.push({"tag":fromServer[i].realm,"land":[[fromServer[i].x,fromServer[i].y]]})
 			} else {
-				var neuesReich = false;
+				var newRealm = false;
 				for(var j = 0; j < accumulator.length; j++){
 					if(fromServer[i].realm == accumulator[j].tag){
 						accumulator[j].land.push([fromServer[i].x,fromServer[i].y]);
 					} else if (j == accumulator.length-1){
-						neuesReich = true;
+						newRealm = true;
 					}
 				}
-				if(neuesReich == true){
-					accumulator.push({"tag":fromServer[i].realm,"land":[[fromServer[i].x,fromServer[i].y]]})
+				if (newRealm) {
+					accumulator.push({"tag":fromServer[i].realm,"land":[[fromServer[i].x,fromServer[i].y]]});
 				}
 			}
 		}
-		for(var i =0; i < accumulator.length; i++){
+		for(var i =0; i < accumulator.length; i++){ //TODO: This has to be dynamically fatched form the server.
 			switch(accumulator[i].tag){
-				case 1: accumulator[i].tag = "usa"; break;
+				case 1: accumulator[i].tag = "usa"; break; 
 				case 3: accumulator[i].tag = "vvh"; break;
 				case 4: accumulator[i].tag = "eos"; break;
 			}
