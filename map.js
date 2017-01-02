@@ -201,11 +201,20 @@ function writeTurnNumber(topBar) {
 	var btn = document.createElement("BUTTON");
 	btn.id = "nextTurnButton";
 	btn.style = "float:left;"
+	if (currentTurn.realm === null || currentTurn.status === 'fi') { //TODO: || not logged in as the current realm
+		btn.disabled = true;
+		btn.style+="opacity: 0.4; cursor: not-allowed;" //TODO: Change button grafic to a disabled grafic
+	}
 
 	var date = document.createElement("P");
 	date.align = "right";
 	date.id = "date_text";
-	date.innerHTML =  "Monat " + months[currentTurn.turn%8] + " des Jahres "+ Math.ceil(currentTurn.turn/8) + " (Zug " + currentTurn.turn + ", " + currentTurn.realm + ") ";
+	date.innerHTML =  "Monat " + months[currentTurn.turn%8] + " des Jahres "+ Math.ceil(currentTurn.turn/8) + " (Zug " + currentTurn.turn + ", ";
+	if (currentTurn.realm === null) { //GM's turn
+		date.innerHTML += "SL) ";
+	} else { //a realm's turn
+		date.innerHTML += currentTurn.realm + ") ";
+	}
 	date.style="width:340px;float:left;line-height:30px;"
 
 	var spec = document.createElement("P");
