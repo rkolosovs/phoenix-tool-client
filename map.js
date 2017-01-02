@@ -41,6 +41,8 @@ var gW;
 
 var currentCSRFToken;
 var gamestate; //abstract turn structure
+var currentTurn; //status \in {st, fi}
+var months = ['Agul', 'Hawar', 'Rim', 'Naliv', 'Larn', 'Hel', 'Jawan', 'Lud'];
 
 var fields; //declare fields variable; holds the terrain fields
 var rivers; //declare rivers variable; holds the rivers
@@ -89,7 +91,8 @@ var bridgeNEImg = new Image();
 
 function loadTurnNumber(url) {
 	$.getJSON(url + "/databaseLink/getturn/", function(json){
-		turn = json;
+		currentTurn = json;
+		writeTurnNumber();
 	});
 }
 
@@ -190,6 +193,36 @@ function drawMap(ctx, x, y, scale) {
 	drawRivers(ctx, x, y, scale);
 	drawBorders(ctx, x, y, scale);
 	drawBuildings(ctx, x, y, scale);
+}
+
+function writeTurnNumber(topBar) {
+	var topBar = document.getElementById('topBar'); //get the top bar element from the HTML document
+
+	var btn = document.createElement("BUTTON");
+	btn.id = "nextTurnButton";
+	btn.style = "float:left;"
+
+	var date = document.createElement("P");
+	date.align = "right";
+	date.id = "date_text";
+	date.innerHTML =  "Monat " + months[currentTurn.turn%8] + " des Jahres "+ Math.ceil(currentTurn.turn/8) + " (Zug " + currentTurn.turn + ", " + currentTurn.realm + ") ";
+	date.style="width:340px;float:left;line-height:30px;"
+
+	var spec = document.createElement("P");
+	spec.align = "left";
+	spec.id = "special_text";
+	if (currentTurn.turn%8 === 1 || currentTurn.turn%8 === 5) {
+		spec.innerHTML =  " Rüstmonat";
+	spec.style="width:100px;float:left;line-height:30px;"
+	} else if (currentTurn.turn%8 === 4 || currentTurn.turn%8 === 0) {
+		spec.innerHTML =  " Einkommensmonat";
+	spec.style="width:160px;float:left;line-height:30px;"
+	}
+	spec.style="width:0px;float:left;line-height:30px;"
+
+	topBar.appendChild(date);
+	topBar.appendChild(btn);
+	topBar.appendChild(spec);
 }
 
 function drawBorders(ctx, x, y, scale) {
