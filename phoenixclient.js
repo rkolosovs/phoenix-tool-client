@@ -302,4 +302,8 @@
 	}
 
 	init();
+	setInterval(function() {
+		loadMap(url);
+		loadArmies(url);
+	}, 30000);
 })();
