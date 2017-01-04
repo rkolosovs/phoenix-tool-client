@@ -180,8 +180,8 @@
 
 	<script>
 		//TODO: Move all of this out of the .html file.
-		var address = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
-		// var address = "http://localhost:8000"; //the address of the remote server goes here
+		// var address = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
+		var address = "http://localhost:8000"; //the address of the remote server goes here
 		var changedFields = []; // Fields that were changes with World Builder
 		authenticationToken = 0; // the session Token, default = 0.
 		var worldCreationModeOn = false;
@@ -193,6 +193,7 @@
 		var bridgeBuildingModeOn = false;
 		var wallBuildingModeOn = false;
 		var changeFieldToType = -1;
+		document.getElementById("ToggleGodModeBar").style.display = "none";
 		document.getElementById("godmodeBox").style.visibility = "hidden";
 		document.getElementById("worldBenderBox").style.display = "none";
 		document.getElementById("riverBenderBox").style.display = "none";
@@ -228,6 +229,7 @@
 			harborBuildingModeOn = false;
 			bridgeBuildingModeOn = false;
 			wallBuildingModeOn = false;
+			changeFieldToType = -1;
 			switch(activeMode){
 				//worldCreationModeOnClick also has worldCreationModeOn enabled
 				case "worldCreationModeOnClick": worldCreationModeOnClick = true;
@@ -244,8 +246,8 @@
 
 		function changeFieldClickedTo(number){
 			if(changeFieldToType != number){
-				changeFieldToType = number;
 				switchModeTo("worldCreationModeOnClick");
+				changeFieldToType = number;
 				document.getElementById("creationWarning").style.display = "";
 			} else {
 				changeFieldToType = -1;
@@ -781,29 +783,47 @@
 		function loginToServer(){
 			var username = document.getElementById("loginName").value;
 			var password = document.getElementById("loginPassword").value;
+			// Request to server with username and password in plaintext
+			// TODO: make safe
 			$.post({
 				url: address + "/databaseLink/login/",
 				data: {username:username, password:password},
 				success: function(data){
-					console.log(data);
+					// savomg the authenticationToken
 					authenticationToken = data.token;
-					console.log(authenticationToken);
-					getNewDataFromServer()
+					// if the user is a GM, godmode possibility is displayed
+					if(data.staff == true){
+						document.getElementById("ToggleGodModeBar").style.display = "";
+					}
+					// overwrite old known data
+					getNewDataFromServer();
 				},
 				dataType: "json"
 			});
+			// change loginBox to infoBox
 			document.getElementById("infoBox").style.display = "";
 			document.getElementById("loginBox").style.display = "none";
 		}
 
 		function logoutFromServer(){
+			//loging out from server
 			$.post({
 				url: address + "/databaseLink/logout/"
 			});
+			// turning off godmode Box, and changing infoBox to Login Bog
+			switchBtnBoxTo("buttonsBox");
+			switchModeTo("none");
+			document.getElementById("godmodeBox").style.visibility = "hidden";
+			document.getElementById("ToggleGodModeBar").style.display = "none";
 			document.getElementById("infoBox").style.display = "none";
 			document.getElementById("loginBox").style.display = "";
+			// forget old authenticationToken
+			authenticationToken = 0;
+			// overwrite previously known data
+			getNewDataFromServer();
 		}
 
+		// help function to fetch current data from the server
 		function getNewDataFromServer(){
 			loadArmies(address);
 			loadMap(address);
