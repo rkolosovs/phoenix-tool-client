@@ -2,6 +2,7 @@
 	var selectedArmy; //currently selected armyCoordinates
 	var listOfArmyCoordinates;
 	var switchScale = 50;
+	var login = null; //either realm tag, 'sl', or null
 
 (function () {
 	'use strict';
@@ -216,7 +217,7 @@
 		};
 	}
 
-	function getClickedField(){
+	function getClickedField(){ //TODO: Buggy. Clicks in the upper right corner are registered as cklicks to the ne neighboar instead.
 		var x = clickX - originX; //reverse our x/y origin offset
 		var y = clickY - originY;
 		// var gridHeight = (1.366/2)*scale; //a hexes height minus the lower tip triangle
@@ -246,10 +247,10 @@
 	function init() {
 		$.getScript("map.js", //use jQuery to load scripts from another .js file
 			function(){ 	//after loading script, run all initialization methods
+				loadTurnNumber(url);
 				loadMap(url);
 				loadImages(tileset);
 				loadArmies(url);
-				loadTurnNumber(url);
 				setHexParts(scale);
 				resizeCanvas();
 			});

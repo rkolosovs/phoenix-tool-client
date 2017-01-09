@@ -195,15 +195,15 @@ function drawMap(ctx, x, y, scale) {
 	drawBuildings(ctx, x, y, scale);
 }
 
-function writeTurnNumber(topBar) {
+function writeTurnNumber() {
 	var topBar = document.getElementById('topBar'); //get the top bar element from the HTML document
 
 	var btn = document.createElement("BUTTON");
 	btn.id = "nextTurnButton";
-	btn.style = "float:left;"
-	if (currentTurn.realm === null || currentTurn.status === 'fi') { //TODO: || not logged in as the current realm
+	if ((currentTurn.realm === null || currentTurn.status === 'fi' || login !== currentTurn.realm) && login !== 'sl') { //if not logged in as the current realm or SL
 		btn.disabled = true;
-		btn.style+="opacity: 0.4; cursor: not-allowed;" //TODO: Change button grafic to a disabled grafic
+		btn.style+="cursor: not-allowed;" //TODO: Change button grafic to a disabled grafic
+		btn.style.backgroundImage = "url(nextturn_button_disabled.svg)";
 	}
 
 	var date = document.createElement("P");
