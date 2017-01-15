@@ -14,8 +14,8 @@
 	var tileset = "mbits_painted"; //tileset name
 	var scrollSpeed = 0.2; //increment to scroll with each step
 
-	// var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
-	var url = "http://localhost:8000"; //put the url (or the IP address) for the remote game server here
+	var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
+	// var url = "http://localhost:8000"; //put the url (or the IP address) for the remote game server here
 
 	var mousePressed = false; //was the mouse button klicked but not yet released?
 	var isDragging = false; //was the mouse moved while the button is down?
@@ -114,11 +114,26 @@
 		if(worldCreationModeOnClick){
 			var clickedHex = new showHex(clickedField[0], clickedField[1]);
 			var posi = clickedHex.positionInList();
-			if(fields[posi].type == 8 || fields[posi].type == 9){
-				fields[posi].type = 0;
-			} else {
-				fields[posi].type++;
+			if(changeFieldToType == -1){// checks if Field should be changed to a specific type, if not use normal world creation mode on click
+				if(fields[posi].type == 8 || fields[posi].type == 9){
+					fields[posi].type = 0;
+				} else {
+					fields[posi].type++;
+				}
+			} else if((changeFieldToType <= 9) && (changeFieldToType >= 0)){
+				fields[posi].type = changeFieldToType
 			}
+			var found = false;
+			for(var i = 0; i < window.changedFields.length; i++){
+				if((window.changedFields[i].x == fields[posi].x) && (window.changedFields[i].y == fields[posi].y )){
+					window.changedFields[i].type = fields[posi].type;
+					found = true;
+				}
+			}
+			if(!found){
+				window.changedFields.push({"type": fields[posi].type,"x": fields[posi].x,"y": fields[posi].y});
+			}
+			console.log(window.changedFields);
 		} else {
 			// Feldauswahl
 			var index = -1;
@@ -172,10 +187,23 @@
 		if(worldCreationModeOnClick){
 			var clickedHex = new showHex(clickedField[0], clickedField[1]);
 			var posi = clickedHex.positionInList();
-			if(fields[posi].type == 0 || fields[posi].type == 9){
-				fields[posi].type = 8;
-			} else {
-				fields[posi].type--;
+			if(changeFieldToType == -1){// checks if Field should be changed to a specific type (then rightclick is disabled)
+				if(fields[posi].type == 0 || fields[posi].type == 9){
+					fields[posi].type = 8;
+				} else {
+					fields[posi].type--;
+				}
+				var found = false;
+				for(var i = 0; i < window.changedFields.length; i++){
+					if((window.changedFields[i].x == fields[posi].x) && (window.changedFields[i].y == fields[posi].y )){
+						window.changedFields[i].type = fields[posi].type;
+						found = true;
+					}
+				}
+				if(!found){
+					window.changedFields.push({"type": fields[posi].type,"x": fields[posi].x,"y": fields[posi].y});
+				}
+				console.log(window.changedFields);
 			}
 		} else {
 			if(selectedArmy != undefined){
@@ -277,4 +305,8 @@
 	}
 
 	init();
+	setInterval(function() {
+		loadMap(url);
+		loadArmies(url);
+	}, 30000);
 })();
