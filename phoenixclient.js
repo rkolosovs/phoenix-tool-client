@@ -2,7 +2,7 @@
 	var selectedArmy; //currently selected armyCoordinates
 	var listOfArmyCoordinates;
 	var switchScale = 50;
-	var login = null; //either realm tag, 'sl', or null
+	var login = 'guest'; //either realm tag, 'sl', or 'guest'
 
 (function () {
 	'use strict';
@@ -14,8 +14,8 @@
 	var tileset = "mbits_painted"; //tileset name
 	var scrollSpeed = 0.2; //increment to scroll with each step
 
-	var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
-	// var url = "http://localhost:8000"; //put the url (or the IP address) for the remote game server here
+	// var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
+	var url = "http://localhost:8000"; //for local debug
 
 	var mousePressed = false; //was the mouse button klicked but not yet released?
 	var isDragging = false; //was the mouse moved while the button is down?

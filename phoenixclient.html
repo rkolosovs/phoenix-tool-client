@@ -185,8 +185,8 @@
 
 	<script>
 		//TODO: Move all of this out of the .html file.
-		var address = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
-		// var address = "http://localhost:8000"; //the address of the remote server goes here
+		// var address = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
+		var address = "http://localhost:8000"; //for local debug
 		var changedFields = []; // Fields that were changes with World Builder
 		authenticationToken = 0; // the session Token, default = 0.
 		var worldCreationModeOn = false;
@@ -795,8 +795,9 @@
 				success: function(data){
 					// savomg the authenticationToken
 					authenticationToken = data.token;
+					login = data.group;
 					// if the user is a GM, godmode possibility is displayed
-					if(data.staff == true){
+					if(login == 'sl'){
 						document.getElementById("ToggleGodModeBar").style.display = "";
 					}
 					// overwrite old known data
@@ -815,6 +816,7 @@
 				url: address + "/databaseLink/logout/"
 			});
 			// turning off godmode Box, and changing infoBox to Login Bog
+			login = 'guest';
 			switchBtnBoxTo("buttonsBox");
 			switchModeTo("none");
 			document.getElementById("godmodeBox").style.visibility = "hidden";
@@ -831,6 +833,7 @@
 		function getNewDataFromServer(){
 			loadArmies(address);
 			loadMap(address);
+			loadTurnNumber(address);
 		}
 	</script>
 
