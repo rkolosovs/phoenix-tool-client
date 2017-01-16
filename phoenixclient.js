@@ -12,8 +12,8 @@
 	var tileset = "mbits_painted"; //tileset name
 	var scrollSpeed = 0.2; //increment to scroll with each step
 
-	var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
-	// var url = "http://localhost:8000"; //put the url (or the IP address) for the remote game server here
+	// var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
+	var url = "http://localhost:8000"; //put the url (or the IP address) for the remote game server here
 
 	var mousePressed = false; //was the mouse button klicked but not yet released?
 	var isDragging = false; //was the mouse moved while the button is down?
@@ -109,7 +109,26 @@
 	function registerLeftClick(){
 		var clickedField = getClickedField(); //get selected field
 		console.log(clickedField);
-		if(worldCreationModeOnClick){
+		if(armyWithNextClick){
+			var army = new heer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, mountsBuffer);
+            var armyCoords = new armyCoordinates(army, clickedField[0], clickedField[1], ownerBuffer);
+			ownerBuffer = document.getElementById("ownerField").value;
+			armyIdBuffer = 0;
+			document.getElementById("armyNumberField").value = 0;
+			countBuffer = 0;
+			document.getElementById("countField").value = 0;
+			leaderBuffer = 0;
+			document.getElementById("leaderField").value = 0;
+			mountsBuffer = 0;
+			document.getElementById("mountsField").value = 0;
+			lkpBuffer = 0;
+			document.getElementById("lkpField").value = 0; 
+			skpBuffer = 0;
+			document.getElementById("skpField").value = 0;
+			listOfArmyCoordinates.push(armyCoords);
+			switchBtnBoxTo("buttonsBox");
+			switchModeTo("none");
+		} else if(worldCreationModeOnClick){
 			var clickedHex = new showHex(clickedField[0], clickedField[1]);
 			var posi = clickedHex.positionInList();
 			if(changeFieldToType == -1){// checks if Field should be changed to a specific type, if not use normal world creation mode on click
@@ -302,8 +321,8 @@
 	}
 
 	init();
-	setInterval(function() {
-		loadMap(url);
-		loadArmies(url);
-	}, 30000);
+//	setInterval(function() {
+//		loadMap(url);
+//	loadArmies(url);
+//	}, 30000);
 })();

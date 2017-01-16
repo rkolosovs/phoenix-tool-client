@@ -70,6 +70,12 @@ div {
     height: 10%;
 }
 
+#armyGeneratorBox {
+    right: calc(15% + 3px);
+    width: calc(70% - 12px);
+    height: 10%;
+}
+
 #minimapBox {
     left:0;
     width: 15%;
