@@ -89,13 +89,6 @@ var bridgeSEImg = new Image();
 var bridgeNEImg = new Image();
 
 
-function loadTurnNumber(url) {
-	$.getJSON(url + "/databaseLink/getturn/", function(json){
-		currentTurn = json;
-		writeTurnNumber();
-	});
-}
-
 function loadMap(url) {
 	gamestate = new gameState(0, [0], [0], 0);
 	$.getJSON(url +"/databaseLink/gettoken/", function(json){// funtioniert nicht !!!
@@ -193,61 +186,6 @@ function drawMap(ctx, x, y, scale) {
 	drawRivers(ctx, x, y, scale);
 	drawBorders(ctx, x, y, scale);
 	drawBuildings(ctx, x, y, scale);
-}
-
-function writeTurnNumber() {
-	var topBar = document.getElementById('topBar'); //get the top bar element from the HTML document
-
-	var btn = document.getElementById('nextTurnButton');
-	var date = document.getElementById('date_text');
-	var spec = document.getElementById('special_text');
-	if (btn === null) {
-		btn = document.createElement("BUTTON");
-		btn.id = "nextTurnButton";
-		btn.addEventListener('click', function() {nextTurn()});
-		date = document.createElement("P");
-		date.align = "right";
-		date.id = "date_text";
-		spec = document.createElement("P");
-		spec.align = "left";
-		spec.id = "special_text";
-	}
-
-	if (login !== 'sl' && (currentTurn.realm === null || currentTurn.status === 'fi' || login !== currentTurn.realm)) { //if not logged in as the current realm or SL
-		btn.disabled = true;
-		btn.style.cursor = "not-allowed";
-		btn.style.backgroundImage = "url(nextturn_button_disabled.svg)";
-	} else {
-		btn.disabled = false;
-		btn.style.cursor = "initial";
-		btn.style.backgroundImage = "url(nextturn_button.svg)";
-	}
-
-	date.innerHTML =  "Monat " + months[currentTurn.turn%8] + " des Jahres "+ Math.ceil(currentTurn.turn/8) + " (Zug " + currentTurn.turn + ", ";
-	if (currentTurn.realm === null) { //GM's turn
-		date.innerHTML += "SL) ";
-	} else { //a realm's turn
-		date.innerHTML += currentTurn.realm + ") ";
-	}
-	date.style="width:340px;float:left;line-height:30px;"
-
-	if (currentTurn.turn%8 === 1 || currentTurn.turn%8 === 5) {
-		spec.innerHTML =  " Rüstmonat";
-	spec.style="width:100px;float:left;line-height:30px;"
-	} else if (currentTurn.turn%8 === 4 || currentTurn.turn%8 === 0) {
-		spec.innerHTML =  " Einkommensmonat";
-	spec.style="width:160px;float:left;line-height:30px;"
-	}
-	spec.style="width:0px;float:left;line-height:30px;"
-
-	topBar.innerHTML = '';
-	topBar.appendChild(date);
-	topBar.appendChild(btn);
-	topBar.appendChild(spec);
-}
-
-function nextTurn() {
-	console.log('Next Turn Button Activated!');
 }
 
 function drawBorders(ctx, x, y, scale) {
