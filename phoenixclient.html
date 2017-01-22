@@ -236,8 +236,8 @@
 
 	<script>
 		//TODO: Move all of this out of the .html file.
-		// var address = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
-		var address = "http://localhost:8000"; //the address of the remote server goes here
+		var address = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
+		// var address = "http://localhost:8000"; //the address of the remote server goes here
 		var changedFields = []; // Fields that were changed with World Builder
 		authenticationToken = 0; // the session Token, default = 0.
 		var worldCreationModeOn = false;
@@ -949,12 +949,11 @@
 			switchModeTo("armyWithNextClick");
 		}
 
-
 		function changeArmyInfo(){
 			for(var i = 0; i<listOfArmyCoordinates.length; i++){
 				if(i!=selectedArmy && listOfArmyCoordinates[i].owner == document.getElementById("ownerChangeInput").value &&
 				listOfArmyCoordinates[i].a.armyId == document.getElementById("armyIdChangeInput").value){
-					window.alert("Diese Armee Nummer ist in diesem Reich bereits vergeben.");
+					window.alert("Diese Armee-Id ist in diesem Reich bereits vergeben.");
 				} else {
 					listOfArmyCoordinates[selectedArmy].owner = document.getElementById("ownerChangeInput").value;
 					listOfArmyCoordinates[selectedArmy].a.armyId = document.getElementById("armyIdChangeInput").value;
