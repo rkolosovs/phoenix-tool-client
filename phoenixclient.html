@@ -19,8 +19,6 @@
 		<button id="ToggleGodModeBar" onclick="toggleGodModeBar()">toggle GodMode Bar</button>
 </div>
 	<div id="infoBox">
-		<h3 align="center">Army Info Goes Here!</h3>
-		<p id="armySelectBtns"></p>
 		<p id="armyId"></p>
 		<p id="count"></p>
 		<p id="leaders"></p>
@@ -30,6 +28,46 @@
 		<p id="movePoints"></p>
 		<p id ="heightPoints"></p>
 		<button id="logoutBtn" onclick="logoutFromServer()">Logout</button>
+	</div>
+	<div id="infoChangeBox">
+		<p id="ownerChange">
+			<label for="ownerChangeInput">Besitzer:</label>
+			<input id="ownerChangeInput"></input>
+		</p>
+		<p id="armyIdChange">
+			<label for="armyIdChangeInput">HeeresId:</label>
+			<input id="armyIdChangeInput"></input>
+		</p>
+		<p id="countChange">
+			<label for="countChangeInput">anzahl Truppen:</label>
+			<input id="countChangeInput"></input>
+		</p>
+		<p id="leadersChange">
+			<label for="leadersChangeInput">anzahl Heerführer:</label>
+			<input id="leadersChangeInput"></input>
+		</p>
+		<p id="mountsChange">
+			<label for="mountsChangeInput">mitgeführte Reittiere:</label>
+			<input id="mountsChangeInput"></input>
+		</p>
+		<p id="lkpChange">
+			<label for="lkpChangeInput">leichte Katapulte:</label>
+			<input id="lkpChangeInput"></input>
+		</p>
+		<p id="skpChange">
+			<label for="skpChangeInput">schwere Katapulte:</label>
+			<input id="skpChangeInput"></input>
+		</p>
+		<p id="movePointsChange">
+			<label for="movePointsChangeInput">Bewegungspunkte:</label>
+			<input id="movePointsChangeInput"></input>
+		</p>
+		<p id ="heightPointsChange">
+			<label for="heightPointsChangeInput">Höhenpunkte:</label>
+			<input id="heightPointsChangeInput"></input>
+		</p>
+		<button id="changeArmyInfo" onclick="changeArmyInfo()" visibility="none">Apply changed Stats</button>
+		<button id="logoutBtnChange" onclick="logoutFromServer()">Logout</button>
 	</div>
 	<div id="loginBox">
 		<h3 align="center">Login</h3>
@@ -52,7 +90,25 @@
 		<button id="ToggleHarborBuildingMode" onclick="toggleHarborBuildingMode()">modify harbours</button>
 		<button id="ToggleBridgeBuildingMode" onclick="toggleBridgeBuildingMode()">modify bridges</button>
 		<button id="SaveArmies" onclick="saveArmies()">save armies</button>
-		<button id="saveFactionsTerritories" onclick="saveFactionsTerritories()">save faction territories</button>
+		<button id="SaveFactionsTerritories" onclick="saveFactionsTerritories()">save faction territories</button>
+		<button id="ToggleArmyCreationMode" onclick="toggleArmyCreationMode()">make an Army</button>
+	</div>
+	<div id="armyGeneratorBox">
+		<label for="ownerField">Reich:</label>
+		<input id="ownerField" value="0">
+		<label for="armyNumberField">Armee Nummer:</label>
+		<input id="armyNumberField" value="0">
+		<label for="countField" value="0">Truppenanzahl:</label>
+		<input id="countField" value="0">
+		<label for="leaderField">Heerführer:</label>
+		<input id="leaderField" value="0">
+		<label for="mountsField">Reittiere:</label>
+		<input id="mountsField" value="0">
+		<label for="lkpField">leichte Katapulte:</label>
+		<input id="lkpField" value="0">
+		<label for="skpField">schwere Katapulte:</label>
+		<input id="skpField" value="0">
+		<button id="GenerateArmyBtn" onclick="generateArmyBtn()">Armee Generieren</button>
 	</div>
 	<div id="worldBenderBox">
 		<h3 id="creationWarning" align="center">WARNING: WORLD CREATION ON CLICK MODE IS ACTIVE !!!</h3>
@@ -180,9 +236,9 @@
 
 	<script>
 		//TODO: Move all of this out of the .html file.
-		var address = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
-		// var address = "http://localhost:8000"; //the address of the remote server goes here
-		var changedFields = []; // Fields that were changes with World Builder
+		// var address = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
+		var address = "http://localhost:8000"; //the address of the remote server goes here
+		var changedFields = []; // Fields that were changed with World Builder
 		authenticationToken = 0; // the session Token, default = 0.
 		var worldCreationModeOn = false;
 		var worldCreationModeOnClick = false;
@@ -193,6 +249,15 @@
 		var bridgeBuildingModeOn = false;
 		var wallBuildingModeOn = false;
 		var changeFieldToType = -1;
+		var armyCreationModeOn = false;
+		var armyWithNextClick = false;
+		var ownerBuffer = 0;
+		var armyIdBuffer = 0;
+		var countBuffer = 0;
+		var leaderBuffer = 0;
+		var mountsBuffer = 0;
+		var lkpBuffer = 0; 
+		var skpBuffer = 0;
 		document.getElementById("ToggleGodModeBar").style.display = "none";
 		document.getElementById("godmodeBox").style.visibility = "hidden";
 		document.getElementById("worldBenderBox").style.display = "none";
@@ -204,9 +269,12 @@
 		document.getElementById("bridgeCreationBox").style.display = "none";
 		document.getElementById("wallCreationBox").style.display = "none";
 		document.getElementById("infoBox").style.display = "none";
+		document.getElementById("armyGeneratorBox").style.display = "none";
+		document.getElementById("infoChangeBox").style.display = "none";
+		document.getElementById("armyIdChange").style.display = "none"
 
 		// switches bunttonBoxContent.style.visibility to "" and all others to "none"
-		function switchBtnBoxTo(bunttonBoxContent){
+		function switchBtnBoxTo(buttonBoxContent){
 			document.getElementById("worldBenderBox").style.display = "none";
 			document.getElementById("riverBenderBox").style.display = "none";
 			document.getElementById("creationWarning").style.display = "none";
@@ -216,7 +284,8 @@
 			document.getElementById("bridgeCreationBox").style.display = "none";
 			document.getElementById("wallCreationBox").style.display = "none";
 			document.getElementById("buttonsBox").style.display = "none";
-			document.getElementById(bunttonBoxContent).style.display = "";
+			document.getElementById("armyGeneratorBox").style.display = "none";
+			document.getElementById(buttonBoxContent).style.display = "";
 		}
 
 		// switches activeMode to True and all others to false
@@ -230,6 +299,8 @@
 			bridgeBuildingModeOn = false;
 			wallBuildingModeOn = false;
 			changeFieldToType = -1;
+			armyWithNextClick = false;
+			armyCreationModeOn = false;
 			switch(activeMode){
 				//worldCreationModeOnClick also has worldCreationModeOn enabled
 				case "worldCreationModeOnClick": worldCreationModeOnClick = true;
@@ -240,8 +311,20 @@
 				case "harborBuildingModeOn": harborBuildingModeOn = true; break;
 				case "bridgeBuildingModeOn": bridgeBuildingModeOn = true; break;
 				case "wallBuildingModeOn": wallBuildingModeOn = true; break;
+				case "armyWithNextClick": armyWithNextClick = true; break;
+				case "armyCreationModeOn": armyCreationModeOn = true; break;
 				case "none": break;
 				}
+		}
+
+		function toggleArmyCreationMode(){
+			if(armyCreationModeOn){
+				switchModeTo("none");
+				switchBtnBoxTo("buttonsBox");
+			} else if (!armyCreationModeOn){
+				switchModeTo("armyCreationModeOn");
+				switchBtnBoxTo("armyGeneratorBox");
+			}
 		}
 
 		function changeFieldClickedTo(number){
@@ -259,8 +342,12 @@
 		function toggleGodModeBar(){
 			if(document.getElementById("godmodeBox").style.visibility == "hidden"){
 				document.getElementById("godmodeBox").style.visibility = "visible";
+				document.getElementById("infoChangeBox").style.display = ""
+				document.getElementById("infoBox").style.display = "none"
 			} else if(document.getElementById("godmodeBox").style.visibility == "visible"){
 				document.getElementById("godmodeBox").style.visibility = "hidden";
+				document.getElementById("infoChangeBox").style.display = "none"
+				document.getElementById("infoBox").style.display = ""
 			}
 		}
 
@@ -789,7 +876,7 @@
 				url: address + "/databaseLink/login/",
 				data: {username:username, password:password},
 				success: function(data){
-					// savomg the authenticationToken
+					// saving the authenticationToken
 					authenticationToken = data.token;
 					// if the user is a GM, godmode possibility is displayed
 					if(data.staff == true){
@@ -813,10 +900,13 @@
 			// turning off godmode Box, and changing infoBox to Login Bog
 			switchBtnBoxTo("buttonsBox");
 			switchModeTo("none");
+			// Hide gm functionalities
 			document.getElementById("godmodeBox").style.visibility = "hidden";
 			document.getElementById("ToggleGodModeBar").style.display = "none";
 			document.getElementById("infoBox").style.display = "none";
 			document.getElementById("loginBox").style.display = "";
+			//change the info change box, back to the normal info Box
+			document.getElementById("infoChangeBox").style.display = "none"
 			// forget old authenticationToken
 			authenticationToken = 0;
 			// overwrite previously known data
@@ -827,6 +917,56 @@
 		function getNewDataFromServer(){
 			loadArmies(address);
 			loadMap(address);
+		}
+
+		function generateArmyBtn(){
+			ownerBuffer = document.getElementById("ownerField").value;
+			armyIdBuffer = document.getElementById("armyNumberField").value;
+			countBuffer = document.getElementById("countField").value;
+			leaderBuffer = document.getElementById("leaderField").value;
+			mountsBuffer = document.getElementById("mountsField").value;
+			lkpBuffer = document.getElementById("lkpField").value; 
+			skpBuffer = document.getElementById("skpField").value;
+			// check for any other armies with the same armyId
+			for(var i=0; i < listOfArmyCoordinates.length; i++){
+				if(listOfArmyCoordinates[i].a.armyId == armyIdBuffer && listOfArmyCoordinates[i].owner == ownerBuffer){
+					window.alert("Ein Heer mit dieser nummer existiert bereits in diesem Königreich.");
+					return false;
+				}
+			}
+			// check for catabults in a rider army, and for mounts in a rider army, or fleet
+			if(Math.floor(armyIdBuffer/100) == 2) {
+				if(mountsBuffer > 0 || lkpBuffer > 0 || skpBuffer > 0){
+					window.alert("In einem Reiterheer sollten weder einzelne Reittiere, noch Katapulte sein. Wenn das Heer ein Fußheer sein sollte gib, ihm eine Nummer zwischen 100 und 199.")
+					return false;
+				}
+			} else if (Math.floor(armyIdBuffer/100) == 3){
+				if(mountsBuffer > 0){
+					window.alert("In einer Flotte sollten keine Reittiere enthalten sein. Wenn das Heer ein Fußheer sein sollte, gib ihm eine Nummer zwischen 100 und 199.")
+					return false;
+				}
+			}
+			switchModeTo("armyWithNextClick");
+		}
+
+
+		function changeArmyInfo(){
+			for(var i = 0; i<listOfArmyCoordinates.length; i++){
+				if(i!=selectedArmy && listOfArmyCoordinates[i].owner == document.getElementById("ownerChangeInput").value &&
+				listOfArmyCoordinates[i].a.armyId == document.getElementById("armyIdChangeInput").value){
+					window.alert("Diese Armee Nummer ist in diesem Reich bereits vergeben.");
+				} else {
+					listOfArmyCoordinates[selectedArmy].owner = document.getElementById("ownerChangeInput").value;
+					listOfArmyCoordinates[selectedArmy].a.armyId = document.getElementById("armyIdChangeInput").value;
+					listOfArmyCoordinates[selectedArmy].a.count = document.getElementById("countChangeInput").value;
+					listOfArmyCoordinates[selectedArmy].a.leaders = document.getElementById("leadersChangeInput").value;
+					listOfArmyCoordinates[selectedArmy].a.mounts = document.getElementById("mountsChangeInput").value;
+					listOfArmyCoordinates[selectedArmy].a.lkp = document.getElementById("lkpChangeInput").value;
+					listOfArmyCoordinates[selectedArmy].a.skp = document.getElementById("skpChangeInput").value;
+					listOfArmyCoordinates[selectedArmy].remainingMovePoints = document.getElementById("movePointsChangeInput").value;
+					listOfArmyCoordinates[selectedArmy].remainingHeightPoints = document.getElementById("heightPointsChangeInput").value;
+				}
+			}
 		}
 	</script>
 

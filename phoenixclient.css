@@ -22,6 +22,12 @@ div {
     height: 25%;
 }
 
+#infoChangeBox {
+    right:0;
+    width: 15%;
+    height: 25%;
+}
+
 #buttonsBox {
     right: calc(15% + 3px);
     width: calc(70% - 12px);
@@ -65,6 +71,12 @@ div {
 }
 
 #harborCreationBox {
+    right: calc(15% + 3px);
+    width: calc(70% - 12px);
+    height: 10%;
+}
+
+#armyGeneratorBox {
     right: calc(15% + 3px);
     width: calc(70% - 12px);
     height: 10%;
