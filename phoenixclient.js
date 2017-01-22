@@ -242,6 +242,7 @@
 
 	function updateInfoBox(){
 		if(selectedArmy != undefined){
+			// info Box
 			document.getElementById("armyId").innerHTML = "HeeresId: " + listOfArmyCoordinates[selectedArmy].a.armyId;
 			document.getElementById("count").innerHTML = "anzahl Truppen: " + listOfArmyCoordinates[selectedArmy].a.count;
 			document.getElementById("leaders").innerHTML = "anzahl Heerführer: " + listOfArmyCoordinates[selectedArmy].a.leaders;
@@ -250,7 +251,28 @@
 			document.getElementById("skp").innerHTML = "schwere Katapulte: " + listOfArmyCoordinates[selectedArmy].a.skp;
 			document.getElementById("movePoints").innerHTML = "Verbleibende Bewegungspunkte: " + listOfArmyCoordinates[selectedArmy].remainingMovePoints;
 			document.getElementById("heightPoints").innerHTML = "Verbleibende Höhenstufen: " + listOfArmyCoordinates[selectedArmy].remainingHeightPoints;
+			// change Box (GodMode)
+			document.getElementById("ownerChangeInput").value = listOfArmyCoordinates[selectedArmy].owner;
+			document.getElementById("ownerChange").style.display = "";
+			document.getElementById("armyIdChangeInput").value = listOfArmyCoordinates[selectedArmy].a.armyId;
+			document.getElementById("armyIdChange").style.display = "";
+			document.getElementById("countChangeInput").value = listOfArmyCoordinates[selectedArmy].a.count;
+			document.getElementById("countChange").style.display = "";
+			document.getElementById("leadersChangeInput").value = listOfArmyCoordinates[selectedArmy].a.leaders;
+			document.getElementById("leadersChange").style.display = "";
+			document.getElementById("mountsChangeInput").value = listOfArmyCoordinates[selectedArmy].a.mounts;
+			document.getElementById("mountsChange").style.display = "";
+			document.getElementById("lkpChangeInput").value = listOfArmyCoordinates[selectedArmy].a.lkp;
+			document.getElementById("lkpChange").style.display = "";
+			document.getElementById("skpChangeInput").value = listOfArmyCoordinates[selectedArmy].a.skp;
+			document.getElementById("skpChange").style.display = "";
+			document.getElementById("movePointsChangeInput").value = listOfArmyCoordinates[selectedArmy].remainingMovePoints;
+			document.getElementById("movePointsChange").style.display = "";
+			document.getElementById("heightPointsChangeInput").value = listOfArmyCoordinates[selectedArmy].remainingHeightPoints;
+			document.getElementById("heightPointsChange").style.display = "";
+			document.getElementById("changeArmyInfo").style.display = "";
 		} else {
+			// info Box
 			document.getElementById("armyId").innerHTML = null;
 			document.getElementById("count").innerHTML = null;
 			document.getElementById("leaders").innerHTML = null;
@@ -259,6 +281,17 @@
 			document.getElementById("skp").innerHTML = null;
 			document.getElementById("movePoints").innerHTML = null;
 			document.getElementById("heightPoints").innerHTML = null;
+			// change Box (GM)
+			document.getElementById("ownerChange").style.display = "none";
+			document.getElementById("armyIdChange").style.display = "none";
+			document.getElementById("countChange").style.display = "none"
+			document.getElementById("leadersChange").style.display = "none"
+			document.getElementById("mountsChange").style.display = "none"
+			document.getElementById("lkpChange").style.display = "none"
+			document.getElementById("skpChange").style.display = "none"
+			document.getElementById("movePointsChange").style.display = "none"
+			document.getElementById("heightPointsChange").style.display = "none"
+			document.getElementById("changeArmyInfo").style.display = "none";
 		};
 	}
 
