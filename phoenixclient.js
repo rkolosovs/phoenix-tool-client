@@ -330,7 +330,20 @@ function nextTurn() {
 	// TODO: post prepared events
 	$.post({
 		url: url + "/databaseLink/nextturn/",
-		data: {authorization: authenticationToken}
+		data: {authorization: authenticationToken},
+		success: function(data){
+			currentTurn = data;
+			writeTurnNumber();
+		},
+		dataType: "json",
+		statusCode: {
+			401: function() {
+      			alert('Authorisation failure. Please log in.');
+    		},
+    		403: function() {
+      			alert('Access denied. You can only end your own turn.');
+    		}
+		}
 	});
 }
 
