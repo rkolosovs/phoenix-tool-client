@@ -342,6 +342,12 @@ function nextTurn() {
     		},
     		403: function() {
       			alert('Access denied. You can only end your own turn.');
+    		},
+    		520: function() { //custom status code
+				alert('Turn Order ran out. Tell SL to fill it!');
+    		},
+    		521: function() { //custom status code
+    			alert('Turn Order ran out. You should fill it!');
     		}
 		}
 	});
