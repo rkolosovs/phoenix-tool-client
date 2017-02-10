@@ -43,6 +43,11 @@ var currentCSRFToken;
 var gamestate; //abstract turn structure
 var currentTurn; //status \in {st, fi}
 var months = ['Agul', 'Hawar', 'Rim', 'Naliv', 'Larn', 'Hel', 'Jawan', 'Lud'];
+var preparedEvents = [
+	{type: "move", content: {id: "101", realm: "usa", x: 19, y: 20}},
+	{type: "move", content: {id: "201", realm: "usa", x: 21, y: 21}},
+	{type: "move", content: {id: "201", realm: "usa", x: 20, y: 21}}
+];
 
 var fields; //declare fields variable; holds the terrain fields
 var rivers; //declare rivers variable; holds the rivers

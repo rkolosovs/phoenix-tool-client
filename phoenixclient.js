@@ -98,7 +98,7 @@ canvas.addEventListener('wheel', function(event) {
 	drawStuff();
 }, {passive: true});
 
-//TODO: implement scrolling with keyboard
+//TODO: implement scrolling with keyboard (if desired)
 // window.addEventListener('keydown', function (event) {
 // });
 
@@ -326,31 +326,66 @@ function writeTurnNumber() {
 }
 	
 function nextTurn() {
-	// TODO: ask if turn realy want's to be ended
-	// TODO: post prepared events
-	$.post({
-		url: url + "/databaseLink/nextturn/",
-		data: {authorization: authenticationToken},
-		success: function(data){
-			currentTurn = data;
-			writeTurnNumber();
-		},
-		dataType: "json",
-		statusCode: {
-			401: function() {
-      			alert('Authorisation failure. Please log in.');
-    		},
-    		403: function() {
-      			alert('Access denied. You can only end your own turn.');
-    		},
-    		520: function() { //custom status code
-				alert('Turn Order ran out. Tell SL to fill it!');
-    		},
-    		521: function() { //custom status code
-    			alert('Turn Order ran out. You should fill it!');
-    		}
+	var message = "";
+	if (currentTurn.realm === null) {
+		message = "Do you want to end the pre-turn phase?";
+	} else if (currentTurn.status === 'fi') {
+		message = "Do you want to end processing the turn of " + currentTurn.realm+"?";
+	} else if (login === 'sl') {
+		message = "Do you want to end the turn of "+ currentTurn.realm+"?";
+	} else {
+		message = "Do you want to end your turn?";
+	}
+
+	if (confirm(message)){
+		
+		for (var i = 0; i < preparedEvents.length; i++) {
+			var cPE = preparedEvents[i];
+			var cPEContent = cPE.content;
+			if (cPE.type === "move") {
+				$.post({
+					url: url + "/databaseLink/moveevent/",
+					data: {
+						authorization: authenticationToken,
+						content: cPEContent //TODO: send proper content
+					},
+					success: console.log("success"),
+					statusCode: {
+						401: function() {
+    	  					alert('Authorisation failure. Please log in.');
+    					},
+    					403: function() {
+    	  					alert('Access denied. You can only send move events for your troops.');
+    					}
+					}
+				});
+			}
 		}
-	});
+
+		$.post({
+			url: url + "/databaseLink/nextturn/",
+			data: {authorization: authenticationToken},
+			success: function(data){
+				currentTurn = data;
+				writeTurnNumber();
+			},
+			dataType: "json",
+			statusCode: {
+				401: function() {
+    	  			alert('Authorisation failure. Please log in.');
+    			},
+    			403: function() {
+    	  			alert('Access denied. You can only end your own turn.');
+    			},
+    			520: function() { //custom status code
+					alert('Turn Order ran out. Tell SL to fill it!');
+    			},
+    			521: function() { //custom status code
+    				alert('Turn Order ran out. You should fill it!');
+    			}
+			}
+		});
+	}
 }
 
 function init() {
