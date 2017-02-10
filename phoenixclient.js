@@ -303,7 +303,7 @@ function writeTurnNumber() {
 	}
 	
 	date.innerHTML =  "Monat " + months[currentTurn.turn%8] + " des Jahres "+ Math.ceil(currentTurn.turn/8) + " (Zug " + currentTurn.turn + ", ";
-	if (currentTurn.realm === null) { //GM's turn
+	if (currentTurn.realm === null || currentTurn.status === 'fi') { //GM's turn
 		date.innerHTML += "SL) ";
 	} else { //a realm's turn
 		date.innerHTML += currentTurn.realm + ") ";
