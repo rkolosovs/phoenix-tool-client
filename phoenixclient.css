@@ -28,6 +28,24 @@ div {
     height: 25%;
 }
 
+#mountBox {
+    right:0;
+    width: 15%;
+    height: 25%;
+}
+
+#unMountBox {
+    right:0;
+    width: 15%;
+    height: 25%;
+}
+
+#loginBox {
+    right:0;
+    width: 15%;
+    height: 25%;
+}
+
 #buttonsBox {
     right: calc(15% + 3px);
     width: calc(70% - 12px);
@@ -92,10 +110,4 @@ div {
     top:0;
     height: 10%;
     width: 100%;
-}
-
-#loginBox {
-    right:0;
-    width: 15%;
-    height: 25%;
 }

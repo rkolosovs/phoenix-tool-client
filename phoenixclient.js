@@ -12,8 +12,8 @@
 	var tileset = "mbits_painted"; //tileset name
 	var scrollSpeed = 0.2; //increment to scroll with each step
 
-	var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
-	// var url = "http://localhost:8000"; //put the url (or the IP address) for the remote game server here
+	// var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
+	var url = "http://localhost:8000"; //put the url (or the IP address) for the remote game server here
 
 	var mousePressed = false; //was the mouse button klicked but not yet released?
 	var isDragging = false; //was the mouse moved while the button is down?
@@ -109,6 +109,10 @@
 	function registerLeftClick(){
 		var clickedField = getClickedField(); //get selected field
 		console.log(clickedField);
+		// If mount or unmount is activated, cancel it.
+		if(document.getElementById("mountBox").style.display == "" || document.getElementById("unMountBox").style.display == ""){
+			cancelMountUnMount();
+		}
 		if(armyWithNextClick){
 			var army = new heer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, mountsBuffer);
             var armyCoords = new armyCoordinates(army, clickedField[0], clickedField[1], ownerBuffer);
@@ -201,6 +205,10 @@
 	function registerRightClick(){
 		var clickedField = getClickedField();
 		console.log(clickedField);
+		// If mount or unmount is activated, cancel it.
+		if(document.getElementById("mountBox").style.display == "" || document.getElementById("unMountBox").style.display == ""){
+			cancelMountUnMount();
+		}
 		if(worldCreationModeOnClick){
 			var clickedHex = new showHex(clickedField[0], clickedField[1]);
 			var posi = clickedHex.positionInList();
@@ -240,60 +248,7 @@
 		
 	}
 
-	function updateInfoBox(){
-		if(selectedArmy != undefined){
-			// info Box
-			document.getElementById("armyId").innerHTML = "HeeresId: " + listOfArmyCoordinates[selectedArmy].a.armyId;
-			document.getElementById("count").innerHTML = "anzahl Truppen: " + listOfArmyCoordinates[selectedArmy].a.count;
-			document.getElementById("leaders").innerHTML = "anzahl Heerführer: " + listOfArmyCoordinates[selectedArmy].a.leaders;
-			document.getElementById("mounts").innerHTML = "mitgeführte Reittiere: " + listOfArmyCoordinates[selectedArmy].a.mounts;
-			document.getElementById("lkp").innerHTML = "leichte Katapulte: " + listOfArmyCoordinates[selectedArmy].a.lkp;
-			document.getElementById("skp").innerHTML = "schwere Katapulte: " + listOfArmyCoordinates[selectedArmy].a.skp;
-			document.getElementById("movePoints").innerHTML = "Verbleibende Bewegungspunkte: " + listOfArmyCoordinates[selectedArmy].remainingMovePoints;
-			document.getElementById("heightPoints").innerHTML = "Verbleibende Höhenstufen: " + listOfArmyCoordinates[selectedArmy].remainingHeightPoints;
-			// change Box (GodMode)
-			document.getElementById("ownerChangeInput").value = listOfArmyCoordinates[selectedArmy].owner;
-			document.getElementById("ownerChange").style.display = "";
-			document.getElementById("armyIdChangeInput").value = listOfArmyCoordinates[selectedArmy].a.armyId;
-			document.getElementById("armyIdChange").style.display = "";
-			document.getElementById("countChangeInput").value = listOfArmyCoordinates[selectedArmy].a.count;
-			document.getElementById("countChange").style.display = "";
-			document.getElementById("leadersChangeInput").value = listOfArmyCoordinates[selectedArmy].a.leaders;
-			document.getElementById("leadersChange").style.display = "";
-			document.getElementById("mountsChangeInput").value = listOfArmyCoordinates[selectedArmy].a.mounts;
-			document.getElementById("mountsChange").style.display = "";
-			document.getElementById("lkpChangeInput").value = listOfArmyCoordinates[selectedArmy].a.lkp;
-			document.getElementById("lkpChange").style.display = "";
-			document.getElementById("skpChangeInput").value = listOfArmyCoordinates[selectedArmy].a.skp;
-			document.getElementById("skpChange").style.display = "";
-			document.getElementById("movePointsChangeInput").value = listOfArmyCoordinates[selectedArmy].remainingMovePoints;
-			document.getElementById("movePointsChange").style.display = "";
-			document.getElementById("heightPointsChangeInput").value = listOfArmyCoordinates[selectedArmy].remainingHeightPoints;
-			document.getElementById("heightPointsChange").style.display = "";
-			document.getElementById("changeArmyInfo").style.display = "";
-		} else {
-			// info Box
-			document.getElementById("armyId").innerHTML = null;
-			document.getElementById("count").innerHTML = null;
-			document.getElementById("leaders").innerHTML = null;
-			document.getElementById("mounts").innerHTML = null;
-			document.getElementById("lkp").innerHTML = null;
-			document.getElementById("skp").innerHTML = null;
-			document.getElementById("movePoints").innerHTML = null;
-			document.getElementById("heightPoints").innerHTML = null;
-			// change Box (GM)
-			document.getElementById("ownerChange").style.display = "none";
-			document.getElementById("armyIdChange").style.display = "none";
-			document.getElementById("countChange").style.display = "none"
-			document.getElementById("leadersChange").style.display = "none"
-			document.getElementById("mountsChange").style.display = "none"
-			document.getElementById("lkpChange").style.display = "none"
-			document.getElementById("skpChange").style.display = "none"
-			document.getElementById("movePointsChange").style.display = "none"
-			document.getElementById("heightPointsChange").style.display = "none"
-			document.getElementById("changeArmyInfo").style.display = "none";
-		};
-	}
+	
 
 	function getClickedField(){
 		var x = clickX - originX; //reverse our x/y origin offset

@@ -5,6 +5,10 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere) {
     this.lkp = leichte;
     this.skp = schwere;
     this.mounts = reittiere;
+    // setze eine neue Id für das Heer
+    this.setId = function(newId){
+        this.armyId = newId;
+    }
     //berechnet die GP aus Heerführern
     this.leaderGp = function(){
         if(this.leaders < 101){
