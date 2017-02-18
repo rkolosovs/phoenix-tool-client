@@ -282,7 +282,6 @@
 			function(){ 	//after loading script, run all initialization methods
 				loadMap(url);
 				loadImages(tileset);
-				loadArmies(url);
 				setHexParts(scale);
 				resizeCanvas();
 			});
@@ -309,8 +308,7 @@
 	}
 
 	init();
-//	setInterval(function() {
-//		loadMap(url);
-//	loadArmies(url);
-//	}, 30000);
+	setInterval(function() {
+		loadMap(url);
+	}, 3000);
 })();

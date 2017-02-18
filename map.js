@@ -44,6 +44,7 @@ var fields; //declare fields variable; holds the terrain fields
 var rivers; //declare rivers variable; holds the rivers
 var buildings; //declare buildings variable; holds the buildings
 var borders; //declare borders variable; holds the borders
+var loginZeit;
 
 //declare variables for all used images
 var shallowsImg = new Image(); //tiles
@@ -85,56 +86,70 @@ var bridgeSEImg = new Image();
 var bridgeNEImg = new Image();
 
 
-function loadMap(url) {
-	gamestate = new gameState(0, [0], [0], 0);
-	$.getJSON(url +"/databaseLink/gettoken/", function(json){// funtioniert nicht !!!
-		currentCSRFToken = json;
-	});
-	$.getJSON(url +"/databaseLink/fielddata/", function(json){// loads the fields from the database
-		fields = json;
-	});
-	$.getJSON(url +"/databaseLink/getriverdata/", function(json){//load the rivers from the database
-		var fluesse = json; 
-		var collector = [];
-		fluesse.forEach(function(element) {
-			collector.push([[element.firstX, element.firstY],[element.secondX,element.secondY]]);
-		}, this);
-		rivers = collector; //rivers are the coordinates of two fields on either side of the river
-	});
-	$.getJSON(url +"/databaseLink/buildingdata/", function(json){
-		buildings = json; //load the buildings from the buildings.json file
-	});
-	$.getJSON(url +"/databaseLink/getborderdata/", function(json){ //load the borders from the database
-		var fromServer = json; //load the borders from the borders.json file
-		var accumulator = []
-		for(var i = 0; i < fromServer.length; i++){
-			if(accumulator.length == 0){
-				accumulator.push({"tag":fromServer[i].reich,"land":[[fromServer[i].x,fromServer[i].y]]})
-				console.log(accumulator);
-			} else {
-				var neuesReich = false;
-				for(var j = 0; j < accumulator.length; j++){
-					if(fromServer[i].reich == accumulator[j].tag){
-						accumulator[j].land.push([fromServer[i].x,fromServer[i].y]);
-					} else if (j == accumulator.length-1){
-						neuesReich = true;
+function loadMap(url) {	
+	var timetest;
+	$.getJSON(url +"/databaseLink/getlastsavedtimestamp/", function(json){// loads the time stamp from the database
+		timetest = "";
+		for(var i = 0; i< json.length; i++){
+			timetest += json[i];
+		}
+		if(loginZeit == undefined || loginZeit < Date.parse(timetest)){
+			loadArmies(url);
+			console.log("da");
+			loginZeit = Date.now();
+			console.log("loginzeit: " + loginZeit);
+			gamestate = new gameState(0, [0], [0], 0);
+			$.getJSON(url +"/databaseLink/gettoken/", function(json){// funtioniert nicht !!!
+				currentCSRFToken = json;
+			});
+			$.getJSON(url +"/databaseLink/fielddata/", function(json){// loads the fields from the database
+				fields = json;
+			});
+			$.getJSON(url +"/databaseLink/getriverdata/", function(json){//load the rivers from the database
+				var fluesse = json; 
+				var collector = [];
+				fluesse.forEach(function(element) {
+					collector.push([[element.firstX, element.firstY],[element.secondX,element.secondY]]);
+				}, this);
+				rivers = collector; //rivers are the coordinates of two fields on either side of the river
+			});
+			$.getJSON(url +"/databaseLink/buildingdata/", function(json){
+				buildings = json; //load the buildings from the buildings.json file
+			});
+			$.getJSON(url +"/databaseLink/getborderdata/", function(json){ //load the borders from the database
+				var fromServer = json; //load the borders from the borders.json file
+				var accumulator = []
+				for(var i = 0; i < fromServer.length; i++){
+					if(accumulator.length == 0){
+						accumulator.push({"tag":fromServer[i].reich,"land":[[fromServer[i].x,fromServer[i].y]]})
+						console.log(accumulator);
+					} else {
+						var neuesReich = false;
+						for(var j = 0; j < accumulator.length; j++){
+							if(fromServer[i].reich == accumulator[j].tag){
+								accumulator[j].land.push([fromServer[i].x,fromServer[i].y]);
+							} else if (j == accumulator.length-1){
+								neuesReich = true;
+							}
+						}
+						if(neuesReich == true){
+							accumulator.push({"tag":fromServer[i].reich,"land":[[fromServer[i].x,fromServer[i].y]]})
+						}
 					}
 				}
-				if(neuesReich == true){
-					accumulator.push({"tag":fromServer[i].reich,"land":[[fromServer[i].x,fromServer[i].y]]})
+				for(var i =0; i < accumulator.length; i++){
+					switch(accumulator[i].tag){
+						case 1: accumulator[i].tag = "usa"; break;
+						case 3: accumulator[i].tag = "vvh"; break;
+							case 4: accumulator[i].tag = "eos"; break;
+					}
 				}
-			}
+				console.log(accumulator);
+					borders = accumulator;
+			});
 		}
-		for(var i =0; i < accumulator.length; i++){
-			switch(accumulator[i].tag){
-				case 1: accumulator[i].tag = "usa"; break;
-				case 3: accumulator[i].tag = "vvh"; break;
-				case 4: accumulator[i].tag = "eos"; break;
-			}
-		}
-		console.log(accumulator);
-		borders = accumulator;
 	});
+	
 }
 
 function loadImages(tileset) { //load the images needed for visualization

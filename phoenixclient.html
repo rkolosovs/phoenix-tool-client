@@ -107,6 +107,7 @@
 	</div>
 	<div id="minimapBox">
 		<h3 align="center">Minimap Goes Here!</h3>
+		<p id="timeTest"></p>
 	</div>
 	<div id="godmodeBox">
 		<h3 align="center">Godmode Box</h3>
@@ -924,6 +925,7 @@
 			// change loginBox to infoBox
 			document.getElementById("infoBox").style.display = "";
 			document.getElementById("loginBox").style.display = "none";
+			
 		}
 
 		function logoutFromServer(){
@@ -945,11 +947,11 @@
 			authenticationToken = 0;
 			// overwrite previously known data
 			getNewDataFromServer();
+			loginZeit = undefined;
 		}
 
 		// help function to fetch current data from the server
 		function getNewDataFromServer(){
-			loadArmies(address);
 			loadMap(address);
 		}
 
