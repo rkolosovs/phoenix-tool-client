@@ -114,7 +114,11 @@
 			cancelMountUnMount();
 		}
 		if(armyWithNextClick){
-			var army = new heer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, mountsBuffer);
+			switch(Math.floor(armyIdBuffer/100)){
+				case 3: var army = new seeHeer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer); break;
+				case 2: var army = new reiterHeer(armyIdBuffer, countBuffer, leaderBuffer); break;
+				case 1: var army = new heer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, mountsBuffer); break;
+			}
             var armyCoords = new armyCoordinates(army, clickedField[0], clickedField[1], ownerBuffer);
 			ownerBuffer = document.getElementById("ownerField").value;
 			armyIdBuffer = 0;
@@ -236,7 +240,9 @@
 				var neighbors = clickedArmyCoords.neighbors();
 				for (var i = 0; i < neighbors.length; i++){
 					if(neighbors[i][0] == clickedField[0] && neighbors[i][1] == clickedField[1]){
-						var out = listOfArmyCoordinates[selectedArmy].move(i)
+						var out = listOfArmyCoordinates[selectedArmy].move(i);
+						console.log("ownerTag:");
+						console.log(listOfArmyCoordinates[selectedArmy].ownerTag());
 						if(out != "ok"){
 							alert(out);
 						}

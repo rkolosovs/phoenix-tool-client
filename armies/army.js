@@ -331,7 +331,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere) {
     this.raumpunkte = function() {
          return (this.count * 100 + this.leaders * 100);
     };
-        // entfernt Soldaten aus der Armee
+    // entfernt Soldaten aus der Armee
     this.removeSoldiers = function(amount){
         if(this.count >= amount){
             this.count -= Math.floor(amount);

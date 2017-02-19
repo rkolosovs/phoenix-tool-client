@@ -118,22 +118,21 @@ function loadMap(url) {
 			});
 			$.getJSON(url +"/databaseLink/getborderdata/", function(json){ //load the borders from the database
 				var fromServer = json; //load the borders from the borders.json file
-				var accumulator = []
+				var accumulator = []; // var to accumulate the differnt nations' borders
 				for(var i = 0; i < fromServer.length; i++){
-					if(accumulator.length == 0){
-						accumulator.push({"tag":fromServer[i].reich,"land":[[fromServer[i].x,fromServer[i].y]]})
-						console.log(accumulator);
+					if(accumulator.length == 0){ // the first is always a new country
+						accumulator.push({"tag":fromServer[i].reich,"land":[[fromServer[i].x,fromServer[i].y]]});
 					} else {
-						var neuesReich = false;
-						for(var j = 0; j < accumulator.length; j++){
-							if(fromServer[i].reich == accumulator[j].tag){
-								accumulator[j].land.push([fromServer[i].x,fromServer[i].y]);
-							} else if (j == accumulator.length-1){
-								neuesReich = true;
+						var neuesReich = false; // think it's not a new country,
+						for(var j = 0; j < accumulator.length; j++){ // look at all existing Countries,
+							if(fromServer[i].reich == accumulator[j].tag){ // if it fits one,
+								accumulator[j].land.push([fromServer[i].x,fromServer[i].y]); // add it to it's land,
+							} else if (j == accumulator.length-1){ // if it doesn't,
+								neuesReich = true; // it's a new country.
 							}
 						}
-						if(neuesReich == true){
-							accumulator.push({"tag":fromServer[i].reich,"land":[[fromServer[i].x,fromServer[i].y]]})
+						if(neuesReich == true){ // if it is a new country
+							accumulator.push({"tag":fromServer[i].reich,"land":[[fromServer[i].x,fromServer[i].y]]}); // add it as a new country
 						}
 					}
 				}
@@ -141,11 +140,12 @@ function loadMap(url) {
 					switch(accumulator[i].tag){
 						case 1: accumulator[i].tag = "usa"; break;
 						case 3: accumulator[i].tag = "vvh"; break;
-							case 4: accumulator[i].tag = "eos"; break;
+						case 4: accumulator[i].tag = "eos"; break;
 					}
 				}
+				console.log("accu: ");
 				console.log(accumulator);
-					borders = accumulator;
+				borders = accumulator;
 			});
 		}
 	});

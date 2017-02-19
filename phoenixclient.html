@@ -907,6 +907,7 @@
 			var password = document.getElementById("loginPassword").value;
 			// Request to server with username and password in plaintext
 			// TODO: make safe
+			loginZeit = undefined;
 			$.post({
 				url: address + "/databaseLink/login/",
 				data: {username:username, password:password},
@@ -956,17 +957,21 @@
 		}
 
 		function generateArmyBtn(){
-			ownerBuffer = document.getElementById("ownerField").value;
-			armyIdBuffer = document.getElementById("armyNumberField").value;
-			countBuffer = document.getElementById("countField").value;
-			leaderBuffer = document.getElementById("leaderField").value;
-			mountsBuffer = document.getElementById("mountsField").value;
-			lkpBuffer = document.getElementById("lkpField").value; 
-			skpBuffer = document.getElementById("skpField").value;
+			ownerBuffer = Number(document.getElementById("ownerField").value);
+			armyIdBuffer = Number(document.getElementById("armyNumberField").value);
+			countBuffer = Number(document.getElementById("countField").value);
+			leaderBuffer = Number(document.getElementById("leaderField").value);
+			mountsBuffer = Number(document.getElementById("mountsField").value);
+			lkpBuffer = Number(document.getElementById("lkpField").value); 
+			skpBuffer = Number(document.getElementById("skpField").value);
+			if(armyIdBuffer < 101 || armyIdBuffer > 399){
+				window.alert("Die Armee-Id muss zwischen 101 und 399 liegen.");
+				return false;
+			}
 			// check for any other armies with the same armyId
 			for(var i=0; i < listOfArmyCoordinates.length; i++){
 				if(listOfArmyCoordinates[i].a.armyId == armyIdBuffer && listOfArmyCoordinates[i].owner == ownerBuffer){
-					window.alert("Ein Heer mit dieser nummer existiert bereits in diesem Königreich.");
+					window.alert("Ein Heer mit dieser Nummer existiert bereits in diesem Königreich.");
 					return false;
 				}
 			}
@@ -991,15 +996,15 @@
 				listOfArmyCoordinates[i].a.armyId == document.getElementById("armyIdChangeInput").value){
 					window.alert("Diese Armee-Id ist in diesem Reich bereits vergeben.");
 				} else {
-					listOfArmyCoordinates[selectedArmy].owner = document.getElementById("ownerChangeInput").value;
-					listOfArmyCoordinates[selectedArmy].a.armyId = document.getElementById("armyIdChangeInput").value;
-					listOfArmyCoordinates[selectedArmy].a.count = document.getElementById("countChangeInput").value;
-					listOfArmyCoordinates[selectedArmy].a.leaders = document.getElementById("leadersChangeInput").value;
-					listOfArmyCoordinates[selectedArmy].a.mounts = document.getElementById("mountsChangeInput").value;
-					listOfArmyCoordinates[selectedArmy].a.lkp = document.getElementById("lkpChangeInput").value;
-					listOfArmyCoordinates[selectedArmy].a.skp = document.getElementById("skpChangeInput").value;
-					listOfArmyCoordinates[selectedArmy].remainingMovePoints = document.getElementById("movePointsChangeInput").value;
-					listOfArmyCoordinates[selectedArmy].remainingHeightPoints = document.getElementById("heightPointsChangeInput").value;
+					listOfArmyCoordinates[selectedArmy].owner = Number(document.getElementById("ownerChangeInput").value);
+					listOfArmyCoordinates[selectedArmy].a.armyId = Number(document.getElementById("armyIdChangeInput").value);
+					listOfArmyCoordinates[selectedArmy].a.count = Number(document.getElementById("countChangeInput").value);
+					listOfArmyCoordinates[selectedArmy].a.leaders = Number(document.getElementById("leadersChangeInput").value);
+					listOfArmyCoordinates[selectedArmy].a.mounts = Number(document.getElementById("mountsChangeInput").value);
+					listOfArmyCoordinates[selectedArmy].a.lkp = Number(document.getElementById("lkpChangeInput").value);
+					listOfArmyCoordinates[selectedArmy].a.skp = Number(document.getElementById("skpChangeInput").value);
+					listOfArmyCoordinates[selectedArmy].remainingMovePoints = Number(document.getElementById("movePointsChangeInput").value);
+					listOfArmyCoordinates[selectedArmy].remainingHeightPoints = Number(document.getElementById("heightPointsChangeInput").value);
 				}
 			}
 		}
@@ -1187,7 +1192,6 @@
 			listOfArmyCoordinates[selectedArmy] = listOfArmyCoordinates[listOfArmyCoordinates.length-1]
 			listOfArmyCoordinates.pop();
 		}
-
 
 		// returns the next armyId not yet assigned for the caller
 		function generateArmyId(type, owner){
