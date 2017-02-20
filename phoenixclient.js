@@ -341,16 +341,18 @@ function nextTurn() {
 		
 		for (var i = 0; i < preparedEvents.length; i++) {
 			var cPE = preparedEvents[i];
-			var cPEContent = cPE.content;
+			var cPEContent = JSON.stringify(cPE.content);
 			if (cPE.type === "move") {
 				$.post({
 					url: url + "/databaseLink/moveevent/",
 					data: {
 						authorization: authenticationToken,
-						content: cPEContent //TODO: send proper content
+						content: cPEContent
 					},
-					success: console.log("success"),
 					statusCode: {
+						200: function() {
+							console.log("success");
+						},
 						401: function() {
     	  					alert('Authorisation failure. Please log in.');
     					},
