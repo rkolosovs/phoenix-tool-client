@@ -353,11 +353,36 @@ function nextTurn() {
 						200: function() {
 							console.log("success");
 						},
+						400: function() {
+							alert('Invalid input. Moved troop does not exist.');
+						},
 						401: function() {
     	  					alert('Authorisation failure. Please log in.');
     					},
     					403: function() {
     	  					alert('Access denied. You can only send move events for your troops.');
+    					}
+					}
+				});
+			} else if (cPE.type === "battle") {
+				$.post({
+					url: url + "/databaseLink/battleevent/",
+					data: {
+						authorization: authenticationToken,
+						content: cPEContent
+					},
+					statusCode: {
+						200: function() {
+							console.log("success");
+						},
+						400: function() {
+							alert("Invalid input. Not all troops participating in a battle exist.");
+						},
+						401: function() {
+    	  					alert('Authorisation failure. Please log in.');
+    					},
+    					403: function() {
+    	  					alert('Access denied. You can only send battle events involving your troops.');
     					}
 					}
 				});

@@ -46,7 +46,8 @@ var months = ['Agul', 'Hawar', 'Rim', 'Naliv', 'Larn', 'Hel', 'Jawan', 'Lud'];
 var preparedEvents = [
 	{type: "move", content: {id: "101", realm: "usa", x: 19, y: 20}},
 	{type: "move", content: {id: "201", realm: "usa", x: 21, y: 21}},
-	{type: "move", content: {id: "201", realm: "usa", x: 20, y: 21}}
+	{type: "move", content: {id: "201", realm: "usa", x: 20, y: 21}},
+	{type: "battle", content: {participants: [{id: "101", realm: "usa"}, {id: "102", realm: "vvh"}], x: 19, y: 20, overrun: false}}
 ];
 
 var fields; //declare fields variable; holds the terrain fields
