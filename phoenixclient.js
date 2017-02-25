@@ -1,31 +1,36 @@
 
 'use strict';
 
-var selectedFields = []; //list of fields to be highlighted
-var selectedArmy; //currently selected armyCoordinates
+var selectedFields = []; // list of fields to be highlighted
+var selectedArmy; // currently selected armyCoordinates
 var listOfArmyCoordinates;
 var switchScale = 50;
-var login = 'guest'; //either realm tag, 'sl', or 'guest'
+var login = 'guest'; // either realm tag, 'sl', or 'guest'
 
-var canvas = document.getElementById('hexCanvas'); //get the canvas element from the HTML document
-var ctx = canvas.getContext('2d'); //get the context of the canvas
+var canvas = document.getElementById('hexCanvas'); // get the canvas element
+													// from the HTML document
+var ctx = canvas.getContext('2d'); // get the context of the canvas
 
-//settings; TODO: let the user change these in game
-var tileset = "mbits_painted"; //tileset name
-var scrollSpeed = 0.2; //increment to scroll with each step
+// settings; TODO: let the user change these in game
+var tileset = "mbits_painted"; // tileset name
+var scrollSpeed = 0.2; // increment to scroll with each step
 
-// var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
-var url = "http://localhost:8000"; //for local debug
+// var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or
+// the IP address) for the remote game server here
+var url = "http://localhost:8000"; // for local debug
 
-var mousePressed = false; //was the mouse button klicked but not yet released?
-var isDragging = false; //was the mouse moved while the button is down?
-var scale = 16; //the scale of the elements, specifically the width
-var originX = 900; //x coordinate of the origin in respect to which all drawing is done
-var originY = 490; //y coodrinate of the origin in respect to which all drawing is done
-var clickX = 0; //x coordinate of the point where the mouse was clicked
-var clickY = 0; //y coordinate of the point where the mouse was clicked
-var moveX = 0; //x distance the mouse was dragged
-var moveY = 0; //y distance the mouse was dragged
+var mousePressed = false; // was the mouse button klicked but not yet
+							// released?
+var isDragging = false; // was the mouse moved while the button is down?
+var scale = 16; // the scale of the elements, specifically the width
+var originX = 900; // x coordinate of the origin in respect to which all
+					// drawing is done
+var originY = 490; // y coodrinate of the origin in respect to which all
+					// drawing is done
+var clickX = 0; // x coordinate of the point where the mouse was clicked
+var clickY = 0; // y coordinate of the point where the mouse was clicked
+var moveX = 0; // x distance the mouse was dragged
+var moveY = 0; // y distance the mouse was dragged
 
 // resize the canvas to fill browser window dynamically
 window.addEventListener('resize', resizeCanvas, false);
@@ -33,72 +38,86 @@ window.addEventListener('resize', resizeCanvas, false);
 canvas.addEventListener('mousedown', function(event){
 	if (event.button === 0 || event.button === 2) {
    		mousePressed = true;
-   		clickX = event.pageX; //record the x coordinate of the mouse when it was clicked
-   		clickY = event.pageY; //record the y coordinate of the mouse when it was clicked
+   		clickX = event.pageX; // record the x coordinate of the mouse when it
+								// was clicked
+   		clickY = event.pageY; // record the y coordinate of the mouse when it
+								// was clicked
    	}
 	drawStuff();
 }, {passive: true});
 
 canvas.addEventListener('mouseup', function(event){
 	if (mousePressed && event.button === 0) {
-		if (isDragging) { //mouse was dragged; run panning finish routine
-   			originX += moveX; //add the x offset from dragged mouse to the current x origin for drawing
-   			originY += moveY; //add the y offset from dragged mouse to the current y origin for drawing
+		if (isDragging) { // mouse was dragged; run panning finish routine
+   			originX += moveX; // add the x offset from dragged mouse to the
+								// current x origin for drawing
+   			originY += moveY; // add the y offset from dragged mouse to the
+								// current y origin for drawing
 		} 
 		else {
-			registerLeftClick(); //do whatever has to be done on leftclick
+			registerLeftClick(); // do whatever has to be done on leftclick
 		}
-		//reset mouse click parameters
-   		mousePressed = false; //mouse is no longer pressed
-   		isDragging = false; //mouse is no longer being dragged
-   		clickX = 0; //reset click registration
+		// reset mouse click parameters
+   		mousePressed = false; // mouse is no longer pressed
+   		isDragging = false; // mouse is no longer being dragged
+   		clickX = 0; // reset click registration
    		clickY = 0;
-   		moveX = 0; //reset move registration
+   		moveX = 0; // reset move registration
    		moveY = 0;
    	} else if (event.button === 2) {
-		registerRightClick();
-		//reset mouse click parameters
-   		mousePressed = false; //mouse is no longer pressed
-   		isDragging = false; //mouse is no longer being dragged
-   		clickX = 0; //reset click registration
+   		if (!isDragging) {
+   			registerRightClick();
+		}
+		// reset mouse click parameters
+   		mousePressed = false; // mouse is no longer pressed
+   		isDragging = false; // mouse is no longer being dragged
+   		clickX = 0; // reset click registration
    		clickY = 0;
-   		moveX = 0; //reset move registration
+   		moveX = 0; // reset move registration
    		moveY = 0;
-	} else if(event.button === 1){
-		gamestate.startNewTurn();
-		updateInfoBox();
-	}
+	} 
+// else if(event.button === 1){
+// gamestate.startNewTurn();
+// updateInfoBox();
+// }
    	drawStuff();
 }, {passive: true});
 
 canvas.addEventListener('mousemove', function(event) {
    	if (mousePressed === true) {
-   		isDragging = true; //for later click detection; no click if mouse was previously dragged
-   		moveX = event.pageX - clickX; //compute the x offset from dragged mouse
-   		moveY = event.pageY - clickY; //compute the y offset from dragged mouse
+   		isDragging = true; // for later click detection; no click if mouse was
+							// previously dragged
+   		moveX = event.pageX - clickX; // compute the x offset from dragged
+										// mouse
+   		moveY = event.pageY - clickY; // compute the y offset from dragged
+										// mouse
    	}
    	drawStuff();
 }, {passive: true});
 canvas.addEventListener('wheel', function(event) {
-	var deltaY = event.deltaY; //get amount scrolled
-	var mouseX = event.pageX; //get current mouse position
+	var deltaY = event.deltaY; // get amount scrolled
+	var mouseX = event.pageX; // get current mouse position
 	var mouseY = event.pageY;
-	var posX = (mouseX - originX) / scale; //get the tile the mouse is currently in (and the position in the tile)
+	var posX = (mouseX - originX) / scale; // get the tile the mouse is
+											// currently in (and the position in
+											// the tile)
 	var posY = (mouseY - originY) / scale;
-	if (deltaY < 0) { //do the actuall scrolling
+	if (deltaY < 0) { // do the actuall scrolling
 		scale *= 1+scrollSpeed;
 	} else {
 		scale *= 1-scrollSpeed;
 	}
-	setHexParts(scale); //compute the scale dependant values used for map drawing
-	var newPosX = posX * scale; //compute the new distance of mouse from origin
+	setHexParts(scale); // compute the scale dependant values used for map
+						// drawing
+	var newPosX = posX * scale; // compute the new distance of mouse from origin
 	var newPosY = posY * scale;
-	originX = mouseX - newPosX; //move origin so that the tile stays the same with the new scaling
+	originX = mouseX - newPosX; // move origin so that the tile stays the same
+								// with the new scaling
 	originY = mouseY - newPosY;
 	drawStuff();
 }, {passive: true});
 
-//TODO: implement scrolling with keyboard (if desired)
+// TODO: implement scrolling with keyboard (if desired)
 // window.addEventListener('keydown', function (event) {
 // });
 
@@ -106,12 +125,14 @@ canvas.addEventListener('wheel', function(event) {
 // });
 
 function registerLeftClick(){
-	var clickedField = getClickedField(); //get selected field
+	var clickedField = getClickedField(); // get selected field
 	console.log(clickedField);
 	if(worldCreationModeOnClick){
 		var clickedHex = new showHex(clickedField[0], clickedField[1]);
 		var posi = clickedHex.positionInList();
-		if(changeFieldToType == -1){// checks if Field should be changed to a specific type, if not use normal world creation mode on click
+		if(changeFieldToType == -1){// checks if Field should be changed to a
+									// specific type, if not use normal world
+									// creation mode on click
 			if(fields[posi].type == 8 || fields[posi].type == 9){
 				fields[posi].type = 0;
 			} else {
@@ -183,7 +204,9 @@ function registerRightClick(){
 	if(worldCreationModeOnClick){
 		var clickedHex = new showHex(clickedField[0], clickedField[1]);
 		var posi = clickedHex.positionInList();
-		if(changeFieldToType == -1){// checks if Field should be changed to a specific type (then rightclick is disabled)
+		if(changeFieldToType == -1){// checks if Field should be changed to a
+									// specific type (then rightclick is
+									// disabled)
 			if(fields[posi].type == 0 || fields[posi].type == 9){
 				fields[posi].type = 8;
 			} else {
@@ -202,13 +225,35 @@ function registerRightClick(){
 			console.log(window.changedFields);
 		}
 	} else {
-		if(selectedArmy != undefined){
+		if(selectedArmy === undefined){
+			console.log("can't move with no army selected");
+		} else {
 			var clickedArmyCoords = new showHex(listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y);
 			var neighbors = clickedArmyCoords.neighbors();
+			var currArmy = listOfArmyCoordinates[selectedArmy];
 			for (var i = 0; i < neighbors.length; i++){
 				if(neighbors[i][0] == clickedField[0] && neighbors[i][1] == clickedField[1]){
-					var out = listOfArmyCoordinates[selectedArmy].move(i)
-					if(out != "ok"){
+					var out;
+					if (currArmy.owner === login) {
+						out = currArmy.move(i);
+					} 
+					if(out === "ok"){
+						preparedEvents.push({type: "move", content: {id: currArmy.id, realm: currArmy.owner, x: currArmy.x, y: currArmy.y}});
+						var battlePossible = false;
+						var participants = [];
+						for (var j = 0; j < listOfArmyCoordinates.length; i++) {
+							var a = listOfArmyCoordinates[j];
+							if (a.x === currArmy.x && a.y === currArmy.y) {
+								participants.push({id: a.id, realm: a.owner});
+								if (a.owner !== currArmy.owner) {
+									battlePossible = true;
+								}
+							}
+						}
+						if (battlePossible) {
+							preparedEvents.push({type: "battle", content:  {participants: participants, x: currArmy.x, y: currArmy.y, overrun: false}});
+						}
+					} else {
 						alert(out);
 					}
 				}
@@ -240,31 +285,36 @@ function updateInfoBox(){
 	};
 }
 
-function getClickedField(){ //TODO: Buggy. Clicks in the upper right corner are registered as cklicks to the ne neighboar instead.
-	var x = clickX - originX; //reverse our x/y origin offset
+function getClickedField(){ // TODO: Buggy. Clicks in the upper right corner are
+							// registered as cklicks to the ne neighboar
+							// instead.
+	var x = clickX - originX; // reverse our x/y origin offset
 	var y = clickY - originY;
-	// var gridHeight = (1.366/2)*scale; //a hexes height minus the lower tip triangle
+	// var gridHeight = (1.366/2)*scale; //a hexes height minus the lower tip
+	// triangle
 	// var gridWidth = 0.866*scale; //a hexes width
 	// var halfWidth = gridWidth/2; //half a hexes width
-	// var c = scale - gridHeight; //the vertical offset of a hexes upper triangle side
-	var m = c/(gW*0.5); //the inclination of the hexes upper triangle side
+	// var c = scale - gridHeight; //the vertical offset of a hexes upper
+	// triangle side
+	var m = c/(gW*0.5); // the inclination of the hexes upper triangle side
 
-	var row = Math.round(y/gH); //get the rectangle clicked in
+	var row = Math.round(y/gH); // get the rectangle clicked in
 	var rowIsOdd = (row%2 !== 0);
 	var column = Math.round((rowIsOdd ? ((x+0.5*gW)/gW) : (x/gW)));
 
-	var relY = y - (row * gH); //compute relative position of the click in respect to the rectangle
+	var relY = y - (row * gH); // compute relative position of the click in
+								// respect to the rectangle
 	var relX = rowIsOdd ? (x-(column*gW)+0.5*gW) : (x-(column*gW));
 
-	if (relY < -m*relX+c) { //click is in upper left corner
+	if (relY < -m*relX+c) { // click is in upper left corner
 		row--;
 		if (rowIsOdd) {column--;}
-	} else if (relY < m*relX-c) { //click is in upper right corner
+	} else if (relY < m*relX-c) { // click is in upper right corner
 		row--;
 		if (!rowIsOdd) {column++;}
 	}
 
-	return [column, row]; //return result
+	return [column, row]; // return result
 }
 
 function loadTurnNumber() {
@@ -275,7 +325,8 @@ function loadTurnNumber() {
 }
 
 function writeTurnNumber() {
-	var topBar = document.getElementById('topBar'); //get the top bar element from the HTML document
+	var topBar = document.getElementById('topBar'); // get the top bar element
+													// from the HTML document
 
 	var btn = document.getElementById('nextTurnButton');
 	var date = document.getElementById('date_text');
@@ -292,7 +343,8 @@ function writeTurnNumber() {
 		spec.id = "special_text";
 	}
 	
-	if (login !== 'sl' && (currentTurn.realm === null || currentTurn.status === 'fi' || login !== currentTurn.realm)) { //if not logged in as the current realm or SL
+	if (login !== 'sl' && (currentTurn.realm === null || currentTurn.status === 'fi' || login !== currentTurn.realm)) { 
+		// if not logged in as the current realm or SL
 		btn.disabled = true;
 		btn.style.cursor = "not-allowed";
 		btn.style.backgroundImage = "url(nextturn_button_disabled.svg)";
@@ -303,9 +355,10 @@ function writeTurnNumber() {
 	}
 	
 	date.innerHTML =  "Monat " + months[currentTurn.turn%8] + " des Jahres "+ Math.ceil(currentTurn.turn/8) + " (Zug " + currentTurn.turn + ", ";
-	if (currentTurn.realm === null || currentTurn.status === 'fi') { //GM's turn
+	if (currentTurn.realm === null || currentTurn.status === 'fi') { 
+		// GM's turn
 		date.innerHTML += "SL) ";
-	} else { //a realm's turn
+	} else { // a realm's turn
 		date.innerHTML += currentTurn.realm + ") ";
 	}
 	date.style="width:340px;float:left;line-height:30px;"
@@ -404,10 +457,10 @@ function nextTurn() {
     			403: function() {
     	  			alert('Access denied. You can only end your own turn.');
     			},
-    			520: function() { //custom status code
+    			520: function() { // custom status code
 					alert('Turn Order ran out. Tell SL to fill it!');
     			},
-    			521: function() { //custom status code
+    			521: function() { // custom status code
     				alert('Turn Order ran out. You should fill it!');
     			}
 			}
@@ -416,8 +469,8 @@ function nextTurn() {
 }
 
 function init() {
-	$.getScript("map.js", //use jQuery to load scripts from another .js file
-		function(){ 	//after loading script, run all initialization methods
+	$.getScript("map.js", // use jQuery to load scripts from another .js file
+		function(){ 	// after loading script, run all initialization methods
 			loadTurnNumber();
 			loadMap(url);
 			loadImages(tileset);
@@ -427,20 +480,22 @@ function init() {
 		});
 }
 
-//canvas resizing method
+// canvas resizing method
 function resizeCanvas() {
    	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
    	drawStuff(); 
 }
 
-//all the stuff to be drawn goes in this method
+// all the stuff to be drawn goes in this method
 function drawStuff() {
-	ctx.clearRect(0, 0, canvas.width, canvas.height); //clear 
+	ctx.clearRect(0, 0, canvas.width, canvas.height); // clear
 
-	//do all drawing/element selection in respect to these coordinates
-	var x = originX + moveX; //current x origin for drawing + x offset from dragged mouse
-	var y = originY + moveY; //current y origin for drawing + y offset from dragged mouse
+	// do all drawing/element selection in respect to these coordinates
+	var x = originX + moveX; // current x origin for drawing + x offset from
+								// dragged mouse
+	var y = originY + moveY; // current y origin for drawing + y offset from
+								// dragged mouse
 
 	drawMap(ctx, x, y, scale);
 	drawSelection(ctx, x, y, scale, selectedFields);

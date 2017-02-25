@@ -44,10 +44,10 @@ var gamestate; //abstract turn structure
 var currentTurn; //status \in {st, fi}
 var months = ['Agul', 'Hawar', 'Rim', 'Naliv', 'Larn', 'Hel', 'Jawan', 'Lud'];
 var preparedEvents = [
-	{type: "move", content: {id: "101", realm: "usa", x: 19, y: 20}},
-	{type: "move", content: {id: "201", realm: "usa", x: 21, y: 21}},
-	{type: "move", content: {id: "201", realm: "usa", x: 20, y: 21}},
-	{type: "battle", content: {participants: [{id: "101", realm: "usa"}, {id: "102", realm: "vvh"}], x: 19, y: 20, overrun: false}}
+//	{type: "move", content: {id: "101", realm: "usa", x: 19, y: 20}},
+//	{type: "move", content: {id: "201", realm: "usa", x: 21, y: 21}},
+//	{type: "move", content: {id: "201", realm: "usa", x: 20, y: 21}},
+//	{type: "battle", content: {participants: [{id: "101", realm: "usa"}, {id: "102", realm: "vvh"}], x: 19, y: 20, overrun: false}}
 ];
 
 var fields; //declare fields variable; holds the terrain fields
@@ -582,7 +582,7 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 		ctx.fillStyle = 'black';
 		ctx.textAlign = 'center';
     	ctx.textBaseline = 'middle';
-		//ctx.fillText(armyData.a.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
+//		ctx.fillText(armyData.a.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
 		if(Math.floor(armyData.a.armyId/100) == 1)
 		{		
 			ctx.drawImage(troopsImg, pos[0], pos[1], (scale*SIN60), scale); 
