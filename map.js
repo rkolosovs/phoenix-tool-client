@@ -60,6 +60,7 @@ var defaultImg = new Image();
 
 var troopsImg = new Image(); //troops
 var mountsImg = new Image();
+var boatsImg = new Image();
 
 var castleImg = new Image(); //buildings
 var cityImg = new Image();
@@ -168,6 +169,7 @@ function loadImages(tileset) { //load the images needed for visualization
 
 	troopsImg.src = pathPrefix+'/troops.svg'; //troops
 	mountsImg.src = pathPrefix+'/mounts.svg';	
+	boatsImg.src = pathPrefix+'/boat.svg'; 
 
 	castleImg.src = pathPrefix+'/castle.svg'; //buildings
 	cityImg.src = pathPrefix+'/city.svg';
@@ -590,11 +592,13 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 		ctx.textAlign = 'center';
     	ctx.textBaseline = 'middle';
 		//ctx.fillText(armyData.a.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
-		if(Math.floor(armyData.a.armyId/100) == 1)
-		{		
+		// armies == 1, riders == 2, boats == 3
+		if(Math.floor(armyData.a.armyId/100) == 1){		
 			ctx.drawImage(troopsImg, pos[0], pos[1], (scale*SIN60), scale); 
 		} else if(Math.floor(armyData.a.armyId/100) == 2) {
 			ctx.drawImage(mountsImg, pos[0], pos[1], (scale*SIN60), scale);
+		} else if(Math.floor(armyData.a.armyId/100) == 3) {
+			ctx.drawImage(boatsImg, pos[0], pos[1], (scale*SIN60), scale);
 		}
 	}
 }
