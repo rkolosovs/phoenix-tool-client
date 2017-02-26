@@ -265,8 +265,8 @@
 
 	<script>
 		//TODO: Move all of this out of the .html file.
-		var address = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
-		// var address = "http://localhost:8000"; //the address of the remote server goes here
+		// var address = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
+		var address = "http://localhost:8000"; //the address of the remote server goes here
 		var changedFields = []; // Fields that were changed with World Builder
 		var authenticationToken = 0; // the session Token, default = 0.
 		var worldCreationModeOn = false;
@@ -1107,7 +1107,7 @@
 			// Sitzen alle auf?
 			} else if((toMount == listOfArmyCoordinates[selectedArmy].a.count)){
 				// neues Reiterheer mit generierter Id an selben Koordinaten
-				var newArmy = new reiterHeer(generateArmyId(2,listOfArmyCoordinates[selectedArmy].owner), toMount, listOfArmyCoordinates[selectedArmy].a.leaders);
+				var newArmy = new reiterHeer(generateArmyId(2,listOfArmyCoordinates[selectedArmy].owner), toMount, listOfArmyCoordinates[selectedArmy].a.leaders, listOfArmyCoordinates[selectedArmy].a.isGuard);
 				// Nachricht, falls Katapulte vorhanden waren.
 				if(listOfArmyCoordinates[selectedArmy].a.skp > 0 || listOfArmyCoordinates[selectedArmy].a.lkp > 0){
 					window.alert("Da kein Fußheer mehr Bestehen bleibt, wurden die Katapulte zerstört.")
@@ -1121,9 +1121,11 @@
 			// genug Heerführer?
 			} else if(leadersToMount >= listOfArmyCoordinates[selectedArmy].a.leaders){
 				window.alert("Du hast zu wenige Heerführer zum aufsitzen")
+			} else if(listOfArmyCoordinates[selectedArmy].a.isGuard){
+				window.alert("Die Garde muss zusammen bleiben");
 			} else {
 				// neues Reiterheer mit generierter Id an selben Koordinaten
-				var newArmy = new reiterHeer(generateArmyId(2,listOfArmyCoordinates[selectedArmy].owner), toMount, leadersToMount);
+				var newArmy = new reiterHeer(generateArmyId(2,listOfArmyCoordinates[selectedArmy].owner), toMount, leadersToMount, false);
 				// zahlen im alten Heer anpassen
 				listOfArmyCoordinates[selectedArmy].a.removeSoldiers(toMount);
 				listOfArmyCoordinates[selectedArmy].a.removeLeaders(leadersToMount);
@@ -1148,7 +1150,7 @@
 			// genug Truppen vorhanden?
 			} else if((toUnMount == listOfArmyCoordinates[selectedArmy].a.count)){
 				// neues Heer mit generierter Id an selben Koordinaten
-				var newArmy = new heer(generateArmyId(1,listOfArmyCoordinates[selectedArmy].owner), toUnMount, listOfArmyCoordinates[selectedArmy].a.leaders, 0, 0, toUnMount);
+				var newArmy = new heer(generateArmyId(1,listOfArmyCoordinates[selectedArmy].owner), toUnMount, listOfArmyCoordinates[selectedArmy].a.leaders, 0, 0, toUnMount, listOfArmyCoordinates[selectedArmy].a.isGuard);
 				// in listOfArmyCoordinates einfügen und alte Armee löschen, ist dann automatisch selectedArmy
 				var newArmyCoordinates = new armyCoordinates(newArmy, listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y, listOfArmyCoordinates[selectedArmy].owner);
 				listOfArmyCoordinates.push(newArmyCoordinates);
@@ -1157,10 +1159,12 @@
 				updateInfoBox();
 			// genug Heerführer?
 			} else if(leadersToUnMount >= listOfArmyCoordinates[selectedArmy].a.leaders){
-				window.alert("Du hast zu wenige Heerführer zum absitzen")
+				window.alert("Du hast zu wenige Heerführer zum absitzen");
+			} else if(listOfArmyCoordinates[selectedArmy].a.isGuard){
+				window.alert("Die Garde muss zusammen bleiben");
 			} else {
 				// neues Heer mit generierter Id an selben Koordinaten
-				var newArmy = new heer(generateArmyId(1,listOfArmyCoordinates[selectedArmy].owner), toUnMount, leadersToUnMount, 0, 0, toUnMount);
+				var newArmy = new heer(generateArmyId(1,listOfArmyCoordinates[selectedArmy].owner), toUnMount, leadersToUnMount, 0, 0, toUnMount, false);
 				// zahlen im alten Riterheer anpassen
 				listOfArmyCoordinates[selectedArmy].a.removeSoldiers(toUnMount);
 				listOfArmyCoordinates[selectedArmy].a.removeLeaders(leadersToUnMount);
