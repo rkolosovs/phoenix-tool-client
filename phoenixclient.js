@@ -17,7 +17,8 @@ var scrollSpeed = 0.2; // increment to scroll with each step
 // var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
 var url = "http://localhost:8000"; // for local debug
 
-var mousePressed = false; // was the mouse button klicked but not yet released?
+var leftMousePressed = false; // was the left mouse button klicked but not yet released?
+var rightMousePressed = false; // was the right mouse button klicked but not yet released?
 var isDragging = false; // was the mouse moved while the button is down?
 var scale = 16; // the scale of the elements, specifically the width
 var originX = 900; // x coordinate of the origin in respect to which all drawing is done
@@ -31,8 +32,12 @@ var moveY = 0; // y distance the mouse was dragged
 window.addEventListener('resize', resizeCanvas, false);
 
 canvas.addEventListener('mousedown', function(event){
-	if (event.button === 0 || event.button === 2) {
-   		mousePressed = true;
+	if (event.button === 0) {
+   		leftMousePressed = true;
+   		clickX = event.pageX; // record the x coordinate of the mouse when it was clicked
+   		clickY = event.pageY; // record the y coordinate of the mouse when it was clicked
+   	} else if (event.button === 2) {
+   		rightMousePressed = true;
    		clickX = event.pageX; // record the x coordinate of the mouse when it was clicked
    		clickY = event.pageY; // record the y coordinate of the mouse when it was clicked
    	}
@@ -40,7 +45,7 @@ canvas.addEventListener('mousedown', function(event){
 }, {passive: true});
 
 canvas.addEventListener('mouseup', function(event){
-	if (mousePressed && event.button === 0) {
+	if (leftMousePressed && event.button === 0) {
 		if (isDragging) { // mouse was dragged; run panning finish routine
    			originX += moveX; // add the x offset from dragged mouse to the current x origin for drawing
    			originY += moveY; // add the y offset from dragged mouse to the current y origin for drawing
@@ -49,18 +54,18 @@ canvas.addEventListener('mouseup', function(event){
 			registerLeftClick(); // do whatever has to be done on leftclick
 		}
 		// reset mouse click parameters
-   		mousePressed = false; // mouse is no longer pressed
+   		leftMousePressed = false; // mouse is no longer pressed
    		isDragging = false; // mouse is no longer being dragged
    		clickX = 0; // reset click registration
    		clickY = 0;
    		moveX = 0; // reset move registration
    		moveY = 0;
-   	} else if (event.button === 2) {
+   	} else if (rightMousePressed && event.button === 2) {
    		if (!isDragging) {
    			registerRightClick();
 		}
 		// reset mouse click parameters
-   		mousePressed = false; // mouse is no longer pressed
+   		rightMousePressed = false; // mouse is no longer pressed
    		isDragging = false; // mouse is no longer being dragged
    		clickX = 0; // reset click registration
    		clickY = 0;
@@ -71,7 +76,7 @@ canvas.addEventListener('mouseup', function(event){
 }, {passive: true});
 
 canvas.addEventListener('mousemove', function(event) {
-   	if (mousePressed === true) {
+   	if (leftMousePressed === true) {
    		isDragging = true; // for later click detection; no click if mouse was previously dragged
    		moveX = event.pageX - clickX; // compute the x offset from dragged mouse
    		moveY = event.pageY - clickY; // compute the y offset from dragged mouse
