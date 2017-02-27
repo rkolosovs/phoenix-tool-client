@@ -9,14 +9,14 @@ function loadArmies(url) {
                     if(Math.floor(armies[i].armyId/100) == 1){
                         var army = new heer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp, armies[i].skp, armies[i].mounts);
                         var armyCoords = new armyCoordinates(army, armies[i].x, armies[i].y, armies[i].reich);
-                        armyCoords.setRemainingMovePoints(9);
-                        armyCoords.setRemainingHeightPoints(2);
+//                        armyCoords.setRemainingMovePoints(9);
+//                        armyCoords.setRemainingHeightPoints(2);
                         listOfArmyCoordinates.push(armyCoords);
                     } else if(Math.floor(armies[i].armyId/100) == 2){
                         var army = new reiterHeer(armies[i].armyId, armies[i].count, armies[i].leaders);
                         var armyCoords = new armyCoordinates(army, armies[i].x, armies[i].y, armies[i].reich);
-                        armyCoords.setRemainingMovePoints(21);
-                        armyCoords.setRemainingHeightPoints(2);
+//                        armyCoords.setRemainingMovePoints(21);
+//                        armyCoords.setRemainingHeightPoints(2);
                         listOfArmyCoordinates.push(armyCoords);
                     }
                 }

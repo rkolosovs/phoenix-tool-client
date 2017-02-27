@@ -7,26 +7,21 @@ var listOfArmyCoordinates;
 var switchScale = 50;
 var login = 'guest'; // either realm tag, 'sl', or 'guest'
 
-var canvas = document.getElementById('hexCanvas'); // get the canvas element
-													// from the HTML document
+var canvas = document.getElementById('hexCanvas'); // get the canvas element from the HTML document
 var ctx = canvas.getContext('2d'); // get the context of the canvas
 
 // settings; TODO: let the user change these in game
 var tileset = "mbits_painted"; // tileset name
 var scrollSpeed = 0.2; // increment to scroll with each step
 
-// var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or
-// the IP address) for the remote game server here
+// var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
 var url = "http://localhost:8000"; // for local debug
 
-var mousePressed = false; // was the mouse button klicked but not yet
-							// released?
+var mousePressed = false; // was the mouse button klicked but not yet released?
 var isDragging = false; // was the mouse moved while the button is down?
 var scale = 16; // the scale of the elements, specifically the width
-var originX = 900; // x coordinate of the origin in respect to which all
-					// drawing is done
-var originY = 490; // y coodrinate of the origin in respect to which all
-					// drawing is done
+var originX = 900; // x coordinate of the origin in respect to which all drawing is done
+var originY = 490; // y coodrinate of the origin in respect to which all drawing is done
 var clickX = 0; // x coordinate of the point where the mouse was clicked
 var clickY = 0; // y coordinate of the point where the mouse was clicked
 var moveX = 0; // x distance the mouse was dragged
@@ -38,10 +33,8 @@ window.addEventListener('resize', resizeCanvas, false);
 canvas.addEventListener('mousedown', function(event){
 	if (event.button === 0 || event.button === 2) {
    		mousePressed = true;
-   		clickX = event.pageX; // record the x coordinate of the mouse when it
-								// was clicked
-   		clickY = event.pageY; // record the y coordinate of the mouse when it
-								// was clicked
+   		clickX = event.pageX; // record the x coordinate of the mouse when it was clicked
+   		clickY = event.pageY; // record the y coordinate of the mouse when it was clicked
    	}
 	drawStuff();
 }, {passive: true});
@@ -49,10 +42,8 @@ canvas.addEventListener('mousedown', function(event){
 canvas.addEventListener('mouseup', function(event){
 	if (mousePressed && event.button === 0) {
 		if (isDragging) { // mouse was dragged; run panning finish routine
-   			originX += moveX; // add the x offset from dragged mouse to the
-								// current x origin for drawing
-   			originY += moveY; // add the y offset from dragged mouse to the
-								// current y origin for drawing
+   			originX += moveX; // add the x offset from dragged mouse to the current x origin for drawing
+   			originY += moveY; // add the y offset from dragged mouse to the current y origin for drawing
 		} 
 		else {
 			registerLeftClick(); // do whatever has to be done on leftclick
@@ -75,44 +66,34 @@ canvas.addEventListener('mouseup', function(event){
    		clickY = 0;
    		moveX = 0; // reset move registration
    		moveY = 0;
-	} 
-// else if(event.button === 1){
-// gamestate.startNewTurn();
-// updateInfoBox();
-// }
+	}
    	drawStuff();
 }, {passive: true});
 
 canvas.addEventListener('mousemove', function(event) {
    	if (mousePressed === true) {
-   		isDragging = true; // for later click detection; no click if mouse was
-							// previously dragged
-   		moveX = event.pageX - clickX; // compute the x offset from dragged
-										// mouse
-   		moveY = event.pageY - clickY; // compute the y offset from dragged
-										// mouse
+   		isDragging = true; // for later click detection; no click if mouse was previously dragged
+   		moveX = event.pageX - clickX; // compute the x offset from dragged mouse
+   		moveY = event.pageY - clickY; // compute the y offset from dragged mouse
    	}
    	drawStuff();
 }, {passive: true});
+
 canvas.addEventListener('wheel', function(event) {
 	var deltaY = event.deltaY; // get amount scrolled
 	var mouseX = event.pageX; // get current mouse position
 	var mouseY = event.pageY;
-	var posX = (mouseX - originX) / scale; // get the tile the mouse is
-											// currently in (and the position in
-											// the tile)
+	var posX = (mouseX - originX) / scale; // get the tile the mouse is currently in (and the position in the tile)
 	var posY = (mouseY - originY) / scale;
 	if (deltaY < 0) { // do the actuall scrolling
 		scale *= 1+scrollSpeed;
 	} else {
 		scale *= 1-scrollSpeed;
 	}
-	setHexParts(scale); // compute the scale dependant values used for map
-						// drawing
+	setHexParts(scale); // compute the scale dependant values used for map drawing
 	var newPosX = posX * scale; // compute the new distance of mouse from origin
 	var newPosY = posY * scale;
-	originX = mouseX - newPosX; // move origin so that the tile stays the same
-								// with the new scaling
+	originX = mouseX - newPosX; // move origin so that the tile stays the same with the new scaling
 	originY = mouseY - newPosY;
 	drawStuff();
 }, {passive: true});
@@ -127,12 +108,30 @@ canvas.addEventListener('wheel', function(event) {
 function registerLeftClick(){
 	var clickedField = getClickedField(); // get selected field
 	console.log(clickedField);
-	if(worldCreationModeOnClick){
+	if(armyWithNextClick){
+		var army = new heer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, mountsBuffer);
+        var armyCoords = new armyCoordinates(army, clickedField[0], clickedField[1], ownerBuffer);
+		ownerBuffer = document.getElementById("ownerField").value;
+		armyIdBuffer = 0;
+		document.getElementById("armyNumberField").value = 0;
+		countBuffer = 0;
+		document.getElementById("countField").value = 0;
+		leaderBuffer = 0;
+		document.getElementById("leaderField").value = 0;
+		mountsBuffer = 0;
+		document.getElementById("mountsField").value = 0;
+		lkpBuffer = 0;
+		document.getElementById("lkpField").value = 0; 
+		skpBuffer = 0;
+		document.getElementById("skpField").value = 0;
+		listOfArmyCoordinates.push(armyCoords);
+		switchBtnBoxTo("buttonsBox");
+		switchModeTo("none");
+	} else if(worldCreationModeOnClick){
 		var clickedHex = new showHex(clickedField[0], clickedField[1]);
 		var posi = clickedHex.positionInList();
-		if(changeFieldToType == -1){// checks if Field should be changed to a
-									// specific type, if not use normal world
-									// creation mode on click
+		if(changeFieldToType == -1){
+			// checks if Field should be changed to a specific type, if not use normal world creation mode on click
 			if(fields[posi].type == 8 || fields[posi].type == 9){
 				fields[posi].type = 0;
 			} else {
@@ -204,9 +203,8 @@ function registerRightClick(){
 	if(worldCreationModeOnClick){
 		var clickedHex = new showHex(clickedField[0], clickedField[1]);
 		var posi = clickedHex.positionInList();
-		if(changeFieldToType == -1){// checks if Field should be changed to a
-									// specific type (then rightclick is
-									// disabled)
+		if(changeFieldToType == -1){
+			// checks if Field should be changed to a specific type (then rightclick is disabled)
 			if(fields[posi].type == 0 || fields[posi].type == 9){
 				fields[posi].type = 8;
 			} else {
@@ -273,7 +271,28 @@ function updateInfoBox(){
 		document.getElementById("skp").innerHTML = "schwere Katapulte: " + listOfArmyCoordinates[selectedArmy].a.skp;
 		document.getElementById("movePoints").innerHTML = "Verbleibende Bewegungspunkte: " + listOfArmyCoordinates[selectedArmy].remainingMovePoints;
 		document.getElementById("heightPoints").innerHTML = "Verbleibende Höhenstufen: " + listOfArmyCoordinates[selectedArmy].remainingHeightPoints;
+		// change Box (GodMode)
+		document.getElementById("ownerChangeInput").value = listOfArmyCoordinates[selectedArmy].owner;
+		document.getElementById("ownerChange").style.display = "";
+		document.getElementById("armyIdChangeInput").value = listOfArmyCoordinates[selectedArmy].a.armyId;
+		document.getElementById("armyIdChange").style.display = "";
+		document.getElementById("countChangeInput").value = listOfArmyCoordinates[selectedArmy].a.count;
+		document.getElementById("countChange").style.display = "";
+		document.getElementById("leadersChangeInput").value = listOfArmyCoordinates[selectedArmy].a.leaders;
+		document.getElementById("leadersChange").style.display = "";
+		document.getElementById("mountsChangeInput").value = listOfArmyCoordinates[selectedArmy].a.mounts;
+		document.getElementById("mountsChange").style.display = "";
+		document.getElementById("lkpChangeInput").value = listOfArmyCoordinates[selectedArmy].a.lkp;
+		document.getElementById("lkpChange").style.display = "";
+		document.getElementById("skpChangeInput").value = listOfArmyCoordinates[selectedArmy].a.skp;
+		document.getElementById("skpChange").style.display = "";
+		document.getElementById("movePointsChangeInput").value = listOfArmyCoordinates[selectedArmy].remainingMovePoints;
+		document.getElementById("movePointsChange").style.display = "";
+		document.getElementById("heightPointsChangeInput").value = listOfArmyCoordinates[selectedArmy].remainingHeightPoints;
+		document.getElementById("heightPointsChange").style.display = "";
+		document.getElementById("changeArmyInfo").style.display = "";
 	} else {
+		// info Box
 		document.getElementById("armyId").innerHTML = null;
 		document.getElementById("count").innerHTML = null;
 		document.getElementById("leaders").innerHTML = null;
@@ -282,12 +301,23 @@ function updateInfoBox(){
 		document.getElementById("skp").innerHTML = null;
 		document.getElementById("movePoints").innerHTML = null;
 		document.getElementById("heightPoints").innerHTML = null;
+		// change Box (GM)
+		document.getElementById("ownerChange").style.display = "none";
+		document.getElementById("armyIdChange").style.display = "none";
+		document.getElementById("countChange").style.display = "none"
+		document.getElementById("leadersChange").style.display = "none"
+		document.getElementById("mountsChange").style.display = "none"
+		document.getElementById("lkpChange").style.display = "none"
+		document.getElementById("skpChange").style.display = "none"
+		document.getElementById("movePointsChange").style.display = "none"
+		document.getElementById("heightPointsChange").style.display = "none"
+		document.getElementById("changeArmyInfo").style.display = "none";
 	};
 }
 
-function getClickedField(){ // TODO: Buggy. Clicks in the upper right corner are
-							// registered as cklicks to the ne neighboar
-							// instead.
+
+function getClickedField(){ 
+	// TODO: Buggy. Clicks in the upper right corner are registered as cklicks to the ne neighboar instead.
 	var x = clickX - originX; // reverse our x/y origin offset
 	var y = clickY - originY;
 	// var gridHeight = (1.366/2)*scale; //a hexes height minus the lower tip
@@ -313,7 +343,6 @@ function getClickedField(){ // TODO: Buggy. Clicks in the upper right corner are
 		row--;
 		if (!rowIsOdd) {column++;}
 	}
-
 	return [column, row]; // return result
 }
 
@@ -503,7 +532,3 @@ function drawStuff() {
 }
 
 init();
-setInterval(function() {
-	loadMap(url);
-	loadArmies(url);
-}, 30000);

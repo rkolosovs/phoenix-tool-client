@@ -43,6 +43,12 @@ canvas { display:block; } /* To remove the scrollbars */
     min-height: 30px;
 }
 
+#infoChangeBox {
+    right:0;
+    width: 15%;
+    height: 25%;
+}
+
 #buttonsBox {
     right: calc(15% + 3px);
     width: calc(70% - 12px);
@@ -86,6 +92,12 @@ canvas { display:block; } /* To remove the scrollbars */
 }
 
 #harborCreationBox {
+    right: calc(15% + 3px);
+    width: calc(70% - 12px);
+    height: 10%;
+}
+
+#armyGeneratorBox {
     right: calc(15% + 3px);
     width: calc(70% - 12px);
     height: 10%;
