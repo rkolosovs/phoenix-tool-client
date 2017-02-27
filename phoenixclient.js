@@ -12,8 +12,8 @@
 	var tileset = "mbits_painted"; //tileset name
 	var scrollSpeed = 0.2; //increment to scroll with each step
 
-	// var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
-	var url = "http://localhost:8000"; //put the url (or the IP address) for the remote game server here
+	var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
+	// var url = "http://localhost:8000"; //put the url (or the IP address) for the remote game server here
 
 	var mousePressed = false; //was the mouse button klicked but not yet released?
 	var isDragging = false; //was the mouse moved while the button is down?
@@ -116,9 +116,9 @@
 		if(armyWithNextClick){
 			switch(Math.floor(armyIdBuffer/100)){
 				// TODO: man soll garde erstellen können
-				case 3: var army = new seeHeer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, false); break;
-				case 2: var army = new reiterHeer(armyIdBuffer, countBuffer, leaderBuffer, false); break;
-				case 1: var army = new heer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, mountsBuffer ,false); break;
+				case 3: var army = new seeHeer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, guardBuffer); break;
+				case 2: var army = new reiterHeer(armyIdBuffer, countBuffer, leaderBuffer, guardBuffer); break;
+				case 1: var army = new heer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, mountsBuffer ,guardBuffer); break;
 			}
             var armyCoords = new armyCoordinates(army, clickedField[0], clickedField[1], ownerBuffer);
 			ownerBuffer = document.getElementById("ownerField").value;
@@ -134,6 +134,8 @@
 			document.getElementById("lkpField").value = 0; 
 			skpBuffer = 0;
 			document.getElementById("skpField").value = 0;
+			guardBuffer = false;
+			document.getElementById("guardField").value = false;
 			listOfArmyCoordinates.push(armyCoords);
 			switchBtnBoxTo("buttonsBox");
 			switchModeTo("none");

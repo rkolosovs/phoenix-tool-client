@@ -19,6 +19,7 @@
 		<button id="ToggleGodModeBar" onclick="toggleGodModeBar()">toggle GodMode Bar</button>
 </div>
 	<div id="infoBox">
+		<p id="guard"></p>
 		<p id="armyId"></p>
 		<p id="count"></p>
 		<p id="leaders"></p>
@@ -137,6 +138,7 @@
 		<input id="lkpField" value="0">
 		<label for="skpField">schwere Katapulte:</label>
 		<input id="skpField" value="0">
+		<input type="checkbox" id="guardField" value="true">Garde?<br>
 		<button id="GenerateArmyBtn" onclick="generateArmyBtn()">Armee Generieren</button>
 	</div>
 	<div id="worldBenderBox">
@@ -265,8 +267,8 @@
 
 	<script>
 		//TODO: Move all of this out of the .html file.
-		// var address = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
-		var address = "http://localhost:8000"; //the address of the remote server goes here
+		var address = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
+		// var address = "http://localhost:8000"; //the address of the remote server goes here
 		var changedFields = []; // Fields that were changed with World Builder
 		var authenticationToken = 0; // the session Token, default = 0.
 		var worldCreationModeOn = false;
@@ -287,6 +289,7 @@
 		var mountsBuffer = 0;
 		var lkpBuffer = 0; 
 		var skpBuffer = 0;
+		var guardBuffer = false;
 		document.getElementById("ToggleGodModeBar").style.display = "none";
 		document.getElementById("godmodeBox").style.visibility = "hidden";
 		document.getElementById("worldBenderBox").style.display = "none";
@@ -964,6 +967,7 @@
 			mountsBuffer = Number(document.getElementById("mountsField").value);
 			lkpBuffer = Number(document.getElementById("lkpField").value); 
 			skpBuffer = Number(document.getElementById("skpField").value);
+			guardBuffer = Boolean(document.getElementById("guardField").value);
 			if(armyIdBuffer < 101 || armyIdBuffer > 399){
 				window.alert("Die Armee-Id muss zwischen 101 und 399 liegen.");
 				return false;
@@ -1013,6 +1017,12 @@
 			if(selectedArmy != undefined){
 				// info Box
 				console.log(listOfArmyCoordinates[selectedArmy].a.armyId);
+				console.log(listOfArmyCoordinates[selectedArmy].a.isGuard);
+				if(listOfArmyCoordinates[selectedArmy].a.isGuard){
+					document.getElementById("guard").innerHTML = "GARDE";
+				} else {
+					document.getElementById("guard").innerHTML = null;
+				}
 				document.getElementById("armyId").innerHTML = "HeeresId: " + listOfArmyCoordinates[selectedArmy].a.armyId;
 				document.getElementById("count").innerHTML = "anzahl Truppen: " + listOfArmyCoordinates[selectedArmy].a.count;
 				document.getElementById("leaders").innerHTML = "anzahl Heerführer: " + listOfArmyCoordinates[selectedArmy].a.leaders;
@@ -1053,6 +1063,7 @@
 				document.getElementById("changeArmyInfo").style.display = "";
 			} else {
 				// info Box
+				document.getElementById("guard").innerHTML = null;
 				document.getElementById("armyId").innerHTML = null;
 				document.getElementById("count").innerHTML = null;
 				document.getElementById("leaders").innerHTML = null;
