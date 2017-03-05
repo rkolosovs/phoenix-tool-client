@@ -59,6 +59,7 @@
 		<button id="cancelMountUnMount" onclick="cancelMountUnMount()">Abbrechen</button>
 	</div>
 	<div id="infoChangeBox">
+		<input type="checkbox" id="guardChangeInput" value=true>Garde?<br>
 		<p id="ownerChange">
 			<label for="ownerChangeInput">Besitzer:</label>
 			<input id="ownerChangeInput"></input>
@@ -138,7 +139,7 @@
 		<input id="lkpField" value="0">
 		<label for="skpField">schwere Katapulte:</label>
 		<input id="skpField" value="0">
-		<input type="checkbox" id="guardField" value="true">Garde?<br>
+		<input type="checkbox" id="guardField" value=true>Garde?<br>
 		<button id="GenerateArmyBtn" onclick="generateArmyBtn()">Armee Generieren</button>
 	</div>
 	<div id="worldBenderBox">
@@ -470,6 +471,7 @@
 			}
 		}
 
+		// add a castle the the selectedField
 		function addCastle(){
 			var sf = selectedFields[0];
 			var found = false;
@@ -487,6 +489,7 @@
 			}
 		}
 
+		// add a city the the selectedField
 		function addCity(){
 			var sf = selectedFields[0];
 			var found = false;
@@ -504,6 +507,7 @@
 			}
 		}
 
+		// add a fortress the the selectedField
 		function addFortress(){
 			var sf = selectedFields[0];
 			var found = false;
@@ -521,6 +525,7 @@
 			}
 		}
 
+		// add a capital city the the selectedField
 		function addCapital(){
 			var sf = selectedFields[0];
 			var found = false;
@@ -538,6 +543,7 @@
 			}
 		}
 
+		// add a capital fortress the the selectedField
 		function addCapitalFortress(){
 			var sf = selectedFields[0];
 			var found = false;
@@ -555,6 +561,7 @@
 			}
 		}
 
+		// delete the building in the selectedField
 		function deleteBuilding(){
 			var sf = selectedFields[0];
 			for(var i = 0; i < buildings.length; i++){
@@ -569,6 +576,7 @@
 			}
 		}
 
+		// adds a street in the target direction
 		function addStreet(direction){
 			var sf = selectedFields[0];
 			var field = new showHex(sf[0], sf[1]);
@@ -590,6 +598,7 @@
 			}
 		}
 
+		// removes a street in the target direction
 		function removeStreet(direction){
 			var sf = selectedFields[0];
 			var field = new showHex(sf[0], sf[1]);
@@ -614,6 +623,7 @@
 			}
 		}
 
+		// adds a river in the target direction
 		function addRiver(direction){
 			var sf = selectedFields[0];
 			var field = new showHex(sf[0], sf[1]);
@@ -633,6 +643,7 @@
 			}
 		}
 
+		// removes a river in the target direction
 		function removeRiver(direction){
 			var sf = selectedFields[0];
 			var field = new showHex(sf[0], sf[1]);
@@ -681,23 +692,6 @@
 				}
 			}
 		}
-		
-
-		//function getCookie(c_name)
-		//{
-   		//	if (document.cookie.length > 0)
-    	//	{
-        //		c_start = document.cookie.indexOf(c_name + "=");
-        //		if (c_start != -1)
-        //		{
-        // 			c_start = c_start + c_name.length + 1;
-        //		    c_end = document.cookie.indexOf(";", c_start);
-        //		    if (c_end == -1) c_end = document.cookie.length;
-        //		    return unescape(document.cookie.substring(c_start,c_end));
-        //		}
-    	//	}
-    	//	return "";
- 		//}
 
 		function saveFields(){ // saves the current fields on the server
 			$(function () {
@@ -866,7 +860,7 @@
 			console.log("end");
 		}
 
-		function saveFactionsTerritories(){ // saves the territories on the server
+		function saveFactionsTerritories(){ // saves the faction territories on the server
 			var dataToServerString = "";
 			for (var i = 0; i < borders.length; i++) {
 				if(i != borders.length-1){
@@ -905,6 +899,7 @@
 			console.log("end");
 		}
 
+		// function to get the authenticationToken from the server and save a login time
 		function loginToServer(){
 			var username = document.getElementById("loginName").value;
 			var password = document.getElementById("loginPassword").value;
@@ -929,9 +924,9 @@
 			// change loginBox to infoBox
 			document.getElementById("infoBox").style.display = "";
 			document.getElementById("loginBox").style.display = "none";
-			
 		}
 
+		// logs out from Server, closes everything you need login for, deletes login time
 		function logoutFromServer(){
 			//loging out from server
 			$.post({
@@ -959,6 +954,7 @@
 			loadMap(address);
 		}
 
+		// the function for the Gm posibility to make an army out of nothing
 		function generateArmyBtn(){
 			ownerBuffer = Number(document.getElementById("ownerField").value);
 			armyIdBuffer = Number(document.getElementById("armyNumberField").value);
@@ -967,7 +963,7 @@
 			mountsBuffer = Number(document.getElementById("mountsField").value);
 			lkpBuffer = Number(document.getElementById("lkpField").value); 
 			skpBuffer = Number(document.getElementById("skpField").value);
-			guardBuffer = Boolean(document.getElementById("guardField").value);
+			guardBuffer = document.getElementById("guardField").value;
 			if(armyIdBuffer < 101 || armyIdBuffer > 399){
 				window.alert("Die Armee-Id muss zwischen 101 und 399 liegen.");
 				return false;
@@ -994,12 +990,18 @@
 			switchModeTo("armyWithNextClick");
 		}
 
+		// This is used by the infoChangeBox to manipulate an armies Stats.
 		function changeArmyInfo(){
 			for(var i = 0; i<listOfArmyCoordinates.length; i++){
 				if(i!=selectedArmy && listOfArmyCoordinates[i].owner == document.getElementById("ownerChangeInput").value &&
 				listOfArmyCoordinates[i].a.armyId == document.getElementById("armyIdChangeInput").value){
 					window.alert("Diese Armee-Id ist in diesem Reich bereits vergeben.");
 				} else {
+					if(document.getElementById("guardChangeInput").checked){
+						listOfArmyCoordinates[selectedArmy].a.isGuard = true;
+					} else {
+						listOfArmyCoordinates[selectedArmy].a.isGuard = false;
+					}
 					listOfArmyCoordinates[selectedArmy].owner = Number(document.getElementById("ownerChangeInput").value);
 					listOfArmyCoordinates[selectedArmy].a.armyId = Number(document.getElementById("armyIdChangeInput").value);
 					listOfArmyCoordinates[selectedArmy].a.count = Number(document.getElementById("countChangeInput").value);
@@ -1013,6 +1015,7 @@
 			}
 		}
 
+		// this is used to update the infoBox and the infoChangeBox with the currently selected Army
 		function updateInfoBox(){
 			if(selectedArmy != undefined){
 				// info Box
@@ -1042,6 +1045,11 @@
 					document.getElementById("unMount").style.display = "none";
 				}
 				// change Box (GodMode)
+				if(listOfArmyCoordinates[selectedArmy].a.isGuard){
+					document.getElementById("guardChangeInput").checked = true;
+				} else {
+					document.getElementById("guardChangeInput").checked = false;
+				}
 				document.getElementById("ownerChangeInput").value = listOfArmyCoordinates[selectedArmy].owner;
 				document.getElementById("ownerChange").style.display = "";
 				document.getElementById("armyIdChangeInput").value = listOfArmyCoordinates[selectedArmy].a.armyId;
@@ -1098,12 +1106,14 @@
 			document.getElementById("unMountBox").style.display = "";
 		}
 
+		// this is the cancel function for the mount/unmount boxes
 		function cancelMountUnMount(){
 			document.getElementById("mountBox").style.display = "none";
 			document.getElementById("unMountBox").style.display = "none";
 			document.getElementById("infoBox").style.display = "";
 		}
 
+		// the mount function of the mount box
 		function mount(){
 			var toMount = document.getElementById("mountInput").value;
 			var leadersToMount = document.getElementById("mountLeaderInput").value;
@@ -1151,6 +1161,7 @@
 			}
 		}
 
+		// the unMount function of the unMount box
 		function unMount(){
 			var toUnMount = document.getElementById("unMountInput").value
 			var leadersToUnMount = document.getElementById("unMountLeaderInput").value;
@@ -1203,6 +1214,7 @@
 			unMount();
 		}
 
+		// deletes the currently selected army und puts the last army in listOfArmyCoordinates in its place
 		function deleteSelectedArmy(){
 			listOfArmyCoordinates[selectedArmy] = listOfArmyCoordinates[listOfArmyCoordinates.length-1]
 			listOfArmyCoordinates.pop();
