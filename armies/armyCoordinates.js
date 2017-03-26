@@ -9,7 +9,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
         switch(this.owner){
             case 1: return "usa";
             case 3: return "vvh";
-            case 4: return "eos";
+            case 2: return "eos";
         }
     }
     this.remainingMovePoints = 300;

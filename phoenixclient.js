@@ -229,18 +229,18 @@ function registerRightClick(){
 		}
 	} else {
 		if(selectedArmy === undefined){
-			console.log("can't move with no army selected");
+			console.log("Can't move with no army selected");
 		} else {
 			var clickedArmyCoords = new showHex(listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y);
 			var neighbors = clickedArmyCoords.neighbors();
 			for (var i = 0; i < neighbors.length; i++){
 				if(neighbors[i][0] == clickedField[0] && neighbors[i][1] == clickedField[1]){
 					var out;
-					if (listOfArmyCoordinates[selectedArmy].owner === login || login === "sl") {
+					if (listOfArmyCoordinates[selectedArmy].ownerTag() === login || login === "sl") {
 						out = listOfArmyCoordinates[selectedArmy].move(i);
 						console.log(out);
 					} else {
-						out = "Das ist nicht deine Armee."
+						out = "Can only move your own armies."
 					}
 					if(out === "ok"){
 						preparedEvents.push({type: "move", content: {id: listOfArmyCoordinates[selectedArmy].id, realm: listOfArmyCoordinates[selectedArmy].owner, x: listOfArmyCoordinates[selectedArmy].x, y: listOfArmyCoordinates[selectedArmy].y}});
