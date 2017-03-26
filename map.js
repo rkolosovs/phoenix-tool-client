@@ -54,6 +54,7 @@ var fields; //declare fields variable; holds the terrain fields
 var rivers; //declare rivers variable; holds the rivers
 var buildings; //declare buildings variable; holds the buildings
 var borders; //declare borders variable; holds the borders
+var loginZeit;
 
 //declare variables for all used images
 var shallowsImg = new Image(); //tiles
@@ -69,6 +70,7 @@ var defaultImg = new Image();
 
 var troopsImg = new Image(); //troops
 var mountsImg = new Image();
+var boatsImg = new Image();
 
 var castleImg = new Image(); //buildings
 var cityImg = new Image();
@@ -96,53 +98,67 @@ var bridgeNEImg = new Image();
 
 
 function loadMap(url) {
-	gamestate = new gameState(0, [0], [0], 0);
-	$.getJSON(url +"/databaseLink/gettoken/", function(json){// funtioniert nicht !!!
-		currentCSRFToken = json;
-	});
-	$.getJSON(url +"/databaseLink/fielddata/", function(json){// loads the fields from the database
-		fields = json;
-	});
-	$.getJSON(url +"/databaseLink/getriverdata/", function(json){//load the rivers from the database
-		var fluesse = json; 
-		var collector = [];
-		fluesse.forEach(function(element) {
-			collector.push([[element.firstX, element.firstY],[element.secondX,element.secondY]]);
-		}, this);
-		rivers = collector; //rivers are the coordinates of two fields on either side of the river
-	});
-	$.getJSON(url +"/databaseLink/buildingdata/", function(json){
-		buildings = json; //load the buildings from the buildings.json file
-	});
-	$.getJSON(url +"/databaseLink/getborderdata/", function(json){ //load the borders from the database
-		var fromServer = json; //load the borders from the borders.json file
-		var accumulator = []
-		for(var i = 0; i < fromServer.length; i++){ //TODO: This whole thing should probaly happen serverside!
-			if(accumulator.length == 0){
-				accumulator.push({"tag":fromServer[i].realm,"land":[[fromServer[i].x,fromServer[i].y]]})
-			} else {
-				var newRealm = false;
-				for(var j = 0; j < accumulator.length; j++){
-					if(fromServer[i].realm == accumulator[j].tag){
-						accumulator[j].land.push([fromServer[i].x,fromServer[i].y]);
-					} else if (j == accumulator.length-1){
-						newRealm = true;
+	var timetest;
+	$.getJSON(url +"/databaseLink/getlastsavedtimestamp/", function(json){// loads the time stamp from the database
+		timetest = "";
+		for(var i = 0; i< json.length; i++){
+			timetest += json[i];
+		}
+		if(loginZeit == undefined || loginZeit < Date.parse(timetest)){
+			loadArmies(url);
+			console.log("da");
+			loginZeit = Date.now();
+			console.log("loginzeit: " + loginZeit);
+			gamestate = new gameState(0, [0], [0], 0);
+			$.getJSON(url +"/databaseLink/gettoken/", function(json){// funtioniert nicht !!!
+				currentCSRFToken = json;
+			});
+			$.getJSON(url +"/databaseLink/fielddata/", function(json){// loads the fields from the database
+				fields = json;
+			});
+			$.getJSON(url +"/databaseLink/getriverdata/", function(json){//load the rivers from the database
+				var fluesse = json; 
+				var collector = [];
+				fluesse.forEach(function(element) {
+					collector.push([[element.firstX, element.firstY],[element.secondX,element.secondY]]);
+				}, this);
+				rivers = collector; //rivers are the coordinates of two fields on either side of the river
+			});
+			$.getJSON(url +"/databaseLink/buildingdata/", function(json){
+				buildings = json; //load the buildings from the buildings.json file
+			});
+			$.getJSON(url +"/databaseLink/getborderdata/", function(json){ //load the borders from the database
+				var fromServer = json; //load the borders from the borders.json file
+				var accumulator = []
+				for(var i = 0; i < fromServer.length; i++){ //TODO: This whole thing should probaly happen serverside!
+					if(accumulator.length == 0){
+						accumulator.push({"tag":fromServer[i].realm,"land":[[fromServer[i].x,fromServer[i].y]]})
+					} else {
+						var newRealm = false;
+						for(var j = 0; j < accumulator.length; j++){
+							if(fromServer[i].realm == accumulator[j].tag){
+								accumulator[j].land.push([fromServer[i].x,fromServer[i].y]);
+							} else if (j == accumulator.length-1){
+								newRealm = true;
+							}
+						}
+						if (newRealm) {
+							accumulator.push({"tag":fromServer[i].realm,"land":[[fromServer[i].x,fromServer[i].y]]});
+						}
 					}
 				}
-				if (newRealm) {
-					accumulator.push({"tag":fromServer[i].realm,"land":[[fromServer[i].x,fromServer[i].y]]});
+				for(var i =0; i < accumulator.length; i++){ //TODO: This has to be dynamically fatched form the server.
+					switch(accumulator[i].tag){
+						case 1: accumulator[i].tag = "usa"; break; 
+						case 3: accumulator[i].tag = "vvh"; break;
+						case 4: accumulator[i].tag = "eos"; break;
+					}
 				}
-			}
+				borders = accumulator;
+				});
 		}
-		for(var i =0; i < accumulator.length; i++){ //TODO: This has to be dynamically fatched form the server.
-			switch(accumulator[i].tag){
-				case 1: accumulator[i].tag = "usa"; break; 
-				case 3: accumulator[i].tag = "vvh"; break;
-				case 4: accumulator[i].tag = "eos"; break;
-			}
-		}
-		borders = accumulator;
 	});
+	
 }
 
 function loadImages(tileset) { //load the images needed for visualization
@@ -161,6 +177,7 @@ function loadImages(tileset) { //load the images needed for visualization
 
 	troopsImg.src = pathPrefix+'/troops.svg'; //troops
 	mountsImg.src = pathPrefix+'/mounts.svg';	
+	boatsImg.src = pathPrefix+'/boat.svg'; 
 
 	castleImg.src = pathPrefix+'/castle.svg'; //buildings
 	cityImg.src = pathPrefix+'/city.svg';
@@ -582,12 +599,14 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 		ctx.fillStyle = 'black';
 		ctx.textAlign = 'center';
     	ctx.textBaseline = 'middle';
-//		ctx.fillText(armyData.a.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
-		if(Math.floor(armyData.a.armyId/100) == 1)
-		{		
+		//ctx.fillText(armyData.a.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
+		// armies == 1, riders == 2, boats == 3
+		if(Math.floor(armyData.a.armyId/100) == 1){
 			ctx.drawImage(troopsImg, pos[0], pos[1], (scale*SIN60), scale); 
 		} else if(Math.floor(armyData.a.armyId/100) == 2) {
 			ctx.drawImage(mountsImg, pos[0], pos[1], (scale*SIN60), scale);
+		} else if(Math.floor(armyData.a.armyId/100) == 3) {
+			ctx.drawImage(boatsImg, pos[0], pos[1], (scale*SIN60), scale);
 		}
 	}
 }

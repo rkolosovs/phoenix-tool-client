@@ -113,8 +113,17 @@ canvas.addEventListener('wheel', function(event) {
 function registerLeftClick(){
 	var clickedField = getClickedField(); // get selected field
 	console.log(clickedField);
+	// If mount or unmount is activated, cancel it.
+	if(document.getElementById("mountBox").style.display == "" || document.getElementById("unMountBox").style.display == ""){
+		cancelMountUnMount();
+	}
 	if(armyWithNextClick){
-		var army = new heer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, mountsBuffer);
+		switch(Math.floor(armyIdBuffer/100)){
+			// TODO: man soll garde erstellen können
+			case 3: var army = new seeHeer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, guardBuffer); break;
+			case 2: var army = new reiterHeer(armyIdBuffer, countBuffer, leaderBuffer, guardBuffer); break;
+			case 1: var army = new heer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, mountsBuffer ,guardBuffer); break;
+		}
         var armyCoords = new armyCoordinates(army, clickedField[0], clickedField[1], ownerBuffer);
 		ownerBuffer = document.getElementById("ownerField").value;
 		armyIdBuffer = 0;
@@ -517,6 +526,7 @@ function init() {
 		});
 }
 
+
 // canvas resizing method
 function resizeCanvas() {
    	canvas.width = window.innerWidth;
@@ -540,3 +550,6 @@ function drawStuff() {
 }
 
 init();
+setInterval(function() {
+	loadMap(url);
+}, 30000);

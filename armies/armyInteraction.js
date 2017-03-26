@@ -12,16 +12,16 @@ function schlacht(army1, army2, mountedArmy1, mountedArmy2, chars1, chars2, posX
     this.y = posY;
     this.initialisieren = function(){
         if(this.a1 == null){
-            this.a1 = new heer(0,0,0,0,0,0);
+            this.a1 = new heer(0,0,0,0,0,0,false);
         }
         if(this.ma1 == null){
-            this.ma1 = new reiterHeer(0,0,0);
+            this.ma1 = new reiterHeer(0,0,0,false);
         }
         if(this.a2 == null){
-            this.a2 = new heer(0,0,0,0,0,0);
+            this.a2 = new heer(0,0,0,0,0,0,false);
         }
         if(this.ma2 == null){
-            this.ma2 = new reiterHeer(0,0,0);
+            this.ma2 = new reiterHeer(0,0,0,false);
         }
     }
     this.charGp1 = function(){
@@ -49,8 +49,8 @@ function schlacht(army1, army2, mountedArmy1, mountedArmy2, chars1, chars2, posX
        }
     }
     // 10:1 ?
-    this.overrun1 = function(){return((this.a1.count + this.ma1.count*2) >= (this.a2.count + this.ma2.count*2) * 10)};
-    this.overrun2 = function(){return((this.a2.count + this.ma2.count*2) >= (this.a1.count + this.ma1.count*2) * 10)};
+    this.overrun1 = function(){return((this.a1.count + this.ma1.count*2) >= (this.a2.count + this.ma2.count*2) * 10) && !this.a2.isGuard && !this.ma2.isGuard};
+    this.overrun2 = function(){return((this.a2.count + this.ma2.count*2) >= (this.a1.count + this.ma1.count*2) * 10) && !this.a2.isGuard && !this.ma2.isGuard};
     // Kampfergebnis in Form [Angreifer gewinnt?:Boolean , Verluste für Gewinner:Zahl], [null, viel] falls unentschieden.
     this.result = function(diceroll1, diceroll2) {
         var power1 = this.a1.count * (1 + (this.a1.leaderGp() + this.charGp1() + diceroll1)/200) + this.ma1.count * 2 * (1 + (this.ma1.leaderGp() + this.charGp1() + diceroll1)/200);
