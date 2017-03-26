@@ -333,27 +333,20 @@ function updateInfoBox(){
 }
 
 
-function getClickedField(){ 
-	// TODO: Buggy. Clicks in the upper right corner are registered as cklicks to the ne neighboar instead.
+function getClickedField(){
 	var x = clickX - originX; // reverse our x/y origin offset
 	var y = clickY - originY;
-	// var gridHeight = (1.366/2)*scale; //a hexes height minus the lower tip
-	// triangle
-	// var gridWidth = 0.866*scale; //a hexes width
-	// var halfWidth = gridWidth/2; //half a hexes width
-	// var c = scale - gridHeight; //the vertical offset of a hexes upper
-	// triangle side
 	var m = c/(gW*0.5); // the inclination of the hexes upper triangle side
 
-	var row = Math.round(y/gH); // get the rectangle clicked in
+	var row = Math.floor(y/gH); // get the rectangle clicked in
 	var rowIsOdd = (row%2 !== 0);
-	var column = Math.round((rowIsOdd ? ((x+0.5*gW)/gW) : (x/gW)));
+	var column = Math.floor((rowIsOdd ? ((x+0.5*gW)/gW) : (x/gW)));
 
 	var relY = y - (row * gH); // compute relative position of the click in
 								// respect to the rectangle
-	var relX = rowIsOdd ? (x-(column*gW)+0.5*gW) : (x-(column*gW));
+	var relX = rowIsOdd ? ((x+0.5*gW)-(column*gW)) : (x-(column*gW));
 
-	if (relY < -m*relX+c) { // click is in upper left corner
+	if (relY < (-m)*relX+c) { // click is in upper left corner
 		row--;
 		if (rowIsOdd) {column--;}
 	} else if (relY < m*relX-c) { // click is in upper right corner
@@ -371,9 +364,8 @@ function loadTurnNumber() {
 }
 
 function writeTurnNumber() {
-	var topBar = document.getElementById('topBar'); // get the top bar element
-													// from the HTML document
-
+	// get the top bar element from the HTML document
+	var topBar = document.getElementById('topBar');
 	var btn = document.getElementById('nextTurnButton');
 	var date = document.getElementById('date_text');
 	var spec = document.getElementById('special_text');
