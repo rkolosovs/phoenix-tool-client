@@ -35,7 +35,7 @@
 		<p id ="heightPoints"></p>
 		<button id="logoutBtn" onclick="logoutFromServer()">Logout</button>
 	</div>
-	<div id="loginBox" class="prettyBox">
+	<div id="infoChangeBox" class="prettyBox">
 		<p id="ownerChange">
 			<label for="ownerChangeInput">Besitzer:</label>
 			<input id="ownerChangeInput"></input>
@@ -74,6 +74,8 @@
 		</p>
 		<button id="changeArmyInfo" onclick="changeArmyInfo()" visibility="none">Apply changed Stats</button>
 		<button id="logoutBtnChange" onclick="logoutFromServer()">Logout</button>
+	</div>
+	<div id="loginBox" class="prettyBox">
 		<h3 align="center">Login</h3>
 		<label for="loginName">Name:</label>
 		<input id="loginName">
@@ -244,7 +246,7 @@
 		// var address = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
 		var address = "http://localhost:8000"; //for local debug
 		var changedFields = []; // Fields that were changes with World Builder
-		authenticationToken = 0; // the session Token, default = 0.
+		var authenticationToken = 0; // the session Token, default = 0.
 		var worldCreationModeOn = false;
 		var worldCreationModeOnClick = false;
 		var riverCreationModeOn = false;
@@ -347,12 +349,12 @@
 		function toggleGodModeBar(){
 			if(document.getElementById("godmodeBox").style.visibility == "hidden"){
 				document.getElementById("godmodeBox").style.visibility = "visible";
-				document.getElementById("infoChangeBox").style.display = ""
-				document.getElementById("infoBox").style.display = "none"
+				document.getElementById("infoChangeBox").style.display = "";
+				document.getElementById("infoBox").style.display = "none";
 			} else if(document.getElementById("godmodeBox").style.visibility == "visible"){
 				document.getElementById("godmodeBox").style.visibility = "hidden";
-				document.getElementById("infoChangeBox").style.display = "none"
-				document.getElementById("infoBox").style.display = ""
+				document.getElementById("infoChangeBox").style.display = "none";
+				document.getElementById("infoBox").style.display = "";
 			}
 		}
 

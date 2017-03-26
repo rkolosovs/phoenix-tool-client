@@ -578,7 +578,7 @@ function computePosition(xOrig, yOrig, xCurr, yCurr, scale) { //computes a field
 function drawArmies(ctx, x, y, scale, armyCoordinates) {
 	for (var i = 0; i < armyCoordinates.length; i++) {
 		var armyData = armyCoordinates[i]; // get army coordinates
-		pos = computePosition(x, y, armyCoordinates[i].x, armyCoordinates[i].y, scale);
+		var pos = computePosition(x, y, armyCoordinates[i].x, armyCoordinates[i].y, scale);
 		ctx.fillStyle = 'black';
 		ctx.textAlign = 'center';
     	ctx.textBaseline = 'middle';

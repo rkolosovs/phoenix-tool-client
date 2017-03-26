@@ -233,28 +233,31 @@ function registerRightClick(){
 		} else {
 			var clickedArmyCoords = new showHex(listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y);
 			var neighbors = clickedArmyCoords.neighbors();
-			var currArmy = listOfArmyCoordinates[selectedArmy];
 			for (var i = 0; i < neighbors.length; i++){
 				if(neighbors[i][0] == clickedField[0] && neighbors[i][1] == clickedField[1]){
 					var out;
-					if (currArmy.owner === login) {
-						out = currArmy.move(i);
-					} 
+					if (listOfArmyCoordinates[selectedArmy].owner === login || login === "sl") {
+						out = listOfArmyCoordinates[selectedArmy].move(i);
+						console.log(out);
+					} else {
+						out = "Das ist nicht deine Armee."
+					}
 					if(out === "ok"){
-						preparedEvents.push({type: "move", content: {id: currArmy.id, realm: currArmy.owner, x: currArmy.x, y: currArmy.y}});
+						preparedEvents.push({type: "move", content: {id: listOfArmyCoordinates[selectedArmy].id, realm: listOfArmyCoordinates[selectedArmy].owner, x: listOfArmyCoordinates[selectedArmy].x, y: listOfArmyCoordinates[selectedArmy].y}});
 						var battlePossible = false;
 						var participants = [];
-						for (var j = 0; j < listOfArmyCoordinates.length; i++) {
+
+						for (var j = 0; j < listOfArmyCoordinates.length; j++) {
 							var a = listOfArmyCoordinates[j];
-							if (a.x === currArmy.x && a.y === currArmy.y) {
+							if (a.x === listOfArmyCoordinates[selectedArmy].x && a.y === listOfArmyCoordinates[selectedArmy].y) {
 								participants.push({id: a.id, realm: a.owner});
-								if (a.owner !== currArmy.owner) {
+								if (a.owner !== listOfArmyCoordinates[selectedArmy].owner) {
 									battlePossible = true;
 								}
 							}
 						}
 						if (battlePossible) {
-							preparedEvents.push({type: "battle", content:  {participants: participants, x: currArmy.x, y: currArmy.y, overrun: false}});
+							preparedEvents.push({type: "battle", content:  {participants: participants, x: listOfArmyCoordinates[selectedArmy].x, y: listOfArmyCoordinates[selectedArmy].y, overrun: false}});
 						}
 					} else {
 						alert(out);
