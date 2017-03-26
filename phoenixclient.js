@@ -245,7 +245,6 @@ function registerRightClick(){
 			for (var i = 0; i < neighbors.length; i++){
 				if(neighbors[i][0] == clickedField[0] && neighbors[i][1] == clickedField[1]){
 					var out;
-					console.log("OwnerTag: "+listOfArmyCoordinates[selectedArmy].ownerTag());
 					if (listOfArmyCoordinates[selectedArmy].ownerTag() === login || login === "sl") {
 						out = listOfArmyCoordinates[selectedArmy].move(i);
 						console.log(out);
