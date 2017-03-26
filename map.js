@@ -138,7 +138,7 @@ function loadMap(url) {
 			switch(accumulator[i].tag){
 				case 1: accumulator[i].tag = "usa"; break; 
 				case 3: accumulator[i].tag = "vvh"; break;
-				case 4: accumulator[i].tag = "eos"; break;
+				case 2: accumulator[i].tag = "eos"; break;
 			}
 		}
 		borders = accumulator;
