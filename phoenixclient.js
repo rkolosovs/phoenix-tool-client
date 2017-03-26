@@ -252,14 +252,14 @@ function registerRightClick(){
 						out = "Can only move your own armies."
 					}
 					if(out === "ok"){
-						preparedEvents.push({type: "move", content: {id: listOfArmyCoordinates[selectedArmy].id, realm: listOfArmyCoordinates[selectedArmy].owner, x: listOfArmyCoordinates[selectedArmy].x, y: listOfArmyCoordinates[selectedArmy].y}});
+						preparedEvents.push({type: "move", content: {armyId: listOfArmyCoordinates[selectedArmy].a.armyId, realm: listOfArmyCoordinates[selectedArmy].ownerTag(), x: listOfArmyCoordinates[selectedArmy].x, y: listOfArmyCoordinates[selectedArmy].y}});
 						var battlePossible = false;
 						var participants = [];
 
 						for (var j = 0; j < listOfArmyCoordinates.length; j++) {
 							var a = listOfArmyCoordinates[j];
 							if (a.x === listOfArmyCoordinates[selectedArmy].x && a.y === listOfArmyCoordinates[selectedArmy].y) {
-								participants.push({id: a.id, realm: a.owner});
+								participants.push({armyId: a.a.armyId, realm: a.ownerTag()});
 								if (a.owner !== listOfArmyCoordinates[selectedArmy].owner) {
 									battlePossible = true;
 								}
