@@ -25,6 +25,7 @@
 	<div id="infoBox" class="prettyBox">
 		<h3 align="center">Army Info Goes Here!</h3>
 		<p id="armySelectBtns"></p>
+		<p id="guard"></p>
 		<p id="armyId"></p>
 		<p id="count"></p>
 		<p id="leaders"></p>
@@ -33,9 +34,38 @@
 		<p id="skp"></p>
 		<p id="movePoints"></p>
 		<p id ="heightPoints"></p>
+		<button id="mount" onclick="activateMountBox()">Aufsitzen</button>
+		<button id="unMount" onclick="activateUnMountBox()">Absitzen</button>
 		<button id="logoutBtn" onclick="logoutFromServer()">Logout</button>
 	</div>
+	<div id="mountBox" class="prettyBox">
+		<p id="mountInputPartition">
+			<label for="mountInput">Wie viele Soldaten sollen aufsitzen:</label>
+			<input id="mountInput"></input>
+		</p>
+		<p id="mountInputLeaderPartition">
+			<label for="mountLeaderInput">Wie viele Heerführer sollen zu Reiterheer:</label>
+			<input id="mountLeaderInput"></input>
+		</p>
+		<button id="mount" onclick="mount()">Aufsitzen</button>
+		<button id="allMount" onclick="allMount()">Alle aufsitzen</button>
+		<button id="cancelMountUnMount" onclick="cancelMountUnMount()">Abbrechen</button>
+	</div>
+	<div id="unMountBox" class="prettyBox">
+		<p id="unMountInputPartition">
+			<label for="unMountInput">Wie viele Soldaten sollen absitzen:</label>
+			<input id="unMountInput"></input>
+		</p>
+		<p id="unMountInputLeaderPartition">
+			<label for="unMountLeaderInput">Wie viele Heerführer sollen zu Fußheer:</label>
+			<input id="unMountLeaderInput"></input>
+		</p>
+		<button id="unMount" onclick="unMount()">Absitzen</button>
+		<button id="allUnMount" onclick="allUnMount()">Alle absitzen</button>
+		<button id="cancelMountUnMount" onclick="cancelMountUnMount()">Abbrechen</button>
+	</div>
 	<div id="infoChangeBox" class="prettyBox">
+		<input type="checkbox" id="guardChangeInput" value=true>Garde?<br>
 		<p id="ownerChange">
 			<label for="ownerChangeInput">Besitzer:</label>
 			<input id="ownerChangeInput"></input>
@@ -85,6 +115,7 @@
 	</div>
 	<div id="minimapBox" class="prettyBox">
 		<h3 align="center">Minimap Goes Here!</h3>
+		<p id="timeTest"></p>
 	</div>
 	<div id="godmodeBox" class="prettyBox">
 		<h3 align="center">Godmode Box</h3>
@@ -114,6 +145,7 @@
 		<input id="lkpField" value="0">
 		<label for="skpField">schwere Katapulte:</label>
 		<input id="skpField" value="0">
+		<input type="checkbox" id="guardField" value=true>Garde?<br>
 		<button id="GenerateArmyBtn" onclick="generateArmyBtn()">Armee Generieren</button>
 	</div>
 	<div id="worldBenderBox" class="prettyBox">
@@ -265,6 +297,7 @@
 		var mountsBuffer = 0;
 		var lkpBuffer = 0; 
 		var skpBuffer = 0;
+		var guardBuffer = false;
 		document.getElementById("ToggleGodModeBar").style.display = "none";
 		document.getElementById("godmodeBox").style.visibility = "hidden";
 		document.getElementById("worldBenderBox").style.display = "none";
@@ -278,7 +311,11 @@
 		document.getElementById("infoBox").style.display = "none";
 		document.getElementById("armyGeneratorBox").style.display = "none";
 		document.getElementById("infoChangeBox").style.display = "none";
-		document.getElementById("armyIdChange").style.display = "none"
+		document.getElementById("armyIdChange").style.display = "none";
+		document.getElementById("mount").style.display = "none";
+		document.getElementById("unMount").style.display = "none";
+		document.getElementById("mountBox").style.display = "none";
+		document.getElementById("unMountBox").style.display = "none";
 
 		// switches bunttonBoxContent.style.visibility to "" and all others to "none"
 		function switchBtnBoxTo(buttonBoxContent){
@@ -348,6 +385,7 @@
 
 		function toggleGodModeBar(){
 			if(document.getElementById("godmodeBox").style.visibility == "hidden"){
+				cancelMountUnMount();
 				document.getElementById("godmodeBox").style.visibility = "visible";
 				document.getElementById("infoChangeBox").style.display = "";
 				document.getElementById("infoBox").style.display = "none";
@@ -355,6 +393,7 @@
 				document.getElementById("godmodeBox").style.visibility = "hidden";
 				document.getElementById("infoChangeBox").style.display = "none";
 				document.getElementById("infoBox").style.display = "";
+				updateInfoBox();
 			}
 		}
 
@@ -439,6 +478,7 @@
 			}
 		}
 
+		// add a castle the the selectedField
 		function addCastle(){
 			var sf = selectedFields[0];
 			var found = false;
@@ -456,6 +496,7 @@
 			}
 		}
 
+		// add a city the the selectedField
 		function addCity(){
 			var sf = selectedFields[0];
 			var found = false;
@@ -473,6 +514,7 @@
 			}
 		}
 
+		// add a fortress the the selectedField
 		function addFortress(){
 			var sf = selectedFields[0];
 			var found = false;
@@ -490,6 +532,7 @@
 			}
 		}
 
+		// add a capital city the the selectedField
 		function addCapital(){
 			var sf = selectedFields[0];
 			var found = false;
@@ -507,6 +550,7 @@
 			}
 		}
 
+		// add a capital fortress the the selectedField
 		function addCapitalFortress(){
 			var sf = selectedFields[0];
 			var found = false;
@@ -524,6 +568,7 @@
 			}
 		}
 
+		// delete the building in the selectedField
 		function deleteBuilding(){
 			var sf = selectedFields[0];
 			for(var i = 0; i < buildings.length; i++){
@@ -538,6 +583,7 @@
 			}
 		}
 
+		// adds a street in the target direction
 		function addStreet(direction){
 			var sf = selectedFields[0];
 			var field = new showHex(sf[0], sf[1]);
@@ -559,6 +605,7 @@
 			}
 		}
 
+		// removes a street in the target direction
 		function removeStreet(direction){
 			var sf = selectedFields[0];
 			var field = new showHex(sf[0], sf[1]);
@@ -583,6 +630,7 @@
 			}
 		}
 
+		// adds a river in the target direction
 		function addRiver(direction){
 			var sf = selectedFields[0];
 			var field = new showHex(sf[0], sf[1]);
@@ -602,6 +650,7 @@
 			}
 		}
 
+		// removes a river in the target direction
 		function removeRiver(direction){
 			var sf = selectedFields[0];
 			var field = new showHex(sf[0], sf[1]);
@@ -650,23 +699,6 @@
 				}
 			}
 		}
-		
-
-		//function getCookie(c_name)
-		//{
-   		//	if (document.cookie.length > 0)
-    	//	{
-        //		c_start = document.cookie.indexOf(c_name + "=");
-        //		if (c_start != -1)
-        //		{
-        // 			c_start = c_start + c_name.length + 1;
-        //		    c_end = document.cookie.indexOf(";", c_start);
-        //		    if (c_end == -1) c_end = document.cookie.length;
-        //		    return unescape(document.cookie.substring(c_start,c_end));
-        //		}
-    	//	}
-    	//	return "";
- 		//}
 
 		function saveFields(){ // saves the current fields on the server
 			$(function () {
@@ -834,7 +866,7 @@
 			console.log("end");
 		}
 
-		function saveFactionsTerritories(){ // saves the territories on the server
+		function saveFactionsTerritories(){ // saves the faction territories on the server
 			var dataToServerString = "";
 			for (var i = 0; i < borders.length; i++) {
 				if(i != borders.length-1){
@@ -873,11 +905,13 @@
 			console.log("end");
 		}
 
+		// function to get the authenticationToken from the server and save a login time
 		function loginToServer(){
 			var username = document.getElementById("loginName").value;
 			var password = document.getElementById("loginPassword").value;
 			// Request to server with username and password in plaintext
 			// TODO: make safe
+			loginZeit = undefined;
 			$.post({
 				url: address + "/databaseLink/login/",
 				data: {username:username, password:password},
@@ -899,6 +933,7 @@
 			document.getElementById("loginBox").style.display = "none";
 		}
 
+		// logs out from Server, closes everything you need login for, deletes login time
 		function logoutFromServer(){
 			//loging out from server
 			$.post({
@@ -919,27 +954,33 @@
 			authenticationToken = 0;
 			// overwrite previously known data
 			getNewDataFromServer();
+			loginZeit = undefined;
 		}
 
 		// help function to fetch current data from the server
 		function getNewDataFromServer(){
-			loadArmies(address);
 			loadMap(address);
 			loadTurnNumber(address);
 		}
 
+		// the function for the Gm posibility to make an army out of nothing
 		function generateArmyBtn(){
-			ownerBuffer = document.getElementById("ownerField").value;
-			armyIdBuffer = document.getElementById("armyNumberField").value;
-			countBuffer = document.getElementById("countField").value;
-			leaderBuffer = document.getElementById("leaderField").value;
-			mountsBuffer = document.getElementById("mountsField").value;
-			lkpBuffer = document.getElementById("lkpField").value; 
-			skpBuffer = document.getElementById("skpField").value;
+			ownerBuffer = Number(document.getElementById("ownerField").value);
+			armyIdBuffer = Number(document.getElementById("armyNumberField").value);
+			countBuffer = Number(document.getElementById("countField").value);
+			leaderBuffer = Number(document.getElementById("leaderField").value);
+			mountsBuffer = Number(document.getElementById("mountsField").value);
+			lkpBuffer = Number(document.getElementById("lkpField").value); 
+			skpBuffer = Number(document.getElementById("skpField").value);
+			guardBuffer = document.getElementById("guardField").value;
+			if(armyIdBuffer < 101 || armyIdBuffer > 399){
+				window.alert("Die Armee-Id muss zwischen 101 und 399 liegen.");
+				return false;
+			}
 			// check for any other armies with the same armyId
 			for(var i=0; i < listOfArmyCoordinates.length; i++){
 				if(listOfArmyCoordinates[i].a.armyId == armyIdBuffer && listOfArmyCoordinates[i].owner == ownerBuffer){
-					window.alert("Ein Heer mit dieser nummer existiert bereits in diesem Königreich.");
+					window.alert("Ein Heer mit dieser Nummer existiert bereits in diesem Königreich.");
 					return false;
 				}
 			}
@@ -958,22 +999,288 @@
 			switchModeTo("armyWithNextClick");
 		}
 
+		// This is used by the infoChangeBox to manipulate an armies Stats.
 		function changeArmyInfo(){
 			for(var i = 0; i<listOfArmyCoordinates.length; i++){
 				if(i!=selectedArmy && listOfArmyCoordinates[i].owner == document.getElementById("ownerChangeInput").value &&
 				listOfArmyCoordinates[i].a.armyId == document.getElementById("armyIdChangeInput").value){
 					window.alert("Diese Armee-Id ist in diesem Reich bereits vergeben.");
 				} else {
-					listOfArmyCoordinates[selectedArmy].owner = document.getElementById("ownerChangeInput").value;
-					listOfArmyCoordinates[selectedArmy].a.armyId = document.getElementById("armyIdChangeInput").value;
-					listOfArmyCoordinates[selectedArmy].a.count = document.getElementById("countChangeInput").value;
-					listOfArmyCoordinates[selectedArmy].a.leaders = document.getElementById("leadersChangeInput").value;
-					listOfArmyCoordinates[selectedArmy].a.mounts = document.getElementById("mountsChangeInput").value;
-					listOfArmyCoordinates[selectedArmy].a.lkp = document.getElementById("lkpChangeInput").value;
-					listOfArmyCoordinates[selectedArmy].a.skp = document.getElementById("skpChangeInput").value;
-					listOfArmyCoordinates[selectedArmy].remainingMovePoints = document.getElementById("movePointsChangeInput").value;
-					listOfArmyCoordinates[selectedArmy].remainingHeightPoints = document.getElementById("heightPointsChangeInput").value;
+					if(document.getElementById("guardChangeInput").checked){
+						listOfArmyCoordinates[selectedArmy].a.isGuard = true;
+					} else {
+						listOfArmyCoordinates[selectedArmy].a.isGuard = false;
+					}
+					listOfArmyCoordinates[selectedArmy].owner = Number(document.getElementById("ownerChangeInput").value);
+					listOfArmyCoordinates[selectedArmy].a.armyId = Number(document.getElementById("armyIdChangeInput").value);
+					listOfArmyCoordinates[selectedArmy].a.count = Number(document.getElementById("countChangeInput").value);
+					listOfArmyCoordinates[selectedArmy].a.leaders = Number(document.getElementById("leadersChangeInput").value);
+					listOfArmyCoordinates[selectedArmy].a.mounts = Number(document.getElementById("mountsChangeInput").value);
+					listOfArmyCoordinates[selectedArmy].a.lkp = Number(document.getElementById("lkpChangeInput").value);
+					listOfArmyCoordinates[selectedArmy].a.skp = Number(document.getElementById("skpChangeInput").value);
+					listOfArmyCoordinates[selectedArmy].remainingMovePoints = Number(document.getElementById("movePointsChangeInput").value);
+					listOfArmyCoordinates[selectedArmy].remainingHeightPoints = Number(document.getElementById("heightPointsChangeInput").value);
 				}
+			}
+		}
+
+		// this is used to update the infoBox and the infoChangeBox with the currently selected Army
+		function updateInfoBox(){
+			if(selectedArmy != undefined){
+				// info Box
+				console.log(listOfArmyCoordinates[selectedArmy].a.armyId);
+				console.log(listOfArmyCoordinates[selectedArmy].a.isGuard);
+				if(listOfArmyCoordinates[selectedArmy].a.isGuard){
+					document.getElementById("guard").innerHTML = "GARDE";
+				} else {
+					document.getElementById("guard").innerHTML = null;
+				}
+				document.getElementById("armyId").innerHTML = "HeeresId: " + listOfArmyCoordinates[selectedArmy].a.armyId;
+				document.getElementById("count").innerHTML = "anzahl Truppen: " + listOfArmyCoordinates[selectedArmy].a.count;
+				document.getElementById("leaders").innerHTML = "anzahl Heerführer: " + listOfArmyCoordinates[selectedArmy].a.leaders;
+				document.getElementById("mounts").innerHTML = "mitgeführte Reittiere: " + listOfArmyCoordinates[selectedArmy].a.mounts;
+				document.getElementById("lkp").innerHTML = "leichte Katapulte: " + listOfArmyCoordinates[selectedArmy].a.lkp;
+				document.getElementById("skp").innerHTML = "schwere Katapulte: " + listOfArmyCoordinates[selectedArmy].a.skp;
+				document.getElementById("movePoints").innerHTML = "Verbleibende Bewegungspunkte: " + listOfArmyCoordinates[selectedArmy].remainingMovePoints;
+				document.getElementById("heightPoints").innerHTML = "Verbleibende Höhenstufen: " + listOfArmyCoordinates[selectedArmy].remainingHeightPoints;
+				if(Math.floor(listOfArmyCoordinates[selectedArmy].a.armyId/100) == 1){
+					document.getElementById("mount").style.display = "";
+					document.getElementById("unMount").style.display = "none";
+				} else if(Math.floor(listOfArmyCoordinates[selectedArmy].a.armyId/100) == 2){
+					document.getElementById("unMount").style.display = "";
+					document.getElementById("mount").style.display = "none";
+				} else {
+					document.getElementById("mount").style.display = "none";
+					document.getElementById("unMount").style.display = "none";
+				}
+				// change Box (GodMode)
+				if(listOfArmyCoordinates[selectedArmy].a.isGuard){
+					document.getElementById("guardChangeInput").checked = true;
+				} else {
+					document.getElementById("guardChangeInput").checked = false;
+				}
+				document.getElementById("ownerChangeInput").value = listOfArmyCoordinates[selectedArmy].owner;
+				document.getElementById("ownerChange").style.display = "";
+				document.getElementById("armyIdChangeInput").value = listOfArmyCoordinates[selectedArmy].a.armyId;
+				document.getElementById("armyIdChange").style.display = "";
+				document.getElementById("countChangeInput").value = listOfArmyCoordinates[selectedArmy].a.count;
+				document.getElementById("countChange").style.display = "";
+				document.getElementById("leadersChangeInput").value = listOfArmyCoordinates[selectedArmy].a.leaders;
+				document.getElementById("leadersChange").style.display = "";
+				document.getElementById("mountsChangeInput").value = listOfArmyCoordinates[selectedArmy].a.mounts;
+				document.getElementById("mountsChange").style.display = "";
+				document.getElementById("lkpChangeInput").value = listOfArmyCoordinates[selectedArmy].a.lkp;
+				document.getElementById("lkpChange").style.display = "";
+				document.getElementById("skpChangeInput").value = listOfArmyCoordinates[selectedArmy].a.skp;
+				document.getElementById("skpChange").style.display = "";
+				document.getElementById("movePointsChangeInput").value = listOfArmyCoordinates[selectedArmy].remainingMovePoints;
+				document.getElementById("movePointsChange").style.display = "";
+				document.getElementById("heightPointsChangeInput").value = listOfArmyCoordinates[selectedArmy].remainingHeightPoints;
+				document.getElementById("heightPointsChange").style.display = "";
+				document.getElementById("changeArmyInfo").style.display = "";
+			} else {
+				// info Box
+				document.getElementById("guard").innerHTML = null;
+				document.getElementById("armyId").innerHTML = null;
+				document.getElementById("count").innerHTML = null;
+				document.getElementById("leaders").innerHTML = null;
+				document.getElementById("mounts").innerHTML = null;
+				document.getElementById("lkp").innerHTML = null;
+				document.getElementById("skp").innerHTML = null;
+				document.getElementById("movePoints").innerHTML = null;
+				document.getElementById("heightPoints").innerHTML = null;
+				document.getElementById("mount").style.display = "none";
+				document.getElementById("unMount").style.display = "none";
+				// change Box (GM)
+				document.getElementById("ownerChange").style.display = "none";
+				document.getElementById("armyIdChange").style.display = "none";
+				document.getElementById("countChange").style.display = "none"
+				document.getElementById("leadersChange").style.display = "none"
+				document.getElementById("mountsChange").style.display = "none"
+				document.getElementById("lkpChange").style.display = "none"
+				document.getElementById("skpChange").style.display = "none"
+				document.getElementById("movePointsChange").style.display = "none"
+				document.getElementById("heightPointsChange").style.display = "none"
+				document.getElementById("changeArmyInfo").style.display = "none";
+			};
+		}
+
+		function activateMountBox(){
+			document.getElementById("infoBox").style.display = "none";
+			document.getElementById("mountBox").style.display = "";
+		}
+
+		function activateUnMountBox(){
+			document.getElementById("infoBox").style.display = "none";
+			document.getElementById("unMountBox").style.display = "";
+		}
+
+		// this is the cancel function for the mount/unmount boxes
+		function cancelMountUnMount(){
+			document.getElementById("mountBox").style.display = "none";
+			document.getElementById("unMountBox").style.display = "none";
+			document.getElementById("infoBox").style.display = "";
+		}
+
+		// the mount function of the mount box
+		function mount(){
+			var toMount = document.getElementById("mountInput").value;
+			var leadersToMount = document.getElementById("mountLeaderInput").value;
+			// genug Truppen vorhanden?
+			if(toMount > listOfArmyCoordinates[selectedArmy].a.count){
+				window.alert("Du hast zu wenige Truppen zum aufsitzen")
+				return false;
+			// genug Reittiere vorhanden?
+			} else if(toMount > listOfArmyCoordinates[selectedArmy].a.mounts){
+				window.alert("Du hast zu wenige Reittiere zum aufsitzen")
+				return false;
+			// Sitzen alle auf?
+			} else if((toMount == listOfArmyCoordinates[selectedArmy].a.count)){
+				// neues Reiterheer mit generierter Id an selben Koordinaten
+				var newArmy = new reiterHeer(generateArmyId(2,listOfArmyCoordinates[selectedArmy].owner), toMount, listOfArmyCoordinates[selectedArmy].a.leaders, listOfArmyCoordinates[selectedArmy].a.isGuard);
+				// Nachricht, falls Katapulte vorhanden waren.
+				if(listOfArmyCoordinates[selectedArmy].a.skp > 0 || listOfArmyCoordinates[selectedArmy].a.lkp > 0){
+					window.alert("Da kein Fußheer mehr Bestehen bleibt, wurden die Katapulte zerstört.")
+				}
+				// in listOfArmyCoordinates einfügen und alte Armee löschen, ist dann automatisch selectedArmy
+				var newArmyCoordinates = new armyCoordinates(newArmy,listOfArmyCoordinates[selectedArmy].x,listOfArmyCoordinates[selectedArmy].y ,listOfArmyCoordinates[selectedArmy].owner);
+				listOfArmyCoordinates.push(newArmyCoordinates);
+				deleteSelectedArmy();
+				cancelMountUnMount();
+				updateInfoBox();
+			// genug Heerführer?
+			} else if(leadersToMount >= listOfArmyCoordinates[selectedArmy].a.leaders){
+				window.alert("Du hast zu wenige Heerführer zum aufsitzen")
+			} else if(listOfArmyCoordinates[selectedArmy].a.isGuard){
+				window.alert("Die Garde muss zusammen bleiben");
+			} else {
+				// neues Reiterheer mit generierter Id an selben Koordinaten
+				var newArmy = new reiterHeer(generateArmyId(2,listOfArmyCoordinates[selectedArmy].owner), toMount, leadersToMount, false);
+				// zahlen im alten Heer anpassen
+				listOfArmyCoordinates[selectedArmy].a.removeSoldiers(toMount);
+				listOfArmyCoordinates[selectedArmy].a.removeLeaders(leadersToMount);
+				listOfArmyCoordinates[selectedArmy].a.removeMounts(toMount);
+				// in listOfArmyCoordinates einfügen
+				var newArmyCoordinates = new armyCoordinates(newArmy,listOfArmyCoordinates[selectedArmy].x,listOfArmyCoordinates[selectedArmy].y ,listOfArmyCoordinates[selectedArmy].owner);
+				listOfArmyCoordinates.push(newArmyCoordinates);
+				// selectedArmy zeigt auf neues Heer
+				selectedArmy = listOfArmyCoordinates.length-1;
+				cancelMountUnMount();
+				updateInfoBox();
+			}
+		}
+
+		// the unMount function of the unMount box
+		function unMount(){
+			var toUnMount = document.getElementById("unMountInput").value
+			var leadersToUnMount = document.getElementById("unMountLeaderInput").value;
+			console.log(toUnMount);
+			if(toUnMount > listOfArmyCoordinates[selectedArmy].a.count){
+				window.alert("So viele Truppen hast du nicht zum absitzen")
+				return false;
+			// genug Truppen vorhanden?
+			} else if((toUnMount == listOfArmyCoordinates[selectedArmy].a.count)){
+				// neues Heer mit generierter Id an selben Koordinaten
+				var newArmy = new heer(generateArmyId(1,listOfArmyCoordinates[selectedArmy].owner), toUnMount, listOfArmyCoordinates[selectedArmy].a.leaders, 0, 0, toUnMount, listOfArmyCoordinates[selectedArmy].a.isGuard);
+				// in listOfArmyCoordinates einfügen und alte Armee löschen, ist dann automatisch selectedArmy
+				var newArmyCoordinates = new armyCoordinates(newArmy, listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y, listOfArmyCoordinates[selectedArmy].owner);
+				listOfArmyCoordinates.push(newArmyCoordinates);
+				deleteSelectedArmy();
+				cancelMountUnMount();
+				updateInfoBox();
+			// genug Heerführer?
+			} else if(leadersToUnMount >= listOfArmyCoordinates[selectedArmy].a.leaders){
+				window.alert("Du hast zu wenige Heerführer zum absitzen");
+			} else if(listOfArmyCoordinates[selectedArmy].a.isGuard){
+				window.alert("Die Garde muss zusammen bleiben");
+			} else {
+				// neues Heer mit generierter Id an selben Koordinaten
+				var newArmy = new heer(generateArmyId(1,listOfArmyCoordinates[selectedArmy].owner), toUnMount, leadersToUnMount, 0, 0, toUnMount, false);
+				// zahlen im alten Riterheer anpassen
+				listOfArmyCoordinates[selectedArmy].a.removeSoldiers(toUnMount);
+				listOfArmyCoordinates[selectedArmy].a.removeLeaders(leadersToUnMount);
+				// in listOfArmyCoordinates einfügen
+				var newArmyCoordinates = new armyCoordinates(newArmy, listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y, listOfArmyCoordinates[selectedArmy].owner);
+				listOfArmyCoordinates.push(newArmyCoordinates);
+				// selectedArmy zeigt auf neues Heer
+				selectedArmy = listOfArmyCoordinates.length-1;
+				cancelMountUnMount();
+				updateInfoBox();
+			}
+		}
+
+		function allMount(){
+			// stellt ein, dass alle aufsitzen
+			document.getElementById("mountInput").value = listOfArmyCoordinates[selectedArmy].a.count;
+			// sitzt auf
+			mount();
+		}
+
+		function allUnMount(){
+			// stellt ein, dass alle aufsitzen
+			document.getElementById("unMountInput").value = listOfArmyCoordinates[selectedArmy].a.count;
+			// sitzt auf
+			unMount();
+		}
+
+		// deletes the currently selected army und puts the last army in listOfArmyCoordinates in its place
+		function deleteSelectedArmy(){
+			listOfArmyCoordinates[selectedArmy] = listOfArmyCoordinates[listOfArmyCoordinates.length-1]
+			listOfArmyCoordinates.pop();
+		}
+
+		// returns the next armyId not yet assigned for the caller
+		function generateArmyId(type, owner){
+			if (type == 1){
+				var j = 101;
+				while(j<200){
+					var found = false;
+					for (var i = 0; i < listOfArmyCoordinates.length; i++){
+						if(listOfArmyCoordinates[i].a.armyId == j && listOfArmyCoordinates[i].owner == owner){
+							j++;
+							found = true;
+						}
+					}
+					if(found == false){
+						return j;
+					}
+				}
+				window.alert("Du hast die maximale Anzahl an Fußheeren erreicht.")
+				return false;
+			} else if (type == 2){
+				var j = 201;
+				while(j<300){
+					var found = false;
+					for (var i = 0; i < listOfArmyCoordinates.length; i++){
+						if(listOfArmyCoordinates[i].a.armyId == j && listOfArmyCoordinates[i].owner == owner){
+							j++;
+							found = true;
+						}
+					}
+					if(found == false){
+						return j;
+					}
+				}
+				window.alert("Du hast die maximale Anzahl an Reiterheeren erreicht.")
+				return false;
+			} else if (type == 3){
+				var j = 301;
+				while(j<400){
+					var found = false;
+					for (var i = 0; i < listOfArmyCoordinates.length; i++){
+						if(listOfArmyCoordinates[i].a.armyId == j && listOfArmyCoordinates[i].owner == owner){
+							j++;
+							found = true;
+						}
+					}
+					if(found == false){
+						return j;
+					}
+				}
+				window.alert("Du hast die maximale Anzahl an Flotten erreicht.")
+				return false;
+			} else {
+				return false;
 			}
 		}
 	</script>

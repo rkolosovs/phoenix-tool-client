@@ -1,22 +1,36 @@
-function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere) {
+function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
     this.armyId = id;
     this.count = truppen;
     this.leaders = heerfuehrer;
     this.lkp = leichte;
     this.skp = schwere;
     this.mounts = reittiere;
+    this.isGuard = istGarde;
+    // setze eine neue Id für das Heer
+    this.setId = function(newId){
+        this.armyId = newId;
+    }
     //berechnet die GP aus Heerführern
     this.leaderGp = function(){
+        var gp = 0;
         if(this.leaders < 101){
-            return this.leaders;
+            gp = this.leaders;
         } else if(this.leaders < 201){
-            return (100 + (this.leaders-100) / 2 );
+            gp = (100 + (this.leaders-100) / 2 );
         } else {
-            return 200;
+            gp = 200;
         }
+        if(this.isGuard){
+            gp += 300
+        }
+        return gp;
     }
     //berechnet die verbrauchten Raumpunkte
     this.raumpunkte = function(){
+        if(this.isGuard){
+            // Garde zählt 3 fach
+            return (this.count * 3 + this.mounts + this.skp*2000 + this.lkp*1000 + this.leaders * 100);
+        }
         return (this.count + this.mounts + this.skp*2000 + this.lkp*1000 + this.leaders * 100);
     }
     // entfernt Soldaten aus der Armee
@@ -241,25 +255,35 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere) {
 }// ende von Heer ------------------------------------------------------------------------------------------------------
 
 //Reiterheere müssen nach dem Kampf nur halb so stark dezimiert werden wie Fußheere.
-function reiterHeer(id, truppen, heerfuehrer) {
+function reiterHeer(id, truppen, heerfuehrer, istGarde) {
     this.armyId = id;
     this.count = truppen;
     this.mounts = 0;
     this.leaders = heerfuehrer;
     this.skp = 0;
     this.lkp = 0;
+    this.isGuard = istGarde;
     this.leaderGp = function(){
+        var gp = 0;
         if(this.leaders < 101){
-            return this.leaders;
+            gp =  this.leaders;
         } else if(this.leaders < 201){
-            return (100 + (this.leaders-100) / 2 );
+            gp =  (100 + (this.leaders-100) / 2 );
         } else {
-            return 200;
+            gp =  200;
         }
+        if(this.isGuard){
+            gp += 300
+        }
+        return gp;
     }
     // Reiter zählen Doppelt so viel wie Soldaten
     this.raumpunkte = function() {
-         return (this.count * 2 + this.leaders * 100);
+        if(this.isGuard){
+            // Garde zählt 3 fach
+            return (this.count * 2 * 3 + this.leaders * 100);
+        }
+        return (this.count * 2 + this.leaders * 100);
     };
     // entfernt Soldaten aus der Armee
     this.removeSoldiers = function(amount){
@@ -306,28 +330,36 @@ function reiterHeer(id, truppen, heerfuehrer) {
     this.fireSkp = function(dicerolls, badConditions){return 0;}
 } // ende von reiterHeer ------------------------------------------------------------------------------------------------------
 
-function seeHeer(id, truppen, heerfuehrer, leichte, schwere) {
-    var sh = new heer(id, truppen, heerfuehrer, leichte, schwere, 0)
+function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde) {
     this.armyId = id;
     this.count = truppen;
     this.mounts = 0;
     this.leaders = heerfuehrer;
     this.skp = leichte;
     this.lkp = schwere;
+    this.isGuard = istGarde;
     this.leaderGp = function(){
+        var gp = 0;
         if(this.leaders < 101){
-            return this.leaders;
+            gp = this.leaders;
         } else if(this.leaders < 201){
-            return (100 + (this.leaders-100) / 2 );
+            gp = (100 + (this.leaders-100) / 2 );
         } else {
-            return 200;
+            gp = 200;
         }
+        if(this.isGuard){
+            gp += 300
+        }
+        return gp;
     }
     // Schiffe zählen 100x so viel wie Soldaten
     this.raumpunkte = function() {
-         return (this.count * 100 + this.leaders * 100);
+        if(this.isGuard){
+            return (this.count * 100 * 3 + this.leaders * 100 + this.lkp * 1000 + this.skp * 2000);
+        }
+        return (this.count * 100 + this.leaders * 100 + this.lkp * 1000 + this.skp * 2000);
     };
-        // entfernt Soldaten aus der Armee
+    // entfernt Soldaten aus der Armee
     this.removeSoldiers = function(amount){
         if(this.count >= amount){
             this.count -= Math.floor(amount);
