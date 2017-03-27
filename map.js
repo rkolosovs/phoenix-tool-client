@@ -123,33 +123,7 @@ function loadMap(url) {
 				buildings = json; //load the buildings from the buildings.json file
 			});
 			$.getJSON(url +"/databaseLink/getborderdata/", function(json){ //load the borders from the database
-				var fromServer = json; //load the borders from the borders.json file
-				var accumulator = []
-				for(var i = 0; i < fromServer.length; i++){ //TODO: This whole thing should probaly happen serverside!
-					if(accumulator.length == 0){
-						accumulator.push({"tag":fromServer[i].realm,"land":[[fromServer[i].x,fromServer[i].y]]})
-					} else {
-						var newRealm = false;
-						for(var j = 0; j < accumulator.length; j++){
-							if(fromServer[i].realm == accumulator[j].tag){
-								accumulator[j].land.push([fromServer[i].x,fromServer[i].y]);
-							} else if (j == accumulator.length-1){
-								newRealm = true;
-							}
-						}
-						if (newRealm) {
-							accumulator.push({"tag":fromServer[i].realm,"land":[[fromServer[i].x,fromServer[i].y]]});
-						}
-					}
-				}
-				for(var i =0; i < accumulator.length; i++){ //TODO: This has to be dynamically fatched form the server.
-					switch(accumulator[i].tag){
-						case 1: accumulator[i].tag = "usa"; break; 
-						case 3: accumulator[i].tag = "vvh"; break;
-						case 2: accumulator[i].tag = "eos"; break;
-					}
-				}
-				borders = accumulator;
+				borders = json; //load the borders from the borders.json file
 			});
 		}
 	});
@@ -207,7 +181,7 @@ function drawMap(ctx, x, y, scale) {
 
 function drawBorders(ctx, x, y, scale) {
 	var offset = (scale/13); //set offset of a border from the actual border of two hexes
-	for (var i = 0; i < borders.length; i++) {
+	for (var i = 0; i < borders.length; i++) { //for each realm with borders
 		var tag = borders[i].tag;
 		var land = borders[i].land;
 		var color;
@@ -221,8 +195,8 @@ function drawBorders(ctx, x, y, scale) {
 		ctx.lineWidth = (scale/14); //line thickness for borders
 		ctx.strokeStyle = 'rgb('+color[0]+', '+color[1]+', '+color[2]+')'; //set line color
 		ctx.lineCap="round";
-		ctx.fillStyle='rgba('+color[0]+', '+color[1]+', '+color[2]+', 0.3)'; //set fill color
-		for (var j = 0; j < land.length; j++) {
+		ctx.fillStyle='rgba('+color[0]+', '+color[1]+', '+color[2]+', 0.3)'; //set fill color	
+		for (var j = 0; j < land.length; j++) { //for each occupied hex
 			var hex = land[j];
 			var point = computePosition(x, y, hex[0], hex[1], scale);
 			var neighbours = getAdjacency(hex, land);
