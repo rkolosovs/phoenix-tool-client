@@ -123,7 +123,35 @@ function loadMap(url) {
 				buildings = json; //load the buildings from the buildings.json file
 			});
 			$.getJSON(url +"/databaseLink/getborderdata/", function(json){ //load the borders from the database
-				borders = json; //load the borders from the borders.json file
+				var fromServer = json; //load the borders from the borders.json file
+				var accumulator = []; // var to accumulate the differnt nations' borders
+				for(var i = 0; i < fromServer.length; i++){
+					if(accumulator.length == 0){ // the first is always a new country
+						accumulator.push({"tag":fromServer[i].realm,"land":[[fromServer[i].x,fromServer[i].y]]});
+					} else {
+						var neuesReich = false; // think it's not a new country,
+						for(var j = 0; j < accumulator.length; j++){ // look at all existing Countries,
+							if(fromServer[i].realm == accumulator[j].tag){ // if it fits one,
+								accumulator[j].land.push([fromServer[i].x,fromServer[i].y]); // add it to it's land,
+							} else if (j == accumulator.length-1){ // if it doesn't,
+								neuesReich = true; // it's a new country.
+							}
+						}
+						if(neuesReich == true){ // if it is a new country
+							accumulator.push({"tag":fromServer[i].realm,"land":[[fromServer[i].x,fromServer[i].y]]}); // add it as a new country
+						}
+					}
+				}
+				for(var i =0; i < accumulator.length; i++){
+					switch(accumulator[i].tag){
+						case 1: accumulator[i].tag = "usa"; break;
+						case 3: accumulator[i].tag = "vvh"; break;
+						case 2: accumulator[i].tag = "eos"; break;
+					}
+				}
+				console.log("accu: ");
+				console.log(accumulator);
+				borders = accumulator;
 			});
 		}
 	});
