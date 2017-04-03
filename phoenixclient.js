@@ -192,12 +192,14 @@ function registerLeftClick(){
 			x.setAttribute("id", "btnSection")
 			for (var i = 0; i < possibleSelections.length; i++){
 				var btn = document.createElement("BUTTON");
-				btn.id = listOfArmyCoordinates[possibleSelections[i]].a.armyId;
+				btn.name = listOfArmyCoordinates[possibleSelections[i]].a.armyId + " " + listOfArmyCoordinates[possibleSelections[i]].owner;
 				var t = document.createTextNode(listOfArmyCoordinates[possibleSelections[i]].a.armyId);
 				btn.appendChild(t);
 				btn.addEventListener('click', function(event) {
+					var idToSearchFor = this.name.split(" ")[0];
+					var ownerToSearchFor = this.name.split(" ")[1];
 					for (var j = 0; j < listOfArmyCoordinates.length ; j++){
-						if(listOfArmyCoordinates[j].a.armyId == this.id){
+						if(listOfArmyCoordinates[j].a.armyId == idToSearchFor && listOfArmyCoordinates[j].owner == ownerToSearchFor){
 							selectedArmy = j;
 						}
 					}
