@@ -452,7 +452,33 @@ function makeEventListItem(event, i) {
 		}
 		eli.innerHTML = html+"</div>";
 	}
+	var deleteButton = document.createElement("BUTTON");
+	deleteButton.classList.add("eventListButton");
+	deleteButton.classList.add("eventListDeleteButton");
+	deleteButton.onclick = deleteEvent(i);
+	var checkButton = document.createElement("BUTTON");
+	checkButton.classList.add("eventListButton");
+	checkButton.classList.add("eventListCheckButton");
+	checkButton.onclick = checkEvent(i);
+	eli.appendChild(deleteButton);
+	eli.appendChild(checkButton);
 	return eli;
+}
+
+function deleteEvent(num) {
+	function del() {
+		//TODO: Actual functionality.
+		console.log("TODO: delete event nr "+num);
+	}
+	return del;
+}
+
+function checkEvent(num) {
+	function check() {
+		//TODO: Actual functionality.
+		console.log("TODO: check event nr "+num);
+	}
+	return check;
 }
 
 function toggleVisibility(element) {

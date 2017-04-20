@@ -88,8 +88,29 @@ div.tab button.active {
 	padding-top: 10px;
 	padding-left: 5px;
 	padding-right: 5px;
-	padding-bottom:0;
+	padding-bottom:0px;
 	height:35px;
+}
+
+.eventListButton {
+	width:33px;
+	height:33px;
+	margin-top:-23px;
+	margin-right:4px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100%;
+	border-radius: 3px;
+	border: 1px solid #55555555;
+	float:right;
+}
+
+.eventListDeleteButton {
+	background-image: url("cross.svg");
+}
+
+.eventListCheckButton {
+	background-image: url("checkmark.svg");
 }
 
 #nextTurnButton {
