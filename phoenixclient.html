@@ -1069,6 +1069,7 @@
 					if(login == 'sl'){
 						document.getElementById("ToggleGodModeBar").style.display = "";
 						toggleVisibility(document.getElementById("eventTabsButton"));
+						loadPendingEvents();
 					}
 					// overwrite old known data
 					getNewDataFromServer();

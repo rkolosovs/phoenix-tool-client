@@ -423,6 +423,38 @@ function mainButton() {
 	toggleVisibility(document.getElementById("bigBox"));
 }
 
+function loadPendingEvents() {
+	$.getJSON(url + "/databaseLink/getevents/", function(json){
+		pendingEvents = json;
+		fillEventList();
+	});
+}
+
+function fillEventList() {
+	var eventList = document.getElementById("eventsTab");
+	for (var i = 0; i<pendingEvents.length; i++){
+		eventList.appendChild(makeEventListItem(pendingEvents[i], i));
+	}
+}
+
+function makeEventListItem(event, i) {
+	var eli = document.createElement("DIV");
+	eli.classList.add("eventListItem");
+	eli.id = "eli"+i;
+	var cont = event.content;
+	if(event.type === "move"){
+		eli.innerHTML = "<div>Move "+cont.realm+" army "+cont.armyId+" to ("+cont.x+", "+cont.y+")</div>";
+	} else if (event.type === "battle") {
+		var html = "<div>Battle at ("+cont.x+", "+cont.y+") involving";
+		var partips = cont.participants
+		for (var i = 0; i<partips.length; i++){
+			html += " ["+partips[i].realm+" "+partips[i].armyId+"]";
+		}
+		eli.innerHTML = html+"</div>";
+	}
+	return eli;
+}
+
 function toggleVisibility(element) {
 	var classes = element.classList;
 	if(classes.contains("invisible")){
