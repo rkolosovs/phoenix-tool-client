@@ -19,8 +19,13 @@
 		<button id="ToggleGodModeBar" onclick="toggleGodModeBar()">toggle GodMode Bar</button>
 	</div>
 
+	<div id="bigBox" class="prettyBox invisible"></div>
+	
+	<button id="mainButton" class="prettyBox" onclick="mainButton()"></button>
+
 	<div id="topBar" class="prettyBox">
 	</div>
+	
 
 	<div id="infoBox" class="prettyBox">
 		<h3 align="center">Army Info Goes Here!</h3>
@@ -275,8 +280,8 @@
 
 	<script>
 		//TODO: Move all of this out of the .html file.
-		var address = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
-// 		var address = "http://localhost:8000"; //for local debug
+// 		var address = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
+		var address = "http://localhost:8000"; //for local debug
 		var changedFields = []; // Fields that were changes with World Builder
 		var authenticationToken = 0; // the session Token, default = 0.
 		var worldCreationModeOn = false;

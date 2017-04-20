@@ -17,6 +17,32 @@ canvas { display:block; } /* To remove the scrollbars */
     border-radius: 8px;
 }
 
+.invisible {
+	display: none;
+}
+
+#mainButton {
+    background:rgba(180,180,180,0);
+    background-image: url("main_button.svg");
+	top: 0;
+	left: 0;
+    float:left;
+    height: 100px;
+    width: 87px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    border: none;
+    border-radius: 25%;
+}
+
+#bigBox {
+	left: 0;
+	top: 90px;
+	height: 65%;
+	width: 40%;
+}
+
 #nextTurnButton {
     background-image: url("nextturn_button.svg");
     float:left;

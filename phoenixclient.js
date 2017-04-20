@@ -14,8 +14,8 @@ var ctx = canvas.getContext('2d'); // get the context of the canvas
 var tileset = "mbits_painted"; // tileset name
 var scrollSpeed = 0.2; // increment to scroll with each step
 
- var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
-//var url = "http://localhost:8000"; // for local debug
+// var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
+var url = "http://localhost:8000"; // for local debug
 
 var leftMousePressed = false; // was the left mouse button klicked but not yet released?
 var rightMousePressed = false; // was the right mouse button klicked but not yet released?
@@ -416,6 +416,19 @@ function writeTurnNumber() {
 	topBar.appendChild(date);
 	topBar.appendChild(btn);
 	topBar.appendChild(spec);
+}
+
+function mainButton() {
+	toggleVisibility(document.getElementById("bigBox"));
+}
+
+function toggleVisibility(element) {
+	var classes = element.classList;
+	if(classes.contains("invisible")){
+		classes.remove("invisible");
+	} else {
+		classes.add("invisible");
+	}
 }
 	
 function nextTurn() {
