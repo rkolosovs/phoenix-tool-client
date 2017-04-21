@@ -488,12 +488,12 @@ function makeEventListItem(event, i) {
 	eli.id = "eli"+i;
 	var cont = event.content;
 	if(event.type === "move"){
-		eli.innerHTML = "<div>Move "+cont.realm+" army "+cont.armyId+" to ("+cont.x+", "+cont.y+")</div>";
+		eli.innerHTML = "<div>Move "+cont.realm+" army "+cont.armyId+" from ("+cont.fromX+", "+cont.fromY+") to ("+cont.toX+", "+cont.toY+")</div>";
 	} else if (event.type === "battle") {
 		var html = "<div>Battle at ("+cont.x+", "+cont.y+") involving";
 		var partips = cont.participants
-		for (var i = 0; i<partips.length; i++){
-			html += " ["+partips[i].realm+" "+partips[i].armyId+"]";
+		for (var j = 0; j<partips.length; j++){
+			html += " ["+partips[j].realm+" "+partips[j].armyId+"]";
 		}
 		eli.innerHTML = html+"</div>";
 	}
@@ -507,14 +507,17 @@ function makeEventListItem(event, i) {
 	checkButton.onclick = checkEvent(i);
 	eli.appendChild(deleteButton);
 	eli.appendChild(checkButton);
+	
+	console.log("type: "+ event.type + " i: " + i + " id: " + eli.id);
+	
 	return eli;
 }
 
 function deleteEvent(num) {
-	var eli = document.getElementById("eli"+num);
-	console.log(eli);
-// eli.style.backgroundColor = "rgba(255,0,0,0.9)";
 	function del() {
+		var eli = document.getElementById("eli"+num);
+		console.log(eli);
+	    eli.style.backgroundColor = "rgba(255,0,0,0.9)";
 		$.post({
 			url: url + "/databaseLink/deleteevent/",
 			data: {
