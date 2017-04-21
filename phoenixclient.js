@@ -466,9 +466,25 @@ function makeEventListItem(event, i) {
 }
 
 function deleteEvent(num) {
+//	var eli = document.getElementById("eli"+num);
+//	eli.style.backgroundColor = "rgba(255,0,0,0.9)";
 	function del() {
-		//TODO: Actual functionality.
-		console.log("TODO: delete event nr "+num);
+		$.post({
+			url: url + "/databaseLink/deleteevent/",
+			data: {
+				authorization: authenticationToken,
+				eventId: pendingEvents[num].pk,
+				eventType: pendingEvents[num].type
+			},
+			statusCode: {
+				200: function() {
+					console.log("success");
+				},
+				403: function() {
+  					alert('Access denied. You have to be SL to do this.');
+				}
+			}
+		});
 	}
 	return del;
 }
