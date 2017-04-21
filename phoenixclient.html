@@ -868,7 +868,10 @@
 			$.ajax({
 				type: 'post',
 				url: address+"/databaseLink/savefielddata/",
-				data: {map: dataToServerString},
+				data: {
+					authorization: authenticationToken,
+					map: dataToServerString
+					},
 				success: console.log("success"),
 				error: console.log("error"),
 			});
@@ -895,7 +898,10 @@
 			$.ajax({
 				type:'post',
 				url: address + "/databaseLink/saveriverdata/",
-				data: {river: dataToServerString},
+				data: {
+					authorization: authenticationToken,
+					river: dataToServerString
+					},
 				success: console.log("success"),
 				error: console.log("error"),
 			});
@@ -967,7 +973,10 @@
 			$.ajax({
 				type:'post',
 				url: address + "/databaseLink/savebuildingdata/",
-				data: {buildings: dataToServerString},
+				data: {
+					authorization: authenticationToken,
+					buildings: dataToServerString
+					},
 				success: console.log("success"),
 				error: console.log("error"),
 			});
@@ -1044,7 +1053,10 @@
 			$.ajax({
 				type:'post',
 				url: address + "/databaseLink/saveborderdata/",
-				data: {borders: dataToServerString},
+				data: {
+					authorization: authenticationToken,
+					borders: dataToServerString
+					},
 				success: console.log("success"),
 				error: console.log("error"),
 			});

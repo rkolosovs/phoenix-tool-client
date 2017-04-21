@@ -507,16 +507,12 @@ function makeEventListItem(event, i) {
 	checkButton.onclick = checkEvent(i);
 	eli.appendChild(deleteButton);
 	eli.appendChild(checkButton);
-	
-	console.log("type: "+ event.type + " i: " + i + " id: " + eli.id);
-	
 	return eli;
 }
 
 function deleteEvent(num) {
 	function del() {
 		var eli = document.getElementById("eli"+num);
-		console.log(eli);
 	    eli.style.backgroundColor = "rgba(255,0,0,0.9)";
 		$.post({
 			url: url + "/databaseLink/deleteevent/",
