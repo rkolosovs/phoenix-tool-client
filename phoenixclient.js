@@ -8,22 +8,28 @@ var switchScale = 50;
 var login = 'guest'; // either realm tag, 'sl', or 'guest'
 var pendingEvents = [];
 
-var canvas = document.getElementById('hexCanvas'); // get the canvas element from the HTML document
+var canvas = document.getElementById('hexCanvas'); // get the canvas element
+													// from the HTML document
 var ctx = canvas.getContext('2d'); // get the context of the canvas
 
 // settings; TODO: let the user change these in game
 var tileset = "mbits_painted"; // tileset name
 var scrollSpeed = 0.2; // increment to scroll with each step
 
-// var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
+// var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or
+// the IP address) for the remote game server here
 var url = "http://localhost:8000"; // for local debug
 
-var leftMousePressed = false; // was the left mouse button klicked but not yet released?
-var rightMousePressed = false; // was the right mouse button klicked but not yet released?
+var leftMousePressed = false; // was the left mouse button klicked but not yet
+								// released?
+var rightMousePressed = false; // was the right mouse button klicked but not
+								// yet released?
 var isDragging = false; // was the mouse moved while the button is down?
 var scale = 16; // the scale of the elements, specifically the width
-var originX = 900; // x coordinate of the origin in respect to which all drawing is done
-var originY = 490; // y coodrinate of the origin in respect to which all drawing is done
+var originX = 900; // x coordinate of the origin in respect to which all
+					// drawing is done
+var originY = 490; // y coodrinate of the origin in respect to which all
+					// drawing is done
 var clickX = 0; // x coordinate of the point where the mouse was clicked
 var clickY = 0; // y coordinate of the point where the mouse was clicked
 var moveX = 0; // x distance the mouse was dragged
@@ -35,12 +41,16 @@ window.addEventListener('resize', resizeCanvas, false);
 canvas.addEventListener('mousedown', function(event){
 	if (event.button === 0) {
    		leftMousePressed = true;
-   		clickX = event.pageX; // record the x coordinate of the mouse when it was clicked
-   		clickY = event.pageY; // record the y coordinate of the mouse when it was clicked
+   		clickX = event.pageX; // record the x coordinate of the mouse when it
+								// was clicked
+   		clickY = event.pageY; // record the y coordinate of the mouse when it
+								// was clicked
    	} else if (event.button === 2) {
    		rightMousePressed = true;
-   		clickX = event.pageX; // record the x coordinate of the mouse when it was clicked
-   		clickY = event.pageY; // record the y coordinate of the mouse when it was clicked
+   		clickX = event.pageX; // record the x coordinate of the mouse when it
+								// was clicked
+   		clickY = event.pageY; // record the y coordinate of the mouse when it
+								// was clicked
    	}
 	drawStuff();
 }, {passive: true});
@@ -48,8 +58,10 @@ canvas.addEventListener('mousedown', function(event){
 canvas.addEventListener('mouseup', function(event){
 	if (leftMousePressed && event.button === 0) {
 		if (isDragging) { // mouse was dragged; run panning finish routine
-   			originX += moveX; // add the x offset from dragged mouse to the current x origin for drawing
-   			originY += moveY; // add the y offset from dragged mouse to the current y origin for drawing
+   			originX += moveX; // add the x offset from dragged mouse to the
+								// current x origin for drawing
+   			originY += moveY; // add the y offset from dragged mouse to the
+								// current y origin for drawing
 		} 
 		else {
 			registerLeftClick(); // do whatever has to be done on leftclick
@@ -78,9 +90,12 @@ canvas.addEventListener('mouseup', function(event){
 
 canvas.addEventListener('mousemove', function(event) {
    	if (leftMousePressed === true) {
-   		isDragging = true; // for later click detection; no click if mouse was previously dragged
-   		moveX = event.pageX - clickX; // compute the x offset from dragged mouse
-   		moveY = event.pageY - clickY; // compute the y offset from dragged mouse
+   		isDragging = true; // for later click detection; no click if mouse was
+							// previously dragged
+   		moveX = event.pageX - clickX; // compute the x offset from dragged
+										// mouse
+   		moveY = event.pageY - clickY; // compute the y offset from dragged
+										// mouse
    	}
    	drawStuff();
 }, {passive: true});
@@ -89,17 +104,21 @@ canvas.addEventListener('wheel', function(event) {
 	var deltaY = event.deltaY; // get amount scrolled
 	var mouseX = event.pageX; // get current mouse position
 	var mouseY = event.pageY;
-	var posX = (mouseX - originX) / scale; // get the tile the mouse is currently in (and the position in the tile)
+	var posX = (mouseX - originX) / scale; // get the tile the mouse is
+											// currently in (and the position in
+											// the tile)
 	var posY = (mouseY - originY) / scale;
 	if (deltaY < 0) { // do the actuall scrolling
 		scale *= 1+scrollSpeed;
 	} else {
 		scale *= 1-scrollSpeed;
 	}
-	setHexParts(scale); // compute the scale dependant values used for map drawing
+	setHexParts(scale); // compute the scale dependant values used for map
+						// drawing
 	var newPosX = posX * scale; // compute the new distance of mouse from origin
 	var newPosY = posY * scale;
-	originX = mouseX - newPosX; // move origin so that the tile stays the same with the new scaling
+	originX = mouseX - newPosX; // move origin so that the tile stays the same
+								// with the new scaling
 	originY = mouseY - newPosY;
 	drawStuff();
 }, {passive: true});
@@ -146,7 +165,8 @@ function registerLeftClick(){
 		var clickedHex = new showHex(clickedField[0], clickedField[1]);
 		var posi = clickedHex.positionInList();
 		if(changeFieldToType == -1){
-			// checks if Field should be changed to a specific type, if not use normal world creation mode on click
+			// checks if Field should be changed to a specific type, if not use
+			// normal world creation mode on click
 			if(fields[posi].type == 8 || fields[posi].type == 9){
 				fields[posi].type = 0;
 			} else {
@@ -221,7 +241,8 @@ function registerRightClick(){
 		var clickedHex = new showHex(clickedField[0], clickedField[1]);
 		var posi = clickedHex.positionInList();
 		if(changeFieldToType == -1){
-			// checks if Field should be changed to a specific type (then rightclick is disabled)
+			// checks if Field should be changed to a specific type (then
+			// rightclick is disabled)
 			if(fields[posi].type == 0 || fields[posi].type == 9){
 				fields[posi].type = 8;
 			} else {
@@ -255,7 +276,15 @@ function registerRightClick(){
 						out = "Can only move your own armies."
 					}
 					if(out === "ok"){
-						preparedEvents.push({type: "move", content: {armyId: listOfArmyCoordinates[selectedArmy].a.armyId, realm: listOfArmyCoordinates[selectedArmy].ownerTag(), x: listOfArmyCoordinates[selectedArmy].x, y: listOfArmyCoordinates[selectedArmy].y}});
+						preparedEvents.push({
+							type: "move", content: {
+								armyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+								realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+								fromX: clickedArmyCoords.x, fromY: clickedArmyCoords.y, 
+								toX: listOfArmyCoordinates[selectedArmy].x, toY: listOfArmyCoordinates[selectedArmy].y
+							}
+						});
+							
 						var battlePossible = false;
 						var participants = [];
 
@@ -269,7 +298,23 @@ function registerRightClick(){
 							}
 						}
 						if (battlePossible) {
-							preparedEvents.push({type: "battle", content:  {participants: participants, x: listOfArmyCoordinates[selectedArmy].x, y: listOfArmyCoordinates[selectedArmy].y, overrun: false}});
+							var inserted = false;
+							for (var j = 0; j < preparedEvents.length; j++){
+								if(preparedEvents[j].type === "battle" && 
+										preparedEvents[j].content.x === listOfArmyCoordinates[selectedArmy].x && 
+										preparedEvents[j].content.y === listOfArmyCoordinates[selectedArmy].y){
+									preparedEvents[j].content.participants = participants;
+									inserted = true;
+								}
+							}
+							if(!inserted){
+								preparedEvents.push({
+									type: "battle", content: {
+										participants: participants, 
+										x: listOfArmyCoordinates[selectedArmy].x, y: listOfArmyCoordinates[selectedArmy].y
+									}
+								});
+							}
 						}
 					} else {
 						alert(out);
@@ -466,8 +511,9 @@ function makeEventListItem(event, i) {
 }
 
 function deleteEvent(num) {
-//	var eli = document.getElementById("eli"+num);
-//	eli.style.backgroundColor = "rgba(255,0,0,0.9)";
+	var eli = document.getElementById("eli"+num);
+	console.log(eli);
+// eli.style.backgroundColor = "rgba(255,0,0,0.9)";
 	function del() {
 		$.post({
 			url: url + "/databaseLink/deleteevent/",
@@ -491,7 +537,7 @@ function deleteEvent(num) {
 
 function checkEvent(num) {
 	function check() {
-		//TODO: Actual functionality.
+		// TODO: Actual functionality.
 		console.log("TODO: check event nr "+num);
 	}
 	return check;
@@ -522,7 +568,8 @@ function openTab(evt, tabName) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
 
-    // Show the current tab, and add an "active" class to the button that opened the tab
+    // Show the current tab, and add an "active" class to the button that opened
+	// the tab
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
 }
