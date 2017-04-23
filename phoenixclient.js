@@ -14,9 +14,6 @@ var ctx = canvas.getContext('2d'); // get the context of the canvas
 var tileset = "mbits_painted"; // tileset name
 var scrollSpeed = 0.2; // increment to scroll with each step
 
- var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
-//var url = "http://localhost:8000"; // for local debug
-
 var leftMousePressed = false; // was the left mouse button klicked but not yet released?
 var rightMousePressed = false; // was the right mouse button klicked but not yet released?
 var isDragging = false; // was the mouse moved while the button is down?
@@ -80,8 +77,8 @@ canvas.addEventListener('mousemove', function(event) {
    		isDragging = true; // for later click detection; no click if mouse was previously dragged
    		moveX = event.pageX - clickX; // compute the x offset from dragged mouse
    		moveY = event.pageY - clickY; // compute the y offset from dragged mouse
+		drawStuff();
    	}
-   	drawStuff();
 }, {passive: true});
 
 canvas.addEventListener('wheel', function(event) {
@@ -277,63 +274,8 @@ function registerRightClick(){
 			}
 			updateInfoBox();
 		}
-	}	
+	}
 }
-
-function updateInfoBox(){
-	if(selectedArmy != undefined){
-		document.getElementById("armyId").innerHTML = "HeeresId: " + listOfArmyCoordinates[selectedArmy].a.armyId;
-		document.getElementById("count").innerHTML = "anzahl Truppen: " + listOfArmyCoordinates[selectedArmy].a.count;
-		document.getElementById("leaders").innerHTML = "anzahl Heerführer: " + listOfArmyCoordinates[selectedArmy].a.leaders;
-		document.getElementById("mounts").innerHTML = "mitgeführte Reittiere: " + listOfArmyCoordinates[selectedArmy].a.mounts;
-		document.getElementById("lkp").innerHTML = "leichte Katapulte: " + listOfArmyCoordinates[selectedArmy].a.lkp;
-		document.getElementById("skp").innerHTML = "schwere Katapulte: " + listOfArmyCoordinates[selectedArmy].a.skp;
-		document.getElementById("movePoints").innerHTML = "Verbleibende Bewegungspunkte: " + listOfArmyCoordinates[selectedArmy].remainingMovePoints;
-		document.getElementById("heightPoints").innerHTML = "Verbleibende Höhenstufen: " + listOfArmyCoordinates[selectedArmy].remainingHeightPoints;
-		// change Box (GodMode)
-		document.getElementById("ownerChangeInput").value = listOfArmyCoordinates[selectedArmy].owner;
-		document.getElementById("ownerChange").style.display = "";
-		document.getElementById("armyIdChangeInput").value = listOfArmyCoordinates[selectedArmy].a.armyId;
-		document.getElementById("armyIdChange").style.display = "";
-		document.getElementById("countChangeInput").value = listOfArmyCoordinates[selectedArmy].a.count;
-		document.getElementById("countChange").style.display = "";
-		document.getElementById("leadersChangeInput").value = listOfArmyCoordinates[selectedArmy].a.leaders;
-		document.getElementById("leadersChange").style.display = "";
-		document.getElementById("mountsChangeInput").value = listOfArmyCoordinates[selectedArmy].a.mounts;
-		document.getElementById("mountsChange").style.display = "";
-		document.getElementById("lkpChangeInput").value = listOfArmyCoordinates[selectedArmy].a.lkp;
-		document.getElementById("lkpChange").style.display = "";
-		document.getElementById("skpChangeInput").value = listOfArmyCoordinates[selectedArmy].a.skp;
-		document.getElementById("skpChange").style.display = "";
-		document.getElementById("movePointsChangeInput").value = listOfArmyCoordinates[selectedArmy].remainingMovePoints;
-		document.getElementById("movePointsChange").style.display = "";
-		document.getElementById("heightPointsChangeInput").value = listOfArmyCoordinates[selectedArmy].remainingHeightPoints;
-		document.getElementById("heightPointsChange").style.display = "";
-		document.getElementById("changeArmyInfo").style.display = "";
-	} else {
-		// info Box
-		document.getElementById("armyId").innerHTML = null;
-		document.getElementById("count").innerHTML = null;
-		document.getElementById("leaders").innerHTML = null;
-		document.getElementById("mounts").innerHTML = null;
-		document.getElementById("lkp").innerHTML = null;
-		document.getElementById("skp").innerHTML = null;
-		document.getElementById("movePoints").innerHTML = null;
-		document.getElementById("heightPoints").innerHTML = null;
-		// change Box (GM)
-		document.getElementById("ownerChange").style.display = "none";
-		document.getElementById("armyIdChange").style.display = "none";
-		document.getElementById("countChange").style.display = "none"
-		document.getElementById("leadersChange").style.display = "none"
-		document.getElementById("mountsChange").style.display = "none"
-		document.getElementById("lkpChange").style.display = "none"
-		document.getElementById("skpChange").style.display = "none"
-		document.getElementById("movePointsChange").style.display = "none"
-		document.getElementById("heightPointsChange").style.display = "none"
-		document.getElementById("changeArmyInfo").style.display = "none";
-	};
-}
-
 
 function getClickedField(){
 	var x = clickX - originX; // reverse our x/y origin offset
@@ -358,13 +300,6 @@ function getClickedField(){
 	return [column, row]; // return result
 }
 
-function loadTurnNumber() {
-	$.getJSON(url + "/databaseLink/getturn/", function(json){
-		currentTurn = json;
-		writeTurnNumber();
-	});
-}
-
 function writeTurnNumber() {
 	// get the top bar element from the HTML document
 	var topBar = document.getElementById('topBar');
@@ -387,11 +322,11 @@ function writeTurnNumber() {
 		// if not logged in as the current realm or SL
 		btn.disabled = true;
 		btn.style.cursor = "not-allowed";
-		btn.style.backgroundImage = "url(nextturn_button_disabled.svg)";
+		btn.style.backgroundImage = "url(immages/nextturn_button_disabled.svg)";
 	} else {
 		btn.disabled = false;
 		btn.style.cursor = "initial";
-		btn.style.backgroundImage = "url(nextturn_button.svg)";
+		btn.style.backgroundImage = "url(immages/nextturn_button.svg)";
 	}
 	
 	date.innerHTML =  "Monat " + months[currentTurn.turn%8] + " des Jahres "+ Math.ceil(currentTurn.turn/8) + " (Zug " + currentTurn.turn + ", ";
@@ -417,133 +352,14 @@ function writeTurnNumber() {
 	topBar.appendChild(btn);
 	topBar.appendChild(spec);
 }
-	
-function nextTurn() {
-	var message = "";
-	if (currentTurn.realm === null) {
-		message = "Do you want to end the pre-turn phase?";
-	} else if (currentTurn.status === 'fi') {
-		message = "Do you want to end processing the turn of " + currentTurn.realm+"?";
-	} else if (login === 'sl') {
-		message = "Do you want to end the turn of "+ currentTurn.realm+"?";
-	} else {
-		message = "Do you want to end your turn?";
-	}
-
-	if (confirm(message)){
-		
-		for (var i = 0; i < preparedEvents.length; i++) {
-			var cPE = preparedEvents[i];
-			var cPEContent = JSON.stringify(cPE.content);
-			if (cPE.type === "move") {
-				$.post({
-					url: url + "/databaseLink/moveevent/",
-					data: {
-						authorization: authenticationToken,
-						content: cPEContent
-					},
-					statusCode: {
-						200: function() {
-							console.log("success");
-						},
-						400: function() {
-							alert('Invalid input. Moved troop does not exist.');
-						},
-						401: function() {
-    	  					alert('Authorisation failure. Please log in.');
-    					},
-    					403: function() {
-    	  					alert('Access denied. You can only send move events for your troops.');
-    					}
-					}
-				});
-			} else if (cPE.type === "battle") {
-				$.post({
-					url: url + "/databaseLink/battleevent/",
-					data: {
-						authorization: authenticationToken,
-						content: cPEContent
-					},
-					statusCode: {
-						200: function() {
-							console.log("success");
-						},
-						400: function() {
-							alert("Invalid input. Not all troops participating in a battle exist.");
-						},
-						401: function() {
-    	  					alert('Authorisation failure. Please log in.');
-    					},
-    					403: function() {
-    	  					alert('Access denied. You can only send battle events involving your troops.');
-    					}
-					}
-				});
-			}
-		}
-
-		$.post({
-			url: url + "/databaseLink/nextturn/",
-			data: {authorization: authenticationToken},
-			success: function(data){
-				currentTurn = data;
-				writeTurnNumber();
-			},
-			dataType: "json",
-			statusCode: {
-				401: function() {
-    	  			alert('Authorisation failure. Please log in.');
-    			},
-    			403: function() {
-    	  			alert('Access denied. You can only end your own turn.');
-    			},
-    			520: function() { // custom status code
-					alert('Turn Order ran out. Tell SL to fill it!');
-    			},
-    			521: function() { // custom status code
-    				alert('Turn Order ran out. You should fill it!');
-    			}
-			}
-		});
-	}
-}
 
 function init() {
-	$.getScript("map.js", // use jQuery to load scripts from another .js file
-		function(){ 	// after loading script, run all initialization methods
-			loadTurnNumber();
-			loadMap(url);
-			loadImages(tileset);
-			loadArmies(url);
-			setHexParts(scale);
-			resizeCanvas();
-		});
-}
-
-
-// canvas resizing method
-function resizeCanvas() {
-   	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-   	drawStuff(); 
-}
-
-// all the stuff to be drawn goes in this method
-function drawStuff() {
-	ctx.clearRect(0, 0, canvas.width, canvas.height); // clear
-
-	// do all drawing/element selection in respect to these coordinates
-	var x = originX + moveX; // current x origin for drawing + x offset from
-								// dragged mouse
-	var y = originY + moveY; // current y origin for drawing + y offset from
-								// dragged mouse
-
-	drawMap(ctx, x, y, scale);
-	drawSelection(ctx, x, y, scale, selectedFields);
-	drawArmies(ctx, x, y, scale, listOfArmyCoordinates);
+	getNewDataFromServer();
+	loadImages(tileset);
+	setHexParts(scale);
 }
 
 init();
 setInterval(function() {
-	loadMap(url);
+	getNewDataFromServer();
 }, 30000);

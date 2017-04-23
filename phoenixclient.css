@@ -18,7 +18,7 @@ canvas { display:block; } /* To remove the scrollbars */
 }
 
 #nextTurnButton {
-    background-image: url("nextturn_button.svg");
+    background-image: url("immages/nextturn_button.svg");
     float:left;
     height: 30px;
     width: 30px;
