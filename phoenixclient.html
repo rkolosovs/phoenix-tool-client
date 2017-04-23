@@ -865,15 +865,22 @@
 				}
 			}
 			console.log("start");
-			$.ajax({
-				type: 'post',
+			$.post({
 				url: address+"/databaseLink/savefielddata/",
 				data: {
 					authorization: authenticationToken,
-					map: dataToServerString
+					map: dataToServerString},
+				statusCode: {
+					200: function() {
+						console.log("success");
 					},
-				success: console.log("success"),
-				error: console.log("error"),
+					401: function() {
+	  					alert('Authorisation failure. Please log in.');
+					},
+					403: function() {
+	  					alert('Access denied. You have to be SL to do this.');
+					}
+				}
 			});
 			console.log("end");
 		}
@@ -895,15 +902,22 @@
 			}
 			console.log("start");
 			console.log(rivers);
-			$.ajax({
-				type:'post',
+			$.post({
 				url: address + "/databaseLink/saveriverdata/",
 				data: {
 					authorization: authenticationToken,
-					river: dataToServerString
+					river: dataToServerString},
+				statusCode: {
+					200: function() {
+						console.log("success");
 					},
-				success: console.log("success"),
-				error: console.log("error"),
+					401: function() {
+		  				alert('Authorisation failure. Please log in.');
+					},
+					403: function() {
+		  				alert('Access denied. You have to be SL to do this.');
+					}
+				}
 			});
 			console.log("end");
 		}
@@ -970,15 +984,22 @@
 			}
 			console.log("start");
 			console.log(buildings);
-			$.ajax({
-				type:'post',
+			$.post({
 				url: address + "/databaseLink/savebuildingdata/",
 				data: {
 					authorization: authenticationToken,
-					buildings: dataToServerString
+					buildings: dataToServerString},
+				statusCode: {
+					200: function() {
+						console.log("success");
 					},
-				success: console.log("success"),
-				error: console.log("error"),
+					401: function() {
+		  				alert('Authorisation failure. Please log in.');
+					},
+					403: function() {
+		  				alert('Access denied. You have to be SL to do this.');
+					}
+				}
 			});
 			console.log("end");
 		}
@@ -1010,13 +1031,21 @@
 			}
 			console.log("start");
 			console.log(listOfArmyCoordinates);
-			$.ajax({
-				type:'post',
+			$.post({
 				url: address + "/databaseLink/savearmydata/",
 				data: {armies: dataToServerString,
 					authorization: authenticationToken},
-				success: console.log("success"),
-				error: console.log("error"),
+				statusCode: {
+					200: function() {
+						console.log("success");
+					},
+					401: function() {
+		  				alert('Authorisation failure. Please log in.');
+					},
+					403: function() {
+		  				alert('Access denied. You have to be SL to do this.');
+					}
+				}
 			});
 			console.log("end");
 		}
@@ -1050,15 +1079,22 @@
 			}
 			console.log("start");
 			console.log(borders);
-			$.ajax({
-				type:'post',
+			$.post({
 				url: address + "/databaseLink/saveborderdata/",
 				data: {
 					authorization: authenticationToken,
-					borders: dataToServerString
+					borders: dataToServerString},
+				statusCode: {
+					200: function() {
+						console.log("success");
 					},
-				success: console.log("success"),
-				error: console.log("error"),
+					401: function() {
+		  				alert('Authorisation failure. Please log in.');
+					},
+					403: function() {
+		  				alert('Access denied. You have to be SL to do this.');
+					}
+				}
 			});
 			console.log("end");
 		}
@@ -1080,8 +1116,10 @@
 					// if the user is a GM, godmode possibility is displayed
 					if(login == 'sl'){
 						document.getElementById("ToggleGodModeBar").style.display = "";
-						toggleVisibility(document.getElementById("eventTabsButton"));
-						loadPendingEvents();
+						if(currentTurn.status === 'fi'){
+							show(document.getElementById("eventTabsButton"));
+							loadPendingEvents();
+						}
 					}
 					// overwrite old known data
 					getNewDataFromServer();
@@ -1116,6 +1154,7 @@
 			// overwrite previously known data
 			getNewDataFromServer();
 			loginZeit = undefined;
+			hide(document.getElementById("eventTabsButton"));
 		}
 
 		// help function to fetch current data from the server

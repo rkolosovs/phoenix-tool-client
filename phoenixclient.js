@@ -440,6 +440,12 @@ function writeTurnNumber() {
 		btn.style.backgroundImage = "url(nextturn_button.svg)";
 	}
 	
+	if(login === 'sl' && currentTurn.status === 'fi') {
+		show(document.getElementById("eventTabsButton"));
+	} else {
+		hide(document.getElementById("eventTabsButton"));
+	}
+	
 	date.innerHTML =  "Monat " + months[currentTurn.turn%8] + " des Jahres "+ Math.ceil(currentTurn.turn/8) + " (Zug " + currentTurn.turn + ", ";
 	if (currentTurn.realm === null || currentTurn.status === 'fi') { 
 		// GM's turn
@@ -542,11 +548,25 @@ function checkEvent(num) {
 	return check;
 }
 
-function toggleVisibility(element) {
+function toggleVisibility(element){
 	var classes = element.classList;
 	if(classes.contains("invisible")){
 		classes.remove("invisible");
 	} else {
+		classes.add("invisible");
+	}
+}
+
+function show(element) {
+	var classes = element.classList;
+	if(classes.contains("invisible")){
+		classes.remove("invisible");
+	}
+}
+
+function hide(element) {
+	var classes = element.classList;
+	if(!classes.contains("invisible")){
 		classes.add("invisible");
 	}
 }
@@ -586,54 +606,61 @@ function nextTurn() {
 	}
 
 	if (confirm(message)){
-		
-		for (var i = 0; i < preparedEvents.length; i++) {
-			var cPE = preparedEvents[i];
-			var cPEContent = JSON.stringify(cPE.content);
-			if (cPE.type === "move") {
-				$.post({
-					url: url + "/databaseLink/moveevent/",
-					data: {
-						authorization: authenticationToken,
-						content: cPEContent
-					},
-					statusCode: {
-						200: function() {
-							console.log("success");
+		if(login === 'sl' && currentTurn.status === 'fi') { //SL sends DB change requests
+			saveFields();
+			saveRivers();
+			saveBuildings();
+			saveArmies();
+			saveFactionsTerritories();
+		} else { //Players send events
+			for (var i = 0; i < preparedEvents.length; i++) {
+				var cPE = preparedEvents[i];
+				var cPEContent = JSON.stringify(cPE.content);
+				if (cPE.type === "move") {
+					$.post({
+						url: url + "/databaseLink/moveevent/",
+						data: {
+							authorization: authenticationToken,
+							content: cPEContent
 						},
-						400: function() {
-							alert('Invalid input. Moved troop does not exist.');
+						statusCode: {
+							200: function() {
+								console.log("success");
+							},
+							400: function() {
+								alert('Invalid input. Moved troop does not exist.');
+							},
+							401: function() {
+    	  						alert('Authorisation failure. Please log in.');
+    						},
+    						403: function() {
+    	  						alert('Access denied. You can only send move events for your troops.');
+    						}
+						}
+					});
+				} else if (cPE.type === "battle") {
+					$.post({
+						url: url + "/databaseLink/battleevent/",
+						data: {
+							authorization: authenticationToken,
+							content: cPEContent
 						},
-						401: function() {
-    	  					alert('Authorisation failure. Please log in.');
-    					},
-    					403: function() {
-    	  					alert('Access denied. You can only send move events for your troops.');
-    					}
-					}
-				});
-			} else if (cPE.type === "battle") {
-				$.post({
-					url: url + "/databaseLink/battleevent/",
-					data: {
-						authorization: authenticationToken,
-						content: cPEContent
-					},
-					statusCode: {
-						200: function() {
-							console.log("success");
-						},
-						400: function() {
-							alert("Invalid input. Not all troops participating in a battle exist.");
-						},
-						401: function() {
-    	  					alert('Authorisation failure. Please log in.');
-    					},
-    					403: function() {
-    	  					alert('Access denied. You can only send battle events involving your troops.');
-    					}
-					}
-				});
+						statusCode: {
+							200: function() {
+								console.log("success");
+							},
+							400: function() {
+								alert("Invalid input. Not all troops participating in a battle exist.");
+							},
+							401: function() {
+    	  						alert('Authorisation failure. Please log in.');
+    						},
+    						403: function() {
+    	  						alert('Access denied. You can only send battle events involving your troops.');
+    						}
+						}
+					});
+				}
 			}
 		}
 
