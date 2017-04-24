@@ -521,7 +521,6 @@ function makeEventListItem(event, i) {
 function deleteEvent(num) {
 	function del() {
 		var eli = document.getElementById("eli"+num);
-//	    eli.style.backgroundColor = "rgba(255,0,0,0.9)";
 		eli.classList.add("deletedELI");
 		$.post({
 			url: url + "/databaseLink/deleteevent/",
@@ -545,10 +544,53 @@ function deleteEvent(num) {
 
 function checkEvent(num) {
 	function check() {
-		// TODO: Actual functionality.
 		var eli = document.getElementById("eli"+num);
 		eli.classList.add("checkedELI");
-		console.log("TODO: check event nr "+num);
+		var event = pendingEvents[num];
+		var cont = event.content;
+		if (event.type === "move") {
+			var army;
+			for(var i = 0; i<listOfArmyCoordinates.length; i++){
+				army = listOfArmyCoordinates[i];
+				if(army.ownerTag() === cont.realm && cont.armyId === army.a.armyId){
+					break;
+				}
+			}
+			console.log(army);
+			var adjacency = getAdjacency([army.x, army.y],[[cont.toX, cont.toY]]);
+			if (adjacency[0] === 1){
+				army.move(1);//move to ne
+			} else if (adjacency[1] === 1) {
+				army.move(2);//move to e
+			} else if (adjacency[2] === 1) {
+				army.move(3);//move to se
+			} else if (adjacency[3] === 1) {
+				army.move(4);//move to sw
+			} else if (adjacency[4] === 1) {
+				army.move(5);//move to w
+			} else if (adjacency[5] === 1) {
+				army.move(0);//move to nw
+			}
+		} else if (event.type === "battle") {
+			//TODO: Handle battles
+		}
+		
+		$.post({
+			url: url + "/databaseLink/checkevent/",
+			data: {
+				authorization: authenticationToken,
+				eventId: pendingEvents[num].pk,
+				eventType: pendingEvents[num].type
+			},
+			statusCode: {
+				200: function() {
+					console.log("success");
+				},
+				403: function() {
+  					alert('Access denied. You have to be SL to do this.');
+				}
+			}
+		});
 	}
 	return check;
 }
