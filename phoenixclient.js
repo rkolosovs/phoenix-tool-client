@@ -441,6 +441,7 @@ function writeTurnNumber() {
 	}
 	
 	if(login === 'sl' && currentTurn.status === 'fi') {
+		loadPendingEvents();
 		show(document.getElementById("eventTabsButton"));
 	} else {
 		hide(document.getElementById("eventTabsButton"));
@@ -483,6 +484,7 @@ function loadPendingEvents() {
 
 function fillEventList() {
 	var eventList = document.getElementById("eventsTab");
+	eventList.innerHTML = "";
 	for (var i = 0; i<pendingEvents.length; i++){
 		eventList.appendChild(makeEventListItem(pendingEvents[i], i));
 	}
@@ -519,7 +521,8 @@ function makeEventListItem(event, i) {
 function deleteEvent(num) {
 	function del() {
 		var eli = document.getElementById("eli"+num);
-	    eli.style.backgroundColor = "rgba(255,0,0,0.9)";
+//	    eli.style.backgroundColor = "rgba(255,0,0,0.9)";
+		eli.classList.add("deletedELI");
 		$.post({
 			url: url + "/databaseLink/deleteevent/",
 			data: {
@@ -543,6 +546,8 @@ function deleteEvent(num) {
 function checkEvent(num) {
 	function check() {
 		// TODO: Actual functionality.
+		var eli = document.getElementById("eli"+num);
+		eli.classList.add("checkedELI");
 		console.log("TODO: check event nr "+num);
 	}
 	return check;
@@ -612,7 +617,7 @@ function nextTurn() {
 			saveBuildings();
 			saveArmies();
 			saveFactionsTerritories();
-		} else { //Players send events
+		} else { //Players and SL during player's turn send events
 			for (var i = 0; i < preparedEvents.length; i++) {
 				var cPE = preparedEvents[i];
 				var cPEContent = JSON.stringify(cPE.content);

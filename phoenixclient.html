@@ -1155,6 +1155,8 @@
 			getNewDataFromServer();
 			loginZeit = undefined;
 			hide(document.getElementById("eventTabsButton"));
+			var eventList = document.getElementById("eventsTab");
+			eventList.innerHTML = "";
 		}
 
 		// help function to fetch current data from the server

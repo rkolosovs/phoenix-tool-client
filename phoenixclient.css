@@ -92,6 +92,14 @@ div.tab button.active {
 	height:35px;
 }
 
+.deletedELI {
+	background-color: rgba(255,0,0,0.9);
+}
+
+.checkedELI {
+	background-color: rgba(0,255,0,0.9);
+}
+
 .eventListButton {
 	width:33px;
 	height:33px;
