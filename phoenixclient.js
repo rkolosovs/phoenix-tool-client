@@ -572,7 +572,19 @@ function checkEvent(num) {
 				army.move(0);//move to nw
 			}
 		} else if (event.type === "battle") {
-			//TODO: Handle battles
+			//TODO: Implement battle resolution in armyInteractions, show force totals for each side, have rolls happen
+			var battleBox = document.getElementById("battleBox");
+			show(battleBox);
+			
+			var battle = new battleHandler(cont.participants, cont.x, cont.y, 
+					document.getElementById("leftArmiesBox"), 
+					document.getElementById("unsortedArmiesBox"), 
+					document.getElementById("rightArmiesBox"));
+			document.getElementById("battleButton").onclick = function(){
+					battle.resolve();
+					hide(battleBox);
+				};
+			battle.updateDisplay();
 		}
 		
 		$.post({

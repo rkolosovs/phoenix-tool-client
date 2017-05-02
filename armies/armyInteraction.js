@@ -1,3 +1,94 @@
+function battleHandler(participants, x, y, leftList, unsortedList, rightList) {
+	this.unsortedArmies = participants;
+	this.leftSide = [];
+	this.rightSide = [];
+	this.x = x;
+	this.y = y;
+	this.leftList = leftList;
+	this.unsortedList = unsortedList;
+	this.rightList = rightList;
+	this.leftSoldiers = 0;
+	this.leftOfficers = 0;
+	this.leftRiders = 0;
+	this.rightSoldiers = 0;
+	this.rightOfficers = 0;
+	this.rightRiders = 0;
+	
+	this.moveToLeft = function(i){
+		leftSide.push(unsortedArmies.splice(i,1));
+		updateDisplay();
+	}
+	
+	this.moveToRight = function(i){
+		rightSide.push(unsortedArmies.splice(i,1));
+		updateDisplay();
+	}
+	
+	this.removeFromRight = function(i){
+		unsortedArmies.push(rightSide.splice(i,1));
+		updateDisplay();
+	}
+	
+	this.removeFromLeft = function(i){
+		unsortedArmies.push(leftSide.splice(i,1));
+		updateDisplay();
+	}
+	
+	this.updateDisplay = function(){
+		leftList.forEach(function(item, index){
+			var listItem = document.createElement("DIV");
+			listItem.classList.add("eventListItem");
+			listItem.innerHTML = "<div>"+item.realm+" "+item.armyId+"</div>";
+			
+			var moveBtn = document.createElement("BUTTON");
+			moveBtn.classList.add("eventListButton");
+			moveBtn.classList.add("moveRightButton");
+			moveBtn.onclick = moveFromLeft(index);
+			listItem.appendChild(moveBtn);
+		});
+
+		unsortedList.forEach(function(item, index){
+			var listItem = document.createElement("DIV");
+			listItem.classList.add("eventListItem");
+			
+			var moveLeftBtn = document.createElement("BUTTON");
+			moveLeftBtn.classList.add("eventListButton");
+			moveLeftBtn.classList.add("moveLeftButton");
+			moveLeftBtn.onclick = moveToLeft(index);
+			listItem.appendChild(moveLeftBtn);
+
+			var div = document.createElement("DIV");
+			div.innerHTML = item.realm+" "+item.armyId;
+			listItem.appendChild(div);
+
+			var moveRightBtn = document.createElement("BUTTON");
+			moveRightBtn.classList.add("eventListButton");
+			moveRightBtn.classList.add("moveRightButton");
+			moveRightBtn.onclick = moveToRight(index);
+			listItem.appendChild(moveRightBtn);
+		});
+
+		rightList.forEach(function(item, index){
+			var listItem = document.createElement("DIV");
+			listItem.classList.add("eventListItem");
+			
+			var moveBtn = document.createElement("BUTTON");
+			moveBtn.classList.add("eventListButton");
+			moveBtn.classList.add("moveLeftButton");
+			moveBtn.onclick = moveFromRight(index);
+			listItem.appendChild(moveBtn);
+			
+			var div = document.createElement("DIV");
+			div.innerHTML = item.realm+" "+item.armyId;
+			listItem.appendChild(div);
+		});
+	}
+	
+	this.resolve = function(){
+		//TODO: Compute result (by calling schlacht, inflict damage to armies.
+	}
+}
+
 // Battle, army1 ist ein vereinigtes Heer der Seite 1 (Angreifer) mountedArmy1 ein vereinigtes Reiterheer der Seite 1, army2 und mountedArmy2 analog zu Seite 2 (Verteidiger).
 // Immer zu erst initialisieren()
 // TODO: Gelaende und unterstuetzung

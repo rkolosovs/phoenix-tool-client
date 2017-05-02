@@ -9,12 +9,26 @@ canvas { display:block; } /* To remove the scrollbars */
     position:fixed;
     padding:0;
     margin:0;
-    background:rgba(180,180,180,0.7);
+    background:rgba(180,180,180,0.85);
 
     border-style: groove;
-    border-color: gold;
+    border-color: silver;
     border-width: 3px;
     border-radius: 8px;
+}
+
+.prettyButton {
+	background-color: darkred;
+    position: absolute;
+    border-radius: 8px;
+    color: silver;
+    border: 3px groove silver;
+    padding: 10px 25px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
 }
 
 .invisible {
@@ -121,6 +135,22 @@ div.tab button.active {
 	background-image: url("checkmark.svg");
 }
 
+.moveLeftButton {
+	background-image: url("arrow_left.svg");
+}
+
+.moveRightButton {
+	background-image: url("arrow_right.svg");
+}
+
+div.armyListBox {
+	border: 2px solid grey;
+	position: absolute;
+	width:32%;
+	height:50%;
+	top:5%;
+}
+
 #nextTurnButton {
     background-image: url("nextturn_button.svg");
     float:left;
@@ -130,6 +160,19 @@ div.tab button.active {
     background-repeat: no-repeat;
     border: 2px solid #4CAF50;
     border-radius: 50%;
+}
+
+#battleBox {
+	right:35%;
+	top:15%;
+	width:30%;
+	height:65%;
+}
+
+#battleButton {
+	width:20%;
+	right: 40%;
+	bottom: 5%;
 }
 
 #infoBox {
@@ -145,6 +188,19 @@ div.tab button.active {
     width: 40%;
     min-width: 540px;
     min-height: 30px;
+}
+
+#leftArmiesBox{
+	left:0.5%;
+}
+
+#unsortedArmiesBox{
+	left:34%;
+	margin-left:-2px;
+}
+
+#rightArmiesBox{
+	right:0.5%;
 }
 
 #infoChangeBox {

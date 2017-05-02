@@ -8,6 +8,7 @@
 <body oncontextmenu="return false;">
 	<canvas id="hexCanvas"></canvas>
 	<script src="jquery-2.2.3.js"></script>
+	<script src="armyInteraction.js"></script>
 	<script src="phoenixclient.js"></script>
 	<script src="armies/army.js"></script>
 	<script src="armies/armyCoordinates.js"></script>
@@ -16,7 +17,7 @@
 
 	<div id="buttonsBox" class="prettyBox">
 		<h3 align="center">Some Controll Buttons Go Here!</h3>
-		<button id="ToggleGodModeBar" onclick="toggleGodModeBar()">toggle
+		<button id="ToggleGodModeBar" class="prettyButton" onclick="toggleGodModeBar()">toggle
 			GodMode Bar</button>
 	</div>
 
@@ -45,6 +46,14 @@
 
 	<div id="topBar" class="prettyBox"></div>
 
+	<div id="battleBox" class="prettyBox invisible">
+		<div id="leftArmiesBox" class="armyListBox"></div>
+		<div id="unsortedArmiesBox" class="armyListBox"></div>
+		<div id="rightArmiesBox" class="armyListBox"></div>
+		<button id="battleButton" class="prettyButton">
+		Fight!
+		</button>
+	</div>
 
 	<div id="infoBox" class="prettyBox">
 		<h3 align="center">Army Info Goes Here!</h3>
@@ -58,11 +67,11 @@
 		<p id="skp"></p>
 		<p id="movePoints"></p>
 		<p id="heightPoints"></p>
-		<button id="mount" onclick="activateMountBox()">Aufsitzen</button>
-		<button id="unMount" onclick="activateUnMountBox()">Absitzen</button>
-		<button id="logoutBtn" onclick="logoutFromServer()">Logout</button>
+		<button id="mount" class="prettyButton" onclick="activateMountBox()">Aufsitzen</button>
+		<button id="unMount" class="prettyButton" onclick="activateUnMountBox()">Absitzen</button>
+		<button id="logoutBtn" class="prettyButton" onclick="logoutFromServer()">Logout</button>
 	</div>
-	<div id="mountBox" class="prettyBox">
+	<div id="mountBox">
 		<p id="mountInputPartition">
 			<label for="mountInput">Wie viele Soldaten sollen aufsitzen:</label>
 			<input id="mountInput"></input>
@@ -132,10 +141,11 @@
 	</div>
 	<div id="loginBox" class="prettyBox">
 		<h3 align="center">Login</h3>
-		<label for="loginName">Name:</label> <input id="loginName"> <label
-			for="loginPassword">Passwort:</label> <input id="loginPassword"
+		<label for="loginName">Name:</label> <input id="loginName"> 
+		<label for="loginPassword">Passwort:</label> <input id="loginPassword"
 			type="password">
-		<button id="loginBtn" onclick="loginToServer()">Login</button>
+		<p></p>
+		<button id="loginBtn" class="prettyButton" onclick="loginToServer()">Login</button>
 	</div>
 	<div id="minimapBox" class="prettyBox">
 		<h3 align="center">Minimap Goes Here!</h3>
@@ -151,17 +161,18 @@
 			onclick="toggleBuildingCreationMode()">modify buildings</button>
 		<button id="ToggleStreetBuildingMode"
 			onclick="toggleStreetBuildingMode()">Modify streets</button>
-		<button id="ToggleWallBuildingMode" onclick="toggleWallBuildingMode()">modify
-			walls</button>
+		<button id="ToggleWallBuildingMode" 
+			onclick="toggleWallBuildingMode()">modify walls</button>
 		<button id="ToggleHarborBuildingMode"
 			onclick="toggleHarborBuildingMode()">modify harbours</button>
 		<button id="ToggleBridgeBuildingMode"
 			onclick="toggleBridgeBuildingMode()">modify bridges</button>
-		<button id="SaveArmies" onclick="saveArmies()">save armies</button>
+		<button id="SaveArmies" 
+			onclick="saveArmies()">save armies</button>
 		<button id="SaveFactionsTerritories"
 			onclick="saveFactionsTerritories()">save faction territories</button>
-		<button id="ToggleArmyCreationMode" onclick="toggleArmyCreationMode()">make
-			an Army</button>
+		<button id="ToggleArmyCreationMode" 
+			onclick="toggleArmyCreationMode()">make an Army</button>
 	</div>
 	<div id="armyGeneratorBox">
 		<label for="ownerField">Reich:</label> <input id="ownerField"
@@ -181,26 +192,26 @@
 		<h3 id="creationWarning" align="center">WARNING: WORLD CREATION
 			ON CLICK MODE IS ACTIVE !!!</h3>
 		<button id="ToggleOnClickWorldCreationMode"
-			onclick="toggleOnClickWorldCreationMode()">toggle on click
-			World Creation Mode</button>
-		<button id="SaveFields" onclick="saveFields()">save fields</button>
+			onclick="toggleOnClickWorldCreationMode()">toggle on click World Creation Mode</button>
+		<button id="SaveFields" 
+			onclick="saveFields()">save fields</button>
 		<section id="changeFieldSection">
-			<button id="ChangeFieldClickedTo0" onclick="changeFieldClickedTo(0)">
-				change field clicked to shallows</button>
-			<button id="ChangeFieldClickedTo1" onclick="changeFieldClickedTo(1)">
-				change field clicked to deepsea</button>
-			<button id="ChangeFieldClickedTo2" onclick="changeFieldClickedTo(2)">
-				change field clicked to lowlands</button>
-			<button id="ChangeFieldClickedTo3" onclick="changeFieldClickedTo(3)">
-				change field clicked to woods</button>
-			<button id="ChangeFieldClickedTo4" onclick="changeFieldClickedTo(4)">
-				change field clicked to hills</button>
-			<button id="ChangeFieldClickedTo5" onclick="changeFieldClickedTo(5)">
-				change field clicked to highlands</button>
-			<button id="ChangeFieldClickedTo6" onclick="changeFieldClickedTo(6)">
-				change field clicked to mountains</button>
-			<button id="ChangeFieldClickedTo7" onclick="changeFieldClickedTo(7)">
-				change field clicked to desert</button>
+			<button id="ChangeFieldClickedTo0" 
+				onclick="changeFieldClickedTo(0)">change field clicked to shallows</button>
+			<button id="ChangeFieldClickedTo1" 
+				onclick="changeFieldClickedTo(1)">change field clicked to deepsea</button>
+			<button id="ChangeFieldClickedTo2" 
+				onclick="changeFieldClickedTo(2)">change field clicked to lowlands</button>
+			<button id="ChangeFieldClickedTo3" 
+				onclick="changeFieldClickedTo(3)">change field clicked to woods</button>
+			<button id="ChangeFieldClickedTo4" 
+				onclick="changeFieldClickedTo(4)">change field clicked to hills</button>
+			<button id="ChangeFieldClickedTo5" 
+				onclick="changeFieldClickedTo(5)">change field clicked to highlands</button>
+			<button id="ChangeFieldClickedTo6" 
+				onclick="changeFieldClickedTo(6)">change field clicked to mountains</button>
+			<button id="ChangeFieldClickedTo7" 
+				onclick="changeFieldClickedTo(7)">change field clicked to desert</button>
 			<button id="ChangeFieldClickedTo8" onclick="changeFieldClickedTo(8)">
 				change field clicked to swamp</button>
 			<button id="ChangeFieldClickedTo9" onclick="changeFieldClickedTo(9)">
