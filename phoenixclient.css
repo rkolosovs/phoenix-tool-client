@@ -205,12 +205,12 @@ div.armyListBox {
 #battleButton {
 	width:20%;
 	right: 40%;
-	bottom: 5%;
+	bottom: 3%;
 }
 
 #leftBattleSide {
 	left:0.5%;
-	width:45%;
+	width:35%;
 	height:30%;
 	top:57%;
 	border: 2px solid grey;
@@ -219,12 +219,24 @@ div.armyListBox {
 
 #rightBattleSide {
 	right:0.5%;
-	width:45%;
+	width:35%;
 	height:30%;
 	top:57%;
 	border: 2px solid grey;
 	position: absolute;
 	text-align: right;
+}
+
+#leftDiceRoll {
+	top:57%;
+	left:36%;
+	position: absolute;
+}
+
+#rightDiceRoll {
+	top:57%;
+	right:36%;
+	position: absolute;
 }
 
 #infoBox {

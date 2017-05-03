@@ -1,4 +1,4 @@
-function battleHandler(participants, x, y, left, unsorted, right, leftCount, rightCount) {
+function battleHandler(participants, x, y) {
 	//participating armies
 	this.unsortedArmies = participants;
 	this.leftSide = [];
@@ -8,12 +8,15 @@ function battleHandler(participants, x, y, left, unsorted, right, leftCount, rig
 	this.y = y;
 	
 	//UI elements to display armies of both sides
-	this.leftList = left;
-	this.unsortedList = unsorted;
-	this.rightList = right;
+	this.leftList = document.getElementById("leftArmiesBox");
+	this.unsortedList = document.getElementById("unsortedArmiesBox");
+	this.rightList = document.getElementById("rightArmiesBox");
 	//both boxes under the lists of troops
-	this.leftTroopCount = leftCount;
-	this.rightTroopCount = rightCount;
+	this.leftTroopCount = document.getElementById("leftBattleSide");
+	this.rightTroopCount = document.getElementById("rightBattleSide");
+	//dice rolls
+	this.leftDice = document.getElementById("leftDiceRoll");
+	this.rightDice = document.getElementById("rightDiceRoll");
 	
 	//Troop counts TODO: expand to accomodate naval combat
 	this.leftSoldiers = 0;
@@ -151,16 +154,23 @@ function battleHandler(participants, x, y, left, unsorted, right, leftCount, rig
 			listItem.appendChild(div);
 		}, this);
 		
+		//TODO: Expand to accomodate naval units
 		this.leftTroopCount.innerHTML = 
 			"<p>Soldaten: "+this.leftSoldiers+"</p><p>Reiter: "+
 			this.leftRiders+"</p><p>Heerführer: "+this.leftOfficers+"</p>";
 		this.rightTroopCount.innerHTML = 
 			"<p>Soldaten: "+this.rightSoldiers+"</p><p>Reiter: "+
 			this.rightRiders+"</p><p>Heerführer: "+this.rightOfficers+"</p>";
+		
+		this.leftTroopCount.innerHTML += "<p>Würfelwurf: "+this.leftDice.value+"</p>";
+		this.rightTroopCount.innerHTML += "<p>Würfelwurf: "+this.rightDice.value+"</p>";
+		
+		//TODO: Make a joined force for each side, generate a battle from it, check overrun, compute losses
+		//display overrun (if applicable), the winner and the future losses for the winner in the troop count
 	}
 	
 	this.resolve = function(){
-		//TODO: Compute result (by calling schlacht, inflict damage to armies.
+		//TODO: Compute result (by calling schlacht), inflict actual damage to armies.
 	}
 }
 

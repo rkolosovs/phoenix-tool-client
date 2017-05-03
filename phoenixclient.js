@@ -576,11 +576,6 @@ function checkEvent(num) {
 			var battleBox = document.getElementById("battleBox");
 			show(battleBox);
 			
-			var leftBox = document.getElementById("leftArmiesBox");
-			var midBox = document.getElementById("unsortedArmiesBox");
-			var rightBox = document.getElementById("rightArmiesBox");
-			var leftCount = document.getElementById("leftBattleSide");
-			var rightCount = document.getElementById("rightBattleSide");
 			var partips = [];
 			cont.participants.forEach(function(item){
 				var a = listOfArmyCoordinates.find(function(candidate){
@@ -589,7 +584,9 @@ function checkEvent(num) {
 				partips.push(a);
 			});
 			
-			var battle = new battleHandler(partips, cont.x, cont.y, leftBox, midBox, rightBox, leftCount, rightCount);
+			var battle = new battleHandler(partips, cont.x, cont.y);
+			document.getElementById("leftDiceRoll").onchange = function(){battle.updateDisplay()};
+			document.getElementById("rightDiceRoll").onchange = function(){battle.updateDisplay()};
 			document.getElementById("battleButton").onclick = function(){
 					battle.resolve();
 					hide(battleBox);
@@ -597,6 +594,7 @@ function checkEvent(num) {
 			battle.updateDisplay();
 		}
 		
+		//TODO: Reenable once battle resolution box is tested sufficiently.
 //		$.post({
 //			url: url + "/databaseLink/checkevent/",
 //			data: {
