@@ -208,6 +208,25 @@ div.armyListBox {
 	bottom: 5%;
 }
 
+#leftBattleSide {
+	left:0.5%;
+	width:45%;
+	height:30%;
+	top:57%;
+	border: 2px solid grey;
+	position: absolute;
+}
+
+#rightBattleSide {
+	right:0.5%;
+	width:45%;
+	height:30%;
+	top:57%;
+	border: 2px solid grey;
+	position: absolute;
+	text-align: right;
+}
+
 #infoBox {
     right:0;
     width: 15%;

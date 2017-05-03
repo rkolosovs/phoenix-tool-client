@@ -1,12 +1,21 @@
-function battleHandler(participants, x, y, left, unsorted, right) {
+function battleHandler(participants, x, y, left, unsorted, right, leftCount, rightCount) {
+	//participating armies
 	this.unsortedArmies = participants;
 	this.leftSide = [];
 	this.rightSide = [];
+	//coordinates of the battle
 	this.x = x;
 	this.y = y;
+	
+	//UI elements to display armies of both sides
 	this.leftList = left;
 	this.unsortedList = unsorted;
 	this.rightList = right;
+	//both boxes under the lists of troops
+	this.leftTroopCount = leftCount;
+	this.rightTroopCount = rightCount;
+	
+	//Troop counts TODO: expand to accomodate naval combat
 	this.leftSoldiers = 0;
 	this.leftOfficers = 0;
 	this.leftRiders = 0;
@@ -19,6 +28,7 @@ function battleHandler(participants, x, y, left, unsorted, right) {
 		return function() {
 			var t = ctx.unsortedArmies.splice(i,1);
 			ctx.leftSide.push(t[0]);
+			ctx.updateTroopCounts();
 			ctx.updateDisplay();
 		}
 	}
@@ -28,6 +38,7 @@ function battleHandler(participants, x, y, left, unsorted, right) {
 		return function() {
 			var t = ctx.unsortedArmies.splice(i,1);
 			ctx.rightSide.push(t[0]);
+			ctx.updateTroopCounts();
 			ctx.updateDisplay();
 		}
 	}
@@ -37,6 +48,7 @@ function battleHandler(participants, x, y, left, unsorted, right) {
 		return function() {
 			var t = ctx.rightSide.splice(i,1);
 			ctx.unsortedArmies.push(t[0]);
+			ctx.updateTroopCounts();
 			ctx.updateDisplay();
 		}
 	}
@@ -46,8 +58,36 @@ function battleHandler(participants, x, y, left, unsorted, right) {
 		return function() {
 			var t = ctx.leftSide.splice(i,1);
 			ctx.unsortedArmies.push(t[0]);
+			ctx.updateTroopCounts();
 			ctx.updateDisplay();
 		}
+	}
+	
+	this.updateTroopCounts = function(){
+		this.leftSoldiers = 0;
+		this.leftOfficers = 0;
+		this.leftRiders = 0;
+		this.rightSoldiers = 0;
+		this.rightOfficers = 0;
+		this.rightRiders = 0;
+		var ctx = this;
+		
+		this.leftSide.forEach(function(item){
+			if(item.a.armyId < 200 ) {//footman army
+				ctx.leftSoldiers += item.a.count;
+			} else {//rider army
+				ctx.leftRiders += item.a.count;
+			} //TODO:Expand to accomodate naval combat
+			ctx.leftOfficers += item.a.leaders;
+		});
+		this.rightSide.forEach(function(item){
+			if(item.a.armyId < 200 ) {//footman army
+				ctx.rightSoldiers += item.a.count;
+			} else {//rider army
+				ctx.rightRiders += item.a.count;
+			} //TODO:Expand to accomodate naval combat
+			ctx.rightOfficers += item.a.leaders;
+		});
 	}
 	
 	this.updateDisplay = function(){
@@ -110,6 +150,13 @@ function battleHandler(participants, x, y, left, unsorted, right) {
 			div.innerHTML = item.ownerTag()+" "+item.a.armyId;
 			listItem.appendChild(div);
 		}, this);
+		
+		this.leftTroopCount.innerHTML = 
+			"<p>Soldaten: "+this.leftSoldiers+"</p><p>Reiter: "+
+			this.leftRiders+"</p><p>Heerführer: "+this.leftOfficers+"</p>";
+		this.rightTroopCount.innerHTML = 
+			"<p>Soldaten: "+this.rightSoldiers+"</p><p>Reiter: "+
+			this.rightRiders+"</p><p>Heerführer: "+this.rightOfficers+"</p>";
 	}
 	
 	this.resolve = function(){

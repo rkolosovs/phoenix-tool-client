@@ -579,6 +579,8 @@ function checkEvent(num) {
 			var leftBox = document.getElementById("leftArmiesBox");
 			var midBox = document.getElementById("unsortedArmiesBox");
 			var rightBox = document.getElementById("rightArmiesBox");
+			var leftCount = document.getElementById("leftBattleSide");
+			var rightCount = document.getElementById("rightBattleSide");
 			var partips = [];
 			cont.participants.forEach(function(item){
 				var a = listOfArmyCoordinates.find(function(candidate){
@@ -587,7 +589,7 @@ function checkEvent(num) {
 				partips.push(a);
 			});
 			
-			var battle = new battleHandler(partips, cont.x, cont.y, leftBox, midBox, rightBox);
+			var battle = new battleHandler(partips, cont.x, cont.y, leftBox, midBox, rightBox, leftCount, rightCount);
 			document.getElementById("battleButton").onclick = function(){
 					battle.resolve();
 					hide(battleBox);
