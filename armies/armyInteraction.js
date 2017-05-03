@@ -1,12 +1,12 @@
-function battleHandler(participants, x, y, leftList, unsortedList, rightList) {
+function battleHandler(participants, x, y, left, unsorted, right) {
 	this.unsortedArmies = participants;
 	this.leftSide = [];
 	this.rightSide = [];
 	this.x = x;
 	this.y = y;
-	this.leftList = leftList;
-	this.unsortedList = unsortedList;
-	this.rightList = rightList;
+	this.leftList = left;
+	this.unsortedList = unsorted;
+	this.rightList = right;
 	this.leftSoldiers = 0;
 	this.leftOfficers = 0;
 	this.leftRiders = 0;
@@ -15,73 +15,101 @@ function battleHandler(participants, x, y, leftList, unsortedList, rightList) {
 	this.rightRiders = 0;
 	
 	this.moveToLeft = function(i){
-		leftSide.push(unsortedArmies.splice(i,1));
-		updateDisplay();
+		var ctx = this;
+		return function() {
+			var t = ctx.unsortedArmies.splice(i,1);
+			ctx.leftSide.push(t);
+			ctx.updateDisplay();
+		}
 	}
 	
 	this.moveToRight = function(i){
-		rightSide.push(unsortedArmies.splice(i,1));
-		updateDisplay();
+		var ctx = this;
+		return function() {
+			var t = ctx.unsortedArmies.splice(i,1);
+			ctx.rightSide.push(t);
+			ctx.updateDisplay();
+		}
 	}
 	
 	this.removeFromRight = function(i){
-		unsortedArmies.push(rightSide.splice(i,1));
-		updateDisplay();
+		var ctx = this;
+		return function() {
+			var t = ctx.rightSide.splice(i,1);
+			ctx.unsortedArmies.push(t);
+			ctx.updateDisplay();
+		}
 	}
 	
 	this.removeFromLeft = function(i){
-		unsortedArmies.push(leftSide.splice(i,1));
-		updateDisplay();
+		var ctx = this;
+		return function() {
+			var t = ctx.leftSide.splice(i,1);
+			ctx.unsortedArmies.push(t);
+			ctx.updateDisplay();
+		}
 	}
 	
 	this.updateDisplay = function(){
-		leftList.forEach(function(item, index){
+		this.leftList.innerHTML = "";
+		this.leftSide.forEach(function(item, index){
 			var listItem = document.createElement("DIV");
-			listItem.classList.add("eventListItem");
-			listItem.innerHTML = "<div>"+item.realm+" "+item.armyId+"</div>";
+			this.leftList.appendChild(listItem);
+			listItem.classList.add("armyListItem");
+
+			var div = document.createElement("DIV");
+			div.classList.add("center");
+			div.innerHTML = item.realm+" "+item.armyId;
+			listItem.appendChild(div);
 			
 			var moveBtn = document.createElement("BUTTON");
-			moveBtn.classList.add("eventListButton");
+			moveBtn.classList.add("armyListButton");
 			moveBtn.classList.add("moveRightButton");
-			moveBtn.onclick = moveFromLeft(index);
+			moveBtn.onclick = this.removeFromLeft(index);
 			listItem.appendChild(moveBtn);
-		});
+		}, this);
 
-		unsortedList.forEach(function(item, index){
+		this.unsortedList.innerHTML = "";
+		this.unsortedArmies.forEach(function(item, index){
 			var listItem = document.createElement("DIV");
-			listItem.classList.add("eventListItem");
+			this.unsortedList.appendChild(listItem);
+			listItem.classList.add("armyListItem");
 			
 			var moveLeftBtn = document.createElement("BUTTON");
-			moveLeftBtn.classList.add("eventListButton");
+			moveLeftBtn.classList.add("armyListButton");
 			moveLeftBtn.classList.add("moveLeftButton");
-			moveLeftBtn.onclick = moveToLeft(index);
+			moveLeftBtn.onclick = this.moveToLeft(index);
 			listItem.appendChild(moveLeftBtn);
 
 			var div = document.createElement("DIV");
+			div.classList.add("center");
 			div.innerHTML = item.realm+" "+item.armyId;
 			listItem.appendChild(div);
 
 			var moveRightBtn = document.createElement("BUTTON");
-			moveRightBtn.classList.add("eventListButton");
+			moveRightBtn.classList.add("armyListButton");
 			moveRightBtn.classList.add("moveRightButton");
-			moveRightBtn.onclick = moveToRight(index);
+			moveRightBtn.onclick = this.moveToRight(index);
 			listItem.appendChild(moveRightBtn);
-		});
+		}, this);
 
-		rightList.forEach(function(item, index){
+		this.rightList.innerHTML = "";
+		this.rightSide.forEach(function(item, index){
 			var listItem = document.createElement("DIV");
-			listItem.classList.add("eventListItem");
+			this.rightList.appendChild(listItem);
+			listItem.classList.add("armyListItem");
 			
 			var moveBtn = document.createElement("BUTTON");
-			moveBtn.classList.add("eventListButton");
+			moveBtn.classList.add("armyListButton");
 			moveBtn.classList.add("moveLeftButton");
-			moveBtn.onclick = moveFromRight(index);
+			moveBtn.onclick = this.removeFromRight(index);
 			listItem.appendChild(moveBtn);
 			
 			var div = document.createElement("DIV");
+			div.classList.add("center");
 			div.innerHTML = item.realm+" "+item.armyId;
 			listItem.appendChild(div);
-		});
+		}, this);
 	}
 	
 	this.resolve = function(){
@@ -142,7 +170,7 @@ function schlacht(army1, army2, mountedArmy1, mountedArmy2, chars1, chars2, posX
     // 10:1 ?
     this.overrun1 = function(){return((this.a1.count + this.ma1.count*2) >= (this.a2.count + this.ma2.count*2) * 10) && !this.a2.isGuard && !this.ma2.isGuard};
     this.overrun2 = function(){return((this.a2.count + this.ma2.count*2) >= (this.a1.count + this.ma1.count*2) * 10) && !this.a2.isGuard && !this.ma2.isGuard};
-    // Kampfergebnis in Form [Angreifer gewinnt?:Boolean , Verluste für Gewinner:Zahl], [null, viel] falls unentschieden.
+    // Kampfergebnis in Form [Angreifer gewinnt?:Boolean , Verluste für Gewinner Fuß:Zahl, Verluste für Gewinner Reiter: Zahl], [null, viel, viel] falls unentschieden.
     this.result = function(diceroll1, diceroll2) {
         var power1 = this.a1.count * (1 + (this.a1.leaderGp() + this.charGp1() + diceroll1)/200) + this.ma1.count * 2 * (1 + (this.ma1.leaderGp() + this.charGp1() + diceroll1)/200);
         var power2 = this.a2.count * (1 + (this.a2.leaderGp() + this.charGp2() + diceroll2)/200) + this.ma2.count * 2 * (1 + (this.ma2.leaderGp() + this.charGp2() + diceroll2)/200);
@@ -216,7 +244,7 @@ function schlacht(army1, army2, mountedArmy1, mountedArmy2, chars1, chars2, posX
             return results;
         } else if(power1 == power2){
             // unentschieden:
-                return [null, null]
+                return [null, null, null]
         }
     }
 }

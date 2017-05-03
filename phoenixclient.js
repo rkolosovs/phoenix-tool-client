@@ -576,10 +576,10 @@ function checkEvent(num) {
 			var battleBox = document.getElementById("battleBox");
 			show(battleBox);
 			
-			var battle = new battleHandler(cont.participants, cont.x, cont.y, 
-					document.getElementById("leftArmiesBox"), 
-					document.getElementById("unsortedArmiesBox"), 
-					document.getElementById("rightArmiesBox"));
+			var leftBox = document.getElementById("leftArmiesBox");
+			var midBox = document.getElementById("unsortedArmiesBox");
+			var rightBox = document.getElementById("rightArmiesBox");
+			var battle = new battleHandler(cont.participants, cont.x, cont.y, leftBox, midBox, rightBox);
 			document.getElementById("battleButton").onclick = function(){
 					battle.resolve();
 					hide(battleBox);
@@ -587,22 +587,22 @@ function checkEvent(num) {
 			battle.updateDisplay();
 		}
 		
-		$.post({
-			url: url + "/databaseLink/checkevent/",
-			data: {
-				authorization: authenticationToken,
-				eventId: pendingEvents[num].pk,
-				eventType: pendingEvents[num].type
-			},
-			statusCode: {
-				200: function() {
-					console.log("success");
-				},
-				403: function() {
-  					alert('Access denied. You have to be SL to do this.');
-				}
-			}
-		});
+//		$.post({
+//			url: url + "/databaseLink/checkevent/",
+//			data: {
+//				authorization: authenticationToken,
+//				eventId: pendingEvents[num].pk,
+//				eventType: pendingEvents[num].type
+//			},
+//			statusCode: {
+//				200: function() {
+//					console.log("success");
+//				},
+//				403: function() {
+//  					alert('Access denied. You have to be SL to do this.');
+//				}
+//			}
+//		});
 	}
 	return check;
 }

@@ -4,6 +4,11 @@ html, body { width:100%; height:100%; } /* just to be sure these are full screen
 
 canvas { display:block; } /* To remove the scrollbars */
 
+.center {
+	margin:auto;
+	width:50%;
+}
+
 .prettyBox {
     bottom:0;
     position:fixed;
@@ -127,6 +132,32 @@ div.tab button.active {
 	float:right;
 }
 
+.armyListItem {
+	background-color: rgba(220,220,220,0.9);
+	border: 2px solid #55555555;
+	border-radius: 3px;
+	width:90%;
+	margin:3px;
+	padding-top: 10px;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom:0px;
+	height:35px;
+}
+
+.armyListButton {
+	width:33px;
+	height:33px;
+	margin-top:-23px;
+	margin-right:4px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100%;
+	border-radius: 3px;
+	border: 1px solid #55555555;
+	position:absolute;
+}
+
 .eventListDeleteButton {
 	background-image: url("cross.svg");
 }
@@ -136,10 +167,12 @@ div.tab button.active {
 }
 
 .moveLeftButton {
+	left: 3px;
 	background-image: url("arrow_left.svg");
 }
 
 .moveRightButton {
+	right:3px;
 	background-image: url("arrow_right.svg");
 }
 
