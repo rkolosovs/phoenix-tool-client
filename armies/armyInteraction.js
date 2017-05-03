@@ -18,7 +18,7 @@ function battleHandler(participants, x, y, left, unsorted, right) {
 		var ctx = this;
 		return function() {
 			var t = ctx.unsortedArmies.splice(i,1);
-			ctx.leftSide.push(t);
+			ctx.leftSide.push(t[0]);
 			ctx.updateDisplay();
 		}
 	}
@@ -27,7 +27,7 @@ function battleHandler(participants, x, y, left, unsorted, right) {
 		var ctx = this;
 		return function() {
 			var t = ctx.unsortedArmies.splice(i,1);
-			ctx.rightSide.push(t);
+			ctx.rightSide.push(t[0]);
 			ctx.updateDisplay();
 		}
 	}
@@ -36,7 +36,7 @@ function battleHandler(participants, x, y, left, unsorted, right) {
 		var ctx = this;
 		return function() {
 			var t = ctx.rightSide.splice(i,1);
-			ctx.unsortedArmies.push(t);
+			ctx.unsortedArmies.push(t[0]);
 			ctx.updateDisplay();
 		}
 	}
@@ -45,7 +45,7 @@ function battleHandler(participants, x, y, left, unsorted, right) {
 		var ctx = this;
 		return function() {
 			var t = ctx.leftSide.splice(i,1);
-			ctx.unsortedArmies.push(t);
+			ctx.unsortedArmies.push(t[0]);
 			ctx.updateDisplay();
 		}
 	}
