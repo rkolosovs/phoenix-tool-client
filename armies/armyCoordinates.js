@@ -6,7 +6,6 @@ function armyCoordinates(army, coordX, coordY, owner) {
     // returns the tag of the owner, not full operational
     // TODO do it right
     this.ownerTag = function(){
-        console.log(this.owner);
         switch(this.owner){
             case 1: return "usa";
             case 3: return "vvh";

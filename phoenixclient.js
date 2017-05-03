@@ -579,7 +579,15 @@ function checkEvent(num) {
 			var leftBox = document.getElementById("leftArmiesBox");
 			var midBox = document.getElementById("unsortedArmiesBox");
 			var rightBox = document.getElementById("rightArmiesBox");
-			var battle = new battleHandler(cont.participants, cont.x, cont.y, leftBox, midBox, rightBox);
+			var partips = [];
+			cont.participants.forEach(function(item){
+				var a = listOfArmyCoordinates.find(function(candidate){
+					return (item.realm === candidate.ownerTag()) && (item.armyId === candidate.a.armyId);
+				});
+				partips.push(a);
+			});
+			
+			var battle = new battleHandler(partips, cont.x, cont.y, leftBox, midBox, rightBox);
 			document.getElementById("battleButton").onclick = function(){
 					battle.resolve();
 					hide(battleBox);

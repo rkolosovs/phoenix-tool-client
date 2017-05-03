@@ -59,7 +59,7 @@ function battleHandler(participants, x, y, left, unsorted, right) {
 
 			var div = document.createElement("DIV");
 			div.classList.add("center");
-			div.innerHTML = item.realm+" "+item.armyId;
+			div.innerHTML = item.ownerTag()+" "+item.a.armyId;
 			listItem.appendChild(div);
 			
 			var moveBtn = document.createElement("BUTTON");
@@ -83,7 +83,7 @@ function battleHandler(participants, x, y, left, unsorted, right) {
 
 			var div = document.createElement("DIV");
 			div.classList.add("center");
-			div.innerHTML = item.realm+" "+item.armyId;
+			div.innerHTML = item.ownerTag()+" "+item.a.armyId;
 			listItem.appendChild(div);
 
 			var moveRightBtn = document.createElement("BUTTON");
@@ -107,7 +107,7 @@ function battleHandler(participants, x, y, left, unsorted, right) {
 			
 			var div = document.createElement("DIV");
 			div.classList.add("center");
-			div.innerHTML = item.realm+" "+item.armyId;
+			div.innerHTML = item.ownerTag()+" "+item.a.armyId;
 			listItem.appendChild(div);
 		}, this);
 	}
