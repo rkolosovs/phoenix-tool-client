@@ -62,242 +62,6 @@ function armyCoordinates(army, coordX, coordY, owner) {
             }
         }
     }
-    this.move = function(direction) {
-        var destination = new showHex(this.x, this.y);
-        var neighborCoords = destination.neighbors();
-        var target = new showHex(neighborCoords[direction][0],neighborCoords[direction][1]);
-        var changeInHeight = false;
-        var thereIsAStreet = false;
-        // check if there is a steet on the route
-        for(var i = 0; i < buildings.length; i++){
-            var building = buildings[i];
-            if(building.type == 8){
-                if(((building.firstX == this.x && building.firstY == this.y) && (building.secondX == target.x && building.secondY == target.y)) || 
-                ((building.secondX == this.x && building.secondY == this.y) && (building.firstX == target.x && building.firstY == target.y))){
-                    thereIsAStreet = true;
-                    break;
-                }
-            }
-        }
-        // check if there is a change in height on the route
-        if(destination.height() != target.height()){
-            if((destination.height() - target.height()) >= 2 || target.height() - destination.height() >= 2){
-                return "The height difference is too big."
-            } else if((this.remainingHeightPoints < 2 && !thereIsAStreet)||this.remainingHeightPoints < 1){
-                return "No height points left."
-            } else {
-                changeInHeight = true;
-            }
-        }
-        // ship movement
-        if(Math.floor(this.a.armyId / 100) == 3){
-            switch(target.fieldType()){
-                case 0: 
-                    if(this.a.lkp == 0 && this.a.skp == 0){
-                        if(this.remainingMovePoints >= 12 ){
-                            this.moveHelper(changeInHeight, direction, 12,2,false, target);
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    } else if(this.a.skp > 0){
-                        if(this.remainingMovePoints >= 21 ){
-                            this.moveHelper(changeInHeight, direction, 21,2,false, target);
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    } else if(this.a.lkp > 0){
-                        if(this.remainingMovePoints >= 21 ){
-                            this.moveHelper(changeInHeight, direction, 21,2,false, target);
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    }
-                case 1: 
-                    if(this.a.lkp == 0 && this.a.skp == 0){
-                        if(this.remainingMovePoints >= 7 ){
-                            this.moveHelper(changeInHeight, direction, 7,2,false, target);
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    } else if(this.a.skp > 0){
-                        if(this.remainingMovePoints >= 10 ){
-                            this.moveHelper(changeInHeight, direction, 10,2,false, target);
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    } else if(this.a.lkp > 0){
-                        if(this.remainingMovePoints >= 8 ){
-                            this.moveHelper(changeInHeight, direction, 8,2,false, target);
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    }
-                case 2:
-                case 4:
-                case 7:
-                case 5:
-                case 6:
-                case 3:
-                case 8: return "You can't drive your ships up land." // can't
-            }
-        // horse movement
-        } else if(Math.floor(this.a.armyId / 100) == 2){
-            switch(target.fieldType()){
-                case 0:
-                case 1: return "You can't walk on Water."; // can't
-                case 2:
-                case 4:
-                case 7: if(thereIsAStreet){
-                    if(this.remainingMovePoints >= 4 ){// 4
-                        this.moveHelper(changeInHeight, direction, 4,1,true, target);
-                        return "ok";
-                    } else {
-                        return "You don't have enough movement Points.";
-                    }
-                } else if(this.remainingMovePoints >= 7 ){// 7
-                    this.moveHelper(changeInHeight, direction, 7,2,true, target);
-                    return "ok";
-                } else {
-                    return "You don't have enough movement Points.";
-                }
-                case 5: if(thereIsAStreet){
-                    if(this.remainingMovePoints >= 7 ){// 7
-                        this.moveHelper(changeInHeight, direction, 7,1,true, target);
-                        return "ok";
-                    } else {
-                        return "You don't have enough movement Points.";
-                    }
-                } else if(this.remainingMovePoints >= 21 ){// 21
-                    this.moveHelper(changeInHeight, direction, 21,2,true, target);
-                    return "ok";
-                } else {
-                    return "You don't have enough movement Points.";
-                }
-                case 6: return "Cavalry can not move through the mountains. "// can't
-                case 3:
-                case 8: if(thereIsAStreet){
-                    if(this.remainingMovePoints >= 5 ){// 5
-                        this.moveHelper(changeInHeight, direction, 5,1,true, target);
-                        return "ok";
-                    } else {
-                        return "You don't have enough movement Points.";
-                    }
-                } else if(this.remainingMovePoints >= 10 ){// 10
-                    this.moveHelper(changeInHeight, direction, 10,2,true, target);
-                    return "ok";
-                } else {
-                    return "You don't have enough movement Points.";
-                }
-            }
-        // normal troop movement
-        } else if(Math.floor(this.a.armyId / 100) == 1){
-            switch(target.fieldType()){
-                case 0:
-                case 1: return "You can't walk on Water.";
-                case 2:
-                case 4:
-                case 7: if(thereIsAStreet){
-                    if(this.remainingMovePoints >= 4){
-                        this.moveHelper(changeInHeight, direction, 4,1,true, target);
-                        return "ok";
-                    } else {
-                        return "You don't have enough movement Points.";
-                    }
-                } else if(this.remainingMovePoints >= 7){
-                    this.moveHelper(changeInHeight, direction, 7,2,true, target);
-                    return "ok";
-                } else {
-                    return "You don't have enough movement Points.";
-                }
-                case 5: if(thereIsAStreet){
-                        if(this.a.skp > 0){
-                            if(this.remainingMovePoints >= 7){
-                                this.moveHelper(changeInHeight, direction, 7,1,true, target);
-                                return "ok";
-                            } else {
-                                return "You don't have enough movement Points.";
-                            }
-                        } if(this.remainingMovePoints >= 4){
-                            this.moveHelper(changeInHeight, direction, 4,1,true, target);
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    } else if(this.a.skp > 0){
-                    return "You you need streets to move heavy catapults into the highlands.";
-                } if(this.remainingMovePoints >= 7){
-                    this.moveHelper(changeInHeight, direction, 7,2,true, target);
-                    return "ok";
-                } else {
-                    return "You don't have enough movement Points.";
-                }
-                case 6: if(thereIsAStreet){
-                    if(this.a.skp > 0){
-                        return "You can't move into the mountains with heavy catapults.";
-                    } else if(this.a.lkp > 0){
-                        if(this.remainingMovePoints >= 7 ){
-                            this.moveHelper(changeInHeight, direction, 7,1,true, target);
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    } else if(this.remainingMovePoints >= 4 ){
-                        this.moveHelper(changeInHeight, direction, 4,1,true, target);
-                        return "ok";
-                    } else {
-                        return "You don't have enough movement Points.";
-                    }
-                } else if(this.a.lkp > 0 || this.a.skp > 0){
-                    return "You can't move into the mountains with catapults.";
-                }
-                case 3:
-                case 8: if(thereIsAStreet){
-                    if(this.a.skp > 0){
-                        if(this.remainingMovePoints >= 7 ){
-                            this.moveHelper(changeInHeight, direction, 7,1,true, target);
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    } else if(this.remainingMovePoints >= 4 ){
-                        this.moveHelper(changeInHeight, direction, 4,1,true, target);
-                        return "ok";
-                    } else {
-                        return "You don't have enough movement Points.";
-                    }
-                } else if(this.a.skp > 0){
-                    console.log(this.a.skp);
-                    return "You can't move into deserts or swamps with heavy catapults unless you have streets.";
-                } else if(this.remainingMovePoints >= 7 ){
-                    this.moveHelper(changeInHeight, direction, 7,2,true, target);
-                    return "ok";
-                } else {
-                    return "You don't have enough movement Points.";
-                }
-            }
-        }
-    }
-
-    //to actually move units
-    this.moveHelper = function(changeInHeight, direction, movepoints, heightpoints, landunit, newTarget)//TODO needs new names
-    {
-        this.remainingMovePoints -= movepoints;
-        this.x = newTarget.x;
-        this.y = newTarget.y;
-        if(changeInHeight){
-            this.setRemainingHeightPoints(this.remainingHeightPoints - heightpoints);
-        }
-        if(landunit == true && this.a.canConquer())
-        {
-            this.conquer(direction);
-        }
-    }
 
 
 //tries to move a Unit in a direction and if possible saves the possible move
@@ -559,17 +323,24 @@ function armyCoordinates(army, coordX, coordY, owner) {
     }
 
     //to actually move units with the new method
-    this.moveHelperNew = function(changeInHeight, direction, movepoints, heightpoints, landunit, newTarget){//TODO needs new names
-        this.remainingMovePoints -= movepoints;
-        this.x = newTarget.x;
-        this.y = newTarget.y;
-        if(changeInHeight){
-            this.setRemainingHeightPoints(this.remainingHeightPoints - heightpoints);
+    this.move = function(direction){//TODO needs new names
+        for(var i =0; i < this.possibleMoves.length; i++){
+            if(this.possibleMoves[i].dir == direction){
+                var tempmove = this.possibleMoves[i];
+                this.remainingMovePoints -= tempmove.movepoints;
+                this.x = tempmove.tar.x;
+                this.y = tempmove.tar.y;
+                if(tempmove.changeInHeight){
+                    this.setRemainingHeightPoints(this.remainingHeightPoints - tempmove.heightpoints);
+                }
+                if(tempmove.landunit == true && this.a.canConquer())
+                {
+                    this.conquer(direction);
+                }
+                return "ok"
+            }
         }
-        if(landunit == true && this.a.canConquer())
-        {
-            this.conquer(direction);
-        }
+        return this.moveToList(direction)
     }
 
 }
