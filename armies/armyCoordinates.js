@@ -13,10 +13,12 @@ function armyCoordinates(army, coordX, coordY, owner) {
             case 2: return "eos";
         }
     }
+    // nur zu Testzwecken 300
     this.remainingMovePoints = 300;
     this.setRemainingMovePoints = function(points){
         this.remainingMovePoints = points;
     }
+    // nur zu Testzwecken 30
     this.remainingHeightPoints = 30;
     this.setRemainingHeightPoints = function(points){
         this.remainingHeightPoints = points;
