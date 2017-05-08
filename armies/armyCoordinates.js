@@ -312,13 +312,14 @@ function armyCoordinates(army, coordX, coordY, owner) {
     //when unit is clicked generates a list of neighbors that can be moved to
     this.clickedMoves = function(){
 
-        this.possibleMoves = [];
-        //goes through all neighbors to see if the army can move there
-        for(var i =0; i < 6; i++)
-        {
-            this.moveToList(i);
+        if(this.ownerTag() === login || login === "sl"){
+            this.possibleMoves = [];
+            //goes through all neighbors to see if the army can move there
+            for(var i =0; i < 6; i++)
+            {
+                this.moveToList(i);
+            }
         }
-
 
     }
 
@@ -337,9 +338,11 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 {
                     this.conquer(direction);
                 }
+                this.clickedMoves();
                 return "ok"
             }
         }
+        this.clickedMoves();
         return this.moveToList(direction)
     }
 
