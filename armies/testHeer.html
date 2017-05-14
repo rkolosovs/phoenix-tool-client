@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+	<meta charset="utf-8"/>
     <script src="army.js" type="text/javascript"></script>
     <script src="armyInteraction.js" type="text/javascript"></script>
 </head>
@@ -38,8 +39,8 @@
 <p id="test25"></p>
 <p id="test26"></p>
 <p id="test27"></p>
-<p>test schlacht: </p>
 <p id="test28"></p>
+<p>test schlacht: </p>
 <p id="test29"></p>
 <p id="test30"></p>
 <p id="test31"></p>
@@ -142,32 +143,32 @@ var testBattleMounted1 = new reiterHeer(206, 10000, 30, false);
 var testBattleMounted2 = new reiterHeer(207, 5000, 5, false);
 var testBattleTenToOneMounted = new reiterHeer(208, 100000, 1, false);
 
-var testSchlachtMixed = new schlacht(testBattle1, testBattle2, testBattleMounted1, testBattleMounted2, null, null, 0, 0);
-var testSchlachtFoot = new schlacht(testBattle1, testBattle2, null, null, null, null, 0, 0);
-var testSchlachtMounted = new schlacht(null, null, testBattleMounted1, testBattleMounted2, null, null, 0, 0);
-var testSchlachtMountVsFoot = new schlacht(testBattle1, null, null, testBattleMounted2, null, null, 0, 0);
+var testSchlachtMixed = new schlacht([testBattle1, testBattleMounted1],[testBattle2, testBattleMounted2], null, null, 0, 0);
+var testSchlachtFoot = new schlacht([testBattle1], [testBattle2],  null, null, 0, 0);
+var testSchlachtMounted = new schlacht([testBattleMounted1], [testBattleMounted2], null, null, 0, 0);
+var testSchlachtMountVsFoot = new schlacht([testBattle1], [testBattleMounted2], null, null, 0, 0);
 
-testSchlachtMixed.initialisieren();
-testSchlachtFoot.initialisieren();
-testSchlachtMounted.initialisieren();
-testSchlachtMountVsFoot.initialisieren();
+testSchlachtMixed.init(); // .initialisieren();
+testSchlachtFoot.init();
+testSchlachtMounted.init();
+testSchlachtMountVsFoot.init();
 
 document.getElementById("test29").innerHTML = "Test Battles with various configurations. " + testSchlachtMixed.overrun1() + " " + testSchlachtMixed.overrun2() + " " + testSchlachtMixed.result(10, 10);
 document.getElementById("test30").innerHTML = "Test Battles with various configurations. " + testSchlachtFoot.overrun1() + " " + testSchlachtFoot.overrun2() + " " + testSchlachtFoot.result(10, 10);
 document.getElementById("test31").innerHTML = "Test Battles with various configurations. " + testSchlachtMounted.overrun1() + " " + testSchlachtMounted.overrun2() + " " + testSchlachtMounted.result(10, 10);
 document.getElementById("test32").innerHTML = "Test Battles with various configurations. " + testSchlachtMountVsFoot.overrun1() + " " + testSchlachtMountVsFoot.overrun2() + " " + testSchlachtMountVsFoot.result(10, 10);
 
-var testSchlachtTenToOne = new schlacht(testBattle1, testBattleTenToOne, null, null, null, null, 0, 0);
-var testSchlachtTenToOne2 = new schlacht(testBattle1, testBattleTenToOne, testBattleMounted1, testBattleTenToOneMounted, null, null, 0, 0);
-var testSchlachtTenToOne3 = new schlacht(null, testBattleTenToOne, testBattleMounted2, null, null, null, 0, 0);
-var testSchlachtTenToOne4 = new schlacht(testBattle1, null, null, testBattleTenToOneMounted, null, null, 0, 0);
-var testSchlachtNotTenToOne = new schlacht(null, testBattleTenToOne, testBattleMounted1, null, null, null, 0, 0);
+var testSchlachtTenToOne = new schlacht([testBattle1], [testBattleTenToOne], null, null, 0, 0);
+var testSchlachtTenToOne2 = new schlacht([testBattle1,testBattleMounted1],[testBattleTenToOne, testBattleTenToOneMounted], null, null, 0, 0);
+var testSchlachtTenToOne3 = new schlacht([testBattleTenToOne], [testBattleMounted2],  null, null, 0, 0);
+var testSchlachtTenToOne4 = new schlacht([testBattle1], [testBattleTenToOneMounted], null, null, 0, 0);
+var testSchlachtNotTenToOne = new schlacht([testBattleTenToOne], [testBattleMounted1], null, null, 0, 0);
 
-testSchlachtTenToOne.initialisieren();
-testSchlachtTenToOne2.initialisieren();
-testSchlachtTenToOne3.initialisieren();
-testSchlachtTenToOne4.initialisieren();
-testSchlachtNotTenToOne.initialisieren();
+testSchlachtTenToOne.init();
+testSchlachtTenToOne2.init();
+testSchlachtTenToOne3.init();
+testSchlachtTenToOne4.init();
+testSchlachtNotTenToOne.init();
 
 document.getElementById("test33").innerHTML = "Test Overrun with ten to one. " + testSchlachtTenToOne.overrun1() + " " + testSchlachtTenToOne.overrun2() + " " + testSchlachtTenToOne.result(10, 10);
 document.getElementById("test34").innerHTML = "Test Overrun with ten to one. " + testSchlachtTenToOne2.overrun1() + " " + testSchlachtTenToOne2.overrun2() + " " + testSchlachtTenToOne2.result(10, 10);
