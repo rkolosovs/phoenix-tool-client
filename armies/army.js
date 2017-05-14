@@ -340,6 +340,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde) {
     this.skp = leichte;
     this.lkp = schwere;
     this.isGuard = istGarde;
+    this.isLoadedIn = null; // for easier Data Saving 
     this.loadedArmies = [];
     // berechnet maximale transportkapazität
     this.maxCapacity = function() {

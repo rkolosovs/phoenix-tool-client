@@ -155,7 +155,8 @@
 					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.mounts + ","
 					dataToServerString = dataToServerString + listOfArmyCoordinates[i].x + ","
 					dataToServerString = dataToServerString + listOfArmyCoordinates[i].y + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].owner + ";"
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].owner + ","
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.isLoadedIn + ";"
 				} else {
 					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.armyId + ","
 					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.count + ","
@@ -165,7 +166,8 @@
 					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.mounts + ","
 					dataToServerString = dataToServerString + listOfArmyCoordinates[i].x + ","
 					dataToServerString = dataToServerString + listOfArmyCoordinates[i].y + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].owner
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].owner + ","
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.isLoadedIn
 				}
 			}
 			console.log("start");
