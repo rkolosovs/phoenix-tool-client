@@ -215,7 +215,7 @@ function drawBuildings(ctx, x, y, scale) {
 			break;
 		}
 		if (building.type <= 4) { //regular one tile buildings excluding walls
-			ctx.drawImage(tileImg, pos[0], pos[1]-c, scale*SIN60, scale); //draw the image
+			ctx.drawImage(tileImg, pos[0], pos[1], scale*SIN60, scale); //draw the image
 		}
 		else if (building.type === 5) { //walls - one tile buildings handled differently from cities
 			ctx.drawImage(tileImg, pos[0], pos[1], scale*SIN60, scale); //draw the image
