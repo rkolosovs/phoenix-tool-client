@@ -6,7 +6,6 @@ function armyCoordinates(army, coordX, coordY, owner) {
     // returns the tag of the owner, not full operational
     // TODO do it right
     this.ownerTag = function(){
-        console.log(this.owner);
         switch(this.owner){
             case 1: return "usa";
             case 3: return "vvh";
@@ -49,7 +48,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                     }
                 }
             }
-            console.log(borders[i]);
+            //console.log(borders[i]);
         }
         // war nicht bereits Land des Besitzers.
         if (found == false){
@@ -97,6 +96,18 @@ function armyCoordinates(army, coordX, coordY, owner) {
                             this.remainingMovePoints -= 12;
                             this.x = target.x;
                             this.y = target.y;
+                            // moves troops that are loaded in the fleet
+                            if(this.a.loadedArmies != undefined && this.a.loadedArmies != []){
+                                for(var i = 0; i < this.a.loadedArmies.length; i++){
+                                    for(var j = 0; j < listOfArmyCoordinates.length; j++){
+                                        console.log(this.a.loadedArmies[i]);
+                                        if(listOfArmyCoordinates[j].owner == this.owner && listOfArmyCoordinates[j].a.armyId == this.a.loadedArmies[i]){
+                                            listOfArmyCoordinates[j].x = target.x;
+                                            listOfArmyCoordinates[j].y = target.y;
+                                        }
+                                    }
+                                }
+                            }
                             if(changeInHeight){
                                 this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
                             }
@@ -109,6 +120,18 @@ function armyCoordinates(army, coordX, coordY, owner) {
                             this.remainingMovePoints -= 21;
                             this.x = target.x;
                             this.y = target.y;
+                            // moves troops that are loaded in the fleet
+                            if(this.a.loadedArmies != undefined && this.a.loadedArmies != []){
+                                for(var i = 0; i < this.a.loadedArmies.length; i++){
+                                    for(var j = 0; j < listOfArmyCoordinates.length; j++){
+                                        console.log(this.a.loadedArmies[i]);
+                                        if(listOfArmyCoordinates[j].owner == this.owner && listOfArmyCoordinates[j].a.armyId == this.a.loadedArmies[i]){
+                                            listOfArmyCoordinates[j].x = target.x;
+                                            listOfArmyCoordinates[j].y = target.y;
+                                        }
+                                    }
+                                }
+                            }
                             if(changeInHeight){
                                 this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
                             }
@@ -121,6 +144,18 @@ function armyCoordinates(army, coordX, coordY, owner) {
                             this.remainingMovePoints -= 21;
                             this.x = target.x;
                             this.y = target.y;
+                            // moves troops that are loaded in the fleet
+                            if(this.a.loadedArmies != undefined && this.a.loadedArmies != []){
+                                for(var i = 0; i < this.a.loadedArmies.length; i++){
+                                    for(var j = 0; j < listOfArmyCoordinates.length; j++){
+                                        console.log(this.a.loadedArmies[i]);
+                                        if(listOfArmyCoordinates[j].owner == this.owner && listOfArmyCoordinates[j].a.armyId == this.a.loadedArmies[i]){
+                                            listOfArmyCoordinates[j].x = target.x;
+                                            listOfArmyCoordinates[j].y = target.y;
+                                        }
+                                    }
+                                }
+                            }
                             if(changeInHeight){
                                 this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
                             }
@@ -135,6 +170,18 @@ function armyCoordinates(army, coordX, coordY, owner) {
                             this.remainingMovePoints -= 7;
                             this.x = target.x;
                             this.y = target.y;
+                            // moves troops that are loaded in the fleet
+                            if(this.a.loadedArmies != undefined && this.a.loadedArmies != []){
+                                for(var i = 0; i < this.a.loadedArmies.length; i++){
+                                    for(var j = 0; j < listOfArmyCoordinates.length; j++){
+                                        console.log(this.a.loadedArmies[i]);
+                                        if(listOfArmyCoordinates[j].owner == this.owner && listOfArmyCoordinates[j].a.armyId == this.a.loadedArmies[i]){
+                                            listOfArmyCoordinates[j].x = target.x;
+                                            listOfArmyCoordinates[j].y = target.y;
+                                        }
+                                    }
+                                }
+                            }
                             if(changeInHeight){
                                 this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
                             }
@@ -147,6 +194,18 @@ function armyCoordinates(army, coordX, coordY, owner) {
                             this.remainingMovePoints -= 10;
                             this.x = target.x;
                             this.y = target.y;
+                            // moves troops that are loaded in the fleet
+                            if(this.a.loadedArmies != undefined && this.a.loadedArmies != []){
+                                for(var i = 0; i < this.a.loadedArmies.length; i++){
+                                    for(var j = 0; j < listOfArmyCoordinates.length; j++){
+                                        console.log(this.a.loadedArmies[i]);
+                                        if(listOfArmyCoordinates[j].owner == this.owner && listOfArmyCoordinates[j].a.armyId == this.a.loadedArmies[i]){
+                                            listOfArmyCoordinates[j].x = target.x;
+                                            listOfArmyCoordinates[j].y = target.y;
+                                        }
+                                    }
+                                }
+                            }
                             if(changeInHeight){
                                 this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
                             }
@@ -159,6 +218,18 @@ function armyCoordinates(army, coordX, coordY, owner) {
                             this.remainingMovePoints -= 8;
                             this.x = target.x;
                             this.y = target.y;
+                            // moves troops that are loaded in the fleet
+                            if(this.a.loadedArmies != undefined && this.a.loadedArmies != []){
+                                for(var i = 0; i < this.a.loadedArmies.length; i++){
+                                    for(var j = 0; j < listOfArmyCoordinates.length; j++){
+                                        console.log(this.a.loadedArmies[i]);
+                                        if(listOfArmyCoordinates[j].owner == this.owner && listOfArmyCoordinates[j].a.armyId == this.a.loadedArmies[i]){
+                                            listOfArmyCoordinates[j].x = target.x;
+                                            listOfArmyCoordinates[j].y = target.y;
+                                        }
+                                    }
+                                }
+                            }
                             if(changeInHeight){
                                 this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
                             }
@@ -276,28 +347,117 @@ function armyCoordinates(army, coordX, coordY, owner) {
         } else if(Math.floor(this.a.armyId / 100) == 1){
             switch(target.fieldType()){
                 case 0:
-                case 1: return "You can't walk on Water.";
+                case 1:
+                // target field is sea, or deepsea
+                // is there an allied fleet on the target field?
+                var fleetsOnDest = [];
+                for(var i = 0; i<listOfArmyCoordinates.length; i++){
+                    if((listOfArmyCoordinates[i].owner == this.owner) && (listOfArmyCoordinates[i].x == target.x) && (listOfArmyCoordinates[i].y == target.y) && 
+                    (Math.floor(listOfArmyCoordinates[i].a.armyId / 100) == 3)){
+                        fleetsOnDest.push(i);
+                        console.log("fleets +1");
+                    }
+                }
+                // there is none
+                if(fleetsOnDest.length == 0){
+                    return "You can't walk on Water.";
+                // there is exactly one
+                } else if(fleetsOnDest.length == 1){
+                    var loadString = listOfArmyCoordinates[fleetsOnDest[0]].a.loadArmy();
+                    if(loadString == "ok"){
+                        this.a.isLoadedIn = listOfArmyCoordinates[fleetsOnDest[0]].a.armyId;
+                        console.log("army in now loaded in " + this.a.isLoadedIn);
+                        this.x = target.x;
+                        this.y = target.y;
+                        return "ok";
+                    } else {
+                        return(loadString);
+                    }
+                // TODO: more than one
+                } else if(fleetsOnDest.length > 1){
+                    var fleetstring = "";
+                    for(var i = 0; i < fleetsOnDest.length; i++){
+                        fleetstring = fleetstring + listOfArmyCoordinates[fleetsOnDest[i]].a.armyId + " ";
+                    }
+                    var chosenFleet = prompt("Mögliche Flotten sind: " + fleetstring);
+                    if(chosenFleet != null){
+                        var findFleet = -1;
+                        for(var i = 0; i < listOfArmyCoordinates.length; i++){
+                            if(listOfArmyCoordinates[i].a.armyId == chosenFleet && listOfArmyCoordinates[i].owner == this.owner){
+                                findFleet = i;
+                            }
+                        }
+                        console.log("chosenFleet: ") 
+                        console.log(chosenFleet);
+                        console.log("findFleet: ") 
+                        console.log(findFleet);
+                        console.log("fleetsOnDest: ") 
+                        console.log(fleetsOnDest);
+                        var found = false;
+                        for(var i = 0; i < fleetsOnDest.length; i++){
+                            if(fleetsOnDest[i] == findFleet){
+                                found = true
+                            }
+                        }
+                        if(found){
+                            var loadString = listOfArmyCoordinates[findFleet].a.loadArmy();
+                            if(loadString == "ok"){
+                                this.a.isLoadedIn = listOfArmyCoordinates[findFleet].a.armyId;
+                                console.log("army in now loaded in " + this.a.isLoadedIn);
+                                this.x = target.x;
+                                this.y = target.y;
+                                return "ok";
+                            } else {
+                                return(loadString);
+                            }
+                        } else {
+                            window.alert("Bitte wähle eine der angegebenen Flotten aus.");
+                        }
+                    }
+                }
                 case 2:
                 case 4:
-                case 7: if(thereIsAStreet){
+                case 7: 
+                if(thereIsAStreet){  // target field is a lowland, hill or desert
                     if(this.remainingMovePoints >= 4){
-                    this.remainingMovePoints -= 4;
-                    this.x = target.x;
-                    this.y = target.y;
-                    if(changeInHeight){
-                        this.setRemainingHeightPoints(this.remainingHeightPoints - 1);
-                    }
-                    if(this.a.canConquer()){
-                        this.conquer(direction);
-                    }
-                    return "ok";
-                } else {
+                        this.remainingMovePoints -= 4;
+                        this.x = target.x;
+                        this.y = target.y;
+                        if(changeInHeight){
+                            this.setRemainingHeightPoints(this.remainingHeightPoints - 1);
+                        }
+                        if(this.a.canConquer()){
+                            this.conquer(direction);
+                        }
+                        return "ok";
+                    } else {
                     return "You don't have enough movement Points.";
-                }
-                } else if(this.remainingMovePoints >= 7){
+                    }
+                } else if(this.remainingMovePoints >= 7){   // falls keine Straße
+                    console.log(this.a.isLoadedIn);
+                    if(this.a.isLoadedIn != null){  // falls armee von flotte transportiert wird
+                        console.log("Armee war in " + this.a.isLoadedIn + " geladen.");
+                        for(var i = 0; i < listOfArmyCoordinates.length; i++){
+                            if((listOfArmyCoordinates[i].owner == this.owner) && listOfArmyCoordinates[i].a.armyId == this.a.isLoadedIn){
+                                var placeInList = -1;
+                                for(var j = 0; j < listOfArmyCoordinates[i].a.loadedArmies.length; j++){
+                                    if(listOfArmyCoordinates[i].a.loadedArmies[j] == this.a.armyId){
+                                        placeInList = j;
+                                    }
+                                }
+                                if(placeInList == (listOfArmyCoordinates[i].a.loadedArmies.length-1)){
+                                    listOfArmyCoordinates[i].a.loadedArmies.pop();
+                                } else {
+                                    listOfArmyCoordinates[i].a.loadedArmies[j] = listOfArmyCoordinates[i].a.loadedArmies[listOfArmyCoordinates[i].a.loadedArmies.length-1];
+                                    listOfArmyCoordinates[i].a.loadedArmies.pop();
+                                }
+                            }
+                        }
+                    }
                     this.remainingMovePoints -= 7;
                     this.x = target.x;
                     this.y = target.y;
+                    this.a.isLoadedIn = null;
                     if(changeInHeight){
                         this.setRemainingHeightPoints(this.remainingHeightPoints - 2);
                     }
@@ -308,7 +468,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 } else {
                     return "You don't have enough movement Points.";
                 }
-                case 5: if(thereIsAStreet){
+                case 5: if(thereIsAStreet){  // target field is a highland
                         if(this.a.skp > 0){
                             if(this.remainingMovePoints >= 7){
                                 this.remainingMovePoints -= 7;
@@ -354,7 +514,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 } else {
                     return "You don't have enough movement Points.";
                 }
-                case 6: if(thereIsAStreet){
+                case 6: if(thereIsAStreet){  // target field is a mountain
                     if(this.a.skp > 0){
                         return "You can't move into the mountains with heavy catapults.";
                     } else if(this.a.lkp > 0){
@@ -390,7 +550,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                     return "You can't move into the mountains with catapults.";
                 }
                 case 3:
-                case 8: if(thereIsAStreet){
+                case 8: if(thereIsAStreet){ // target field is a wood, or swamp
                     if(this.a.skp > 0){
                         if(this.remainingMovePoints >= 7 ){
                             this.remainingMovePoints -= 7;
@@ -421,8 +581,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                         return "You don't have enough movement Points.";
                     }
                 } else if(this.a.skp > 0){
-                    console.log(this.a.skp);
-                    return "You can't move into deserts or swamps with heavy catapults unless you have streets.";
+                    return "You can't move into woods or swamps with heavy catapults unless you have streets.";
                 } else if(this.remainingMovePoints >= 7 ){
                     this.remainingMovePoints -= 7;
                     this.x = target.x;

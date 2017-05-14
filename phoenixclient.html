@@ -130,7 +130,7 @@
 		<button id="SaveFactionsTerritories" onclick="saveFactionsTerritories()">save faction territories</button>
 		<button id="ToggleArmyCreationMode" onclick="toggleArmyCreationMode()">make an Army</button>
 	</div>
-	<div id="armyGeneratorBox">
+	<div id="armyGeneratorBox" class="prettyBox">
 		<label for="ownerField">Reich:</label>
 		<input id="ownerField" value="0">
 		<label for="armyNumberField">Armee Nummer:</label>
@@ -165,7 +165,7 @@
 			<button id="ChangeFieldClickedTo9" onclick="changeFieldClickedTo(9)"> change field clicked to undefined</button>
 		</section>
 	</div>
-	<div id="riverBenderBox">
+	<div id="riverBenderBox" class="prettyBox">
 		<section id="buildRiverSection">
 			<button id="addRiverNW" onclick="addRiver(0)">Add a River at the north west border</button>
 			<button id="addRiverNE" onclick="addRiver(1)">Add a River at the north east border</button>
@@ -973,6 +973,7 @@
 			lkpBuffer = Number(document.getElementById("lkpField").value); 
 			skpBuffer = Number(document.getElementById("skpField").value);
 			guardBuffer = document.getElementById("guardField").value;
+			console.log("guard Field is: " +  document.getElementById("guardField").value);
 			if(armyIdBuffer < 101 || armyIdBuffer > 399){
 				window.alert("Die Armee-Id muss zwischen 101 und 399 liegen.");
 				return false;
@@ -1028,8 +1029,6 @@
 		function updateInfoBox(){
 			if(selectedArmy != undefined){
 				// info Box
-				console.log(listOfArmyCoordinates[selectedArmy].a.armyId);
-				console.log("This a guard army: " + listOfArmyCoordinates[selectedArmy].a.isGuard);
 				if(listOfArmyCoordinates[selectedArmy].a.isGuard){
 					document.getElementById("guard").innerHTML = "GARDE";
 				} else {
@@ -1124,8 +1123,8 @@
 
 		// the mount function of the mount box
 		function mount(){
-			var toMount = document.getElementById("mountInput").value;
-			var leadersToMount = document.getElementById("mountLeaderInput").value;
+			var toMount = parseInt(document.getElementById("mountInput").value);
+			var leadersToMount = parseInt(document.getElementById("mountLeaderInput").value);
 			// genug Truppen vorhanden?
 			if(toMount > listOfArmyCoordinates[selectedArmy].a.count){
 				window.alert("Du hast zu wenige Truppen zum aufsitzen")
@@ -1172,8 +1171,8 @@
 
 		// the unMount function of the unMount box
 		function unMount(){
-			var toUnMount = document.getElementById("unMountInput").value
-			var leadersToUnMount = document.getElementById("unMountLeaderInput").value;
+			var toUnMount = parseInt(document.getElementById("unMountInput").value);
+			var leadersToUnMount = parseInt(document.getElementById("unMountLeaderInput").value);
 			console.log(toUnMount);
 			if(toUnMount > listOfArmyCoordinates[selectedArmy].a.count){
 				window.alert("So viele Truppen hast du nicht zum absitzen")
