@@ -23,7 +23,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
         this.remainingHeightPoints = points;
     }
     // direction as a number, 0 = NW, 1 = NO, 2 = O, 3 = SO, 4 = SW, 5 = W
-    //TODO: Alles was nicht standart Bewegung auf ein benachbartes Feld ist.
+    //TODO: Alles was nicht standard Bewegung auf ein benachbartes Feld ist.
     // done streets, height change
     this.conquer = function(direction){
         var found = false;
