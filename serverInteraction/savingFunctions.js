@@ -22,7 +22,8 @@
 			$.ajax({
 				type: 'post',
 				url: url+"/databaseLink/savefielddata/",
-				data: {map: dataToServerString},
+				data: {map: dataToServerString,
+					authorization: authenticationToken},
 				success: console.log("success"),
 				error: console.log("error"),
 			});
@@ -49,7 +50,8 @@
 			$.ajax({
 				type:'post',
 				url: url + "/databaseLink/saveriverdata/",
-				data: {river: dataToServerString},
+				data: {river: dataToServerString,
+					authorization: authenticationToken},
 				success: console.log("success"),
 				error: console.log("error"),
 			});
@@ -57,71 +59,84 @@
 		}
 
 		function saveBuildings(){ // saves the current buildings on the server
+			console.log(changedBuildings);
+			console.log("changed Buildings length: " + changedBuildings.length);
 			var dataToServerString = "";
-			for(var i = 0; i < buildings.length; i++){
-				if(i != buildings.length-1){
-					switch(buildings[i].type){
+			for(var i = 0; i < changedBuildings.length; i++){
+				if(i != changedBuildings.length-1){
+					console.log("i "+ i + " type " + changedBuildings[i][1].type)
+					switch(changedBuildings[i][1].type){
+						case 0:
 						case 1:
 						case 2:
 						case 3:
 						case 4:
-							dataToServerString = dataToServerString + buildings[i].type + ","
-							dataToServerString = dataToServerString + buildings[i].realm + ","
-							dataToServerString = dataToServerString + buildings[i].x + ","
-							dataToServerString = dataToServerString + buildings[i].y + ";"
+							dataToServerString = dataToServerString + changedBuildings[i][1].type + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].realm + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].x + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].y + ","
+							dataToServerString = dataToServerString + changedBuildings[i][0] + ";"
 							break
 						case 5:
 						case 6:
 						case 7:
-							dataToServerString = dataToServerString + buildings[i].type + ","
-							dataToServerString = dataToServerString + buildings[i].realm + ","
-							dataToServerString = dataToServerString + buildings[i].x + ","
-							dataToServerString = dataToServerString + buildings[i].y + ","
-							dataToServerString = dataToServerString + buildings[i].direction + ";"
+							dataToServerString = dataToServerString + changedBuildings[i][1].type + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].realm + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].x + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].y + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].direction + ","
+							dataToServerString = dataToServerString + changedBuildings[i][0] + ";"
 							break
 						case 8:
-							dataToServerString = dataToServerString + buildings[i].type + ","
-							dataToServerString = dataToServerString + buildings[i].realm + ","
-							dataToServerString = dataToServerString + buildings[i].firstX + ","
-							dataToServerString = dataToServerString + buildings[i].firstY + ","
-							dataToServerString = dataToServerString + buildings[i].secondX + ","
-							dataToServerString = dataToServerString + buildings[i].secondY + ";"
+							dataToServerString = dataToServerString + changedBuildings[i][1].type + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].realm + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].firstX + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].firstY + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].secondX + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].secondY + ","
+							dataToServerString = dataToServerString + changedBuildings[i][0] + ";"
 					}
-				} else {switch(buildings[i].type){
+				} else {
+					console.log("at last entry in datatoserverstring, i = " + i);
+					switch(changedBuildings[i][1].type){
+						case 0:
 						case 1:
 						case 2:
 						case 3:
 						case 4:
-							dataToServerString = dataToServerString + buildings[i].type + ","
-							dataToServerString = dataToServerString + buildings[i].realm + ","
-							dataToServerString = dataToServerString + buildings[i].x + ","
-							dataToServerString = dataToServerString + buildings[i].y
+							dataToServerString = dataToServerString + changedBuildings[i][1].type + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].realm + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].x + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].y + ","
+							dataToServerString = dataToServerString + changedBuildings[i][0]
 							break
 						case 5:
 						case 6:
 						case 7:
-							dataToServerString = dataToServerString + buildings[i].type + ","
-							dataToServerString = dataToServerString + buildings[i].realm + ","
-							dataToServerString = dataToServerString + buildings[i].x + ","
-							dataToServerString = dataToServerString + buildings[i].y + ","
-							dataToServerString = dataToServerString + buildings[i].direction
+							dataToServerString = dataToServerString + changedBuildings[i][1].type + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].realm + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].x + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].y + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].direction + ","
+							dataToServerString = dataToServerString + changedBuildings[i][0]
 							break
 						case 8:
-							dataToServerString = dataToServerString + buildings[i].type + ","
-							dataToServerString = dataToServerString + buildings[i].realm + ","
-							dataToServerString = dataToServerString + buildings[i].firstX + ","
-							dataToServerString = dataToServerString + buildings[i].firstY + ","
-							dataToServerString = dataToServerString + buildings[i].secondX + ","
-							dataToServerString = dataToServerString + buildings[i].secondY
+							dataToServerString = dataToServerString + changedBuildings[i][1].type + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].realm + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].firstX + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].firstY + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].secondX + ","
+							dataToServerString = dataToServerString + changedBuildings[i][1].secondY + ","
+							dataToServerString = dataToServerString + changedBuildings[i][0]
 					}
 				}
 			}
-			console.log("start");
-			console.log(buildings);
+			console.log("data to Server String: " + dataToServerString);
 			$.ajax({
 				type:'post',
 				url: url + "/databaseLink/savebuildingdata/",
-				data: {buildings: dataToServerString},
+				data: {buildings: dataToServerString,
+					authorization: authenticationToken},
 				success: console.log("success"),
 				error: console.log("error"),
 			});
@@ -198,7 +213,8 @@
 			$.ajax({
 				type:'post',
 				url: url + "/databaseLink/saveborderdata/",
-				data: {borders: dataToServerString},
+				data: {borders: dataToServerString,
+					authorization: authenticationToken},
 				success: console.log("success"),
 				error: console.log("error"),
 			});
