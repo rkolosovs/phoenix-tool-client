@@ -6,6 +6,7 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
     this.skp = schwere;
     this.mounts = reittiere;
     this.isGuard = istGarde;
+    this.isLoadedIn = null;
     // setze eine neue Id für das Heer
     this.setId = function(newId){
         this.armyId = newId;
@@ -263,6 +264,7 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde) {
     this.skp = 0;
     this.lkp = 0;
     this.isGuard = istGarde;
+    this.isLoadedIn = null;
     this.leaderGp = function(){
         var gp = 0;
         if(this.leaders < 101){
@@ -338,6 +340,55 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde) {
     this.skp = leichte;
     this.lkp = schwere;
     this.isGuard = istGarde;
+    this.isLoadedIn = null; // for easier Data Saving 
+    this.loadedArmies = [];
+    // berechnet maximale transportkapazität
+    this.maxCapacity = function() {
+        return this.count*100;
+    }
+    // berechnet von armeen belegten platz
+    this.spaceLoaded = function(){
+        console.log(this.loadedArmies);
+        if(this.loadedArmies == undefined || this.loadedArmies == []){
+            return 0;
+        }
+        var loaded = 0;
+        for(var i = 0; i < this.loadedArmies.length; i++){
+            for(var j = 0; j < listOfArmyCoordinates.length; j++){
+                if((listOfArmyCoordinates[j].owner == listOfArmyCoordinates[selectedArmy].owner) && listOfArmyCoordinates[j].a.armyId == this.loadedArmies[i]){
+                    loaded += listOfArmyCoordinates[j].a.raumpunkte();
+                }
+            }
+        }
+        console.log("loaded armies RP sum is: " + loaded);
+        return loaded;
+    }
+    // berechnet gerade freien platz
+    this.currentCapacity = function(){
+        var spaceLoaded = this.spaceLoaded();
+        var maxCapacity = this.maxCapacity();
+        console.log("current Capacity is: " + (maxCapacity - spaceLoaded));
+        return(maxCapacity - spaceLoaded);
+    }
+    //lädt armee ein
+    this.loadArmy = function(){
+        if(listOfArmyCoordinates[selectedArmy].a.raumpunkte() <= this.currentCapacity()){
+            this.loadedArmies.push(listOfArmyCoordinates[selectedArmy].a.armyId);
+            console.log("Army " + listOfArmyCoordinates[selectedArmy].a.armyId +  " successfully loaded.");
+            this.currentCapacity();
+            return "ok";
+        } else {
+            return "This army is too big for this fleet.";
+        }
+    }
+    // Schiffe zählen 100x so viel wie Soldaten
+    this.raumpunkte = function() {
+        if(this.isGuard){
+            return (this.count * 100 * 3 + this.leaders * 100 + this.lkp * 1000 + this.skp * 2000);
+        }
+        return (this.count * 100 + this.leaders * 100 + this.lkp * 1000 + this.skp * 2000);
+    };
+    // berechnet gutpunkte durch heerführer
     this.leaderGp = function(){
         var gp = 0;
         if(this.leaders < 101){
@@ -352,13 +403,6 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde) {
         }
         return gp;
     }
-    // Schiffe zählen 100x so viel wie Soldaten
-    this.raumpunkte = function() {
-        if(this.isGuard){
-            return (this.count * 100 * 3 + this.leaders * 100 + this.lkp * 1000 + this.skp * 2000);
-        }
-        return (this.count * 100 + this.leaders * 100 + this.lkp * 1000 + this.skp * 2000);
-    };
     // entfernt Soldaten aus der Armee
     this.removeSoldiers = function(amount){
         if(this.count >= amount){
@@ -399,6 +443,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde) {
     this.addSkp = function(amount){
         this.skp += amount;
     }
+    // teilt genommenen schaden auf
     this.decimate = function(amount){
         var factor = amount / this.count;
         this.removeSoldiers(amount);
@@ -414,6 +459,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde) {
             return false;
         }
     }
+    // wieviele Baupunkte hat die flotte
     this.sumBP = function(){return this.count * 10 + this.lkp * 200 + this.skp * 400;}
     // entfernt Truppen nach Beschuß
     this.takeFire = function(damageBP){
