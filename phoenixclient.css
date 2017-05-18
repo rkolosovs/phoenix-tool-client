@@ -184,6 +184,10 @@ div.armyListBox {
 	top:5%;
 }
 
+p.red {
+	color: red;
+}
+
 #nextTurnButton {
     background-image: url("immages/nextturn_button.svg");
     float:left;
@@ -282,8 +286,10 @@ div.armyListBox {
 }
 
 #closeBattleButton{
-	right:-35px;
+	right:-30px;
 	top:-25px;
+	border-radius:50%;
+    padding: 10px 15px;
 }
 
 #infoChangeBox {

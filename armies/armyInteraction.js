@@ -1,65 +1,65 @@
 function battleHandler(participants, x, y) {
 	//participating armies
 	this.unsortedArmies = participants;
-	this.leftSide = [];
-	this.rightSide = [];
+	this.attackSide = [];
+	this.defenseSide = [];
 	//coordinates of the battle
 	this.x = x;
 	this.y = y;
 	
 	//UI elements to display armies of both sides
-	this.leftList = document.getElementById("attackArmiesBox");
+	this.attackList = document.getElementById("attackArmiesBox");
 	this.unsortedList = document.getElementById("unsortedArmiesBox");
-	this.rightList = document.getElementById("defenseArmiesBox");
+	this.defenseList = document.getElementById("defenseArmiesBox");
 	//both boxes under the lists of troops
-	this.leftTroopCount = document.getElementById("attackBattleSide");
-	this.rightTroopCount = document.getElementById("defenseBattleSide");
+	this.attackTroopCount = document.getElementById("attackBattleSide");
+	this.defenseTroopCount = document.getElementById("defenseBattleSide");
 	//dice rolls
-	this.leftDice = document.getElementById("attackDiceRoll");
-	this.rightDice = document.getElementById("defenseDiceRoll");
+	this.attackDice = document.getElementById("attackDiceRoll");
+	this.defenseDice = document.getElementById("defenseDiceRoll");
 	
 	//Troop counts TODO: expand to accomodate naval combat
-	this.leftSoldiers = 0;
-	this.leftOfficers = 0;
-	this.leftRiders = 0;
-	this.rightSoldiers = 0;
-	this.rightOfficers = 0;
-	this.rightRiders = 0;
+	this.attackSoldiers = 0;
+	this.attackOfficers = 0;
+	this.attackRiders = 0;
+	this.defenseSoldiers = 0;
+	this.defenseOfficers = 0;
+	this.defenseRiders = 0;
 	
-	this.moveToLeft = function(i){
+	this.moveToAttack = function(i){
 		var ctx = this;
 		return function() {
 			var t = ctx.unsortedArmies.splice(i,1);
-			ctx.leftSide.push(t[0]);
+			ctx.attackSide.push(t[0]);
 			ctx.updateTroopCounts();
 			ctx.updateDisplay();
 		}
 	}
 	
-	this.moveToRight = function(i){
+	this.moveToDefense = function(i){
 		var ctx = this;
 		return function() {
 			var t = ctx.unsortedArmies.splice(i,1);
-			ctx.rightSide.push(t[0]);
+			ctx.defenseSide.push(t[0]);
 			ctx.updateTroopCounts();
 			ctx.updateDisplay();
 		}
 	}
 	
-	this.removeFromRight = function(i){
+	this.removeFromDefense = function(i){
 		var ctx = this;
 		return function() {
-			var t = ctx.rightSide.splice(i,1);
+			var t = ctx.defenseSide.splice(i,1);
 			ctx.unsortedArmies.push(t[0]);
 			ctx.updateTroopCounts();
 			ctx.updateDisplay();
 		}
 	}
 	
-	this.removeFromLeft = function(i){
+	this.removeFromAttack = function(i){
 		var ctx = this;
 		return function() {
-			var t = ctx.leftSide.splice(i,1);
+			var t = ctx.attackSide.splice(i,1);
 			ctx.unsortedArmies.push(t[0]);
 			ctx.updateTroopCounts();
 			ctx.updateDisplay();
@@ -67,37 +67,37 @@ function battleHandler(participants, x, y) {
 	}
 	
 	this.updateTroopCounts = function(){
-		this.leftSoldiers = 0;
-		this.leftOfficers = 0;
-		this.leftRiders = 0;
-		this.rightSoldiers = 0;
-		this.rightOfficers = 0;
-		this.rightRiders = 0;
+		this.attackSoldiers = 0;
+		this.attackOfficers = 0;
+		this.attackRiders = 0;
+		this.defenseSoldiers = 0;
+		this.defenseOfficers = 0;
+		this.defenseRiders = 0;
 		var ctx = this;
 		
-		this.leftSide.forEach(function(item){
+		this.attackSide.forEach(function(item){
 			if(item.a.armyId < 200 ) {//footman army
-				ctx.leftSoldiers += item.a.count;
+				ctx.attackSoldiers += item.a.count;
 			} else {//rider army
-				ctx.leftRiders += item.a.count;
+				ctx.attackRiders += item.a.count;
 			} //TODO:Expand to accomodate naval combat
-			ctx.leftOfficers += item.a.leaders;
+			ctx.attackOfficers += item.a.leaders;
 		});
-		this.rightSide.forEach(function(item){
+		this.defenseSide.forEach(function(item){
 			if(item.a.armyId < 200 ) {//footman army
-				ctx.rightSoldiers += item.a.count;
+				ctx.defenseSoldiers += item.a.count;
 			} else {//rider army
-				ctx.rightRiders += item.a.count;
+				ctx.defenseRiders += item.a.count;
 			} //TODO:Expand to accomodate naval combat
-			ctx.rightOfficers += item.a.leaders;
+			ctx.defenseOfficers += item.a.leaders;
 		});
 	}
 	
 	this.updateDisplay = function(){
-		this.leftList.innerHTML = "";
-		this.leftSide.forEach(function(item, index){
+		this.attackList.innerHTML = "";
+		this.attackSide.forEach(function(item, index){
 			var listItem = document.createElement("DIV");
-			this.leftList.appendChild(listItem);
+			this.attackList.appendChild(listItem);
 			listItem.classList.add("armyListItem");
 
 			var div = document.createElement("DIV");
@@ -108,7 +108,7 @@ function battleHandler(participants, x, y) {
 			var moveBtn = document.createElement("BUTTON");
 			moveBtn.classList.add("armyListButton");
 			moveBtn.classList.add("moveRightButton");
-			moveBtn.onclick = this.removeFromLeft(index);
+			moveBtn.onclick = this.removeFromAttack(index);
 			listItem.appendChild(moveBtn);
 		}, this);
 
@@ -121,7 +121,7 @@ function battleHandler(participants, x, y) {
 			var moveLeftBtn = document.createElement("BUTTON");
 			moveLeftBtn.classList.add("armyListButton");
 			moveLeftBtn.classList.add("moveLeftButton");
-			moveLeftBtn.onclick = this.moveToLeft(index);
+			moveLeftBtn.onclick = this.moveToAttack(index);
 			listItem.appendChild(moveLeftBtn);
 
 			var div = document.createElement("DIV");
@@ -132,20 +132,20 @@ function battleHandler(participants, x, y) {
 			var moveRightBtn = document.createElement("BUTTON");
 			moveRightBtn.classList.add("armyListButton");
 			moveRightBtn.classList.add("moveRightButton");
-			moveRightBtn.onclick = this.moveToRight(index);
+			moveRightBtn.onclick = this.moveToDefense(index);
 			listItem.appendChild(moveRightBtn);
 		}, this);
 
-		this.rightList.innerHTML = "";
-		this.rightSide.forEach(function(item, index){
+		this.defenseList.innerHTML = "";
+		this.defenseSide.forEach(function(item, index){
 			var listItem = document.createElement("DIV");
-			this.rightList.appendChild(listItem);
+			this.defenseList.appendChild(listItem);
 			listItem.classList.add("armyListItem");
 			
 			var moveBtn = document.createElement("BUTTON");
 			moveBtn.classList.add("armyListButton");
 			moveBtn.classList.add("moveLeftButton");
-			moveBtn.onclick = this.removeFromRight(index);
+			moveBtn.onclick = this.removeFromDefense(index);
 			listItem.appendChild(moveBtn);
 			
 			var div = document.createElement("DIV");
@@ -155,22 +155,118 @@ function battleHandler(participants, x, y) {
 		}, this);
 		
 		//TODO: Expand to accomodate naval units
-		this.leftTroopCount.innerHTML = 
-			"<p>Soldaten: "+this.leftSoldiers+"</p><p>Reiter: "+
-			this.leftRiders+"</p><p>Heerführer: "+this.leftOfficers+"</p>";
-		this.rightTroopCount.innerHTML = 
-			"<p>Soldaten: "+this.rightSoldiers+"</p><p>Reiter: "+
-			this.rightRiders+"</p><p>Heerführer: "+this.rightOfficers+"</p>";
+		this.attackTroopCount.innerHTML = 
+			"<p>Soldaten: "+this.attackSoldiers+"</p><p>Reiter: "+
+			this.attackRiders+"</p><p>Heerführer: "+this.attackOfficers+"</p>";
+		this.defenseTroopCount.innerHTML = 
+			"<p>Soldaten: "+this.defenseSoldiers+"</p><p>Reiter: "+
+			this.defenseRiders+"</p><p>Heerführer: "+this.defenseOfficers+"</p>";
 		
-		this.leftTroopCount.innerHTML += "<p>Würfelwurf: "+this.leftDice.value+"</p>";
-		this.rightTroopCount.innerHTML += "<p>Würfelwurf: "+this.rightDice.value+"</p>";
+		this.attackTroopCount.innerHTML += "<p>Würfelwurf: "+this.attackDice.value+"</p>";
+		this.defenseTroopCount.innerHTML += "<p>Würfelwurf: "+this.defenseDice.value+"</p>";
 		
-		//TODO: Make a joined force for each side, generate a battle from it, check overrun, compute losses
-		//display overrun (if applicable), the winner and the future losses for the winner in the troop count
+		//Instant result preview (remove if not desired)
+		var battle = new schlacht(this.attackSide, this.defenseSide, null, null, this.x, this.y);
+		battle.init();
+		var result = battle.result(this.attackDice.value, this.defenseDice.value);
+		if(result.victor === 'attacker'){
+			if(battle.overrun1()) {
+				this.defenseTroopCount.innerHTML += "<p class=\"red\">Überrant!</p>";
+			} else {
+				this.defenseTroopCount.innerHTML += "<p class=\"red\">Besiegt!</p>";
+				this.attackTroopCount.innerHTML = 
+					"<div>Soldaten: "+this.attackSoldiers+"<p class=\"red\">-"+
+					Math.round(result.footLosses)+"</p></div><div>Reiter: "+this.attackRiders+"<p class=\"red\">-"+
+					Math.round(result.cavLosses)+"</p></div><div>Heerführer: "+this.attackOfficers+"<p class=\"red\">-"+
+					Math.round(((result.footLosses+result.cavLosses)/(this.attackSoldiers+this.attackRiders))*this.attackOfficers)+"</p></div>";
+			}
+		} else if (result.victor === 'defender') {
+			if(battle.overrun2()) {
+				this.attackTroopCount.innerHTML += "<p class=\"red\">Überrant!</p>";
+			} else {
+				this.attackTroopCount.innerHTML += "<p class=\"red\">Besiegt!</p>";
+				this.defenseTroopCount.innerHTML = 
+					"<div>Soldaten: "+this.defenseSoldiers+"<p class=\"red\">-"+
+					Math.round(result.footLosses)+"</p></div><div>Reiter: "+this.defenseRiders+"<p class=\"red\">-"+
+					Math.round(result.cavLosses)+"</p></div><div>Heerführer: "+this.defenseOfficers+"<p class=\"red\">-"+
+					Math.round(((result.footLosses+result.cavLosses)/(this.defenseSoldiers+this.defenseRiders))*this.defenseOfficers)+"</p></div>";
+			}
+		}
 	}
 	
 	this.resolve = function(){
-		//TODO: Compute result (by calling schlacht), inflict actual damage to armies.
+		var battle = new schlacht(this.attackSide, this.defenseSide, null, null, this.x, this.y);
+		battle.init();
+		if(battle.overrun1()) {
+			this.attackSide.forEach(function(item){
+				item.remainingMovePoints -= 7;
+			});
+			this.defenseSide.forEach(function(item){
+				var army = item.a;
+				army.count = 0;
+				army.leaders = 0;
+				army.lkp = 0;
+				army.skp = 0;
+				army.mounts = 0;
+			});
+		} else if(battle.overrun2()) {
+			this.defenseSide.forEach(function(item){
+				item.remainingMovePoints -= 7;
+			});
+			this.attackSide.forEach(function(item){
+				var army = item.a;
+				army.count = 0;
+				army.leaders = 0;
+				army.lkp = 0;
+				army.skp = 0;
+				army.mounts = 0;
+			});
+		} else {
+			var result = battle.result(this.attackDice.value, this.defenseDice.value);
+			if(result.victor === 'attacker'){
+				//wipe the looser out
+				this.defenseSide.forEach(function(item){
+					var army = item.a;
+					army.count = 0;
+					army.leaders = 0;
+					army.lkp = 0;
+					army.skp = 0;
+					army.mounts = 0;
+				});
+				//null move points of the victor and inflict losses
+				this.attackSide.forEach(function(item){
+					var army = item.a;
+					item.remainingMovePoints = 0;
+					if(army.armyId < 200){
+						army.decimate((army.count/this.attackSoldiers)*result.footLosses);
+					} else if(army.armyId < 300){
+						army.decimate((army.count/this.attackRiders)*result.cavLosses);
+					}
+				});
+			} else if(result.victor === 'defender'){
+				//wipe the looser out
+				this.attackSide.forEach(function(item){
+					var army = item.a;
+					army.count = 0;
+					army.leaders = 0;
+					army.lkp = 0;
+					army.skp = 0;
+					army.mounts = 0;
+				});
+				//null move points of the victor and inflict losses
+				this.defenseSide.forEach(function(item){
+					var army = item.a;
+					item.remainingMovePoints = 0;
+					if(army.armyId < 200){
+						army.decimate((army.count/this.attackSoldiers)*result.footLosses);
+					} else if(army.armyId < 300){
+						army.decimate((army.count/this.attackRiders)*result.cavLosses);
+					}
+				});
+			} else {
+				//TODO: Revisit once the schlacht.result(dice1, dice2) returns proper values for a tie
+			}
+		}
 	}
 }
 
@@ -191,35 +287,35 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
     this.y = posY;
 	this.init = function(){
 		for(var i=0; i < armiesAttack.length; i++){
-			if(Math.floor(armiesAttack[i].armyId/100) == 1){
-				this.a1.addSoldiers(armiesAttack[i].count);
-				this.a1.addLeaders(armiesAttack[i].leaders);
-				this.a1.addLkp(armiesAttack[i].lkp);
-				this.a1.addSkp(armiesAttack[i].skp);
-			} else if(Math.floor(armiesAttack[i].armyId/100) == 2){
-				this.ma1.addSoldiers(armiesAttack[i].count);
-				this.ma1.addLeaders(armiesAttack[i].leaders);
-			} else if(Math.floor(armiesAttack[i].armyId/100) == 3){
-				this.fa1.addSoldiers(armiesAttack[i].count);
-				this.fa1.addLeaders(armiesAttack[i].leaders);
-				this.fa1.addLkp(armiesAttack[i].lkp);
-				this.fa1.addSkp(armiesAttack[i].skp);
+			if(Math.floor(armiesAttack[i].a.armyId/100) == 1){
+				this.a1.addSoldiers(armiesAttack[i].a.count);
+				this.a1.addLeaders(armiesAttack[i].a.leaders);
+				this.a1.addLkp(armiesAttack[i].a.lkp);
+				this.a1.addSkp(armiesAttack[i].a.skp);
+			} else if(Math.floor(armiesAttack[i].a.armyId/100) == 2){
+				this.ma1.addSoldiers(armiesAttack[i].a.count);
+				this.ma1.addLeaders(armiesAttack[i].a.leaders);
+			} else if(Math.floor(armiesAttack[i].a.armyId/100) == 3){
+				this.fa1.addSoldiers(armiesAttack[i].a.count);
+				this.fa1.addLeaders(armiesAttack[i].a.leaders);
+				this.fa1.addLkp(armiesAttack[i].a.lkp);
+				this.fa1.addSkp(armiesAttack[i].a.skp);
 			}
 		}
 		for(var i=0; i < armiesDefend.length; i++){
-			if(Math.floor(armiesDefend[i].armyId/100) == 1){
-				this.a2.addSoldiers(armiesDefend[i].count);
-				this.a2.addLeaders(armiesDefend[i].leaders);
-				this.a2.addLkp(armiesDefend[i].lkp);
-				this.a2.addSkp(armiesDefend[i].skp);
-			} else if(Math.floor(armiesDefend[i].armyId/100) == 2){
-				this.ma2.addSoldiers(armiesDefend[i].count);
-				this.ma2.addLeaders(armiesDefend[i].leaders);
-			} else if(Math.floor(armiesDefend[i].armyId/100) == 3){
-				this.fa2.addSoldiers(armiesDefend[i].count);
-				this.fa2.addLeaders(armiesDefend[i].leaders);
-				this.fa2.addLkp(armiesDefend[i].lkp);
-				this.fa2.addSkp(armiesDefend[i].skp);
+			if(Math.floor(armiesDefend[i].a.armyId/100) == 1){
+				this.a2.addSoldiers(armiesDefend[i].a.count);
+				this.a2.addLeaders(armiesDefend[i].a.leaders);
+				this.a2.addLkp(armiesDefend[i].a.lkp);
+				this.a2.addSkp(armiesDefend[i].a.skp);
+			} else if(Math.floor(armiesDefend[i].a.armyId/100) == 2){
+				this.ma2.addSoldiers(armiesDefend[i].a.count);
+				this.ma2.addLeaders(armiesDefend[i].a.leaders);
+			} else if(Math.floor(armiesDefend[i].a.armyId/100) == 3){
+				this.fa2.addSoldiers(armiesDefend[i].a.count);
+				this.fa2.addLeaders(armiesDefend[i].a.leaders);
+				this.fa2.addLkp(armiesDefend[i].a.lkp);
+				this.fa2.addSkp(armiesDefend[i].a.skp);
 			}
 		}
 	}
@@ -248,18 +344,19 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
        }
     }
     // 10:1 ?
-    this.overrun1 = function(){return((this.a1.count + this.ma1.count*2) >= (this.a2.count + this.ma2.count*2) * 10) && !this.a2.isGuard && !this.ma2.isGuard};
-    this.overrun2 = function(){return((this.a2.count + this.ma2.count*2) >= (this.a1.count + this.ma1.count*2) * 10) && !this.a2.isGuard && !this.ma2.isGuard};
-    // Kampfergebnis in Form [Angreifer gewinnt?:Boolean , Verluste für Gewinner Fuß:Zahl, Verluste für Gewinner Reiter: Zahl], [null, viel, viel] falls unentschieden.
+    this.overrun1 = function(){return(((this.a1.count + this.ma1.count*2) >= (this.a2.count + this.ma2.count*2) * 10) && !this.a2.isGuard && !this.ma2.isGuard)};
+    this.overrun2 = function(){return(((this.a2.count + this.ma2.count*2) >= (this.a1.count + this.ma1.count*2) * 10) && !this.a2.isGuard && !this.ma2.isGuard)};
+    // Kampfergebnis in Form {victor: <'attacker', 'defender', 'tie'>, footLosses: <int>, cavLosses: <int>], 
+    // {victor: 'tie', footLosses: <viel>, cavLosses: <viel>} falls unentschieden.
     this.result = function(diceroll1, diceroll2) {
 		if(this.overrun1()){
 			console.log("Attacker Overrun");
 			console.log("----------------------------------------------------------");
-			return(true, 0,0);
+			return({victor: 'attacker', footLosses: 0, cavLosses: 0});
 		} else if(this.overrun2()){
 			console.log("Defender Overrun");
 			console.log("----------------------------------------------------------");
-			return(false, 0,0);
+			return({victor: 'defender', footLosses: 0, cavLosses: 0});
 		}
         var power1 = this.a1.count * (1 + (this.a1.leaderGp() + this.charGp1() + diceroll1)/200) + this.ma1.count * 2 * (1 + (this.ma1.leaderGp() + this.charGp1() + diceroll1)/200);
         var power2 = this.a2.count * (1 + (this.a2.leaderGp() + this.charGp2() + diceroll2)/200) + this.ma2.count * 2 * (1 + (this.ma2.leaderGp() + this.charGp2() + diceroll2)/200);
@@ -284,24 +381,24 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
             } else {
                 var verluste = countSum2;
             }
-			console.log("Faktor: " + factor)
+			console.log("Faktor: " + factor);
             console.log("Verluste: " + verluste);
-            var gpDiffHeer = ((this.a1.leaderGp() + this.charGp1() + diceroll1)/2 - gpSchnitt)/100
-            var gpDiffReiter = ((this.ma1.leaderGp() + this.charGp1() + diceroll1)/2 - gpSchnitt)/100
+            var gpDiffHeer = ((this.a1.leaderGp() + this.charGp1() + diceroll1)/2 - gpSchnitt)/100;
+            var gpDiffReiter = ((this.ma1.leaderGp() + this.charGp1() + diceroll1)/2 - gpSchnitt)/100;
             var verlusteHeer = this.a1.count/countSum1 * verluste;
             var verlusteReiter = this.ma1.count*2/countSum1 * verluste;
             if(gpDiffHeer >= 0){
-                verlusteHeer = verlusteHeer/(1+gpDiffHeer)
+                verlusteHeer = verlusteHeer/(1+gpDiffHeer);
             } else {
-                verlusteHeer = verlusteHeer*(1-gpDiffHeer)
+                verlusteHeer = verlusteHeer*(1-gpDiffHeer);
             }
             if(gpDiffReiter >= 0){
-                verlusteReiter = verlusteReiter/(1+gpDiffReiter)
+                verlusteReiter = verlusteReiter/(1+gpDiffReiter);
             } else {
-                verlusteReiter = verlusteReiter*(1-gpDiffReiter)
+                verlusteReiter = verlusteReiter*(1-gpDiffReiter);
             }
             // gewonnen?, anzahl Verluste Heer, Reiter
-            var results = [true, verlusteHeer, verlusteReiter];
+            var results = {victor: 'attacker', footLosses: verlusteHeer, cavLosses: verlusteReiter};
 			console.log("----------------------------------------------------------");
             return results;
         } else if(power2 > power1){
@@ -317,36 +414,38 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
             } else {
                 var verluste = countSum1;
             }
-			console.log("Faktor: " + factor)
+			console.log("Faktor: " + factor);
             console.log("Verluste: " + verluste);
-            var gpDiffHeer = ((this.a2.leaderGp() + this.charGp2() + diceroll2)/2 - gpSchnitt)/100
-            var gpDiffReiter = ((this.ma2.leaderGp() + this.charGp2() + diceroll2)/2 - gpSchnitt)/100
+            var gpDiffHeer = ((this.a2.leaderGp() + this.charGp2() + diceroll2)/2 - gpSchnitt)/100;
+            var gpDiffReiter = ((this.ma2.leaderGp() + this.charGp2() + diceroll2)/2 - gpSchnitt)/100;
             var verlusteHeer = this.a2.count/countSum2 * verluste;
             var verlusteReiter = this.ma2.count*2/countSum2 * verluste;
             if(gpDiffHeer >= 0){
-                verlusteHeer = verlusteHeer/(1+gpDiffHeer)
+                verlusteHeer = verlusteHeer/(1+gpDiffHeer);
             } else {
-                verlusteHeer = verlusteHeer*(1-gpDiffHeer)
+                verlusteHeer = verlusteHeer*(1-gpDiffHeer);
             }
             if(gpDiffReiter >= 0){
-                verlusteReiter = verlusteReiter/(1+gpDiffReiter)
+                verlusteReiter = verlusteReiter/(1+gpDiffReiter);
             } else {
-                verlusteReiter = verlusteReiter*(1-gpDiffReiter)
+                verlusteReiter = verlusteReiter*(1-gpDiffReiter);
             }
             // gewonnen?, anzahl Verluste Heer, Reiter
-            var results = [false, verlusteHeer, verlusteReiter];
+            var results = {victor: 'defender', footLosses: verlusteHeer, cavLosses: verlusteReiter};
 			console.log("----------------------------------------------------------");
             return results;
         } else if(power1 == power2){
             // unentschieden:
 			console.log("----------------------------------------------------------");
-            return [null, null, null]
+			//TODO: The losses seem to be missing. This is not {'tie', <lot>, <lot>}.
+            return {victor: 'tie', footLosses: null, cavLosses: null};
         }
     }
 }
 // TODO schiffskampf
 
-// array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null), schießende Armee, ziel Armee, Charaktere und Zauberer auf dem Zielfeld
+// array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null), 
+// schießende Armee, ziel Armee, Charaktere und Zauberer auf dem Zielfeld
 // TODO rüstorte vermindern Schaden
 function fernkampf(dicerollsL, dicerollsS, badConditions, shooter, target, chars) {
     var charGpSum = 0;      
