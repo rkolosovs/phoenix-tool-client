@@ -8,15 +8,15 @@ function battleHandler(participants, x, y) {
 	this.y = y;
 	
 	//UI elements to display armies of both sides
-	this.leftList = document.getElementById("leftArmiesBox");
+	this.leftList = document.getElementById("attackArmiesBox");
 	this.unsortedList = document.getElementById("unsortedArmiesBox");
-	this.rightList = document.getElementById("rightArmiesBox");
+	this.rightList = document.getElementById("defenseArmiesBox");
 	//both boxes under the lists of troops
-	this.leftTroopCount = document.getElementById("leftBattleSide");
-	this.rightTroopCount = document.getElementById("rightBattleSide");
+	this.leftTroopCount = document.getElementById("attackBattleSide");
+	this.rightTroopCount = document.getElementById("defenseBattleSide");
 	//dice rolls
-	this.leftDice = document.getElementById("leftDiceRoll");
-	this.rightDice = document.getElementById("rightDiceRoll");
+	this.leftDice = document.getElementById("attackDiceRoll");
+	this.rightDice = document.getElementById("defenseDiceRoll");
 	
 	//Troop counts TODO: expand to accomodate naval combat
 	this.leftSoldiers = 0;

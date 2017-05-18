@@ -54,11 +54,16 @@
 	<div id="topBar" class="prettyBox"></div>
 
 	<div id="battleBox" class="prettyBox invisible">
-		<div id="leftArmiesBox" class="armyListBox"></div>
+		<button id="closeBattleButton" class="prettyButton">X</button>
+		<div>
+			<div id="<attackersTitleText">Attackers</div>
+			<div id="defendersTitleText">Defenders</div>
+		</div>
+		<div id="attackArmiesBox" class="armyListBox"></div>
 		<div id="unsortedArmiesBox" class="armyListBox"></div>
-		<div id="rightArmiesBox" class="armyListBox"></div>
-		<div id="leftBattleSide"></div>
-		<select id="leftDiceRoll">
+		<div id="defenseArmiesBox" class="armyListBox"></div>
+		<div id="attackBattleSide"></div>
+		<select id="attackDiceRoll">
 			<option value="1">1</option>
 			<option value="2">2</option>
 			<option value="3">3</option>
@@ -70,7 +75,7 @@
 			<option value="9">9</option>
 			<option value="10">10</option>
 		</select>
-		<select id="rightDiceRoll">
+		<select id="defenseDiceRoll">
 			<option value="1">1</option>
 			<option value="2">2</option>
 			<option value="3">3</option>
@@ -82,7 +87,7 @@
 			<option value="9">9</option>
 			<option value="10">10</option>
 		</select>
-		<div id="rightBattleSide"></div>
+		<div id="defenseBattleSide"></div>
 		<button id="battleButton" class="prettyButton">
 		Fight!
 		</button>

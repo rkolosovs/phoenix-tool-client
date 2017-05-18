@@ -502,14 +502,17 @@ function checkEvent(num) {
 			});
 			
 			var battle = new battleHandler(partips, cont.x, cont.y);
-			document.getElementById("leftDiceRoll").onchange = function(){battle.updateDisplay()};
-			document.getElementById("rightDiceRoll").onchange = function(){battle.updateDisplay()};
+			document.getElementById("attackDiceRoll").onchange = function(){battle.updateDisplay()};
+			document.getElementById("defenseDiceRoll").onchange = function(){battle.updateDisplay()};
 			document.getElementById("battleButton").onclick = function(){
-					battle.resolve();
-					hide(battleBox);
-					//TODO: Reenable once battle resolution box is tested sufficiently.
-//					sendCheckEvent(event.pk, event.type);
-				};
+				battle.resolve();
+				hide(battleBox);
+				//TODO: Reenable once battle resolution box is tested sufficiently.
+//				sendCheckEvent(event.pk, event.type);
+			};
+			document.getElementById("closeBattleButton").onclick = function(){
+				hide(battleBox);
+			};
 			battle.updateDisplay();
 		}
 	}

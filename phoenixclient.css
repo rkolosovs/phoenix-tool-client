@@ -208,7 +208,7 @@ div.armyListBox {
 	bottom: 3%;
 }
 
-#leftBattleSide {
+#attackBattleSide {
 	left:0.5%;
 	width:35%;
 	height:30%;
@@ -217,7 +217,7 @@ div.armyListBox {
 	position: absolute;
 }
 
-#rightBattleSide {
+#defenseBattleSide {
 	right:0.5%;
 	width:35%;
 	height:30%;
@@ -227,13 +227,13 @@ div.armyListBox {
 	text-align: right;
 }
 
-#leftDiceRoll {
+#attackDiceRoll {
 	top:57%;
 	left:36%;
 	position: absolute;
 }
 
-#rightDiceRoll {
+#defenseDiceRoll {
 	top:57%;
 	right:36%;
 	position: absolute;
@@ -254,7 +254,7 @@ div.armyListBox {
     min-height: 30px;
 }
 
-#leftArmiesBox{
+#attackArmiesBox{
 	left:0.5%;
 }
 
@@ -263,8 +263,27 @@ div.armyListBox {
 	margin-left:-2px;
 }
 
-#rightArmiesBox{
+#defenseArmiesBox{
 	right:0.5%;
+}
+
+#attackersTitleText{
+	position: absolute;
+	float:left;
+	left:10px;
+	top:15px;
+}
+
+#defendersTitleText{
+	position: absolute;
+	float:right;
+	right:10px;
+	top:15px;
+}
+
+#closeBattleButton{
+	right:-35px;
+	top:-25px;
 }
 
 #infoChangeBox {
