@@ -366,11 +366,11 @@ function writeTurnNumber() {
 		// if not logged in as the current realm or SL
 		btn.disabled = true;
 		btn.style.cursor = "not-allowed";
-		btn.style.backgroundImage = "url(immages/nextturn_button_disabled.svg)";
+		btn.style.backgroundImage = "url(images/nextturn_button_disabled.svg)";
 	} else {
 		btn.disabled = false;
 		btn.style.cursor = "initial";
-		btn.style.backgroundImage = "url(immages/nextturn_button.svg)";
+		btn.style.backgroundImage = "url(images/nextturn_button.svg)";
 	}
 	
 	if(login === 'sl' && currentTurn.status === 'fi') {
@@ -414,6 +414,7 @@ function determineEventStatus(){
 		for(var i = 0; i<pendingEvents.length; i++){
 			var oldStatus = pendingEvents[i].status;
 			if(oldStatus === 'withheld' || oldStatus === 'available' || oldStatus === 'impossible'){
+				
 				//TODO: Check, if an event is available (all troops at the right place), 
 				//withheld (not all at the right place but all troops present and move events to the right place available and not impossible) or
 				//impossible (some troops are missing or all troops present but not every troop has a possible move event to arrive at the right place)

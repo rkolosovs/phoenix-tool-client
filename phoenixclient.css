@@ -42,7 +42,7 @@ canvas { display:block; } /* To remove the scrollbars */
 
 #mainButton {
     background:rgba(180,180,180,0);
-    background-image: url("immages/main_button.svg");
+    background-image: url("images/main_button.svg");
 	top: 0;
 	left: 0;
     float:left;
@@ -171,21 +171,21 @@ div.eventListItem button:disabled {
 }
 
 .eventListDeleteButton {
-	background-image: url("immages/cross.svg");
+	background-image: url("images/cross.svg");
 }
 
 .eventListCheckButton {
-	background-image: url("immages/checkmark.svg");
+	background-image: url("images/checkmark.svg");
 }
 
 .moveLeftButton {
 	left: 3px;
-	background-image: url("immages/arrow_left.svg");
+	background-image: url("images/arrow_left.svg");
 }
 
 .moveRightButton {
 	right:3px;
-	background-image: url("immages/arrow_right.svg");
+	background-image: url("images/arrow_right.svg");
 }
 
 div.armyListBox {
@@ -201,7 +201,7 @@ p.red {
 }
 
 #nextTurnButton {
-    background-image: url("immages/nextturn_button.svg");
+    background-image: url("images/nextturn_button.svg");
     float:left;
     height: 30px;
     width: 30px;
