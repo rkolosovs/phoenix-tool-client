@@ -409,15 +409,34 @@ function mainButton() {
 }
 
 function determineEventStatus(){
+	console.log("determineEventStatus()");
 	var fixpointReached = true;
 	do {
 		for(var i = 0; i<pendingEvents.length; i++){
-			var oldStatus = pendingEvents[i].status;
+			var event = pendingEvents[i];
+			var content = event.content;
+			var oldStatus = event.status;
 			if(oldStatus === 'withheld' || oldStatus === 'available' || oldStatus === 'impossible'){
-				
-				//TODO: Check, if an event is available (all troops at the right place), 
-				//withheld (not all at the right place but all troops present and move events to the right place available and not impossible) or
-				//impossible (some troops are missing or all troops present but not every troop has a possible move event to arrive at the right place)
+				if(event.type === 'move'){
+					if(armyExistsAndIsLocated(content.realm, content.armyId, content.fromX, content.fromY) && 
+						!unprocessedBattleAtContainingArmy(content.realm, content.armyId, content.fromX, content.fromY)){
+							pendingEvents[i].status = 'available';
+					} else if(armyExists(content.realm, content.armyId) && 
+						possibleMoveOfArmyTo(content.realm, content.armyId, content.fromX, content.fromY)){
+							pendingEvents[i].status = 'withheld';
+					} else {
+						pendingEvents[i].status = 'impossible';
+					}
+				} else if(event.type === 'battle'){
+					if (eachArmyExistsAndIsLocated(event.content.participants, content.x, content.y)) {
+						pendingEvents[i].status = 'available';
+					} else if (eachArmyExists(event.content.participants) && 
+						possibleMoveOfEachArmyTo(event.content.participants, content.x, content.y)) {
+							pendingEvents[i].status = 'withheld';
+					} else {
+						pendingEvents[i].status = 'impossible';
+					}
+				}
 			}
 			if(oldStatus !== pendingEvents[i].status){ //if there was a change, do another pass after this
 				fixpointReached = false;
@@ -426,7 +445,69 @@ function determineEventStatus(){
 	} while(!fixpointReached);
 }
 
+//begin of helper methods for event status determining
+function eachArmyExists(armies){
+	return armies.map(function(army){
+			return armyExists(army.realm, army.armyId);
+		}).reduce(function(total, current){
+			return total && current;
+		}, true);
+}
+
+function eachArmyExistsAndIsLocated(armies, x, y){
+	return armies.map(function(army){
+		return armyExistsAndIsLocated(army.realm, army.armyId, this.x, this.y);
+		}, this).reduce(function(total, current){
+			return total && current;
+		}, true);
+}
+
+function possibleMoveOfEachArmyTo(armies, x, y){
+	return armies.map(function(army){
+			return possibleMoveOfArmyTo(army.realm, army.armyId, this.x, this.y);
+		}, this).reduce(function(total, current){
+			return total && current;
+		}, true);
+}
+
+function armyExists(realm, id){
+	return listOfArmyCoordinates.some(function(val){
+		return (val.ownerTag() === this.realm) && (val.a.armyId === this.id);
+	}, this);
+}
+
+function armyExistsAndIsLocated(realm, id, x, y){
+	return listOfArmyCoordinates.some(function(val){
+		return (val.ownerTag() === this.realm) && 
+			(val.a.armyId === this.id) && 
+			(val.x === this.x) && (val.y === this.y);
+	}, this);
+}
+
+function possibleMoveOfArmyTo(realm, id, x, y){
+	return pendingEvents.some(function(pEv){
+		return (pEv.type === 'move') && (pEv.content.realm === this.realm) && 
+			(pEv.content.armyId === this.id) && (pEv.status === 'available' || pEv.status === 'withheld') && 
+			(pEv.content.toX === this.x) && (pEv.content.toY === this.y);
+	}, this);
+}
+
+function unprocessedBattleAtContainingArmy(realm, id, x, y){
+	return pendingEvents.some(function(pEv){
+		return (pEv.type === 'battle') && 
+			(pEv.status !== 'deleted') && 
+			(pEv.status !== 'checked') && 
+			(pEv.content.x === this.x) &&
+			(pEv.content.y === this.y) &&
+			(pEv.content.participants.some(function(part){
+				return (part.armyId === this.id) && (part.realm === this.realm);
+		}, this));
+	}, this);
+}
+//end of helper methods for event status determining
+
 function fillEventList() {
+	console.log("fillEventList()");
 	var eventList = document.getElementById("eventsTab");
 	eventList.innerHTML = "";
 	determineEventStatus();
