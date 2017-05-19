@@ -265,8 +265,6 @@
 		}
 		
 		function sendDeleteEvent(eventId, eventType) {
-			var eli = document.getElementById("eli"+num);
-			eli.classList.add("deletedELI");
 			$.post({
 				url: url + "/databaseLink/deleteevent/",
 				data: {

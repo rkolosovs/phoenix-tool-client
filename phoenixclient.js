@@ -408,16 +408,27 @@ function mainButton() {
 	toggleVisibility(document.getElementById("bigBox"));
 }
 
-function loadPendingEvents() {
-	$.getJSON(url + "/databaseLink/getevents/", function(json){
-		pendingEvents = json;
-		fillEventList();
-	});
+function determineEventStatus(){
+	var fixpointReached = true;
+	do {
+		for(var i = 0; i<pendingEvents.length; i++){
+			var oldStatus = pendingEvents[i].status;
+			if(oldStatus === 'withheld' || oldStatus === 'available' || oldStatus === 'impossible'){
+				//TODO: Check, if an event is available (all troops at the right place), 
+				//withheld (not all at the right place but all troops present and move events to the right place available and not impossible) or
+				//impossible (some troops are missing or all troops present but not every troop has a possible move event to arrive at the right place)
+			}
+			if(oldStatus !== pendingEvents[i].status){ //if there was a change, do another pass after this
+				fixpointReached = false;
+			}
+		}
+	} while(!fixpointReached);
 }
 
 function fillEventList() {
 	var eventList = document.getElementById("eventsTab");
 	eventList.innerHTML = "";
+	determineEventStatus();
 	for (var i = 0; i<pendingEvents.length; i++){
 		eventList.appendChild(makeEventListItem(pendingEvents[i], i));
 	}
@@ -439,22 +450,47 @@ function makeEventListItem(event, i) {
 		eli.innerHTML = html+"</div>";
 	}
 	var deleteButton = document.createElement("BUTTON");
+	deleteButton.id = "delBtn"+i;
 	deleteButton.classList.add("eventListButton");
 	deleteButton.classList.add("eventListDeleteButton");
 	deleteButton.onclick = deleteEvent(i);
 	var checkButton = document.createElement("BUTTON");
+	checkButton.id = "checkBtn"+i;
 	checkButton.classList.add("eventListButton");
 	checkButton.classList.add("eventListCheckButton");
 	checkButton.onclick = checkEvent(i);
 	eli.appendChild(deleteButton);
 	eli.appendChild(checkButton);
+	
+	if(event.status === 'checked'){
+		eli.classList.add("checkedELI");
+		deleteButton.disabled = true;
+		checkButton.disabled = true;
+	} else if(event.status === 'deleted'){
+		eli.classList.add("deletedELI");
+		deleteButton.disabled = true;
+		checkButton.disabled = true;
+	} else if(event.status === 'impossible'){
+		eli.classList.add("impossibleELI");
+		deleteButton.disabled = true;
+		checkButton.disabled = true;
+	} else if(event.status === 'withheld'){
+		eli.classList.add("withheldELI");
+		deleteButton.disabled = true;
+		checkButton.disabled = true;
+	}
+	
 	return eli;
 }
 
 function deleteEvent(num) {
 	function del() {
+		var eli = document.getElementById("eli"+num);
 		var event = pendingEvents[num];
-		sendDeleteEvent(event.pk, event.type);
+		event.status = 'deleted';
+		fillEventList();
+		//TODO: Re-enable after test
+//		sendDeleteEvent(event.pk, event.type);
 	}
 	return del;
 }
@@ -462,7 +498,6 @@ function deleteEvent(num) {
 function checkEvent(num) {
 	function check() {
 		var eli = document.getElementById("eli"+num);
-		eli.classList.add("checkedELI");
 		var event = pendingEvents[num];
 		var cont = event.content;
 		if (event.type === "move") {
@@ -487,9 +522,10 @@ function checkEvent(num) {
 			} else if (adjacency[5] === 1) {
 				army.move(0);//move to nw
 			}
+			event.status = 'checked';
+			fillEventList();
 			sendCheckEvent(event.pk, event.type);
 		} else if (event.type === "battle") {
-			//TODO: Implement battle resolution in armyInteractions, show force totals for each side, have rolls happen
 			var battleBox = document.getElementById("battleBox");
 			show(battleBox);
 			
@@ -507,6 +543,8 @@ function checkEvent(num) {
 			document.getElementById("battleButton").onclick = function(){
 				battle.resolve();
 				hide(battleBox);
+				event.status = 'checked';
+				fillEventList();
 				//TODO: Reenable once battle resolution box is tested sufficiently.
 //				sendCheckEvent(event.pk, event.type);
 			};

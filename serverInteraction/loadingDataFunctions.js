@@ -18,6 +18,16 @@ function loadTurnNumber() {
 	});
 }
 
+function loadPendingEvents() {
+	$.getJSON(url + "/databaseLink/getevents/", function(json){
+		pendingEvents = json;
+		pendingEvents.forEach(function(item){
+			item.status = 'withheld';
+		});
+		fillEventList();
+	});
+}
+
 // loads the armies data from the server.
 // Data the client is not supposed to have based on his login status is set to -1.
 function loadArmies(url) {

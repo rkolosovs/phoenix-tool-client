@@ -111,12 +111,24 @@ div.tab button.active {
 	height:35px;
 }
 
-.deletedELI {
+div.deletedELI {
+	text-decoration: line-through;
+}
+
+div.impossibleELI {
 	background-color: rgba(255,0,0,0.9);
 }
 
-.checkedELI {
+div.withheldELI {
+	background-color: yellow;
+}
+
+div.checkedELI {
 	background-color: rgba(0,255,0,0.9);
+}
+
+div.eventListItem button:disabled {
+	cursor: not-allowed;
 }
 
 .eventListButton {
