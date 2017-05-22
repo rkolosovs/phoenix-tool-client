@@ -55,7 +55,13 @@
 
 
 <script>
-  
+    function showHex(positionX, positionY) {
+        // what type is this field
+	    this.fieldType = function(){
+            // change this to the field type you want the Battles to happen in.
+		    return 0;
+	    }
+    }
 
 var testArmy1 = new heer(101, 1000, 1, 0, 0, 0, false);
 var testArmy2 = new reiterHeer(201, 500, 1, false);

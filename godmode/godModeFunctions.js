@@ -325,6 +325,17 @@
 			switchModeTo("armyWithNextClick");
 		}
 
+		// used to delete the selected army
+		function deleteSelectedArmy(){
+			if (confirm('Are you sure you want to delete your currenty selected army?')) {
+				listOfArmyCoordinates[selectedArmy] = listOfArmyCoordinates[listOfArmyCoordinates.length-1];
+				listOfArmyCoordinates.pop()
+			} else {
+    			// Do nothing!
+			}
+			resizeCanvas();
+		}
+
 		// This is used by the infoChangeBox to manipulate an armies Stats.
 		function changeArmyInfo(){
 			for(var i = 0; i<listOfArmyCoordinates.length; i++){
