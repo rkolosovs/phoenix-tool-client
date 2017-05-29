@@ -7,7 +7,6 @@
 // help function to fetch current data from the server
 function getNewDataFromServer(){
 	loadMap(url);
-	loadTurnNumber(url);
 }
 
 

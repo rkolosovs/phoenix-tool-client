@@ -695,6 +695,7 @@ function nextTurn() {
 
 function init() {
 	getNewDataFromServer();
+	loadTurnNumber();
 	loadImages(tileset);
 	setHexParts(scale);
 }
