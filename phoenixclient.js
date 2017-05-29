@@ -410,43 +410,38 @@ function mainButton() {
 
 function determineEventStatus(){
 	console.log("determineEventStatus()");
-	var fixpointReached = true;
-	do {
-		for(var i = 0; i<pendingEvents.length; i++){
-			var event = pendingEvents[i];
-			var content = event.content;
-			var oldStatus = event.status;
-			if(oldStatus === 'withheld' || oldStatus === 'available' || oldStatus === 'impossible'){
-				if(event.type === 'move'){
-					if(armyExistsAndIsLocated(content.realm, content.armyId, content.fromX, content.fromY) && 
+	for(var i = 0; i<pendingEvents.length; i++){
+		var event = pendingEvents[i];
+		var content = event.content;
+		if(event.status === 'undetermined' || event.status === 'available' || 
+				event.status === 'withheld' || event.status === 'impossible'){
+			if(event.type === 'move'){
+				if(armyExistsAndIsLocated(content.realm, content.armyId, content.fromX, content.fromY) && 
 						!unprocessedBattleAtContainingArmy(content.realm, content.armyId, content.fromX, content.fromY)){
-							pendingEvents[i].status = 'available';
-					} else if(armyExists(content.realm, content.armyId) && 
+					pendingEvents[i].status = 'available';
+				} else if(armyExists(content.realm, content.armyId) && 
 						possibleMoveOfArmyTo(content.realm, content.armyId, content.fromX, content.fromY)){
-							pendingEvents[i].status = 'withheld';
-					} else {
-						pendingEvents[i].status = 'impossible';
-					}
-				} else if(event.type === 'battle'){
-					if (eachArmyExistsAndIsLocated(event.content.participants, content.x, content.y)) {
-						pendingEvents[i].status = 'available';
-					} else if (eachArmyExists(event.content.participants) && 
-						possibleMoveOfEachArmyTo(event.content.participants, content.x, content.y)) {
-							pendingEvents[i].status = 'withheld';
-					} else {
-						pendingEvents[i].status = 'impossible';
-					}
+					pendingEvents[i].status = 'withheld';
+				} else {
+					pendingEvents[i].status = 'impossible';
+				}
+			} else if(event.type === 'battle'){
+				if (eachArmyExistsAndIsLocated(content.participants, content.x, content.y)) {
+					pendingEvents[i].status = 'available';
+				} else if (eachArmyExists(content.participants) && 
+						possibleMoveOfEachArmyTo(content.participants, content.x, content.y)) {
+					pendingEvents[i].status = 'withheld';
+				} else {
+					pendingEvents[i].status = 'impossible';
 				}
 			}
-			if(oldStatus !== pendingEvents[i].status){ //if there was a change, do another pass after this
-				fixpointReached = false;
-			}
 		}
-	} while(!fixpointReached);
+	}
 }
 
 //begin of helper methods for event status determining
 function eachArmyExists(armies){
+	console.log("eachArmyExits("+armies+")");
 	return armies.map(function(army){
 			return armyExists(army.realm, army.armyId);
 		}).reduce(function(total, current){
@@ -455,52 +450,59 @@ function eachArmyExists(armies){
 }
 
 function eachArmyExistsAndIsLocated(armies, x, y){
+	console.log("eachArmyExistsAndIsLocated("+armies+", "+x+", "+y+")");
 	return armies.map(function(army){
-		return armyExistsAndIsLocated(army.realm, army.armyId, this.x, this.y);
+		return armyExistsAndIsLocated(army.realm, army.armyId, x, y);
 		}, this).reduce(function(total, current){
 			return total && current;
 		}, true);
 }
 
 function possibleMoveOfEachArmyTo(armies, x, y){
+	console.log("possibleMoveOfEachArmyTo("+armies+", "+x+", "+y+")");
 	return armies.map(function(army){
-			return possibleMoveOfArmyTo(army.realm, army.armyId, this.x, this.y);
+			return armyExistsAndIsLocated(army.realm, army.armyId, x, y) || 
+				possibleMoveOfArmyTo(army.realm, army.armyId, x, y);
 		}, this).reduce(function(total, current){
 			return total && current;
 		}, true);
 }
 
 function armyExists(realm, id){
+	console.log("armyExists("+realm+", "+id+")");
 	return listOfArmyCoordinates.some(function(val){
-		return (val.ownerTag() === this.realm) && (val.a.armyId === this.id);
+		return (val.ownerTag() === realm) && (val.a.armyId === id);
 	}, this);
 }
 
 function armyExistsAndIsLocated(realm, id, x, y){
+	console.log("armyExistsAndIsLocated("+realm+", "+id+", "+x+", "+y+")");
 	return listOfArmyCoordinates.some(function(val){
-		return (val.ownerTag() === this.realm) && 
-			(val.a.armyId === this.id) && 
-			(val.x === this.x) && (val.y === this.y);
+		return (val.ownerTag() === realm) && 
+			(val.a.armyId === id) && 
+			(val.x === x) && (val.y === y);
 	}, this);
 }
 
 function possibleMoveOfArmyTo(realm, id, x, y){
+	console.log("possibleMoveOfArmyTo("+realm+", "+id+", "+x+", "+y+")");
 	return pendingEvents.some(function(pEv){
-		return (pEv.type === 'move') && (pEv.content.realm === this.realm) && 
-			(pEv.content.armyId === this.id) && (pEv.status === 'available' || pEv.status === 'withheld') && 
-			(pEv.content.toX === this.x) && (pEv.content.toY === this.y);
+		return (pEv.type === 'move') && (pEv.content.realm === realm) && 
+			(pEv.content.armyId === id) && (pEv.status !== 'deleted' || pEv.status !== 'checked') && 
+			(pEv.content.toX === x) && (pEv.content.toY === y);
 	}, this);
 }
 
 function unprocessedBattleAtContainingArmy(realm, id, x, y){
+	console.log("unprocessedBattleAtContainingArmy("+realm+", "+id+", "+x+", "+y+")");
 	return pendingEvents.some(function(pEv){
 		return (pEv.type === 'battle') && 
 			(pEv.status !== 'deleted') && 
 			(pEv.status !== 'checked') && 
-			(pEv.content.x === this.x) &&
-			(pEv.content.y === this.y) &&
+			(pEv.content.x === x) &&
+			(pEv.content.y === y) &&
 			(pEv.content.participants.some(function(part){
-				return (part.armyId === this.id) && (part.realm === this.realm);
+				return (part.armyId === id) && (part.realm === realm);
 		}, this));
 	}, this);
 }

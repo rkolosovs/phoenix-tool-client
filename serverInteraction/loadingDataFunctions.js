@@ -23,7 +23,7 @@ function loadPendingEvents() {
 	$.getJSON(url + "/databaseLink/getevents/", function(json){
 		pendingEvents = json;
 		pendingEvents.forEach(function(item){
-			item.status = 'withheld';
+			item.status = 'undetermined';
 		});
 		fillEventList();
 	});
