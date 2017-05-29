@@ -135,7 +135,15 @@
 		<button id="ToggleBridgeBuildingMode" onclick="toggleBridgeBuildingMode()">modify bridges</button>
 		<button id="SaveArmies" onclick="saveArmies()">save armies</button>
 		<button id="SaveFactionsTerritories" onclick="saveFactionsTerritories()">save faction territories</button>
-		<button id="ToggleArmyCreationMode" onclick="toggleArmyCreationMode()">make an Army</button>
+		<button id="ToggleArmyCreationMode" onclick="toggleArmyCreationMode()">make an army</button>
+		<button id="DeleteSelectedArmy" onclick="deleteSelectedArmy()">delete selected army</button>
+		<label> Gebäude werden erzeugt für Fraktion:
+			<select id="factionToCreateBuildingsFor" onchange="setFactionToCreateBuildingsFor(this.value)">
+				<option value=1>usa</option>
+				<option value=2>eos</option>
+				<option value=3>vvh</option>
+			</select>
+		</label>
 	</div>
 	<div id="armyGeneratorBox" class="prettyBox">
 		<label for="ownerField">Reich:</label>
@@ -198,6 +206,9 @@
 		<button id="addCapital" onclick="addCapital()">Build a capital</button>
 		<button id="addCapitalFortress" onclick="addCapitalFortress()">Build a capital fortress</button>
 		<button id="deleteBuilding" onclick="deleteBuilding()">Delete a building</button>
+		<section>
+			<button id="SaveBuildings" onclick="saveBuildings()">save buildings</button>
+		</section>
 	</div>
 	<div id="wallCreationBox" class="prettyBox">
 		<h3 align="center">Wall Builder</h3>
@@ -283,6 +294,7 @@
 	<script>
 		//TODO: Move all of this out of the .html file.
 		var changedFields = []; // Fields that were changes with World Builder
+		var changedBuildings = []; // [true if added false if removed, buildings that were added deleted or changed]
 		var authenticationToken = 0; // the session Token, default = 0.
 
 		// Box Sichtbarkeits Zeug, bisher hat es sich geweigert in eine andere Datei zu gehen.

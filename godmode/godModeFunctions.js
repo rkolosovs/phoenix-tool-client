@@ -1,4 +1,11 @@
 'use strict';
+// TODO: before pushing check added and deleted buildings if one is already inside the other, if it is then delete it.
+
+		var factionToCreateBuildingsFor = 1;
+		function setFactionToCreateBuildingsFor(faction){
+			factionToCreateBuildingsFor = faction;
+			console.log("buildings for faction " + factionToCreateBuildingsFor);
+		}
 
 		function toggleOnClickWorldCreationMode(){
 			if(worldCreationModeOnClick && (changeFieldToType == -1)){
@@ -9,6 +16,7 @@
 				worldCreationModeOnClick = true;
 				document.getElementById("creationWarning").style.display = "";
 			}
+			resizeCanvas()
 		}
 
 		function changeFieldClickedTo(number){
@@ -21,6 +29,7 @@
 				switchModeTo("worldCreationModeOn");
 				document.getElementById("creationWarning").style.display = "none";
 			}
+			resizeCanvas()
 		}
 
 		// add a castle in the selectedField
@@ -34,11 +43,16 @@
 					found = true;
 				}
 			}
-			var building = {"type": 0, "x": sf[0], "y": sf[1]};
 			if(found){
+				changedBuildings.push([true, {"type": 0, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);	//<----------------------------------------Realm
+				console.log({"type": 0, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
 			} else {
-				buildings.push(building);
+				changedBuildings.push([true, {"type": 0, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
+				buildings.push({"type": 0, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
+				console.log("this is a new:");
+				console.log(changedBuildings[changedBuildings.length-1]);
 			}
+			resizeCanvas()
 		}
 
 		// add a city in the selectedField
@@ -52,11 +66,16 @@
 					found = true;
 				}
 			}
-			var building = {"type": 1, "x": sf[0], "y": sf[1]};
 			if(found){
+				changedBuildings.push([true, {"type": 1, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
+				console.log({"type": 1, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
 			} else {
-				buildings.push(building);
+				changedBuildings.push([true, {"type": 1, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
+				buildings.push({"type": 1, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
+				console.log("this is a new:");
+				console.log(changedBuildings[changedBuildings.length-1]);
 			}
+			resizeCanvas()
 		}
 
 		// add a fortress in the selectedField
@@ -70,11 +89,16 @@
 					found = true;
 				}
 			}
-			var building = {"type": 2, "x": sf[0], "y": sf[1]};
 			if(found){
+				changedBuildings.push([true, {"type": 2, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
+				console.log({"type": 2, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
 			} else {
-				buildings.push(building);
+				changedBuildings.push([true, {"type": 2, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
+				buildings.push({"type": 2, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
+				console.log("this is a new:");
+				console.log(changedBuildings[changedBuildings.length-1]);
 			}
+			resizeCanvas()
 		}
 
 		// add a capital city in the selectedField
@@ -88,11 +112,16 @@
 					found = true;
 				}
 			}
-			var building = {"type": 3, "x": sf[0], "y": sf[1]};
 			if(found){
+				changedBuildings.push([true, {"type": 3, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
+				console.log({"type": 3, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
 			} else {
-				buildings.push(building);
+				changedBuildings.push([true, {"type": 3, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
+				buildings.push({"type": 3, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
+				console.log("this is a new:");
+				console.log(changedBuildings[changedBuildings.length-1]);
 			}
+			resizeCanvas()
 		}
 
 		// add a capital fortress in the selectedField
@@ -106,11 +135,16 @@
 					found = true;
 				}
 			}
-			var building = {"type": 4, "x": sf[0], "y": sf[1]};
 			if(found){
+				changedBuildings.push([true, {"type": 4, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
+				console.log({"type": 4, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
 			} else {
-				buildings.push(building);
+				changedBuildings.push([true, {"type": 4, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
+				buildings.push({"type": 4, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
+				console.log("this is a new:");
+				console.log(changedBuildings[changedBuildings.length-1]);
 			}
+			resizeCanvas()
 		}
 
 		// delete the building in the selectedField
@@ -119,13 +153,15 @@
 			for(var i = 0; i < buildings.length; i++){
 				var building = buildings[i];
 				if(building.type < 5 && building.x == sf[0] && building.y == sf[1]){
+					changedBuildings.push([false, {"type": building.type, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
 					if(i == buildings.length-1){
-						delete buildings[i];
-					}else{
+						buildings.pop();
+					} else {
 						buildings[i] = buildings.pop();
 					}
 				}
 			}
+			resizeCanvas()
 		}
 
 		// adds a street in the target direction
@@ -137,17 +173,18 @@
 			var found = false;
 			for(var i = 0; i < buildings.length; i++){
 				var building = buildings[i];
-				if(building.type == 8 && ((building.first[0] == sf[0] && building.first[1] == sf[1] && building.second[0] == target[0] && building.second[1] == target[1]) || 
-				(building.first[0] == target[0] && building.first[1] == target[1] && building.second[0] == sf[0] && building.second[1] == sf[1]))){
+				if((building.type == 8 && (building.firstX == sf[0] && building.firstY == sf[1] && building.secondX == target[0] && building.secondY == target[1])) || 
+				(building.type == 8 &&(building.firstX == target[0] && building.firstY == target[1] && building.secondX == sf[0] && building.secondY == sf[1]))){
 					found = true;
 				}
 			}
-			var building = {"type": 8, "first": [sf[0], sf[1]], "second": [target[0], target[1]]};
 			if(found){
 			} else {
-				buildings.push(building);
+				changedBuildings.push([true, {"type": 8, "firstX":sf[0], "firstY":sf[1], "secondX": target[0], "secondY": target[1], "realm":factionToCreateBuildingsFor}]);
+				buildings.push({"type": 8, "firstX":sf[0], "firstY":sf[1], "secondX": target[0], "secondY": target[1], "realm":factionToCreateBuildingsFor});
 				selectedFields[0]=[target[0], target[1]];
 			}
+			resizeCanvas()
 		}
 
 		// removes a street in the target direction
@@ -159,12 +196,13 @@
 			var found = undefined;
 			for(var i = 0; i < buildings.length; i++){
 				var building = buildings[i];
-				if(building.type == 8 && ((building.first[0] == sf[0] && building.first[1] == sf[1] && building.second[0] == target[0] && building.second[1] == target[1]) || 
-				(building.first[0] == target[0] && building.first[1] == target[1] && building.second[0] == sf[0] && building.second[1] == sf[1]))){
+				if(building.type == 8 && ((building.firstX == sf[0] && building.firstY == sf[1] && building.secondX == target[0] && building.secondY == target[1]) || 
+				(building.firstX == target[0] && building.firstY == target[1] && building.secondX == sf[0] && building.secondY == sf[1]))){
 					found = i;
 				}
 			}
 			if(found != undefined){
+				changedBuildings.push([false, {"type": 8, "firstX":sf[0], "firstY":sf[1], "secondX": target[0], "secondY": target[1], "realm":factionToCreateBuildingsFor}]);
 				if(found == buildings.length-1){
 					buildings.pop();
 					selectedFields[0]=[target[0], target[1]];
@@ -173,6 +211,7 @@
 					selectedFields[0]=[target[0], target[1]];
 				}
 			}
+			resizeCanvas()
 		}
 
 		// adds a river in the target direction
@@ -193,6 +232,7 @@
 			} else {
 				rivers.push([[sf[0],sf[1]],[target[0],target[1]]]);
 			}
+			resizeCanvas()
 		}
 
 		// removes a river in the target direction
@@ -216,6 +256,7 @@
 					rivers[found] = rivers.pop();
 				}
 			}
+			resizeCanvas()
 		}
 
 		//add = true means add a building, else remove it.
@@ -229,13 +270,15 @@
 				}
 			}
 			if(add){
-				var building = {"type": type, "x": sf[0], "y": sf[1], "direction": direction};
 				if(found){
+					changedBuildings.push([true, {"type": type, "x": sf[0], "y": sf[1], "direction": direction, "realm":factionToCreateBuildingsFor}]);
 				} else {
-					buildings.push(building);
+					changedBuildings.push([true, {"type": type, "x": sf[0], "y": sf[1], "direction": direction, "realm":factionToCreateBuildingsFor}]);
+					buildings.push({"type": type, "x": sf[0], "y": sf[1], "direction": direction, "realm":factionToCreateBuildingsFor});
 				}
 			} else {
 				if(found != undefined){
+					changedBuildings.push([false, {"type": type, "x": sf[0], "y": sf[1], "direction": direction, "realm":factionToCreateBuildingsFor}]);
 					if(found == buildings.length-1){
 						buildings.pop();
 					}else{
@@ -243,6 +286,7 @@
 					}
 				}
 			}
+			resizeCanvas()
 		}
 
 		// the function for the Gm posibility to make an army out of nothing
@@ -281,6 +325,17 @@
 			switchModeTo("armyWithNextClick");
 		}
 
+		// used to delete the selected army
+		function deleteSelectedArmy(){
+			if (confirm('Are you sure you want to delete your currenty selected army?')) {
+				listOfArmyCoordinates[selectedArmy] = listOfArmyCoordinates[listOfArmyCoordinates.length-1];
+				listOfArmyCoordinates.pop()
+			} else {
+    			// Do nothing!
+			}
+			resizeCanvas();
+		}
+
 		// This is used by the infoChangeBox to manipulate an armies Stats.
 		function changeArmyInfo(){
 			for(var i = 0; i<listOfArmyCoordinates.length; i++){
@@ -304,4 +359,5 @@
 					listOfArmyCoordinates[selectedArmy].remainingHeightPoints = Number(document.getElementById("heightPointsChangeInput").value);
 				}
 			}
+			resizeCanvas()
 		}
