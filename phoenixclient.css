@@ -60,6 +60,7 @@ canvas { display:block; } /* To remove the scrollbars */
 	top: 90px;
 	height: 65%;
 	width: 40%;
+    overflow: auto;
 }
 
  /* Style the tab */
