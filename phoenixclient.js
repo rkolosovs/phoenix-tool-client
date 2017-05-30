@@ -489,7 +489,8 @@ function possibleMoveOfArmyTo(realm, id, x, y){
 	return pendingEvents.some(function(pEv){
 		return (pEv.type === 'move') && (pEv.content.realm === realm) && 
 			(pEv.content.armyId === id) && (pEv.status !== 'deleted' || pEv.status !== 'checked') && 
-			(pEv.content.toX === x) && (pEv.content.toY === y);
+			(pEv.content.toX === x) && (pEv.content.toY === y) && 
+			(canMove(realm, id, pEv.content.fromX, pEv.content.fromY, x, y));
 	}, this);
 }
 
@@ -505,6 +506,33 @@ function unprocessedBattleAtContainingArmy(realm, id, x, y){
 				return (part.armyId === id) && (part.realm === realm);
 		}, this));
 	}, this);
+}
+
+//TODO: This is a redundant implementation of code present in armyCoordinates move().
+//This should be merged to avaid inconsistencies.
+function canMove(realm, id, fromX, fromY, toX, toY){
+	var foundArmy = listOfArmyCoordinates.find(function(army){
+		return (army.a.armyId === id) && (army.ownerTag() === realm);
+	}, this);
+	if (foundArmy !== undefined) {
+		var origin = new showHex(fromX, fromY);
+        var destination = new showHex(toX, toY);
+		var streetPresent = buildings.some(function(building){
+			return (building.type === 8) && 
+				(((building.firstX == fromX && building.firstY == fromY) && (building.secondX == toX && building.secondY == toY)) || 
+					((building.secondX == toX && building.secondY == toY) && (building.firstX == fromX && building.firstY == fromY)));
+		});
+		var heightDifference = Math.abs((origin.height() - destination.height()));
+		//TODO: This is missing harbors
+		var enoughHeightPoints =  (foundArmy.remainingHeightPoints >= 1) &&
+			((heightDifference <= 2 && streetPresent) || (heightDifference <= 1));
+		//TODO: This is missin gbasically everything. But hey, the movement points are set as too high anyways right now.
+		//TODO: Change the TODO above once the movement points are no longer extreme high due to testing.
+		var enoughMovePoints = (foundArmy.remainingMovePoints >= 7);
+		return enoughHeightPoints && enoughMovePoints; 
+	} else {
+		return false;
+	}
 }
 //end of helper methods for event status determining
 
@@ -556,12 +584,12 @@ function makeEventListItem(event, i) {
 		checkButton.disabled = true;
 	} else if(event.status === 'impossible'){
 		eli.classList.add("impossibleELI");
-		deleteButton.disabled = true;
 		checkButton.disabled = true;
 	} else if(event.status === 'withheld'){
 		eli.classList.add("withheldELI");
-		deleteButton.disabled = true;
 		checkButton.disabled = true;
+	} else if(event.status === 'available'){
+		eli.classList.add("availableELI");
 	}
 	
 	return eli;
@@ -608,6 +636,7 @@ function checkEvent(num) {
 			}
 			event.status = 'checked';
 			fillEventList();
+			drawStuff();
 			//TODO: Reenable once event availability check is tested sufficiently.
 //			sendCheckEvent(event.pk, event.type);
 		} else if (event.type === "battle") {
@@ -630,6 +659,7 @@ function checkEvent(num) {
 				hide(battleBox);
 				event.status = 'checked';
 				fillEventList();
+				drawStuff();
 				//TODO: Reenable once battle resolution box is tested sufficiently.
 //				sendCheckEvent(event.pk, event.type);
 			};
