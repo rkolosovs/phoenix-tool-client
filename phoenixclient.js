@@ -441,7 +441,7 @@ function determineEventStatus(){
 
 //begin of helper methods for event status determining
 function eachArmyExists(armies){
-	console.log("eachArmyExits("+armies+")");
+//	console.log("eachArmyExits("+armies+")");
 	return (armies.length > 0) && (armies.map(function(army){
 			return armyExists(army.realm, army.armyId);
 		}).reduce(function(total, current){
@@ -450,7 +450,7 @@ function eachArmyExists(armies){
 }
 
 function eachArmyExistsAndIsLocated(armies, x, y){
-	console.log("eachArmyExistsAndIsLocated("+armies+", "+x+", "+y+")");
+//	console.log("eachArmyExistsAndIsLocated("+armies+", "+x+", "+y+")");
 	return (armies.length > 0) && (armies.map(function(army){
 		return armyExistsAndIsLocated(army.realm, army.armyId, x, y);
 		}, this).reduce(function(total, current){
@@ -459,7 +459,7 @@ function eachArmyExistsAndIsLocated(armies, x, y){
 }
 
 function possibleMoveOfEachArmyTo(armies, x, y){
-	console.log("possibleMoveOfEachArmyTo("+armies+", "+x+", "+y+")");
+//	console.log("possibleMoveOfEachArmyTo("+armies+", "+x+", "+y+")");
 	return (armies.length > 0) && (armies.map(function(army){
 			return armyExistsAndIsLocated(army.realm, army.armyId, x, y) || 
 				possibleMoveOfArmyTo(army.realm, army.armyId, x, y);
@@ -469,14 +469,14 @@ function possibleMoveOfEachArmyTo(armies, x, y){
 }
 
 function armyExists(realm, id){
-	console.log("armyExists("+realm+", "+id+")");
+//	console.log("armyExists("+realm+", "+id+")");
 	return listOfArmyCoordinates.some(function(val){
 		return (val.ownerTag() === realm) && (val.a.armyId === id);
 	}, this);
 }
 
 function armyExistsAndIsLocated(realm, id, x, y){
-	console.log("armyExistsAndIsLocated("+realm+", "+id+", "+x+", "+y+")");
+//	console.log("armyExistsAndIsLocated("+realm+", "+id+", "+x+", "+y+")");
 	return listOfArmyCoordinates.some(function(val){
 		return (val.ownerTag() === realm) && 
 			(val.a.armyId === id) && 
@@ -485,7 +485,7 @@ function armyExistsAndIsLocated(realm, id, x, y){
 }
 
 function possibleMoveOfArmyTo(realm, id, x, y){
-	console.log("possibleMoveOfArmyTo("+realm+", "+id+", "+x+", "+y+")");
+//	console.log("possibleMoveOfArmyTo("+realm+", "+id+", "+x+", "+y+")");
 	return pendingEvents.some(function(pEv){
 		return (pEv.type === 'move') && (pEv.content.realm === realm) && 
 			(pEv.content.armyId === id) && (pEv.status !== 'deleted' || pEv.status !== 'checked') && 
@@ -495,7 +495,7 @@ function possibleMoveOfArmyTo(realm, id, x, y){
 }
 
 function unprocessedBattleAtContainingArmy(realm, id, x, y){
-	console.log("unprocessedBattleAtContainingArmy("+realm+", "+id+", "+x+", "+y+")");
+//	console.log("unprocessedBattleAtContainingArmy("+realm+", "+id+", "+x+", "+y+")");
 	return pendingEvents.some(function(pEv){
 		return (pEv.type === 'battle') && 
 			(pEv.status !== 'deleted') && 
@@ -660,6 +660,7 @@ function checkEvent(num) {
 				event.status = 'checked';
 				fillEventList();
 				drawStuff();
+				console.log(listOfArmyCoordinates);
 				//TODO: Reenable once battle resolution box is tested sufficiently.
 //				sendCheckEvent(event.pk, event.type);
 			};

@@ -237,9 +237,9 @@ function battleHandler(participants, x, y) {
 				this.attackSide.forEach(function(item){
 					var army = item.a;
 					item.remainingMovePoints = 0;
-					if(army.armyId < 200){
+					if(army.armyId < 200 && army.armyId > 0){
 						army.decimate((army.count/this.attackSoldiers)*result.footLosses);
-					} else if(army.armyId < 300){
+					} else if(army.armyId < 300 && army.armyId > 200){
 						army.decimate((army.count/this.attackRiders)*result.cavLosses);
 					}
 				});
@@ -257,9 +257,9 @@ function battleHandler(participants, x, y) {
 				this.defenseSide.forEach(function(item){
 					var army = item.a;
 					item.remainingMovePoints = 0;
-					if(army.armyId < 200){
+					if(army.armyId < 200 && army.armyId > 0){
 						army.decimate((army.count/this.attackSoldiers)*result.footLosses);
-					} else if(army.armyId < 300){
+					} else if(army.armyId < 300 && army.armyId > 200){
 						army.decimate((army.count/this.attackRiders)*result.cavLosses);
 					}
 				});
