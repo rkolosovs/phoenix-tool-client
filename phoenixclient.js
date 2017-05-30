@@ -699,7 +699,14 @@ function nextTurn() {
 	if (currentTurn.realm === null) {
 		message = "Do you want to end the pre-turn phase?";
 	} else if (currentTurn.status === 'fi') {
-		message = "Do you want to end processing the turn of " + currentTurn.realm+"?";
+		var unprocessedEvents = pendingEvents.some(function(event){
+			return (event.status === 'available' || event.status === 'withheld' ||
+				event.status === 'impossible');
+		});
+		if (unprocessedEvents){
+			message = "Some events are unprocessed.";
+		}
+		message += ("Do you want to end processing the turn of " + currentTurn.realm+"?");
 	} else if (login === 'sl') {
 		message = "Do you want to end the turn of "+ currentTurn.realm+"?";
 	} else {

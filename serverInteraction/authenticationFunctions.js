@@ -15,7 +15,7 @@
 					authenticationToken = data.token;
 					login = data.group;
 					// if the user is a GM, godmode possibility is displayed
-					if(login == 'sl'){
+					if(login === 'sl'){
 						document.getElementById("ToggleGodModeBar").style.display = "";
 						if(currentTurn.status === 'fi'){
 							 show(document.getElementById("eventTabsButton"));
@@ -24,6 +24,7 @@
 					}
 					// overwrite old known data
 					getNewDataFromServer();
+					writeTurnNumber();
 				},
 				dataType: "json"
 			});
@@ -57,4 +58,5 @@
 			hide(document.getElementById("eventTabsButton"));
 			var eventList = document.getElementById("eventsTab");
 			eventList.innerHTML = "";
+			writeTurnNumber();
 		}
