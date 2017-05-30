@@ -442,30 +442,30 @@ function determineEventStatus(){
 //begin of helper methods for event status determining
 function eachArmyExists(armies){
 	console.log("eachArmyExits("+armies+")");
-	return armies.map(function(army){
+	return (armies.length > 0) && (armies.map(function(army){
 			return armyExists(army.realm, army.armyId);
 		}).reduce(function(total, current){
 			return total && current;
-		}, true);
+		}, true));
 }
 
 function eachArmyExistsAndIsLocated(armies, x, y){
 	console.log("eachArmyExistsAndIsLocated("+armies+", "+x+", "+y+")");
-	return armies.map(function(army){
+	return (armies.length > 0) && (armies.map(function(army){
 		return armyExistsAndIsLocated(army.realm, army.armyId, x, y);
 		}, this).reduce(function(total, current){
 			return total && current;
-		}, true);
+		}, true));
 }
 
 function possibleMoveOfEachArmyTo(armies, x, y){
 	console.log("possibleMoveOfEachArmyTo("+armies+", "+x+", "+y+")");
-	return armies.map(function(army){
+	return (armies.length > 0) && (armies.map(function(army){
 			return armyExistsAndIsLocated(army.realm, army.armyId, x, y) || 
 				possibleMoveOfArmyTo(army.realm, army.armyId, x, y);
 		}, this).reduce(function(total, current){
 			return total && current;
-		}, true);
+		}, true));
 }
 
 function armyExists(realm, id){
@@ -608,7 +608,8 @@ function checkEvent(num) {
 			}
 			event.status = 'checked';
 			fillEventList();
-			sendCheckEvent(event.pk, event.type);
+			//TODO: Reenable once event availability check is tested sufficiently.
+//			sendCheckEvent(event.pk, event.type);
 		} else if (event.type === "battle") {
 			var battleBox = document.getElementById("battleBox");
 			show(battleBox);
