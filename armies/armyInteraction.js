@@ -258,9 +258,9 @@ function battleHandler(participants, x, y) {
 					var army = item.a;
 					item.remainingMovePoints = 0;
 					if(army.armyId < 200 && army.armyId > 0){
-						army.decimate((army.count/this.attackSoldiers)*result.footLosses);
+						army.decimate((army.count/this.defenseSoldiers)*result.footLosses);
 					} else if(army.armyId < 300 && army.armyId > 200){
-						army.decimate((army.count/this.attackRiders)*result.cavLosses);
+						army.decimate((army.count/this.defenseRiders)*result.cavLosses);
 					}
 				});
 			} else {
@@ -434,7 +434,7 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
             var results = {victor: 'defender', footLosses: verlusteHeer, cavLosses: verlusteReiter};
 			console.log("----------------------------------------------------------");
             return results;
-        } else if(power1 == power2){
+        } else if(power1 === power2){
             // unentschieden:
 			console.log("----------------------------------------------------------");
 			//TODO: The losses seem to be missing. This is not {'tie', <lot>, <lot>}.
