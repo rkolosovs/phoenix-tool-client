@@ -18,7 +18,7 @@ function loadTurnNumber() {
 }
 
 function loadPendingEvents() {
-	console.log("loadPendingEvents()");
+//	console.log("loadPendingEvents()");
 	$.getJSON(url + "/databaseLink/getevents/", function(json){
 		pendingEvents = json;
 		pendingEvents.forEach(function(item){
