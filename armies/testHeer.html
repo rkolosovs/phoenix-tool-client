@@ -55,7 +55,13 @@
 
 
 <script>
-  
+    function showHex(positionX, positionY) {
+        // what type is this field
+	    this.fieldType = function(){
+            // change this to the field type you want the Battles to happen in.
+		    return 0;
+	    }
+    }
 
 var testArmy1 = new heer(101, 1000, 1, 0, 0, 0, false);
 var testArmy2 = new reiterHeer(201, 500, 1, false);
@@ -153,10 +159,10 @@ testSchlachtFoot.init();
 testSchlachtMounted.init();
 testSchlachtMountVsFoot.init();
 
-document.getElementById("test29").innerHTML = "Test Battles with various configurations. " + testSchlachtMixed.overrun1() + " " + testSchlachtMixed.overrun2() + " " + testSchlachtMixed.result(10, 10);
-document.getElementById("test30").innerHTML = "Test Battles with various configurations. " + testSchlachtFoot.overrun1() + " " + testSchlachtFoot.overrun2() + " " + testSchlachtFoot.result(10, 10);
-document.getElementById("test31").innerHTML = "Test Battles with various configurations. " + testSchlachtMounted.overrun1() + " " + testSchlachtMounted.overrun2() + " " + testSchlachtMounted.result(10, 10);
-document.getElementById("test32").innerHTML = "Test Battles with various configurations. " + testSchlachtMountVsFoot.overrun1() + " " + testSchlachtMountVsFoot.overrun2() + " " + testSchlachtMountVsFoot.result(10, 10);
+document.getElementById("test29").innerHTML = "Test Battles with various configurations. " + testSchlachtMixed.overrun1() + " " + testSchlachtMixed.overrun2() + " " + testSchlachtMixed.result([10, 10]);
+document.getElementById("test30").innerHTML = "Test Battles with various configurations. " + testSchlachtFoot.overrun1() + " " + testSchlachtFoot.overrun2() + " " + testSchlachtFoot.result([10, 10]);
+document.getElementById("test31").innerHTML = "Test Battles with various configurations. " + testSchlachtMounted.overrun1() + " " + testSchlachtMounted.overrun2() + " " + testSchlachtMounted.result([10, 10]);
+document.getElementById("test32").innerHTML = "Test Battles with various configurations. " + testSchlachtMountVsFoot.overrun1() + " " + testSchlachtMountVsFoot.overrun2() + " " + testSchlachtMountVsFoot.result([10, 10]);
 
 var testSchlachtTenToOne = new schlacht([testBattle1], [testBattleTenToOne], null, null, 0, 0);
 var testSchlachtTenToOne2 = new schlacht([testBattle1,testBattleMounted1],[testBattleTenToOne, testBattleTenToOneMounted], null, null, 0, 0);
@@ -170,11 +176,11 @@ testSchlachtTenToOne3.init();
 testSchlachtTenToOne4.init();
 testSchlachtNotTenToOne.init();
 
-document.getElementById("test33").innerHTML = "Test Overrun with ten to one. " + testSchlachtTenToOne.overrun1() + " " + testSchlachtTenToOne.overrun2() + " " + testSchlachtTenToOne.result(10, 10);
-document.getElementById("test34").innerHTML = "Test Overrun with ten to one. " + testSchlachtTenToOne2.overrun1() + " " + testSchlachtTenToOne2.overrun2() + " " + testSchlachtTenToOne2.result(10, 10);
-document.getElementById("test35").innerHTML = "Test Overrun with ten to one. " + testSchlachtTenToOne3.overrun1() + " " + testSchlachtTenToOne3.overrun2() + " " + testSchlachtTenToOne3.result(10, 10);
-document.getElementById("test36").innerHTML = "Test Overrun with ten to one. " + testSchlachtTenToOne4.overrun1() + " " + testSchlachtTenToOne4.overrun2() + " " + testSchlachtTenToOne4.result(10, 10);
-document.getElementById("test37").innerHTML = "Test Overrun without ten to one. " + testSchlachtNotTenToOne.overrun1() + " " + testSchlachtNotTenToOne.overrun2() + " " + testSchlachtNotTenToOne.result(10, 10);
+document.getElementById("test33").innerHTML = "Test Overrun with ten to one. " + testSchlachtTenToOne.overrun1() + " " + testSchlachtTenToOne.overrun2() + " " + testSchlachtTenToOne.result([10, 10]);
+document.getElementById("test34").innerHTML = "Test Overrun with ten to one. " + testSchlachtTenToOne2.overrun1() + " " + testSchlachtTenToOne2.overrun2() + " " + testSchlachtTenToOne2.result([10, 10]);
+document.getElementById("test35").innerHTML = "Test Overrun with ten to one. " + testSchlachtTenToOne3.overrun1() + " " + testSchlachtTenToOne3.overrun2() + " " + testSchlachtTenToOne3.result([10, 10]);
+document.getElementById("test36").innerHTML = "Test Overrun with ten to one. " + testSchlachtTenToOne4.overrun1() + " " + testSchlachtTenToOne4.overrun2() + " " + testSchlachtTenToOne4.result([10, 10]);
+document.getElementById("test37").innerHTML = "Test Overrun without ten to one. " + testSchlachtNotTenToOne.overrun1() + " " + testSchlachtNotTenToOne.overrun2() + " " + testSchlachtNotTenToOne.result([10, 10]);
 
 </script>
 
