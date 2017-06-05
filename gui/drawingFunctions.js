@@ -421,5 +421,14 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 		} else if(Math.floor(armyData.a.armyId/100) == 3) {
 			ctx.drawImage(boatsImg, pos[0], pos[1], (scale*SIN60), scale);
 		}
+		if (armyCoordinates[i].ownerTag() === login || login === "sl"){
+			if(armyCoordinates[i].remainingMovePoints > 3){
+                ctx.lineWidth = scale/8;
+	            ctx.strokeStyle='#00FFFF';
+		        ctx.beginPath();
+      	        ctx.arc(pos[0]+(0.5 * scale * SIN60)-c, pos[1]+(scale * 0.5)-c, scale/16, Math.PI*1.25, Math.PI*1.75, false);
+      	        ctx.stroke();
+			}
+		}
 	}
 }
