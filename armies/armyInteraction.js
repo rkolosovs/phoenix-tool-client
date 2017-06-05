@@ -242,7 +242,7 @@ function battleHandler(participants, x, y) {
 					} else if(army.armyId < 300 && army.armyId > 200){
 						army.decimate((army.count/this.attackRiders)*result.cavLosses);
 					}
-				});
+				}, this);
 			} else if(result.victor === 'defender'){
 				//wipe the looser out
 				this.attackSide.forEach(function(item){
@@ -262,7 +262,7 @@ function battleHandler(participants, x, y) {
 					} else if(army.armyId < 300 && army.armyId > 200){
 						army.decimate((army.count/this.defenseRiders)*result.cavLosses);
 					}
-				});
+				},this);
 			} else {
 				//TODO: Revisit once the schlacht.result(dice1, dice2) returns proper values for a tie
 			}
