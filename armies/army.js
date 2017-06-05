@@ -383,6 +383,16 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde) {
             return "This army is too big for this fleet.";
         }
     }
+    //prüft ob die selectierte armee geladen werden kann
+    this.isLoadable = function(){
+        if(listOfArmyCoordinates[selectedArmy].a.raumpunkte() <= this.currentCapacity()){
+            console.log("Army " + listOfArmyCoordinates[selectedArmy].a.armyId +  " is loadable.");
+            this.currentCapacity();
+            return "ok";
+        } else {
+            return "This army is too big for this fleet.";
+        }
+    }
     // Schiffe zählen 100x so viel wie Soldaten
     this.raumpunkte = function() {
         if(this.isGuard){
