@@ -2,8 +2,8 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
     this.armyId = id;
     this.count = truppen;
     this.leaders = heerfuehrer;
-    this.lkp = leichte;
-    this.skp = schwere;
+    this.lkp = leichte; //also light warships
+    this.skp = schwere; //also heavy warships
     this.mounts = reittiere;
     this.isGuard = istGarde;
     this.isLoadedIn = null;
