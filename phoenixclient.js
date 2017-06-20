@@ -207,6 +207,9 @@ function registerLeftClick(){
 			document.getElementById("buttonsBox").appendChild(x);
 		}
 		updateInfoBox();
+		if(selectedArmy !== undefined){
+		    listOfArmyCoordinates[selectedArmy].clickedMoves();
+		}
 	}
 }
 
