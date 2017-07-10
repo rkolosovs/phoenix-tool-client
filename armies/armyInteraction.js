@@ -238,8 +238,10 @@ function battleHandler(participants, x, y) {
 					var army = item.a;
 					item.remainingMovePoints = 0;
 					if(army.armyId < 200 && army.armyId > 0){
+						console.log("armyCount: " + army.count + ", attackSoldiers: " + this.attackSoldiers + ", footLosses: " + result.footLosses);
 						army.decimate((army.count/this.attackSoldiers)*result.footLosses);
 					} else if(army.armyId < 300 && army.armyId > 200){
+						console.log("armyCount: " + army.count + ", attackRiders: " + this.attackRiders + ", cavLosses: " + result.cavLosses);
 						army.decimate((army.count/this.attackRiders)*result.cavLosses);
 					}
 				});
@@ -258,8 +260,10 @@ function battleHandler(participants, x, y) {
 					var army = item.a;
 					item.remainingMovePoints = 0;
 					if(army.armyId < 200 && army.armyId > 0){
+						console.log("armyCount: " + army.count + ", attackSoldiers: " + this.attackSoldiers + ", footLosses: " + result.footLosses);
 						army.decimate((army.count/this.attackSoldiers)*result.footLosses);
 					} else if(army.armyId < 300 && army.armyId > 200){
+						console.log("armyCount: " + army.count + ", attackRiders: " + this.attackRiders + ", cavLosses: " + result.cavLosses);
 						army.decimate((army.count/this.attackRiders)*result.cavLosses);
 					}
 				});

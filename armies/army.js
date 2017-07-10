@@ -86,6 +86,8 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
     }
     // enfernt Truppen, Heerführer und Katapulte entsprechend dem Kampfergebnis
     this.decimate = function(amount){
+        console.log("troops lost: "); 
+        console.log(amount);
         var factor = amount/ this.count;
         this.removeSoldiers(amount);
         this.removeLeaders(this.leaders*factor);
@@ -309,6 +311,8 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde) {
     }
     // Reiter zählen Doppelt so viel wie Soldaten
     this.decimate = function(amount){
+        console.log("riders lost: ");
+        console.log(amount);
         var factor = (amount/2) / this.count;
         this.removeSoldiers(amount/2);
         this.removeLeaders(this.leaders*factor);
