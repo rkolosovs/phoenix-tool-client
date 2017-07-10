@@ -319,15 +319,15 @@ function battleHandler(participants, x, y) {
 // attackingarmies[], defendingarmies[]
 function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
     this.a1 = new heer(0,0,0,0,0,0,false);	// Fußheer Angreifer
-    this.a2 = new heer(0,0,0,0,0,0,false);	// Fußheer Angreifer TODO: Verteidiger?
+    this.a2 = new heer(0,0,0,0,0,0,false);	// Fußheer Verteidiger
     this.ma1 = new reiterHeer(0,0,0,false);	// Reiterheer Angreifer
-    this.ma2 = new reiterHeer(0,0,0,false);	// Reiterheer Angreifer TODO: Verteidiger?
+    this.ma2 = new reiterHeer(0,0,0,false);	// Reiterheer Verteidiger
 	this.fa1 = new seeHeer(0,0,0,0,0,false); // Flotte Angreifer NOCH NICHT UNTERSTÜTZT
 	this.fa2 = new seeHeer(0,0,0,0,0,false); // Flotte Verteidiger NOCH NICHT UNTERSTÜTZT
     this.g1 = new heer(0,0,0,0,0,0,true);	// Garde Angreifer
-    this.g2 = new heer(0,0,0,0,0,0,true);	// Garde Angreifer TODO: Verteidiger?
+    this.g2 = new heer(0,0,0,0,0,0,true);	// Garde Verteidiger
     this.mg1 = new reiterHeer(0,0,0,true);	// ReiterGarde Angreifer
-    this.mg2 = new reiterHeer(0,0,0,true);	// ReiterGarde Angreifer TODO: Verteidiger?
+    this.mg2 = new reiterHeer(0,0,0,true);	// ReiterGarde Verteidiger
 	this.fg1 = new seeHeer(0,0,0,0,0,true); // Gardeflotte Angreifer NOCH NICHT UNTERSTÜTZT
 	this.fg2 = new seeHeer(0,0,0,0,0,true); // Gardeflotte Verteidiger NOCH NICHT UNTERSTÜTZT
 	this.armiesAttack = armiesAttack;
@@ -410,6 +410,8 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
 		console.log("init");
 		console.log("this.a1.count = " + this.a1.count);
 		console.log("this.ma1.count = " + this.ma1.count);
+		console.log("this.g1.count = " + this.g1.count);
+		console.log("this.mg1.count = " + this.mg1.count);
 		console.log("this.a2.count = " + this.a2.count);
 		console.log("this.ma2.count = " + this.ma2.count);
 		console.log("this.g2.count = " + this.g2.count);
@@ -452,25 +454,46 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
 		console.log("overrun1");
 		console.log("this.a1.count = " + this.a1.count);
 		console.log("this.ma1.count = " + this.ma1.count);
+		console.log("this.fa1.count = " + this.fa1.count);
+		console.log("this.g1.count = " + this.g1.count);
+		console.log("this.mg1.count = " + this.mg1.count);
+		console.log("this.fg1.count = " + this.fg1.count);
 		console.log("this.a2.count = " + this.a2.count);
 		console.log("this.ma2.count = " + this.ma2.count);
+		console.log("this.fa2.count = " + this.fa2.count);
 		console.log("this.g2.count = " + this.g2.count);
 		console.log("this.mg2.count = " + this.mg2.count);
-    	return (this.a1.count + this.ma1.count*2) > 0 && (this.a1.count + this.ma1.count*2) >= ((this.a2.count + this.ma2.count*2)*10) && 
-    		(this.g2.count === 0) && (this.mg2.count === 0);
+		console.log("this.fg2.count = " + this.fg2.count);
+    	return ((this.a1.count + this.ma1.count*2 + this.g1.count + this.mg1.count*2) > 0 && 
+		(this.a1.count + this.ma1.count*2 + this.g1.count + this.mg1.count*2) >= ((this.a2.count + this.ma2.count*2)*10) && 
+		(this.g2.count === 0) && (this.mg2.count === 0)) || 
+		((this.fa1.count*100 + this.fg1.count*100) > 0 && 
+		(this.fa1.count*100 + this.fg1.count*100) >= (10 * this.fa2.count*100) &&
+		this.fg2.count === 0);
     }
     
     this.overrun2 = function() {
 		console.log("overrun2");
 		console.log("this.a1.count = " + this.a1.count);
 		console.log("this.ma1.count = " + this.ma1.count);
+		console.log("this.fa1.count = " + this.fa1.count);
+		console.log("this.g1.count = " + this.g1.count);
+		console.log("this.mg1.count = " + this.mg1.count);
+		console.log("this.fg1.count = " + this.fg1.count);
 		console.log("this.a2.count = " + this.a2.count);
 		console.log("this.ma2.count = " + this.ma2.count);
+		console.log("this.fa2.count = " + this.fa2.count);
 		console.log("this.g2.count = " + this.g2.count);
 		console.log("this.mg2.count = " + this.mg2.count);
-    	return (this.a2.count + this.ma2.count*2) > 0 && (this.a2.count + this.ma2.count*2) >= ((this.a1.count + this.ma1.count*2)*10) && 
-    		(this.g1.count === 0) && (this.mg1.count === 0);
+		console.log("this.fg2.count = " + this.fg2.count);
+    	return (this.a2.count + this.ma2.count*2 + this.g2.count + this.mg2.count*2) > 0 && 
+		(this.a2.count + this.ma2.count*2 + this.g2.count + this.mg2.count*2) >= ((this.a1.count + this.ma1.count*2)*10) && 
+    	(this.g1.count === 0) && (this.mg1.count === 0) || 
+		((this.fa2.count*100 + this.fg2.count*100) > 0 && 
+		(this.fa2.count*100 + this.fg2.count*100) >= (10 * this.fa1.count*100) &&
+		this.fg1.count === 0);
     }
+
     // Kampfergebnis in Form {victor: <'attacker', 'defender', 'tie'>, footLosses: <int>, cavLosses: <int>], 
     // {victor: 'tie', footLosses: <viel>, cavLosses: <viel>} falls unentschieden.
     this.result = function(dicerolls) {
@@ -495,10 +518,20 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
 			case 6:
 			case 8: troopAdvantage = 1; break;
 		}
-        var power1 = this.a1.count * (1 + (this.a1.leaderGp() + 140 * troopAdvantage + this.charGp1() + dicerolls[0])/200) + this.ma1.count * 2 * (1 + (this.ma1.leaderGp() + 140 * riderAdvantage + this.charGp1() + dicerolls[0])/200);
-        var power2 = this.a2.count * (1 + (this.a2.leaderGp() + 140 * troopAdvantage + this.charGp2() + dicerolls[1])/200) + this.ma2.count * 2 * (1 + (this.ma2.leaderGp() + 140 * riderAdvantage + this.charGp2() + dicerolls[1])/200);
-        var countSum1 = this.a1.count + this.ma1.count * 2 + this.g1.count + this.mg1.count * 2;
-        var countSum2 = this.a2.count + this.ma2.count * 2 + this.g2.count + this.mg2.count * 2;
+        var power1 = this.a1.count * (1 + (this.a1.leaderGp() + 140 * troopAdvantage + this.charGp1() + dicerolls[0])/200) +
+		 this.g1.count * (1 + (this.g1.leaderGp() + 140 * troopAdvantage + this.charGp1() + dicerolls[0])/200) +
+		 this.ma1.count * 2 * (1 + (this.ma1.leaderGp() + 140 * riderAdvantage + this.charGp1() + dicerolls[0])/200) +
+		 this.mg1.count * 2 * (1 + (this.mg1.leaderGp() + 140 * riderAdvantage + this.charGp1() + dicerolls[0])/200) +
+		 this.fa1.count * 100 * (1 + (this.fa1.leaderGp() + this.charGp1() + dicerolls[0])/200) +
+		 this.fg1.count * 100 * (1 + (this.fg1.leaderGp() + this.charGp1() + dicerolls[0])/200);
+        var power2 = this.a2.count * (1 + (this.a2.leaderGp() + 140 * troopAdvantage + this.charGp2() + dicerolls[1])/200) +
+		 this.g2.count * (1 + (this.g2.leaderGp() + 140 * troopAdvantage + this.charGp1() + dicerolls[0])/200) +
+		 this.mg2.count * 2 * (1 + (this.mg2.leaderGp() + 140 * riderAdvantage + this.charGp1() + dicerolls[0])/200) +
+		 this.ma2.count * 2 * (1 + (this.ma2.leaderGp() + 140 * riderAdvantage + this.charGp2() + dicerolls[1])/200) +
+		 this.fa2.count * 100 * (1 + (this.fa2.leaderGp() + this.charGp1() + dicerolls[0])/200) +
+		 this.fg2.count * 100 * (1 + (this.fg2.leaderGp() + this.charGp1() + dicerolls[0])/200);
+        var countSum1 = this.a1.count + this.ma1.count * 2 + this.fa1.count * 100 + this.g1.count + this.mg1.count * 2 + this.fg1.count * 100;
+        var countSum2 = this.a2.count + this.ma2.count * 2 + this.fa2.count * 100 + this.g2.count + this.mg2.count * 2 + this.fg2.count * 100;
         console.log("power Angreifer = " + power1);
         console.log("power Verteidiger = " + power2);
         console.log("anzahl Angreifer = " + countSum1);
@@ -520,14 +553,18 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
             }
 			console.log("Faktor: " + factor);
             console.log("Verluste: " + verluste);
-            var gpDiffHeer = ((this.a1.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100
-            var gpDiffReiter = ((this.ma1.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100
-            var gpDiffGardeHeer = ((this.g1.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100
-            var gpDiffGardeReiter = ((this.mg1.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100
+            var gpDiffHeer = ((this.a1.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100;
+            var gpDiffReiter = ((this.ma1.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100;
+            var gpDiffFlotte = ((this.fa1.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100;
+            var gpDiffGardeHeer = ((this.g1.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100;
+            var gpDiffGardeReiter = ((this.mg1.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100;
+            var gpDiffGardeFlotte = ((this.fg1.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100;
             var verlusteHeer = this.a1.count/countSum1 * verluste;
             var verlusteReiter = this.ma1.count*2/countSum1 * verluste;
+            var verlusteFlotte = this.fa1.count*100/countSum1 * verluste;
             var verlusteGardeHeer = this.g1.count/countSum1 * verluste;
             var verlusteGardeReiter = this.mg1.count*2/countSum1 * verluste;
+            var verlusteGardeFlotte = this.fg1.count*100/countSum1 * verluste;
             if(gpDiffHeer >= 0){
                 verlusteHeer = verlusteHeer/(1+gpDiffHeer);
             } else {
@@ -537,6 +574,11 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
                 verlusteReiter = verlusteReiter/(1+gpDiffReiter);
             } else {
                 verlusteReiter = verlusteReiter*(1-gpDiffReiter);
+            }
+            if(gpDiffFlotte >= 0){
+                verlusteFlotte = verlusteFlotte/(1+gpDiffFlotte);
+            } else {
+                verlusteFlotte = verlusteFlotte*(1-gpDiffFlotte);
             }
             if(gpDiffGardeHeer >= 0){
                 verlusteGardeHeer = verlusteGardeHeer/(1+gpDiffGardeHeer)
@@ -548,8 +590,14 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
             } else {
                 verlusteGardeReiter = verlusteGardeReiter*(1-gpDiffGardeReiter)
             }
+            if(gpDiffGardeFlotte >= 0){
+                verlusteGardeFlotte = verlusteGardeFlotte/(1+gpDiffGardeFlotte)
+            } else {
+                verlusteGardeFlotte = verlusteGardeFlotte*(1-gpDiffGardeFlotte)
+            }
             // gewonnen?, anzahl Verluste Heer, Reiter, gardeHeer, gardeReiter
-            var results = {victor: 'attacker', footLosses: verlusteHeer, cavLosses: verlusteReiter, gFootLosses: verlusteGardeHeer, gCavLosses: verlusteGardeReiter};
+            var results = {victor: 'attacker', footLosses: verlusteHeer, cavLosses: verlusteReiter, fleetLosses: verlusteFlotte, 
+			gFootLosses: verlusteGardeHeer, gCavLosses: verlusteGardeReiter, gFleetLosses: verlusteGardeFlotte};
 			console.log("----------------------------------------------------------");
             return results;
         } else if(power2 > power1){
@@ -569,12 +617,16 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
             console.log("Verluste: " + verluste);
             var gpDiffHeer = ((this.a2.leaderGp() + this.charGp2() + dicerolls[1])/2 - gpSchnitt)/100
             var gpDiffReiter = ((this.ma2.leaderGp() + this.charGp2() + dicerolls[1])/2 - gpSchnitt)/100
+            var gpDiffFlotte = ((this.fa2.leaderGp() + this.charGp2() + dicerolls[1])/2 - gpSchnitt)/100
             var gpDiffGardeHeer = ((this.g2.leaderGp() + this.charGp2() + dicerolls[1])/2 - gpSchnitt)/100
             var gpDiffGardeReiter = ((this.mg2.leaderGp() + this.charGp2() + dicerolls[1])/2 - gpSchnitt)/100
+            var gpDiffGardeFlotte = ((this.fg2.leaderGp() + this.charGp2() + dicerolls[1])/2 - gpSchnitt)/100
             var verlusteHeer = this.a2.count/countSum2 * verluste;
             var verlusteReiter = this.ma2.count*2/countSum2 * verluste;
+            var verlusteFlotte = this.fa2.count*100/countSum2 * verluste;
             var verlusteGardeHeer = this.g2.count/countSum2 * verluste;
             var verlusteGardeReiter = this.mg2.count*2/countSum2 * verluste;
+            var verlusteGardeFlotte = this.fg2.count*100/countSum2 * verluste;
             if(gpDiffHeer >= 0){
                 verlusteHeer = verlusteHeer/(1+gpDiffHeer);
             } else {
@@ -584,6 +636,11 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
                 verlusteReiter = verlusteReiter/(1+gpDiffReiter);
             } else {
                 verlusteReiter = verlusteReiter*(1-gpDiffReiter);
+            }
+            if(gpDiffFlotte >= 0){
+                verlusteFlotte = verlusteFlotte/(1+gpDiffFlotte);
+            } else {
+                verlusteFlotte = verlusteFlotte*(1-gpDiffFlotte);
             }
             if(gpDiffGardeHeer >= 0){
                 verlusteGardeHeer = verlusteGardeHeer/(1+gpDiffGardeHeer)
@@ -595,8 +652,14 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
             } else {
                 verlusteGardeReiter = verlusteGardeReiter*(1-gpDiffGardeReiter)
             }
+            if(gpDiffGardeFlotte >= 0){
+                verlusteGardeFlotte = verlusteGardeFlotte/(1+gpDiffGardeFlotte)
+            } else {
+                verlusteGardeFlotte = verlusteGardeFlotte*(1-gpDiffGardeFlotte)
+            }
             // gewonnen?, anzahl Verluste Heer, Reiter, gardeHeer, gardeReiter
-            var results = {victor: 'defender', footLosses: verlusteHeer, cavLosses: verlusteReiter, gFootLosses: verlusteGardeHeer, gCavLosses: verlusteGardeReiter};
+            var results = {victor: 'defender', footLosses: verlusteHeer, cavLosses: verlusteReiter, fleetLosses: verlusteFlotte, 
+			gFootLosses: verlusteGardeHeer, gCavLosses: verlusteGardeReiter, gFleetLosses: verlusteGardeFlotte};
 			console.log("----------------------------------------------------------");
             return results;
         } else if(power1 === power2){
