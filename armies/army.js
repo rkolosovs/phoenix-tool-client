@@ -2,8 +2,8 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
     this.armyId = id;
     this.count = truppen;
     this.leaders = heerfuehrer;
-    this.lkp = leichte;
-    this.skp = schwere;
+    this.lkp = leichte; //also light warships
+    this.skp = schwere; //also heavy warships
     this.mounts = reittiere;
     this.isGuard = istGarde;
     this.isLoadedIn = null;
@@ -14,15 +14,17 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
     //berechnet die GP aus Heerführern
     this.leaderGp = function(){
         var gp = 0;
-        if(this.leaders < 101){
-            gp = this.leaders;
-        } else if(this.leaders < 201){
-            gp = (100 + (this.leaders-100) / 2 );
-        } else {
-            gp = 200;
-        }
         if(this.isGuard){
             gp += 300
+        }
+        if(this.leaders == 0){
+            gp = 0;
+        } else if(this.leaders < 101){
+            gp += this.leaders;
+        } else if(this.leaders < 201){
+            gp += (100 + (this.leaders-100) / 2 );
+        } else {
+            gp += 200;
         }
         return gp;
     }
