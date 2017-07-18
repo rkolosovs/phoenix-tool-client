@@ -11,6 +11,10 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
     this.setId = function(newId){
         this.armyId = newId;
     }
+    //sollte 1 für heer, 2 für reiterheer, 3 für seeHeer
+    this.armyType = function(){
+        return(Math.floor(this.armyId/100));
+    }
     //berechnet die GP aus Heerführern
     this.leaderGp = function(){
         var gp = 0;
@@ -283,6 +287,10 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde) {
         }
         return gp;
     }
+    //sollte 1 für heer, 2 für reiterheer, 3 für seeHeer
+    this.armyType = function(){
+        return(Math.floor(this.armyId / 100));
+    }
     // Reiter zählen Doppelt so viel wie Soldaten
     this.raumpunkte = function() {
         if(this.isGuard){
@@ -348,6 +356,10 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde) {
     this.isGuard = istGarde;
     this.isLoadedIn = null; // for easier Data Saving 
     this.loadedArmies = [];
+    //sollte 1 für heer, 2 für reiterheer, 3 für seeHeer
+    this.armyType = function(){
+        return(Math.floor(this.armyId / 100));
+    }
     // berechnet maximale transportkapazität
     this.maxCapacity = function() {
         return this.count*100;

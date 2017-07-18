@@ -129,9 +129,6 @@ function registerLeftClick(){
 	var clickedField = getClickedField(); // get selected field
 	console.log(clickedField);
 	// If mount or unmount is activated, cancel it.
-	if(document.getElementById("mountBox").style.display == "" || document.getElementById("unMountBox").style.display == ""){
-		cancelMountUnMount();
-	}
 	if(armyWithNextClick){
 		switch(Math.floor(armyIdBuffer/100)){
 			// TODO: man soll garde erstellen können
@@ -191,6 +188,7 @@ function registerLeftClick(){
 			selectedFields[0] = clickedField;
 		}
 		// Armeeauswahl
+		restoreInfoBox();
 		selectedArmy = undefined;
 		var possibleSelections = [];
 		for(var i = 0; i < listOfArmyCoordinates.length; i++){
@@ -208,6 +206,7 @@ function registerLeftClick(){
 			x.setAttribute("id", "btnSection")
 			for (var i = 0; i < possibleSelections.length; i++){
 				var btn = document.createElement("BUTTON");
+				btn.setAttribute("class", "fixedPrettyButton");
 				btn.name = listOfArmyCoordinates[possibleSelections[i]].a.armyId + " " + listOfArmyCoordinates[possibleSelections[i]].owner;
 				var t = document.createTextNode(listOfArmyCoordinates[possibleSelections[i]].a.armyId);
 				btn.appendChild(t);

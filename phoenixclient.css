@@ -36,6 +36,20 @@ canvas { display:block; } /* To remove the scrollbars */
     font-size: 16px;
 }
 
+.fixedPrettyButton {
+	background-color: darkred;
+    /*position: absolute;*/
+    border-radius: 8px;
+    color: silver;
+    border: 3px groove silver;
+    padding: 3px 5px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+}
+
 .invisible {
 	display: none;
 }
@@ -321,6 +335,24 @@ p.red {
 }
 
 #unMountBox {
+    right:0;
+    width: 15%;
+    height: 25%;
+}
+
+#splitBox {
+    right:0;
+    width: 15%;
+    height: 25%;
+}
+
+#splitMountedBox {
+    right:0;
+    width: 15%;
+    height: 25%;
+}
+
+#splitFleetBox {
     right:0;
     width: 15%;
     height: 25%;

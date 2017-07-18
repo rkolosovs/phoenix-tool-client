@@ -170,7 +170,7 @@ function hide(element) {
 
 		function toggleGodModeBar(){
 			if(document.getElementById("godmodeBox").style.visibility == "hidden"){
-				cancelMountUnMount();
+				restoreInfoBox();
 				document.getElementById("godmodeBox").style.visibility = "visible";
 				document.getElementById("infoChangeBox").style.display = "";
 				document.getElementById("infoBox").style.display = "none";
@@ -189,18 +189,26 @@ function hide(element) {
 				console.log(listOfArmyCoordinates[selectedArmy].a.armyId);
 				console.log("This a guard army: " + listOfArmyCoordinates[selectedArmy].a.isGuard);
 				if(listOfArmyCoordinates[selectedArmy].a.isGuard){
-					document.getElementById("guard").innerHTML = "GARDE";
+					document.getElementById("guard").innerHTML = "Garde";
 				} else {
 					document.getElementById("guard").innerHTML = null;
 				}
-				document.getElementById("armyId").innerHTML = "HeeresId: " + listOfArmyCoordinates[selectedArmy].a.armyId;
-				document.getElementById("count").innerHTML = "anzahl Truppen: " + listOfArmyCoordinates[selectedArmy].a.count;
-				document.getElementById("leaders").innerHTML = "anzahl Heerführer: " + listOfArmyCoordinates[selectedArmy].a.leaders;
+				if(listOfArmyCoordinates[selectedArmy].a.armyType() == 1 || listOfArmyCoordinates[selectedArmy].a.armyType() == 2)
+				{
+					document.getElementById("armyId").innerHTML = "Heer " + listOfArmyCoordinates[selectedArmy].a.armyId;
+				}
+				else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 3)
+				{
+					document.getElementById("armyId").innerHTML = "Flotte " + listOfArmyCoordinates[selectedArmy].a.armyId;
+				}
+				document.getElementById("count").innerHTML = "Truppen: " + listOfArmyCoordinates[selectedArmy].a.count;
+				document.getElementById("leaders").innerHTML = "Heerführer: " + listOfArmyCoordinates[selectedArmy].a.leaders;
 				document.getElementById("mounts").innerHTML = "mitgeführte Reittiere: " + listOfArmyCoordinates[selectedArmy].a.mounts;
 				document.getElementById("lkp").innerHTML = "leichte Katapulte: " + listOfArmyCoordinates[selectedArmy].a.lkp;
 				document.getElementById("skp").innerHTML = "schwere Katapulte: " + listOfArmyCoordinates[selectedArmy].a.skp;
-				document.getElementById("movePoints").innerHTML = "Verbleibende Bewegungspunkte: " + listOfArmyCoordinates[selectedArmy].remainingMovePoints;
-				document.getElementById("heightPoints").innerHTML = "Verbleibende Höhenstufen: " + listOfArmyCoordinates[selectedArmy].remainingHeightPoints;
+				document.getElementById("movePoints").innerHTML = "Bewegungspunkte: " + listOfArmyCoordinates[selectedArmy].remainingMovePoints;
+				document.getElementById("heightPoints").innerHTML = "Höhenstufen: " + listOfArmyCoordinates[selectedArmy].remainingHeightPoints;
+				document.getElementById("splitBtn").style.display = "";
 				if(Math.floor(listOfArmyCoordinates[selectedArmy].a.armyId/100) == 1){
 					document.getElementById("mount").style.display = "";
 					document.getElementById("unMount").style.display = "none";
@@ -249,6 +257,7 @@ function hide(element) {
 				document.getElementById("heightPoints").innerHTML = null;
 				document.getElementById("mount").style.display = "none";
 				document.getElementById("unMount").style.display = "none";
+				document.getElementById("splitBtn").style.display = "none";
 				// change Box (GM)
 				document.getElementById("ownerChange").style.display = "none";
 				document.getElementById("armyIdChange").style.display = "none";
@@ -273,9 +282,31 @@ function hide(element) {
 			document.getElementById("unMountBox").style.display = "";
 		}
 
-		// this is the cancel function for the mount/unmount boxes
-		function cancelMountUnMount(){
+		function activateSplitbox(){
+			if(listOfArmyCoordinates[selectedArmy].a.armyType() == 1)
+			{
+				document.getElementById("splitBox").style.display = "";
+			} 
+			else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 2)
+			{
+				document.getElementById("splitMountedBox").style.display = "";
+			}
+			else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 3)
+			{
+				document.getElementById("splitFleetBox").style.display = "";
+			}
+			document.getElementById("infoBox").style.display = "none";
+		}
+
+		// this is the cancel function for the mount/unmount and split boxes
+		function restoreInfoBox(){
 			document.getElementById("mountBox").style.display = "none";
 			document.getElementById("unMountBox").style.display = "none";
-			document.getElementById("infoBox").style.display = "";
+			document.getElementById("splitBox").style.display = "none";
+			document.getElementById("splitMountedBox").style.display = "none";
+			document.getElementById("splitFleetBox").style.display = "none";
+			if(document.getElementById("godmodeBox").style.visibility != "visible")
+			{
+				document.getElementById("infoBox").style.display = "";
+			}
 		}

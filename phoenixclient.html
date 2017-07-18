@@ -24,8 +24,7 @@
 
 	<div id="buttonsBox" class="prettyBox">
 		<h3 align="center">Some Controll Buttons Go Here!</h3>
-		<button id="ToggleGodModeBar" class="prettyButton" onclick="toggleGodModeBar()">toggle
-			GodMode Bar</button>
+		<button id="ToggleGodModeBar" class="fixedPrettyButton" onclick="toggleGodModeBar()">toggle GodMode Bar</button>
 	</div>
 
 	<div id="bigBox" class="prettyBox invisible">
@@ -56,7 +55,7 @@
 	<div id="battleBox" class="prettyBox invisible">
 		<button id="closeBattleButton" class="prettyButton">X</button>
 		<div>
-			<div id="<attackersTitleText">Attackers</div>
+			<div id="attackersTitleText">Attackers</div>
 			<div id="defendersTitleText">Defenders</div>
 		</div>
 		<div id="attackArmiesBox" class="armyListBox"></div>
@@ -94,10 +93,9 @@
 	</div>
 
 	<div id="infoBox" class="prettyBox">
-		<h3 align="center">Army Info Goes Here!</h3>
 		<p id="armySelectBtns"></p>
+		<h3 id="armyId"></h3>
 		<p id="guard"></p>
-		<p id="armyId"></p>
 		<p id="count"></p>
 		<p id="leaders"></p>
 		<p id="mounts"></p>
@@ -105,11 +103,71 @@
 		<p id="skp"></p>
 		<p id="movePoints"></p>
 		<p id="heightPoints"></p>
-		<button id="mount" class="prettyButton" onclick="activateMountBox()">Aufsitzen</button>
-		<button id="unMount" class="prettyButton" onclick="activateUnMountBox()">Absitzen</button>
-		<button id="logoutBtn" class="prettyButton" onclick="logoutFromServer()">Logout</button>
+		<button id="mount" class="fixedPrettyButton" onclick="activateMountBox()">Aufsitzen</button>
+		<button id="unMount" class="fixedPrettyButton" onclick="activateUnMountBox()">Absitzen</button>
+		<button id="splitBtn" class="fixedPrettyButton" onclick="activateSplitbox()">Aufteilen</button>
+		<button id="logoutBtn" class="fixedPrettyButton" onclick="logoutFromServer()">Logout</button>
 	</div>
-	<div id="mountBox">
+	<div id="splitBox" class="prettyBox">
+		<h>Heer abspalten</h>
+		<p id="splitInputPartition">
+			<label for="splitInput">Truppen:</label>
+			<input id="splitInput" value="0"></input>
+		</p>
+		<p id="splitInputLeadersPartition">
+			<label for="splitLeadersInput">Heerführer:</label> 
+			<input id="splitLeadersInput" value="0"></input>
+		</p>
+		<p id="splitInputMountsPartition">
+			<label for="splitMountsInput">Reittiere:</label> 
+			<input id="splitMountsInput" value="0"></input>
+		</p>
+		<p id="splitInputLkpPartition">
+			<label for="splitLkpInput">Leiche Katapulte:</label> 
+			<input id="splitLkpInput" value="0"></input>
+		</p>
+		<p id="splitInputSkpPartition">
+			<label for="splitSkpInput">Schwere Katapulte:</label> 
+			<input id="splitSkpInput" value="0"></input>
+		</p>
+		<button id="splitSelectedArmy" class="fixedPrettyButton" onclick="splitSelectedArmy()">Aufteilen</button>	
+		<button id="restoreInfoBox" class="fixedPrettyButton" onclick="restoreInfoBox()">Abbrechen</button>
+	</div>
+	<div id="splitMountedBox" class="prettyBox">
+		<h>Reiterheer abspalten</h>
+		<p id="splitMountedInputPartition">
+			<label for="splitMountedInput">Reiter:</label>
+			<input id="splitMountedInput" value="0"></input>
+		</p>
+		<p id="splitMountedInputLeadersPartition">
+			<label for="splitMountedLeadersInput">Heerführer:</label> 
+			<input id="splitMountedLeadersInput" value="0"></input>
+		</p>
+		<button id="splitSelectedArmy" class="fixedPrettyButton" onclick="splitSelectedArmy()">Aufteilen</button>	
+		<button id="restoreInfoBox" class="fixedPrettyButton" onclick="restoreInfoBox()">Abbrechen</button>
+	</div>
+	<div id="splitFleetBox" class="prettyBox">
+		<h>Flotte abspalten</h>
+		<p id="splitFleetInputPartition">
+			<label for="splitFleetInput">Schiffe:</label>
+			<input id="splitFleetInput" value="0"></input>
+		</p>
+		<p id="splitFleetInputLeadersPartition">
+			<label for="splitFleetLeadersInput">Heerführer:</label> 
+			<input id="splitFleetLeadersInput" value="0"></input>
+		</p>
+		<p id="splitFleetInputLkpPartition">
+			<label for="splitFleetLkpInput">Leiche Kriegsschiffe:</label> 
+			<input id="splitFleetLkpInput" value="0"></input>
+		</p>
+		<p id="splitFleetInputSkpPartition">
+			<label for="splitFleetSkpInput">Schwere Kriegsschiffe:</label> 
+			<input id="splitFleetSkpInput" value="0"></input>
+		</p>
+		<button id="splitSelectedArmy" class="fixedPrettyButton" onclick="splitSelectedArmy()">Aufteilen</button>	
+		<button id="restoreInfoBox" class="fixedPrettyButton" onclick="restoreInfoBox()">Abbrechen</button>
+	</div>
+	<div id="mountBox" class="prettyBox">
 		<p id="mountInputPartition">
 			<label for="mountInput">Wie viele Soldaten sollen aufsitzen:</label>
 			<input id="mountInput"></input>
@@ -118,9 +176,9 @@
 			<label for="mountLeaderInput">Wie viele Heerführer sollen zu
 				Reiterheer:</label> <input id="mountLeaderInput"></input>
 		</p>
-		<button id="mount" onclick="mount()">Aufsitzen</button>
-		<button id="allMount" onclick="allMount()">Alle aufsitzen</button>
-		<button id="cancelMountUnMount" onclick="cancelMountUnMount()">Abbrechen</button>
+		<button id="mount" class="fixedPrettyButton" onclick="mount()">Aufsitzen</button>
+		<button id="allMount" class="fixedPrettyButton" onclick="allMount()">Alle aufsitzen</button>
+		<button id="restoreInfoBox" class="fixedPrettyButton" onclick="restoreInfoBox()">Abbrechen</button>
 	</div>
 	<div id="unMountBox" class="prettyBox">
 		<p id="unMountInputPartition">
@@ -131,9 +189,9 @@
 			<label for="unMountLeaderInput">Wie viele Heerführer sollen
 				zu Fußheer:</label> <input id="unMountLeaderInput"></input>
 		</p>
-		<button id="unMount" onclick="unMount()">Absitzen</button>
-		<button id="allUnMount" onclick="allUnMount()">Alle absitzen</button>
-		<button id="cancelMountUnMount" onclick="cancelMountUnMount()">Abbrechen</button>
+		<button id="unMount" class="fixedPrettyButton" onclick="unMount()">Absitzen</button>
+		<button id="allUnMount" class="fixedPrettyButton" onclick="allUnMount()">Alle absitzen</button>
+		<button id="restoreInfoBox" class="fixedPrettyButton" onclick="restoreInfoBox()">Abbrechen</button>
 	</div>
 	<div id="infoChangeBox" class="prettyBox">
 		<input type="checkbox" id="guardChangeInput" value=true>Garde?<br>
@@ -173,9 +231,9 @@
 			<label for="heightPointsChangeInput">Höhenpunkte:</label> <input
 				id="heightPointsChangeInput"></input>
 		</p>
-		<button id="changeArmyInfo" onclick="changeArmyInfo()"
+		<button id="changeArmyInfo" class="fixedPrettyButton" onclick="changeArmyInfo()"
 			visibility="none">Apply changed Stats</button>
-		<button id="logoutBtnChange" onclick="logoutFromServer()">Logout</button>
+		<button id="logoutBtnChange" class="fixedPrettyButton" onclick="logoutFromServer()">Logout</button>
 	</div>
 	<div id="loginBox" class="prettyBox">
 		<h3 align="center">Login</h3>
@@ -191,17 +249,17 @@
 	</div>
 	<div id="godmodeBox" class="prettyBox">
 		<h3 align="center">Godmode Box</h3>
-		<button id="ToggleWorldCreationMode" onclick="toggleWorldCreationMode()">modify fields</button>
-		<button id="ToggleRiverCreationMode" onclick="toggleRiverCreationMode()">modify rivers</button>
-		<button id="ToggleBuildingCreationMode" onclick="toggleBuildingCreationMode()">modify buildings</button>
-		<button id="ToggleStreetBuildingMode" onclick="toggleStreetBuildingMode()">Modify streets</button>
-		<button id="ToggleWallBuildingMode" onclick="toggleWallBuildingMode()">modify walls</button>
-		<button id="ToggleHarborBuildingMode" onclick="toggleHarborBuildingMode()">modify harbours</button>
-		<button id="ToggleBridgeBuildingMode" onclick="toggleBridgeBuildingMode()">modify bridges</button>
-		<button id="SaveArmies" onclick="saveArmies()">save armies</button>
-		<button id="SaveFactionsTerritories" onclick="saveFactionsTerritories()">save faction territories</button>
-		<button id="ToggleArmyCreationMode" onclick="toggleArmyCreationMode()">make an army</button>
-		<button id="DeleteSelectedArmy" onclick="deleteSelectedArmy()">delete selected army</button>
+		<button id="ToggleWorldCreationMode" class="fixedPrettyButton" onclick="toggleWorldCreationMode()">modify fields</button>
+		<button id="ToggleRiverCreationMode" class="fixedPrettyButton" onclick="toggleRiverCreationMode()">modify rivers</button>
+		<button id="ToggleBuildingCreationMode" class="fixedPrettyButton" onclick="toggleBuildingCreationMode()">modify buildings</button>
+		<button id="ToggleStreetBuildingMode" class="fixedPrettyButton" onclick="toggleStreetBuildingMode()">Modify streets</button>
+		<button id="ToggleWallBuildingMode" class="fixedPrettyButton" onclick="toggleWallBuildingMode()">modify walls</button>
+		<button id="ToggleHarborBuildingMode" class="fixedPrettyButton" onclick="toggleHarborBuildingMode()">modify harbours</button>
+		<button id="ToggleBridgeBuildingMode" class="fixedPrettyButton" onclick="toggleBridgeBuildingMode()">modify bridges</button>
+		<button id="SaveArmies" class="fixedPrettyButton" onclick="saveArmies()">save armies</button>
+		<button id="SaveFactionsTerritories" class="fixedPrettyButton" onclick="saveFactionsTerritories()">save faction territories</button>
+		<button id="ToggleArmyCreationMode" class="fixedPrettyButton" onclick="toggleArmyCreationMode()">make an army</button>
+		<button id="DeleteSelectedArmy" class="fixedPrettyButton" onclick="deleteSelectedArmy()">delete selected army</button>
 		<label> Gebäude werden erzeugt für Fraktion:
 			<select id="factionToCreateBuildingsFor" onchange="setFactionToCreateBuildingsFor(this.value)">
 				<option value=1>usa</option>
@@ -226,246 +284,246 @@
 		<label for="skpField">schwere Katapulte:</label>
 		<input id="skpField" value="0">
 		<input type="checkbox" id="guardField" value=true>Garde?<br>
-		<button id="GenerateArmyBtn" onclick="generateArmyBtn()">Armee Generieren</button>
+		<button id="GenerateArmyBtn" class="fixedPrettyButton" onclick="generateArmyBtn()">Armee Generieren</button>
 	</div>
 	<div id="worldBenderBox" class="prettyBox">
 		<h3 id="creationWarning" align="center">WARNING: WORLD CREATION
 			ON CLICK MODE IS ACTIVE !!!</h3>
-		<button id="ToggleOnClickWorldCreationMode"
+		<button id="ToggleOnClickWorldCreationMode" class="fixedPrettyButton"
 			onclick="toggleOnClickWorldCreationMode()">toggle on click World Creation Mode</button>
-		<button id="SaveFields" 
+		<button id="SaveFields" class="fixedPrettyButton" 
 			onclick="saveFields()">save fields</button>
 		<section id="changeFieldSection">
-			<button id="ChangeFieldClickedTo0" 
+			<button id="ChangeFieldClickedTo0" class="fixedPrettyButton" 
 				onclick="changeFieldClickedTo(0)">change field clicked to shallows</button>
-			<button id="ChangeFieldClickedTo1" 
+			<button id="ChangeFieldClickedTo1" class="fixedPrettyButton" 
 				onclick="changeFieldClickedTo(1)">change field clicked to deepsea</button>
-			<button id="ChangeFieldClickedTo2" 
+			<button id="ChangeFieldClickedTo2" class="fixedPrettyButton" 
 				onclick="changeFieldClickedTo(2)">change field clicked to lowlands</button>
-			<button id="ChangeFieldClickedTo3" 
+			<button id="ChangeFieldClickedTo3" class="fixedPrettyButton" 
 				onclick="changeFieldClickedTo(3)">change field clicked to woods</button>
-			<button id="ChangeFieldClickedTo4" 
+			<button id="ChangeFieldClickedTo4" class="fixedPrettyButton" 
 				onclick="changeFieldClickedTo(4)">change field clicked to hills</button>
-			<button id="ChangeFieldClickedTo5" 
+			<button id="ChangeFieldClickedTo5" class="fixedPrettyButton" 
 				onclick="changeFieldClickedTo(5)">change field clicked to highlands</button>
-			<button id="ChangeFieldClickedTo6" 
+			<button id="ChangeFieldClickedTo6" class="fixedPrettyButton" 
 				onclick="changeFieldClickedTo(6)">change field clicked to mountains</button>
-			<button id="ChangeFieldClickedTo7" 
+			<button id="ChangeFieldClickedTo7" class="fixedPrettyButton" 
 				onclick="changeFieldClickedTo(7)">change field clicked to desert</button>
-			<button id="ChangeFieldClickedTo8" onclick="changeFieldClickedTo(8)">
+			<button id="ChangeFieldClickedTo8" class="fixedPrettyButton" onclick="changeFieldClickedTo(8)">
 				change field clicked to swamp</button>
-			<button id="ChangeFieldClickedTo9" onclick="changeFieldClickedTo(9)">
+			<button id="ChangeFieldClickedTo9" class="fixedPrettyButton" onclick="changeFieldClickedTo(9)">
 				change field clicked to undefined</button>
 		</section>
 	</div>
 	<div id="riverBenderBox" class="prettyBox">
 		<section id="buildRiverSection">
-			<button id="addRiverNW" onclick="addRiver(0)">Add a River at
+			<button id="addRiverNW" class="fixedPrettyButton" onclick="addRiver(0)">Add a River at
 				the north west border</button>
-			<button id="addRiverNE" onclick="addRiver(1)">Add a River at
+			<button id="addRiverNE" class="fixedPrettyButton" onclick="addRiver(1)">Add a River at
 				the north east border</button>
-			<button id="addRiverE" onclick="addRiver(2)">Add a River at
+			<button id="addRiverE" class="fixedPrettyButton" onclick="addRiver(2)">Add a River at
 				the east border</button>
-			<button id="addRiverSE" onclick="addRiver(3)">Add a River at
+			<button id="addRiverSE" class="fixedPrettyButton" onclick="addRiver(3)">Add a River at
 				the south east border</button>
-			<button id="addRiverSW" onclick="addRiver(4)">Add a River at
+			<button id="addRiverSW" class="fixedPrettyButton" onclick="addRiver(4)">Add a River at
 				the south west border</button>
-			<button id="addRiverW" onclick="addRiver(5)">Add a River at
+			<button id="addRiverW" class="fixedPrettyButton" onclick="addRiver(5)">Add a River at
 				the west border</button>
 		</section>
 		<section id="removeRiverSection">
-			<button id="removeRiverNW" onclick="removeRiver(0)">Remove a
+			<button id="removeRiverNW" class="fixedPrettyButton" onclick="removeRiver(0)">Remove a
 				River at the north west border</button>
-			<button id="removeRiverNE" onclick="removeRiver(1)">Remove a
+			<button id="removeRiverNE" class="fixedPrettyButton" onclick="removeRiver(1)">Remove a
 				River at the north east border</button>
-			<button id="removeRiverE" onclick="removeRiver(2)">Remove a
+			<button id="removeRiverE" class="fixedPrettyButton" onclick="removeRiver(2)">Remove a
 				River at the east border</button>
-			<button id="removeRiverSE" onclick="removeRiver(3)">Remove a
+			<button id="removeRiverSE" class="fixedPrettyButton" onclick="removeRiver(3)">Remove a
 				River at the south east border</button>
-			<button id="removeRiverSW" onclick="removeRiver(4)">Remove a
+			<button id="removeRiverSW" class="fixedPrettyButton" onclick="removeRiver(4)">Remove a
 				River at the south west border</button>
-			<button id="removeRiverW" onclick="removeRiver(5)">Remove a
+			<button id="removeRiverW" class="fixedPrettyButton" onclick="removeRiver(5)">Remove a
 				River at the west border</button>
 		</section>
-		<button id="SaveRivers" onclick="saveRivers()">save rivers</button>
+		<button id="SaveRivers" class="fixedPrettyButton" onclick="saveRivers()">save rivers</button>
 	</div>
 	<div id="buildingCreationBox" class="prettyBox">
-		<button id="addCastle" onclick="addCastle()">Build a castle</button>
-		<button id="addCity" onclick="addCity()">Build a city</button>
-		<button id="addFortress" onclick="addFortress()">Build a fortress</button>
-		<button id="addCapital" onclick="addCapital()">Build a capital</button>
-		<button id="addCapitalFortress" onclick="addCapitalFortress()">Build a capital fortress</button>
-		<button id="deleteBuilding" onclick="deleteBuilding()">Delete a building</button>
+		<button id="addCastle" class="fixedPrettyButton" onclick="addCastle()">Build a castle</button>
+		<button id="addCity" class="fixedPrettyButton" onclick="addCity()">Build a city</button>
+		<button id="addFortress" class="fixedPrettyButton" onclick="addFortress()">Build a fortress</button>
+		<button id="addCapital" class="fixedPrettyButton" onclick="addCapital()">Build a capital</button>
+		<button id="addCapitalFortress" class="fixedPrettyButton" onclick="addCapitalFortress()">Build a capital fortress</button>
+		<button id="deleteBuilding" class="fixedPrettyButton" onclick="deleteBuilding()">Delete a building</button>
 		<section>
-			<button id="SaveBuildings" onclick="saveBuildings()">save buildings</button>
+			<button id="SaveBuildings" class="fixedPrettyButton" onclick="saveBuildings()">save buildings</button>
 		</section>
 	</div>
 	<div id="wallCreationBox" class="prettyBox">
 		<h3 align="center">Wall Builder</h3>
 		<section id="buildWall">
-			<button id="addWallNW"
+			<button id="addWallNW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(5, 'nw', true)">Build a
 				Wall in north west direction</button>
-			<button id="addWallNE"
+			<button id="addWallNE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(5, 'ne', true)">Build a
 				Wall in north east direction</button>
-			<button id="addWallE"
+			<button id="addWallE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(5, 'e', true)">Build a
 				Wall in east direction</button>
-			<button id="addWallSE"
+			<button id="addWallSE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(5, 'se', true)">Build a
 				Wall in south east direction</button>
-			<button id="addWallSW"
+			<button id="addWallSW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(5, 'sw', true)">Build a
 				Wall in south west direction</button>
-			<button id="addWallW"
+			<button id="addWallW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(5, 'w', true)">Build a
 				Wall in west direction</button>
 		</section>
 		<section id="removeWall">
-			<button id="removeWallNW"
+			<button id="removeWallNW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(5, 'nw', false)">Remove a
 				Wall in north west direction</button>
-			<button id="removeWallNE"
+			<button id="removeWallNE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(5, 'ne', false)">Remove a
 				Wall in north east direction</button>
-			<button id="removeWallE"
+			<button id="removeWallE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(5, 'e', false)">Remove a
 				Wall in east direction</button>
-			<button id="removeWallSE"
+			<button id="removeWallSE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(5, 'se', false)">Remove a
 				Wall in south east direction</button>
-			<button id="removeWallSW"
+			<button id="removeWallSW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(5, 'sw', false)">Remove a
 				Wall in south west direction</button>
-			<button id="removeWallW"
+			<button id="removeWallW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(5, 'w', false)">Remove a
 				Wall in west direction</button>
 		</section>
-		<button id="SaveBuildings" onclick="saveBuildings()">save
+		<button id="SaveBuildings" class="fixedPrettyButton" onclick="saveBuildings()">save
 			buildings</button>
 	</div>
 	<div id="harborCreationBox" class="prettyBox">
 		<h3 align="center">Harbor Builder</h3>
 		<section id="buildHarbor">
-			<button id="addHarborNW"
+			<button id="addHarborNW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(6, 'nw', true)">Build a
 				Harbor in north west direction</button>
-			<button id="addHarborNE"
+			<button id="addHarborNE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(6, 'ne', true)">Build a
 				Harbor in north east direction</button>
-			<button id="addHarborE"
+			<button id="addHarborE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(6, 'e', true)">Build a
 				Harbor in east direction</button>
-			<button id="addHarborSE"
+			<button id="addHarborSE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(6, 'se', true)">Build a
 				Harbor in south east direction</button>
-			<button id="addHarborSW"
+			<button id="addHarborSW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(6, 'sw', true)">Build a
 				Harbor in south west direction</button>
-			<button id="addHarborW"
+			<button id="addHarborW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(6, 'w', true)">Build a
 				Harbor in west direction</button>
 		</section>
 		<section id="removeHarbor">
-			<button id="removeHarborNW"
+			<button id="removeHarborNW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(6, 'nw', false)">Remove a
 				Harbor in north west direction</button>
-			<button id="removeHarborNE"
+			<button id="removeHarborNE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(6, 'ne', false)">Remove a
 				Harbor in north east direction</button>
-			<button id="removeHarborE"
+			<button id="removeHarborE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(6, 'e', false)">Remove a
 				Harbor in east direction</button>
-			<button id="removeHarborSE"
+			<button id="removeHarborSE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(6, 'se', false)">Remove a
 				Harbor in south east direction</button>
-			<button id="removeHarborSW"
+			<button id="removeHarborSW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(6, 'sw', false)">Remove a
 				Harbor in south west direction</button>
-			<button id="removeHarborW"
+			<button id="removeHarborW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(6, 'w', false)">Remove a
 				Harbor in west direction</button>
 		</section>
-		<button id="SaveBuildings" onclick="saveBuildings()">save
+		<button id="SaveBuildings" class="fixedPrettyButton" onclick="saveBuildings()">save
 			buildings</button>
 	</div>
 	<div id="bridgeCreationBox" class="prettyBox">
 		<h3 align="center">Bridge Builder</h3>
 		<section id="buildBridge">
-			<button id="addBridgeNW"
+			<button id="addBridgeNW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(7, 'nw', true)">Build a
 				Bridge in north west direction</button>
-			<button id="addBridgeNE"
+			<button id="addBridgeNE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(7, 'ne', true)">Build a
 				Bridge in north east direction</button>
-			<button id="addBridgeE"
+			<button id="addBridgeE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(7, 'e', true)">Build a
 				Bridge in east direction</button>
-			<button id="addBridgeSE"
+			<button id="addBridgeSE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(7, 'se', true)">Build a
 				Bridge in south east direction</button>
-			<button id="addBridgeSW"
+			<button id="addBridgeSW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(7, 'sw', true)">Build a
 				Bridge in south west direction</button>
-			<button id="addBridgeW"
+			<button id="addBridgeW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(7, 'w', true)">Build a
 				Bridge in west direction</button>
 		</section>
 		<section id="removeBridge">
-			<button id="removeBridgeNW"
+			<button id="removeBridgeNW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(7, 'nw', false)">Remove a
 				Bridge in north west direction</button>
-			<button id="removeBridgeNE"
+			<button id="removeBridgeNE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(7, 'ne', false)">Remove a
 				Bridge in north east direction</button>
-			<button id="removeBridgeE"
+			<button id="removeBridgeE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(7, 'e', false)">Remove a
 				Bridge in east direction</button>
-			<button id="removeBridgeSE"
+			<button id="removeBridgeSE" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(7, 'se', false)">Remove a
 				Bridge in south east direction</button>
-			<button id="removeBridgeSW"
+			<button id="removeBridgeSW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(7, 'sw', false)">Remove a
 				Bridge in south west direction</button>
-			<button id="removeBridgeW"
+			<button id="removeBridgeW" class="fixedPrettyButton"
 				onclick="manipulateBorderBuilding(7, 'w', false)">Remove a
 				Bridge in west direction</button>
 		</section>
-		<button id="SaveBuildings" onclick="saveBuildings()">save
+		<button id="SaveBuildings" class="fixedPrettyButton" onclick="saveBuildings()">save
 			buildings</button>
 	</div>
 	<div id="streetCreationBox" class="prettyBox">
 		<h3 align="center">Street Builder</h3>
 		<section id="buildStreetSection">
-			<button id="addStreetNW" onclick="addStreet(0)">Build a
+			<button id="addStreetNW" class="fixedPrettyButton" onclick="addStreet(0)">Build a
 				Street in north west direction</button>
-			<button id="addStreetNE" onclick="addStreet(1)">Build a
+			<button id="addStreetNE" class="fixedPrettyButton" onclick="addStreet(1)">Build a
 				Street in north east direction</button>
-			<button id="addStreetE" onclick="addStreet(2)">Build a
+			<button id="addStreetE" class="fixedPrettyButton" onclick="addStreet(2)">Build a
 				Street in east direction</button>
-			<button id="addStreetSE" onclick="addStreet(3)">Build a
+			<button id="addStreetSE" class="fixedPrettyButton" onclick="addStreet(3)">Build a
 				Street in south east direction</button>
-			<button id="addStreetSW" onclick="addStreet(4)">Build a
+			<button id="addStreetSW" class="fixedPrettyButton" onclick="addStreet(4)">Build a
 				Street in south west direction</button>
-			<button id="addStreetW" onclick="addStreet(5)">Build a
+			<button id="addStreetW" class="fixedPrettyButton" onclick="addStreet(5)">Build a
 				Street in west direction</button>
 		</section>
 		<section id="removeStreetSection">
-			<button id="removeStreetNW" onclick="removeStreet(0)">Remove
+			<button id="removeStreetNW" class="fixedPrettyButton" onclick="removeStreet(0)">Remove
 				a Street in north west direction</button>
-			<button id="removeStreetNE" onclick="removeStreet(1)">Remove
+			<button id="removeStreetNE" class="fixedPrettyButton" onclick="removeStreet(1)">Remove
 				a Street in north east direction</button>
-			<button id="removeStreetE" onclick="removeStreet(2)">Remove
+			<button id="removeStreetE" class="fixedPrettyButton" onclick="removeStreet(2)">Remove
 				a Street in east direction</button>
-			<button id="removeStreetSE" onclick="removeStreet(3)">Remove
+			<button id="removeStreetSE" class="fixedPrettyButton" onclick="removeStreet(3)">Remove
 				a Street in south east direction</button>
-			<button id="removeStreetSW" onclick="removeStreet(4)">Remove
+			<button id="removeStreetSW" class="fixedPrettyButton" onclick="removeStreet(4)">Remove
 				a Street in south west direction</button>
-			<button id="removeStreetW" onclick="removeStreet(5)">Remove
+			<button id="removeStreetW" class="fixedPrettyButton" onclick="removeStreet(5)">Remove
 				a Street in west direction</button>
 		</section>
-		<button id="SaveBuildings" onclick="saveBuildings()">save
+		<button id="SaveBuildings" class="fixedPrettyButton" onclick="saveBuildings()">save
 			buildings</button>
 	</div>
 
@@ -494,8 +552,12 @@
 		document.getElementById("armyIdChange").style.display = "none";
 		document.getElementById("mount").style.display = "none";
 		document.getElementById("unMount").style.display = "none";
+		document.getElementById("splitBtn").style.display = "none";
 		document.getElementById("mountBox").style.display = "none";
 		document.getElementById("unMountBox").style.display = "none";
+		document.getElementById("splitBox").style.display = "none";
+		document.getElementById("splitMountedBox").style.display = "none";
+		document.getElementById("splitFleetBox").style.display = "none";
 
 	</script>
 
