@@ -4,6 +4,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
     this.y = coordY;
     this.owner = owner;
     this.possibleMoves = [];
+    this.multiArmyField = false;
     // returns the tag of the owner, not full operational
     // TODO do it right
     this.ownerTag = function(){

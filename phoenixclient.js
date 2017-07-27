@@ -4,6 +4,7 @@
 var selectedFields = []; // list of fields to be highlighted
 var selectedArmy; // currently selected armyCoordinates
 var listOfArmyCoordinates;
+var listOfMultiArmyFields;
 var switchScale = 50;
 var login = 'guest'; // either realm tag, 'sl', or 'guest'
 
@@ -262,9 +263,19 @@ function registerRightClick(){
 							var a = listOfArmyCoordinates[j];
 							if (a.x === listOfArmyCoordinates[selectedArmy].x && a.y === listOfArmyCoordinates[selectedArmy].y) {
 								participants.push({armyId: a.a.armyId, realm: a.ownerTag()});
+								//in case they are enemies
 								if (a.owner !== listOfArmyCoordinates[selectedArmy].owner) {
 									battlePossible = true;
 								}
+								//MultipleFriendlyArmies
+								//5 cases
+								//1. move to create multifield
+								//2. move to existing multifield
+								//3. move from multi and leaving regular field
+								//4. move from multi but still multifield left
+								//5. move from multi to multi
+
+
 							}
 						}
 						if (battlePossible) {
