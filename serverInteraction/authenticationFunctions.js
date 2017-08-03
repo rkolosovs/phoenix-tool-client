@@ -21,6 +21,11 @@
 					// overwrite old known data
 					getNewDataFromServer();
 				},
+				error: function(data){
+					// alert for a failed login
+					alert("Login failed and logged in as guest. Check username or password.");
+					getNewDataFromServer();
+				},
 				dataType: "json"
 			});
 			// change loginBox to infoBox
