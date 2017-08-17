@@ -136,6 +136,34 @@ function registerLeftClick(){
 		document.getElementById("lkpField").value = 0; 
 		skpBuffer = 0;
 		document.getElementById("skpField").value = 0;
+		//before adding to list check if there is an army on the field and add multifield accordingly
+		var onmulti = false;
+		var newmulti = false;
+		var foundarmy;
+		for(var i = 0; i < listOfArmyCoordinates.length; i++){
+			var a = listOfArmyCoordinates[i];
+			if (a.x === armyCoords.x && a.y === armyCoords.y) {
+				if(a.multiArmyField === true){
+					onmulti = true;
+					foundarmy = a;
+				}
+				else{
+					newmulti = true;
+					foundarmy = a;
+				}
+			}
+		}
+		if(onmulti == true){
+			addToMultifield(foundarmy, armyCoords)
+		}
+		else if(newmulti == true){
+			var templist =[];//creating a list of armies to add to the list of multifieldarmies
+			templist.push(foundarmy);
+			templist.push(armyCoords);
+			listOfMultiArmyFields.push(templist);
+			foundarmy.multiArmyField = true;
+			armyCoords.multiArmyField = true;
+		}
 		listOfArmyCoordinates.push(armyCoords);
 		switchBtnBoxTo("buttonsBox");
 		switchModeTo("none");
@@ -285,11 +313,11 @@ function registerRightClick(){
 									addToMultifield(a, listOfArmyCoordinates[selectedArmy]);
 								}
 								else{//1.
-									a.multiArmyField = true;
 									var templist =[];//creating a list of armies to add to the list of multifieldarmies
 									templist.push(a);
 									templist.push(listOfArmyCoordinates[selectedArmy]);
 									listOfMultiArmyFields.push(templist);
+									a.multiArmyField = true;
 									listOfArmyCoordinates[selectedArmy].multiArmyField = true;
 								}
 							}
