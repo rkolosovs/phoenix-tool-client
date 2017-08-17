@@ -50,4 +50,6 @@
 			// overwrite previously known data
 			getNewDataFromServer();
 			loginZeit = undefined;
+			//delete Multifield Data
+			listOfMultiArmyFields = [];
 		}

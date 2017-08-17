@@ -31,7 +31,7 @@ canvas { display:block; } /* To remove the scrollbars */
 #infoBox {
     right:0;
     width: 15%;
-    height: 25%;
+    height: 40%;
 }
 
 #topBar {
@@ -46,7 +46,7 @@ canvas { display:block; } /* To remove the scrollbars */
 #infoChangeBox {
     right:0;
     width: 15%;
-    height: 25%;
+    height: 30%;
 }
 
 #mountBox {

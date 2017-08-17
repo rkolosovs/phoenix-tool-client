@@ -4,7 +4,7 @@
 var selectedFields = []; // list of fields to be highlighted
 var selectedArmy; // currently selected armyCoordinates
 var listOfArmyCoordinates;
-var listOfMultiArmyFields;
+var listOfMultiArmyFields = [];
 var switchScale = 50;
 var login = 'guest'; // either realm tag, 'sl', or 'guest'
 
@@ -249,6 +249,7 @@ function registerRightClick(){
 				if(neighbors[i][0] == clickedField[0] && neighbors[i][1] == clickedField[1]){
 					var out;
 					if (listOfArmyCoordinates[selectedArmy].ownerTag() === login || login === "sl") {
+
 						out = listOfArmyCoordinates[selectedArmy].move(i);
 						console.log(out);
 					} else {
@@ -259,28 +260,45 @@ function registerRightClick(){
 						var battlePossible = false;
 						var participants = [];
 
+						//before moving check if you leave a Multi Army field
+						if(listOfArmyCoordinates[selectedArmy].multiArmyField === true){
+							deleteFromMultifield(listOfArmyCoordinates[selectedArmy]);
+						}
+
 						for (var j = 0; j < listOfArmyCoordinates.length; j++) {
 							var a = listOfArmyCoordinates[j];
-							if (a.x === listOfArmyCoordinates[selectedArmy].x && a.y === listOfArmyCoordinates[selectedArmy].y) {
+							if (a.x === listOfArmyCoordinates[selectedArmy].x && a.y === listOfArmyCoordinates[selectedArmy].y && a.a !== listOfArmyCoordinates[selectedArmy].a) {
 								participants.push({armyId: a.a.armyId, realm: a.ownerTag()});
 								//in case they are enemies
 								if (a.owner !== listOfArmyCoordinates[selectedArmy].owner) {
 									battlePossible = true;
 								}
-								//MultipleFriendlyArmies
+								//MultipleArmies - even if not friendly
 								//5 cases
 								//1. move to create multifield
 								//2. move to existing multifield
 								//3. move from multi and leaving regular field
 								//4. move from multi but still multifield left
 								//5. move from multi to multi
-
-
+								
+								if(a.multiArmyField === true){//2.
+									addToMultifield(a, listOfArmyCoordinates[selectedArmy]);
+								}
+								else{//1.
+									a.multiArmyField = true;
+									var templist =[];//creating a list of armies to add to the list of multifieldarmies
+									templist.push(a);
+									templist.push(listOfArmyCoordinates[selectedArmy]);
+									listOfMultiArmyFields.push(templist);
+									listOfArmyCoordinates[selectedArmy].multiArmyField = true;
+								}
 							}
 						}
 						if (battlePossible) {
 							preparedEvents.push({type: "battle", content:  {participants: participants, x: listOfArmyCoordinates[selectedArmy].x, y: listOfArmyCoordinates[selectedArmy].y, overrun: false}});
 						}
+
+
 					} else {
 						alert(out);
 					}
@@ -289,6 +307,45 @@ function registerRightClick(){
 			updateInfoBox();
 		}
 	}
+}
+
+function addToMultifield(armyOnMultifield, armyToAdd){
+	var alreadyInList = false;
+	var placeToAdd;
+	for(var i = 0; i < listOfMultiArmyFields.length; i++){
+		for(var j = 0; j < listOfMultiArmyFields[i].length; j++){
+			if(listOfMultiArmyFields[i][j].a === armyOnMultifield.a){
+				placeToAdd = i;
+			}
+			else if(listOfMultiArmyFields[i][j].a === armyToAdd.a){
+				alreadyInList = true;
+			}
+		}
+	}
+	if(alreadyInList == false){
+		listOfMultiArmyFields[placeToAdd].push(armyToAdd);
+	}
+	armyToAdd.multiArmyField = true;
+}
+
+function deleteFromMultifield(armyToDelete){
+	addArmyToMulti:{//label to jump out when its found and added
+	for(var k = 0; k < listOfMultiArmyFields.length; k++){
+		for(var l = 0; l < listOfMultiArmyFields[k].length; l++){
+			if(listOfMultiArmyFields[k][l].a === armyToDelete.a){
+				listOfMultiArmyFields[k].splice(l,1);
+
+				//check if remaining field is still multi
+				if(listOfMultiArmyFields[k].length < 2){
+					listOfMultiArmyFields[k][0].multiArmyField = false;
+					listOfMultiArmyFields.splice(k,1);
+				}
+				break;
+			}
+		}
+	}
+	}
+	armyToDelete.multiArmyField = false;
 }
 
 function getClickedField(){

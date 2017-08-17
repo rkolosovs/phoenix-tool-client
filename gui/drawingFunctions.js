@@ -440,22 +440,23 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 			} else if(Math.floor(armyData.a.armyId/100) == 3) {
 				ctx.drawImage(boatsImg, pos[0], pos[1], (scale*SIN60), scale);
 			}
-			if (armyCoordinates[i].ownerTag() === login || login === "sl"){
-				
-				if(armyCoordinates[i].possibleMoves.length > 0){
-					drawRemainingMovement(ctx, pos, scale);
-				}
-				else if(Math.floor(armyData.a.armyId/100) == 1 && armyCoordinates[i].remainingMovePoints == 9){
-					drawRemainingMovement(ctx, pos, scale);
-				}
-				else if(Math.floor(armyData.a.armyId/100) == 2 && armyCoordinates[i].remainingMovePoints == 21){
-					drawRemainingMovement(ctx, pos, scale);
-				}
-				else if(Math.floor(armyData.a.armyId/100) == 3 && armyCoordinates[i].remainingMovePoints >= 42){
-					drawRemainingMovement(ctx, pos, scale);
-				}
+		}
+		if (armyCoordinates[i].ownerTag() === login || login === "sl"){
+			
+			if(armyCoordinates[i].possibleMoves.length > 0){
+				drawRemainingMovement(ctx, pos, scale);
+			}
+			else if(Math.floor(armyData.a.armyId/100) == 1 && armyCoordinates[i].remainingMovePoints == 9){
+				drawRemainingMovement(ctx, pos, scale);
+			}
+			else if(Math.floor(armyData.a.armyId/100) == 2 && armyCoordinates[i].remainingMovePoints == 21){
+				drawRemainingMovement(ctx, pos, scale);
+			}
+			else if(Math.floor(armyData.a.armyId/100) == 3 && armyCoordinates[i].remainingMovePoints >= 42){
+				drawRemainingMovement(ctx, pos, scale);
 			}
 		}
+		
 	}
 
 	//drawing the multifield armies
@@ -472,9 +473,9 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 		//Für jedes i-te Objekt dann die Position des Mittelpunktes:
 		//const double MidPosX = (cos(Angle * i) * RadiusX) + CirclePosX;
 		//const double MidPosY =(sin(Angle * i) * RadiusY) + CirclePosY;
-		var angle = (Math.PI * 2) / listOfMultiArmyFields[j].length;//Total armies on field
-		var xPosArmy = (Math.cos(angle * i) * scale/4) + pos[0];
-		var yPosArmy = (Math.cos(angle * i) * scale/4) + pos[1];
+		var angle = (Math.PI * 2.0) / listOfMultiArmyFields[j].length;//Total armies on field
+		var xPosArmy = (Math.cos(angle * i) * scale/4) + pos[0] + scale/4;
+		var yPosArmy = (Math.sin(angle * i) * scale/4) + pos[1];
 
 		// armies == 1, riders == 2, boats == 3
 			if(Math.floor(armyData.a.armyId/100) == 1){
