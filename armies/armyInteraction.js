@@ -246,6 +246,7 @@ function battleHandler(participants, x, y) {
 				army.lkp = 0;
 				army.skp = 0;
 				army.mounts = 0;
+				deleteFromMultifield(item);
 			});
 		} else if(battle.overrun2()) {
 			this.defenseSide.forEach(function(item){
@@ -258,6 +259,7 @@ function battleHandler(participants, x, y) {
 				army.lkp = 0;
 				army.skp = 0;
 				army.mounts = 0;
+				deleteFromMultifield(item);
 			});
 		} else {
 			var result = battle.result([this.attackDice.value, this.defenseDice.value]);
@@ -270,6 +272,7 @@ function battleHandler(participants, x, y) {
 					army.lkp = 0;
 					army.skp = 0;
 					army.mounts = 0;
+					deleteFromMultifield(item);
 				});
 				//null move points of the victor and inflict losses
 				this.attackSide.forEach(function(item){
@@ -292,6 +295,7 @@ function battleHandler(participants, x, y) {
 					army.lkp = 0;
 					army.skp = 0;
 					army.mounts = 0;
+					deleteFromMultifield(item);
 				});
 				//null move points of the victor and inflict losses
 				this.defenseSide.forEach(function(item){
