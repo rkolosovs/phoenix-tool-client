@@ -7,6 +7,7 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
     this.mounts = reittiere;
     this.isGuard = istGarde;
     this.isLoadedIn = null;
+    this.wasShotAt = false;
     // setze eine neue Id für das Heer
     this.setId = function(newId){
         this.armyId = newId;
@@ -119,6 +120,7 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
         this.removeMounts(damageBP * (this.mounts*0.1 / saveBp) * 10);
         this.removeLkp(damageBP * (this.lkp*200 / saveBp) / 200);
         this.removeSkp(damageBP * (this.skp*400 / saveBp) / 400);
+        this.wasShotAt = true;
     }
     //array der Würfelergebnisse, badConditions("far"/"high"/null)
     //return BPschaden

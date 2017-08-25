@@ -438,7 +438,7 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 			ctx.drawImage(boatsImg, pos[0], pos[1], (scale*SIN60), scale);
 		}
 		if (armyCoordinates[i].ownerTag() === login || login === "sl"){
-			
+			//draw if you can move
 			if(armyCoordinates[i].possibleMoves.length > 0){
                 drawRemainingMovement(ctx, pos, scale);
 			}
@@ -451,6 +451,11 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 			else if(Math.floor(armyData.a.armyId/100) == 3 && armyCoordinates[i].remainingMovePoints >= 42){
                 drawRemainingMovement(ctx, pos, scale);
 			}
+
+			//draw if it took fire
+			if(armyData.a.wasShotAt === true){
+				drawTookFire(ctx, pos, scale);
+			}
 		}
 	}
 }
@@ -460,5 +465,13 @@ function drawRemainingMovement(ctx, pos, scale){
 	ctx.strokeStyle='#00FFFF';
 	ctx.beginPath();
     ctx.arc(pos[0]+(0.5 * scale * SIN60)-c, pos[1]+(scale * 0.5)-c, scale/16, Math.PI*1.25, Math.PI*1.75, false);
+    ctx.stroke();
+}
+
+function drawTookFire(ctx, pos, scale){
+	ctx.lineWidth = scale/8;
+	ctx.strokeStyle='#FF0000';
+	ctx.beginPath();
+    ctx.arc(pos[0]+(0.5 * scale * SIN60)+c, pos[1]+(scale * 0.5)+c, scale/16, Math.PI*1.25, Math.PI*1.75, false);
     ctx.stroke();
 }

@@ -731,6 +731,14 @@ function nextTurn() {
 	}
 }
 
+function untagHitArmys(){
+	for(var i = 0; i < armyCoordinates.length; i++){
+		if (armyCoordinates[i].ownerTag() === login || login === "sl"){
+			armyCoordinates.a.wasShotAt = false;
+		}
+	}
+}
+
 function init() {
 	getNewDataFromServer();
 	loadTurnNumber();

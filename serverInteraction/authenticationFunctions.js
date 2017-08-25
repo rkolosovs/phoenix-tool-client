@@ -64,4 +64,5 @@
 			var eventList = document.getElementById("eventsTab");
 			eventList.innerHTML = "";
 			writeTurnNumber();
+			untagHitArmys();
 		}
