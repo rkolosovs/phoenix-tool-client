@@ -50,6 +50,14 @@
 <p id="test35"></p>
 <p id="test36"></p>
 <p id="test37"></p>
+<p>specials</p>
+<p id="test38"></p>
+<p id="test39"></p>
+<p> see Zeug </p>
+<p id="test40"></p>
+<p id="test41"></p>
+<p id="test42"></p>
+<p id="test43"></p>
 
 
 
@@ -144,6 +152,7 @@ document.getElementById("test28").innerHTML = "testFK2Armies 250 heerfuehrer, 15
 // test schlacht
 var testBattle1 = new heer(110, 10000, 10, 0, 0, 0, false);
 var testBattle2 = new heer(111, 20000, 20, 0, 0, 0, false);
+var testGuard = new heer(199, 1000, 100, 0, 0, 0, true);
 var testBattleTenToOne = new heer(112, 100000, 1, 0, 0, 0, false);
 var testBattleMounted1 = new reiterHeer(206, 10000, 30, false);
 var testBattleMounted2 = new reiterHeer(207, 5000, 5, false);
@@ -169,12 +178,16 @@ var testSchlachtTenToOne2 = new schlacht([testBattle1,testBattleMounted1],[testB
 var testSchlachtTenToOne3 = new schlacht([testBattleTenToOne], [testBattleMounted2],  null, null, 0, 0);
 var testSchlachtTenToOne4 = new schlacht([testBattle1], [testBattleTenToOneMounted], null, null, 0, 0);
 var testSchlachtNotTenToOne = new schlacht([testBattleTenToOne], [testBattleMounted1], null, null, 0, 0);
+var testSchlachtArray = new schlacht([testBattle1, testBattleMounted1, testBattle2, testBattleTenToOneMounted],[testBattleMounted2, testBattleTenToOne], null, null, 0, 0);
+var testGuardBattle = new schlacht([testGuard],[testBattle1], null, null, 0, 0);
 
 testSchlachtTenToOne.init();
 testSchlachtTenToOne2.init();
 testSchlachtTenToOne3.init();
 testSchlachtTenToOne4.init();
 testSchlachtNotTenToOne.init();
+testSchlachtArray.init();
+testGuardBattle.init();
 
 document.getElementById("test33").innerHTML = "Test Overrun with ten to one. " + testSchlachtTenToOne.overrun1() + " " + testSchlachtTenToOne.overrun2() + " " + testSchlachtTenToOne.result([10, 10]);
 document.getElementById("test34").innerHTML = "Test Overrun with ten to one. " + testSchlachtTenToOne2.overrun1() + " " + testSchlachtTenToOne2.overrun2() + " " + testSchlachtTenToOne2.result([10, 10]);
@@ -182,6 +195,25 @@ document.getElementById("test35").innerHTML = "Test Overrun with ten to one. " +
 document.getElementById("test36").innerHTML = "Test Overrun with ten to one. " + testSchlachtTenToOne4.overrun1() + " " + testSchlachtTenToOne4.overrun2() + " " + testSchlachtTenToOne4.result([10, 10]);
 document.getElementById("test37").innerHTML = "Test Overrun without ten to one. " + testSchlachtNotTenToOne.overrun1() + " " + testSchlachtNotTenToOne.overrun2() + " " + testSchlachtNotTenToOne.result([10, 10]);
 
+document.getElementById("test38").innerHTML = "arrayBattleTest " + testSchlachtArray.overrun1() + " " + testSchlachtArray.overrun2() + " " + testSchlachtArray.result([10, 10]);
+document.getElementById("test39").innerHTML = "testGuardBattle " + testGuardBattle.overrun1() + " " + testGuardBattle.overrun2() + " " + testGuardBattle.result([10, 10]);
+
+var testFleet1 = new seeHeer(301, 10, 1, 0, 0, false);
+var testFleet2 = new seeHeer(302, 10, 1, 0, 0, false);
+var testFleetBig = new seeHeer(303, 100, 1, 0, 0, false);
+var testFleetGuard = new seeHeer(399, 10, 1, 0, 0, true);
+
+var testSeeSchlachtTwoVOne = new schlacht([testFleet1, testFleet2], [testFleetBig], null, null, 0, 0);
+var testSeeSchlachtTenToOne = new schlacht([testFleet1], [testFleetBig], null, null, 0, 0);
+var testSeeSchlachtTenToOneGuard = new schlacht([testFleetBig], [testFleetGuard], null, null, 0, 0);
+
+testSeeSchlachtTwoVOne.init();
+testSeeSchlachtTenToOne.init();
+testSeeSchlachtTenToOneGuard.init();
+
+document.getElementById("test40").innerHTML = "testSeeSchlachtTwoVOne " + testSeeSchlachtTwoVOne.overrun1() + " " + testSeeSchlachtTwoVOne.overrun2() + " " + testSeeSchlachtTwoVOne.result([10, 10]);
+document.getElementById("test41").innerHTML = "testSeeSchlachtTenToOne " + testSeeSchlachtTenToOne.overrun1() + " " + testSeeSchlachtTenToOne.overrun2() + " " + testSeeSchlachtTenToOne.result([10, 10]);
+document.getElementById("test42").innerHTML = "testSeeSchlachtTenToOneGuard " + testSeeSchlachtTenToOneGuard.overrun1() + " " + testSeeSchlachtTenToOneGuard.overrun2() + " " + testSeeSchlachtTenToOneGuard.result([10, 10]);
 </script>
 
 </body>

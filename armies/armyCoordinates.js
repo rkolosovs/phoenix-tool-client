@@ -15,11 +15,13 @@ function armyCoordinates(army, coordX, coordY, owner) {
         }
     }
     // nur zu Testzwecken 300
+    //TODO: make it the proper value once testing is done
     this.remainingMovePoints = 300;
     this.setRemainingMovePoints = function(points){
         this.remainingMovePoints = points;
     }
     // nur zu Testzwecken 30
+    //TODO: make it the proper value once testing is done
     this.remainingHeightPoints = 30;
     this.setRemainingHeightPoints = function(points){
         this.remainingHeightPoints = points;
