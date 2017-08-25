@@ -7,7 +7,6 @@
 // help function to fetch current data from the server
 function getNewDataFromServer(){
 	loadMap(url);
-	loadTurnNumber(url);
 }
 
 
@@ -15,6 +14,17 @@ function loadTurnNumber() {
 	$.getJSON(url + "/databaseLink/getturn/", function(json){
 		currentTurn = json;
 		writeTurnNumber();
+	});
+}
+
+function loadPendingEvents() {
+//	console.log("loadPendingEvents()");
+	$.getJSON(url + "/databaseLink/getevents/", function(json){
+		pendingEvents = json;
+		pendingEvents.forEach(function(item){
+			item.status = 'undetermined';
+		});
+		fillEventList();
 	});
 }
 

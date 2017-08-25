@@ -19,13 +19,22 @@
 				}
 			}
 			console.log("start");
-			$.ajax({
-				type: 'post',
-				url: url+"/databaseLink/savefielddata/",
-				data: {map: dataToServerString,
-					authorization: authenticationToken},
-				success: console.log("success"),
-				error: console.log("error"),
+			$.post({
+				 url: url+"/databaseLink/savefielddata/",
+				 data: {
+					 authorization: authenticationToken,
+				 	 map: dataToServerString},
+				 statusCode: {
+				 	 200: function() {
+				 		 console.log("success");
+				 	 },
+				 	 401: function() {
+				 		 alert('Authorisation failure. Please log in.');
+				 	 },
+				 	 403: function() {
+				 		 alert('Access denied. You have to be SL to do this.');
+				 	 }
+				 }
 			});
 			console.log("end");
 		}
@@ -47,13 +56,21 @@
 			}
 			console.log("start");
 			console.log(rivers);
-			$.ajax({
-				type:'post',
+			$.post({
 				url: url + "/databaseLink/saveriverdata/",
 				data: {river: dataToServerString,
 					authorization: authenticationToken},
-				success: console.log("success"),
-				error: console.log("error"),
+				statusCode: {
+					200: function() {
+						console.log("success");
+					},
+					401: function() {
+						alert('Authorisation failure. Please log in.');
+					},
+					403: function() {
+						alert('Access denied. You have to be SL to do this.');
+					}
+				}
 			});
 			console.log("end");
 		}
@@ -132,13 +149,21 @@
 				}
 			}
 			console.log("data to Server String: " + dataToServerString);
-			$.ajax({
-				type:'post',
+			$.post({
 				url: url + "/databaseLink/savebuildingdata/",
 				data: {buildings: dataToServerString,
 					authorization: authenticationToken},
-				success: console.log("success"),
-				error: console.log("error"),
+				statusCode: {
+					200: function() {
+						console.log("success");
+					},
+					401: function() {
+						alert('Authorisation failure. Please log in.');
+					},
+					403: function() {
+						alert('Access denied. You have to be SL to do this.');
+					}
+				}
 			});
 			console.log("end");
 		}
@@ -147,38 +172,46 @@
 			var dataToServerString = "";
 			for(var i = 0; i < listOfArmyCoordinates.length; i++){
 				if(i != listOfArmyCoordinates.length-1){
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.armyId + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.count + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.leaders + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.lkp + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.skp + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.mounts + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].x + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].y + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].owner + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.isLoadedIn + ";"
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.armyId + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.count + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.leaders + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.lkp + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.skp + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.mounts + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].x + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].y + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].owner + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.isLoadedIn + ";";
 				} else {
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.armyId + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.count + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.leaders + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.lkp + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.skp + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.mounts + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].x + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].y + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].owner + ","
-					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.isLoadedIn
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.armyId + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.count + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.leaders + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.lkp + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.skp + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.mounts + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].x + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].y + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].owner + ",";
+					dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.isLoadedIn;
 				}
 			}
 			console.log("start");
 			console.log(listOfArmyCoordinates);
-			$.ajax({
-				type:'post',
+			$.post({
 				url: url + "/databaseLink/savearmydata/",
 				data: {armies: dataToServerString,
 					authorization: authenticationToken},
-				success: console.log("success"),
-				error: console.log("error"),
+				statusCode: {
+					200: function() {
+						console.log("success");
+					},
+					401: function() {
+						alert('Authorisation failure. Please log in.');
+					},
+					403: function() {
+						alert('Access denied. You have to be SL to do this.');
+					}
+				}
 			});
 			console.log("end");
 		}
@@ -212,13 +245,118 @@
 			}
 			console.log("start");
 			console.log(borders);
-			$.ajax({
-				type:'post',
+			$.post({
 				url: url + "/databaseLink/saveborderdata/",
 				data: {borders: dataToServerString,
 					authorization: authenticationToken},
-				success: console.log("success"),
-				error: console.log("error"),
+				statusCode: {
+					200: function() {
+						console.log("success");
+					},
+					401: function() {
+						alert('Authorisation failure. Please log in.');
+					},
+					403: function() {
+						alert('Access denied. You have to be SL to do this.');
+					}
+				}
 			});
 			console.log("end");
+		}
+		
+		function sendDeleteEvent(eventId, eventType) {
+			$.post({
+				url: url + "/databaseLink/deleteevent/",
+				data: {
+					authorization: authenticationToken,
+					eventId: eventId,
+					eventType: eventType
+				},
+				statusCode: {
+					200: function() {
+						console.log("success");
+					},
+					403: function() {
+		  				alert('Access denied. You have to be SL to do this.');
+					}
+				}
+			});
+		}
+		
+
+		function sendCheckEvent(eventId, eventType) {
+			$.post({
+				url: url + "/databaseLink/checkevent/",
+				data: {
+					authorization: authenticationToken,
+					eventId: eventId,
+					eventType: eventType
+				},
+				statusCode: {
+					200: function() {
+						console.log("success");
+					},
+					403: function() {
+						alert('Access denied. You have to be SL to do this.');
+					}
+				}
+			});
+		}
+		
+		function sendNewEvent(type, content) {
+			$.post({
+				url: url + "/databaseLink/"+type+"event/",
+				data: {
+					authorization: authenticationToken,
+					content: content
+				},
+				statusCode: {
+					200: function() {
+						console.log("success");
+					},
+					400: function() {
+						if(type === "move") {
+							alert('Invalid input. Moved troop does not exist.');
+						} else if (type === "battle") {
+							alert("Invalid input. Not all troops participating in a battle exist.");
+						}
+					},
+					401: function() {
+  						alert('Authorisation failure. Please log in.');
+					},
+					403: function() {
+						if(type === "move") {
+							alert('Access denied. You can only send move events for your troops.');
+						} else if (type === "battle") {
+							alert('Access denied. You can only send battle events involving your troops.');
+						}
+					}
+				}
+			});
+		}
+		
+		function sendNextTurn() {
+			$.post({
+				url: url + "/databaseLink/nextturn/",
+				data: {authorization: authenticationToken},
+				success: function(data){
+					currentTurn = data;
+					writeTurnNumber();
+				},
+				dataType: "json",
+				statusCode: {
+					401: function() {
+	    	  			alert('Authorisation failure. Please log in.');
+	    			},
+	    			403: function() {
+	    	  			alert('Access denied. You can only end your own turn.');
+	    			},
+	    			520: function() { // custom status code
+						alert('Turn Order ran out. Tell SL to fill it!');
+	    			},
+	    			521: function() { // custom status code
+	    				alert('Turn Order ran out. You should fill it!');
+	    			}
+				}
+			});
 		}

@@ -2,14 +2,18 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
     this.armyId = id;
     this.count = truppen;
     this.leaders = heerfuehrer;
-    this.lkp = leichte;
-    this.skp = schwere;
+    this.lkp = leichte; //also light warships
+    this.skp = schwere; //also heavy warships
     this.mounts = reittiere;
     this.isGuard = istGarde;
     this.isLoadedIn = null;
     // setze eine neue Id für das Heer
     this.setId = function(newId){
         this.armyId = newId;
+    }
+    //sollte 1 für heer, 2 für reiterheer, 3 für seeHeer
+    this.armyType = function(){
+        return(Math.floor(this.armyId/100));
     }
     //berechnet die GP aus Heerführern
     this.leaderGp = function(){
@@ -88,6 +92,8 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
     }
     // enfernt Truppen, Heerführer und Katapulte entsprechend dem Kampfergebnis
     this.decimate = function(amount){
+        console.log("troops lost: "); 
+        console.log(amount);
         var factor = amount/ this.count;
         this.removeSoldiers(amount);
         this.removeLeaders(this.leaders*factor);
@@ -281,6 +287,10 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde) {
         }
         return gp;
     }
+    //sollte 1 für heer, 2 für reiterheer, 3 für seeHeer
+    this.armyType = function(){
+        return(Math.floor(this.armyId / 100));
+    }
     // Reiter zählen Doppelt so viel wie Soldaten
     this.raumpunkte = function() {
         if(this.isGuard){
@@ -311,6 +321,8 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde) {
     }
     // Reiter zählen Doppelt so viel wie Soldaten
     this.decimate = function(amount){
+        console.log("riders lost: ");
+        console.log(amount);
         var factor = (amount/2) / this.count;
         this.removeSoldiers(amount/2);
         this.removeLeaders(this.leaders*factor);
@@ -344,6 +356,10 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde) {
     this.isGuard = istGarde;
     this.isLoadedIn = null; // for easier Data Saving 
     this.loadedArmies = [];
+    //sollte 1 für heer, 2 für reiterheer, 3 für seeHeer
+    this.armyType = function(){
+        return(Math.floor(this.armyId / 100));
+    }
     // berechnet maximale transportkapazität
     this.maxCapacity = function() {
         return this.count*100;
