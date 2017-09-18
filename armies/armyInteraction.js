@@ -689,6 +689,11 @@ function fernkampf(dicerollsL, dicerollsS, badConditions, shooter, target, chars
 // the splitArmy funtion of the split box
 // TODO: If the army has moved, set the new split army's move points to the appropriate, non-max value.
 function splitSelectedArmy(){
+	if(login == 'guest')
+	{
+		window.alert("Zuschauer haben keine Rechte.");
+		return false;
+	}
 	var toSplit = 0;
 	var leadersToSplit = 0;
 	var mountsToSplit = 0;
@@ -743,7 +748,6 @@ function splitSelectedArmy(){
 			return false;
 		}
 	}
-	// TODO: Handle transported troops
 	else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 3)
 	{
 		toSplit = parseInt(document.getElementById("splitFleetInput").value);
@@ -753,6 +757,11 @@ function splitSelectedArmy(){
 		if(toSplit > (listOfArmyCoordinates[selectedArmy].a.count-1))
 		{
 			window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.")
+			return false;
+		}
+		if(toSplit*100 > (listOfArmyCoordinates[selectedArmy].a.currentCapacity()))
+		{
+			window.alert("Du kannst keine beladenen Schiffe abspalten.")
 			return false;
 		}
 		if(toSplit < 1)
@@ -783,7 +792,8 @@ function splitSelectedArmy(){
 	}
 	if(listOfArmyCoordinates[selectedArmy].a.armyType() == 1)
 	{
-		var newArmy = new heer(generateArmyId(1,listOfArmyCoordinates[selectedArmy].owner), toSplit, leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, false);
+		var newArmyId = generateArmyId(1,listOfArmyCoordinates[selectedArmy].owner);
+		var newArmy = new heer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, false);
 		var newArmyCoordinates = new armyCoordinates(newArmy, listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y, listOfArmyCoordinates[selectedArmy].owner);
 		listOfArmyCoordinates.push(newArmyCoordinates);
 		listOfArmyCoordinates[selectedArmy].a.removeSoldiers(toSplit);
@@ -791,6 +801,24 @@ function splitSelectedArmy(){
 		listOfArmyCoordinates[selectedArmy].a.removeLkp(lkpToSplit);
 		listOfArmyCoordinates[selectedArmy].a.removeSkp(skpToSplit);
 		listOfArmyCoordinates[selectedArmy].a.removeMounts(mountsToSplit);
+		if(login != 'sl')
+		{
+			preparedEvents.push({
+				type: "split", content: {
+					armyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+					troops: tosplit,
+					leaders: leadersToSplit,
+					lkp: lkpToSplit,
+					skp: skpToSplit,
+					mounts: mountsToSplit,
+					x: listOfArmyCoordinates[selectedArmy].x,
+					y: listOfArmyCoordinates[selectedArmy].y,
+					newArmysId: newArmyId
+				}
+			});
+		}
+		
 	}
 	if(listOfArmyCoordinates[selectedArmy].a.armyType() == 2)
 	{
@@ -799,6 +827,23 @@ function splitSelectedArmy(){
 		listOfArmyCoordinates.push(newArmyCoordinates);
 		listOfArmyCoordinates[selectedArmy].a.removeSoldiers(toSplit);
 		listOfArmyCoordinates[selectedArmy].a.removeLeaders(leadersToSplit);
+		if(login != 'sl')
+		{
+			preparedEvents.push({
+				type: "split", content: {
+					armyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+					troops: tosplit,
+					leaders: leadersToSplit,
+					lkp: 0,
+					skp: 0,
+					mounts: 0,
+					x: listOfArmyCoordinates[selectedArmy].x,
+					y: listOfArmyCoordinates[selectedArmy].y,
+					newArmysId: newArmyId
+				}
+			});
+		}
 	}
 	if(listOfArmyCoordinates[selectedArmy].a.armyType() == 3)
 	{
@@ -809,6 +854,23 @@ function splitSelectedArmy(){
 		listOfArmyCoordinates[selectedArmy].a.removeLeaders(leadersToSplit);
 		listOfArmyCoordinates[selectedArmy].a.removeLkp(lkpToSplit);
 		listOfArmyCoordinates[selectedArmy].a.removeSkp(skpToSplit);
+		if(login != 'sl')
+		{
+			preparedEvents.push({
+				type: "split", content: {
+					armyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+					troops: tosplit,
+					leaders: leadersToSplit,
+					lkp: lkpToSplit,
+					skp: skpToSplit,
+					mounts: 0,
+					x: listOfArmyCoordinates[selectedArmy].x,
+					y: listOfArmyCoordinates[selectedArmy].y,
+					newArmysId: newArmyId
+				}
+			});
+		}
 	}
 	restoreInfoBox();
 	updateInfoBox();
@@ -928,10 +990,250 @@ function allUnMount(){
 	unMount();
 }
 
+// move troops or leaders from selectedArmy to the army at position mergeId in listOfArmyCoordinates
+function transferTroopsFromSelectedArmy(mergeId){
+	var toSplit = 0;
+	var leadersToSplit = 0;
+	var mountsToSplit = 0;
+	var lkpToSplit = 0;
+	var skpToSplit = 0;
+	// depending on army type different fields are needed
+	if(listOfArmyCoordinates[selectedArmy].a.armyType() == 1)
+	{
+		toSplit = parseInt(document.getElementById("splitInput").value);
+		leadersToSplit = parseInt(document.getElementById("splitLeadersInput").value);
+		mountsToSplit = parseInt(document.getElementById("splitMountsInput").value);
+		lkpToSplit = parseInt(document.getElementById("splitLkpInput").value);
+		skpToSplit = parseInt(document.getElementById("splitSkpInput").value);
+		if(toSplit >= 0 && leadersToSplit >= 0 && mountsToSplit >= 0 && lkpToSplit >= 0 && skpToSplit >= 0)
+		{
+			listOfArmyCoordinates[selectedArmy].a.count -= toSplit;
+			listOfArmyCoordinates[mergeId].a.count += toSplit;
+			listOfArmyCoordinates[selectedArmy].a.leaders -= leadersToSplit;
+			listOfArmyCoordinates[mergeId].a.leaders += leadersToSplit;
+			listOfArmyCoordinates[selectedArmy].a.mounts -= mountsToSplit;
+			listOfArmyCoordinates[mergeId].a.mounts += mountsToSplit;
+			listOfArmyCoordinates[selectedArmy].a.lkp -= lkpToSplit;
+			listOfArmyCoordinates[mergeId].a.lkp += lkpToSplit;
+			listOfArmyCoordinates[selectedArmy].a.skp -= skpToSplit;
+			listOfArmyCoordinates[mergeId].a.skp += skpToSplit;
+			if(login != 'sl')
+			{
+				preparedEvents.push({
+					type: "transfer", content: {
+						fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+						toArmyId: listOfArmyCoordinates[mergeId].a.armyId,
+						realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+						troops: tosplit,
+						leaders: leadersToSplit,
+						lkp: lkpToSplit,
+						skp: skpToSplit,
+						mounts: mountsToSplit
+					}
+				});
+			}
+		} else
+		{
+			window.alert("Es müssen positive Werte abgespalten werden");
+			return false;
+		}
+	}
+	else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 2)
+	{
+		toSplit = parseInt(document.getElementById("splitMountedInput").value);
+		leadersToSplit = parseInt(document.getElementById("splitMountedLeadersInput").value);
+		if(toSplit >= 0 && leadersToSplit >= 0)
+		{
+			listOfArmyCoordinates[selectedArmy].a.count -= toSplit;
+			listOfArmyCoordinates[mergeId].a.count += toSplit;
+			listOfArmyCoordinates[selectedArmy].a.leaders -= leadersToSplit;
+			listOfArmyCoordinates[mergeId].a.leaders += leadersToSplit;
+			listOfArmyCoordinates[selectedArmy].a.lkp -= lkpToSplit;
+			listOfArmyCoordinates[mergeId].a.lkp += lkpToSplit;
+			listOfArmyCoordinates[selectedArmy].a.skp -= skpToSplit;
+			listOfArmyCoordinates[mergeId].a.skp += skpToSplit;
+			if(login != 'sl')
+			{
+				preparedEvents.push({
+					type: "transfer", content: {
+						fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+						toArmyId: listOfArmyCoordinates[mergeId].a.armyId,
+						realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+						troops: tosplit,
+						leaders: leadersToSplit,
+						lkp: 0,
+						skp: 0,
+						mounts: 0
+					}
+				});
+			}
+		} else
+		{
+			window.alert("Es müssen positive Werte abgespalten werden");
+			return false;
+		}
+	}
+	else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 3)
+	{
+		toSplit = parseInt(document.getElementById("splitFleetInput").value);
+		leadersToSplit = parseInt(document.getElementById("splitFleetLeadersInput").value);
+		lkpToSplit = parseInt(document.getElementById("splitFleetLkpInput").value);
+		skpToSplit = parseInt(document.getElementById("splitFleetSkpInput").value);
+		if(toSplit >= 0 && leadersToSplit >= 0 && lkpToSplit >= 0 && skpToSplit >= 0)
+		{
+			listOfArmyCoordinates[selectedArmy].a.count -= toSplit;
+			listOfArmyCoordinates[mergeId].a.count += toSplit;
+			listOfArmyCoordinates[selectedArmy].a.leaders -= leadersToSplit;
+			listOfArmyCoordinates[mergeId].a.leaders += leadersToSplit;
+			listOfArmyCoordinates[selectedArmy].a.lkp -= lkpToSplit;
+			listOfArmyCoordinates[mergeId].a.lkp += lkpToSplit;
+			listOfArmyCoordinates[selectedArmy].a.skp -= skpToSplit;
+			listOfArmyCoordinates[mergeId].a.skp += skpToSplit;
+			if(login != 'sl')
+			{
+				preparedEvents.push({
+					type: "transfer", content: {
+						fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+						toArmyId: listOfArmyCoordinates[mergeId].a.armyId,
+						realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+						troops: tosplit,
+						leaders: leadersToSplit,
+						lkp: lkpToSplit,
+						skp: skpToSplit,
+						mounts: 0
+					}
+				});
+			}
+		} else
+		{
+			window.alert("Es müssen positive Werte abgespalten werden");
+			return false;
+		}
+	}
+	updateInfoBox();
+	restoreInfoBox();
+}
+
+// merges selectedArmy with the army at position mergeId in listOfArmyCoordinates
+function mergeSelectedArmy(mergeId){
+	// depending on army type different fields are needed
+	if(listOfArmyCoordinates[selectedArmy].a.armyType() == 1)
+	{
+		listOfArmyCoordinates[mergeId].a.count += listOfArmyCoordinates[selectedArmy].a.count;
+		listOfArmyCoordinates[mergeId].a.leaders += listOfArmyCoordinates[selectedArmy].a.leaders;
+		listOfArmyCoordinates[mergeId].a.mounts += listOfArmyCoordinates[selectedArmy].a.mounts;
+		listOfArmyCoordinates[mergeId].a.lkp += listOfArmyCoordinates[selectedArmy].a.lkp;
+		listOfArmyCoordinates[mergeId].a.skp += listOfArmyCoordinates[selectedArmy].a.skp;
+		if(login != 'sl')
+		{
+			preparedEvents.push({
+				type: "merge", content: {
+					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					toArmyId: listOfArmyCoordinates[mergeId].a.armyId,
+					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+					troops: listOfArmyCoordinates[selectedArmy].a.count,
+					leaders: listOfArmyCoordinates[selectedArmy].a.leaders,
+					lkp: listOfArmyCoordinates[selectedArmy].a.lkp,
+					skp: listOfArmyCoordinates[selectedArmy].a.skp,
+					mounts: listOfArmyCoordinates[selectedArmy].a.mounts
+				}
+			});
+		}
+		deleteSelectedArmy();
+	}
+	else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 2)
+	{
+		listOfArmyCoordinates[mergeId].a.count += listOfArmyCoordinates[selectedArmy].a.count;
+		listOfArmyCoordinates[mergeId].a.leaders += listOfArmyCoordinates[selectedArmy].a.leaders;
+		if(login != 'sl')
+		{
+			preparedEvents.push({
+				type: "merge", content: {
+					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					toArmyId: listOfArmyCoordinates[mergeId].a.armyId,
+					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+					troops: listOfArmyCoordinates[selectedArmy].a.count,
+					leaders: listOfArmyCoordinates[selectedArmy].a.leaders,
+					lkp: 0,
+					skp: 0,
+					mounts: 0
+				}
+			});
+		}
+		deleteSelectedArmy();
+	}
+	else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 3)
+	{
+		listOfArmyCoordinates[mergeId].a.count += listOfArmyCoordinates[selectedArmy].a.count;
+		listOfArmyCoordinates[mergeId].a.leaders += listOfArmyCoordinates[selectedArmy].a.leaders;
+		listOfArmyCoordinates[mergeId].a.lkp += listOfArmyCoordinates[selectedArmy].a.lkp;
+		listOfArmyCoordinates[mergeId].a.skp += listOfArmyCoordinates[selectedArmy].a.skp;
+		listOfArmyCoordinates[mergeId].a.loadedArmies = listOfArmyCoordinates[mergeId].a.loadedArmies.concat(listOfArmyCoordinates[selectedArmy].a.loadedArmies);
+
+		console.log("the loaded armies in the new fleet are:");
+		console.log(listOfArmyCoordinates[mergeId].a.loadedArmies);
+		if (listOfArmyCoordinates[selectedArmy].a.loadedArmies.length > 0)
+		{
+			console.log("id = " + listOfArmyCoordinates[selectedArmy].a.loadedArmies[i]);
+			for(var j = 0; j < listOfArmyCoordinates[selectedArmy].a.loadedArmies.length; j++)
+			{
+				for(var i = 0; i < listOfArmyCoordinates.length; i++)
+				{
+					if(listOfArmyCoordinates[selectedArmy].a.loadedArmies[j] == listOfArmyCoordinates[i].a.armyId && 
+						listOfArmyCoordinates[mergeId].owner == listOfArmyCoordinates[i].owner)
+					{
+						console.log(listOfArmyCoordinates[i].a.armyId + " was loaded in " + listOfArmyCoordinates[i].a.isLoadedIn + ",");
+						listOfArmyCoordinates[i].a.isLoadedIn = listOfArmyCoordinates[mergeId].a.armyId;
+						console.log("but is now loaded in " + listOfArmyCoordinates[i].a.isLoadedIn + ".");
+					}
+				}
+			}
+		}
+		for(var j = 0; j < listOfArmyCoordinates[mergeId].a.loadedArmies.length; j++)	
+		{
+			for(var i = 0; i < listOfArmyCoordinates.length; i++)
+			{
+				if(listOfArmyCoordinates[mergeId].a.loadedArmies[j] == listOfArmyCoordinates[i].a.armyId && 
+					listOfArmyCoordinates[mergeId].owner == listOfArmyCoordinates[i].owner)
+				{
+					console.log(listOfArmyCoordinates[i].a.armyId + " is loaded in " + listOfArmyCoordinates[i].a.isLoadedIn + ".");
+				}
+			}
+		}
+		if(login != 'sl')
+		{
+			preparedEvents.push({
+				type: "merge", content: {
+					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					toArmyId: listOfArmyCoordinates[mergeId].a.armyId,
+					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+					troops: listOfArmyCoordinates[selectedArmy].a.count,
+					leaders: listOfArmyCoordinates[selectedArmy].a.leaders,
+					lkp: 0,
+					skp: 0,
+					mounts: 0
+				}
+			});
+		}
+		deleteSelectedArmy();
+	}
+	if(mergeId = listOfArmyCoordinates.length)
+	{
+		mergeId -= 1;
+	}
+	selectedArmy = mergeId;
+	updateInfoBox();
+	restoreInfoBox();
+}
+
 // deletes the currently selected army und puts the last army in listOfArmyCoordinates in its place
 function deleteSelectedArmy(){
-	listOfArmyCoordinates[selectedArmy] = listOfArmyCoordinates[listOfArmyCoordinates.length-1]
+	listOfArmyCoordinates[selectedArmy] = listOfArmyCoordinates[listOfArmyCoordinates.length-1];
 	listOfArmyCoordinates.pop();
+	if(selectedArmy == listOfArmyCoordinates.length)
+	{
+		selectedArmy = undefined;
+	}
 }
 
 // returns the next armyId not yet assigned for the caller

@@ -341,7 +341,7 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde) {
         this.removeLeaders(this.leaders * (damageBP / this.sumBP()));
         this.removeSoldiers(damageBP * 5);
     }
-    //reiter haben keite Karapulte
+    //reiter haben keite Katapulte
     this.fireLkp = function(dicerolls, badConditions){return 0;}
     this.fireSkp = function(dicerolls, badConditions){return 0;}
 } // ende von reiterHeer ------------------------------------------------------------------------------------------------------

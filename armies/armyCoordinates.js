@@ -62,6 +62,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
             }
         }
     }
+    // direction as a number, 0 = NW, 1 = NO, 2 = O, 3 = SO, 4 = SW, 5 = W
     this.move = function(direction) {
         var destination = new showHex(this.x, this.y);
         var neighborCoords = destination.neighbors();
@@ -363,6 +364,9 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 // there is none
                 if(fleetsOnDest.length == 0){
                     return "You can't walk on Water.";
+                // already embarked
+                } else if(this.a.isLoadedIn != null){
+                    return "You are already embarked on a Fleet.";
                 // there is exactly one
                 } else if(fleetsOnDest.length == 1){
                     var loadString = listOfArmyCoordinates[fleetsOnDest[0]].a.loadArmy();
@@ -447,10 +451,12 @@ function armyCoordinates(army, coordX, coordY, owner) {
                                         placeInList = j;
                                     }
                                 }
+                                // fall es letztes ist .pop()
                                 if(placeInList == (listOfArmyCoordinates[i].a.loadedArmies.length-1)){
                                     listOfArmyCoordinates[i].a.loadedArmies.pop();
+                                // falls nicht vertausche es mit dem letzten und .pop()
                                 } else {
-                                    listOfArmyCoordinates[i].a.loadedArmies[j] = listOfArmyCoordinates[i].a.loadedArmies[listOfArmyCoordinates[i].a.loadedArmies.length-1];
+                                    listOfArmyCoordinates[i].a.loadedArmies[placeInList] = listOfArmyCoordinates[i].a.loadedArmies[listOfArmyCoordinates[i].a.loadedArmies.length-1];
                                     listOfArmyCoordinates[i].a.loadedArmies.pop();
                                 }
                             }

@@ -298,7 +298,8 @@
 			mountsBuffer = Number(document.getElementById("mountsField").value);
 			lkpBuffer = Number(document.getElementById("lkpField").value); 
 			skpBuffer = Number(document.getElementById("skpField").value);
-			guardBuffer = document.getElementById("guardField").value;
+			// TODO be able to generate guard armies
+			guardBuffer = false;
 			if(armyIdBuffer < 101 || armyIdBuffer > 399){
 				window.alert("Die Armee-Id muss zwischen 101 und 399 liegen.");
 				return false;
@@ -326,7 +327,7 @@
 		}
 
 		// used to delete the selected army
-		function deleteSelectedArmy(){
+		function godDeleteSelectedArmy(){
 			if (confirm('Are you sure you want to delete your currenty selected army?')) {
 				listOfArmyCoordinates[selectedArmy] = listOfArmyCoordinates[listOfArmyCoordinates.length-1];
 				listOfArmyCoordinates.pop()

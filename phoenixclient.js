@@ -219,6 +219,7 @@ function registerLeftClick(){
 						}
 					}
 					updateInfoBox();
+					restoreInfoBox();
 				});
 				x.appendChild(btn);
 			}
@@ -433,6 +434,72 @@ function determineEventStatus(){
 				} else {
 					pendingEvents[i].status = 'impossible';
 				}
+			} 
+			else if(event.type === 'merge')
+			{
+				var army1 = listOfArmyCoordinates[findArmyPlaceInList(content.fromArmy, content.realm)];
+				var army2 = listOfArmyCoordinates[findArmyPlaceInList(content.toArmy, content.realm)];
+				if(army1.a.armyType() == army2.a.armyType() && army1.x == army2.x && army1.y == army2.y)
+				{
+					pendingEvents[i].status = 'available';
+				} 
+				else if((army1.a.armyType() != army2.a.armyType()) ||
+					((((army1.a.armyType() == 1 || army1.a.armyType() == 2) && army1.remainingMovePoints < 3) ||
+				army1.a.armyType() == 3 && army1.remainingMovePoints < 5) && (((army2.a.armyType() == 1 || army2.a.armyType() == 2) &&
+				 army2.remainingMovePoints < 3)|| army2.a.armyType() == 3 && army2.remainingMovePoints < 5)))
+				{
+					pendingEvents[i].status = 'impossible';
+				} 
+				else
+				{
+					pendingEvents[i].status = 'withheld';
+				}
+			}
+			else if(event.type === 'transfer')
+			{
+				var army1 = listOfArmyCoordinates[findArmyPlaceInList(content.fromArmy, content.realm)];
+				var army2 = listOfArmyCoordinates[findArmyPlaceInList(content.toArmy, content.realm)];
+				if((army1.a.armyType() == army2.a.armyType() || (content.troops == 0 && content.mounts == 0 && content.lkp == 0 && conten.skp == 0))
+				&& army1.x == army2.x && army1.y == army2.y)
+				{
+					pendingEvents[i].status = 'available';
+				}
+				else if(((((army1.a.armyType() == 1 || army1.a.armyType() == 2) && army1.remainingMovePoints < 3) ||
+				army1.a.armyType() == 3 && army1.remainingMovePoints < 5) && (((army2.a.armyType() == 1 || army2.a.armyType() == 2) &&
+			 	army2.remainingMovePoints < 3)|| army2.a.armyType() == 3 && army2.remainingMovePoints < 5)))
+				{
+					pendingEvents[i].status = 'impossible';
+				}
+				else
+				{
+					pendingEvents[i].status = 'withheld';
+				}
+			}
+			else if(event.type === 'split')
+			{
+				var typefactor = 1;
+				var army = listOfArmyCoordinates[findArmyPlaceInList(content.fromArmy, content.realm)];
+				if(army.a.armyType() == 2)
+				{
+					typefactor = 2;
+				} 
+				else if(army.a.armyType() == 3)
+				{
+					typefactor = 100;
+				}
+				console.log(army.a.count - content.troops);
+				if(((army.a.count - content.troops) >= (100/typefactor)) &&
+				 ((army.a.leaders - content.leaders) >= 1) &&
+				 ((army.a.mounts - content.mounts) >= 0) &&
+				 ((army.a.lkp - content.lkp) >= 0) &&
+				 ((army.a.skp - content.skp) >= 0))
+				 {
+					 pendingEvents[i].status = 'available';
+				 } 
+				 else
+				 {
+					 pendingEvents[i].status = 'impossible';
+				 }
 			}
 		}
 	}
@@ -446,6 +513,14 @@ function eachArmyExists(armies){
 		}).reduce(function(total, current){
 			return total && current;
 		}, true));
+}
+
+function findArmyPlaceInList(armyId, owner){
+	for(var i = 0; i<listOfArmyCoordinates.length; i++){
+		if(listOfArmyCoordinates[i].a.armyId == armyId && listOfArmyCoordinates[i].owner == owner){
+			return i;
+		}
+	}
 }
 
 function eachArmyExistsAndIsLocated(armies, x, y){
@@ -536,12 +611,20 @@ function canMove(realm, id, fromX, fromY, toX, toY){
 //end of helper methods for event status determining
 
 function fillEventList() {
-//	console.log("fillEventList()");
+	console.log("fillEventList()");
 	var eventList = document.getElementById("eventsTab");
 	eventList.innerHTML = "";
 	determineEventStatus();
 	for (var i = 0; i<pendingEvents.length; i++){
 		eventList.appendChild(makeEventListItem(pendingEvents[i], i));
+	}
+}
+
+function realmIdToshort(id){
+	switch(id){
+		case 1: return "usa";
+		case 2: return "eos";
+		case 3: return "vvh";
 	}
 }
 
@@ -559,6 +642,13 @@ function makeEventListItem(event, i) {
 			html += " ["+partips[j].realm+" "+partips[j].armyId+"]";
 		}
 		eli.innerHTML = html+"</div>";
+	} else if(event.type === "merge"){
+		eli.innerHTML = "<div>"+realmIdToshort(cont.realm)+"'s army "+cont.fromArmy+" merges with army "+cont.toArmy+".</div>";
+	} else if(event.type === "split"){
+		// TODO: detailed explanation
+		eli.innerHTML = "<div>"+realmIdToshort(cont.realm)+"'s army "+cont.fromArmy+" splits off army "+cont.newArmy+".</div>";
+	} else if(event.type === "transfer"){
+		eli.innerHTML = "<div>"+realmIdToshort(cont.realm)+"'s army "+cont.fromArmy+" transfers troops to "+cont.toArmy+".</div>";
 	}
 	var deleteButton = document.createElement("BUTTON");
 	deleteButton.id = "delBtn"+i;
@@ -590,7 +680,7 @@ function makeEventListItem(event, i) {
 	} else if(event.status === 'available'){
 		eli.classList.add("availableELI");
 	}
-	
+
 	return eli;
 }
 
@@ -664,6 +754,135 @@ function checkEvent(num) {
 				hide(battleBox);
 			};
 			battle.updateDisplay();
+		} else if (event.type === "split") {
+			console.log("this is a split event");
+			var armyFromPlaceInList = -1;
+			var armyFromId = cont.fromArmy;
+			var newArmyId = cont.newArmy;
+			var realm = cont.realm;
+			var toSplit = cont.troops;
+			var leadersToSplit = cont.leaders;
+			var mountsToSplit = cont.mounts;
+			var lkpToSplit = cont.lkp;
+			var skpToSplit = cont.skp;
+			for(var i = 0; i < listOfArmyCoordinates.length; i++)
+			{
+				if(listOfArmyCoordinates[i].a.armyId == armyFromId && listOfArmyCoordinates[i].owner == realm)
+				{
+					armyFromPlaceInList = i;
+				}
+			}
+			if(armyFromPlaceInList >= 0)
+			{
+				listOfArmyCoordinates[armyFromPlaceInList].a.count -= toSplit;
+				listOfArmyCoordinates[armyFromPlaceInList].a.leaders -= leadersToSplit;
+				if(listOfArmyCoordinates[armyFromPlaceInList].a.armyType == 1)
+				{
+					listOfArmyCoordinates[armyFromPlaceInList].a.mounts -= mountsToSplit;
+				}
+				if(listOfArmyCoordinates[armyFromPlaceInList].a.armyType == 1 || listOfArmyCoordinates[armyFromPlaceInList].a.armyType == 3)
+				{
+					listOfArmyCoordinates[armyFromPlaceInList].a.lkp -= lkpToSplit;
+					listOfArmyCoordinates[armyFromPlaceInList].a.skp -= skpToSplit;
+				}
+				var army = null;
+				if(Math.floor(newArmyId/100) == 1)
+				{
+					army = new heer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, false);
+				}
+				else if(Math.floor(newArmyId/100) == 2)
+				{
+					army = new reiterHeer(newArmyId, toSplit, leadersToSplit, false);
+				}
+				else if(Math.floor(newArmyId/100) == 3)
+				{
+					army = new seeHeer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, false);
+				}
+				var armyCoords = new armyCoordinates(army, listOfArmyCoordinates[armyFromPlaceInList].x, listOfArmyCoordinates[armyFromPlaceInList].y, realm);
+				listOfArmyCoordinates.push(armyCoords);
+			}
+			event.status = 'checked';
+			fillEventList();
+			//sendCheckEvent(event.pk, event.type);
+			drawStuff();
+		} else if (event.type === "merge") {
+			var armyFromPlaceInList = -1;
+			var armyToPlaceInList = -1;
+			var armyFromId = cont.fromArmy;
+			var armyToId = cont.toArmy;
+			var realm = cont.realm;
+			for(var i = 0; i < listOfArmyCoordinates.length; i++)
+			{
+				if(listOfArmyCoordinates[i].a.armyId == armyFromId && listOfArmyCoordinates[i].owner == realm)
+				{
+					armyFromPlaceInList = i;
+					console.log("i1="+i);
+				} 
+				else if(listOfArmyCoordinates[i].a.armyId == armyToId && listOfArmyCoordinates[i].owner == realm)
+				{
+					armyToPlaceInList = i;
+					console.log("i2="+i);
+				}
+			}
+			console.log("armyfromplace = " + armyFromPlaceInList);
+			console.log("armytoplace = " + armyToPlaceInList)
+			if(armyFromPlaceInList >= 0 && armyToPlaceInList >= 0)
+			{
+				selectedArmy = armyFromPlaceInList;
+				mergeSelectedArmy(armyToPlaceInList);
+				preparedEvents.pop();
+			}
+			event.status = 'checked';
+			fillEventList();
+			//sendCheckEvent(event.pk, event.type);
+			drawStuff();
+			selectedArmy = undefined;
+		} else if (event.type === "transfer") {
+			console.log("this is a transfer event");
+			var armyFromPlaceInList = -1;
+			var armyToPlaceInList = -1;
+			var armyFromId = cont.fromArmy;
+			var armyToId = cont.toArmy;
+			var realm = cont.realm;
+			var toSplit = cont.troops;
+			var leadersToSplit = cont.leaders;
+			var mountsToSplit = cont.mounts;
+			var lkpToSplit = cont.lkp;
+			var skpToSplit = cont.skp;
+			for(var i = 0; i < listOfArmyCoordinates.length; i++)
+			{
+				if(listOfArmyCoordinates[i].a.armyId == armyFromId && listOfArmyCoordinates[i].owner == realm)
+				{
+					armyFromPlaceInList = i;
+				} 
+				else if(listOfArmyCoordinates[i].a.armyId == armyToId && listOfArmyCoordinates[i].owner == realm)
+				{
+					armyToPlaceInList = i;
+				}
+			}
+			if(armyFromPlaceInList >= 0 && armyToPlaceInList >= 0)
+			{
+				listOfArmyCoordinates[armyFromPlaceInList].a.count -= toSplit;
+				listOfArmyCoordinates[armyToPlaceInList].a.count += toSplit;
+				listOfArmyCoordinates[armyFromPlaceInList].a.leaders -= leadersToSplit;
+				listOfArmyCoordinates[armyToPlaceInList].a.leaders += leadersToSplit;
+				if(listOfArmyCoordinates[armyFromPlaceInList].a.armyType == 1)
+				{
+					listOfArmyCoordinates[armyFromPlaceInList].a.mounts -= mountsToSplit;
+					listOfArmyCoordinates[armyToPlaceInList].a.mounts += mountsToSplit;					
+				}
+				if(listOfArmyCoordinates[armyFromPlaceInList].a.armyType == 1 || listOfArmyCoordinates[armyFromPlaceInList].a.armyType == 3)
+				{
+					listOfArmyCoordinates[armyFromPlaceInList].a.lkp -= lkpToSplit;
+					listOfArmyCoordinates[armyToPlaceInList].a.lkp += lkpToSplit;
+					listOfArmyCoordinates[armyFromPlaceInList].a.skp -= skpToSplit;
+					listOfArmyCoordinates[armyToPlaceInList].a.skp += skpToSplit;
+				}
+			}
+			event.status = 'checked';
+			fillEventList();
+			//sendCheckEvent(event.pk, event.type);
+			drawStuff();
 		}
 	}
 	return check;
@@ -690,7 +909,7 @@ function openTab(evt, tabName) {
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
 }
-	
+
 function nextTurn() {
 	var message = "";
 	if (currentTurn.realm === null) {

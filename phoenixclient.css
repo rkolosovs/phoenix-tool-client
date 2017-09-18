@@ -279,6 +279,18 @@ p.red {
     height: 25%;
 }
 
+#transmuteBox {
+    right:0;
+    width: 15%;
+    height: 25%;
+}
+
+#mergeBox {
+    right:0;
+    width: 15%;
+    height: 25%;
+}
+
 #topBar {
     right: 0;
     top: 0;
