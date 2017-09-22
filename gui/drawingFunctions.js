@@ -447,14 +447,25 @@ function writeTurnNumber() {
 	if (stepBtn === null) {
 		stepBtn = document.createElement("BUTTON");
 		stepBtn.id = "stepButton";
-		stepBtn.addEventListener('click', function() {});
+		stepBtn.addEventListener('click', function() {
+			//TODO: Put alert with confirmation here
+			pendingEvents.forEach(function(event) {
+				if(event.status === 'checked'){
+					sendCheckEvent(event.pk, event.type);
+				} else if(event.status === 'deleted') {
+					sendDeleteEvent(event.pk, event.type);
+				}
+			}, this)
+		});
 		stepBtn.style.backgroundImage = "url(images/step_button.svg)";
 	}
 
 	if (revertBtn === null) {
 		revertBtn = document.createElement("BUTTON");
 		revertBtn.id = "revertButton";
-		revertBtn.addEventListener('click', function() {});
+		revertBtn.addEventListener('click', function() {
+			
+		});
 		revertBtn.style.backgroundImage = "url(images/revert_button.svg)";
 	}
 	

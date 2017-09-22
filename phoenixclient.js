@@ -541,7 +541,7 @@ function deleteEvent(num) {
 		var event = pendingEvents[num];
 		event.status = 'deleted';
 		fillEventList();
-		sendDeleteEvent(event.pk, event.type);
+//		sendDeleteEvent(event.pk, event.type);
 	}
 	return del;
 }
@@ -576,7 +576,7 @@ function checkEvent(num) {
 			event.status = 'checked';
 			fillEventList();
 			drawStuff();
-			sendCheckEvent(event.pk, event.type);
+//			sendCheckEvent(event.pk, event.type);
 		} else if (event.type === "battle") {
 			var battleBox = document.getElementById("battleBox");
 			show(battleBox);
@@ -599,7 +599,7 @@ function checkEvent(num) {
 				fillEventList();
 				drawStuff();
 //				console.log(listOfArmyCoordinates);
-				sendCheckEvent(event.pk, event.type);
+//				sendCheckEvent(event.pk, event.type);
 			};
 			document.getElementById("closeBattleButton").onclick = function(){
 				hide(battleBox);

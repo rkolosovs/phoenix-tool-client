@@ -63,6 +63,14 @@ function nextTurn() {
 				});
 			}
 		}
+		
+		pendingEvents.forEach(function(event) {
+			if(event.status === 'checked'){
+				sendCheckEvent(event.pk, event.type);
+			} else if(event.status === 'deleted') {
+				sendDeleteEvent(event.pk, event.type);
+			}
+		}, this);
 
 		$.post({
 			url: url + "/databaseLink/nextturn/",
