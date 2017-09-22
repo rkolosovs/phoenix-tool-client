@@ -343,65 +343,6 @@ function getClickedField(){
 	return [column, row]; // return result
 }
 
-function writeTurnNumber() {
-	// get the top bar element from the HTML document
-	var topBar = document.getElementById('topBar');
-	var btn = document.getElementById('nextTurnButton');
-	var date = document.getElementById('date_text');
-	var spec = document.getElementById('special_text');
-	if (btn === null) {
-		btn = document.createElement("BUTTON");
-		btn.id = "nextTurnButton";
-		btn.addEventListener('click', function() {nextTurn()});
-		date = document.createElement("P");
-		date.align = "right";
-		date.id = "date_text";
-		spec = document.createElement("P");
-		spec.align = "left";
-		spec.id = "special_text";
-	}
-	
-	if (login !== 'sl' && (currentTurn.realm === null || currentTurn.status === 'fi' || login !== currentTurn.realm)) { 
-		// if not logged in as the current realm or SL
-		btn.disabled = true;
-		btn.style.cursor = "not-allowed";
-		btn.style.backgroundImage = "url(images/nextturn_button_disabled.svg)";
-	} else {
-		btn.disabled = false;
-		btn.style.cursor = "initial";
-		btn.style.backgroundImage = "url(images/nextturn_button.svg)";
-	}
-	
-	if(login === 'sl' && currentTurn.status === 'fi') {
-		loadPendingEvents();
-		show(document.getElementById("eventTabsButton"));
-	} else {
-		hide(document.getElementById("eventTabsButton"));
-	}
-	
-	date.innerHTML =  "Monat " + months[currentTurn.turn%8] + " des Jahres "+ Math.ceil(currentTurn.turn/8) + " (Zug " + currentTurn.turn + ", ";
-	if (currentTurn.realm === null || currentTurn.status === 'fi') { 
-		// GM's turn
-		date.innerHTML += "SL) ";
-	} else { // a realm's turn
-		date.innerHTML += currentTurn.realm + ") ";
-	}
-	date.style="width:340px;float:left;line-height:30px;"
-	
-	if (currentTurn.turn%8 === 1 || currentTurn.turn%8 === 5) {
-		spec.innerHTML =  " Rüstmonat";
-	spec.style="width:100px;float:left;line-height:30px;"
-	} else if (currentTurn.turn%8 === 4 || currentTurn.turn%8 === 0) {
-		spec.innerHTML =  " Einkommensmonat";
-	spec.style="width:160px;float:left;line-height:30px;"
-	}
-	spec.style="width:0px;float:left;line-height:30px;"
-	
-	topBar.innerHTML = '';
-	topBar.appendChild(date);
-	topBar.appendChild(btn);
-	topBar.appendChild(spec);
-}
 
 function mainButton() {
 	toggleVisibility(document.getElementById("bigBox"));

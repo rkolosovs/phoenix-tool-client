@@ -423,3 +423,81 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 		}
 	}
 }
+
+function writeTurnNumber() {
+	// get the top bar element from the HTML document
+	var topBar = document.getElementById('topBar');
+	var nextTurnBtn = document.getElementById('nextTurnButton');
+	var stepBtn = document.getElementById('stepButton');
+	var revertBtn = document.getElementById('revertButton');
+	var date = document.getElementById('date_text');
+	var spec = document.getElementById('special_text');
+	if (nextTurnBtn === null) {
+		nextTurnBtn = document.createElement("BUTTON");
+		nextTurnBtn.id = "nextTurnButton";
+		nextTurnBtn.addEventListener('click', function() {nextTurn()});
+		date = document.createElement("P");
+		date.align = "right";
+		date.id = "date_text";
+		spec = document.createElement("P");
+		spec.align = "left";
+		spec.id = "special_text";
+	}
+	
+	if (stepBtn === null) {
+		stepBtn = document.createElement("BUTTON");
+		stepBtn.id = "stepButton";
+		stepBtn.addEventListener('click', function() {});
+		stepBtn.style.backgroundImage = "url(images/step_button.svg)";
+	}
+
+	if (revertBtn === null) {
+		revertBtn = document.createElement("BUTTON");
+		revertBtn.id = "revertButton";
+		revertBtn.addEventListener('click', function() {});
+		revertBtn.style.backgroundImage = "url(images/revert_button.svg)";
+	}
+	
+	if (login !== 'sl' && (currentTurn.realm === null || currentTurn.status === 'fi' || login !== currentTurn.realm)) { 
+		// if not logged in as the current realm or SL
+		nextTurnBtn.disabled = true;
+		nextTurnBtn.style.cursor = "not-allowed";
+		nextTurnBtn.style.backgroundImage = "url(images/nextturn_button_disabled.svg)";
+	} else {
+		nextTurnBtn.disabled = false;
+		nextTurnBtn.style.cursor = "initial";
+		nextTurnBtn.style.backgroundImage = "url(images/nextturn_button.svg)";
+	}
+	
+	if(login === 'sl' && currentTurn.status === 'fi') {
+		loadPendingEvents();
+		show(document.getElementById("eventTabsButton"));
+	} else {
+		hide(document.getElementById("eventTabsButton"));
+	}
+	
+	date.innerHTML =  "Monat " + months[currentTurn.turn%8] + " des Jahres "+ Math.ceil(currentTurn.turn/8) + " (Zug " + currentTurn.turn + ", ";
+	if (currentTurn.realm === null || currentTurn.status === 'fi') { 
+		// GM's turn
+		date.innerHTML += "SL) ";
+	} else { // a realm's turn
+		date.innerHTML += currentTurn.realm + ") ";
+	}
+	date.style="width:340px;float:left;line-height:30px;"
+	
+	if (currentTurn.turn%8 === 1 || currentTurn.turn%8 === 5) {
+		spec.innerHTML =  " Rüstmonat";
+	spec.style="width:100px;float:left;line-height:30px;"
+	} else if (currentTurn.turn%8 === 4 || currentTurn.turn%8 === 0) {
+		spec.innerHTML =  " Einkommensmonat";
+	spec.style="width:160px;float:left;line-height:30px;"
+	}
+	spec.style="width:0px;float:left;line-height:30px;"
+	
+	topBar.innerHTML = '';
+	topBar.appendChild(date);
+	topBar.appendChild(nextTurnBtn);
+	topBar.appendChild(stepBtn);
+	topBar.appendChild(revertBtn);
+	topBar.appendChild(spec);
+}
