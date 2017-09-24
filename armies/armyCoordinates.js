@@ -252,7 +252,6 @@ function armyCoordinates(army, coordX, coordY, owner) {
                     } else {
                         return(loadString);
                     }
-                // TODO: more than one
                 } else if(fleetsOnDest.length > 1){
                     var fleetstring = "";
                     for(var i = 0; i < fleetsOnDest.length; i++){
