@@ -447,26 +447,38 @@ function writeTurnNumber() {
 	if (stepBtn === null) {
 		stepBtn = document.createElement("BUTTON");
 		stepBtn.id = "stepButton";
-		stepBtn.addEventListener('click', function() {
-			//TODO: Put alert with confirmation here
-			pendingEvents.forEach(function(event) {
-				if(event.status === 'checked'){
-					sendCheckEvent(event.pk, event.type);
-				} else if(event.status === 'deleted') {
-					sendDeleteEvent(event.pk, event.type);
-				}
-			}, this)
-		});
 		stepBtn.style.backgroundImage = "url(images/step_button.svg)";
+		stepBtn.addEventListener('click', function() {
+			if (confirm("Do you want to save the events handled so far without ending the turn?" +
+					" Once saved the progress can't be reverted anymore.")){
+				pendingEvents.forEach(function(event) {
+					if(event.status === 'checked'){
+						sendCheckEvent(event.pk, event.type);
+					} else if(event.status === 'deleted') {
+						sendDeleteEvent(event.pk, event.type);
+					}
+				}, this);
+				saveBuildings();
+				saveFactionsTerritories();
+				saveArmies();
+			}
+		});
 	}
 
 	if (revertBtn === null) {
 		revertBtn = document.createElement("BUTTON");
 		revertBtn.id = "revertButton";
-		revertBtn.addEventListener('click', function() {
-			
-		});
 		revertBtn.style.backgroundImage = "url(images/revert_button.svg)";
+		revertBtn.addEventListener('click', function() {
+			if (confirm("Do you want to revert the events handled so far?")){
+				loadArmies();
+				loadBuildingData();
+				loadBorderData();
+				loadPendingEvents();
+				drawStuff();
+				writeTurnNumber();
+			}
+		});
 	}
 	
 	if (login !== 'sl' && (currentTurn.realm === null || currentTurn.status === 'fi' || login !== currentTurn.realm)) { 
@@ -474,10 +486,18 @@ function writeTurnNumber() {
 		nextTurnBtn.disabled = true;
 		nextTurnBtn.style.cursor = "not-allowed";
 		nextTurnBtn.style.backgroundImage = "url(images/nextturn_button_disabled.svg)";
+		stepBtn.disabled = true;
+		stepBtn.style.cursor = "not-allowed";
+		revertBtn.disabled = true;
+		revertBtn.style.cursor = "not-allowed";
 	} else {
 		nextTurnBtn.disabled = false;
 		nextTurnBtn.style.cursor = "initial";
 		nextTurnBtn.style.backgroundImage = "url(images/nextturn_button.svg)";
+		stepBtn.disabled = false;
+		stepBtn.style.cursor = "initial";
+		revertBtn.disabled = false;
+		revertBtn.style.cursor = "initial";
 	}
 	
 	if(login === 'sl' && currentTurn.status === 'fi') {

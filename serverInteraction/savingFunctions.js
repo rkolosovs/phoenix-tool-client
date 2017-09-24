@@ -217,37 +217,35 @@
 		}
 
 		function saveFactionsTerritories(){ // saves the faction territories on the server
-			var dataToServerString = "";
-			for (var i = 0; i < borders.length; i++) {
-				if(i != borders.length-1){
-					dataToServerString = dataToServerString + borders[i].tag + ":"
-					for (var j = 0; j < borders[i].land.length; j++){
-						if(j != borders[i].land.length-1){
-							dataToServerString = dataToServerString + borders[i].land[j][0] + "/"
-							dataToServerString = dataToServerString + borders[i].land[j][1] + ","
-						} else {
-							dataToServerString = dataToServerString + borders[i].land[j][0] + "/"
-							dataToServerString = dataToServerString + borders[i].land[j][1] + ";"
-						}
-					}
-				} else {
-					dataToServerString = dataToServerString + borders[i].tag + ":"
-					for (var j = 0; j < borders[i].land.length; j++){
-						if(j != borders[i].land.length-1){
-							dataToServerString = dataToServerString + borders[i].land[j][0] + "/"
-							dataToServerString = dataToServerString + borders[i].land[j][1] + ","
-						} else {
-							dataToServerString = dataToServerString + borders[i].land[j][0] + "/"
-							dataToServerString = dataToServerString + borders[i].land[j][1]
-						}
-					}
-				}
-			}
-			console.log("start");
-			console.log(borders);
+//			var dataToServerString = "";
+//			for (var i = 0; i < borders.length; i++) {
+//				if(i != borders.length-1){
+//					dataToServerString = dataToServerString + borders[i].tag + ":"
+//					for (var j = 0; j < borders[i].land.length; j++){
+//						if(j != borders[i].land.length-1){
+//							dataToServerString = dataToServerString + borders[i].land[j][0] + "/"
+//							dataToServerString = dataToServerString + borders[i].land[j][1] + ","
+//						} else {
+//							dataToServerString = dataToServerString + borders[i].land[j][0] + "/"
+//							dataToServerString = dataToServerString + borders[i].land[j][1] + ";"
+//						}
+//					}
+//				} else {
+//					dataToServerString = dataToServerString + borders[i].tag + ":"
+//					for (var j = 0; j < borders[i].land.length; j++){
+//						if(j != borders[i].land.length-1){
+//							dataToServerString = dataToServerString + borders[i].land[j][0] + "/"
+//							dataToServerString = dataToServerString + borders[i].land[j][1] + ","
+//						} else {
+//							dataToServerString = dataToServerString + borders[i].land[j][0] + "/"
+//							dataToServerString = dataToServerString + borders[i].land[j][1]
+//						}
+//					}
+//				}
+//			}
 			$.post({
 				url: url + "/databaseLink/saveborderdata/",
-				data: {borders: dataToServerString,
+				data: {borders: JSON.stringify(borders),
 					authorization: authenticationToken},
 				statusCode: {
 					200: function() {
@@ -261,7 +259,6 @@
 					}
 				}
 			});
-			console.log("end");
 		}
 		
 		function sendDeleteEvent(eventId, eventType) {

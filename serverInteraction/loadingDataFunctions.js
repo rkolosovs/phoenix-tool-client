@@ -6,7 +6,7 @@
 
 // help function to fetch current data from the server
 function getNewDataFromServer(){
-	loadMap(url);
+	loadMap();
 }
 
 
@@ -28,44 +28,71 @@ function loadPendingEvents() {
 	});
 }
 
-// loads the armies data from the server.
-// Data the client is not supposed to have based on his login status is set to -1.
-function loadArmies(url) {
-    $.post({
+
+function loadMap() {
+	var timetest;
+	$.getJSON(url +"/databaseLink/getlastsavedtimestamp/", function(json){// loads the time stamp from the database
+		timetest = "";
+		for(var i = 0; i< json.length; i++){
+			timetest += json[i];
+		}
+		if(loginZeit === undefined || loginZeit < Date.parse(timetest)){
+			loginZeit = Date.now();
+			console.log("loginzeit: " + loginZeit);
+			loadCSRFToken();
+			loadArmies();
+			loadFieldData();
+			loadRiverData();
+			loadBuildingData();
+			loadBorderData();
+		}
+	});
+}
+
+function loadCSRFToken() {
+	$.getJSON(url +"/databaseLink/gettoken/", function(json){// funtioniert nicht !!!
+		currentCSRFToken = json;
+	});
+}
+
+//loads the armies data from the server.
+//Data the client is not supposed to have based on his login status is set to -1.
+function loadArmies() {
+ $.post({
 			url: url +"/databaseLink/armydata/",
-            data: {authorization: authenticationToken},
-            success: function(data){
+         data: {authorization: authenticationToken},
+         success: function(data){
 				var armies = data; //load the armies from the armies.json file
 				var armiesToLoadIn = [];
-                listOfArmyCoordinates = [];
-                for(var i = 0; i < armies.length; i++){
-                    if(Math.floor(armies[i].armyId/100) == 1){
-                        var army = new heer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp, armies[i].skp, armies[i].mounts, armies[i].isGuard);
-                        var armyCoords = new armyCoordinates(army, armies[i].x, armies[i].y, armies[i].realm);
-                        armyCoords.setRemainingMovePoints(9);
-                        armyCoords.setRemainingHeightPoints(2);
+             listOfArmyCoordinates = [];
+             for(var i = 0; i < armies.length; i++){
+                 if(Math.floor(armies[i].armyId/100) == 1){
+                     var army = new heer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp, armies[i].skp, armies[i].mounts, armies[i].isGuard);
+                     var armyCoords = new armyCoordinates(army, armies[i].x, armies[i].y, armies[i].realm);
+                     armyCoords.setRemainingMovePoints(9);
+                     armyCoords.setRemainingHeightPoints(2);
 						if(armies[i].isLoadedIn != null){
 							armiesToLoadIn.push([armies[i].isLoadedIn, armies[i].realm, armies[i].armyId]);
 							armyCoords.a.isLoadedIn = armies[i].isLoadedIn;
 						}
-                        listOfArmyCoordinates.push(armyCoords);
-                    } else if(Math.floor(armies[i].armyId/100) == 2){
-                        var army = new reiterHeer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].isGuard);
-                        var armyCoords = new armyCoordinates(army, armies[i].x, armies[i].y, armies[i].realm);
-                        armyCoords.setRemainingMovePoints(21);
-                        armyCoords.setRemainingHeightPoints(2);
+                     listOfArmyCoordinates.push(armyCoords);
+                 } else if(Math.floor(armies[i].armyId/100) == 2){
+                     var army = new reiterHeer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].isGuard);
+                     var armyCoords = new armyCoordinates(army, armies[i].x, armies[i].y, armies[i].realm);
+                     armyCoords.setRemainingMovePoints(21);
+                     armyCoords.setRemainingHeightPoints(2);
 						if(armies[i].isLoadedIn != null){
 							armiesToLoadIn.push([armies[i].isLoadedIn, armies[i].realm, armies[i].armyId]);
 							armyCoords.a.isLoadedIn = armies[i].isLoadedIn;
 						}
-                        listOfArmyCoordinates.push(armyCoords);
-                    } if(Math.floor(armies[i].armyId/100) == 3){
-                        var army = new seeHeer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp, armies[i].skp, armies[i].isGuard);
-                        var armyCoords = new armyCoordinates(army, armies[i].x, armies[i].y, armies[i].realm);
-//                        armyCoords.setRemainingMovePoints(42); [whatevershipsmayneed]
-                        listOfArmyCoordinates.push(armyCoords);
-                    }
-                }
+                     listOfArmyCoordinates.push(armyCoords);
+                 } if(Math.floor(armies[i].armyId/100) == 3){
+                     var army = new seeHeer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp, armies[i].skp, armies[i].isGuard);
+                     var armyCoords = new armyCoordinates(army, armies[i].x, armies[i].y, armies[i].realm);
+//                     armyCoords.setRemainingMovePoints(42); [whatevershipsmayneed]
+                     listOfArmyCoordinates.push(armyCoords);
+                 }
+             }
 				// if needed, load Troops into ships
 				if(armiesToLoadIn.length > 0){
 					for(var i = 0; i < armiesToLoadIn.length; i++){
@@ -79,45 +106,39 @@ function loadArmies(url) {
 				}
 			},
 			dataType: "json",
-            //headers: {
-            //    "Authorization" :"Token " + authenticationToken,
-            //}
+         //headers: {
+         //    "Authorization" :"Token " + authenticationToken,
+         //}
 		});
 }
 
-function loadMap(url) {
-	var timetest;
-	$.getJSON(url +"/databaseLink/getlastsavedtimestamp/", function(json){// loads the time stamp from the database
-		timetest = "";
-		for(var i = 0; i< json.length; i++){
-			timetest += json[i];
-		}
-		if(loginZeit == undefined || loginZeit < Date.parse(timetest)){
-			loadArmies(url);
-			loginZeit = Date.now();
-			console.log("loginzeit: " + loginZeit);
-			$.getJSON(url +"/databaseLink/gettoken/", function(json){// funtioniert nicht !!!
-				currentCSRFToken = json;
-			});
-			$.getJSON(url +"/databaseLink/fielddata/", function(json){// loads the fields from the database
-				fields = json;
-				resizeCanvas();
-			});
-			$.getJSON(url +"/databaseLink/getriverdata/", function(json){//load the rivers from the database
-				var fluesse = json; 
-				var collector = [];
-				fluesse.forEach(function(element) {
-					collector.push([[element.firstX, element.firstY],[element.secondX,element.secondY]]);
-				}, this);
-				rivers = collector; //rivers are the coordinates of two fields on either side of the river
-			});
-			$.getJSON(url +"/databaseLink/buildingdata/", function(json){
-				buildings = json; //load the buildings from the buildings.json file
-			});
-			$.getJSON(url +"/databaseLink/getborderdata/", function(json){ //load the borders from the database
-				borders = json; //load the borders from the borders.json file
-			});
-		}
+function loadFieldData() {
+	$.getJSON(url +"/databaseLink/fielddata/", function(json){// loads the fields from the database
+		fields = json;
+		resizeCanvas();
+	});
+}
+
+function loadRiverData() {
+	$.getJSON(url +"/databaseLink/getriverdata/", function(json){//load the rivers from the database
+		var fluesse = json; 
+		var collector = [];
+		fluesse.forEach(function(element) {
+			collector.push([[element.firstX, element.firstY],[element.secondX,element.secondY]]);
+		}, this);
+		rivers = collector; //rivers are the coordinates of two fields on either side of the river
+	});
+}
+
+function loadBuildingData() {
+	$.getJSON(url +"/databaseLink/buildingdata/", function(json){
+		buildings = json; //load the buildings from the buildings.json file
+	});
+}
+
+function loadBorderData() {
+	$.getJSON(url +"/databaseLink/getborderdata/", function(json){ //load the borders from the database
+		borders = json; //load the borders from the borders.json file
 	});
 }
 
