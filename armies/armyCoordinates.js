@@ -217,11 +217,11 @@ function armyCoordinates(army, coordX, coordY, owner) {
             switch(target.fieldType()){
                 case 0:
                 case 1:
+                var fleetsOnDest = [];
                 // target field is sea, or deepsea
                 // to see if there is the exact heightchange(not too high or on the sea switching boats)
                 if(changeInHeight == true){
                     // is there an allied fleet on the target field?
-                    var fleetsOnDest = [];
                     for(var i = 0; i<listOfArmyCoordinates.length; i++){
                         if((listOfArmyCoordinates[i].owner == this.owner) && (listOfArmyCoordinates[i].x == target.x) && (listOfArmyCoordinates[i].y == target.y) && 
                         (Math.floor(listOfArmyCoordinates[i].a.armyId / 100) == 3)){
