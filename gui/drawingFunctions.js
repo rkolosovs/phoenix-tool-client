@@ -20,6 +20,7 @@ function drawStuff() {
 	drawMap(ctx, x, y, scale);
 	drawSelection(ctx, x, y, scale, selectedFields);
 	drawArmies(ctx, x, y, scale, listOfArmyCoordinates);
+	drawPossibleMoves(ctx, x, y, scale, selectedArmy);
 }
 
 function drawMap(ctx, x, y, scale) {
@@ -391,6 +392,21 @@ function drawFields(ctx, x, y, scale) { //draw the terrain fields
 	}
 }
 
+function drawPossibleMoves(ctx, x, y, scale, selectedArmy){//drawing all possible moves to neighboring fields if army was selected
+    if(selectedArmy !== undefined){
+		var moves = listOfArmyCoordinates[selectedArmy].possibleMoves;
+		for (var i = 0; i < moves.length; i++) {
+            ctx.lineWidth = scale/6;
+	        ctx.strokeStyle='#00FF00';
+            var pos = computePosition(x, y, moves[i].tar.x, moves[i].tar.y, scale); //get fields position
+		    ctx.beginPath();
+      	    ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/12, 0, 2 * Math.PI, false);
+      	    ctx.stroke();
+		}
+	}
+}
+
+
 function drawSelection(ctx, x, y, scale, selectedFields) {
 	ctx.lineWidth = 5;
 	ctx.strokeStyle="green";
@@ -413,13 +429,71 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 		ctx.textAlign = 'center';
     	ctx.textBaseline = 'middle';
 		//ctx.fillText(armyData.a.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
-		// armies == 1, riders == 2, boats == 3
-		if(Math.floor(armyData.a.armyId/100) == 1){
-			ctx.drawImage(troopsImg, pos[0], pos[1], (scale*SIN60), scale); 
-		} else if(Math.floor(armyData.a.armyId/100) == 2) {
-			ctx.drawImage(mountsImg, pos[0], pos[1], (scale*SIN60), scale);
-		} else if(Math.floor(armyData.a.armyId/100) == 3) {
-			ctx.drawImage(boatsImg, pos[0], pos[1], (scale*SIN60), scale);
+
+		//check if its is on a multifield. if it is ignore
+		if(armyData.multiArmyField == false){
+			// armies == 1, riders == 2, boats == 3
+			if(Math.floor(armyData.a.armyId/100) == 1){
+				ctx.drawImage(troopsImg, pos[0], pos[1], (scale*SIN60), scale); 
+			} else if(Math.floor(armyData.a.armyId/100) == 2) {
+				ctx.drawImage(mountsImg, pos[0], pos[1], (scale*SIN60), scale);
+			} else if(Math.floor(armyData.a.armyId/100) == 3) {
+				ctx.drawImage(boatsImg, pos[0], pos[1], (scale*SIN60), scale);
+			}
 		}
+		if (armyCoordinates[i].ownerTag() === login || login === "sl"){
+			
+			if(armyCoordinates[i].possibleMoves.length > 0){
+				drawRemainingMovement(ctx, pos, scale);
+			}
+			else if(Math.floor(armyData.a.armyId/100) == 1 && armyCoordinates[i].remainingMovePoints == 9){
+				drawRemainingMovement(ctx, pos, scale);
+			}
+			else if(Math.floor(armyData.a.armyId/100) == 2 && armyCoordinates[i].remainingMovePoints == 21){
+				drawRemainingMovement(ctx, pos, scale);
+			}
+			else if(Math.floor(armyData.a.armyId/100) == 3 && armyCoordinates[i].remainingMovePoints >= 42){
+				drawRemainingMovement(ctx, pos, scale);
+			}
+		}
+		
 	}
+
+	//drawing the multifield armies
+	for(var j = 0; j < listOfMultiArmyFields.length; j++){//for every field
+
+		for(var i = 0; i < listOfMultiArmyFields[j].length; i++){//for every army on that field
+		
+		var armyData = listOfMultiArmyFields[j][i]; // get army coordinates
+		var pos = computePosition(x, y, listOfMultiArmyFields[j][i].x, listOfMultiArmyFields[j][i].y, scale);
+
+		var circleScale = (scale*SIN60) / listOfMultiArmyFields[j].length;
+
+		//const double Angle = (M_PI * 2.0) / n;
+		//Für jedes i-te Objekt dann die Position des Mittelpunktes:
+		//const double MidPosX = (cos(Angle * i) * RadiusX) + CirclePosX;
+		//const double MidPosY =(sin(Angle * i) * RadiusY) + CirclePosY;
+		var angle = (Math.PI * 2.0) / listOfMultiArmyFields[j].length;//Total armies on field
+		var xPosArmy = (Math.cos(angle * i) * scale/4) + pos[0] + scale/4;
+		var yPosArmy = (Math.sin(angle * i) * scale/4) + pos[1];
+
+		// armies == 1, riders == 2, boats == 3
+			if(Math.floor(armyData.a.armyId/100) == 1){
+				ctx.drawImage(troopsImg, xPosArmy, yPosArmy, circleScale, scale); 
+			} else if(Math.floor(armyData.a.armyId/100) == 2) {
+				ctx.drawImage(mountsImg, xPosArmy, yPosArmy, circleScale, scale);
+			} else if(Math.floor(armyData.a.armyId/100) == 3) {
+				ctx.drawImage(boatsImg, xPosArmy, yPosArmy, circleScale, scale);
+			}
+		}
+
+	}
+}
+
+function drawRemainingMovement(ctx, pos, scale){
+    ctx.lineWidth = scale/8;
+	ctx.strokeStyle='#00FFFF';
+	ctx.beginPath();
+    ctx.arc(pos[0]+(0.5 * scale * SIN60)-c, pos[1]+(scale * 0.5)-c, scale/16, Math.PI*1.25, Math.PI*1.75, false);
+    ctx.stroke();
 }

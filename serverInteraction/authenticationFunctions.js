@@ -24,6 +24,12 @@ function loginToServer() {
 			}
 			// overwrite old known data
 			getNewDataFromServer();
+			loginZeit = undefined;
+			//delete Multifield Data
+			listOfMultiArmyFields = [];
+			hide(document.getElementById("eventTabsButton"));
+			var eventList = document.getElementById("eventsTab");
+			eventList.innerHTML = "";
 			writeTurnNumber();
 		},
 		dataType: "json"

@@ -887,6 +887,7 @@ function mount(){
 		window.alert("Du hast zu wenige Truppen zum aufsitzen")
 		return false;
 	// genug Reittiere vorhanden?
+
 	} 
 	else if(toMount > listOfArmyCoordinates[selectedArmy].a.mounts)
 	{
@@ -905,6 +906,10 @@ function mount(){
 		// in listOfArmyCoordinates einfügen und alte Armee löschen, ist dann automatisch selectedArmy
 		var newArmyCoordinates = new armyCoordinates(newArmy,listOfArmyCoordinates[selectedArmy].x,listOfArmyCoordinates[selectedArmy].y ,listOfArmyCoordinates[selectedArmy].owner);
 		listOfArmyCoordinates.push(newArmyCoordinates);
+		if(listOfArmyCoordinates[selectedArmy].multiArmyField === true){
+			addToMultifield(listOfArmyCoordinates[selectedArmy], newArmyCoordinates);
+			deleteFromMultifield(listOfArmyCoordinates[selectedArmy]);
+		}
 		deleteSelectedArmy();
 		restoreInfoBox();
 		updateInfoBox();
@@ -952,6 +957,10 @@ function unMount(){
 		// in listOfArmyCoordinates einfügen und alte Armee löschen, ist dann automatisch selectedArmy
 		var newArmyCoordinates = new armyCoordinates(newArmy, listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y, listOfArmyCoordinates[selectedArmy].owner);
 		listOfArmyCoordinates.push(newArmyCoordinates);
+		if(listOfArmyCoordinates[selectedArmy].multiArmyField === true){
+			addToMultifield(listOfArmyCoordinates[selectedArmy], newArmyCoordinates);
+			deleteFromMultifield(listOfArmyCoordinates[selectedArmy]);
+		}
 		deleteSelectedArmy();
 		restoreInfoBox();
 		updateInfoBox();
