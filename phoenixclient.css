@@ -218,6 +218,14 @@ p.red {
 	color: red;
 }
 
+div.red {
+	color: red;
+}
+
+div.inline {
+    display: inline-block;
+}
+
 #nextTurnButton {
     background-image: url("images/nextturn_button.svg");
     float:left;
@@ -257,7 +265,7 @@ p.red {
 #battleBox {
 	right:35%;
 	top:15%;
-	width:30%;
+	width:40%;
 	height:65%;
 }
 
@@ -269,7 +277,7 @@ p.red {
 
 #attackBattleSide {
 	left:0.5%;
-	width:35%;
+	width:40%;
 	height:30%;
 	top:57%;
 	border: 2px solid grey;
@@ -278,7 +286,7 @@ p.red {
 
 #defenseBattleSide {
 	right:0.5%;
-	width:35%;
+	width:40%;
 	height:30%;
 	top:57%;
 	border: 2px solid grey;
@@ -288,13 +296,13 @@ p.red {
 
 #attackDiceRoll {
 	top:57%;
-	left:36%;
+	left:41%;
 	position: absolute;
 }
 
 #defenseDiceRoll {
 	top:57%;
-	right:36%;
+	right:41%;
 	position: absolute;
 }
 
