@@ -289,6 +289,10 @@ function hide(element) {
 			document.getElementById("unMountBox").style.display = "";
 		}
 
+		function activateShootBox(){
+			document.getElementById("shootBox").style.display = "";
+		}
+
 		function activateSplitbox(){
 			if(listOfArmyCoordinates[selectedArmy].a.armyType() == 1)
 			{
@@ -312,6 +316,7 @@ function hide(element) {
 			document.getElementById("splitBox").style.display = "none";
 			document.getElementById("splitMountedBox").style.display = "none";
 			document.getElementById("splitFleetBox").style.display = "none";
+			document.getElementById("shootBox").style.display = "none";
 			if(document.getElementById("godmodeBox").style.visibility != "visible")
 			{
 				document.getElementById("infoBox").style.display = "";

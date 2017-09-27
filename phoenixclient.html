@@ -106,7 +106,7 @@
 		<button id="mount" class="fixedPrettyButton" onclick="activateMountBox()">Aufsitzen</button>
 		<button id="unMount" class="fixedPrettyButton" onclick="activateUnMountBox()">Absitzen</button>
 		<button id="splitBtn" class="fixedPrettyButton" onclick="activateSplitbox()">Aufteilen</button>
-		<button id="shoot" class="fixedPrettyButton" onclick="">Schie&szlig;en</button>
+		<button id="shoot" class="fixedPrettyButton" onclick="activateShootBox()">Schie&szlig;en</button>
 		<button id="logoutBtn" class="fixedPrettyButton" onclick="logoutFromServer()">Logout</button>
 	</div>
 	<div id="splitBox" class="prettyBox">
@@ -192,6 +192,18 @@
 		</p>
 		<button id="unMount" class="fixedPrettyButton" onclick="unMount()">Absitzen</button>
 		<button id="allUnMount" class="fixedPrettyButton" onclick="allUnMount()">Alle absitzen</button>
+		<button id="restoreInfoBox" class="fixedPrettyButton" onclick="restoreInfoBox()">Abbrechen</button>
+	</div>
+	<div id="shootBox" class="prettyBox">
+		<p id="shootLKPPartition">
+			<label for="shootingLKPInput">Wie viele LKP sollen schie&szlig;en:</label>
+			<input id="shootingLKPInput"></input>
+		</p>
+		<p id="shootSKPPartition">
+			<label for="shootingSKPInput">Wie viele SKP sollen schie&szlig;en::</label> 
+			<input id="shootingSKPInput"></input>
+		</p>
+		<button id="fire" class="fixedPrettyButton" onclick="">Feuer!</button>
 		<button id="restoreInfoBox" class="fixedPrettyButton" onclick="restoreInfoBox()">Abbrechen</button>
 	</div>
 	<div id="infoChangeBox" class="prettyBox">
@@ -557,6 +569,7 @@
 		document.getElementById("splitBtn").style.display = "none";
 		document.getElementById("mountBox").style.display = "none";
 		document.getElementById("unMountBox").style.display = "none";
+		document.getElementById("shootBox").style.display = "none";
 		document.getElementById("splitBox").style.display = "none";
 		document.getElementById("splitMountedBox").style.display = "none";
 		document.getElementById("splitFleetBox").style.display = "none";

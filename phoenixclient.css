@@ -334,6 +334,13 @@ p.red {
     height: 25%;
 }
 
+#shootBox {
+    right:0;
+    bottom:40%;
+    width: 15%;
+    height: 25%;
+}
+
 #unMountBox {
     right:0;
     width: 15%;
