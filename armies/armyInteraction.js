@@ -575,7 +575,7 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
 		this.fg1.count === 0);
     }
 
-    // Kampfergebnis in Form {victor: <'attacker', 'defender', 'tie'>, footLosses: <int>, cavLosses: <int>], 
+    // Kampfergebnis in Form {victor: <'attacker', 'defender', 'tie'>, footLosses: <int>, cavLosses: <int>}, 
     // {victor: 'tie', footLosses: <viel>, cavLosses: <viel>} falls unentschieden.
     this.result = function(dicerolls) {
 		if(this.overrun1()){
