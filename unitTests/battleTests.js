@@ -226,5 +226,39 @@ module( "Battle" , function() {
 				t.resultEquals( battle.result([5, 5]), {victor: 'attacker', footLosses: 1496, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 387.32, gFleetLosses: 0} );
 			});
 		});
+		module( "Complex Battles", function() {
+			test( "Large land battle at the defenders castle.", function(t) {
+				var attackingArmies = [
+					new heer(121, 12000, 40, 0, 0, 0, true),//army of attacker realm
+					new heer(122, 32000, 80, 0, 0, 0, false),//army of attacker realm
+					new heer(221, 16000, 80, 0, 0, 0, false)//army of attacker realm
+				];
+				var defendingArmies = [
+					new heer(111, 29000, 80, 0, 0, 0, false),//army of realm vvh
+					new heer(211, 13500, 70, 0, 0, 0, false),//army of realm vvh
+					new heer(112, 8000, 50, 0, 0, 0, true)//army of a third realm
+				];
+				var battle = new schlacht(attackingArmies, defendingArmies, null, null, 3, 3);
+				battle.init();
+				t.resultEquals( battle.result([18, 3]), {victor: 'attacker', footLosses: 37638.48, cavLosses: 18819.24, fleetLosses: 0, gFootLosses: 5192.2, gCavLosses: 0, gFleetLosses: 0} );
+				//TODO Defender not completely wiped out. Defender guard foot losses 4196.45
+			});
+			test( "Large naval battle.", function(t) {
+				var attackingArmies = [
+					new heer(321, 120, 40, 0, 0, 0, true),//army of attacker realm
+					new heer(322, 300, 100, 0, 0, 0, false),//army of attacker realm
+					new heer(323, 340, 60, 0, 0, 0, false)//army of attacker realm
+				];
+				var defendingArmies = [
+					new heer(311, 225, 25, 10, 0, 0, false),//army of defending realm
+					new heer(312, 175, 25, 0, 5, 0, false),//army of defending realm
+					new heer(313, 100, 50, 0, 0, 0, true)//army of a defending realm
+				];
+				var battle = new schlacht(attackingArmies, defendingArmies, null, null, 2, 2);
+				battle.init();
+				t.resultEquals( battle.result([12, 8]), {victor: 'attacker', footLosses: 0, cavLosses: 0, fleetLosses: 436.20, gFootLosses: 35.60, gCavLosses: 0, gFleetLosses: 0} );
+				//TODO Defender not completely wiped out. Defender guard fleet losses 59.47
+			});
+		});
 	});
 });
