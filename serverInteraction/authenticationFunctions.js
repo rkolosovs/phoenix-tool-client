@@ -32,6 +32,11 @@ function loginToServer() {
 			eventList.innerHTML = "";
 			writeTurnNumber();
 		},
+		error: function(data){
+			// alert for a failed login
+			alert("Login failed and logged in as guest. Check username or password.");
+			getNewDataFromServer();
+		},
 		dataType: "json"
 	});
 	// change loginBox to infoBox
@@ -45,7 +50,7 @@ function logoutFromServer() {
 	$.post({
 		url: url + "/databaseLink/logout/"
 	});
-	// turning off godmode Box, and changing infoBox to Login Bog
+	// turning off godmode Box, and changing infoBox to Login Box
 	login = 'guest';
 	switchBtnBoxTo("buttonsBox");
 	switchModeTo("none");
