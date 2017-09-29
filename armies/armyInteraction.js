@@ -251,8 +251,6 @@ function battleHandler(participants, x, y) {
 		var battle = new schlacht(this.attackSide.map(function(val){return val.a;}), this.defenseSide.map(function(val){return val.a;}), null, null, this.x, this.y);
 		battle.init();
 		var result = battle.result([this.attackDice.value, this.defenseDice.value]);
-		console.log("result");
-		console.log(result);
 
 		var footLosses = Math.round(result.footLosses);
 		var cavLosses = Math.round(result.cavLosses);
