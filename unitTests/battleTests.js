@@ -14,9 +14,9 @@ QUnit.assert.resultEquals = function(actual, expected) {
     for (var i = 0; i < actualProps.length; i++) {
         var propName = actualProps[i];
 
-        if (actual[propName] !== expected[propName]) {
+        if ((propName === "victor" && actual[propName] !== expected[propName]) || Math.abs(actual[propName] - expected[propName]) > 0.01) {
         	this.pushResult({result: false, actual: actual, expected: expected,
-                message: ""+propName+" should be "+expected[propName]+" was "+actual[propName]});
+                message: "Wrong result: "+propName+" should be "+expected[propName]+" was "+actual[propName]});
             return false;
         }
     }
