@@ -25,16 +25,19 @@ QUnit.assert.resultEquals = function(actual, expected) {
     return true;
 };
 
+var defenderArmies = [];
+var attackerArmies = [];
+function showHex(posX, posY) {
+    this.fieldType = function(){
+		if(posX === 0 && posY === 0){ return 2; }
+    }
+}
+
 module( "Battle" , function() {
 	module( "Ergebnis", {
 		before: function() {
-			function showHex(posX, posY) {
-			    this.fieldType = function(){
-					if(posX === 0 && posY === 0){ return 2; }
-			    }
-			}
 		    //prepare something once for all tests
-			var defenderArmies = [
+			defenderArmies = [
 				new heer(111, 1000, 1, 0, 0, 0, false),
 				new heer(112, 1000, 5, 0, 0, 0, false),
 				new heer(115, 15000, 15, 0, 0, 0, false),
@@ -53,7 +56,7 @@ module( "Battle" , function() {
 				new heer(315, 12, 2, 3, 1, 0, false),
 				new heer(316, 100, 10, 0, 0, 0, false)
 			];
-			var attackerArmies = [
+			attackerArmies = [
 				new heer(121, 1000, 1, 0, 0, 0, false),
 				new heer(123, 10000, 5, 0, 0, 0, false),
 				new heer(124, 5000, 5, 0, 0, 0, false),
@@ -85,7 +88,7 @@ module( "Battle" , function() {
 		test( "Minimal armies, defenders win by dice roll", function(t) {
 			var battle = new schlacht([attackerArmies[0]], [defenderArmies[0]], null, null, 0, 0);
 			battle.init();
-			t.resultEquals( battle.result([1, 10]), {victor: 'defender', footLosses: 861.24, cavLosses: 0, gFootLosses: 0, gCavLosses: 0} );
+			t.resultEquals( battle.result([1, 10]), {victor: 'defender', footLosses: 861.24, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 		});
 	});
 });
