@@ -25,13 +25,17 @@ QUnit.assert.resultEquals = function(actual, expected) {
     return true;
 };
 
+//arrays to hold prepared armies for test
 var defenderArmies = [];
 var attackerArmies = [];
+//mockup arrays of borders, bildings and field
+var borders = [];
+var buildings = [];
+var fieldTypes = [];
+//mockup showHex method
 function showHex(posX, posY) {
     this.fieldType = function(){
-		if(posX === 0 && posY === 0){ return 2; }// plains
-		if(posX === 1 && posY === 1){ return 3; }// forest
-		if(posX === 2 && posY === 2){ return 0; }// water
+    	return fieldTypes[posX];
     }
 }
 
@@ -78,6 +82,9 @@ module( "Battle" , function() {
 				new heer(327, 40, 35, 0, 0, 0, true),
 				new heer(328, 100, 100, 0, 0, 0, true)
 			];
+			borders = [{'tag': 'vvh', 'land': [[0, 0], [1, 1], [3, 3]]}];
+			buildings = [{'realm': 1, 'name': "", 'type': 0, 'x': 3, 'y': 3, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null}];
+			fieldTypes = [2, 3, 0, 2];//plains, woods, water, plains (with castle)
 		},
 		after: function() {
 			defenderArmies = [];
