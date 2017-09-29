@@ -805,9 +805,9 @@ function splitSelectedArmy(){
 		{
 			preparedEvents.push({
 				type: "split", content: {
-					armyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
 					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
-					troops: tosplit,
+					troops: toSplit,
 					leaders: leadersToSplit,
 					lkp: lkpToSplit,
 					skp: skpToSplit,
@@ -831,9 +831,9 @@ function splitSelectedArmy(){
 		{
 			preparedEvents.push({
 				type: "split", content: {
-					armyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
 					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
-					troops: tosplit,
+					troops: toSplit,
 					leaders: leadersToSplit,
 					lkp: 0,
 					skp: 0,
@@ -858,9 +858,9 @@ function splitSelectedArmy(){
 		{
 			preparedEvents.push({
 				type: "split", content: {
-					armyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
 					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
-					troops: tosplit,
+					troops: toSplit,
 					leaders: leadersToSplit,
 					lkp: lkpToSplit,
 					skp: skpToSplit,
@@ -1033,7 +1033,7 @@ function transferTroopsFromSelectedArmy(mergeId){
 						fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
 						toArmyId: listOfArmyCoordinates[mergeId].a.armyId,
 						realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
-						troops: tosplit,
+						troops: toSplit,
 						leaders: leadersToSplit,
 						lkp: lkpToSplit,
 						skp: skpToSplit,
@@ -1068,7 +1068,7 @@ function transferTroopsFromSelectedArmy(mergeId){
 						fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
 						toArmyId: listOfArmyCoordinates[mergeId].a.armyId,
 						realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
-						troops: tosplit,
+						troops: toSplit,
 						leaders: leadersToSplit,
 						lkp: 0,
 						skp: 0,
@@ -1105,7 +1105,7 @@ function transferTroopsFromSelectedArmy(mergeId){
 						fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
 						toArmyId: listOfArmyCoordinates[mergeId].a.armyId,
 						realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
-						troops: tosplit,
+						troops: toSplit,
 						leaders: leadersToSplit,
 						lkp: lkpToSplit,
 						skp: skpToSplit,
