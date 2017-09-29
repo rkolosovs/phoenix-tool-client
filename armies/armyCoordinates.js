@@ -68,6 +68,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
 // direction as a number, 0 = NW, 1 = NO, 2 = O, 3 = SO, 4 = SW, 5 = W
 //tries to move a Unit in a direction and if possible saves the possible move
     this.moveToList = function(direction) {
+        console.log("moveToListInitiated");
         var destination = new showHex(this.x, this.y);
         var neighborCoords = destination.neighbors();
         var target = new showHex(neighborCoords[direction][0],neighborCoords[direction][1]);
@@ -161,7 +162,32 @@ function armyCoordinates(army, coordX, coordY, owner) {
         } else if(Math.floor(this.a.armyId / 100) == 2){
             switch(target.fieldType()){
                 case 0:
-                case 1: return "You can't walk on Water."; // can't
+                case 1:
+                var fleetsOnDest = [];
+                // target field is sea, or deepsea
+                // to see if there is the exact heightchange(not too high or on the sea switching boats)
+                if(changeInHeight == true){
+                    // is there an allied fleet on the target field?
+                    for(var i = 0; i<listOfArmyCoordinates.length; i++){
+                        if((listOfArmyCoordinates[i].owner == this.owner) && (listOfArmyCoordinates[i].x == target.x) && (listOfArmyCoordinates[i].y == target.y) && 
+                        (Math.floor(listOfArmyCoordinates[i].a.armyId / 100) == 3)){
+                            if (listOfArmyCoordinates[i].a.isLoadable() == "ok")
+                            {
+                                this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 2,landunit: true ,tar: target, load: true});
+                            }
+                            fleetsOnDest.push(i);
+                            console.log("fleets +1");
+                        }
+                    }
+                }
+                // there is none
+                if(fleetsOnDest.length == 0){
+                    return "You can't walk on Water.";
+                // already embarked
+                } else if(this.a.isLoadedIn != null){
+                    return "You are already embarked on a Fleet.";
+                // there is exactly one
+                }
                 case 2:
                 case 4:
                 case 7: if(thereIsAStreet){
@@ -173,8 +199,13 @@ function armyCoordinates(army, coordX, coordY, owner) {
                         return "You don't have enough movement Points.";
                     }
                 } else if(this.remainingMovePoints >= 7 ){// 7
-                    //this.moveHelper(changeInHeight, direction, 7,2,true, target);
-                    this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target});
+                    if(this.a.isLoadedIn != null){  // falls armee von flotte transportiert wird
+                        this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: true});
+                    }
+                    else {
+                        //this.moveHelper(changeInHeight, direction, 7,2,true, target);
+                        this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: false});
+                    }
                     return "ok";
                 } else {
                     return "You don't have enough movement Points.";
@@ -205,8 +236,13 @@ function armyCoordinates(army, coordX, coordY, owner) {
                         return "You don't have enough movement Points.";
                     }
                 } else if(this.remainingMovePoints >= 10 ){// 10
-                    //this.moveHelper(changeInHeight, direction, 10,2,true, target);
-                    this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 10, height: 2,landunit: true ,tar: target});
+                    if(this.a.isLoadedIn != null){  // falls armee von flotte transportiert wird
+                        this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 10, height: 2,landunit: true ,tar: target, unload: true});
+                    }
+                    else {
+                        //this.moveHelper(changeInHeight, direction, 10,2,true, target);
+                        this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 10, height: 2,landunit: true ,tar: target});
+                    }
                     return "ok";
                 } else {
                     return "You don't have enough movement Points.";
@@ -241,44 +277,11 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 } else if(this.a.isLoadedIn != null){
                     return "You are already embarked on a Fleet.";
                 // there is exactly one
-                } else if(fleetsOnDest.length == 1){
-                    var loadString = listOfArmyCoordinates[fleetsOnDest[0]].a.loadArmy();
-                    if(loadString == "ok"){
-                        this.a.isLoadedIn = listOfArmyCoordinates[fleetsOnDest[0]].a.armyId;
-                        console.log("army in now loaded in " + this.a.isLoadedIn);
-                        this.x = target.x;
-                        this.y = target.y;
-                        return "ok";
-                    } else {
-                        return(loadString);
-                    }
-                } else if(fleetsOnDest.length > 1){
-                    var fleetstring = "";
-                    for(var i = 0; i < fleetsOnDest.length; i++){
-                        fleetstring = fleetstring + listOfArmyCoordinates[fleetsOnDest[i]].a.armyId + " ";
-                    }
-                    var chosenFleet = prompt("Mögliche Flotten sind: " + fleetstring);
-                    if(chosenFleet != null){
-                        var findFleet = -1;
-                        for(var i = 0; i < listOfArmyCoordinates.length; i++){
-                            if(listOfArmyCoordinates[i].a.armyId == chosenFleet && listOfArmyCoordinates[i].owner == this.owner){
-                                findFleet = i;
-                            }
-                            fleetsOnDest.push(i);
-                            console.log("fleets +1");
-                        }
-                    }
-                    // there is none
-                    if(fleetsOnDest.length == 0){
-                        return "You can't walk on Water.";
-                    // there is at least one
-                    } else {
-                        return "ok";
-                    }
                 }
                 case 2:
                 case 4:
-                case 7: 
+                case 7:
+                console.log("there is a street: "+ thereIsAStreet);
                 if(thereIsAStreet){  // target field is a lowland, hill or desert
                     if(this.remainingMovePoints >= 4){
                         //this.moveHelper(changeInHeight, direction, 4,1,true, target);
@@ -287,36 +290,13 @@ function armyCoordinates(army, coordX, coordY, owner) {
                     } else {
                         return "You don't have enough movement Points.";
                     }
-                
-                        
                 } else if(this.remainingMovePoints >= 7){
-                    console.log(this.a.isLoadedIn);
                     if(this.a.isLoadedIn != null){  // falls armee von flotte transportiert wird
-                        console.log("Armee war in " + this.a.isLoadedIn + " geladen.");
-                        for(var i = 0; i < listOfArmyCoordinates.length; i++){
-                            if((listOfArmyCoordinates[i].owner == this.owner) && listOfArmyCoordinates[i].a.armyId == this.a.isLoadedIn){
-                                var placeInList = -1;
-                                for(var j = 0; j < listOfArmyCoordinates[i].a.loadedArmies.length; j++){
-                                    if(listOfArmyCoordinates[i].a.loadedArmies[j] == this.a.armyId){
-                                        placeInList = j;
-                                    }
-                                }
-                                // fall es letztes ist .pop()
-                                if(placeInList == (listOfArmyCoordinates[i].a.loadedArmies.length-1)){
-                                    listOfArmyCoordinates[i].a.loadedArmies.pop();
-                                // falls nicht vertausche es mit dem letzten und .pop()
-                                } else {
-                                    listOfArmyCoordinates[i].a.loadedArmies[placeInList] = listOfArmyCoordinates[i].a.loadedArmies[listOfArmyCoordinates[i].a.loadedArmies.length-1];
-                                    listOfArmyCoordinates[i].a.loadedArmies.pop();
-                                }
-                            }
-                        }
                         this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: true});
                     }
                     else {
                     this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: false});
                     }
-                    this.a.isLoadedIn = null;
                     return "ok";
                 } else {
                     return "You don't have enough movement Points.";
@@ -388,7 +368,12 @@ function armyCoordinates(army, coordX, coordY, owner) {
                     return "You can't move into woods or swamps with heavy catapults unless you have streets.";
                 } else if(this.remainingMovePoints >= 7 ){
                     //this.moveHelper(changeInHeight, direction, 7,2,true, target);
-                    this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2, landunit: true ,tar: target});
+                    if(this.a.isLoadedIn != null){  // falls armee von flotte transportiert wird
+                        this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: true});
+                    }
+                    else{
+                        this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2, landunit: true ,tar: target});
+                    }
                     return "ok";
                 } else {
                     return "You don't have enough movement Points.";
@@ -440,6 +425,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
 
                     //for moving off a ship
                     if(tempmove.unload != undefined && tempmove.unload == true){
+                        console.log("MAAAAPMAAAAPMAAAAAP ------------This Totally Happened-------------------")
                         console.log("Armee war in " + this.a.isLoadedIn + " geladen.");
                         for(var i = 0; i < listOfArmyCoordinates.length; i++){
                             if((listOfArmyCoordinates[i].owner == this.owner) && listOfArmyCoordinates[i].a.armyId == this.a.isLoadedIn){
@@ -455,6 +441,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                                     listOfArmyCoordinates[i].a.loadedArmies[j] = listOfArmyCoordinates[i].a.loadedArmies[listOfArmyCoordinates[i].a.loadedArmies.length-1];
                                     listOfArmyCoordinates[i].a.loadedArmies.pop();
                                 }
+                                this.a.isLoadedIn = null;
                             }
                         }
                     }
@@ -545,11 +532,6 @@ function armyCoordinates(army, coordX, coordY, owner) {
     }
 
 }
-
-
-
-
-
 
 // contains helper functions to get information about a field out of the fields array with just its coordinates.
 function showHex(positionX, positionY) {

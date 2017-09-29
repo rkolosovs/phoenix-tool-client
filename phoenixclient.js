@@ -249,6 +249,11 @@ function registerLeftClick(){
 					}
 					updateInfoBox();
 					restoreInfoBox();
+					console.log(selectedArmy);
+					if(selectedArmy !== undefined){
+						listOfArmyCoordinates[selectedArmy].clickedMoves();
+					}
+					drawStuff();
 				});
 				x.appendChild(btn);
 			}
