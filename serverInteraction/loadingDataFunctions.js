@@ -1,8 +1,8 @@
 'use strict';
 
 
- //	var url = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
-	var url = "http://localhost:8000"; //for local debug
+    var url = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
+//  var url = "http://localhost:8000"; //for local debug
 
 // help function to fetch current data from the server
 function getNewDataFromServer(){
@@ -58,10 +58,10 @@ function loadCSRFToken() {
 //loads the armies data from the server.
 //Data the client is not supposed to have based on his login status is set to -1.
 function loadArmies() {
- $.post({
-			url: url +"/databaseLink/armydata/",
-         data: {authorization: authenticationToken},
-         success: function(data){
+	$.post({
+		url: url +"/databaseLink/armydata/",
+        data: {authorization: authenticationToken},
+        success: function(data){
 				var armies = data; //load the armies from the armies.json file
 				var armiesToLoadIn = [];
              listOfArmyCoordinates = [];
@@ -105,7 +105,7 @@ function loadArmies() {
 					}
 				}
 			},
-			dataType: "json",
+			dataType: "json"
          //headers: {
          //    "Authorization" :"Token " + authenticationToken,
          //}
