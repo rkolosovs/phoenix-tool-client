@@ -309,6 +309,18 @@ div.inline {
 #infoBox {
     right:0;
     width: 15%;
+    height: 40%;
+}
+
+#transmuteBox {
+    right:0;
+    width: 15%;
+    height: 25%;
+}
+
+#mergeBox {
+    right:0;
+    width: 15%;
     height: 25%;
 }
 
@@ -358,7 +370,7 @@ div.inline {
 #infoChangeBox {
     right:0;
     width: 15%;
-    height: 25%;
+    height: 30%;
 }
 
 #mountBox {
