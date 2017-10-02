@@ -153,3 +153,23 @@ function setHexParts(scale) {
 	gH = 0.75 * scale;
 	gW = SIN60 * scale;
 }
+function getHexDistance(hexStart, hexTarget){
+	var distanceX = hexStart.x - hexTarget.x;
+	var distanceY = hexStart.y - hexTarget.y;
+
+  	var lesserCoord = Math.abs(distanceX) < Math.abs(distanceY) ? Math.abs(distanceX) : Math.abs(distanceY);
+  	var diagonalMovementX = (distanceX < 0) ? -lesserCoord : lesserCoord; // keep the sign 
+	var diagonalMovementY = (distanceY < 0) ? -lesserCoord : lesserCoord; // keep the sign
+	
+	var straightMovementX = distanceX - diagonalMovementX;
+	var straightMovementY = distanceY - diagonalMovementY;
+	
+	var straightDistance = Math.abs(straightMovementX) + Math.abs(straightMovementY);
+	var diagonalDistance = Math.abs(diagonalMovementX);
+	if ( (diagonalMovementX < 0 && diagonalMovementY > 0) || 
+       (diagonalMovementX > 0 && diagonalMovementY < 0) ){
+    	diagonalDistance *= 2;
+  	}
+
+  	return straightDistance + diagonalDistance;
+}

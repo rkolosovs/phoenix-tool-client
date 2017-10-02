@@ -686,6 +686,11 @@ function fernkampf(dicerollsL, dicerollsS, badConditions, shooter, target, chars
     target.takeFire((shooter.fireLkp(dicerollsL, badConditions) + shooter.fireSkp(dicerollsS, badConditions))/(1+(target.leaderGp()+charGpSum)/100));
 }
 
+//to fill the targetList
+function aim(){
+	listOfArmyCoordinates[selectedArmy].findToFire();
+}
+
 // the splitArmy funtion of the split box
 // TODO: If the army has moved, set the new split army's move points to the appropriate, non-max value.
 function splitSelectedArmy(){

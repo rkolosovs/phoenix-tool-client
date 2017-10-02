@@ -21,6 +21,7 @@ function drawStuff() {
 	drawSelection(ctx, x, y, scale, selectedFields);
 	drawArmies(ctx, x, y, scale, listOfArmyCoordinates);
 	drawPossibleMoves(ctx, x, y, scale, selectedArmy);
+	drawShootingTargets(ctx, x, y, scale, selectedArmy);
 }
 
 function drawMap(ctx, x, y, scale) {
@@ -474,4 +475,18 @@ function drawTookFire(ctx, pos, scale){
 	ctx.beginPath();
     ctx.arc(pos[0]+(0.5 * scale * SIN60)+c, pos[1]+(scale * 0.5)+c, scale/16, Math.PI*1.25, Math.PI*1.75, false);
     ctx.stroke();
+}
+
+function drawShootingTargets(ctx, x, y, scale, selectedArmy){
+	if(selectedArmy !== undefined){
+		var targets = listOfArmyCoordinates[selectedArmy].targetList;
+		for (var i = 0; i < targets.length; i++) {
+			ctx.lineWidth = scale/6;
+			ctx.strokeStyle='#FF0000';
+			var pos = computePosition(x, y, targets[i][0], targets[i][1], scale); //get fields position
+			ctx.beginPath();
+			ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/12, 0, 2 * Math.PI, false);
+			ctx.stroke();
+		}
+	}
 }

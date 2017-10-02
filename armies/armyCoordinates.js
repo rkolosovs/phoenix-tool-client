@@ -4,6 +4,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
     this.y = coordY;
     this.owner = owner;
     this.possibleMoves = [];
+    this.targetList = [];
     // returns the tag of the owner, not full operational
     // TODO do it right
     this.ownerTag = function(){
@@ -488,8 +489,26 @@ function armyCoordinates(army, coordX, coordY, owner) {
         return this.moveToList(direction)
     }
 
-}
+    //to find all fields in a two tile proximity
+    this.findToFire = function(){
+	this.targetList = [];
+	var range = 2;
+	var origin = new showHex(this.x, this.y);
 
+	//from a formula 
+	//https://stackoverflow.com/questions/4585135/hexagonal-tiles-and-finding-their-adjacent-neighbourghs
+	for(var x = origin.x - range; x <= origin.x + range; x++){
+		for(var y = origin.y - range; y <= origin.y + range; y++){
+			var point = new showHex(x,y);
+            if(getHexDistance(origin, point) <= range)
+                //to filter point of origin
+                if(point.x != origin.x || point.y != origin.y)
+				    this.targetList.push([point.x, point.y]);
+		}
+	}
+	console.log(this.targetList);
+    }
+}
 
 
 
