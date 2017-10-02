@@ -383,11 +383,11 @@ function battleHandler(participants, x, y) {
 					var army = item.a;
 					item.remainingMovePoints = 0;
 					if(army.armyId < 200 && army.armyId > 0){ //TODO
-						console.log("armyCount: " + army.count + ", attackSoldiers: " + this.attackSoldiers + ", footLosses: " + result.footLosses);
 						army.decimate((army.count/this.attackSoldiers)*result.footLosses);
 					} else if(army.armyId < 300 && army.armyId > 200){
-						console.log("armyCount: " + army.count + ", attackRiders: " + this.attackRiders + ", cavLosses: " + result.cavLosses);
 						army.decimate((army.count/this.attackRiders)*result.cavLosses);
+					} else if(army.armyId < 400 && army.armyId > 300){
+						army.decimate((army.count/this.attackShips)*result.fleetLosses);
 					}
 				}, this);
 			} else if(result.victor === 'defender'){
@@ -405,23 +405,18 @@ function battleHandler(participants, x, y) {
 					var army = item.a;
 					item.remainingMovePoints = 0;
 					if(army.armyId < 200 && army.armyId > 0){ //TODO
-						console.log("Before decimation: armyCount: " + army.count + ", attackSoldiers: " + this.attackSoldiers + ", footLosses: " + result.footLosses);
 						army.decimate((army.count/this.defenseSoldiers)*result.footLosses);
-						console.log("After decimation: armyCount: " + army.count);
 					} else if(army.armyId < 300 && army.armyId > 200){
-						console.log("Before decimation: armyCount: " + army.count + ", attackRiders: " + this.attackRiders + ", cavLosses: " + result.cavLosses);
 						army.decimate((army.count/this.defenseRiders)*result.cavLosses);
-						console.log("After decimation: armyCount: " + army.count);
 					} else if(army.armyId < 400 && army.armyId > 300){
-						console.log("Before decimation: armyCount: " + army.count + ", attackRiders: " + this.attackRiders + ", cavLosses: " + result.cavLosses);
-						army.decimate((army.count/this.defenseRiders)*result.cavLosses);
-						console.log("After decimation: armyCount: " + army.count);
+						army.decimate((army.count/this.defenseShips)*result.fleetLosses);
 					}
 				},this);
 			} else {
 				//TODO: Revisit once the schlacht.result(dice1, dice2) returns proper values for a tie
 			}
 		}
+		checkArmiesForLiveliness();
 	}
 }
 
@@ -1316,7 +1311,11 @@ function mergeSelectedArmy(mergeId){
 
 // deletes the currently selected army und puts the last army in listOfArmyCoordinates in its place
 function deleteSelectedArmy(){
-	listOfArmyCoordinates[selectedArmy] = listOfArmyCoordinates[listOfArmyCoordinates.length-1];
+	deleteArmy(selectedArmy);
+}
+
+function deleteArmy(index){
+	listOfArmyCoordinates[index] = listOfArmyCoordinates[listOfArmyCoordinates.length-1];
 	listOfArmyCoordinates.pop();
 	if(selectedArmy == listOfArmyCoordinates.length)
 	{
@@ -1376,5 +1375,13 @@ function generateArmyId(type, owner){
 		return false;
 	} else {
 		return false;
+	}
+}
+
+function checkArmiesForLiveliness(){//TODO fix
+	for (var i = listOfArmyCoordinates.length -1; i >= 0; i--){
+		if (!listOfArmyCoordinates[i].a.isAlive){
+			deleteArmy(i);
+		}
 	}
 }

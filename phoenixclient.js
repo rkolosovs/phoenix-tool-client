@@ -755,16 +755,22 @@ function checkEvent(num) {
 			}
 			var adjacency = getAdjacency([army.x, army.y],[[cont.toX, cont.toY]]);
 			if (adjacency[0] === 1){
+				army.moveToList(1);
 				army.move(1);//move to ne
 			} else if (adjacency[1] === 1) {
+				army.moveToList(2);
 				army.move(2);//move to e
 			} else if (adjacency[2] === 1) {
+				army.moveToList(3);
 				army.move(3);//move to se
 			} else if (adjacency[3] === 1) {
+				army.moveToList(4);
 				army.move(4);//move to sw
 			} else if (adjacency[4] === 1) {
+				army.moveToList(5);
 				army.move(5);//move to w
 			} else if (adjacency[5] === 1) {
+				army.moveToList(0);
 				army.move(0);//move to nw
 			}
 			event.status = 'checked';

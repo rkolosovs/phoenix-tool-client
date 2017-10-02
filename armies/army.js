@@ -261,6 +261,11 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
         }
         return damageBP;
     }
+    
+    this.isAlive = function(){
+    	return (this.raumpunkte >= 100 && this.leaders >= 1);
+    	//TODO once characters are a thing, 0 officer armies with a character on the field should also be alive
+    }
 }// ende von Heer ------------------------------------------------------------------------------------------------------
 
 //Reiterheere müssen nach dem Kampf nur halb so stark dezimiert werden wie Fußheere.
