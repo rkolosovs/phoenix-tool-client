@@ -462,7 +462,8 @@ function determineEventStatus(){
 				event.status === 'withheld' || event.status === 'impossible'){
 			if(event.type === 'move'){
 				if(armyExistsAndIsLocated(content.realm, content.armyId, content.fromX, content.fromY) && 
-						!unprocessedBattleAtContainingArmy(content.realm, content.armyId, content.fromX, content.fromY)){
+						!unprocessedBattleAtContainingArmy(content.realm, content.armyId, content.fromX, content.fromY) && 
+						canMove(content.realm, content.armyId, content.fromX, content.fromY, content.toX, content.toY)){
 					pendingEvents[i].status = 'available';
 				} else if(armyExists(content.realm, content.armyId) && 
 						possibleMoveOfArmyTo(content.realm, content.armyId, content.fromX, content.fromY)){
@@ -627,28 +628,34 @@ function unprocessedBattleAtContainingArmy(realm, id, x, y){
 	}, this);
 }
 
-//TODO: This is a redundant implementation of code present in armyCoordinates move().
-//This should be merged to avaid inconsistencies.
 function canMove(realm, id, fromX, fromY, toX, toY){
 	var foundArmy = listOfArmyCoordinates.find(function(army){
 		return (army.a.armyId === id) && (army.ownerTag() === realm);
 	}, this);
-	if (foundArmy !== undefined) {
-		var origin = new showHex(fromX, fromY);
-        var destination = new showHex(toX, toY);
-		var streetPresent = buildings.some(function(building){
-			return (building.type === 8) && 
-				(((building.firstX == fromX && building.firstY == fromY) && (building.secondX == toX && building.secondY == toY)) || 
-					((building.secondX == toX && building.secondY == toY) && (building.firstX == fromX && building.firstY == fromY)));
-		});
-		var heightDifference = Math.abs((origin.height() - destination.height()));
-		//TODO: This is missing harbors
-		var enoughHeightPoints =  (foundArmy.remainingHeightPoints >= 1) &&
-			((heightDifference <= 2 && streetPresent) || (heightDifference <= 1));
-		//TODO: This is missin gbasically everything. But hey, the movement points are set as too high anyways right now.
-		//TODO: Change the TODO above once the movement points are no longer extreme high due to testing.
-		var enoughMovePoints = (foundArmy.remainingMovePoints >= 7);
-		return enoughHeightPoints && enoughMovePoints; 
+	if (foundArmy !== undefined && foundArmy.x === fromX && foundArmy.y === fromY) {
+		var adjacency = getAdjacency([fromX, fromY],[[toX, toY]]);
+		
+		if (adjacency.reduce((total, current) => (total || current), false)){
+			foundArmy.possibleMoves = [];
+			var direction = (adjacency.findIndex((dir) => dir === 1) + 1)%6;
+			foundArmy.moveToList(direction);
+			return foundArmy.possibleMoves.length > 0;
+		}
+//		var origin = new showHex(fromX, fromY);
+//        var destination = new showHex(toX, toY);
+//		var streetPresent = buildings.some(function(building){
+//			return (building.type === 8) && 
+//				(((building.firstX == fromX && building.firstY == fromY) && (building.secondX == toX && building.secondY == toY)) || 
+//					((building.secondX == toX && building.secondY == toY) && (building.firstX == fromX && building.firstY == fromY)));
+//		});
+//		var heightDifference = Math.abs((origin.height() - destination.height()));
+//		//TODO: This is missing harbors
+//		var enoughHeightPoints =  (foundArmy.remainingHeightPoints >= 1) &&
+//			((heightDifference <= 2 && streetPresent) || (heightDifference <= 1));
+//		//TODO: This is missin gbasically everything. But hey, the movement points are set as too high anyways right now.
+//		//TODO: Change the TODO above once the movement points are no longer extreme high due to testing.
+//		var enoughMovePoints = (foundArmy.remainingMovePoints >= 7);
+//		return enoughHeightPoints && enoughMovePoints; 
 	} else {
 		return false;
 	}

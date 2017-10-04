@@ -541,8 +541,8 @@ function writeTurnNumber() {
 				loadBuildingData();
 				loadBorderData();
 				loadPendingEvents();
-				drawStuff();
 				writeTurnNumber();
+				drawStuff();
 			}
 		});
 	}
