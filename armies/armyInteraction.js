@@ -1378,10 +1378,7 @@ function generateArmyId(type, owner){
 	}
 }
 
-function checkArmiesForLiveliness(){//TODO fix
-	for (var i = listOfArmyCoordinates.length -1; i >= 0; i--){
-		if (!listOfArmyCoordinates[i].a.isAlive){
-			deleteArmy(i);
-		}
-	}
+function checkArmiesForLiveliness(){
+	listOfArmyCoordinates = listOfArmyCoordinates.filter(
+			function(armyCoord){return armyCoord.isAlive();});
 }
