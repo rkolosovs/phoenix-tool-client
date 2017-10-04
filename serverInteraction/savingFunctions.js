@@ -174,38 +174,26 @@ function saveBuildings() { // saves the current buildings on the server
 }
 
 function saveArmies() { // saves the current armies on the server
-	var dataToServerString = "";
-	for (var i = 0; i < listOfArmyCoordinates.length; i++) {
-		if (i != listOfArmyCoordinates.length - 1) {
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.armyId + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.count + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.leaders + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.lkp + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.skp + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.mounts + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].x + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].y + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].owner + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.isLoadedIn + ";";
-		} else {
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.armyId + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.count + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.leaders + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.lkp + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.skp + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.mounts + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].x + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].y + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].owner + ",";
-			dataToServerString = dataToServerString + listOfArmyCoordinates[i].a.isLoadedIn;
-		}
-	}
-	console.log("start");
-	console.log(listOfArmyCoordinates);
+	var sensibleArmyList = listOfArmyCoordinates.map(function(elem){
+		return {
+			armyId: elem.a.armyId,
+			count: elem.a.count,
+			leaders: elem.a.leaders,
+			lkp: elem.a.lkp,
+			skp: elem.a.skp,
+			mounts: elem.a.mounts,
+			x: elem.x,
+			y: elem.y,
+			ownerPk: elem.owner,
+			movementPoints: elem.remainingMovePoints,
+			heightPoints: elem.remainingHeightPoints,
+			isLoadedIn: elem.a.isLoadedIn
+		};
+	});
 	$.post({
 		url: url + "/databaseLink/savearmydata/",
 		data: {
-			armies: dataToServerString,
+			armies: JSON.stringify(sensibleArmyList),
 			authorization: authenticationToken
 		},
 		statusCode: {

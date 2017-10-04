@@ -62,56 +62,44 @@ function loadArmies() {
 		url: url +"/databaseLink/armydata/",
         data: {authorization: authenticationToken},
         success: function(data){
-				var armies = data; //load the armies from the armies.json file
-				var armiesToLoadIn = [];
-             listOfArmyCoordinates = [];
-             for(var i = 0; i < armies.length; i++){
-                 if(Math.floor(armies[i].armyId/100) == 1){
-                     var army = new heer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp, armies[i].skp, armies[i].mounts, armies[i].isGuard);
-                     var armyCoords = new armyCoordinates(army, armies[i].x, armies[i].y, armies[i].realm);
-                     armyCoords.setRemainingMovePoints(9);
-                     armyCoords.setRemainingHeightPoints(2);
-						if(armies[i].isLoadedIn != null){
-							armiesToLoadIn.push([armies[i].isLoadedIn, armies[i].realm, armies[i].armyId]);
-							armyCoords.a.isLoadedIn = armies[i].isLoadedIn;
-						}
-                     listOfArmyCoordinates.push(armyCoords);
-                 } else if(Math.floor(armies[i].armyId/100) == 2){
-                     var army = new reiterHeer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].isGuard);
-                     var armyCoords = new armyCoordinates(army, armies[i].x, armies[i].y, armies[i].realm);
-                     armyCoords.setRemainingMovePoints(21);
-                     armyCoords.setRemainingHeightPoints(2);
-						if(armies[i].isLoadedIn != null){
-							armiesToLoadIn.push([armies[i].isLoadedIn, armies[i].realm, armies[i].armyId]);
-							armyCoords.a.isLoadedIn = armies[i].isLoadedIn;
-						}
-                     listOfArmyCoordinates.push(armyCoords);
-                 } if(Math.floor(armies[i].armyId/100) == 3){
-                     var army = new seeHeer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp, armies[i].skp, armies[i].isGuard);
-                     var armyCoords = new armyCoordinates(army, armies[i].x, armies[i].y, armies[i].realm);
-//                     armyCoords.setRemainingMovePoints(42); [whatevershipsmayneed]
-                     listOfArmyCoordinates.push(armyCoords);
-                 }
-             }
-				// if needed, load Troops into ships
-				if(armiesToLoadIn.length > 0){
-					for(var i = 0; i < armiesToLoadIn.length; i++){
-						for(var j = 0; j < listOfArmyCoordinates.length; j++){
-							if(listOfArmyCoordinates[j].a.armyId == armiesToLoadIn[i][0] && listOfArmyCoordinates[j].owner == armiesToLoadIn[i][1]){
-								listOfArmyCoordinates[j].a.loadedArmies.push(armiesToLoadIn[i][2]);
-								console.log(armiesToLoadIn[i][2] + " is loaded in " + listOfArmyCoordinates[j].a.armyId);
-							}
+        	var armies = data;
+			var armiesToLoadIn = [];
+            listOfArmyCoordinates = [];
+            for(var i = 0; i < armies.length; i++){
+            	var armyCoords = null;
+            	var army = null;
+                if(Math.floor(armies[i].armyId/100) == 1){
+                	army = new heer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp, armies[i].skp, armies[i].mounts, armies[i].isGuard);
+                } else if(Math.floor(armies[i].armyId/100) == 2){
+                	army = new reiterHeer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].isGuard);
+                } else if(Math.floor(armies[i].armyId/100) == 3){
+                	army = new seeHeer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp, armies[i].skp, armies[i].isGuard);
+                }
+                armyCoords = new armyCoordinates(army, armies[i].x, armies[i].y, armies[i].realm);
+				if(armies[i].isLoadedIn != null){
+					armiesToLoadIn.push([armies[i].isLoadedIn, armies[i].realm, armies[i].armyId]);
+					armyCoords.a.isLoadedIn = armies[i].isLoadedIn;
+				}
+                armyCoords.setRemainingMovePoints(armies[i].movementPoints);
+                armyCoords.setRemainingHeightPoints(armies[i].heightPoints);
+                listOfArmyCoordinates.push(armyCoords);
+            }
+			// if needed, load Troops into ships
+			if(armiesToLoadIn.length > 0){
+				for(var i = 0; i < armiesToLoadIn.length; i++){
+					for(var j = 0; j < listOfArmyCoordinates.length; j++){
+						if(listOfArmyCoordinates[j].a.armyId == armiesToLoadIn[i][0] && listOfArmyCoordinates[j].owner == armiesToLoadIn[i][1]){
+							listOfArmyCoordinates[j].a.loadedArmies.push(armiesToLoadIn[i][2]);
+							console.log(armiesToLoadIn[i][2] + " is loaded in " + listOfArmyCoordinates[j].a.armyId);
 						}
 					}
 				}
-				// if the event loading finishes before the army loading is is needed, eventlist may be wrong otherwise
-				fillEventList();
-			},
-			dataType: "json"
-         //headers: {
-         //    "Authorization" :"Token " + authenticationToken,
-         //}
-		});
+			}
+			// if the event loading finishes before the army loading is is needed, eventlist may be wrong otherwise
+			fillEventList();
+		},
+		dataType: "json"
+	});
 }
 
 function loadFieldData() {
