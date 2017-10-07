@@ -153,6 +153,9 @@ function setHexParts(scale) {
 	gH = 0.75 * scale;
 	gW = SIN60 * scale;
 }
+
+//this is for a different hex representation but might be usefull in the future
+//deprecated
 function getHexDistance(hexStart, hexTarget){
 	var distanceX = hexStart.x - hexTarget.x;
 	var distanceY = hexStart.y - hexTarget.y;

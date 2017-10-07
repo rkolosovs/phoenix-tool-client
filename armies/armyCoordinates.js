@@ -491,22 +491,29 @@ function armyCoordinates(army, coordX, coordY, owner) {
 
     //to find all fields in a two tile proximity
     this.findToFire = function(){
-	this.targetList = [];
-	var range = 2;
-	var origin = new showHex(this.x, this.y);
+        var origin = new showHex(this.x, this.y);
 
-	//from a formula 
-	//https://stackoverflow.com/questions/4585135/hexagonal-tiles-and-finding-their-adjacent-neighbourghs
-	for(var x = origin.x - range; x <= origin.x + range; x++){
-		for(var y = origin.y - range; y <= origin.y + range; y++){
-			var point = new showHex(x,y);
-            if(getHexDistance(origin, point) <= range)
-                //to filter point of origin
-                if(point.x != origin.x || point.y != origin.y)
-				    this.targetList.push([point.x, point.y]);
-		}
-	}
-	console.log(this.targetList);
+        this.targetList = origin.neighbors();
+        if(this.a.skp >0){
+            var templist = origin.neighbors();
+
+            for(var i = 0; i < templist.length; i++){
+                var tempneigh = new showHex(templist[i][0], templist[i][1]);
+                var tempneighList = tempneigh.neighbors();
+
+                for(var j = 0; j < tempneighList.length; j++){
+                    var found = false;
+                    for(var k = 0; k < this.targetList.length; k++){
+                        if((tempneighList[j][0] == this.targetList[k][0] && tempneighList[j][1] == this.targetList[k][1]) || (tempneighList[j][0] == this.x && tempneighList[j][1] == this.y)){
+                            found = true;
+                        }
+                        
+                    }
+                    if(found  == false)
+                        this.targetList.push(tempneighList[j]);
+                }
+            }
+        }
     }
 }
 
