@@ -803,9 +803,11 @@ function splitSelectedArmy(){
 		listOfArmyCoordinates[selectedArmy].a.removeMounts(mountsToSplit);
 		if(login != 'sl')
 		{
+			console.log("!!!!" + newArmyId + "!!!!");
 			preparedEvents.push({
 				type: "split", content: {
-					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId,
+					newArmysId: newArmyId, 
 					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
 					troops: toSplit,
 					leaders: leadersToSplit,
@@ -813,8 +815,7 @@ function splitSelectedArmy(){
 					skp: skpToSplit,
 					mounts: mountsToSplit,
 					x: listOfArmyCoordinates[selectedArmy].x,
-					y: listOfArmyCoordinates[selectedArmy].y,
-					newArmysId: newArmyId
+					y: listOfArmyCoordinates[selectedArmy].y
 				}
 			});
 		}
@@ -822,7 +823,8 @@ function splitSelectedArmy(){
 	}
 	if(listOfArmyCoordinates[selectedArmy].a.armyType() == 2)
 	{
-		var newArmy = new reiterHeer(generateArmyId(2,listOfArmyCoordinates[selectedArmy].owner), toSplit, leadersToSplit, false);
+		var newArmyId = generateArmyId(2,listOfArmyCoordinates[selectedArmy].owner);
+		var newArmy = new reiterHeer(newArmyId, toSplit, leadersToSplit, false);
 		var newArmyCoordinates = new armyCoordinates(newArmy, listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y, listOfArmyCoordinates[selectedArmy].owner);
 		listOfArmyCoordinates.push(newArmyCoordinates);
 		listOfArmyCoordinates[selectedArmy].a.removeSoldiers(toSplit);
@@ -831,7 +833,8 @@ function splitSelectedArmy(){
 		{
 			preparedEvents.push({
 				type: "split", content: {
-					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId,
+					newArmysId: newArmyId, 
 					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
 					troops: toSplit,
 					leaders: leadersToSplit,
@@ -839,15 +842,15 @@ function splitSelectedArmy(){
 					skp: 0,
 					mounts: 0,
 					x: listOfArmyCoordinates[selectedArmy].x,
-					y: listOfArmyCoordinates[selectedArmy].y,
-					newArmysId: newArmyId
+					y: listOfArmyCoordinates[selectedArmy].y
 				}
 			});
 		}
 	}
 	if(listOfArmyCoordinates[selectedArmy].a.armyType() == 3)
 	{
-		var newArmy = new seeHeer(generateArmyId(3,listOfArmyCoordinates[selectedArmy].owner), toSplit, leadersToSplit, lkpToSplit, skpToSplit, false);
+		var newArmyId = generateArmyId(3,listOfArmyCoordinates[selectedArmy].owner);
+		var newArmy = new seeHeer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, false);
 		var newArmyCoordinates = new armyCoordinates(newArmy, listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y, listOfArmyCoordinates[selectedArmy].owner);
 		listOfArmyCoordinates.push(newArmyCoordinates);
 		listOfArmyCoordinates[selectedArmy].a.removeSoldiers(toSplit);
@@ -858,7 +861,8 @@ function splitSelectedArmy(){
 		{
 			preparedEvents.push({
 				type: "split", content: {
-					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId,
+					newArmysId: newArmyId, 
 					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
 					troops: toSplit,
 					leaders: leadersToSplit,
@@ -866,8 +870,7 @@ function splitSelectedArmy(){
 					skp: skpToSplit,
 					mounts: 0,
 					x: listOfArmyCoordinates[selectedArmy].x,
-					y: listOfArmyCoordinates[selectedArmy].y,
-					newArmysId: newArmyId
+					y: listOfArmyCoordinates[selectedArmy].y
 				}
 			});
 		}

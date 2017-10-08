@@ -907,7 +907,8 @@ function checkEvent(num) {
 			}
 			event.status = 'checked';
 			fillEventList();
-			//sendCheckEvent(event.pk, event.type);
+			sendCheckEvent(event.pk, event.type);
+			saveArmies();
 			drawStuff();
 		} else if (event.type === "merge") {
 			var armyFromPlaceInList = -1;
@@ -938,7 +939,8 @@ function checkEvent(num) {
 			}
 			event.status = 'checked';
 			fillEventList();
-			//sendCheckEvent(event.pk, event.type);
+			sendCheckEvent(event.pk, event.type);
+			saveArmies();
 			drawStuff();
 			selectedArmy = undefined;
 		} else if (event.type === "transfer") {
@@ -985,7 +987,8 @@ function checkEvent(num) {
 			}
 			event.status = 'checked';
 			fillEventList();
-			//sendCheckEvent(event.pk, event.type);
+			sendCheckEvent(event.pk, event.type);
+			saveArmies();
 			drawStuff();
 		}
 	}
