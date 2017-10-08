@@ -40,6 +40,14 @@ function saveFields() { // saves the current fields on the server
 	console.log("end");
 }
 
+function sendAllPreparedEvents(){
+	for (var i = 0; i < preparedEvents.length; i++) {
+		var cPE = preparedEvents[i];
+		var cPEContent = JSON.stringify(cPE.content);
+		sendNewEvent(cPE.type, cPEContent);
+	}
+}
+
 function saveRivers() { // saves the current rivers on the server
 	var dataToServerString = "";
 	for (var i = 0; i < rivers.length; i++) {

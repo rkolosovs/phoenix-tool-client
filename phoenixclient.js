@@ -327,11 +327,12 @@ function registerRightClick(){
 						}
 
 						for (var j = 0; j < listOfArmyCoordinates.length; j++) {
-							var a = listOfArmyCoordinates[j];
-							if (a.x === listOfArmyCoordinates[selectedArmy].x && a.y === listOfArmyCoordinates[selectedArmy].y && a.a !== listOfArmyCoordinates[selectedArmy].a) {
-								participants.push({armyId: a.a.armyId, realm: a.ownerTag()});
+							var someArmy = listOfArmyCoordinates[j];
+							if (someArmy.x === listOfArmyCoordinates[selectedArmy].x && someArmy.y === listOfArmyCoordinates[selectedArmy].y 
+									&& someArmy.a !== listOfArmyCoordinates[selectedArmy].a) {
+								participants.push({armyId: someArmy.a.armyId, realm: someArmy.ownerTag()});
 								//in case they are enemies
-								if (a.owner !== listOfArmyCoordinates[selectedArmy].owner) {
+								if (someArmy.owner !== listOfArmyCoordinates[selectedArmy].owner) {
 									battlePossible = true;
 								}
 								//MultipleArmies - even if not friendly
@@ -342,21 +343,24 @@ function registerRightClick(){
 								//4. move from multi but still multifield left
 								//5. move from multi to multi
 								
-								if(a.multiArmyField === true){//2.
-									addToMultifield(a, listOfArmyCoordinates[selectedArmy]);
+								if(someArmy.multiArmyField === true){//2.
+									addToMultifield(someArmy, listOfArmyCoordinates[selectedArmy]);
 								}
 								else{//1.
 									var templist =[];//creating a list of armies to add to the list of multifieldarmies
-									templist.push(a);
+									templist.push(someArmy);
 									templist.push(listOfArmyCoordinates[selectedArmy]);
 									listOfMultiArmyFields.push(templist);
-									a.multiArmyField = true;
+									someArmy.multiArmyField = true;
 									listOfArmyCoordinates[selectedArmy].multiArmyField = true;
 								}
 							}
 						}
+						
 						if (battlePossible) {
 							var inserted = false;
+							participants.push({armyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+								realm: listOfArmyCoordinates[selectedArmy].ownerTag()});
 							for (var j = 0; j < preparedEvents.length; j++){
 								if(preparedEvents[j].type === "battle" && 
 										preparedEvents[j].content.x === listOfArmyCoordinates[selectedArmy].x && 
@@ -997,11 +1001,7 @@ function nextTurn() {
 			saveArmies();
 			saveFactionsTerritories();
 		} else { //Players and SL during player's turn send events
-			for (var i = 0; i < preparedEvents.length; i++) {
-				var cPE = preparedEvents[i];
-				var cPEContent = JSON.stringify(cPE.content);
-				sendNewEvent(cPE.type, cPEContent);
-			}
+			sendAllPreparedEvents();
 		}
 		sendNextTurn();
 	}

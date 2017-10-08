@@ -515,18 +515,25 @@ function writeTurnNumber() {
 		stepBtn.id = "stepButton";
 		stepBtn.style.backgroundImage = "url(images/step_button.svg)";
 		stepBtn.addEventListener('click', function() {
-			if (confirm("Do you want to save the events handled so far without ending the turn?" +
-					" Once saved the progress can't be reverted anymore.")){
-				pendingEvents.forEach(function(event) {
-					if(event.status === 'checked'){
-						sendCheckEvent(event.pk, event.type);
-					} else if(event.status === 'deleted') {
-						sendDeleteEvent(event.pk, event.type);
-					}
-				}, this);
-				saveBuildings();
-				saveFactionsTerritories();
-				saveArmies();
+			if(login === 'sl'){
+				if (confirm("Do you want to save the events handled so far without ending the turn?" +
+						" Once saved the progress can't be reverted anymore.")){
+					pendingEvents.forEach(function(event) {
+						if(event.status === 'checked'){
+							sendCheckEvent(event.pk, event.type);
+						} else if(event.status === 'deleted') {
+							sendDeleteEvent(event.pk, event.type);
+						}
+					}, this);
+					saveBuildings();
+					saveFactionsTerritories();
+					saveArmies();
+				}
+			} else {
+				if (confirm("Do you want to save the events issued so far without ending the turn?" +
+				" Once saved the progress can only be reverted by the SL.")){
+					sendAllPreparedEvents();
+				}
 			}
 		});
 	}
@@ -571,6 +578,10 @@ function writeTurnNumber() {
 		show(document.getElementById("eventTabsButton"));
 	} else {
 		hide(document.getElementById("eventTabsButton"));
+		stepBtn.disabled = true;
+		stepBtn.style.cursor = "not-allowed";
+		revertBtn.disabled = true;
+		revertBtn.style.cursor = "not-allowed";
 	}
 	
 	date.innerHTML =  "Monat " + months[currentTurn.turn%8] + " des Jahres "+ Math.ceil(currentTurn.turn/8) + " (Zug " + currentTurn.turn + ", ";
