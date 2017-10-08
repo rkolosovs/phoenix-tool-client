@@ -964,8 +964,10 @@ function openTab(evt, tabName) {
 
     // Show the current tab, and add an "active" class to the button that opened
 	// the tab
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
+    if(evt !== undefined && tabName !== ""){
+    	document.getElementById(tabName).style.display = "block";
+    	evt.currentTarget.className += " active";
+    }
 }
 
 function nextTurn() {

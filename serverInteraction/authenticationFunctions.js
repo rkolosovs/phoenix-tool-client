@@ -73,5 +73,6 @@ function logoutFromServer() {
 	hide(document.getElementById("eventTabsButton"));
 	var eventList = document.getElementById("eventsTab");
 	eventList.innerHTML = "";
+	openTab(null, "");
 	writeTurnNumber();
 }
