@@ -493,9 +493,17 @@ function armyCoordinates(army, coordX, coordY, owner) {
     this.findToFire = function(){
         var origin = new showHex(this.x, this.y);
 
+        //get all neighboring tiles
         this.targetList = origin.neighbors();
-        if(this.a.skp >0){
-            var templist = origin.neighbors();
+        var templist = origin.neighbors();
+
+        //adding the range
+        for(var i = 0; i < this.targetList.length; i++){
+            this.targetList[i].push(1);
+        }
+
+
+        if(this.a.skp >0){//in a 2 tile range
 
             for(var i = 0; i < templist.length; i++){
                 var tempneigh = new showHex(templist[i][0], templist[i][1]);
@@ -510,7 +518,41 @@ function armyCoordinates(army, coordX, coordY, owner) {
                         
                     }
                     if(found  == false)
-                        this.targetList.push(tempneighList[j]);
+                        //tempneighList[j].push(2);//the 2 is the range
+                        this.targetList.push([tempneighList[j][0], tempneighList[j][1], 2]);
+                }
+            }
+        }
+
+        templist = this.targetList.slice();
+        //to find out the conditions and maybe kick out if not shootable
+        for(var i = templist.length -1; i >= 0; i--){
+            var target = new showHex(templist[i][0], templist[i][1]);
+            if(this.a.skp > 0){//skp shooting
+                if(templist[i][2] == 1){
+                    if(target.height() - origin.height() <= 2){
+
+                    }
+                    else{
+                        this.targetList.splice(i,1);
+                    }
+                }
+                else if(templist[i][2] == 2){
+                    //also if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
+                    if(target.height() - origin.height() <= 1){
+
+                    }
+                    else{
+                        this.targetList.splice(i,1);
+                    }
+                }
+            }
+            else{//for lkp shooting
+                if(target.height() - origin.height() <= 1){
+
+                }
+                else{
+                    this.targetList.splice(i,1);
                 }
             }
         }
