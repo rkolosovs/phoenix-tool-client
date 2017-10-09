@@ -501,7 +501,45 @@ function writeTurnNumber() {
 	if (nextTurnBtn === null) {
 		nextTurnBtn = document.createElement("BUTTON");
 		nextTurnBtn.id = "nextTurnButton";
-		nextTurnBtn.addEventListener('click', function() {nextTurn()});
+		nextTurnBtn.addEventListener('click', function() {
+			var message = "";
+			if (currentTurn.realm === null) {
+				message = "Do you want to end the pre-turn phase?";
+			} else if (currentTurn.status === 'fi') {
+				var unprocessedEvents = pendingEvents.some(function(event){
+					return (event.status === 'available' || event.status === 'withheld' ||
+						event.status === 'impossible');
+				});
+				if (unprocessedEvents){
+					message = "Some events are unprocessed.";
+				}
+				message += ("Do you want to end processing the turn of " + currentTurn.realm+"?");
+			} else if (login === 'sl') {
+				message = "Do you want to end the turn of "+ currentTurn.realm+"?";
+			} else {
+				message = "Do you want to end your turn?";
+			}
+
+			if (confirm(message)){
+				if(login === 'sl' && currentTurn.status === 'fi') { //SL sends DB change requests
+					pendingEvents.forEach(function(event) {
+						if(event.status === 'checked'){
+							sendCheckEvent(event.pk, event.type);
+						} else if(event.status === 'deleted') {
+							sendDeleteEvent(event.pk, event.type);
+						}
+					}, this);
+					saveBuildings();
+					saveFactionsTerritories();
+					saveArmies();
+				} else { //Players and SL during player's turn send events
+					sendAllPreparedEvents();
+				}
+				pendingEvents = [];
+				preparedEvents = [];
+				sendNextTurn();
+			}
+		});
 		date = document.createElement("P");
 		date.align = "right";
 		date.id = "date_text";
@@ -525,6 +563,8 @@ function writeTurnNumber() {
 							sendDeleteEvent(event.pk, event.type);
 						}
 					}, this);
+					pendingEvents = [];
+					preparedEvents = [];
 					saveBuildings();
 					saveFactionsTerritories();
 					saveArmies();
@@ -544,6 +584,8 @@ function writeTurnNumber() {
 		revertBtn.style.backgroundImage = "url(images/revert_button.svg)";
 		revertBtn.addEventListener('click', function() {
 			if (confirm("Do you want to revert the events handled so far?")){
+				pendingEvents = [];
+				preparedEvents = [];
 				loadArmies();
 				loadBuildingData();
 				loadBorderData();

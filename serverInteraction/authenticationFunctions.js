@@ -74,5 +74,7 @@ function logoutFromServer() {
 	var eventList = document.getElementById("eventsTab");
 	eventList.innerHTML = "";
 	openTab(null, "");
+	pendingEvents = [];
+	preparedEvents = [];
 	writeTurnNumber();
 }

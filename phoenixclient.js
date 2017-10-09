@@ -667,7 +667,6 @@ function canMove(realm, id, fromX, fromY, toX, toY){
 //end of helper methods for event status determining
 
 function fillEventList() {
-	console.log("fillEventList()");
 	var eventList = document.getElementById("eventsTab");
 	eventList.innerHTML = "";
 	determineEventStatus();
@@ -972,39 +971,6 @@ function openTab(evt, tabName) {
     	document.getElementById(tabName).style.display = "block";
     	evt.currentTarget.className += " active";
     }
-}
-
-function nextTurn() {
-	var message = "";
-	if (currentTurn.realm === null) {
-		message = "Do you want to end the pre-turn phase?";
-	} else if (currentTurn.status === 'fi') {
-		var unprocessedEvents = pendingEvents.some(function(event){
-			return (event.status === 'available' || event.status === 'withheld' ||
-				event.status === 'impossible');
-		});
-		if (unprocessedEvents){
-			message = "Some events are unprocessed.";
-		}
-		message += ("Do you want to end processing the turn of " + currentTurn.realm+"?");
-	} else if (login === 'sl') {
-		message = "Do you want to end the turn of "+ currentTurn.realm+"?";
-	} else {
-		message = "Do you want to end your turn?";
-	}
-
-	if (confirm(message)){
-		if(login === 'sl' && currentTurn.status === 'fi') { //SL sends DB change requests
-			saveFields();
-			saveRivers();
-			saveBuildings();
-			saveArmies();
-			saveFactionsTerritories();
-		} else { //Players and SL during player's turn send events
-			sendAllPreparedEvents();
-		}
-		sendNextTurn();
-	}
 }
 
 function init() {
