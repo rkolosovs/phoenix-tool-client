@@ -802,7 +802,8 @@ function checkEvent(num) {
 			var battle = new battleHandler(partips, cont.x, cont.y);
 			document.getElementById("attackDiceRoll").onchange = function(){battle.updateDisplay()};
 			document.getElementById("defenseDiceRoll").onchange = function(){battle.updateDisplay()};
-			document.getElementById("battleButton").onclick = function(){
+			var battleButton = document.getElementById("battleButton");
+			battleButton.onclick = function(){
 				battle.resolve();
 				hide(battleBox);
 				event.status = 'checked';
@@ -811,6 +812,8 @@ function checkEvent(num) {
 //				console.log(listOfArmyCoordinates);
 //				sendCheckEvent(event.pk, event.type);
 			};
+			battleButton.disabled = true;
+			battleButton.style.cursor = "not-allowed";
 			document.getElementById("closeBattleButton").onclick = function(){
 				hide(battleBox);
 			};
