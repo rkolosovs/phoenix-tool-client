@@ -422,23 +422,21 @@ function battleHandler(participants, x, y) {
 
 // Battle, armiesAttack: Array der angreifenden Armeen, armiesDefend: Array der Verteidigenden Armeen 
 // Immer zu erst init()
-// TODO: Gelaende und unterstuetzung, Flotten
 // TODO: Kommentare aktualisieren!
-// TODO: Bessere variabelnamen!!!
 // attackingarmies[], defendingarmies[]
 function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
-    this.a1 = new heer(0,0,0,0,0,0,false);	// Fußheer Angreifer
-    this.a2 = new heer(0,0,0,0,0,0,false);	// Fußheer Verteidiger
-    this.ma1 = new reiterHeer(0,0,0,false);	// Reiterheer Angreifer
-    this.ma2 = new reiterHeer(0,0,0,false);	// Reiterheer Verteidiger
-	this.fa1 = new seeHeer(0,0,0,0,0,false); // Flotte Angreifer NOCH NICHT UNTERSTÜTZT
-	this.fa2 = new seeHeer(0,0,0,0,0,false); // Flotte Verteidiger NOCH NICHT UNTERSTÜTZT
-    this.g1 = new heer(0,0,0,0,0,0,true);	// Garde Angreifer
-    this.g2 = new heer(0,0,0,0,0,0,true);	// Garde Verteidiger
-    this.mg1 = new reiterHeer(0,0,0,true);	// ReiterGarde Angreifer
-    this.mg2 = new reiterHeer(0,0,0,true);	// ReiterGarde Verteidiger
-	this.fg1 = new seeHeer(0,0,0,0,0,true); // Gardeflotte Angreifer NOCH NICHT UNTERSTÜTZT
-	this.fg2 = new seeHeer(0,0,0,0,0,true); // Gardeflotte Verteidiger NOCH NICHT UNTERSTÜTZT
+    this.armyAttack = new heer(0,0,0,0,0,0,false);	// Fußheer Angreifer
+    this.armyDefense = new heer(0,0,0,0,0,0,false);	// Fußheer Verteidiger
+    this.mountedAttack = new reiterHeer(0,0,0,false);	// Reiterheer Angreifer
+    this.mountedDefense = new reiterHeer(0,0,0,false);	// Reiterheer Verteidiger
+	this.fleetAttack = new seeHeer(0,0,0,0,0,false); // Flotte Angreifer
+	this.fleetDefense = new seeHeer(0,0,0,0,0,false); // Flotte Verteidiger
+    this.guardAttack = new heer(0,0,0,0,0,0,true);	// Garde Angreifer
+    this.guardDefense = new heer(0,0,0,0,0,0,true);	// Garde Verteidiger
+    this.mountedGuardAttack = new reiterHeer(0,0,0,true);	// ReiterGarde Angreifer
+    this.mountedGuardDefense = new reiterHeer(0,0,0,true);	// ReiterGarde Verteidiger
+	this.fleetGuardAttack = new seeHeer(0,0,0,0,0,true); // Gardeflotte Angreifer
+	this.fleetGuardDefense = new seeHeer(0,0,0,0,0,true); // Gardeflotte Verteidiger
 	this.armiesAttack = armiesAttack;
 	this.armiesDefend = armiesDefend;
     this.c1 = chars1;
@@ -450,33 +448,33 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
 			for(var i=0; i < this.armiesAttack.length; i++){
 				if(!this.armiesAttack[i].isGuard){
 					if(Math.floor(this.armiesAttack[i].armyId/100) === 1){
-						this.a1.addSoldiers(this.armiesAttack[i].count);
-						this.a1.addLeaders(this.armiesAttack[i].leaders);
-						this.a1.addLkp(this.armiesAttack[i].lkp);
-						this.a1.addSkp(this.armiesAttack[i].skp);
+						this.armyAttack.addSoldiers(this.armiesAttack[i].count);
+						this.armyAttack.addLeaders(this.armiesAttack[i].leaders);
+						this.armyAttack.addLkp(this.armiesAttack[i].lkp);
+						this.armyAttack.addSkp(this.armiesAttack[i].skp);
 					} else if(Math.floor(this.armiesAttack[i].armyId/100) === 2){
-						this.ma1.addSoldiers(this.armiesAttack[i].count);
-						this.ma1.addLeaders(this.armiesAttack[i].leaders);
+						this.mountedAttack.addSoldiers(this.armiesAttack[i].count);
+						this.mountedAttack.addLeaders(this.armiesAttack[i].leaders);
 					} else if(Math.floor(this.armiesAttack[i].armyId/100) === 3){
-						this.fa1.addSoldiers(this.armiesAttack[i].count);
-						this.fa1.addLeaders(this.armiesAttack[i].leaders);
-						this.fa1.addLkp(this.armiesAttack[i].lkp);
-						this.fa1.addSkp(this.armiesAttack[i].skp);
+						this.fleetAttack.addSoldiers(this.armiesAttack[i].count);
+						this.fleetAttack.addLeaders(this.armiesAttack[i].leaders);
+						this.fleetAttack.addLkp(this.armiesAttack[i].lkp);
+						this.fleetAttack.addSkp(this.armiesAttack[i].skp);
 					}
 				} else if(this.armiesAttack[i].isGuard){
 					if(Math.floor(this.armiesAttack[i].armyId/100) === 1){
-						this.g1.addSoldiers(this.armiesAttack[i].count);
-						this.g1.addLeaders(this.armiesAttack[i].leaders);
-						this.g1.addLkp(this.armiesAttack[i].lkp);
-						this.g1.addSkp(this.armiesAttack[i].skp);
+						this.guardAttack.addSoldiers(this.armiesAttack[i].count);
+						this.guardAttack.addLeaders(this.armiesAttack[i].leaders);
+						this.guardAttack.addLkp(this.armiesAttack[i].lkp);
+						this.guardAttack.addSkp(this.armiesAttack[i].skp);
 					} else if(Math.floor(this.armiesAttack[i].armyId/100) === 2){
-						this.mg1.addSoldiers(this.armiesAttack[i].count);
-						this.mg1.addLeaders(this.armiesAttack[i].leaders);
+						this.mountedGuardAttack.addSoldiers(this.armiesAttack[i].count);
+						this.mountedGuardAttack.addLeaders(this.armiesAttack[i].leaders);
 					} else if(Math.floor(this.armiesAttack[i].armyId/100) === 3){
-						this.fg1.addSoldiers(this.armiesAttack[i].count);
-						this.fg1.addLeaders(this.armiesAttack[i].leaders);
-						this.fg1.addLkp(this.armiesAttack[i].lkp);
-						this.fg1.addSkp(this.armiesAttack[i].skp);
+						this.fleetGuardAttack.addSoldiers(this.armiesAttack[i].count);
+						this.fleetGuardAttack.addLeaders(this.armiesAttack[i].leaders);
+						this.fleetGuardAttack.addLkp(this.armiesAttack[i].lkp);
+						this.fleetGuardAttack.addSkp(this.armiesAttack[i].skp);
 					}
 				}
 			}
@@ -485,44 +483,46 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
 			for(var i=0; i < this.armiesDefend.length; i++){
 				if(!this.armiesDefend[i].isGuard){
 					if(Math.floor(this.armiesDefend[i].armyId/100) === 1){
-						this.a2.addSoldiers(this.armiesDefend[i].count);
-						this.a2.addLeaders(this.armiesDefend[i].leaders);
-						this.a2.addLkp(this.armiesDefend[i].lkp);
-						this.a2.addSkp(this.armiesDefend[i].skp);
+						this.armyDefense.addSoldiers(this.armiesDefend[i].count);
+						this.armyDefense.addLeaders(this.armiesDefend[i].leaders);
+						this.armyDefense.addLkp(this.armiesDefend[i].lkp);
+						this.armyDefense.addSkp(this.armiesDefend[i].skp);
 					} else if(Math.floor(this.armiesDefend[i].armyId/100) === 2){
-						this.ma2.addSoldiers(this.armiesDefend[i].count);
-						this.ma2.addLeaders(this.armiesDefend[i].leaders);
+						this.mountedDefense.addSoldiers(this.armiesDefend[i].count);
+						this.mountedDefense.addLeaders(this.armiesDefend[i].leaders);
 					} else if(Math.floor(this.armiesDefend[i].armyId/100) === 3){
-						this.fa2.addSoldiers(this.armiesDefend[i].count);
-						this.fa2.addLeaders(this.armiesDefend[i].leaders);
-						this.fa2.addLkp(this.armiesDefend[i].lkp);
-						this.fa2.addSkp(this.armiesDefend[i].skp);
+						this.fleetDefense.addSoldiers(this.armiesDefend[i].count);
+						this.fleetDefense.addLeaders(this.armiesDefend[i].leaders);
+						this.fleetDefense.addLkp(this.armiesDefend[i].lkp);
+						this.fleetDefense.addSkp(this.armiesDefend[i].skp);
 					}
 				} else if(this.armiesDefend[i].isGuard){
 					if(Math.floor(this.armiesDefend[i].armyId/100) === 1){
-						this.g2.addSoldiers(this.armiesDefend[i].count);
-						this.g2.addLeaders(this.armiesDefend[i].leaders);
-						this.g2.addLkp(this.armiesDefend[i].lkp);
-						this.g2.addSkp(this.armiesDefend[i].skp);
+						this.guardDefense.addSoldiers(this.armiesDefend[i].count);
+						this.guardDefense.addLeaders(this.armiesDefend[i].leaders);
+						this.guardDefense.addLkp(this.armiesDefend[i].lkp);
+						this.guardDefense.addSkp(this.armiesDefend[i].skp);
 					} else if(Math.floor(this.armiesDefend[i].armyId/100) === 2){
-						this.mg2.addSoldiers(this.armiesDefend[i].count);
-						this.mg2.addLeaders(this.armiesDefend[i].leaders);
+						this.mountedGuardDefense.addSoldiers(this.armiesDefend[i].count);
+						this.mountedGuardDefense.addLeaders(this.armiesDefend[i].leaders);
 					} else if(Math.floor(this.armiesDefend[i].armyId/100) === 3){
-						this.fg2.addSoldiers(this.armiesDefend[i].count);
-						this.fg2.addLeaders(this.armiesDefend[i].leaders);
-						this.fg2.addLkp(this.armiesDefend[i].lkp);
-						this.fg2.addSkp(this.armiesDefend[i].skp);
+						this.fleetGuardDefense.addSoldiers(this.armiesDefend[i].count);
+						this.fleetGuardDefense.addLeaders(this.armiesDefend[i].leaders);
+						this.fleetGuardDefense.addLkp(this.armiesDefend[i].lkp);
+						this.fleetGuardDefense.addSkp(this.armiesDefend[i].skp);
 					}
 				}
 			}
 		}
 	}
 
+	// returns fieldType of the battle field
 	this.fieldType = function(){
 		var battleField = new showHex(this.x,this.y);
 		return battleField.fieldType();
 	}
 
+	// returns the GP sum of all chars in the battle for attacker side
     this.charGp1 = function(){
        if(this.c1 === null){
            return 0;
@@ -536,6 +536,7 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
        }
     }
     
+	// returns the GP sum of all chars in the battle for defender side
     this.charGp2 = function(){
        if(this.c2 === null){
            return 0;
@@ -549,23 +550,24 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
        }
     }
     
-    // 10:1 ?
+    // checks if attacker has a 10:1 advantage
     this.overrun1 = function() {
-    	return ((this.a1.count + this.ma1.count*2 + this.g1.count + this.mg1.count*2) > 0 && 
-		(this.a1.count + this.ma1.count*2 + this.g1.count + this.mg1.count*2) >= ((this.a2.count + this.ma2.count*2)*10) && 
-		(this.g2.count === 0) && (this.mg2.count === 0)) || 
-		((this.fa1.count*100 + this.fg1.count*100) > 0 && 
-		(this.fa1.count*100 + this.fg1.count*100) >= (10 * this.fa2.count*100) &&
-		this.fg2.count === 0);
+    	return ((this.armyAttack.count + this.mountedAttack.count*2 + this.guardAttack.count + this.mountedGuardAttack.count*2) > 0 && 
+		(this.armyAttack.count + this.mountedAttack.count*2 + this.guardAttack.count + this.mountedGuardAttack.count*2) >= ((this.armyDefense.count + this.mountedDefense.count*2)*10) && 
+		(this.guardDefense.count === 0) && (this.mountedGuardDefense.count === 0)) || 
+		((this.fleetAttack.count*100 + this.fleetGuardAttack.count*100) > 0 && 
+		(this.fleetAttack.count*100 + this.fleetGuardAttack.count*100) >= (10 * this.fleetDefense.count*100) &&
+		this.fleetGuardDefense.count === 0);
     }
     
+    // checks if defender has a 10:1 advantage
     this.overrun2 = function() {
-    	return (this.a2.count + this.ma2.count*2 + this.g2.count + this.mg2.count*2) > 0 && 
-		(this.a2.count + this.ma2.count*2 + this.g2.count + this.mg2.count*2) >= ((this.a1.count + this.ma1.count*2)*10) && 
-    	(this.g1.count === 0) && (this.mg1.count === 0) || 
-		((this.fa2.count*100 + this.fg2.count*100) > 0 && 
-		(this.fa2.count*100 + this.fg2.count*100) >= (10 * this.fa1.count*100) &&
-		this.fg1.count === 0);
+    	return (this.armyDefense.count + this.mountedDefense.count*2 + this.guardDefense.count + this.mountedGuardDefense.count*2) > 0 && 
+		(this.armyDefense.count + this.mountedDefense.count*2 + this.guardDefense.count + this.mountedGuardDefense.count*2) >= ((this.armyAttack.count + this.mountedAttack.count*2)*10) && 
+    	(this.guardAttack.count === 0) && (this.mountedGuardAttack.count === 0) || 
+		((this.fleetDefense.count*100 + this.fleetGuardDefense.count*100) > 0 && 
+		(this.fleetDefense.count*100 + this.fleetGuardDefense.count*100) >= (10 * this.fleetAttack.count*100) &&
+		this.fleetGuardAttack.count === 0);
     }
 
     // Kampfergebnis in Form {victor: <'attacker', 'defender', 'tie'>, footLosses: <int>, cavLosses: <int>}, 
@@ -592,29 +594,29 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
 			case 6:
 			case 8: troopAdvantage = 1; break;
 		}
-        var power1 = this.a1.count * (1 + (this.a1.leaderGp() + 140 * troopAdvantage + this.charGp1() + dicerolls[0])/200) +
-		 this.g1.count * (1 + (this.g1.leaderGp() + 140 * troopAdvantage + this.charGp1() + dicerolls[0])/200) +
-		 this.ma1.count * 2 * (1 + (this.ma1.leaderGp() + 140 * riderAdvantage + this.charGp1() + dicerolls[0])/200) +
-		 this.mg1.count * 2 * (1 + (this.mg1.leaderGp() + 140 * riderAdvantage + this.charGp1() + dicerolls[0])/200) +
-		 this.fa1.count * 100 * (1 + (this.fa1.leaderGp() + this.charGp1() + dicerolls[0])/200) +
-		 this.fg1.count * 100 * (1 + (this.fg1.leaderGp() + this.charGp1() + dicerolls[0])/200);
-        var power2 = this.a2.count * (1 + (this.a2.leaderGp() + 140 * troopAdvantage + this.charGp2() + dicerolls[1])/200) +
-		 this.g2.count * (1 + (this.g2.leaderGp() + 140 * troopAdvantage + this.charGp1() + dicerolls[0])/200) +
-		 this.mg2.count * 2 * (1 + (this.mg2.leaderGp() + 140 * riderAdvantage + this.charGp1() + dicerolls[0])/200) +
-		 this.ma2.count * 2 * (1 + (this.ma2.leaderGp() + 140 * riderAdvantage + this.charGp2() + dicerolls[1])/200) +
-		 this.fa2.count * 100 * (1 + (this.fa2.leaderGp() + this.charGp1() + dicerolls[0])/200) +
-		 this.fg2.count * 100 * (1 + (this.fg2.leaderGp() + this.charGp1() + dicerolls[0])/200);
-        var countSum1 = this.a1.count + this.ma1.count * 2 + this.fa1.count * 100 + this.g1.count + this.mg1.count * 2 + this.fg1.count * 100;
-        var countSum2 = this.a2.count + this.ma2.count * 2 + this.fa2.count * 100 + this.g2.count + this.mg2.count * 2 + this.fg2.count * 100;
+        var power1 = this.armyAttack.count * (1 + (this.armyAttack.leaderGp() + 140 * troopAdvantage + this.charGp1() + dicerolls[0])/200) +
+		 this.guardAttack.count * (1 + (this.guardAttack.leaderGp() + 140 * troopAdvantage + this.charGp1() + dicerolls[0])/200) +
+		 this.mountedAttack.count * 2 * (1 + (this.mountedAttack.leaderGp() + 140 * riderAdvantage + this.charGp1() + dicerolls[0])/200) +
+		 this.mountedGuardAttack.count * 2 * (1 + (this.mountedGuardAttack.leaderGp() + 140 * riderAdvantage + this.charGp1() + dicerolls[0])/200) +
+		 this.fleetAttack.count * 100 * (1 + (this.fleetAttack.leaderGp() + this.charGp1() + dicerolls[0])/200) +
+		 this.fleetGuardAttack.count * 100 * (1 + (this.fleetGuardAttack.leaderGp() + this.charGp1() + dicerolls[0])/200);
+        var power2 = this.armyDefense.count * (1 + (this.armyDefense.leaderGp() + 140 * troopAdvantage + this.charGp2() + dicerolls[1])/200) +
+		 this.guardDefense.count * (1 + (this.guardDefense.leaderGp() + 140 * troopAdvantage + this.charGp1() + dicerolls[0])/200) +
+		 this.mountedGuardDefense.count * 2 * (1 + (this.mountedGuardDefense.leaderGp() + 140 * riderAdvantage + this.charGp1() + dicerolls[0])/200) +
+		 this.mountedDefense.count * 2 * (1 + (this.mountedDefense.leaderGp() + 140 * riderAdvantage + this.charGp2() + dicerolls[1])/200) +
+		 this.fleetDefense.count * 100 * (1 + (this.fleetDefense.leaderGp() + this.charGp1() + dicerolls[0])/200) +
+		 this.fleetGuardDefense.count * 100 * (1 + (this.fleetGuardDefense.leaderGp() + this.charGp1() + dicerolls[0])/200);
+        var countSum1 = this.armyAttack.count + this.mountedAttack.count * 2 + this.fleetAttack.count * 100 + this.guardAttack.count + this.mountedGuardAttack.count * 2 + this.fleetGuardAttack.count * 100;
+        var countSum2 = this.armyDefense.count + this.mountedDefense.count * 2 + this.fleetDefense.count * 100 + this.guardDefense.count + this.mountedGuardDefense.count * 2 + this.fleetGuardDefense.count * 100;
         console.log("power Angreifer = " + power1);
         console.log("power Verteidiger = " + power2);
         console.log("anzahl Angreifer = " + countSum1);
         console.log("anzahl Verteidiger = " + countSum2);
-        var gpSchnitt = ((power1 + power2) / (countSum1 + countSum2) -1) * 100;
-        console.log(gpSchnitt);
         if(power1 > power2){
-			console.log("Angreifer gewinnt:");
         	// Angreifer gewinnt:
+			var gpSchnitt = ((power2) / (countSum2) -1) * 100;
+			console.log("gpSchnitt: " + gpSchnitt);
+			console.log("Angreifer gewinnt:");
             var factor = 0;
             if(countSum1 > countSum2){
                 factor = ((countSum2 - countSum1)/10)/countSum2-0.1;
@@ -627,18 +629,18 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
             }
 			console.log("Faktor: " + factor);
             console.log("Verluste: " + verluste);
-            var gpDiffHeer = ((this.a1.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100;
-            var gpDiffReiter = ((this.ma1.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100;
-            var gpDiffFlotte = ((this.fa1.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100;
-            var gpDiffGardeHeer = ((this.g1.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100;
-            var gpDiffGardeReiter = ((this.mg1.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100;
-            var gpDiffGardeFlotte = ((this.fg1.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100;
-            var verlusteHeer = this.a1.count/countSum1 * verluste;
-            var verlusteReiter = this.ma1.count*2/countSum1 * verluste;
-            var verlusteFlotte = this.fa1.count*100/countSum1 * verluste;
-            var verlusteGardeHeer = this.g1.count/countSum1 * verluste;
-            var verlusteGardeReiter = this.mg1.count*2/countSum1 * verluste;
-            var verlusteGardeFlotte = this.fg1.count*100/countSum1 * verluste;
+            var gpDiffHeer = ((this.armyAttack.leaderGp() + this.charGp1() + 140 * troopAdvantage + dicerolls[0])/2 - gpSchnitt)/100;
+            var gpDiffReiter = ((this.mountedAttack.leaderGp() + this.charGp1() + 140 * riderAdvantage + dicerolls[0])/2 - gpSchnitt)/100;
+            var gpDiffFlotte = ((this.fleetAttack.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100;
+            var gpDiffGardeHeer = ((this.guardAttack.leaderGp() + this.charGp1() + 140 * troopAdvantage + dicerolls[0])/2 - gpSchnitt)/100;
+            var gpDiffGardeReiter = ((this.mountedGuardAttack.leaderGp() + this.charGp1() + 140 * riderAdvantage + dicerolls[0])/2 - gpSchnitt)/100;
+            var gpDiffGardeFlotte = ((this.fleetGuardAttack.leaderGp() + this.charGp1() + dicerolls[0])/2 - gpSchnitt)/100;
+            var verlusteHeer = this.armyAttack.count/countSum1 * verluste;
+            var verlusteReiter = this.mountedAttack.count*2/countSum1 * verluste;
+            var verlusteFlotte = this.fleetAttack.count*100/countSum1 * verluste;
+            var verlusteGardeHeer = this.guardAttack.count/countSum1 * verluste;
+            var verlusteGardeReiter = this.mountedGuardAttack.count*2/countSum1 * verluste;
+            var verlusteGardeFlotte = this.fleetGuardAttack.count*100/countSum1 * verluste;
             if(gpDiffHeer >= 0){
                 verlusteHeer = verlusteHeer/(1+gpDiffHeer);
             } else {
@@ -675,8 +677,10 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
 			console.log("----------------------------------------------------------");
             return results;
         } else if(power2 > power1){
-            console.log("Verteidiger gewinnt:");
             // Verteidiger gewinnt:
+			var gpSchnitt = ((power1 / countSum1) -1.0) * 100;
+			console.log("gpSchnitt: " + gpSchnitt);
+            console.log("Verteidiger gewinnt:");
             var factor = 0;
             if(countSum2 > countSum1){
                 factor = ((countSum1 - countSum2)/10)/countSum1-0.1;
@@ -689,18 +693,18 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
             }
 			console.log("Faktor: " + factor);
             console.log("Verluste: " + verluste);
-            var gpDiffHeer = ((this.a2.leaderGp() + this.charGp2() + dicerolls[1])/2 - gpSchnitt)/100
-            var gpDiffReiter = ((this.ma2.leaderGp() + this.charGp2() + dicerolls[1])/2 - gpSchnitt)/100
-            var gpDiffFlotte = ((this.fa2.leaderGp() + this.charGp2() + dicerolls[1])/2 - gpSchnitt)/100
-            var gpDiffGardeHeer = ((this.g2.leaderGp() + this.charGp2() + dicerolls[1])/2 - gpSchnitt)/100
-            var gpDiffGardeReiter = ((this.mg2.leaderGp() + this.charGp2() + dicerolls[1])/2 - gpSchnitt)/100
-            var gpDiffGardeFlotte = ((this.fg2.leaderGp() + this.charGp2() + dicerolls[1])/2 - gpSchnitt)/100
-            var verlusteHeer = this.a2.count/countSum2 * verluste;
-            var verlusteReiter = this.ma2.count*2/countSum2 * verluste;
-            var verlusteFlotte = this.fa2.count*100/countSum2 * verluste;
-            var verlusteGardeHeer = this.g2.count/countSum2 * verluste;
-            var verlusteGardeReiter = this.mg2.count*2/countSum2 * verluste;
-            var verlusteGardeFlotte = this.fg2.count*100/countSum2 * verluste;
+            var gpDiffHeer = ((this.armyDefense.leaderGp() + this.charGp2() + 140 * troopAdvantage + dicerolls[1])/2 - gpSchnitt)/100
+            var gpDiffReiter = ((this.mountedDefense.leaderGp() + this.charGp2() + 140 * riderAdvantage + dicerolls[1])/2 - gpSchnitt)/100
+            var gpDiffFlotte = ((this.fleetDefense.leaderGp() + this.charGp2() + dicerolls[1])/2 - gpSchnitt)/100
+            var gpDiffGardeHeer = ((this.guardDefense.leaderGp() + this.charGp2() + 140 * troopAdvantage + dicerolls[1])/2 - gpSchnitt)/100
+            var gpDiffGardeReiter = ((this.mountedGuardDefense.leaderGp() + this.charGp2() + 140 * riderAdvantage + dicerolls[1])/2 - gpSchnitt)/100
+            var gpDiffGardeFlotte = ((this.fleetGuardDefense.leaderGp() + this.charGp2() + dicerolls[1])/2 - gpSchnitt)/100
+            var verlusteHeer = this.armyDefense.count/countSum2 * verluste;
+            var verlusteReiter = this.mountedDefense.count*2/countSum2 * verluste;
+            var verlusteFlotte = this.fleetDefense.count*100/countSum2 * verluste;
+            var verlusteGardeHeer = this.guardDefense.count/countSum2 * verluste;
+            var verlusteGardeReiter = this.mountedGuardDefense.count*2/countSum2 * verluste;
+            var verlusteGardeFlotte = this.fleetGuardDefense.count*100/countSum2 * verluste;
             if(gpDiffHeer >= 0){
                 verlusteHeer = verlusteHeer/(1+gpDiffHeer);
             } else {

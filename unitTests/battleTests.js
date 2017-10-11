@@ -43,44 +43,44 @@ module( "Battle" , function() {
 	module( "Results", {
 		before: function() {
 			defenderArmies = [
-				new heer(111, 1000, 1, 0, 0, 0, false),
-				new heer(112, 1000, 5, 0, 0, 0, false),
-				new heer(115, 15000, 15, 0, 0, 0, false),
-				new heer(116, 1000, 36, 0, 0, 0, false),
-				new heer(117, 1500, 10, 0, 0, 0, false),
-				new heer(118, 10000, 10, 0, 0, 0, false),
-				new heer(119, 1200, 12, 0, 0, 0, false),
-				new heer(211, 5000, 5, 0, 0, 0, false),
-				new heer(214, 10000, 5, 0, 0, 0, false),
-				new heer(215, 1500, 10, 0, 0, 0, false),
-				new heer(219, 1200, 12, 0, 0, 0, false),
-				new heer(311, 20, 5, 0, 0, 0, false),
-				new heer(312, 10, 5, 5, 0, 0, false),
-				new heer(313, 10, 5, 0, 5, 0, false),
-				new heer(314, 10, 5, 3, 2, 0, false),
-				new heer(315, 12, 2, 3, 1, 0, false),
-				new heer(316, 100, 10, 0, 0, 0, false),
-				new heer(317, 1000, 10, 0, 0, 0, false)
+				new heer(111, 1000, 1, 0, 0, 0, false),//0
+				new heer(112, 1000, 5, 0, 0, 0, false),//1
+				new heer(115, 15000, 15, 0, 0, 0, false),//2
+				new heer(116, 1000, 36, 0, 0, 0, false),//3
+				new heer(117, 1500, 10, 0, 0, 0, false),//4
+				new heer(118, 10000, 10, 0, 0, 0, false),//5
+				new heer(119, 1200, 12, 0, 0, 0, false),//6
+				new heer(211, 5000, 5, 0, 0, 0, false),//7
+				new heer(214, 10000, 5, 0, 0, 0, false),//8
+				new heer(215, 1500, 10, 0, 0, 0, false),//9
+				new heer(219, 1200, 12, 0, 0, 0, false),//10
+				new heer(311, 20, 5, 0, 0, 0, false),//11
+				new heer(312, 10, 5, 5, 0, 0, false),//12
+				new heer(313, 10, 5, 0, 5, 0, false),//13
+				new heer(314, 10, 5, 3, 2, 0, false),//14
+				new heer(315, 12, 2, 3, 1, 0, false),//15
+				new heer(316, 100, 10, 0, 0, 0, false),//16
+				new heer(317, 1000, 10, 0, 0, 0, false)//17
 			];
 			attackerArmies = [
-				new heer(121, 1000, 1, 0, 0, 0, false),
-				new heer(123, 10000, 5, 0, 0, 0, false),
-				new heer(124, 5000, 5, 0, 0, 0, false),
-				new heer(126, 1200, 4, 0, 0, 0, false),
-				new heer(127, 1000, 10, 0, 0, 0, true),
-				new heer(128, 1000, 100, 0, 0, 0, true),
-				new heer(129, 1000, 10, 0, 0, 0, false),
-				new heer(224, 15000, 15, 0, 0, 0, false),
-				new heer(227, 1000, 10, 0, 0, 0, true),
-				new heer(228, 1000, 10, 0, 0, 0, false),
-				new heer(321, 10, 5, 0, 0, 0, false),
-				new heer(322, 10, 5, 5, 0, 0, false),
-				new heer(323, 10, 5, 0, 5, 0, false),
-				new heer(324, 20, 5, 0, 0, 0, false),
-				new heer(325, 10, 5, 3, 2, 0, false),
-				new heer(326, 35, 40, 7, 6, 0, false),
-				new heer(327, 40, 35, 0, 0, 0, true),
-				new heer(328, 100, 100, 0, 0, 0, true)
+				new heer(121, 1000, 1, 0, 0, 0, false),//0
+				new heer(123, 10000, 5, 0, 0, 0, false),//1
+				new heer(124, 5000, 5, 0, 0, 0, false),//2
+				new heer(126, 1200, 4, 0, 0, 0, false),//3
+				new heer(127, 1000, 10, 0, 0, 0, true),//4
+				new heer(128, 1000, 100, 0, 0, 0, true),//5
+				new heer(129, 1000, 10, 0, 0, 0, false),//6
+				new heer(224, 15000, 15, 0, 0, 0, false),//7
+				new heer(227, 1000, 10, 0, 0, 0, true),//8
+				new heer(228, 1000, 10, 0, 0, 0, false),//9
+				new heer(321, 10, 5, 0, 0, 0, false),//10
+				new heer(322, 10, 5, 5, 0, 0, false),//11
+				new heer(323, 10, 5, 0, 5, 0, false),//12
+				new heer(324, 20, 5, 0, 0, 0, false),//13
+				new heer(325, 10, 5, 3, 2, 0, false),//14
+				new heer(326, 35, 40, 7, 6, 0, false),//15
+				new heer(327, 40, 35, 0, 0, 0, true),//16
+				new heer(328, 100, 100, 0, 0, 0, true)//17
 			];
 			borders = [{'tag': 'vvh', 'land': [[0, 0], [1, 1], [3, 3]]}];
 			buildings = [{'realm': 1, 'name': "", 'type': 0, 'x': 3, 'y': 3, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null}];
