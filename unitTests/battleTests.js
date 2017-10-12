@@ -107,12 +107,12 @@ module( "Battle" , function() {
 			test( "Minimal armies, tie (both loose).", function(t) {
 				var battle = new schlacht([attackerArmies[0]], [defenderArmies[0]], null, null, 0, 0);
 				battle.init();
-				t.resultEquals( battle.result([5, 5]), {victor: 'tie', footLosses: 1000, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result([5, 5]), {victor: 'tie', footLosses: -1, cavLosses: -1, fleetLosses: -1, gFootLosses: -1, gCavLosses: -1, gFleetLosses: -1} );
 			});
 			test( "Different officer count, different rolls, tie (both loose).", function(t) {
 				var battle = new schlacht([attackerArmies[0]], [defenderArmies[1]], null, null, 0, 0);
 				battle.init();
-				t.resultEquals( battle.result([7, 3]), {victor: 'tie', footLosses: 1000, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result([7, 3]), {victor: 'tie', footLosses: -1, cavLosses: -1, fleetLosses: -1, gFootLosses: -1, gCavLosses: -1, gFleetLosses: -1} );
 			});
 			test( "Riders vs footmen on plains.", function(t) {
 				var battle = new schlacht([attackerArmies[1]], [defenderArmies[8]], null, null, 0, 0);
@@ -132,7 +132,7 @@ module( "Battle" , function() {
 			test( "Tie with soldier count, officer count and dice roll all different.", function(t) {
 				var battle = new schlacht([attackerArmies[3]], [defenderArmies[3]], null, null, 0, 0);
 				battle.init();
-				t.resultEquals( battle.result([1, 10]), {victor: 'tie', footLosses: 1205, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result([1, 10]), {victor: 'tie', footLosses: -1, cavLosses: -1, fleetLosses: -1, gFootLosses: -1, gCavLosses: -1, gFleetLosses: -1} );
 				//TODO Attacker losses given as expected. Defender losses are 995.85
 			});
 		});
@@ -294,54 +294,54 @@ module( "Battle" , function() {
 				test( "Footmen outnumbered 10:1.", function(t) {
 					var battle = new schlacht([attackerArmies[0]], [defenderArmies[0]], null, null, 0, 0);
 					battle.init();
-					t.ok(battle.overrun1());
+					t.ok(battle.overrunAttack());
 				});
 				test( "Riders outnumbered 10:1.", function(t) {
 					var battle = new schlacht([attackerArmies[2]], [defenderArmies[3]], null, null, 0, 0);
 					battle.init();
-					t.ok(battle.overrun1());
+					t.ok(battle.overrunAttack());
 				});
 				test( "Mixed army outnumbered 10:1.", function(t) {
 					var battle = new schlacht([attackerArmies[0], attackerArmies[2]], [defenderArmies[0], defenderArmies[3]], null, null, 0, 0);
 					battle.init();
-					t.ok(battle.overrun1());
+					t.ok(battle.overrunAttack());
 				});
 				test( "Guard outnumbering 10:1.", function(t) {
 					var battle = new schlacht([attackerArmies[1]], [defenderArmies[1]], null, null, 0, 0);
 					battle.init();
-					t.ok(battle.overrun1());
+					t.ok(battle.overrunAttack());
 				});
 				test( "Guard outnumbered 10:1.", function(t) {
 					var battle = new schlacht([attackerArmies[0]], [defenderArmies[2]], null, null, 0, 0);
 					battle.init();
-					t.notOk(battle.overrun1());
+					t.notOk(battle.overrunAttack());
 				});
 			});
 			module( "Naval Battles", function() {
 				test( "Fleet outnumbered 10:1.", function(t) {
 					var battle = new schlacht([attackerArmies[3]], [defenderArmies[4]], null, null, 1, 1);
 					battle.init();
-					t.ok(battle.overrun1());
+					t.ok(battle.overrunAttack());
 				});
 				test( "Defending fleet outnumbered 10:1 despite having warships.", function(t) {
 					var battle = new schlacht([attackerArmies[4]], [defenderArmies[5]], null, null, 1, 1);
 					battle.init();
-					t.ok(battle.overrun1());
+					t.ok(battle.overrunAttack());
 				});
 				test( "Guard fleet outnumbering 10:1.", function(t) {
 					var battle = new schlacht([attackerArmies[6]], [defenderArmies[4]], null, null, 1, 1);
 					battle.init();
-					t.ok(battle.overrun1());
+					t.ok(battle.overrunAttack());
 				});
 				test( "Guard fleet outnumbered 10:1.", function(t) {
 					var battle = new schlacht([attackerArmies[4]], [defenderArmies[6]], null, null, 1, 1);
 					battle.init();
-					t.notOk(battle.overrun1());
+					t.notOk(battle.overrunAttack());
 				});
 				test( "Attacking fleet not outnumbering 10:1 despite having warships.", function(t) {
 					var battle = new schlacht([attackerArmies[5]], [defenderArmies[5]], null, null, 1, 1);
 					battle.init();
-					t.notOk(battle.overrun1());
+					t.notOk(battle.overrunAttack());
 				});
 			});
 		});
