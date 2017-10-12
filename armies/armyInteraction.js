@@ -461,16 +461,12 @@ function schlacht(armiesAttack, armiesDefend, charsAttack, charsDefense, posX, p
 					if(Math.floor(this.armiesAttack[i].armyId/100) === 1){
 						this.guardAttack.addSoldiers(this.armiesAttack[i].count);
 						this.guardAttack.addLeaders(this.armiesAttack[i].leaders);
-						this.guardAttack.addLkp(this.armiesAttack[i].lkp);
-						this.guardAttack.addSkp(this.armiesAttack[i].skp);
 					} else if(Math.floor(this.armiesAttack[i].armyId/100) === 2){
 						this.mountedGuardAttack.addSoldiers(this.armiesAttack[i].count);
 						this.mountedGuardAttack.addLeaders(this.armiesAttack[i].leaders);
 					} else if(Math.floor(this.armiesAttack[i].armyId/100) === 3){
 						this.fleetGuardAttack.addSoldiers(this.armiesAttack[i].count);
 						this.fleetGuardAttack.addLeaders(this.armiesAttack[i].leaders);
-						this.fleetGuardAttack.addLkp(this.armiesAttack[i].lkp);
-						this.fleetGuardAttack.addSkp(this.armiesAttack[i].skp);
 					}
 				}
 			}
@@ -496,16 +492,12 @@ function schlacht(armiesAttack, armiesDefend, charsAttack, charsDefense, posX, p
 					if(Math.floor(this.armiesDefend[i].armyId/100) === 1){
 						this.guardDefense.addSoldiers(this.armiesDefend[i].count);
 						this.guardDefense.addLeaders(this.armiesDefend[i].leaders);
-						this.guardDefense.addLkp(this.armiesDefend[i].lkp);
-						this.guardDefense.addSkp(this.armiesDefend[i].skp);
 					} else if(Math.floor(this.armiesDefend[i].armyId/100) === 2){
 						this.mountedGuardDefense.addSoldiers(this.armiesDefend[i].count);
 						this.mountedGuardDefense.addLeaders(this.armiesDefend[i].leaders);
 					} else if(Math.floor(this.armiesDefend[i].armyId/100) === 3){
 						this.fleetGuardDefense.addSoldiers(this.armiesDefend[i].count);
 						this.fleetGuardDefense.addLeaders(this.armiesDefend[i].leaders);
-						this.fleetGuardDefense.addLkp(this.armiesDefend[i].lkp);
-						this.fleetGuardDefense.addSkp(this.armiesDefend[i].skp);
 					}
 				}
 			}
@@ -549,23 +541,23 @@ function schlacht(armiesAttack, armiesDefend, charsAttack, charsDefense, posX, p
     // checks if attacker has a 10:1 advantage
     this.overrunAttack = function() {
     	return ((this.armyAttack.count + this.mountedAttack.count + this.guardAttack.count + this.mountedGuardAttack.count) > 0 && 
-		(this.armyAttack.count + this.mountedAttack.count + this.guardAttack.count + this.mountedGuardAttack.count) >= 
-			((this.armyDefense.count + this.mountedDefense.count)*10) && 
-		(this.guardDefense.count === 0) && (this.mountedGuardDefense.count === 0)) || 
-		((this.fleetAttack.count + this.fleetGuardAttack.count) > 0 && 
-		(this.fleetAttack.count + this.fleetGuardAttack.count) >= (10 * this.fleetDefense.count) &&
-		this.fleetGuardDefense.count === 0);
+    		(this.armyAttack.count + this.mountedAttack.count + this.guardAttack.count + this.mountedGuardAttack.count) >= 
+    			((this.armyDefense.count + this.mountedDefense.count)*10) && 
+    		(this.guardDefense.count === 0) && (this.mountedGuardDefense.count === 0)) || 
+    		((this.fleetAttack.count + this.fleetGuardAttack.count) > 0 && 
+    		(this.fleetAttack.count + this.fleetGuardAttack.count) >= (10 * this.fleetDefense.count) &&
+    		this.fleetGuardDefense.count === 0);
     }
     
     // checks if defender has a 10:1 advantage
     this.overrunDefense = function() {
     	return (this.armyDefense.count + this.mountedDefense.count + this.guardDefense.count + this.mountedGuardDefense.count) > 0 && 
-		(this.armyDefense.count + this.mountedDefense.count + this.guardDefense.count + this.mountedGuardDefense.count) >= 
-			((this.armyAttack.count + this.mountedAttack.count)*10) && 
-    	(this.guardAttack.count === 0) && (this.mountedGuardAttack.count === 0) || 
-		((this.fleetDefense.count + this.fleetGuardDefense.count) > 0 && 
-		(this.fleetDefense.count + this.fleetGuardDefense.count) >= (10 * this.fleetAttack.count) &&
-		this.fleetGuardAttack.count === 0);
+			(this.armyDefense.count + this.mountedDefense.count + this.guardDefense.count + this.mountedGuardDefense.count) >= 
+				((this.armyAttack.count + this.mountedAttack.count)*10) && 
+			(this.guardAttack.count === 0) && (this.mountedGuardAttack.count === 0) || 
+			((this.fleetDefense.count + this.fleetGuardDefense.count) > 0 && 
+			(this.fleetDefense.count + this.fleetGuardDefense.count) >= (10 * this.fleetAttack.count) &&
+			this.fleetGuardAttack.count === 0);
     }
 
     // Kampfergebnis in Form {victor: <'attacker', 'defender', 'tie'>, footLosses: <int>, cavLosses: <int>, gFootLosses: <int>, 
