@@ -321,10 +321,8 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde) {
     }
     // Reiter zählen Doppelt so viel wie Soldaten
     this.decimate = function(amount){
-        console.log("riders lost: ");
-        console.log(amount);
-        var factor = (amount/2) / this.count;
-        this.removeSoldiers(amount/2);
+        var factor = (amount) / this.count;
+        this.removeSoldiers(amount);
         this.removeLeaders(this.leaders*factor);
     }
     // Reiter zählen Doppelt so viel wie Soldaten

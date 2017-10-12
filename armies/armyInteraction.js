@@ -604,11 +604,11 @@ function schlacht(armiesAttack, armiesDefend, charsAttack, charsDefense, posX, p
 		 this.fleetGuardDefense.count * (1 + (this.fleetGuardDefense.leaderGp() + this.charGpDefense() + defenseRoll)/200);
         var countSumAttack = this.armyAttack.count + this.mountedAttack.count + this.fleetAttack.count + this.guardAttack.count + 
         	this.mountedGuardAttack.count + this.fleetGuardAttack.count;
-        var countSumDefense = this.armyDefense.count + this.mountedDefense.count + this.fleetDefense.count + this.guardDefense.count + 
-        	this.mountedGuardDefense.count + this.fleetGuardDefense.count;
+        var countSumDefense = this.armyDefense.count + this.mountedDefense.count + (this.fleetDefense.count + this.fleetDefense.lkp * 5 + this.fleetDefense.skp * 10) + 
+        	this.guardDefense.count + this.mountedGuardDefense.count + this.fleetGuardDefense.count;
         if(powerAttack > powerDefense){
         	// Angreifer gewinnt:
-			var gpSchnitt = ((powerDefense) / (countSumDefense) -1) * 100;
+			var gpSchnitt = ((powerDefense / countSumDefense) -1) * 100;
             var factor = 0;
             if(countSumAttack >= countSumDefense){
                 factor = ((countSumDefense - countSumAttack)/10)/countSumDefense-0.1;
@@ -682,7 +682,7 @@ function schlacht(armiesAttack, armiesDefend, charsAttack, charsDefense, posX, p
             var gpDiffGardeFlotte = ((this.fleetGuardDefense.leaderGp() + this.charGpDefense() + defenseRoll)/2 - gpSchnitt)/100;
             var verlusteHeer = this.armyDefense.count/countSumDefense * verluste;
             var verlusteReiter = this.mountedDefense.count/countSumDefense * verluste;
-            var verlusteFlotte = this.fleetDefense.count/countSumDefense * verluste;
+            var verlusteFlotte = (this.fleetDefense.count + this.fleetDefense.lkp * 5 + this.fleetDefense.skp * 10)/countSumDefense * verluste;
             var verlusteGardeHeer = this.guardDefense.count/countSumDefense * verluste;
             var verlusteGardeReiter = this.mountedGuardDefense.count/countSumDefense * verluste;
             var verlusteGardeFlotte = this.fleetGuardDefense.count/countSumDefense * verluste;
