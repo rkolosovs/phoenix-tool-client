@@ -623,14 +623,12 @@ function schlacht(armiesAttack, armiesDefend, charsAttack, charsDefense, posX, p
         	// Angreifer gewinnt:
 			var gpSchnitt = ((powerDefense) / (countSumDefense) -1) * 100;
             var factor = 0;
-            if(countSumAttack > countSumDefense){
+            if(countSumAttack >= countSumDefense){
                 factor = ((countSumDefense - countSumAttack)/10)/countSumDefense-0.1;
                 var verluste = countSumDefense * (1 + factor);
             } else if(countSumDefense > countSumAttack){
                 factor = ((countSumDefense - countSumAttack)/10)/countSumAttack+0.1;
                 var verluste = countSumDefense * (1 + factor);
-            } else {
-                var verluste = countSumDefense;
             }
             var gpDiffHeer = ((this.armyAttack.leaderGp() + this.charGpAttack() + 140 * troopAdvantage + dicerolls[0])/2 - gpSchnitt)/100;
             var gpDiffReiter = ((this.mountedAttack.leaderGp() + this.charGpAttack() + 140 * riderAdvantage + dicerolls[0])/2 - gpSchnitt)/100;
@@ -682,14 +680,12 @@ function schlacht(armiesAttack, armiesDefend, charsAttack, charsDefense, posX, p
             // Verteidiger gewinnt:
 			var gpSchnitt = ((powerAttack / countSumAttack) -1.0) * 100;
             var factor = 0;
-            if(countSumDefense > countSumAttack){
+            if(countSumDefense >= countSumAttack){
                 factor = ((countSumAttack - countSumDefense)/10)/countSumAttack-0.1;
                 var verluste = countSumAttack * (1 + factor);
             } else if(countSumAttack > countSumDefense){
                 factor = ((countSumAttack - countSumDefense)/10)/countSumDefense+0.1;
                 var verluste = countSumAttack * (1 + factor);
-            } else {
-                var verluste = countSumAttack;
             }
             var gpDiffHeer = ((this.armyDefense.leaderGp() + this.charGpDefense() + 140 * troopAdvantage + dicerolls[1])/2 - gpSchnitt)/100;
             var gpDiffReiter = ((this.mountedDefense.leaderGp() + this.charGpDefense() + 140 * riderAdvantage + dicerolls[1])/2 - gpSchnitt)/100;
