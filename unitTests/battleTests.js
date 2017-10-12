@@ -97,42 +97,42 @@ module( "Battle" , function() {
 			test( "Minimal armies, defenders win by dice roll.", function(t) {
 				var battle = new schlacht([attackerArmies[0]], [defenderArmies[0]], null, null, 0, 0);
 				battle.init();
-				t.resultEquals( battle.result([1, 10]), {victor: 'defender', footLosses: 861.24, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(1, 10), {victor: 'defender', footLosses: 861.24, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 			});
 			test( "Minimal armies, attackers win by dice roll.", function(t) {
 				var battle = new schlacht([attackerArmies[0]], [defenderArmies[0]], null, null, 0, 0);
 				battle.init();
-				t.resultEquals( battle.result([9, 2]), {victor: 'attacker', footLosses: 869.57, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(9, 2), {victor: 'attacker', footLosses: 869.57, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 			});
 			test( "Minimal armies, tie (both loose).", function(t) {
 				var battle = new schlacht([attackerArmies[0]], [defenderArmies[0]], null, null, 0, 0);
 				battle.init();
-				t.resultEquals( battle.result([5, 5]), {victor: 'tie', footLosses: -1, cavLosses: -1, fleetLosses: -1, gFootLosses: -1, gCavLosses: -1, gFleetLosses: -1} );
+				t.resultEquals( battle.result(5, 5), {victor: 'tie', footLosses: -1, cavLosses: -1, fleetLosses: -1, gFootLosses: -1, gCavLosses: -1, gFleetLosses: -1} );
 			});
 			test( "Different officer count, different rolls, tie (both loose).", function(t) {
 				var battle = new schlacht([attackerArmies[0]], [defenderArmies[1]], null, null, 0, 0);
 				battle.init();
-				t.resultEquals( battle.result([7, 3]), {victor: 'tie', footLosses: -1, cavLosses: -1, fleetLosses: -1, gFootLosses: -1, gCavLosses: -1, gFleetLosses: -1} );
+				t.resultEquals( battle.result(7, 3), {victor: 'tie', footLosses: -1, cavLosses: -1, fleetLosses: -1, gFootLosses: -1, gCavLosses: -1, gFleetLosses: -1} );
 			});
 			test( "Riders vs footmen on plains.", function(t) {
 				var battle = new schlacht([attackerArmies[1]], [defenderArmies[8]], null, null, 0, 0);
 				battle.init();
-				t.resultEquals( battle.result([6, 6]), {victor: 'defender', footLosses: 0, cavLosses: 5294.12, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(6, 6), {victor: 'defender', footLosses: 0, cavLosses: 5294.12, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 			});
 			test( "Riders vs footmen in woods.", function(t) {
 				var battle = new schlacht([attackerArmies[1]], [defenderArmies[8]], null, null, 1, 1);
 				battle.init();
-				t.resultEquals( battle.result([4, 4]), {victor: 'attacker', footLosses: 5294.12, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(4, 4), {victor: 'attacker', footLosses: 5294.12, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 			});
 			test( "Mixed armies of different compositions on plains.", function(t) {
 				var battle = new schlacht([attackerArmies[2], attackerArmies[7]], [defenderArmies[2], defenderArmies[7]], null, null, 0, 0);
 				battle.init();
-				t.resultEquals( battle.result([5, 5]), {victor: 'attacker', footLosses: 5456.25, cavLosses: 8780.49, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(5, 5), {victor: 'attacker', footLosses: 5456.25, cavLosses: 8780.49, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 			});
 			test( "Tie with soldier count, officer count and dice roll all different.", function(t) {
 				var battle = new schlacht([attackerArmies[3]], [defenderArmies[3]], null, null, 0, 0);
 				battle.init();
-				t.resultEquals( battle.result([1, 10]), {victor: 'tie', footLosses: -1, cavLosses: -1, fleetLosses: -1, gFootLosses: -1, gCavLosses: -1, gFleetLosses: -1} );
+				t.resultEquals( battle.result(1, 10), {victor: 'tie', footLosses: -1, cavLosses: -1, fleetLosses: -1, gFootLosses: -1, gCavLosses: -1, gFleetLosses: -1} );
 				//TODO Attacker losses given as expected. Defender losses are 995.85
 			});
 		});
@@ -140,93 +140,93 @@ module( "Battle" , function() {
 			test( "Basic fleet combat.", function(t) {
 				var battle = new schlacht([attackerArmies[10]], [defenderArmies[11]], null, null, 2, 2);
 				battle.init();
-				t.resultEquals( battle.result([5, 5]), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 8, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(5, 5), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 8, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 			});
 			test( "Light warships on the attack.", function(t) {
 				var battle = new schlacht([attackerArmies[11]], [defenderArmies[11]], null, null, 2, 2);
 				battle.init();
-				t.resultEquals( battle.result([5, 5]), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 8, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(5, 5), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 8, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 			});
 			test( "Heavy warships on the attack.", function(t) {
 				var battle = new schlacht([attackerArmies[12]], [defenderArmies[11]], null, null, 2, 2);
 				battle.init();
-				t.resultEquals( battle.result([5, 5]), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 8, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(5, 5), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 8, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 			});
 			test( "Light warships on the defense.", function(t) {
 				var battle = new schlacht([attackerArmies[13]], [defenderArmies[12]], null, null, 2, 2);
 				battle.init();
-				t.resultEquals( battle.result([5, 5]), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 4.57, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(5, 5), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 4.57, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 			});
 			test( "Heavy warships on the defense.", function(t) {
 				var battle = new schlacht([attackerArmies[13]], [defenderArmies[13]], null, null, 2, 2);
 				battle.init();
-				t.resultEquals( battle.result([5, 5]), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 2.33, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(5, 5), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 2.33, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 			});
 			test( "Heavy and light warships on the defense.", function(t) {
 				var battle = new schlacht([attackerArmies[13]], [defenderArmies[14]], null, null, 2, 2);
 				battle.init();
-				t.resultEquals( battle.result([5, 5]), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 3.33, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(5, 5), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 3.33, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 			});
 			test( "Heavy and light warships on the attack.", function(t) {
 				var battle = new schlacht([attackerArmies[14]], [defenderArmies[11]], null, null, 2, 2);
 				battle.init();
-				t.resultEquals( battle.result([5, 5]), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 8, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(5, 5), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 8, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 			});
 			test( "Mixed fleet combat.", function(t) {
 				var battle = new schlacht([attackerArmies[15]], [defenderArmies[15]], null, null, 2, 2);
 				battle.init();
-				t.resultEquals( battle.result([5, 5]), {victor: 'attacker', footLosses: 0, cavLosses: 0, fleetLosses: 26.72, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(5, 5), {victor: 'attacker', footLosses: 0, cavLosses: 0, fleetLosses: 26.72, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 			});
 		});
 		module( "Guard Battles", function() {
 			test( "Guard fleet combat.", function(t) {
 				var battle = new schlacht([attackerArmies[16]], [defenderArmies[16]], null, null, 2, 2);
 				battle.init();
-				t.resultEquals( battle.result([10, 1]), {victor: 'attacker', footLosses: 0, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 35.96} );
+				t.resultEquals( battle.result(10, 1), {victor: 'attacker', footLosses: 0, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 35.96} );
 			});
 			test( "Foot vs guard foot.", function(t) {
 				var battle = new schlacht([attackerArmies[4]], [defenderArmies[4]], null, null, 0, 0);
 				battle.init();
-				t.resultEquals( battle.result([10, 1]), {victor: 'attacker', footLosses: 0, cavLosses: 0, fleetLosses: 0, gFootLosses: 550.10, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(10, 1), {victor: 'attacker', footLosses: 0, cavLosses: 0, fleetLosses: 0, gFootLosses: 550.10, gCavLosses: 0, gFleetLosses: 0} );
 			});
 			test( "Riders vs guard foot on plains.", function(t) {
 				var battle = new schlacht([attackerArmies[4]], [defenderArmies[9]], null, null, 0, 0);
 				battle.init();
-				t.resultEquals( battle.result([10, 1]), {victor: 'defender', footLosses: 0, cavLosses: 1568.25, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(10, 1), {victor: 'defender', footLosses: 0, cavLosses: 1568.25, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 				//TODO Attacker not completely wiped out. Attacker guard foot losses are 813.01
 			});
 			test( "Foot vs guard riders in forest.", function(t) {
 				var battle = new schlacht([attackerArmies[8]], [defenderArmies[4]], null, null, 1, 1);
 				battle.init();
-				t.resultEquals( battle.result([10, 1]), {victor: 'defender', footLosses: 1568.25, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(10, 1), {victor: 'defender', footLosses: 1568.25, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 				//TODO Attacker not completely wiped out. Attacker guard cav losses are 813.01
 			});
 			test( "Riders vs guard riders.", function(t) {
 				var battle = new schlacht([attackerArmies[8]], [defenderArmies[9]], null, null, 1, 1);
 				battle.init();
-				t.resultEquals( battle.result([10, 1]), {victor: 'attacker', footLosses: 0, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 550.10, gFleetLosses: 0} );
+				t.resultEquals( battle.result(10, 1), {victor: 'attacker', footLosses: 0, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 550.10, gFleetLosses: 0} );
 			});
 			test( "Foot vs guard foot 10:1 fight.", function(t) {
 				var battle = new schlacht([attackerArmies[5]], [defenderArmies[5]], null, null, 0, 0);
 				battle.init();
-				t.resultEquals( battle.result([10, 1]), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(10, 1), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 				//TODO Not sure if the rules work as intended here (victor losses are 0)
 			});
 			test( "Fleet vs guard fleet 10:1 fight.", function(t) {
 				var battle = new schlacht([attackerArmies[17]], [defenderArmies[17]], null, null, 2, 2);
 				battle.init();
-				t.resultEquals( battle.result([10, 1]), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(10, 1), {victor: 'defender', footLosses: 0, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 0, gFleetLosses: 0} );
 				//TODO Not sure if the rules work as intended here (victor losses are 0)
 			});
 			test( "Mixed army vs guard foot and regular horse in forest.", function(t) {
 				var battle = new schlacht([attackerArmies[5], attackerArmies[9]], [defenderArmies[6], defenderArmies[10]], null, null, 1, 1);
 				battle.init();
-				t.resultEquals( battle.result([5, 5]), {victor: 'attacker', footLosses: 0, cavLosses: 1496, fleetLosses: 0, gFootLosses: 387.32, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(5, 5), {victor: 'attacker', footLosses: 0, cavLosses: 1496, fleetLosses: 0, gFootLosses: 387.32, gCavLosses: 0, gFleetLosses: 0} );
 			});
 			test( "Mixed army vs regular foot and guard horse on plains.", function(t) {
 				var battle = new schlacht([attackerArmies[6], attackerArmies[8]], [defenderArmies[6], defenderArmies[10]], null, null, 0, 0);
 				battle.init();
-				t.resultEquals( battle.result([5, 5]), {victor: 'attacker', footLosses: 1496, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 387.32, gFleetLosses: 0} );
+				t.resultEquals( battle.result(5, 5), {victor: 'attacker', footLosses: 1496, cavLosses: 0, fleetLosses: 0, gFootLosses: 0, gCavLosses: 387.32, gFleetLosses: 0} );
 			});
 		});
 		module( "Complex Battles", function() {
@@ -243,7 +243,7 @@ module( "Battle" , function() {
 				];
 				var battle = new schlacht(attackingArmies, defendingArmies, null, null, 3, 3);
 				battle.init();
-				t.resultEquals( battle.result([18, 3]), {victor: 'attacker', footLosses: 37638.48, cavLosses: 18819.24, fleetLosses: 0, gFootLosses: 5192.2, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(18, 3), {victor: 'attacker', footLosses: 37638.48, cavLosses: 18819.24, fleetLosses: 0, gFootLosses: 5192.2, gCavLosses: 0, gFleetLosses: 0} );
 				//TODO Defender not completely wiped out. Defender guard foot losses 4196.45
 			});
 			test( "Large naval battle.", function(t) {
@@ -259,7 +259,7 @@ module( "Battle" , function() {
 				];
 				var battle = new schlacht(attackingArmies, defendingArmies, null, null, 2, 2);
 				battle.init();
-				t.resultEquals( battle.result([12, 8]), {victor: 'attacker', footLosses: 0, cavLosses: 0, fleetLosses: 436.20, gFootLosses: 35.60, gCavLosses: 0, gFleetLosses: 0} );
+				t.resultEquals( battle.result(12, 8), {victor: 'attacker', footLosses: 0, cavLosses: 0, fleetLosses: 436.20, gFootLosses: 35.60, gCavLosses: 0, gFleetLosses: 0} );
 				//TODO Defender not completely wiped out. Defender guard fleet losses 59.47
 			});
 		});
@@ -392,7 +392,7 @@ module( "Army" , function() {
 			});
 			test( "Rider army decimation", function(t){
 				var army = new reiterHeer(201, 10000, 100, false);
-				army.decimate(2000);
+				army.decimate(1000);
 				t.armyEquals(army, new reiterHeer(201, 9000, 90, false));
 			});
 			test( "Fleet decimation", function(t){
