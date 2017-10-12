@@ -270,19 +270,19 @@ module( "Battle" , function() {
 				new heer(111, 1500, 10, 0, 0, 0, false),
 				new heer(112, 1000, 10, 0, 0, 0, false),
 				new heer(113, 1000, 10, 0, 0, 0, true),
-				new heer(211, 1000, 15, 0, 0, 0, false),
-				new heer(311, 20, 5, 0, 0, 0, false),
-				new heer(314, 10, 5, 3, 2, 0, false),
-				new heer(315, 10, 5, 0, 0, 0, true)
+				new reiterHeer(211, 1000, 15, false),
+				new seeHeer(311, 20, 5, 0, 0, false),
+				new seeHeer(314, 10, 5, 3, 2, false),
+				new seeHeer(315, 10, 5, 0, 0, true)
 			];
 			attackerArmies = [
 				new heer(123, 15000, 1, 0, 0, 0, false),
 				new heer(124, 10000, 1, 0, 0, 0, true),
-				new heer(224, 10000, 1, 0, 0, 0, false),
-				new heer(321, 200, 5, 0, 0, 0, false),
-				new heer(322, 100, 5, 0, 0, 0, false),
-				new heer(325, 99, 5, 3, 2, 0, false),
-				new heer(326, 200, 5, 0, 0, 0, true)
+				new reiterHeer(224, 10000, 1, false),
+				new seeHeer(321, 200, 5, 0, 0, false),
+				new seeHeer(322, 100, 5, 0, 0, false),
+				new seeHeer(325, 99, 5, 3, 2, false),
+				new seeHeer(326, 200, 5, 0, 0, true)
 			];
 			fieldTypes = [2, 0];//plains, water
 		},
