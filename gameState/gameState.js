@@ -61,8 +61,82 @@ function nextTurn() {
     					}
 					}
 				});
+			} else if (cPE.type === "merge") {
+				$.post({
+					url: url + "/databaseLink/mergeevent/",
+					data: {
+						authorization: authenticationToken,
+						content: cPEContent
+					},
+					statusCode: {
+						200: function() {
+							console.log("success");
+						},
+						400: function() {
+							alert("Invalid input. Something went wrong with the merging of troops.");
+						},
+						401: function() {
+    	  					alert('Authorisation failure. Please log in.');
+    					},
+    					403: function() {
+    	  					alert('Access denied. You can only send merge events involving your troops.');
+    					}
+					}
+				});
+			} else if (cPE.type === "transfer") {
+				$.post({
+					url: url + "/databaseLink/transferevent/",
+					data: {
+						authorization: authenticationToken,
+						content: cPEContent
+					},
+					statusCode: {
+						200: function() {
+							console.log("success");
+						},
+						400: function() {
+							alert("Invalid input. Something went wrong with the transfer of troops.");
+						},
+						401: function() {
+    	  					alert('Authorisation failure. Please log in.');
+    					},
+    					403: function() {
+    	  					alert('Access denied. You can only send transfer events involving your troops.');
+    					}
+					}
+				});
+			} else if (cPE.type === "split") {
+				$.post({
+					url: url + "/databaseLink/splitevent/",
+					data: {
+						authorization: authenticationToken,
+						content: cPEContent
+					},
+					statusCode: {
+						200: function() {
+							console.log("success");
+						},
+						400: function() {
+							alert("Invalid input. Something went wrong with the splitting of armies.");
+						},
+						401: function() {
+    	  					alert('Authorisation failure. Please log in.');
+    					},
+    					403: function() {
+    	  					alert('Access denied. You can only send split events involving your troops.');
+    					}
+					}
+				});
 			}
 		}
+		
+		pendingEvents.forEach(function(event) {
+			if(event.status === 'checked'){
+				sendCheckEvent(event.pk, event.type);
+			} else if(event.status === 'deleted') {
+				sendDeleteEvent(event.pk, event.type);
+			}
+		}, this);
 
 		$.post({
 			url: url + "/databaseLink/nextturn/",

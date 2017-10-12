@@ -11,29 +11,35 @@ function battleHandler(participants, x, y) {
 	this.attackList = document.getElementById("attackArmiesBox");
 	this.unsortedList = document.getElementById("unsortedArmiesBox");
 	this.defenseList = document.getElementById("defenseArmiesBox");
-	//both boxes under the lists of troops
+	//both boxes under the lists of troops and the Fight! button
 	this.attackTroopCount = document.getElementById("attackBattleSide");
 	this.defenseTroopCount = document.getElementById("defenseBattleSide");
+	this.battleButton = document.getElementById("battleButton");
 	//dice rolls
 	this.attackDice = document.getElementById("attackDiceRoll");
 	this.defenseDice = document.getElementById("defenseDiceRoll");
 	
-	//Troop counts TODO: expand to accomodate naval combat
 	this.attackSoldiers = 0;
 	this.attackOfficers = 0;
 	this.attackRiders = 0;
+	this.attackGuardSoldiers = 0;
+	this.attackGuardRiders = 0;
 	
 	this.attackShips = 0;
 	this.attackLightWarships = 0;
 	this.attackHeavyWarships = 0;
+	this.attackGuardShips = 0;
 	
 	this.defenseSoldiers = 0;
 	this.defenseOfficers = 0;
 	this.defenseRiders = 0;
+	this.defenseGuardSoldiers = 0;
+	this.defenseGuardRiders = 0;
 	
 	this.defenseShips = 0;
 	this.defenseLightWarships = 0;
 	this.defenseHeavyWarships = 0;
+	this.defenseGuardShips = 0;
 	
 	this.moveToAttack = function(i){
 		var ctx = this;
@@ -79,27 +85,45 @@ function battleHandler(participants, x, y) {
 		this.attackSoldiers = 0;
 		this.attackOfficers = 0;
 		this.attackRiders = 0;
+		this.attackGuardSoldiers = 0;
+		this.attackGuardRiders = 0;
 
 		this.attackShips = 0;
 		this.attackLightWarships = 0;
 		this.attackHeavyWarships = 0;
+		this.attackGuardShips = 0;
 		
 		this.defenseSoldiers = 0;
 		this.defenseOfficers = 0;
 		this.defenseRiders = 0;
+		this.defenseGuardSoldiers = 0;
+		this.defenseGuardRiders = 0;
 
 		this.defenseShips = 0;
 		this.defenseLightWarships = 0;
 		this.defenseHeavyWarships = 0;
+		this.defenseGuardShips = 0;
 		var ctx = this;
 		
 		this.attackSide.forEach(function(item){
 			if(item.a.armyId < 200 ) {//footman army
-				ctx.attackSoldiers += item.a.count;
+				if(item.a.isGuard){
+					ctx.attackGuardSoldiers += item.a.count;
+				} else {
+					ctx.attackSoldiers += item.a.count;
+				}
 			} else if(item.a.armyId < 300) {//rider army
-				ctx.attackRiders += item.a.count;
+				if(item.a.isGuard){
+					ctx.attackGuardRiders += item.a.count;
+				} else {
+					ctx.attackRiders += item.a.count;
+				}
 			} else if(item.a.armyId < 400) {//navy
-				ctx.attackShips += item.a.count;
+				if(item.a.isGuard){
+					ctx.attackGuardShips += item.a.count;
+				} else {
+					ctx.attackShips += item.a.count;
+				}
 				ctx.attackLightWarships += item.a.lkp;
 				ctx.attackHeavyWarships += item.a.skp;
 			}
@@ -107,11 +131,23 @@ function battleHandler(participants, x, y) {
 		});
 		this.defenseSide.forEach(function(item){
 			if(item.a.armyId < 200 ) {//footman army
-				ctx.defenseSoldiers += item.a.count;
+				if(item.a.isGuard){
+					ctx.defenseGuardSoldiers += item.a.count;
+				} else {
+					ctx.defenseSoldiers += item.a.count;
+				}
 			} else if(item.a.armyId < 300) {//rider army
-				ctx.defenseRiders += item.a.count;
+				if(item.a.isGuard){
+					ctx.defenseGuardRiders += item.a.count;
+				} else {
+					ctx.defenseRiders += item.a.count;
+				}
 			} else if(item.a.armyId < 400) {//navy
-				ctx.defenseShips += item.a.count;
+				if(item.a.isGuard){
+					ctx.defenseGuardShips += item.a.count;
+				} else {
+					ctx.defenseShips += item.a.count;
+				}
 				ctx.defenseLightWarships += item.a.lkp;
 				ctx.defenseHeavyWarships += item.a.skp;
 			}
@@ -120,6 +156,14 @@ function battleHandler(participants, x, y) {
 	}
 	
 	this.updateDisplay = function(){
+		if(this.attackSide.length === 0 || this.defenseSide.length === 0){
+			this.battleButton.disabled = true;
+			this.battleButton.style.cursor = "not-allowed";
+		} else {
+			this.battleButton.disabled = false;
+			this.battleButton.style.cursor = "initial";
+		}
+		
 		this.attackList.innerHTML = "";
 		this.attackSide.forEach(function(item, index){
 			var listItem = document.createElement("DIV");
@@ -179,61 +223,133 @@ function battleHandler(participants, x, y) {
 			div.innerHTML = item.ownerTag()+" "+item.a.armyId;
 			listItem.appendChild(div);
 		}, this);
-		
-		if(this.attackShips + this.attackLightWarships + this.attackHeavyWarships > 0 || 
-				this.defenseShips + this.defenseLightWarships + this.defenseHeavyWarships > 0){
+
+		this.attackTroopCount.innerHTML = "";
+		this.defenseTroopCount.innerHTML = "";
+		if(this.attackShips + this.attackLightWarships + this.attackHeavyWarships + this.attackGuardShips > 0 || 
+				this.defenseShips + this.defenseLightWarships + this.defenseHeavyWarships + this.defenseGuardShips > 0){
 			//naval combat
-			this.attackTroopCount.innerHTML = 
-				"<p>Shiffe: "+this.attackShips+"</p><p>Leichte Kreigsschiffe: "+
-				this.attackLightWarships+"</p><p>Schwere Kriegsschiffe: "+
-				this.attackHeavyWarships+"</p><p>Heerführer: "+this.attackOfficers+"</p>";
-			this.defenseTroopCount.innerHTML = 
-				"<p>Shiffe: "+this.defenseShips+"</p><p>Leichte Kreigsschiffe: "+
-				this.defenseLightWarships+"</p><p>Schwere Kriegsschiffe: "+
-				this.defenseHeavyWarships+"</p><p>Heerführer: "+this.defenseOfficers+"</p>";
-		} else { //land combat
-			this.attackTroopCount.innerHTML = 
-				"<p>Soldaten: "+this.attackSoldiers+"</p><p>Reiter: "+
-				this.attackRiders+"</p><p>Heerführer: "+this.attackOfficers+"</p>";
-			this.defenseTroopCount.innerHTML = 
-				"<p>Soldaten: "+this.defenseSoldiers+"</p><p>Reiter: "+
-				this.defenseRiders+"</p><p>Heerführer: "+this.defenseOfficers+"</p>";
+			if (this.attackShips > 0) {this.attackTroopCount.innerHTML += "<p>Shiffe: "+this.attackShips+"</p>";}
+			if (this.attackGuardShips > 0) {this.attackTroopCount.innerHTML += "<p>Gardeschiffe: "+this.attackGuardShips+"</p>";}
+			if (this.attackLightWarships > 0) {this.attackTroopCount.innerHTML += "<p>Leichte Kreigsschiffe: "+this.attackLightWarships+"</p>";}
+			if (this.attackHeavyWarships > 0) {this.attackTroopCount.innerHTML += "<p>Schwere Kriegsschiffe: "+this.attackHeavyWarships+"</p>";}
+			
+			if (this.defenseShips > 0) {this.defenseTroopCount.innerHTML += "<p>Shiffe: "+this.defenseShips+"</p>";}
+			if (this.defenseGuardShips > 0) {this.defenseTroopCount.innerHTML += "<p>Gardeschiffe: "+this.defenseGuardShips+"</p>";}
+			if (this.defenseLightWarships > 0) {this.defenseTroopCount.innerHTML += "<p>Leichte Kreigsschiffe: "+this.defenseLightWarships+"</p>";}
+			if (this.defenseHeavyWarships > 0) {this.defenseTroopCount.innerHTML += "<p>Schwere Kriegsschiffe: "+this.defenseHeavyWarships+"</p>";}
+		} else { 
+			//land combat
+			if (this.attackSoldiers > 0) {this.attackTroopCount.innerHTML += "<p>Soldaten: "+this.attackSoldiers+"</p>";}
+			if (this.attackRiders > 0) {this.attackTroopCount.innerHTML += "<p>Reiter: "+this.attackRiders+"</p>";}
+			if (this.attackGuardSoldiers > 0) {this.attackTroopCount.innerHTML += "<p>Gardesoldaten: "+this.attackGuardSoldiers+"</p>";}
+			if (this.attackGuardRiders > 0) {this.attackTroopCount.innerHTML += "<p>Gardereiter: "+this.attackGuardRiders+"</p>";}
+				
+			if (this.defenseSoldiers > 0) {this.defenseTroopCount.innerHTML += "<p>Soldaten: "+this.defenseSoldiers+"</p>";}
+			if (this.defenseRiders > 0) {this.defenseTroopCount.innerHTML += "<p>Reiter: "+this.defenseRiders+"</p>";}
+			if (this.defenseGuardSoldiers > 0) {this.defenseTroopCount.innerHTML += "<p>Gardesoldaten: "+this.defenseGuardSoldiers+"</p>";}
+			if (this.defenseGuardRiders > 0) {this.defenseTroopCount.innerHTML += "<p>Gardereiter: "+this.defenseGuardRiders+"</p>";}
 		}
+		if (this.attackOfficers > 0) {this.attackTroopCount.innerHTML += "<p>Heerführer: "+this.attackOfficers+"</p>";}
+		if (this.defenseOfficers > 0) {this.defenseTroopCount.innerHTML += "<p>Heerführer: "+this.defenseOfficers+"</p>";}
 		
 		this.attackTroopCount.innerHTML += "<p>Würfelwurf: "+this.attackDice.value+"</p>";
 		this.defenseTroopCount.innerHTML += "<p>Würfelwurf: "+this.defenseDice.value+"</p>";
 		
 		//Instant result preview (remove if not desired)
-		var battle = new schlacht(this.attackSide, this.defenseSide, null, null, this.x, this.y);
+		var battle = new schlacht(this.attackSide.map(function(val){return val.a;}), this.defenseSide.map(function(val){return val.a;}), null, null, this.x, this.y);
 		battle.init();
 		var result = battle.result([this.attackDice.value, this.defenseDice.value]);
+
+		var footLosses = Math.round(result.footLosses);
+		var cavLosses = Math.round(result.cavLosses);
+		var fleetLosses = Math.round(result.fleetLosses); 
+		var guardFootLosses = Math.round(result.gFootLosses);
+		var guardCavLosses = Math.round(result.gCavLosses);
+		var guardFleetLosses =  Math.round(result.gFleetLosses);
 		if(result.victor === 'attacker'){
 			if(battle.overrun1()) {
 				this.defenseTroopCount.innerHTML += "<p class=\"red\">Überrant!</p>";
 			} else {
 				this.defenseTroopCount.innerHTML += "<p class=\"red\">Besiegt!</p>";
-				this.attackTroopCount.innerHTML = 
-					"<div>Soldaten: "+this.attackSoldiers+"<p class=\"red\">-"+
-					Math.round(result.footLosses)+"</p></div><div>Reiter: "+this.attackRiders+"<p class=\"red\">-"+
-					Math.round(result.cavLosses)+"</p></div><div>Heerführer: "+this.attackOfficers+"<p class=\"red\">-"+
-					Math.round(((result.footLosses+result.cavLosses)/(this.attackSoldiers+this.attackRiders))*this.attackOfficers)+"</p></div>";
+				this.attackTroopCount.innerHTML = "";
+				if(this.attackShips + this.attackLightWarships + this.attackHeavyWarships + this.attackGuardShips > 0 || 
+						this.defenseShips + this.defenseLightWarships + this.defenseHeavyWarships + this.defenseGuardShips > 0){
+					//naval battle
+					var lossProportion = ((result.fleetLosses+result.gFleetLosses)/(this.attackShips+this.attackGuardShips));
+					var officerLosses = Math.round(lossProportion*this.attackOfficers);
+					var lightWarshipLosses = Math.round(lossProportion*this.attackLightWarships);
+					var heavyWarshipLosses = Math.round(lossProportion*this.attackHeavyWarships);
+					if (this.attackShips > 0) {this.attackTroopCount.innerHTML += "<div>Schiffe: "+
+						this.attackShips+"<div class=\"red inline\"> -"+ fleetLosses+"</div></div>";}
+					if (this.attackGuardShips > 0) {this.attackTroopCount.innerHTML += "<div>Gardeschiffe: "+
+						this.attackGuardShips+"<div class=\"red inline\"> -"+ guardFleetLosses+"</div></div>";}
+					if (this.attackLightWarships > 0) {this.attackTroopCount.innerHTML += "<div>Leichte Kriegsschiffe: "+
+						this.attackLightWarships+"<div class=\"red inline\"> -"+ lightWarshipLosses+"</div></div>";}
+					if (this.attackHeavyWarships > 0) {this.attackTroopCount.innerHTML += "<div>Schwere Kriegsschiffe: "+
+						this.attackHeavyWarships+"<div class=\"red inline\"> -"+ heavyWarshipLosses+"</div></div>";}
+					if (this.attackOfficers > 0) {this.attackTroopCount.innerHTML += "<div>Heerführer: "+
+						this.attackOfficers+"<div class=\"red inline\"> -"+ officerLosses+"</div></div>";}
+				} else {
+					//land battle
+					var officerLosses = Math.round(((result.footLosses+result.cavLosses+result.gFootLosses+result.gCavLosses)/
+							(this.attackSoldiers+this.attackRiders+this.attackGuardSoldiers+this.attackGuardRiders))*this.attackOfficers);
+					if (this.attackSoldiers > 0) {this.attackTroopCount.innerHTML += "<div>Soldaten: "+
+						this.attackSoldiers+"<div class=\"red inline\"> -"+footLosses+"</div></div>";}
+					if (this.attackRiders > 0) {this.attackTroopCount.innerHTML += "<div>Reiter: "+
+						this.attackRiders+"<div class=\"red inline\"> -"+ cavLosses+"</div></div>";}
+					if (this.attackGuardSoldiers > 0) {this.attackTroopCount.innerHTML += "<div>Gardesoldaten: "+
+						this.attackGuardSoldiers+"<div class=\"red inline\"> -"+guardFootLosses+"</div></div>";}
+					if (this.attackGuardRiders > 0) {this.attackTroopCount.innerHTML += "<div>Gardereiter: "+
+						this.attackGuardRiders+"<div class=\"red inline\"> -"+guardCavLosses+"</div></div>";}
+					if (this.attackOfficers > 0) {this.attackTroopCount.innerHTML += "<div>Heerführer: "+
+						this.attackOfficers+"<div class=\"red inline\"> -"+ officerLosses+"</div></div>";}
+				}
 			}
 		} else if (result.victor === 'defender') {
 			if(battle.overrun2()) {
 				this.attackTroopCount.innerHTML += "<p class=\"red\">Überrant!</p>";
 			} else {
 				this.attackTroopCount.innerHTML += "<p class=\"red\">Besiegt!</p>";
-				this.defenseTroopCount.innerHTML = 
-					"<div>Soldaten: "+this.defenseSoldiers+"<p class=\"red\">-"+
-					Math.round(result.footLosses)+"</p></div><div>Reiter: "+this.defenseRiders+"<p class=\"red\">-"+
-					Math.round(result.cavLosses)+"</p></div><div>Heerführer: "+this.defenseOfficers+"<p class=\"red\">-"+
-					Math.round(((result.footLosses+result.cavLosses)/(this.defenseSoldiers+this.defenseRiders))*this.defenseOfficers)+"</p></div>";
+				this.defenseTroopCount.innerHTML = "";
+				if(this.attackShips + this.attackLightWarships + this.attackHeavyWarships + this.attackGuardShips > 0 || 
+						this.defenseShips + this.defenseLightWarships + this.defenseHeavyWarships + this.defenseGuardShips > 0){
+					//naval battle
+					var lossProportion = ((result.fleetLosses+result.gFleetLosses)/(this.defenseShips+this.defenseGuardShips));
+					var officerLosses = Math.round(lossProportion*this.defenseOfficers);
+					var lightWarshipLosses = Math.round(lossProportion*this.defenseLightWarships);
+					var heavyWarshipLosses = Math.round(lossProportion*this.defenseHeavyWarships);
+					if (this.defenseShips > 0) {this.defenseTroopCount.innerHTML += "<div>Schiffe: "+
+						this.defenseShips+"<div class=\"red inline\"> -"+ fleetLosses+"</div></div>";}
+					if (this.defenseGuardShips > 0) {this.defenseTroopCount.innerHTML += "<div>Gardeschiffe: "+
+						this.defenseGuardShips+"<div class=\"red inline\"> -"+ guardFleetLosses+"</div></div>";}
+					if (this.defenseLightWarships > 0) {this.defenseTroopCount.innerHTML += "<div>Leichte Kriegsschiffe: "+
+						this.defenseLightWarships+"<div class=\"red inline\"> -"+ lightWarshipLosses+"</div></div>";}
+					if (this.defenseHeavyWarships > 0) {this.defenseTroopCount.innerHTML += "<div>Schwere Kriegsschiffe: "+
+						this.defenseHeavyWarships+"<div class=\"red inline\"> -"+ heavyWarshipLosses+"</div></div>";}
+					if (this.defenseOfficers > 0) {this.defenseTroopCount.innerHTML += "<div>Heerführer: "+
+						this.defenseOfficers+"<div class=\"red inline\"> -"+ officerLosses+"</div></div>";}
+				} else {
+					//land battle
+					var officerLosses = Math.round(((result.footLosses+result.cavLosses+result.gFootLosses+result.gCavLosses)/
+							(this.defenseSoldiers+this.defenseRiders+this.defenseGuardSoldiers+this.defenseGuardRiders))*this.defenseOfficers);
+					if (this.defenseSoldiers > 0) {this.defenseTroopCount.innerHTML += "<div>Soldaten: "+
+						this.defenseSoldiers+"<div class=\"red inline\"> -"+footLosses+"</div></div>";}
+					if (this.defenseRiders > 0) {this.defenseTroopCount.innerHTML += "<div>Reiter: "+
+						this.defenseRiders+"<div class=\"red inline\"> -"+ cavLosses+"</div></div>";}
+					if (this.defenseGuardSoldiers > 0) {this.defenseTroopCount.innerHTML += "<div>Gardesoldaten: "+
+						this.defenseGuardSoldiers+"<div class=\"red inline\"> -"+guardFootLosses+"</div></div>";}
+					if (this.defenseGuardRiders > 0) {this.defenseTroopCount.innerHTML += "<div>Gardereiter: "+
+						this.defenseGuardRiders+"<div class=\"red inline\"> -"+guardCavLosses+"</div></div>";}
+					if (this.defenseOfficers > 0) {this.defenseTroopCount.innerHTML += "<div>Heerführer: "+
+						this.defenseOfficers+"<div class=\"red inline\"> -"+ officerLosses+"</div></div>";}
+				}
 			}
 		}
 	}
 	
 	this.resolve = function(){
-		var battle = new schlacht(this.attackSide, this.defenseSide, null, null, this.x, this.y);
+		var battle = new schlacht(this.attackSide.map(function(val){return val.a;}), this.defenseSide.map(function(val){return val.a;}), null, null, this.x, this.y);
 		battle.init();
 		if(battle.overrun1()) {
 			this.attackSide.forEach(function(item){
@@ -276,11 +392,11 @@ function battleHandler(participants, x, y) {
 					var army = item.a;
 					item.remainingMovePoints = 0;
 					if(army.armyId < 200 && army.armyId > 0){
-						console.log("armyCount: " + army.count + ", attackSoldiers: " + this.attackSoldiers + ", footLosses: " + result.footLosses);
 						army.decimate((army.count/this.attackSoldiers)*result.footLosses);
 					} else if(army.armyId < 300 && army.armyId > 200){
-						console.log("armyCount: " + army.count + ", attackRiders: " + this.attackRiders + ", cavLosses: " + result.cavLosses);
 						army.decimate((army.count/this.attackRiders)*result.cavLosses);
+					} else if(army.armyId < 400 && army.armyId > 300){
+						army.decimate((army.count/this.attackShips)*result.fleetLosses);
 					}
 				}, this);
 			} else if(result.victor === 'defender'){
@@ -298,24 +414,26 @@ function battleHandler(participants, x, y) {
 					var army = item.a;
 					item.remainingMovePoints = 0;
 					if(army.armyId < 200 && army.armyId > 0){
-						console.log("armyCount: " + army.count + ", attackSoldiers: " + this.attackSoldiers + ", footLosses: " + result.footLosses);
 						army.decimate((army.count/this.defenseSoldiers)*result.footLosses);
 					} else if(army.armyId < 300 && army.armyId > 200){
-						console.log("armyCount: " + army.count + ", attackRiders: " + this.attackRiders + ", cavLosses: " + result.cavLosses);
 						army.decimate((army.count/this.defenseRiders)*result.cavLosses);
+					} else if(army.armyId < 400 && army.armyId > 300){
+						army.decimate((army.count/this.defenseShips)*result.fleetLosses);
 					}
 				},this);
 			} else {
 				//TODO: Revisit once the schlacht.result(dice1, dice2) returns proper values for a tie
 			}
 		}
+		checkArmiesForLiveliness();
 	}
 }
 
 // Battle, armiesAttack: Array der angreifenden Armeen, armiesDefend: Array der Verteidigenden Armeen 
 // Immer zu erst init()
 // TODO: Gelaende und unterstuetzung, Flotten
-// TODO: Bessere variabelnamen!
+// TODO: Kommentare aktualisieren!
+// TODO: Bessere variabelnamen!!!
 // attackingarmies[], defendingarmies[]
 function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
     this.a1 = new heer(0,0,0,0,0,0,false);	// Fußheer Angreifer
@@ -407,15 +525,6 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
 				}
 			}
 		}
-		console.log("init");
-		console.log("this.a1.count = " + this.a1.count);
-		console.log("this.ma1.count = " + this.ma1.count);
-		console.log("this.g1.count = " + this.g1.count);
-		console.log("this.mg1.count = " + this.mg1.count);
-		console.log("this.a2.count = " + this.a2.count);
-		console.log("this.ma2.count = " + this.ma2.count);
-		console.log("this.g2.count = " + this.g2.count);
-		console.log("this.mg2.count = " + this.mg2.count);
 	}
 
 	this.fieldType = function(){
@@ -451,19 +560,6 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
     
     // 10:1 ?
     this.overrun1 = function() {
-		console.log("overrun1");
-		console.log("this.a1.count = " + this.a1.count);
-		console.log("this.ma1.count = " + this.ma1.count);
-		console.log("this.fa1.count = " + this.fa1.count);
-		console.log("this.g1.count = " + this.g1.count);
-		console.log("this.mg1.count = " + this.mg1.count);
-		console.log("this.fg1.count = " + this.fg1.count);
-		console.log("this.a2.count = " + this.a2.count);
-		console.log("this.ma2.count = " + this.ma2.count);
-		console.log("this.fa2.count = " + this.fa2.count);
-		console.log("this.g2.count = " + this.g2.count);
-		console.log("this.mg2.count = " + this.mg2.count);
-		console.log("this.fg2.count = " + this.fg2.count);
     	return ((this.a1.count + this.ma1.count*2 + this.g1.count + this.mg1.count*2) > 0 && 
 		(this.a1.count + this.ma1.count*2 + this.g1.count + this.mg1.count*2) >= ((this.a2.count + this.ma2.count*2)*10) && 
 		(this.g2.count === 0) && (this.mg2.count === 0)) || 
@@ -473,19 +569,6 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
     }
     
     this.overrun2 = function() {
-		console.log("overrun2");
-		console.log("this.a1.count = " + this.a1.count);
-		console.log("this.ma1.count = " + this.ma1.count);
-		console.log("this.fa1.count = " + this.fa1.count);
-		console.log("this.g1.count = " + this.g1.count);
-		console.log("this.mg1.count = " + this.mg1.count);
-		console.log("this.fg1.count = " + this.fg1.count);
-		console.log("this.a2.count = " + this.a2.count);
-		console.log("this.ma2.count = " + this.ma2.count);
-		console.log("this.fa2.count = " + this.fa2.count);
-		console.log("this.g2.count = " + this.g2.count);
-		console.log("this.mg2.count = " + this.mg2.count);
-		console.log("this.fg2.count = " + this.fg2.count);
     	return (this.a2.count + this.ma2.count*2 + this.g2.count + this.mg2.count*2) > 0 && 
 		(this.a2.count + this.ma2.count*2 + this.g2.count + this.mg2.count*2) >= ((this.a1.count + this.ma1.count*2)*10) && 
     	(this.g1.count === 0) && (this.mg1.count === 0) || 
@@ -494,7 +577,7 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
 		this.fg1.count === 0);
     }
 
-    // Kampfergebnis in Form {victor: <'attacker', 'defender', 'tie'>, footLosses: <int>, cavLosses: <int>], 
+    // Kampfergebnis in Form {victor: <'attacker', 'defender', 'tie'>, footLosses: <int>, cavLosses: <int>}, 
     // {victor: 'tie', footLosses: <viel>, cavLosses: <viel>} falls unentschieden.
     this.result = function(dicerolls) {
 		if(this.overrun1()){
@@ -694,6 +777,11 @@ function aim(){
 // the splitArmy funtion of the split box
 // TODO: If the army has moved, set the new split army's move points to the appropriate, non-max value.
 function splitSelectedArmy(){
+	if(login == 'guest')
+	{
+		window.alert("Zuschauer haben keine Rechte.");
+		return false;
+	}
 	var toSplit = 0;
 	var leadersToSplit = 0;
 	var mountsToSplit = 0;
@@ -748,7 +836,6 @@ function splitSelectedArmy(){
 			return false;
 		}
 	}
-	// TODO: Handle transported troops
 	else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 3)
 	{
 		toSplit = parseInt(document.getElementById("splitFleetInput").value);
@@ -758,6 +845,11 @@ function splitSelectedArmy(){
 		if(toSplit > (listOfArmyCoordinates[selectedArmy].a.count-1))
 		{
 			window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.")
+			return false;
+		}
+		if(toSplit*100 > (listOfArmyCoordinates[selectedArmy].a.currentCapacity()))
+		{
+			window.alert("Du kannst keine beladenen Schiffe abspalten.")
 			return false;
 		}
 		if(toSplit < 1)
@@ -788,7 +880,8 @@ function splitSelectedArmy(){
 	}
 	if(listOfArmyCoordinates[selectedArmy].a.armyType() == 1)
 	{
-		var newArmy = new heer(generateArmyId(1,listOfArmyCoordinates[selectedArmy].owner), toSplit, leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, false);
+		var newArmyId = generateArmyId(1,listOfArmyCoordinates[selectedArmy].owner);
+		var newArmy = new heer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, false);
 		var newArmyCoordinates = new armyCoordinates(newArmy, listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y, listOfArmyCoordinates[selectedArmy].owner);
 		listOfArmyCoordinates.push(newArmyCoordinates);
 		listOfArmyCoordinates[selectedArmy].a.removeSoldiers(toSplit);
@@ -796,6 +889,24 @@ function splitSelectedArmy(){
 		listOfArmyCoordinates[selectedArmy].a.removeLkp(lkpToSplit);
 		listOfArmyCoordinates[selectedArmy].a.removeSkp(skpToSplit);
 		listOfArmyCoordinates[selectedArmy].a.removeMounts(mountsToSplit);
+		if(login != 'sl')
+		{
+			preparedEvents.push({
+				type: "split", content: {
+					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+					troops: toSplit,
+					leaders: leadersToSplit,
+					lkp: lkpToSplit,
+					skp: skpToSplit,
+					mounts: mountsToSplit,
+					x: listOfArmyCoordinates[selectedArmy].x,
+					y: listOfArmyCoordinates[selectedArmy].y,
+					newArmysId: newArmyId
+				}
+			});
+		}
+		
 	}
 	if(listOfArmyCoordinates[selectedArmy].a.armyType() == 2)
 	{
@@ -804,6 +915,23 @@ function splitSelectedArmy(){
 		listOfArmyCoordinates.push(newArmyCoordinates);
 		listOfArmyCoordinates[selectedArmy].a.removeSoldiers(toSplit);
 		listOfArmyCoordinates[selectedArmy].a.removeLeaders(leadersToSplit);
+		if(login != 'sl')
+		{
+			preparedEvents.push({
+				type: "split", content: {
+					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+					troops: toSplit,
+					leaders: leadersToSplit,
+					lkp: 0,
+					skp: 0,
+					mounts: 0,
+					x: listOfArmyCoordinates[selectedArmy].x,
+					y: listOfArmyCoordinates[selectedArmy].y,
+					newArmysId: newArmyId
+				}
+			});
+		}
 	}
 	if(listOfArmyCoordinates[selectedArmy].a.armyType() == 3)
 	{
@@ -814,6 +942,23 @@ function splitSelectedArmy(){
 		listOfArmyCoordinates[selectedArmy].a.removeLeaders(leadersToSplit);
 		listOfArmyCoordinates[selectedArmy].a.removeLkp(lkpToSplit);
 		listOfArmyCoordinates[selectedArmy].a.removeSkp(skpToSplit);
+		if(login != 'sl')
+		{
+			preparedEvents.push({
+				type: "split", content: {
+					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+					troops: toSplit,
+					leaders: leadersToSplit,
+					lkp: lkpToSplit,
+					skp: skpToSplit,
+					mounts: 0,
+					x: listOfArmyCoordinates[selectedArmy].x,
+					y: listOfArmyCoordinates[selectedArmy].y,
+					newArmysId: newArmyId
+				}
+			});
+		}
 	}
 	restoreInfoBox();
 	updateInfoBox();
@@ -830,6 +975,7 @@ function mount(){
 		window.alert("Du hast zu wenige Truppen zum aufsitzen")
 		return false;
 	// genug Reittiere vorhanden?
+
 	} 
 	else if(toMount > listOfArmyCoordinates[selectedArmy].a.mounts)
 	{
@@ -848,6 +994,10 @@ function mount(){
 		// in listOfArmyCoordinates einfügen und alte Armee löschen, ist dann automatisch selectedArmy
 		var newArmyCoordinates = new armyCoordinates(newArmy,listOfArmyCoordinates[selectedArmy].x,listOfArmyCoordinates[selectedArmy].y ,listOfArmyCoordinates[selectedArmy].owner);
 		listOfArmyCoordinates.push(newArmyCoordinates);
+		if(listOfArmyCoordinates[selectedArmy].multiArmyField === true){
+			addToMultifield(listOfArmyCoordinates[selectedArmy], newArmyCoordinates);
+			deleteFromMultifield(listOfArmyCoordinates[selectedArmy]);
+		}
 		deleteSelectedArmy();
 		restoreInfoBox();
 		updateInfoBox();
@@ -895,6 +1045,10 @@ function unMount(){
 		// in listOfArmyCoordinates einfügen und alte Armee löschen, ist dann automatisch selectedArmy
 		var newArmyCoordinates = new armyCoordinates(newArmy, listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y, listOfArmyCoordinates[selectedArmy].owner);
 		listOfArmyCoordinates.push(newArmyCoordinates);
+		if(listOfArmyCoordinates[selectedArmy].multiArmyField === true){
+			addToMultifield(listOfArmyCoordinates[selectedArmy], newArmyCoordinates);
+			deleteFromMultifield(listOfArmyCoordinates[selectedArmy]);
+		}
 		deleteSelectedArmy();
 		restoreInfoBox();
 		updateInfoBox();
@@ -933,10 +1087,254 @@ function allUnMount(){
 	unMount();
 }
 
+// move troops or leaders from selectedArmy to the army at position mergeId in listOfArmyCoordinates
+function transferTroopsFromSelectedArmy(mergeId){
+	var toSplit = 0;
+	var leadersToSplit = 0;
+	var mountsToSplit = 0;
+	var lkpToSplit = 0;
+	var skpToSplit = 0;
+	// depending on army type different fields are needed
+	if(listOfArmyCoordinates[selectedArmy].a.armyType() == 1)
+	{
+		toSplit = parseInt(document.getElementById("splitInput").value);
+		leadersToSplit = parseInt(document.getElementById("splitLeadersInput").value);
+		mountsToSplit = parseInt(document.getElementById("splitMountsInput").value);
+		lkpToSplit = parseInt(document.getElementById("splitLkpInput").value);
+		skpToSplit = parseInt(document.getElementById("splitSkpInput").value);
+		if(toSplit >= 0 && leadersToSplit >= 0 && mountsToSplit >= 0 && lkpToSplit >= 0 && skpToSplit >= 0)
+		{
+			listOfArmyCoordinates[selectedArmy].a.count -= toSplit;
+			listOfArmyCoordinates[mergeId].a.count += toSplit;
+			listOfArmyCoordinates[selectedArmy].a.leaders -= leadersToSplit;
+			listOfArmyCoordinates[mergeId].a.leaders += leadersToSplit;
+			listOfArmyCoordinates[selectedArmy].a.mounts -= mountsToSplit;
+			listOfArmyCoordinates[mergeId].a.mounts += mountsToSplit;
+			listOfArmyCoordinates[selectedArmy].a.lkp -= lkpToSplit;
+			listOfArmyCoordinates[mergeId].a.lkp += lkpToSplit;
+			listOfArmyCoordinates[selectedArmy].a.skp -= skpToSplit;
+			listOfArmyCoordinates[mergeId].a.skp += skpToSplit;
+			if(login != 'sl')
+			{
+				preparedEvents.push({
+					type: "transfer", content: {
+						fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+						toArmyId: listOfArmyCoordinates[mergeId].a.armyId,
+						realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+						troops: toSplit,
+						leaders: leadersToSplit,
+						lkp: lkpToSplit,
+						skp: skpToSplit,
+						mounts: mountsToSplit
+					}
+				});
+			}
+		} else
+		{
+			window.alert("Es müssen positive Werte abgespalten werden");
+			return false;
+		}
+	}
+	else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 2)
+	{
+		toSplit = parseInt(document.getElementById("splitMountedInput").value);
+		leadersToSplit = parseInt(document.getElementById("splitMountedLeadersInput").value);
+		if(toSplit >= 0 && leadersToSplit >= 0)
+		{
+			listOfArmyCoordinates[selectedArmy].a.count -= toSplit;
+			listOfArmyCoordinates[mergeId].a.count += toSplit;
+			listOfArmyCoordinates[selectedArmy].a.leaders -= leadersToSplit;
+			listOfArmyCoordinates[mergeId].a.leaders += leadersToSplit;
+			listOfArmyCoordinates[selectedArmy].a.lkp -= lkpToSplit;
+			listOfArmyCoordinates[mergeId].a.lkp += lkpToSplit;
+			listOfArmyCoordinates[selectedArmy].a.skp -= skpToSplit;
+			listOfArmyCoordinates[mergeId].a.skp += skpToSplit;
+			if(login != 'sl')
+			{
+				preparedEvents.push({
+					type: "transfer", content: {
+						fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+						toArmyId: listOfArmyCoordinates[mergeId].a.armyId,
+						realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+						troops: toSplit,
+						leaders: leadersToSplit,
+						lkp: 0,
+						skp: 0,
+						mounts: 0
+					}
+				});
+			}
+		} else
+		{
+			window.alert("Es müssen positive Werte abgespalten werden");
+			return false;
+		}
+	}
+	else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 3)
+	{
+		toSplit = parseInt(document.getElementById("splitFleetInput").value);
+		leadersToSplit = parseInt(document.getElementById("splitFleetLeadersInput").value);
+		lkpToSplit = parseInt(document.getElementById("splitFleetLkpInput").value);
+		skpToSplit = parseInt(document.getElementById("splitFleetSkpInput").value);
+		if(toSplit >= 0 && leadersToSplit >= 0 && lkpToSplit >= 0 && skpToSplit >= 0)
+		{
+			listOfArmyCoordinates[selectedArmy].a.count -= toSplit;
+			listOfArmyCoordinates[mergeId].a.count += toSplit;
+			listOfArmyCoordinates[selectedArmy].a.leaders -= leadersToSplit;
+			listOfArmyCoordinates[mergeId].a.leaders += leadersToSplit;
+			listOfArmyCoordinates[selectedArmy].a.lkp -= lkpToSplit;
+			listOfArmyCoordinates[mergeId].a.lkp += lkpToSplit;
+			listOfArmyCoordinates[selectedArmy].a.skp -= skpToSplit;
+			listOfArmyCoordinates[mergeId].a.skp += skpToSplit;
+			if(login != 'sl')
+			{
+				preparedEvents.push({
+					type: "transfer", content: {
+						fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+						toArmyId: listOfArmyCoordinates[mergeId].a.armyId,
+						realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+						troops: toSplit,
+						leaders: leadersToSplit,
+						lkp: lkpToSplit,
+						skp: skpToSplit,
+						mounts: 0
+					}
+				});
+			}
+		} else
+		{
+			window.alert("Es müssen positive Werte abgespalten werden");
+			return false;
+		}
+	}
+	updateInfoBox();
+	restoreInfoBox();
+}
+
+// merges selectedArmy with the army at position mergeId in listOfArmyCoordinates
+function mergeSelectedArmy(mergeId){
+	// depending on army type different fields are needed
+	if(listOfArmyCoordinates[selectedArmy].a.armyType() == 1)
+	{
+		listOfArmyCoordinates[mergeId].a.count += listOfArmyCoordinates[selectedArmy].a.count;
+		listOfArmyCoordinates[mergeId].a.leaders += listOfArmyCoordinates[selectedArmy].a.leaders;
+		listOfArmyCoordinates[mergeId].a.mounts += listOfArmyCoordinates[selectedArmy].a.mounts;
+		listOfArmyCoordinates[mergeId].a.lkp += listOfArmyCoordinates[selectedArmy].a.lkp;
+		listOfArmyCoordinates[mergeId].a.skp += listOfArmyCoordinates[selectedArmy].a.skp;
+		if(login != 'sl')
+		{
+			preparedEvents.push({
+				type: "merge", content: {
+					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					toArmyId: listOfArmyCoordinates[mergeId].a.armyId,
+					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+					troops: listOfArmyCoordinates[selectedArmy].a.count,
+					leaders: listOfArmyCoordinates[selectedArmy].a.leaders,
+					lkp: listOfArmyCoordinates[selectedArmy].a.lkp,
+					skp: listOfArmyCoordinates[selectedArmy].a.skp,
+					mounts: listOfArmyCoordinates[selectedArmy].a.mounts
+				}
+			});
+		}
+		deleteSelectedArmy();
+	}
+	else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 2)
+	{
+		listOfArmyCoordinates[mergeId].a.count += listOfArmyCoordinates[selectedArmy].a.count;
+		listOfArmyCoordinates[mergeId].a.leaders += listOfArmyCoordinates[selectedArmy].a.leaders;
+		if(login != 'sl')
+		{
+			preparedEvents.push({
+				type: "merge", content: {
+					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					toArmyId: listOfArmyCoordinates[mergeId].a.armyId,
+					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+					troops: listOfArmyCoordinates[selectedArmy].a.count,
+					leaders: listOfArmyCoordinates[selectedArmy].a.leaders,
+					lkp: 0,
+					skp: 0,
+					mounts: 0
+				}
+			});
+		}
+		deleteSelectedArmy();
+	}
+	else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 3)
+	{
+		listOfArmyCoordinates[mergeId].a.count += listOfArmyCoordinates[selectedArmy].a.count;
+		listOfArmyCoordinates[mergeId].a.leaders += listOfArmyCoordinates[selectedArmy].a.leaders;
+		listOfArmyCoordinates[mergeId].a.lkp += listOfArmyCoordinates[selectedArmy].a.lkp;
+		listOfArmyCoordinates[mergeId].a.skp += listOfArmyCoordinates[selectedArmy].a.skp;
+		listOfArmyCoordinates[mergeId].a.loadedArmies = listOfArmyCoordinates[mergeId].a.loadedArmies.concat(listOfArmyCoordinates[selectedArmy].a.loadedArmies);
+
+		console.log("the loaded armies in the new fleet are:");
+		console.log(listOfArmyCoordinates[mergeId].a.loadedArmies);
+		if (listOfArmyCoordinates[selectedArmy].a.loadedArmies.length > 0)
+		{
+			console.log("id = " + listOfArmyCoordinates[selectedArmy].a.loadedArmies[i]);
+			for(var j = 0; j < listOfArmyCoordinates[selectedArmy].a.loadedArmies.length; j++)
+			{
+				for(var i = 0; i < listOfArmyCoordinates.length; i++)
+				{
+					if(listOfArmyCoordinates[selectedArmy].a.loadedArmies[j] == listOfArmyCoordinates[i].a.armyId && 
+						listOfArmyCoordinates[mergeId].owner == listOfArmyCoordinates[i].owner)
+					{
+						console.log(listOfArmyCoordinates[i].a.armyId + " was loaded in " + listOfArmyCoordinates[i].a.isLoadedIn + ",");
+						listOfArmyCoordinates[i].a.isLoadedIn = listOfArmyCoordinates[mergeId].a.armyId;
+						console.log("but is now loaded in " + listOfArmyCoordinates[i].a.isLoadedIn + ".");
+					}
+				}
+			}
+		}
+		for(var j = 0; j < listOfArmyCoordinates[mergeId].a.loadedArmies.length; j++)	
+		{
+			for(var i = 0; i < listOfArmyCoordinates.length; i++)
+			{
+				if(listOfArmyCoordinates[mergeId].a.loadedArmies[j] == listOfArmyCoordinates[i].a.armyId && 
+					listOfArmyCoordinates[mergeId].owner == listOfArmyCoordinates[i].owner)
+				{
+					console.log(listOfArmyCoordinates[i].a.armyId + " is loaded in " + listOfArmyCoordinates[i].a.isLoadedIn + ".");
+				}
+			}
+		}
+		if(login != 'sl')
+		{
+			preparedEvents.push({
+				type: "merge", content: {
+					fromArmyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+					toArmyId: listOfArmyCoordinates[mergeId].a.armyId,
+					realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+					troops: listOfArmyCoordinates[selectedArmy].a.count,
+					leaders: listOfArmyCoordinates[selectedArmy].a.leaders,
+					lkp: 0,
+					skp: 0,
+					mounts: 0
+				}
+			});
+		}
+		deleteSelectedArmy();
+	}
+	if(mergeId = listOfArmyCoordinates.length)
+	{
+		mergeId -= 1;
+	}
+	selectedArmy = mergeId;
+	updateInfoBox();
+	restoreInfoBox();
+}
+
 // deletes the currently selected army und puts the last army in listOfArmyCoordinates in its place
 function deleteSelectedArmy(){
-	listOfArmyCoordinates[selectedArmy] = listOfArmyCoordinates[listOfArmyCoordinates.length-1]
+	deleteArmy(selectedArmy);
+}
+
+function deleteArmy(index){
+	listOfArmyCoordinates[index] = listOfArmyCoordinates[listOfArmyCoordinates.length-1];
 	listOfArmyCoordinates.pop();
+	if(selectedArmy == listOfArmyCoordinates.length)
+	{
+		selectedArmy = undefined;
+	}
 }
 
 // returns the next armyId not yet assigned for the caller
@@ -992,4 +1390,9 @@ function generateArmyId(type, owner){
 	} else {
 		return false;
 	}
+}
+
+function checkArmiesForLiveliness(){
+	listOfArmyCoordinates = listOfArmyCoordinates.filter(
+			function(armyCoord){return armyCoord.isAlive();});
 }

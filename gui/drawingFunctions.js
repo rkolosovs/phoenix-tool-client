@@ -430,27 +430,31 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 		ctx.textAlign = 'center';
     	ctx.textBaseline = 'middle';
 		//ctx.fillText(armyData.a.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
-		// armies == 1, riders == 2, boats == 3
-		if(Math.floor(armyData.a.armyId/100) == 1){
-			ctx.drawImage(troopsImg, pos[0], pos[1], (scale*SIN60), scale); 
-		} else if(Math.floor(armyData.a.armyId/100) == 2) {
-			ctx.drawImage(mountsImg, pos[0], pos[1], (scale*SIN60), scale);
-		} else if(Math.floor(armyData.a.armyId/100) == 3) {
-			ctx.drawImage(boatsImg, pos[0], pos[1], (scale*SIN60), scale);
+
+		//check if its is on a multifield. if it is ignore
+		if(armyData.multiArmyField == false){
+			// armies == 1, riders == 2, boats == 3
+			if(Math.floor(armyData.a.armyId/100) == 1){
+				ctx.drawImage(troopsImg, pos[0], pos[1], (scale*SIN60), scale); 
+			} else if(Math.floor(armyData.a.armyId/100) == 2) {
+				ctx.drawImage(mountsImg, pos[0], pos[1], (scale*SIN60), scale);
+			} else if(Math.floor(armyData.a.armyId/100) == 3) {
+				ctx.drawImage(boatsImg, pos[0], pos[1], (scale*SIN60), scale);
+			}
 		}
 		if (armyCoordinates[i].ownerTag() === login || login === "sl"){
 			//draw if you can move
 			if(armyCoordinates[i].possibleMoves.length > 0){
-                drawRemainingMovement(ctx, pos, scale);
+				drawRemainingMovement(ctx, pos, scale);
 			}
 			else if(Math.floor(armyData.a.armyId/100) == 1 && armyCoordinates[i].remainingMovePoints == 9){
-                drawRemainingMovement(ctx, pos, scale);
+				drawRemainingMovement(ctx, pos, scale);
 			}
 			else if(Math.floor(armyData.a.armyId/100) == 2 && armyCoordinates[i].remainingMovePoints == 21){
-                drawRemainingMovement(ctx, pos, scale);
+				drawRemainingMovement(ctx, pos, scale);
 			}
 			else if(Math.floor(armyData.a.armyId/100) == 3 && armyCoordinates[i].remainingMovePoints >= 42){
-                drawRemainingMovement(ctx, pos, scale);
+				drawRemainingMovement(ctx, pos, scale);
 			}
 
 			//draw if it took fire
@@ -458,7 +462,200 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 				drawTookFire(ctx, pos, scale);
 			}
 		}
+		
 	}
+
+	//drawing the multifield armies
+	for(var j = 0; j < listOfMultiArmyFields.length; j++){//for every field
+
+		for(var i = 0; i < listOfMultiArmyFields[j].length; i++){//for every army on that field
+		
+		var armyData = listOfMultiArmyFields[j][i]; // get army coordinates
+		var pos = computePosition(x, y, listOfMultiArmyFields[j][i].x, listOfMultiArmyFields[j][i].y, scale);
+
+		var circleScale = (scale*SIN60) / listOfMultiArmyFields[j].length;
+
+		//const double Angle = (M_PI * 2.0) / n;
+		//Für jedes i-te Objekt dann die Position des Mittelpunktes:
+		//const double MidPosX = (cos(Angle * i) * RadiusX) + CirclePosX;
+		//const double MidPosY =(sin(Angle * i) * RadiusY) + CirclePosY;
+		var angle = (Math.PI * 2.0) / listOfMultiArmyFields[j].length;//Total armies on field
+		var xPosArmy = (Math.cos(angle * i) * scale/4) + pos[0] + scale/4;
+		var yPosArmy = (Math.sin(angle * i) * scale/4) + pos[1];
+
+		// armies == 1, riders == 2, boats == 3
+			if(Math.floor(armyData.a.armyId/100) == 1){
+				ctx.drawImage(troopsImg, xPosArmy, yPosArmy, circleScale, scale); 
+			} else if(Math.floor(armyData.a.armyId/100) == 2) {
+				ctx.drawImage(mountsImg, xPosArmy, yPosArmy, circleScale, scale);
+			} else if(Math.floor(armyData.a.armyId/100) == 3) {
+				ctx.drawImage(boatsImg, xPosArmy, yPosArmy, circleScale, scale);
+			}
+		}
+
+	}
+}
+
+function writeTurnNumber() {
+	// get the top bar element from the HTML document
+	var topBar = document.getElementById('topBar');
+	var nextTurnBtn = document.getElementById('nextTurnButton');
+	var stepBtn = document.getElementById('stepButton');
+	var revertBtn = document.getElementById('revertButton');
+	var date = document.getElementById('date_text');
+	var spec = document.getElementById('special_text');
+	if (nextTurnBtn === null) {
+		nextTurnBtn = document.createElement("BUTTON");
+		nextTurnBtn.id = "nextTurnButton";
+		nextTurnBtn.addEventListener('click', function() {
+			var message = "";
+			if (currentTurn.realm === null) {
+				message = "Do you want to end the pre-turn phase?";
+			} else if (currentTurn.status === 'fi') {
+				var unprocessedEvents = pendingEvents.some(function(event){
+					return (event.status === 'available' || event.status === 'withheld' ||
+						event.status === 'impossible');
+				});
+				if (unprocessedEvents){
+					message = "Some events are unprocessed.";
+				}
+				message += ("Do you want to end processing the turn of " + currentTurn.realm+"?");
+			} else if (login === 'sl') {
+				message = "Do you want to end the turn of "+ currentTurn.realm+"?";
+			} else {
+				message = "Do you want to end your turn?";
+			}
+
+			if (confirm(message)){
+				if(login === 'sl' && currentTurn.status === 'fi') { //SL sends DB change requests
+					pendingEvents.forEach(function(event) {
+						if(event.status === 'checked'){
+							sendCheckEvent(event.pk, event.type);
+						} else if(event.status === 'deleted') {
+							sendDeleteEvent(event.pk, event.type);
+						}
+					}, this);
+					saveBuildings();
+					saveFactionsTerritories();
+					saveArmies();
+				} else { //Players and SL during player's turn send events
+					sendAllPreparedEvents();
+				}
+				pendingEvents = [];
+				preparedEvents = [];
+				sendNextTurn();
+			}
+		});
+		date = document.createElement("P");
+		date.align = "right";
+		date.id = "date_text";
+		spec = document.createElement("P");
+		spec.align = "left";
+		spec.id = "special_text";
+	}
+	
+	if (stepBtn === null) {
+		stepBtn = document.createElement("BUTTON");
+		stepBtn.id = "stepButton";
+		stepBtn.style.backgroundImage = "url(images/step_button.svg)";
+		stepBtn.addEventListener('click', function() {
+			if(login === 'sl'){
+				if (confirm("Do you want to save the events handled so far without ending the turn?" +
+						" Once saved the progress can't be reverted anymore.")){
+					pendingEvents.forEach(function(event) {
+						if(event.status === 'checked'){
+							sendCheckEvent(event.pk, event.type);
+						} else if(event.status === 'deleted') {
+							sendDeleteEvent(event.pk, event.type);
+						}
+					}, this);
+					pendingEvents = [];
+					preparedEvents = [];
+					saveBuildings();
+					saveFactionsTerritories();
+					saveArmies();
+				}
+			} else {
+				if (confirm("Do you want to save the events issued so far without ending the turn?" +
+				" Once saved the progress can only be reverted by the SL.")){
+					sendAllPreparedEvents();
+				}
+			}
+		});
+	}
+
+	if (revertBtn === null) {
+		revertBtn = document.createElement("BUTTON");
+		revertBtn.id = "revertButton";
+		revertBtn.style.backgroundImage = "url(images/revert_button.svg)";
+		revertBtn.addEventListener('click', function() {
+			if (confirm("Do you want to revert the events handled so far?")){
+				pendingEvents = [];
+				preparedEvents = [];
+				loadArmies();
+				loadBuildingData();
+				loadBorderData();
+				loadPendingEvents();
+				writeTurnNumber();
+				drawStuff();
+			}
+		});
+	}
+	
+	if (login !== 'sl' && (currentTurn.realm === null || currentTurn.status === 'fi' || login !== currentTurn.realm)) { 
+		// if not logged in as the current realm or SL
+		nextTurnBtn.disabled = true;
+		nextTurnBtn.style.cursor = "not-allowed";
+		nextTurnBtn.style.backgroundImage = "url(images/nextturn_button_disabled.svg)";
+		stepBtn.disabled = true;
+		stepBtn.style.cursor = "not-allowed";
+		revertBtn.disabled = true;
+		revertBtn.style.cursor = "not-allowed";
+	} else {
+		nextTurnBtn.disabled = false;
+		nextTurnBtn.style.cursor = "initial";
+		nextTurnBtn.style.backgroundImage = "url(images/nextturn_button.svg)";
+		stepBtn.disabled = false;
+		stepBtn.style.cursor = "initial";
+		revertBtn.disabled = false;
+		revertBtn.style.cursor = "initial";
+	}
+	
+	if(login === 'sl' && currentTurn.status === 'fi') {
+		loadPendingEvents();
+		show(document.getElementById("eventTabsButton"));
+	} else {
+		hide(document.getElementById("eventTabsButton"));
+		stepBtn.disabled = true;
+		stepBtn.style.cursor = "not-allowed";
+		revertBtn.disabled = true;
+		revertBtn.style.cursor = "not-allowed";
+	}
+	
+	date.innerHTML =  "Monat " + months[currentTurn.turn%8] + " des Jahres "+ Math.ceil(currentTurn.turn/8) + " (Zug " + currentTurn.turn + ", ";
+	if (currentTurn.realm === null || currentTurn.status === 'fi') { 
+		// GM's turn
+		date.innerHTML += "SL) ";
+	} else { // a realm's turn
+		date.innerHTML += currentTurn.realm + ") ";
+	}
+	date.style="width:340px;float:left;line-height:30px;"
+	
+	if (currentTurn.turn%8 === 1 || currentTurn.turn%8 === 5) {
+		spec.innerHTML =  " Rüstmonat";
+	spec.style="width:100px;float:left;line-height:30px;"
+	} else if (currentTurn.turn%8 === 4 || currentTurn.turn%8 === 0) {
+		spec.innerHTML =  " Einkommensmonat";
+	spec.style="width:160px;float:left;line-height:30px;"
+	}
+	spec.style="width:0px;float:left;line-height:30px;"
+	
+	topBar.innerHTML = '';
+	topBar.appendChild(date);
+	topBar.appendChild(nextTurnBtn);
+	topBar.appendChild(stepBtn);
+	topBar.appendChild(revertBtn);
+	topBar.appendChild(spec);
 }
 
 function drawRemainingMovement(ctx, pos, scale){
