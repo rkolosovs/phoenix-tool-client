@@ -11,9 +11,10 @@ function battleHandler(participants, x, y) {
 	this.attackList = document.getElementById("attackArmiesBox");
 	this.unsortedList = document.getElementById("unsortedArmiesBox");
 	this.defenseList = document.getElementById("defenseArmiesBox");
-	//both boxes under the lists of troops
+	//both boxes under the lists of troops and the Fight! button
 	this.attackTroopCount = document.getElementById("attackBattleSide");
 	this.defenseTroopCount = document.getElementById("defenseBattleSide");
+	this.battleButton = document.getElementById("battleButton");
 	//dice rolls
 	this.attackDice = document.getElementById("attackDiceRoll");
 	this.defenseDice = document.getElementById("defenseDiceRoll");
@@ -155,6 +156,14 @@ function battleHandler(participants, x, y) {
 	}
 	
 	this.updateDisplay = function(){
+		if(this.attackSide.length === 0 || this.defenseSide.length === 0){
+			this.battleButton.disabled = true;
+			this.battleButton.style.cursor = "not-allowed";
+		} else {
+			this.battleButton.disabled = false;
+			this.battleButton.style.cursor = "initial";
+		}
+		
 		this.attackList.innerHTML = "";
 		this.attackSide.forEach(function(item, index){
 			var listItem = document.createElement("DIV");

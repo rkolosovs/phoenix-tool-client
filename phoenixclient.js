@@ -327,11 +327,12 @@ function registerRightClick(){
 						}
 
 						for (var j = 0; j < listOfArmyCoordinates.length; j++) {
-							var a = listOfArmyCoordinates[j];
-							if (a.x === listOfArmyCoordinates[selectedArmy].x && a.y === listOfArmyCoordinates[selectedArmy].y && a.a !== listOfArmyCoordinates[selectedArmy].a) {
-								participants.push({armyId: a.a.armyId, realm: a.ownerTag()});
+							var someArmy = listOfArmyCoordinates[j];
+							if (someArmy.x === listOfArmyCoordinates[selectedArmy].x && someArmy.y === listOfArmyCoordinates[selectedArmy].y 
+									&& someArmy.a !== listOfArmyCoordinates[selectedArmy].a) {
+								participants.push({armyId: someArmy.a.armyId, realm: someArmy.ownerTag()});
 								//in case they are enemies
-								if (a.owner !== listOfArmyCoordinates[selectedArmy].owner) {
+								if (someArmy.owner !== listOfArmyCoordinates[selectedArmy].owner) {
 									battlePossible = true;
 								}
 								//MultipleArmies - even if not friendly
@@ -342,21 +343,24 @@ function registerRightClick(){
 								//4. move from multi but still multifield left
 								//5. move from multi to multi
 								
-								if(a.multiArmyField === true){//2.
-									addToMultifield(a, listOfArmyCoordinates[selectedArmy]);
+								if(someArmy.multiArmyField === true){//2.
+									addToMultifield(someArmy, listOfArmyCoordinates[selectedArmy]);
 								}
 								else{//1.
 									var templist =[];//creating a list of armies to add to the list of multifieldarmies
-									templist.push(a);
+									templist.push(someArmy);
 									templist.push(listOfArmyCoordinates[selectedArmy]);
 									listOfMultiArmyFields.push(templist);
-									a.multiArmyField = true;
+									someArmy.multiArmyField = true;
 									listOfArmyCoordinates[selectedArmy].multiArmyField = true;
 								}
 							}
 						}
+						
 						if (battlePossible) {
 							var inserted = false;
+							participants.push({armyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+								realm: listOfArmyCoordinates[selectedArmy].ownerTag()});
 							for (var j = 0; j < preparedEvents.length; j++){
 								if(preparedEvents[j].type === "battle" && 
 										preparedEvents[j].content.x === listOfArmyCoordinates[selectedArmy].x && 
@@ -663,7 +667,6 @@ function canMove(realm, id, fromX, fromY, toX, toY){
 //end of helper methods for event status determining
 
 function fillEventList() {
-	console.log("fillEventList()");
 	var eventList = document.getElementById("eventsTab");
 	eventList.innerHTML = "";
 	determineEventStatus();
@@ -799,7 +802,8 @@ function checkEvent(num) {
 			var battle = new battleHandler(partips, cont.x, cont.y);
 			document.getElementById("attackDiceRoll").onchange = function(){battle.updateDisplay()};
 			document.getElementById("defenseDiceRoll").onchange = function(){battle.updateDisplay()};
-			document.getElementById("battleButton").onclick = function(){
+			var battleButton = document.getElementById("battleButton");
+			battleButton.onclick = function(){
 				battle.resolve();
 				hide(battleBox);
 				event.status = 'checked';
@@ -808,6 +812,8 @@ function checkEvent(num) {
 //				console.log(listOfArmyCoordinates);
 //				sendCheckEvent(event.pk, event.type);
 			};
+			battleButton.disabled = true;
+			battleButton.style.cursor = "not-allowed";
 			document.getElementById("closeBattleButton").onclick = function(){
 				hide(battleBox);
 			};
@@ -964,45 +970,10 @@ function openTab(evt, tabName) {
 
     // Show the current tab, and add an "active" class to the button that opened
 	// the tab
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
-
-function nextTurn() {
-	var message = "";
-	if (currentTurn.realm === null) {
-		message = "Do you want to end the pre-turn phase?";
-	} else if (currentTurn.status === 'fi') {
-		var unprocessedEvents = pendingEvents.some(function(event){
-			return (event.status === 'available' || event.status === 'withheld' ||
-				event.status === 'impossible');
-		});
-		if (unprocessedEvents){
-			message = "Some events are unprocessed.";
-		}
-		message += ("Do you want to end processing the turn of " + currentTurn.realm+"?");
-	} else if (login === 'sl') {
-		message = "Do you want to end the turn of "+ currentTurn.realm+"?";
-	} else {
-		message = "Do you want to end your turn?";
-	}
-
-	if (confirm(message)){
-		if(login === 'sl' && currentTurn.status === 'fi') { //SL sends DB change requests
-			saveFields();
-			saveRivers();
-			saveBuildings();
-			saveArmies();
-			saveFactionsTerritories();
-		} else { //Players and SL during player's turn send events
-			for (var i = 0; i < preparedEvents.length; i++) {
-				var cPE = preparedEvents[i];
-				var cPEContent = JSON.stringify(cPE.content);
-				sendNewEvent(cPE.type, cPEContent);
-			}
-		}
-		sendNextTurn();
-	}
+    if(evt !== undefined && tabName !== ""){
+    	document.getElementById(tabName).style.display = "block";
+    	evt.currentTarget.className += " active";
+    }
 }
 
 function init() {

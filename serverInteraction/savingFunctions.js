@@ -18,7 +18,6 @@ function saveFields() { // saves the current fields on the server
 			dataToServerString = dataToServerString + changedFields[i].y
 		}
 	}
-	console.log("start");
 	$.post({
 		url: url + "/databaseLink/savefielddata/",
 		data: {
@@ -37,7 +36,14 @@ function saveFields() { // saves the current fields on the server
 			}
 		}
 	});
-	console.log("end");
+}
+
+function sendAllPreparedEvents(){
+	for (var i = 0; i < preparedEvents.length; i++) {
+		var cPE = preparedEvents[i];
+		var cPEContent = JSON.stringify(cPE.content);
+		sendNewEvent(cPE.type, cPEContent);
+	}
 }
 
 function saveRivers() { // saves the current rivers on the server
@@ -55,8 +61,6 @@ function saveRivers() { // saves the current rivers on the server
 			dataToServerString = dataToServerString + rivers[i][1][1]
 		}
 	}
-	console.log("start");
-	console.log(rivers);
 	$.post({
 		url: url + "/databaseLink/saveriverdata/",
 		data: {
@@ -75,12 +79,9 @@ function saveRivers() { // saves the current rivers on the server
 			}
 		}
 	});
-	console.log("end");
 }
 
 function saveBuildings() { // saves the current buildings on the server
-	console.log(changedBuildings);
-	console.log("changed Buildings length: " + changedBuildings.length);
 	var dataToServerString = "";
 	for (var i = 0; i < changedBuildings.length; i++) {
 		if (i != changedBuildings.length - 1) {
@@ -117,7 +118,6 @@ function saveBuildings() { // saves the current buildings on the server
 					dataToServerString = dataToServerString + changedBuildings[i][0] + ";"
 			}
 		} else {
-			console.log("at last entry in datatoserverstring, i = " + i);
 			switch (changedBuildings[i][1].type) {
 				case 0:
 				case 1:
@@ -151,7 +151,6 @@ function saveBuildings() { // saves the current buildings on the server
 			}
 		}
 	}
-	console.log("data to Server String: " + dataToServerString);
 	$.post({
 		url: url + "/databaseLink/savebuildingdata/",
 		data: {
@@ -170,7 +169,6 @@ function saveBuildings() { // saves the current buildings on the server
 			}
 		}
 	});
-	console.log("end");
 }
 
 function saveArmies() { // saves the current armies on the server
@@ -208,7 +206,6 @@ function saveArmies() { // saves the current armies on the server
 			}
 		}
 	});
-	console.log("end");
 }
 
 function saveFactionsTerritories(){ // saves the faction territories on the server
