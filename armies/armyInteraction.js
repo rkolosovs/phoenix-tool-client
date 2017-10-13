@@ -443,6 +443,37 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
     this.result = function(attackRoll, defenseRoll){
         //TODO
         return {victor: 'tie', attackerLosses: [1000], defenderLosses: [1000]};
+
+        var attackerFightingNumbers = armiesAttack.map((elem) => (elem.count));
+        var defenderFightingNumbers = armiesDefense.map((elem) => {
+            if(elem.armyType() === 3){
+                return elem.count + elem.lkp * 5 + elem.skp * 10;
+            } else {
+                return elem.count;
+            }
+        });
+
+        //TODO: Compute GP values for all armies.
+
+        //TODO: Compute each side's combat power
+
+        //TODO: Determine winner and looser
+
+        //TODO: Determine base losses
+
+        //TODO: Determine loss factor
+
+        //TODO: Determine overall losses
+
+        //TODO: Determine army size based losses for each army
+
+        //TODO: Determine GP relation (cut? average?)
+
+        //TODO: Determine GP differences
+
+        //TODO: Determine GP modified loss for each army
+
+        //TODO: Return proper result with proper losses
     }
 }
 
