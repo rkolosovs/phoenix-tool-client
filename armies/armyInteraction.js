@@ -771,7 +771,12 @@ function fernkampf(dicerollsL, dicerollsS, badConditions, shooter, target, chars
 
 //to fill the targetList
 function aim(){
-	listOfArmyCoordinates[selectedArmy].findToFire();
+	listOfArmyCoordinates[selectedArmy].findShootingTargets();
+}
+
+//to actually shoot stuff, with events
+function shoot(){
+
 }
 
 // the splitArmy funtion of the split box

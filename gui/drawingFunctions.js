@@ -678,11 +678,11 @@ function drawShootingTargets(ctx, x, y, scale, selectedArmy){
 	if(selectedArmy !== undefined){
 		var targets = listOfArmyCoordinates[selectedArmy].targetList;
 		for (var i = 0; i < targets.length; i++) {
-			ctx.lineWidth = scale/8;
+			ctx.lineWidth = scale/10;
 			ctx.strokeStyle='#FF0000';
 			var pos = computePosition(x, y, targets[i][0], targets[i][1], scale); //get fields position
 			ctx.beginPath();
-			ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/16, 0, 2 * Math.PI, false);
+			ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/20, 0, 2 * Math.PI, false);
 			ctx.stroke();
 		}
 	}

@@ -539,21 +539,19 @@ function armyCoordinates(army, coordX, coordY, owner) {
     }
 
     //to find all fields in a two tile proximity
-    this.findToFire = function(){
+    this.findShootingTargets = function(){
         var origin = new showHex(this.x, this.y);
 
         //get all neighboring tiles
         this.targetList = origin.neighbors();
         var templist = origin.neighbors();
 
-        //adding the range
+        //adding the range identifier showing the distange to origin
         for(var i = 0; i < this.targetList.length; i++){
             this.targetList[i].push(1);
         }
 
-
         if(this.a.skp >0){//in a 2 tile range
-
             for(var i = 0; i < templist.length; i++){
                 var tempneigh = new showHex(templist[i][0], templist[i][1]);
                 var tempneighList = tempneigh.neighbors();
@@ -567,40 +565,44 @@ function armyCoordinates(army, coordX, coordY, owner) {
                         
                     }
                     if(found  == false)
-                        //tempneighList[j].push(2);//the 2 is the range
-                        this.targetList.push([tempneighList[j][0], tempneighList[j][1], 2]);
+                        this.targetList.push([tempneighList[j][0], tempneighList[j][1], 2]);//the 2 is the rangeidentifier 
                 }
             }
         }
+
 
         templist = this.targetList.slice();
         //to find out the conditions and maybe kick out if not shootable
         for(var i = templist.length -1; i >= 0; i--){
             var target = new showHex(templist[i][0], templist[i][1]);
             if(this.a.skp > 0){//skp shooting
-                if(templist[i][2] == 1){
-                    if(target.height() - origin.height() <= 2){
-
-                    }
-                    else{
+                if(templist[i][2] == 1){//for range of 1
+                    if(target.height() - origin.height() > 2){
                         this.targetList.splice(i,1);
                     }
                 }
-                else if(templist[i][2] == 2){
-                    //also if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
-                    if(target.height() - origin.height() <= 1){
-
-                    }
-                    else{
+                else if(templist[i][2] == 2){//for range of 2
+                    if(target.height() - origin.height() > 1){
                         this.targetList.splice(i,1);
+                    }
+                    else{//if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
+                        var targetNeighbors = target.neighbors();
+                        var originNeighbors = origin.neighbors();
+                        for(var j = 0; j < targetNeighbors.length; j++){
+                            for(var k = 0; k < originNeighbors.length; k++){
+                                if(targetNeighbors[j][0] == originNeighbors[k][0] && targetNeighbors[j][1] == originNeighbors[k][1]){
+                                    var commonTile = new showHex(targetNeighbors[j][0], targetNeighbors[j][1]);
+                                    if(commonTile.height() - origin.height() > 1){
+                                        this.targetList.splice(i,1);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
             else{//for lkp shooting
-                if(target.height() - origin.height() <= 1){
-
-                }
-                else{
+                if(target.height() - origin.height() > 1){
                     this.targetList.splice(i,1);
                 }
             }

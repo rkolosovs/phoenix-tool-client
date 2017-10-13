@@ -292,9 +292,9 @@ function activateUnMountBox(){
 }
 
 
-		function activateShootBox(){
-			document.getElementById("shootBox").style.display = "";
-		}
+function activateShootBox(){
+	document.getElementById("shootBox").style.display = "";
+}
 
 
 function activateSplitbox(){
@@ -588,6 +588,7 @@ function restoreInfoBox(){
 	document.getElementById("splitFleetBox").style.display = "none";
 	document.getElementById("transmuteBox").style.display = "none";
 	document.getElementById("mergeBox").style.display = "none";
+	document.getElementById("shootBox").style.display = "none";
 	if(document.getElementById("godmodeBox").style.visibility != "visible")
 	{
 		document.getElementById("infoBox").style.display = "";
