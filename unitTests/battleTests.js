@@ -231,7 +231,7 @@ module( "Battle" , function() {
 					new seeHeer(313, 100, 50, 0, 0, true)//army of a defending realm
 				];
 				var battle = new schlacht(attackingArmies, defendingArmies, null, null, 2, 2);
-				t.resultEquals( battle.result(12, 8), {victor: 'attacker', attackerLosses: [35.60, 184, 252.20], defenderLosses: [426.02, 331.39, 59.47} );
+				t.resultEquals( battle.result(12, 8), {victor: 'attacker', attackerLosses: [35.60, 184, 252.20], defenderLosses: [426.02, 331.39, 59.47]} );
 				//TODO Defender not completely wiped out. Check in with the SL to see what is to be done about it.
 			});
 		});
@@ -239,22 +239,22 @@ module( "Battle" , function() {
 	module( "Overrun", {
 		before: function() {
 			defenderArmies = [
-				new heer(111, 1500, 10, 0, 0, 0, false),
-				new heer(112, 1000, 10, 0, 0, 0, false),
-				new heer(113, 1000, 10, 0, 0, 0, true),
-				new reiterHeer(211, 1000, 15, false),
-				new seeHeer(311, 20, 5, 0, 0, false),
-				new seeHeer(314, 10, 5, 3, 2, false),
-				new seeHeer(315, 10, 5, 0, 0, true)
+				new heer(111, 1500, 10, 0, 0, 0, false),//0
+				new heer(112, 1000, 10, 0, 0, 0, false),//1
+				new heer(113, 1000, 10, 0, 0, 0, true),//2
+				new reiterHeer(211, 1000, 15, false),//3
+				new seeHeer(311, 20, 5, 0, 0, false),//4
+				new seeHeer(314, 10, 5, 3, 2, false),//5
+				new seeHeer(315, 10, 5, 0, 0, true)//6
 			];
 			attackerArmies = [
-				new heer(123, 15000, 1, 0, 0, 0, false),
-				new heer(124, 10000, 1, 0, 0, 0, true),
-				new reiterHeer(224, 10000, 1, false),
-				new seeHeer(321, 200, 5, 0, 0, false),
-				new seeHeer(322, 100, 5, 0, 0, false),
-				new seeHeer(325, 99, 5, 3, 2, false),
-				new seeHeer(326, 200, 5, 0, 0, true)
+				new heer(123, 15000, 1, 0, 0, 0, false),//0
+				new heer(124, 10000, 1, 0, 0, 0, true),//1
+				new reiterHeer(224, 10000, 1, false),//2
+				new seeHeer(321, 200, 5, 0, 0, false),//3
+				new seeHeer(322, 100, 5, 0, 0, false),//4
+				new seeHeer(325, 99, 5, 3, 2, false),//5
+				new seeHeer(326, 200, 5, 0, 0, true)//6
 			];
 			fieldTypes = [2, 0];//plains, water
 		},
