@@ -440,6 +440,29 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
             reduce((total, elem) => (elem.count + total), 0);
     }
 
+    this.terrainGP = function(army, attacker) {
+        //TODO: compute bonuses from terrain including bonuses form defending a production building
+        //TODO: once an army knows its previous position the attacker parameter can be removed
+        return 0;
+    }
+
+    this.characterGP = function(army) {
+        //TODO: compute GP from own character fighting in battle.
+        //BLOCKER: requires characters and armies to know their realm allegiance.
+        //currently army coordinates have the owner of an army and chars don't have it at all
+        return 0;
+    }
+
+    this.directionalTerrainGP = function(army) {
+        //TODO: compute GP from directional terrain like attacking from a forest, up/down hill, over a wall etc.
+        //BLOCKER: an army doesn't know its position or former position
+        return 0;
+    }
+
+    this.computeCombatPower = function(fightingNumbers, listOfGP) {
+        return fightingNumbers.map((elem, index) => (elem * (1 + (listOfGP[index]/200))));
+    }
+
     this.result = function(attackRoll, defenseRoll){
         //TODO
         return {victor: 'tie', attackerLosses: [1000], defenderLosses: [1000]};
@@ -453,15 +476,24 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
             }
         });
 
-        //TODO: Compute GP values for all armies.
+        var attackerGP = armiesAttack.map((elem) => {
+            return elem.leaderGp() + this.terrainGP(elem, true) + this.characterGP(elem) + this.directionalTerrainGP(elem);
+        });
+        var defenderGP = armiesDefense.map((elem) => {
+            return elem.leaderGp() + this.terrainGP(elem, false) + this.characterGP(elem) + this.directionalTerrainGP(elem);
+        });
 
-        //TODO: Compute each side's combat power
+        var attackerCombatPower = computeCombatPower(attackerFightingNumbers, attackerGP);
+        var defenderCombatPower = computeCombatPower(defenderFightingNumbers, defenderGP);
 
-        //TODO: Determine winner and looser
+        var attackerPowerSum = attackerCombatPower.reduce((total, elem) => (total + elem), 0);
+        var defenderPowerSum = defenderCombatPower.reduce((total, elem) => (total + elem), 0);
 
-        //TODO: Determine base losses
+        var attackerBaseLosses = defenderFightingNumbers.reduce((total, elem) => (total + elem), 0);
+        var defenderBaseLosses = attackerFightingNumbers.reduce((total, elem) => (total + elem), 0);
 
         //TODO: Determine loss factor
+//        var attackerLossFactor =
 
         //TODO: Determine overall losses
 
@@ -472,6 +504,8 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
         //TODO: Determine GP differences
 
         //TODO: Determine GP modified loss for each army
+
+        //TODO: Determine winner and looser
 
         //TODO: Return proper result with proper losses
     }

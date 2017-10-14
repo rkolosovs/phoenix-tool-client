@@ -15,7 +15,7 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
     this.armyType = function(){
         return(Math.floor(this.armyId/100));
     }
-    //berechnet die GP aus Heerführern
+    //berechnet die GP aus Heerführern. Includes bonus GP for being guard
     this.leaderGp = function(){
         var gp = 0;
         if(this.isGuard){
