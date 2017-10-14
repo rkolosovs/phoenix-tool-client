@@ -265,6 +265,7 @@ function hide(element) {
 				document.getElementById("heightPoints").innerHTML = null;
 				document.getElementById("mount").style.display = "none";
 				document.getElementById("unMount").style.display = "none";
+				document.getElementById("shoot").style.display = "none";
 				document.getElementById("splitBtn").style.display = "none";
 				// change Box (GM)
 				document.getElementById("guardChangeInput").style.display = "none";

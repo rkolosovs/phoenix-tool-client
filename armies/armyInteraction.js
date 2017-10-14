@@ -771,12 +771,23 @@ function fernkampf(dicerollsL, dicerollsS, badConditions, shooter, target, chars
 
 //to fill the targetList
 function aim(){
+	//shootTODO check if loaded in ship
 	listOfArmyCoordinates[selectedArmy].findShootingTargets();
 }
 
 //to actually shoot stuff, with events
 function shoot(){
-
+	var x = 1;//just temporary so it compiles
+	preparedEvents.push({
+		type: "shoot", content: {
+			shooterID: listOfArmyCoordinates[selectedArmy].a.armyId, 
+			realm: listOfArmyCoordinates[selectedArmy].ownerTag(),
+			LKPcount: x,
+			SKPcount: x,
+			toX: x,
+			toY: x
+		}
+	});
 }
 
 // the splitArmy funtion of the split box

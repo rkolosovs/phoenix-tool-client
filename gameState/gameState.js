@@ -127,6 +127,28 @@ function nextTurn() {
     					}
 					}
 				});
+			}else if (cPE.type === "shoot") { //shootTODO
+				$.post({
+					url: url + "/databaseLink/shootevent/",
+					data: {
+						authorization: authenticationToken,
+						content: cPEContent
+					},
+					statusCode: {
+						200: function() {
+							console.log("success");
+						},
+						400: function() {
+							alert("Invalid input. Something went wrong with the shooting of armies.");
+						},
+						401: function() {
+    	  					alert('Authorisation failure. Please log in.');
+    					},
+    					403: function() {
+    	  					alert('Access denied. You can only send shooting events involving your troops.');
+    					}
+					}
+				});
 			}
 		}
 		
