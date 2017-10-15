@@ -878,6 +878,8 @@ function splitSelectedArmy(){
 		var newArmyId = generateArmyId(1,listOfArmyCoordinates[selectedArmy].owner);
 		var newArmy = new heer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, false);
 		var newArmyCoordinates = new armyCoordinates(newArmy, listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y, listOfArmyCoordinates[selectedArmy].owner);
+		newArmyCoordinates.setRemainingMovePoints(listOfArmyCoordinates[selectedArmy].remainingMovePoints);
+		newArmyCoordinates.setRemainingHeightPoints(listOfArmyCoordinates[selectedArmy].remainingHeightPoints);
 		listOfArmyCoordinates.push(newArmyCoordinates);
 		listOfArmyCoordinates[selectedArmy].a.removeSoldiers(toSplit);
 		listOfArmyCoordinates[selectedArmy].a.removeLeaders(leadersToSplit);
@@ -909,6 +911,8 @@ function splitSelectedArmy(){
 		var newArmyId = generateArmyId(2,listOfArmyCoordinates[selectedArmy].owner);
 		var newArmy = new reiterHeer(newArmyId, toSplit, leadersToSplit, false);
 		var newArmyCoordinates = new armyCoordinates(newArmy, listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y, listOfArmyCoordinates[selectedArmy].owner);
+		newArmyCoordinates.setRemainingMovePoints(listOfArmyCoordinates[selectedArmy].remainingMovePoints);
+		newArmyCoordinates.setRemainingHeightPoints(listOfArmyCoordinates[selectedArmy].remainingHeightPoints);
 		listOfArmyCoordinates.push(newArmyCoordinates);
 		listOfArmyCoordinates[selectedArmy].a.removeSoldiers(toSplit);
 		listOfArmyCoordinates[selectedArmy].a.removeLeaders(leadersToSplit);
@@ -935,6 +939,8 @@ function splitSelectedArmy(){
 		var newArmyId = generateArmyId(3,listOfArmyCoordinates[selectedArmy].owner);
 		var newArmy = new seeHeer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, false);
 		var newArmyCoordinates = new armyCoordinates(newArmy, listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y, listOfArmyCoordinates[selectedArmy].owner);
+		newArmyCoordinates.setRemainingMovePoints(listOfArmyCoordinates[selectedArmy].remainingMovePoints);
+		newArmyCoordinates.setRemainingHeightPoints(listOfArmyCoordinates[selectedArmy].remainingHeightPoints);
 		listOfArmyCoordinates.push(newArmyCoordinates);
 		listOfArmyCoordinates[selectedArmy].a.removeSoldiers(toSplit);
 		listOfArmyCoordinates[selectedArmy].a.removeLeaders(leadersToSplit);
@@ -1112,6 +1118,14 @@ function transferTroopsFromSelectedArmy(mergeId){
 			listOfArmyCoordinates[mergeId].a.lkp += lkpToSplit;
 			listOfArmyCoordinates[selectedArmy].a.skp -= skpToSplit;
 			listOfArmyCoordinates[mergeId].a.skp += skpToSplit;
+			if(listOfArmyCoordinates[selectedArmy].remainingMovePoints<listOfArmyCoordinates[mergeId].remainingMovePoints)
+			{
+				listOfArmyCoordinates[mergeId].setRemainingMovePoints(listOfArmyCoordinates[selectedArmy.remainingMovePoints]);
+			}
+			if(listOfArmyCoordinates[selectedArmy].remainingHeightPoints<listOfArmyCoordinates[mergeId].remainingHeightPoints)
+			{
+				listOfArmyCoordinates[mergeId].setRemainingHeightPoints(listOfArmyCoordinates[selectedArmy.remainingHeightPoints]);
+			}
 			if(login != 'sl')
 			{
 				preparedEvents.push({
@@ -1147,6 +1161,14 @@ function transferTroopsFromSelectedArmy(mergeId){
 			listOfArmyCoordinates[mergeId].a.lkp += lkpToSplit;
 			listOfArmyCoordinates[selectedArmy].a.skp -= skpToSplit;
 			listOfArmyCoordinates[mergeId].a.skp += skpToSplit;
+			if(listOfArmyCoordinates[selectedArmy].remainingMovePoints<listOfArmyCoordinates[mergeId].remainingMovePoints)
+			{
+				listOfArmyCoordinates[mergeId].setRemainingMovePoints(listOfArmyCoordinates[selectedArmy.remainingMovePoints]);
+			}
+			if(listOfArmyCoordinates[selectedArmy].remainingHeightPoints<listOfArmyCoordinates[mergeId].remainingHeightPoints)
+			{
+				listOfArmyCoordinates[mergeId].setRemainingHeightPoints(listOfArmyCoordinates[selectedArmy.remainingHeightPoints]);
+			}
 			if(login != 'sl')
 			{
 				preparedEvents.push({
@@ -1184,6 +1206,14 @@ function transferTroopsFromSelectedArmy(mergeId){
 			listOfArmyCoordinates[mergeId].a.lkp += lkpToSplit;
 			listOfArmyCoordinates[selectedArmy].a.skp -= skpToSplit;
 			listOfArmyCoordinates[mergeId].a.skp += skpToSplit;
+			if(listOfArmyCoordinates[selectedArmy].remainingMovePoints<listOfArmyCoordinates[mergeId].remainingMovePoints)
+			{
+				listOfArmyCoordinates[mergeId].setRemainingMovePoints(listOfArmyCoordinates[selectedArmy.remainingMovePoints]);
+			}
+			if(listOfArmyCoordinates[selectedArmy].remainingHeightPoints<listOfArmyCoordinates[mergeId].remainingHeightPoints)
+			{
+				listOfArmyCoordinates[mergeId].setRemainingHeightPoints(listOfArmyCoordinates[selectedArmy.remainingHeightPoints]);
+			}
 			if(login != 'sl')
 			{
 				preparedEvents.push({
@@ -1219,6 +1249,14 @@ function mergeSelectedArmy(mergeId){
 		listOfArmyCoordinates[mergeId].a.mounts += listOfArmyCoordinates[selectedArmy].a.mounts;
 		listOfArmyCoordinates[mergeId].a.lkp += listOfArmyCoordinates[selectedArmy].a.lkp;
 		listOfArmyCoordinates[mergeId].a.skp += listOfArmyCoordinates[selectedArmy].a.skp;
+		if(listOfArmyCoordinates[selectedArmy].remainingMovePoints<listOfArmyCoordinates[mergeId].remainingMovePoints)
+		{
+			listOfArmyCoordinates[mergeId].setRemainingMovePoints(listOfArmyCoordinates[selectedArmy.remainingMovePoints]);
+		}
+		if(listOfArmyCoordinates[selectedArmy].remainingHeightPoints<listOfArmyCoordinates[mergeId].remainingHeightPoints)
+		{
+			listOfArmyCoordinates[mergeId].setRemainingHeightPoints(listOfArmyCoordinates[selectedArmy.remainingHeightPoints]);
+		}
 		if(login != 'sl')
 		{
 			preparedEvents.push({
@@ -1240,6 +1278,14 @@ function mergeSelectedArmy(mergeId){
 	{
 		listOfArmyCoordinates[mergeId].a.count += listOfArmyCoordinates[selectedArmy].a.count;
 		listOfArmyCoordinates[mergeId].a.leaders += listOfArmyCoordinates[selectedArmy].a.leaders;
+		if(listOfArmyCoordinates[selectedArmy].remainingMovePoints<listOfArmyCoordinates[mergeId].remainingMovePoints)
+		{
+			listOfArmyCoordinates[mergeId].setRemainingMovePoints(listOfArmyCoordinates[selectedArmy.remainingMovePoints]);
+		}
+		if(listOfArmyCoordinates[selectedArmy].remainingHeightPoints<listOfArmyCoordinates[mergeId].remainingHeightPoints)
+		{
+			listOfArmyCoordinates[mergeId].setRemainingHeightPoints(listOfArmyCoordinates[selectedArmy.remainingHeightPoints]);
+		}
 		if(login != 'sl')
 		{
 			preparedEvents.push({
@@ -1264,7 +1310,14 @@ function mergeSelectedArmy(mergeId){
 		listOfArmyCoordinates[mergeId].a.lkp += listOfArmyCoordinates[selectedArmy].a.lkp;
 		listOfArmyCoordinates[mergeId].a.skp += listOfArmyCoordinates[selectedArmy].a.skp;
 		listOfArmyCoordinates[mergeId].a.loadedArmies = listOfArmyCoordinates[mergeId].a.loadedArmies.concat(listOfArmyCoordinates[selectedArmy].a.loadedArmies);
-
+		if(listOfArmyCoordinates[selectedArmy].remainingMovePoints<listOfArmyCoordinates[mergeId].remainingMovePoints)
+		{
+			listOfArmyCoordinates[mergeId].setRemainingMovePoints(listOfArmyCoordinates[selectedArmy.remainingMovePoints]);
+		}
+		if(listOfArmyCoordinates[selectedArmy].remainingHeightPoints<listOfArmyCoordinates[mergeId].remainingHeightPoints)
+		{
+			listOfArmyCoordinates[mergeId].setRemainingHeightPoints(listOfArmyCoordinates[selectedArmy.remainingHeightPoints]);
+		}
 		console.log("the loaded armies in the new fleet are:");
 		console.log(listOfArmyCoordinates[mergeId].a.loadedArmies);
 		if (listOfArmyCoordinates[selectedArmy].a.loadedArmies.length > 0)
@@ -1326,6 +1379,7 @@ function deleteSelectedArmy(){
 	deleteArmy(selectedArmy);
 }
 
+// deletes the army at listOfArmyCoordinates[index] and replaces it with listOfArmyCoordinates[listOfArmyCoordinates.length-1];
 function deleteArmy(index){
 	listOfArmyCoordinates[index] = listOfArmyCoordinates[listOfArmyCoordinates.length-1];
 	listOfArmyCoordinates.pop();

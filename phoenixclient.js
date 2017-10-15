@@ -489,7 +489,11 @@ function determineEventStatus(){
 			{
 				var army1 = listOfArmyCoordinates[findArmyPlaceInList(content.fromArmy, content.realm)];
 				var army2 = listOfArmyCoordinates[findArmyPlaceInList(content.toArmy, content.realm)];
-				if(army1.a.armyType() == army2.a.armyType() && army1.x == army2.x && army1.y == army2.y)
+				if(army1 == undefined || army2 == undefined)
+				{
+					pendingEvents[i].status = 'withheld';
+				}
+				else if(army1.a.armyType() == army2.a.armyType() && army1.x == army2.x && army1.y == army2.y)
 				{
 					pendingEvents[i].status = 'available';
 				} 
@@ -509,7 +513,11 @@ function determineEventStatus(){
 			{
 				var army1 = listOfArmyCoordinates[findArmyPlaceInList(content.fromArmy, content.realm)];
 				var army2 = listOfArmyCoordinates[findArmyPlaceInList(content.toArmy, content.realm)];
-				if((army1.a.armyType() == army2.a.armyType() || (content.troops == 0 && content.mounts == 0 && content.lkp == 0 && conten.skp == 0))
+				if(army1 == undefined || army2 == undefined)
+				{
+					pendingEvents[i].status = 'withheld';
+				}
+				else if((army1.a.armyType() == army2.a.armyType() || (content.troops == 0 && content.mounts == 0 && content.lkp == 0 && conten.skp == 0))
 				&& army1.x == army2.x && army1.y == army2.y)
 				{
 					pendingEvents[i].status = 'available';
@@ -863,6 +871,8 @@ function checkEvent(num) {
 					army = new seeHeer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, false);
 				}
 				var armyCoords = new armyCoordinates(army, listOfArmyCoordinates[armyFromPlaceInList].x, listOfArmyCoordinates[armyFromPlaceInList].y, realm);
+				armyCoords.setRemainingMovePoints(listOfArmyCoordinates[armyFromPlaceInList].remainingMovePoints);
+				armyCoords.setRemainingHeightPoints(listOfArmyCoordinates[armyFromPlaceInList].remainingHeightPoints);
 				listOfArmyCoordinates.push(armyCoords);
 			}
 			event.status = 'checked';
