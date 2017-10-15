@@ -218,6 +218,14 @@ p.red {
 	color: red;
 }
 
+div.red {
+	color: red;
+}
+
+div.inline {
+    display: inline-block;
+}
+
 #nextTurnButton {
     background-image: url("images/nextturn_button.svg");
     float:left;
@@ -227,12 +235,37 @@ p.red {
     background-repeat: no-repeat;
     border: 2px solid #4CAF50;
     border-radius: 50%;
+    margin-left: 4px;
+}
+
+#stepButton {
+    background-image: url("images/step_button.svg");
+    float:left;
+    height: 30px;
+    width: 30px;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 2px solid #E1E31A;
+    border-radius: 50%;
+    margin-left: 4px;
+}
+
+#revertButton {
+    background-image: url("images/revert_button.svg");
+    float:left;
+    height: 30px;
+    width: 30px;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 2px solid #E3381A;
+    border-radius: 50%;
+    margin-left: 4px;
 }
 
 #battleBox {
 	right:35%;
 	top:15%;
-	width:30%;
+	width:40%;
 	height:65%;
 }
 
@@ -244,7 +277,7 @@ p.red {
 
 #attackBattleSide {
 	left:0.5%;
-	width:35%;
+	width:40%;
 	height:30%;
 	top:57%;
 	border: 2px solid grey;
@@ -253,7 +286,7 @@ p.red {
 
 #defenseBattleSide {
 	right:0.5%;
-	width:35%;
+	width:40%;
 	height:30%;
 	top:57%;
 	border: 2px solid grey;
@@ -263,13 +296,13 @@ p.red {
 
 #attackDiceRoll {
 	top:57%;
-	left:36%;
+	left:41%;
 	position: absolute;
 }
 
 #defenseDiceRoll {
 	top:57%;
-	right:36%;
+	right:41%;
 	position: absolute;
 }
 

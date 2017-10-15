@@ -327,11 +327,12 @@ function registerRightClick(){
 						}
 
 						for (var j = 0; j < listOfArmyCoordinates.length; j++) {
-							var a = listOfArmyCoordinates[j];
-							if (a.x === listOfArmyCoordinates[selectedArmy].x && a.y === listOfArmyCoordinates[selectedArmy].y && a.a !== listOfArmyCoordinates[selectedArmy].a) {
-								participants.push({armyId: a.a.armyId, realm: a.ownerTag()});
+							var someArmy = listOfArmyCoordinates[j];
+							if (someArmy.x === listOfArmyCoordinates[selectedArmy].x && someArmy.y === listOfArmyCoordinates[selectedArmy].y 
+									&& someArmy.a !== listOfArmyCoordinates[selectedArmy].a) {
+								participants.push({armyId: someArmy.a.armyId, realm: someArmy.ownerTag()});
 								//in case they are enemies
-								if (a.owner !== listOfArmyCoordinates[selectedArmy].owner) {
+								if (someArmy.owner !== listOfArmyCoordinates[selectedArmy].owner) {
 									battlePossible = true;
 								}
 								//MultipleArmies - even if not friendly
@@ -342,21 +343,24 @@ function registerRightClick(){
 								//4. move from multi but still multifield left
 								//5. move from multi to multi
 								
-								if(a.multiArmyField === true){//2.
-									addToMultifield(a, listOfArmyCoordinates[selectedArmy]);
+								if(someArmy.multiArmyField === true){//2.
+									addToMultifield(someArmy, listOfArmyCoordinates[selectedArmy]);
 								}
 								else{//1.
 									var templist =[];//creating a list of armies to add to the list of multifieldarmies
-									templist.push(a);
+									templist.push(someArmy);
 									templist.push(listOfArmyCoordinates[selectedArmy]);
 									listOfMultiArmyFields.push(templist);
-									a.multiArmyField = true;
+									someArmy.multiArmyField = true;
 									listOfArmyCoordinates[selectedArmy].multiArmyField = true;
 								}
 							}
 						}
+						
 						if (battlePossible) {
 							var inserted = false;
+							participants.push({armyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
+								realm: listOfArmyCoordinates[selectedArmy].ownerTag()});
 							for (var j = 0; j < preparedEvents.length; j++){
 								if(preparedEvents[j].type === "battle" && 
 										preparedEvents[j].content.x === listOfArmyCoordinates[selectedArmy].x && 
@@ -448,65 +452,6 @@ function getClickedField(){
 	return [column, row]; // return result
 }
 
-function writeTurnNumber() {
-	// get the top bar element from the HTML document
-	var topBar = document.getElementById('topBar');
-	var btn = document.getElementById('nextTurnButton');
-	var date = document.getElementById('date_text');
-	var spec = document.getElementById('special_text');
-	if (btn === null) {
-		btn = document.createElement("BUTTON");
-		btn.id = "nextTurnButton";
-		btn.addEventListener('click', function() {nextTurn()});
-		date = document.createElement("P");
-		date.align = "right";
-		date.id = "date_text";
-		spec = document.createElement("P");
-		spec.align = "left";
-		spec.id = "special_text";
-	}
-	
-	if (login !== 'sl' && (currentTurn.realm === null || currentTurn.status === 'fi' || login !== currentTurn.realm)) { 
-		// if not logged in as the current realm or SL
-		btn.disabled = true;
-		btn.style.cursor = "not-allowed";
-		btn.style.backgroundImage = "url(images/nextturn_button_disabled.svg)";
-	} else {
-		btn.disabled = false;
-		btn.style.cursor = "initial";
-		btn.style.backgroundImage = "url(images/nextturn_button.svg)";
-	}
-	
-	if(login === 'sl' && currentTurn.status === 'fi') {
-		loadPendingEvents();
-		show(document.getElementById("eventTabsButton"));
-	} else {
-		hide(document.getElementById("eventTabsButton"));
-	}
-	
-	date.innerHTML =  "Monat " + months[currentTurn.turn%8] + " des Jahres "+ Math.ceil(currentTurn.turn/8) + " (Zug " + currentTurn.turn + ", ";
-	if (currentTurn.realm === null || currentTurn.status === 'fi') { 
-		// GM's turn
-		date.innerHTML += "SL) ";
-	} else { // a realm's turn
-		date.innerHTML += currentTurn.realm + ") ";
-	}
-	date.style="width:340px;float:left;line-height:30px;"
-	
-	if (currentTurn.turn%8 === 1 || currentTurn.turn%8 === 5) {
-		spec.innerHTML =  " Rüstmonat";
-	spec.style="width:100px;float:left;line-height:30px;"
-	} else if (currentTurn.turn%8 === 4 || currentTurn.turn%8 === 0) {
-		spec.innerHTML =  " Einkommensmonat";
-	spec.style="width:160px;float:left;line-height:30px;"
-	}
-	spec.style="width:0px;float:left;line-height:30px;"
-	
-	topBar.innerHTML = '';
-	topBar.appendChild(date);
-	topBar.appendChild(btn);
-	topBar.appendChild(spec);
-}
 
 function mainButton() {
 	toggleVisibility(document.getElementById("bigBox"));
@@ -521,7 +466,8 @@ function determineEventStatus(){
 				event.status === 'withheld' || event.status === 'impossible'){
 			if(event.type === 'move'){
 				if(armyExistsAndIsLocated(content.realm, content.armyId, content.fromX, content.fromY) && 
-						!unprocessedBattleAtContainingArmy(content.realm, content.armyId, content.fromX, content.fromY)){
+						!unprocessedBattleAtContainingArmy(content.realm, content.armyId, content.fromX, content.fromY) && 
+						canMove(content.realm, content.armyId, content.fromX, content.fromY, content.toX, content.toY)){
 					pendingEvents[i].status = 'available';
 				} else if(armyExists(content.realm, content.armyId) && 
 						possibleMoveOfArmyTo(content.realm, content.armyId, content.fromX, content.fromY)){
@@ -686,28 +632,34 @@ function unprocessedBattleAtContainingArmy(realm, id, x, y){
 	}, this);
 }
 
-//TODO: This is a redundant implementation of code present in armyCoordinates move().
-//This should be merged to avaid inconsistencies.
 function canMove(realm, id, fromX, fromY, toX, toY){
 	var foundArmy = listOfArmyCoordinates.find(function(army){
 		return (army.a.armyId === id) && (army.ownerTag() === realm);
 	}, this);
-	if (foundArmy !== undefined) {
-		var origin = new showHex(fromX, fromY);
-        var destination = new showHex(toX, toY);
-		var streetPresent = buildings.some(function(building){
-			return (building.type === 8) && 
-				(((building.firstX == fromX && building.firstY == fromY) && (building.secondX == toX && building.secondY == toY)) || 
-					((building.secondX == toX && building.secondY == toY) && (building.firstX == fromX && building.firstY == fromY)));
-		});
-		var heightDifference = Math.abs((origin.height() - destination.height()));
-		//TODO: This is missing harbors
-		var enoughHeightPoints =  (foundArmy.remainingHeightPoints >= 1) &&
-			((heightDifference <= 2 && streetPresent) || (heightDifference <= 1));
-		//TODO: This is missin gbasically everything. But hey, the movement points are set as too high anyways right now.
-		//TODO: Change the TODO above once the movement points are no longer extreme high due to testing.
-		var enoughMovePoints = (foundArmy.remainingMovePoints >= 7);
-		return enoughHeightPoints && enoughMovePoints; 
+	if (foundArmy !== undefined && foundArmy.x === fromX && foundArmy.y === fromY) {
+		var adjacency = getAdjacency([fromX, fromY],[[toX, toY]]);
+		
+		if (adjacency.reduce((total, current) => (total || current), false)){
+			foundArmy.possibleMoves = [];
+			var direction = (adjacency.findIndex((dir) => dir === 1) + 1)%6;
+			foundArmy.moveToList(direction);
+			return foundArmy.possibleMoves.length > 0;
+		}
+//		var origin = new showHex(fromX, fromY);
+//        var destination = new showHex(toX, toY);
+//		var streetPresent = buildings.some(function(building){
+//			return (building.type === 8) && 
+//				(((building.firstX == fromX && building.firstY == fromY) && (building.secondX == toX && building.secondY == toY)) || 
+//					((building.secondX == toX && building.secondY == toY) && (building.firstX == fromX && building.firstY == fromY)));
+//		});
+//		var heightDifference = Math.abs((origin.height() - destination.height()));
+//		//TODO: This is missing harbors
+//		var enoughHeightPoints =  (foundArmy.remainingHeightPoints >= 1) &&
+//			((heightDifference <= 2 && streetPresent) || (heightDifference <= 1));
+//		//TODO: This is missin gbasically everything. But hey, the movement points are set as too high anyways right now.
+//		//TODO: Change the TODO above once the movement points are no longer extreme high due to testing.
+//		var enoughMovePoints = (foundArmy.remainingMovePoints >= 7);
+//		return enoughHeightPoints && enoughMovePoints; 
 	} else {
 		return false;
 	}
@@ -715,7 +667,6 @@ function canMove(realm, id, fromX, fromY, toX, toY){
 //end of helper methods for event status determining
 
 function fillEventList() {
-	console.log("fillEventList()");
 	var eventList = document.getElementById("eventsTab");
 	eventList.innerHTML = "";
 	determineEventStatus();
@@ -794,7 +745,7 @@ function deleteEvent(num) {
 		var event = pendingEvents[num];
 		event.status = 'deleted';
 		fillEventList();
-		sendDeleteEvent(event.pk, event.type);
+//		sendDeleteEvent(event.pk, event.type);
 	}
 	return del;
 }
@@ -814,22 +765,28 @@ function checkEvent(num) {
 			}
 			var adjacency = getAdjacency([army.x, army.y],[[cont.toX, cont.toY]]);
 			if (adjacency[0] === 1){
+				army.moveToList(1);
 				army.move(1);//move to ne
 			} else if (adjacency[1] === 1) {
+				army.moveToList(2);
 				army.move(2);//move to e
 			} else if (adjacency[2] === 1) {
+				army.moveToList(3);
 				army.move(3);//move to se
 			} else if (adjacency[3] === 1) {
+				army.moveToList(4);
 				army.move(4);//move to sw
 			} else if (adjacency[4] === 1) {
+				army.moveToList(5);
 				army.move(5);//move to w
 			} else if (adjacency[5] === 1) {
+				army.moveToList(0);
 				army.move(0);//move to nw
 			}
 			event.status = 'checked';
 			fillEventList();
 			drawStuff();
-			sendCheckEvent(event.pk, event.type);
+//			sendCheckEvent(event.pk, event.type);
 		} else if (event.type === "battle") {
 			var battleBox = document.getElementById("battleBox");
 			show(battleBox);
@@ -845,15 +802,18 @@ function checkEvent(num) {
 			var battle = new battleHandler(partips, cont.x, cont.y);
 			document.getElementById("attackDiceRoll").onchange = function(){battle.updateDisplay()};
 			document.getElementById("defenseDiceRoll").onchange = function(){battle.updateDisplay()};
-			document.getElementById("battleButton").onclick = function(){
+			var battleButton = document.getElementById("battleButton");
+			battleButton.onclick = function(){
 				battle.resolve();
 				hide(battleBox);
 				event.status = 'checked';
 				fillEventList();
 				drawStuff();
 //				console.log(listOfArmyCoordinates);
-				sendCheckEvent(event.pk, event.type);
+//				sendCheckEvent(event.pk, event.type);
 			};
+			battleButton.disabled = true;
+			battleButton.style.cursor = "not-allowed";
 			document.getElementById("closeBattleButton").onclick = function(){
 				hide(battleBox);
 			};
@@ -1013,45 +973,10 @@ function openTab(evt, tabName) {
 
     // Show the current tab, and add an "active" class to the button that opened
 	// the tab
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
-
-function nextTurn() {
-	var message = "";
-	if (currentTurn.realm === null) {
-		message = "Do you want to end the pre-turn phase?";
-	} else if (currentTurn.status === 'fi') {
-		var unprocessedEvents = pendingEvents.some(function(event){
-			return (event.status === 'available' || event.status === 'withheld' ||
-				event.status === 'impossible');
-		});
-		if (unprocessedEvents){
-			message = "Some events are unprocessed.";
-		}
-		message += ("Do you want to end processing the turn of " + currentTurn.realm+"?");
-	} else if (login === 'sl') {
-		message = "Do you want to end the turn of "+ currentTurn.realm+"?";
-	} else {
-		message = "Do you want to end your turn?";
-	}
-
-	if (confirm(message)){
-		if(login === 'sl' && currentTurn.status === 'fi') { //SL sends DB change requests
-			saveFields();
-			saveRivers();
-			saveBuildings();
-			saveArmies();
-			saveFactionsTerritories();
-		} else { //Players and SL during player's turn send events
-			for (var i = 0; i < preparedEvents.length; i++) {
-				var cPE = preparedEvents[i];
-				var cPEContent = JSON.stringify(cPE.content);
-				sendNewEvent(cPE.type, cPEContent);
-			}
-		}
-		sendNextTurn();
-	}
+    if(evt !== undefined && tabName !== ""){
+    	document.getElementById(tabName).style.display = "block";
+    	evt.currentTarget.className += " active";
+    }
 }
 
 function init() {

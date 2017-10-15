@@ -9,8 +9,11 @@ function loginToServer() {
 	loginZeit = undefined;
 	$.post({
 		url: url + "/databaseLink/login/",
-		data: { username: username, password: password },
-		success: function (data) {
+		data: {
+			username: username,
+			password: password
+		},
+		success: function(data) {
 			// saving the authenticationToken
 			authenticationToken = data.token;
 			login = data.group;
@@ -44,6 +47,7 @@ function loginToServer() {
 	document.getElementById("loginBox").style.display = "none";
 }
 
+
 // logs out from Server, closes everything you need login for, deletes login time
 function logoutFromServer() {
 	//loging out from server
@@ -69,5 +73,8 @@ function logoutFromServer() {
 	hide(document.getElementById("eventTabsButton"));
 	var eventList = document.getElementById("eventsTab");
 	eventList.innerHTML = "";
+	openTab(null, "");
+	pendingEvents = [];
+	preparedEvents = [];
 	writeTurnNumber();
 }

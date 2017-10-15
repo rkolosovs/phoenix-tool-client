@@ -14,6 +14,12 @@ function armyCoordinates(army, coordX, coordY, owner) {
             case 2: return "eos";
         }
     }
+    
+    this.isAlive = function(){
+    	return (this.a.raumpunkte() >= 100 && this.a.leaders >= 1);
+    	//TODO once characters are a thing, 0 officer armies with a character on the field should also be alive
+    }
+    
     // nur zu Testzwecken 300
     //TODO: make it the proper value once testing is done
     this.remainingMovePoints = 300;
