@@ -820,6 +820,10 @@ function splitSelectedArmy() {
 		window.alert("Zuschauer haben keine Rechte.");
 		return false;
 	}
+	if (listOfArmyCoordinates[selectedArmy].a.isGuard){
+		window.alert("Garde Armeen können nicht geteilt werden.");
+		return false;
+	}
 	var toSplit = 0;
 	var leadersToSplit = 0;
 	var mountsToSplit = 0;
