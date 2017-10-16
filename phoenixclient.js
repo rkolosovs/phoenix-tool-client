@@ -301,8 +301,7 @@ function registerRightClick(){
 			for (var i = 0; i < neighbors.length; i++){
 				if(neighbors[i][0] == clickedField[0] && neighbors[i][1] == clickedField[1]){
 					var out;
-					if (listOfArmyCoordinates[selectedArmy].ownerTag() === login || login === "sl") {
-
+					if (listOfArmyCoordinates[selectedArmy].ownerTag() === login || login === "sl"){
 						out = listOfArmyCoordinates[selectedArmy].move(i);
 						console.log(out);
 					} else {
@@ -877,7 +876,7 @@ function checkEvent(num) {
 			}
 			event.status = 'checked';
 			fillEventList();
-			sendCheckEvent(event.pk, event.type);
+//			sendCheckEvent(event.pk, event.type);
 			saveArmies();
 			drawStuff();
 		} else if (event.type === "merge") {
@@ -909,7 +908,7 @@ function checkEvent(num) {
 			}
 			event.status = 'checked';
 			fillEventList();
-			sendCheckEvent(event.pk, event.type);
+//			sendCheckEvent(event.pk, event.type);
 			saveArmies();
 			drawStuff();
 			selectedArmy = undefined;
@@ -957,7 +956,7 @@ function checkEvent(num) {
 			}
 			event.status = 'checked';
 			fillEventList();
-			sendCheckEvent(event.pk, event.type);
+//			sendCheckEvent(event.pk, event.type);
 			saveArmies();
 			drawStuff();
 		}

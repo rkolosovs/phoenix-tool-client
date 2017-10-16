@@ -138,6 +138,9 @@ function nextTurn() {
 			}
 		}, this);
 
+		pendingEvents = [];
+		preparedEvents = [];
+		
 		$.post({
 			url: url + "/databaseLink/nextturn/",
 			data: {authorization: authenticationToken},
