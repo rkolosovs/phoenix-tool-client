@@ -164,11 +164,11 @@ module( "Battle" , function() {
 		module( "Guard Battles", function() {
 			test( "Guard fleet combat.", function(t) {
 				var battle = new schlacht([attackerArmies[16]], [defenderArmies[16]], [], [], 2, 2);
-				t.resultEquals( battle.result(10, 1), {victor: 'attacker', attackerLosses: [35.96], defenderLosses: [106.8]} );
+				t.resultEquals( battle.result(10, 1), {victor: 'attacker', attackerLosses: [43.45], defenderLosses: [106.8]} );
 			});
 			test( "Foot vs guard foot.", function(t) {
 				var battle = new schlacht([attackerArmies[4]], [defenderArmies[4]], [], [], 0, 0);
-				t.resultEquals( battle.result(10, 1), {victor: 'attacker', attackerLosses: [550.10], defenderLosses: [2545]} );
+				t.resultEquals( battle.result(10, 1), {victor: 'attacker', attackerLosses: [667.98], defenderLosses: [2545]} );
 			});
 			test( "Riders vs guard foot on plains.", function(t) {
 				var battle = new schlacht([attackerArmies[4]], [defenderArmies[9]], [], [], 0, 0);
@@ -182,7 +182,7 @@ module( "Battle" , function() {
 			});
 			test( "Riders vs guard riders.", function(t) {
 				var battle = new schlacht([attackerArmies[8]], [defenderArmies[9]], [], [], 1, 1);
-				t.resultEquals( battle.result(10, 1), {victor: 'attacker', attackerLosses: [550.10], defenderLosses: [2545]} );
+				t.resultEquals( battle.result(10, 1), {victor: 'attacker', attackerLosses: [667.98], defenderLosses: [2545]} );
 			});
 			test( "Foot vs guard foot 10:1 fight.", function(t) {
 				var battle = new schlacht([attackerArmies[5]], [defenderArmies[5]], [], [], 0, 0);

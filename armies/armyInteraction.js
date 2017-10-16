@@ -441,9 +441,18 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
     }
 
     this.terrainGP = function(army, attacker) {
-        //TODO: compute bonuses from terrain including bonuses form defending a production building
+        //TODO: including bonuses form defending a production building. remember that that negates usual terrain bonus
+        //BLOCKER: requires the army to know its real, allegiance.
         //TODO: once an army knows its previous position the attacker parameter can be removed
-        return 0;
+        var fieldType = this.fieldType();
+        if((army.armyType() === 1 && (fieldType === 3 || fieldType === 8)) ||
+            (army.armyType() === 2 && (fieldType === 2 || fieldType === 4 || fieldType === 7))) {
+            return 140;
+        } else if(false) {
+            //TODO: defending a production building bonus comes here.
+        } else {
+            return 0;
+        }
     }
 
     this.characterGP = function(army) {
@@ -459,15 +468,17 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
         return 0;
     }
 
-    this.computeCombatPower = function(fightingNumbers, listOfGP) {
-        return fightingNumbers.map((elem, index) => (elem * (1 + (listOfGP[index]/200))));
+    this.computeCombatRating = function(strengthArmy, totalArmyGP) {
+        return strengthArmy.map((elem, index) => (elem * (1 + (totalArmyGP[index]/200))));
     }
 
-    this.computeLossFactor = function(ownForces, enemyForces) {
-        if (ownForces >= enemyForces) {
+    this.computeLossFactor = function(ownForces, enemyForces, victorious) {
+        if (victorious && ownForces >= enemyForces) {
             return (((enemyForces - ownForces)/10)/enemyForces) - 0.1;
-        } else {
+        } else if (victorious && ownForces < enemyForces) {
             return (((enemyForces - ownForces)/10)/ownForces) + 0.1;
+        } else {
+            return 0;
         }
     }
 
@@ -480,8 +491,8 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
     }
 
     this.result = function(attackRoll, defenseRoll){
-        var attackerNumbers = armiesAttack.map((elem) => (elem.count));
-        var defenderNumbers = armiesDefense.map((elem) => {
+        var totalStrengthAttackerArmy = armiesAttack.map((elem) => (elem.count));
+        var totalStrengthDefenderArmy = armiesDefense.map((elem) => {
             if(elem.armyType() === 3){
                 return elem.count + elem.lkp * 5 + elem.skp * 10;
             } else {
@@ -489,57 +500,57 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
             }
         });
 
-        var attackerGP = armiesAttack.map((elem) => (
+        var totalAttackerArmyGP = armiesAttack.map((elem) => (
             attackRoll + elem.leaderGp() + this.terrainGP(elem, true) + this.characterGP(elem) + this.directionalTerrainGP(elem)
         ));
-        var defenderGP = armiesDefense.map((elem) => (
+        var totalDefenderArmyGP = armiesDefense.map((elem) => (
             defenseRoll + elem.leaderGp() + this.terrainGP(elem, false) + this.characterGP(elem) + this.directionalTerrainGP(elem)
         ));
 
-        var attackerCombatPower = this.computeCombatPower(attackerNumbers, attackerGP);
-        var defenderCombatPower = this.computeCombatPower(defenderNumbers, defenderGP);
+        var combatRatingAttackerArmy = this.computeCombatRating(totalStrengthAttackerArmy, totalAttackerArmyGP);
+        var combatRatingDefenderArmy = this.computeCombatRating(totalStrengthDefenderArmy, totalDefenderArmyGP);
 
-        var attackerNumbersSum = attackerNumbers.reduce((total, elem) => (total + elem), 0);
-        var defenderNumbersSum = defenderNumbers.reduce((total, elem) => (total + elem), 0);
+        var totalAttackerStrength = totalStrengthAttackerArmy.reduce((total, elem) => (total + elem), 0);
+        var totalDefenderStrength = totalStrengthDefenderArmy.reduce((total, elem) => (total + elem), 0);
 
-        var attackerPowerSum = attackerCombatPower.reduce((total, elem) => (total + elem), 0);
-        var defenderPowerSum = defenderCombatPower.reduce((total, elem) => (total + elem), 0);
-
-        var attackerBaseLosses = defenderNumbers.reduce((total, elem) => (total + elem), 0);
-        var defenderBaseLosses = attackerNumbers.reduce((total, elem) => (total + elem), 0);
-
-        var attackerLossFactor = this.computeLossFactor(attackerNumbers, defenderNumbers);
-        var defenderLossFactor = this.computeLossFactor(defenderNumbers, attackerNumbers);
-
-        var attackerOverallLosses = attackerBaseLosses * (1 + attackerLossFactor);
-        var defenderOverallLosses = defenderBaseLosses * (1 + defenderLossFactor);
-
-        var attackerArmiesBaseLosses = attackerNumbers.map((elem) => ((elem/attackerNumbersSum)*attackerOverallLosses));
-        var defenderArmiesBaseLosses = defenderNumbers.map((elem) => ((elem/defenderNumbersSum)*defenderOverallLosses));
-
-        var attackerMeanGP = ((attackerPowerSum/attackerNumbersSum) - 1) * 100;
-        var defenderMeanGP = ((defenderPowerSum/defenderNumbersSum) - 1) * 100;
-
-        var attackerGPDiffs = attackerGP.map((elem) => (((elem/2) - attackerMeanGP)/100));
-        var defenderGPDiffs = defenderGP.map((elem) => (((elem/2) - defenderMeanGP)/100));
-
-        var attackerFinalLosses = attackerArmiesBaseLosses.map((elem, index) => (
-            this.computeFinalLosses(elem, attackerGPDiffs[index])
-        ));
-        var defenderFinalLosses = defenderArmiesBaseLosses.map((elem, index) => (
-            this.computeFinalLosses(elem, defenderGPDiffs[index])
-        ));
+        var attackerTotalCombatRating = combatRatingAttackerArmy.reduce((total, elem) => (total + elem), 0);
+        var defenderTotalCombatRating = combatRatingDefenderArmy.reduce((total, elem) => (total + elem), 0);
 
         var victor = '';
-        if (this.overrunAttack() || attackerPowerSum > defenderPowerSum) {
+        if (this.overrunAttack() || attackerTotalCombatRating > defenderTotalCombatRating) {
             victor = 'attacker';
-        } else if (this.overrunDefense() || attackerPowerSum < defenderPowerSum) {
+        } else if (this.overrunDefense() || attackerTotalCombatRating < defenderTotalCombatRating) {
             victor = 'defender';
         } else {
             victor = 'tie';
         }
 
-        return {victor: victor, attackerLosses: attackerFinalLosses, defenderLosses: defenderFinalLosses};
+        var attackerBaseLosses = totalDefenderStrength;
+        var defenderBaseLosses = totalAttackerStrength;
+
+        var attackerLossFactor = this.computeLossFactor(totalAttackerStrength, totalDefenderStrength, (victor === 'attacker'));
+        var defenderLossFactor = this.computeLossFactor(totalDefenderStrength, totalAttackerStrength, (victor === 'defender'));
+
+        var attackerNewBaseLosses = Math.floor(attackerBaseLosses * (1 + attackerLossFactor));
+        var defenderNewBaseLosses = Math.floor(defenderBaseLosses * (1 + defenderLossFactor));
+
+        var baseLossesAttackerArmy = totalStrengthAttackerArmy.map((elem) => ((elem/totalAttackerStrength)*attackerNewBaseLosses));
+        var baseLossesDefenderArmy = totalStrengthDefenderArmy.map((elem) => ((elem/totalDefenderStrength)*defenderNewBaseLosses));
+
+        var attackerMeanGP = ((attackerTotalCombatRating/totalAttackerStrength) - 1) * 100;
+        var defenderMeanGP = ((defenderTotalCombatRating/totalDefenderStrength) - 1) * 100;
+
+        var attackerGPDiffArmy = totalAttackerArmyGP.map((elem) => (((elem/2) - defenderMeanGP)/100));
+        var defenderGPDiffArmy = totalDefenderArmyGP.map((elem) => (((elem/2) - attackerMeanGP)/100));
+
+        var finalLossesAttackerArmy = baseLossesAttackerArmy.map((elem, index) => (
+            this.computeFinalLosses(elem, attackerGPDiffArmy[index])
+        ));
+        var finalLossesDefenderArmy = baseLossesDefenderArmy.map((elem, index) => (
+            this.computeFinalLosses(elem, defenderGPDiffArmy[index])
+        ));
+
+        return {victor: victor, attackerLosses: finalLossesAttackerArmy, defenderLosses: finalLossesDefenderArmy};
     }
 }
 
