@@ -257,8 +257,7 @@ function battleHandler(participants, x, y) {
 		this.defenseTroopCount.innerHTML += "<p>Würfelwurf: "+this.defenseDice.value+"</p>";
 		
 		//Instant result preview (remove if not desired)
-		var battle = new schlacht(this.attackSide.map(function(val){return val.a;}), this.defenseSide.map(function(val){return val.a;}), null, null, this.x, this.y);
-		battle.init();
+		var battle = new schlacht(this.attackSide.map(function(val){return val.a;}), this.defenseSide.map(function(val){return val.a;}), [], [], this.x, this.y);
 		var result = battle.result(this.attackDice.value, this.defenseDice.value);
 
 		var footLosses = Math.round(result.footLosses);
