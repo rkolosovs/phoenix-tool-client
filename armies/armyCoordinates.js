@@ -540,41 +540,25 @@ function armyCoordinates(army, coordX, coordY, owner) {
 
     //to find all fields in a two tile proximity
     this.findShootingTargets = function(){
-        var origin = new showHex(this.x, this.y);
-
-        //get all neighboring tiles
-        this.targetList = origin.neighbors();
-        var templist = origin.neighbors();
-
-        //adding the range identifier showing the distange to origin
-        for(var i = 0; i < this.targetList.length; i++){
-            this.targetList[i].push(1);
-        }
+        let origin = new showHex(this.x, this.y);
 
         if(this.a.skp >0){//in a 2 tile range
-            for(var i = 0; i < templist.length; i++){
-                var tempneigh = new showHex(templist[i][0], templist[i][1]);
-                var tempneighList = tempneigh.neighbors();
-
-                for(var j = 0; j < tempneighList.length; j++){
-                    var found = false;
-                    for(var k = 0; k < this.targetList.length; k++){
-                        if((tempneighList[j][0] == this.targetList[k][0] && tempneighList[j][1] == this.targetList[k][1]) || (tempneighList[j][0] == this.x && tempneighList[j][1] == this.y)){
-                            found = true;
-                        }
-                        
-                    }
-                    if(found  == false)
-                        this.targetList.push([tempneighList[j][0], tempneighList[j][1], 2]);//the 2 is the rangeidentifier 
-                }
-            }
+            this.targetList = origin.neighborInRange(2);
+        }
+        else{//ontile range
+            this.targetList = origin.neighborInRange(1);
         }
 
+        //adding the range identifier showing the distange to origin
+        for(let i = 0; i < this.targetList.length; i++){
+            this.targetList[i].push(origin.distance(this.targetList[i][0], this.targetList[i][1]));
+        }
+        //console.log(this.targetList);
 
-        templist = this.targetList.slice();
+        let templist = this.targetList.slice();
         //to find out the conditions and maybe kick out if not shootable
-        for(var i = templist.length -1; i >= 0; i--){
-            var target = new showHex(templist[i][0], templist[i][1]);
+        for(let i = templist.length -1; i >= 0; i--){
+            let target = new showHex(templist[i][0], templist[i][1]);
             if(this.a.skp > 0){//skp shooting
                 if(templist[i][2] == 1){//for range of 1
                     if(target.height() - origin.height() > 2){
@@ -586,12 +570,12 @@ function armyCoordinates(army, coordX, coordY, owner) {
                         this.targetList.splice(i,1);
                     }
                     else{//if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
-                        var targetNeighbors = target.neighbors();
-                        var originNeighbors = origin.neighbors();
-                        for(var j = 0; j < targetNeighbors.length; j++){
-                            for(var k = 0; k < originNeighbors.length; k++){
+                        let targetNeighbors = target.neighbors();
+                        let originNeighbors = origin.neighbors();
+                        for(let j = 0; j < targetNeighbors.length; j++){
+                            for(let k = 0; k < originNeighbors.length; k++){
                                 if(targetNeighbors[j][0] == originNeighbors[k][0] && targetNeighbors[j][1] == originNeighbors[k][1]){
-                                    var commonTile = new showHex(targetNeighbors[j][0], targetNeighbors[j][1]);
+                                    let commonTile = new showHex(targetNeighbors[j][0], targetNeighbors[j][1]);
                                     if(commonTile.height() - origin.height() > 1){
                                         this.targetList.splice(i,1);
                                     }
@@ -671,5 +655,36 @@ function showHex(positionX, positionY) {
 		} else {
 			return [[this.x-1,this.y-1],[this.x,this.y-1],[this.x+1,this.y],[this.x,this.y+1],[this.x-1,this.y+1],[this.x-1,this.y]];
 		}
-	}
+    }
+    //returns the distance from here to target Hex
+    //to properly do this we use a 3D/Cube coordinate system as described at
+    //https://www.redblobgames.com/grids/hexagons/
+    this.distance = function(toX, toY){
+        //this is the cube coordinates for the current Hex
+        let thisCubeX = this.x - (this.y + (this.y&1)) / 2;
+        let thisCubeZ = this.y;
+        let thisCubeY = - thisCubeX - thisCubeZ;
+
+        //this is the cube coordinates for the current Hex
+        let targetCubeX = toX - (toY + (toY&1)) / 2;
+        let targetCubeZ = toY;
+        let targetCubeY = - targetCubeX - targetCubeZ;
+
+        return Math.max(Math.abs(thisCubeX - targetCubeX),Math.abs(thisCubeY - targetCubeY),Math.abs(thisCubeZ - targetCubeZ));
+    }
+
+    this.neighborInRange = function(range){
+        let neighbors = [];
+        for(var i = this.x - range; i <= this.x + range; i++){
+            for(var j = this.y - range; j <= this.y + range; j++){
+                let dist = this.distance(i,j);
+                if(i != this.x || j != this.y){
+                    if(dist <= range){
+                        neighbors.push([i,j]);
+                    }
+                }
+            }
+        }
+        return neighbors;
+    }
 }
