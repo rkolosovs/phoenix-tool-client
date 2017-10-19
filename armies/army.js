@@ -18,18 +18,19 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
     //berechnet die GP aus Heerführern. Includes bonus GP for being guard
     this.leaderGp = function(){
         var gp = 0;
-        if(this.isGuard){
-            gp += 300
-        }
-        if(this.leaders == 0){
-            gp = 0;
-        } else if(this.leaders < 101){
+
+        if(this.leaders < 101) {
             gp += this.leaders;
-        } else if(this.leaders < 201){
+        } else if(this.leaders < 201) {
             gp += (100 + (this.leaders-100) / 2 );
         } else {
             gp += 200;
         }
+
+        if(this.isGuard){
+            gp += 300;
+        }
+
         return gp;
     }
     //berechnet die verbrauchten Raumpunkte
@@ -275,16 +276,19 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde) {
     this.isLoadedIn = null;
     this.leaderGp = function(){
         var gp = 0;
-        if(this.leaders < 101){
-            gp =  this.leaders;
-        } else if(this.leaders < 201){
-            gp =  (100 + (this.leaders-100) / 2 );
+
+        if(this.leaders < 101) {
+            gp = this.leaders;
+        } else if(this.leaders < 201) {
+            gp = (100 + (this.leaders-100) / 2 );
         } else {
-            gp =  200;
+            gp = 200;
         }
+
         if(this.isGuard){
-            gp += 300
+            gp += 300;
         }
+
         return gp;
     }
     //sollte 1 für heer, 2 für reiterheer, 3 für seeHeer
@@ -417,16 +421,19 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde) {
     // berechnet gutpunkte durch heerführer
     this.leaderGp = function(){
         var gp = 0;
-        if(this.leaders < 101){
+
+        if(this.leaders < 101) {
             gp = this.leaders;
-        } else if(this.leaders < 201){
+        } else if(this.leaders < 201) {
             gp = (100 + (this.leaders-100) / 2 );
         } else {
             gp = 200;
         }
+
         if(this.isGuard){
-            gp += 300
+            gp += 300;
         }
+
         return gp;
     }
     // entfernt Soldaten aus der Armee

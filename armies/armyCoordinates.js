@@ -571,7 +571,7 @@ function showHex(positionX, positionY) {
     // what type is this field
 	this.fieldType = function(){
 		for (var i = 0; i < fields.length; i++) {
-			if((fields[i].x == this.x) && (fields[i].y == this.y)){return fields[i].type;}
+			if((fields[i].x === this.x) && (fields[i].y === this.y)){return fields[i].type;}
 		}
 	}
     // what height is this field

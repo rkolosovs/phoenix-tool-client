@@ -656,8 +656,7 @@ function canMove(realm, id, fromX, fromY, toX, toY){
 //		//TODO: This is missing harbors
 //		var enoughHeightPoints =  (foundArmy.remainingHeightPoints >= 1) &&
 //			((heightDifference <= 2 && streetPresent) || (heightDifference <= 1));
-//		//TODO: This is missin gbasically everything. But hey, the movement points are set as too high anyways right now.
-//		//TODO: Change the TODO above once the movement points are no longer extreme high due to testing.
+//		//TODO: This is missing basically everything. Now the movement points are set serverside and no longer to high so this should work or not be here.
 //		var enoughMovePoints = (foundArmy.remainingMovePoints >= 7);
 //		return enoughHeightPoints && enoughMovePoints; 
 	} else {

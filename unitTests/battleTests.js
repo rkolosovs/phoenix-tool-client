@@ -11,10 +11,19 @@ QUnit.assert.resultEquals = function(actual, expected) {
         return false;
     }
 
+    this.lossesMatch = function(actual, expected) {
+        if (actual.length !== expected.length) {
+            return false;
+        } else {
+            return actual.reduce((total, current, index) => (total && Math.abs(current - expected[index]) <= 0.01), true);
+        }
+    }
+
     for (var i = 0; i < actualProps.length; i++) {
         var propName = actualProps[i];
-
-        if ((propName === "victor" && actual[propName] !== expected[propName]) || Math.abs(actual[propName] - expected[propName]) > 0.01) {
+        //TODO: Fix checking
+        if ((propName === "victor" && actual[propName] !== expected[propName]) ||
+            (propName !== "victor" && !this.lossesMatch(actual[propName], expected[propName]))) {
         	this.pushResult({result: false, actual: actual, expected: expected,
                 message: "Wrong result: "+propName+" should be "+expected[propName]+" was "+actual[propName]});
             return false;

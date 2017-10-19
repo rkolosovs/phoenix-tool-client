@@ -6,6 +6,7 @@ function battleHandler(participants, x, y) {
 	//coordinates of the battle
 	this.x = x;
 	this.y = y;
+	this.battle = null;
 	
 	//UI elements to display armies of both sides
 	this.attackList = document.getElementById("attackArmiesBox");
@@ -231,8 +232,6 @@ function battleHandler(participants, x, y) {
 			//naval combat
 			if (this.attackShips > 0) {this.attackTroopCount.innerHTML += "<p>Shiffe: "+this.attackShips+"</p>";}
 			if (this.attackGuardShips > 0) {this.attackTroopCount.innerHTML += "<p>Gardeschiffe: "+this.attackGuardShips+"</p>";}
-			if (this.attackLightWarships > 0) {this.attackTroopCount.innerHTML += "<p>Leichte Kreigsschiffe: "+this.attackLightWarships+"</p>";}
-			if (this.attackHeavyWarships > 0) {this.attackTroopCount.innerHTML += "<p>Schwere Kriegsschiffe: "+this.attackHeavyWarships+"</p>";}
 			
 			if (this.defenseShips > 0) {this.defenseTroopCount.innerHTML += "<p>Shiffe: "+this.defenseShips+"</p>";}
 			if (this.defenseGuardShips > 0) {this.defenseTroopCount.innerHTML += "<p>Gardeschiffe: "+this.defenseGuardShips+"</p>";}
@@ -257,17 +256,49 @@ function battleHandler(participants, x, y) {
 		this.defenseTroopCount.innerHTML += "<p>Würfelwurf: "+this.defenseDice.value+"</p>";
 		
 		//Instant result preview (remove if not desired)
-		var battle = new schlacht(this.attackSide.map(function(val){return val.a;}), this.defenseSide.map(function(val){return val.a;}), [], [], this.x, this.y);
-		var result = battle.result(this.attackDice.value, this.defenseDice.value);
+		this.battle = new schlacht(this.attackSide.map((val) => (val.a)), this.defenseSide.map((val) => (val.a)), [], [], this.x, this.y);
+		var result = this.battle.result(parseInt(this.attackDice.value), parseInt(this.defenseDice.value));
 
-		var footLosses = Math.round(result.footLosses);
-		var cavLosses = Math.round(result.cavLosses);
-		var fleetLosses = Math.round(result.fleetLosses); 
-		var guardFootLosses = Math.round(result.gFootLosses);
-		var guardCavLosses = Math.round(result.gCavLosses);
-		var guardFleetLosses =  Math.round(result.gFleetLosses);
+		var attackFootLosses = result.attackerLosses.reduce((total, current, index) => {
+		        if(this.attackSide[index].a.armyType() === 1 && !this.attackSide[index].a.isGuard){ return total + Math.round(current); }
+		        else { return total; } }, 0);
+		var attackCavLosses = result.attackerLosses.reduce((total, current, index) => {
+		        if(this.attackSide[index].a.armyType() === 2 && !this.attackSide[index].a.isGuard){ return total + Math.round(current); }
+		        else { return total; } }, 0);
+		var attackFleetLosses = result.attackerLosses.reduce((total, current, index) => {
+		        if(this.attackSide[index].a.armyType() === 3 && !this.attackSide[index].a.isGuard){ return total + Math.round(current); }
+		        else { return total; } }, 0);
+		var attackGuardFootLosses = result.attackerLosses.reduce((total, current, index) => {
+		        if(this.attackSide[index].a.armyType() === 1 && this.attackSide[index].a.isGuard){ return total + Math.round(current); }
+		        else { return total; } }, 0);
+		var attackGuardCavLosses = result.attackerLosses.reduce((total, current, index) => {
+		        if(this.attackSide[index].a.armyType() === 2 && this.attackSide[index].a.isGuard){ return total + Math.round(current); }
+		        else { return total; } }, 0);
+		var attackGuardFleetLosses = result.attackerLosses.reduce((total, current, index) => {
+		        if(this.attackSide[index].a.armyType() === 3 && this.attackSide[index].a.isGuard){ return total + Math.round(current); }
+		        else { return total; } }, 0);
+
+		var defenseFootLosses = result.defenderLosses.reduce((total, current, index) => {
+		        if(this.defenseSide[index].a.armyType() === 1 && !this.defenseSide[index].a.isGuard){ return total + Math.round(current); }
+		        else { return total; } }, 0);
+		var defenseCavLosses = result.defenderLosses.reduce((total, current, index) => {
+		        if(this.defenseSide[index].a.armyType() === 2 && !this.defenseSide[index].a.isGuard){ return total + Math.round(current); }
+		        else { return total; } }, 0);
+		var defenseFleetLosses = result.defenderLosses.reduce((total, current, index) => {
+		        if(this.defenseSide[index].a.armyType() === 3 && !this.defenseSide[index].a.isGuard){ return total + Math.round(current); }
+		        else { return total; } }, 0);
+		var defenseGuardFootLosses = result.defenderLosses.reduce((total, current, index) => {
+		        if(this.defenseSide[index].a.armyType() === 1 && this.defenseSide[index].a.isGuard){ return total + Math.round(current); }
+		        else { return total; } }, 0);
+		var defenseGuardCavLosses = result.defenderLosses.reduce((total, current, index) => {
+		        if(this.defenseSide[index].a.armyType() === 2 && this.defenseSide[index].a.isGuard){ return total + Math.round(current); }
+		        else { return total; } }, 0);
+		var defenseGuardFleetLosses = result.defenderLosses.reduce((total, current, index) => {
+		        if(this.defenseSide[index].a.armyType() === 3 && this.defenseSide[index].a.isGuard){ return total + Math.round(current); }
+		        else { return total; } }, 0);
+
 		if(result.victor === 'attacker'){
-			if(battle.overrunAttack()) {
+			if(this.battle.overrunAttack()) {
 				this.defenseTroopCount.innerHTML += "<p class=\"red\">Überrant!</p>";
 			} else {
 				this.defenseTroopCount.innerHTML += "<p class=\"red\">Besiegt!</p>";
@@ -275,38 +306,32 @@ function battleHandler(participants, x, y) {
 				if(this.attackShips + this.attackLightWarships + this.attackHeavyWarships + this.attackGuardShips > 0 || 
 						this.defenseShips + this.defenseLightWarships + this.defenseHeavyWarships + this.defenseGuardShips > 0){
 					//naval battle
-					var lossProportion = ((result.fleetLosses+result.gFleetLosses)/(this.attackShips+this.attackGuardShips));
+					var lossProportion = ((attackFleetLosses+attackGuardFleetLosses)/(this.attackShips+this.attackGuardShips));
 					var officerLosses = Math.round(lossProportion*this.attackOfficers);
-					var lightWarshipLosses = Math.round(lossProportion*this.attackLightWarships);
-					var heavyWarshipLosses = Math.round(lossProportion*this.attackHeavyWarships);
 					if (this.attackShips > 0) {this.attackTroopCount.innerHTML += "<div>Schiffe: "+
-						this.attackShips+"<div class=\"red inline\"> -"+ fleetLosses+"</div></div>";}
+						this.attackShips+"<div class=\"red inline\"> -"+ attackFleetLosses+"</div></div>";}
 					if (this.attackGuardShips > 0) {this.attackTroopCount.innerHTML += "<div>Gardeschiffe: "+
-						this.attackGuardShips+"<div class=\"red inline\"> -"+ guardFleetLosses+"</div></div>";}
-					if (this.attackLightWarships > 0) {this.attackTroopCount.innerHTML += "<div>Leichte Kriegsschiffe: "+
-						this.attackLightWarships+"<div class=\"red inline\"> -"+ lightWarshipLosses+"</div></div>";}
-					if (this.attackHeavyWarships > 0) {this.attackTroopCount.innerHTML += "<div>Schwere Kriegsschiffe: "+
-						this.attackHeavyWarships+"<div class=\"red inline\"> -"+ heavyWarshipLosses+"</div></div>";}
+						this.attackGuardShips+"<div class=\"red inline\"> -"+ attackGuardFleetLosses+"</div></div>";}
 					if (this.attackOfficers > 0) {this.attackTroopCount.innerHTML += "<div>Heerführer: "+
 						this.attackOfficers+"<div class=\"red inline\"> -"+ officerLosses+"</div></div>";}
 				} else {
 					//land battle
-					var officerLosses = Math.round(((result.footLosses+result.cavLosses+result.gFootLosses+result.gCavLosses)/
+					var officerLosses = Math.round(((attackFootLosses+attackCavLosses+attackGuardFootLosses+attackGuardCavLosses)/
 							(this.attackSoldiers+this.attackRiders+this.attackGuardSoldiers+this.attackGuardRiders))*this.attackOfficers);
 					if (this.attackSoldiers > 0) {this.attackTroopCount.innerHTML += "<div>Soldaten: "+
-						this.attackSoldiers+"<div class=\"red inline\"> -"+footLosses+"</div></div>";}
+						this.attackSoldiers+"<div class=\"red inline\"> -"+attackFootLosses+"</div></div>";}
 					if (this.attackRiders > 0) {this.attackTroopCount.innerHTML += "<div>Reiter: "+
-						this.attackRiders+"<div class=\"red inline\"> -"+ cavLosses+"</div></div>";}
+						this.attackRiders+"<div class=\"red inline\"> -"+ attackCavLosses+"</div></div>";}
 					if (this.attackGuardSoldiers > 0) {this.attackTroopCount.innerHTML += "<div>Gardesoldaten: "+
-						this.attackGuardSoldiers+"<div class=\"red inline\"> -"+guardFootLosses+"</div></div>";}
+						this.attackGuardSoldiers+"<div class=\"red inline\"> -"+attackGuardFootLosses+"</div></div>";}
 					if (this.attackGuardRiders > 0) {this.attackTroopCount.innerHTML += "<div>Gardereiter: "+
-						this.attackGuardRiders+"<div class=\"red inline\"> -"+guardCavLosses+"</div></div>";}
+						this.attackGuardRiders+"<div class=\"red inline\"> -"+attackGuardCavLosses+"</div></div>";}
 					if (this.attackOfficers > 0) {this.attackTroopCount.innerHTML += "<div>Heerführer: "+
 						this.attackOfficers+"<div class=\"red inline\"> -"+ officerLosses+"</div></div>";}
 				}
 			}
 		} else if (result.victor === 'defender') {
-			if(battle.overrunDefense()) {
+			if(this.battle.overrunDefense()) {
 				this.attackTroopCount.innerHTML += "<p class=\"red\">Überrant!</p>";
 			} else {
 				this.attackTroopCount.innerHTML += "<p class=\"red\">Besiegt!</p>";
@@ -314,14 +339,14 @@ function battleHandler(participants, x, y) {
 				if(this.attackShips + this.attackLightWarships + this.attackHeavyWarships + this.attackGuardShips > 0 || 
 						this.defenseShips + this.defenseLightWarships + this.defenseHeavyWarships + this.defenseGuardShips > 0){
 					//naval battle
-					var lossProportion = ((result.fleetLosses+result.gFleetLosses)/(this.defenseShips+this.defenseGuardShips));
+					var lossProportion = ((defenseFleetLosses+defenseGuardFleetLosses)/(this.defenseShips+this.defenseGuardShips));
 					var officerLosses = Math.round(lossProportion*this.defenseOfficers);
 					var lightWarshipLosses = Math.round(lossProportion*this.defenseLightWarships);
 					var heavyWarshipLosses = Math.round(lossProportion*this.defenseHeavyWarships);
 					if (this.defenseShips > 0) {this.defenseTroopCount.innerHTML += "<div>Schiffe: "+
-						this.defenseShips+"<div class=\"red inline\"> -"+ fleetLosses+"</div></div>";}
+						this.defenseShips+"<div class=\"red inline\"> -"+ defenseFleetLosses+"</div></div>";}
 					if (this.defenseGuardShips > 0) {this.defenseTroopCount.innerHTML += "<div>Gardeschiffe: "+
-						this.defenseGuardShips+"<div class=\"red inline\"> -"+ guardFleetLosses+"</div></div>";}
+						this.defenseGuardShips+"<div class=\"red inline\"> -"+ defenseGuardFleetLosses+"</div></div>";}
 					if (this.defenseLightWarships > 0) {this.defenseTroopCount.innerHTML += "<div>Leichte Kriegsschiffe: "+
 						this.defenseLightWarships+"<div class=\"red inline\"> -"+ lightWarshipLosses+"</div></div>";}
 					if (this.defenseHeavyWarships > 0) {this.defenseTroopCount.innerHTML += "<div>Schwere Kriegsschiffe: "+
@@ -330,16 +355,16 @@ function battleHandler(participants, x, y) {
 						this.defenseOfficers+"<div class=\"red inline\"> -"+ officerLosses+"</div></div>";}
 				} else {
 					//land battle
-					var officerLosses = Math.round(((result.footLosses+result.cavLosses+result.gFootLosses+result.gCavLosses)/
+					var officerLosses = Math.round(((defenseFootLosses+defenseCavLosses+defenseGuardFootLosses+defenseGuardCavLosses)/
 							(this.defenseSoldiers+this.defenseRiders+this.defenseGuardSoldiers+this.defenseGuardRiders))*this.defenseOfficers);
 					if (this.defenseSoldiers > 0) {this.defenseTroopCount.innerHTML += "<div>Soldaten: "+
-						this.defenseSoldiers+"<div class=\"red inline\"> -"+footLosses+"</div></div>";}
+						this.defenseSoldiers+"<div class=\"red inline\"> -"+defenseFootLosses+"</div></div>";}
 					if (this.defenseRiders > 0) {this.defenseTroopCount.innerHTML += "<div>Reiter: "+
-						this.defenseRiders+"<div class=\"red inline\"> -"+ cavLosses+"</div></div>";}
+						this.defenseRiders+"<div class=\"red inline\"> -"+ defenseCavLosses+"</div></div>";}
 					if (this.defenseGuardSoldiers > 0) {this.defenseTroopCount.innerHTML += "<div>Gardesoldaten: "+
-						this.defenseGuardSoldiers+"<div class=\"red inline\"> -"+guardFootLosses+"</div></div>";}
+						this.defenseGuardSoldiers+"<div class=\"red inline\"> -"+defenseGuardFootLosses+"</div></div>";}
 					if (this.defenseGuardRiders > 0) {this.defenseTroopCount.innerHTML += "<div>Gardereiter: "+
-						this.defenseGuardRiders+"<div class=\"red inline\"> -"+guardCavLosses+"</div></div>";}
+						this.defenseGuardRiders+"<div class=\"red inline\"> -"+defenseGuardCavLosses+"</div></div>";}
 					if (this.defenseOfficers > 0) {this.defenseTroopCount.innerHTML += "<div>Heerführer: "+
 						this.defenseOfficers+"<div class=\"red inline\"> -"+ officerLosses+"</div></div>";}
 				}
@@ -348,9 +373,8 @@ function battleHandler(participants, x, y) {
 	}
 	
 	this.resolve = function(){
-		var battle = new schlacht(this.attackSide.map(function(val){return val.a;}), this.defenseSide.map(function(val){return val.a;}), null, null, this.x, this.y);
-		battle.init();
-		if(battle.overrunAttack()) {
+		this.battle = new schlacht(this.attackSide.map((val) => (val.a)), this.defenseSide.map((val) => (val.a)), [], [], this.x, this.y);
+		if(this.battle.overrunAttack()) {
 			this.attackSide.forEach(function(item){
 				item.remainingMovePoints -= 7;
 			});
@@ -365,23 +389,17 @@ function battleHandler(participants, x, y) {
 				item.a.decimate(item.a.count);
 			});
 		} else {
-			var result = battle.result(this.attackDice.value, this.defenseDice.value);
+			var result = this.battle.result(parseInt(this.attackDice.value), parseInt(this.defenseDice.value));
 			if(result.victor === 'attacker'){
 				//wipe the looser out
 				this.defenseSide.forEach(function(item){
 					item.a.decimate(item.a.count);
 				});
 				//null move points of the victor and inflict losses
-				this.attackSide.forEach(function(item){
+				this.attackSide.forEach(function(item, index){
 					var army = item.a;
 					item.remainingMovePoints = 0;
-					if(army.armyId < 200 && army.armyId > 0){
-						army.decimate((army.count/this.attackSoldiers)*result.footLosses);
-					} else if(army.armyId < 300 && army.armyId > 200){
-						army.decimate((army.count/this.attackRiders)*result.cavLosses);
-					} else if(army.armyId < 400 && army.armyId > 300){
-						army.decimate((army.count/this.attackShips)*result.fleetLosses);
-					}
+					army.decimate(result.attackerLosses[index]);
 				}, this);
 			} else if(result.victor === 'defender'){
 				//wipe the looser out
@@ -389,16 +407,10 @@ function battleHandler(participants, x, y) {
 					item.a.decimate(item.a.count);
 				});
 				//null move points of the victor and inflict losses
-				this.defenseSide.forEach(function(item){
+				this.defenseSide.forEach(function(item, index){
 					var army = item.a;
 					item.remainingMovePoints = 0;
-					if(army.armyId < 200 && army.armyId > 0){
-						army.decimate((army.count/this.defenseSoldiers)*result.footLosses);
-					} else if(army.armyId < 300 && army.armyId > 200){
-						army.decimate((army.count/this.defenseRiders)*result.cavLosses);
-					} else if(army.armyId < 400 && army.armyId > 300){
-						army.decimate((army.count/this.defenseShips)*result.fleetLosses);
-					}
+					army.decimate(result.defenderLosses[index]);
 				},this);
 			} else if(result.victor === 'tie'){
 				//wipe all combatants out
@@ -418,19 +430,26 @@ function battleHandler(participants, x, y) {
 
 
 function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, posY) {
+    this.armiesAttack = armiesAttack;
+    this.armiesDefense = armiesDefense;
+    this.charsAttack = charsAttack;
+    this.charsDefense = charsDefense;
+    this.posX = posX;
+    this.posY = posY;
 
     this.fieldType = function(){
-		return (new showHex(posX, posY)).fieldType();
+        return (new showHex(this.posX, this.posY)).fieldType();
+//        return fields.find((field) => (field.x === this.posX && field.y === this.posY)).type;
 	}
 
     this.overrunAttack = function() {
-        return this.armyArrayCount(armiesAttack) >= 10 * this.armyArrayCount(armiesDefense) &&
-            armiesDefense.filter((elem) => (elem.isGuard)).length === 0;
+        return this.armyArrayCount(this.armiesAttack) >= 10 * this.armyArrayCount(this.armiesDefense) &&
+            this.armiesDefense.filter((elem) => (elem.isGuard)).length === 0 && this.armyArrayCount(this.armiesAttack) > 0;
     }
 
     this.overrunDefense = function() {
-        return 10 * this.armyArrayCount(armiesAttack) <= this.armyArrayCount(armiesDefense) &&
-            armiesAttack.filter((elem) => (elem.isGuard)).length === 0;
+        return 10 * this.armyArrayCount(this.armiesAttack) <= this.armyArrayCount(this.armiesDefense) &&
+            this.armiesAttack.filter((elem) => (elem.isGuard)).length === 0 && this.armyArrayCount(this.armiesDefense) > 0;
     }
 
     this.armyArrayCount = function(armyArray) {
@@ -490,8 +509,11 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
     }
 
     this.result = function(attackRoll, defenseRoll){
-        var totalStrengthAttackerArmy = armiesAttack.map((elem) => (elem.count));
-        var totalStrengthDefenderArmy = armiesDefense.map((elem) => {
+        this.attackRoll = attackRoll;
+        this.defenseRoll = defenseRoll;
+        
+        var totalStrengthAttackerArmy = this.armiesAttack.map((elem) => (elem.count));
+        var totalStrengthDefenderArmy = this.armiesDefense.map((elem) => {
             if(elem.armyType() === 3){
                 return elem.count + elem.lkp * 5 + elem.skp * 10;
             } else {
@@ -499,11 +521,11 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
             }
         });
 
-        var totalAttackerArmyGP = armiesAttack.map((elem) => (
-            attackRoll + elem.leaderGp() + this.terrainGP(elem, true) + this.characterGP(elem) + this.directionalTerrainGP(elem)
+        var totalAttackerArmyGP = this.armiesAttack.map((elem) => (
+            this.attackRoll + elem.leaderGp() + this.terrainGP(elem, true) + this.characterGP(elem) + this.directionalTerrainGP(elem)
         ));
         var totalDefenderArmyGP = armiesDefense.map((elem) => (
-            defenseRoll + elem.leaderGp() + this.terrainGP(elem, false) + this.characterGP(elem) + this.directionalTerrainGP(elem)
+            this.defenseRoll + elem.leaderGp() + this.terrainGP(elem, false) + this.characterGP(elem) + this.directionalTerrainGP(elem)
         ));
 
         var combatRatingAttackerArmy = this.computeCombatRating(totalStrengthAttackerArmy, totalAttackerArmyGP);
