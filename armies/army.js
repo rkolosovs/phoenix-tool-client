@@ -353,8 +353,8 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde) {
     this.count = truppen;
     this.mounts = 0;
     this.leaders = heerfuehrer;
-    this.skp = leichte;
-    this.lkp = schwere;
+    this.lkp = leichte;
+    this.skp = schwere;
     this.isGuard = istGarde;
     this.isLoadedIn = null; // for easier Data Saving 
     this.loadedArmies = [];

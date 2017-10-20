@@ -430,10 +430,8 @@ function battleHandler(participants, x, y) {
 
 
 function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, posY) {
-    this.fieldType = function(){
-        return (new showHex(posX, posY)).fieldType();
+    this.fieldType = (new showHex(posX, posY)).fieldType();
 //        return fields.find((field) => (field.x === this.posX && field.y === this.posY)).type;
-	}
 
     this.overrunAttack = function() {
         return this.armyArrayCount(armiesAttack) >= 10 * this.armyArrayCount(armiesDefense) &&
@@ -447,7 +445,7 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
 
     this.armyArrayCount = function(armyArray) {
         return armyArray.filter((val) => (
-            (val.armyType() === 3 && this.fieldType() <= 1) || (this.fieldType() >= 2 && val.armyType() <= 2)), this).
+            (val.armyType() === 3 && this.fieldType <= 1) || (this.fieldType >= 2 && val.armyType() <= 2)), this).
             reduce((total, elem) => (elem.count + total), 0);
     }
 
@@ -455,7 +453,7 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
         //TODO: including bonuses form defending a production building. remember that that negates usual terrain bonus
         //BLOCKER: requires the army to know its real, allegiance.
         //TODO: once an army knows its previous position the attacker parameter can be removed
-        var fieldType = this.fieldType();
+        var fieldType = this.fieldType;
         if((army.armyType() === 1 && (fieldType === 3 || fieldType === 8)) ||
             (army.armyType() === 2 && (fieldType === 2 || fieldType === 4 || fieldType === 7))) {
             return 140;
