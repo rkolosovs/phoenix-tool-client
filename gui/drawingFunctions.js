@@ -399,7 +399,7 @@ function drawPossibleMoves(ctx, x, y, scale, selectedArmy){//drawing all possibl
 		for (var i = 0; i < moves.length; i++) {
             ctx.lineWidth = scale/6;
 	        ctx.strokeStyle='#00FF00';
-            var pos = computePosition(x, y, moves[i].tar.x, moves[i].tar.y, scale); //get fields position
+            var pos = computePosition(x, y, moves[i].x, moves[i].y, scale); //get fields position
 		    ctx.beginPath();
       	    ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/12, 0, 2 * Math.PI, false);
       	    ctx.stroke();

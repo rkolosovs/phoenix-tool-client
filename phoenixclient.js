@@ -184,7 +184,7 @@ function registerLeftClick(){
 		switchModeTo("none");
 	} else if(worldCreationModeOnClick){
 		var clickedHex = new showHex(clickedField[0], clickedField[1]);
-		var posi = clickedHex.positionInList();
+		var posi = clickedHex.positionInList(clickedField[0], clickedField[1]);
 		if(changeFieldToType == -1){
 			// checks if Field should be changed to a specific type, if not use
 			// normal world creation mode on click
@@ -271,7 +271,7 @@ function registerRightClick(){
 	console.log(clickedField);
 	if(worldCreationModeOnClick){
 		var clickedHex = new showHex(clickedField[0], clickedField[1]);
-		var posi = clickedHex.positionInList();
+		var posi = clickedHex.positionInList(clickedField[0], clickedField[1]);
 		if(changeFieldToType == -1){
 			// checks if Field should be changed to a specific type (then
 			// rightclick is disabled)
@@ -296,8 +296,10 @@ function registerRightClick(){
 		if(selectedArmy === undefined){
 			console.log("Can't move with no army selected");
 		} else {
+			var clickedArmyX = listOfArmyCoordinates[selectedArmy].x;
+			var clickedArmyY = listOfArmyCoordinates[selectedArmy].y;
 			var clickedArmyCoords = new showHex(listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y);
-			var neighbors = clickedArmyCoords.neighbors();
+			var neighbors = clickedArmyCoords.neighbors(listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y);
 			for (var i = 0; i < neighbors.length; i++){
 				if(neighbors[i][0] == clickedField[0] && neighbors[i][1] == clickedField[1]){
 					var out;
@@ -313,7 +315,7 @@ function registerRightClick(){
 							type: "move", content: {
 								armyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
 								realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
-								fromX: clickedArmyCoords.x, fromY: clickedArmyCoords.y, 
+								fromX: clickedArmyX, fromY: clickedArmyY, 
 								toX: listOfArmyCoordinates[selectedArmy].x, toY: listOfArmyCoordinates[selectedArmy].y
 							}
 						});

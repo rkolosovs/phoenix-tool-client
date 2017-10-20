@@ -527,9 +527,9 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
 		}
 	}
 
-	this.fieldType = function(){
+	this.fieldType = function(){//TODO probably redundant since hex.js refactoring
 		var battleField = new showHex(this.x,this.y);
-		return battleField.fieldType();
+		return battleField.fieldType(this.x, this.y);
 	}
 
     this.charGp1 = function(){
@@ -591,7 +591,7 @@ function schlacht(armiesAttack, armiesDefend, chars1, chars2, posX, posY) {
 		}
 		var troopAdvantage = 0;
 		var riderAdvantage = 0;
-		var battleFieldType = this.fieldType();
+		var battleFieldType = this.fieldType(this.x, this.y);//TODO probably rework to use the generic function
 		switch (battleFieldType){
 			case 2:
 			case 4:

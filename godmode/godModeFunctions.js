@@ -168,7 +168,7 @@
 		function addStreet(direction){
 			var sf = selectedFields[0];
 			var field = new showHex(sf[0], sf[1]);
-			var targets = field.neighbors();
+			var targets = field.neighbors(sf[0], sf[1]);
 			var target = targets[direction];
 			var found = false;
 			for(var i = 0; i < buildings.length; i++){
@@ -191,7 +191,7 @@
 		function removeStreet(direction){
 			var sf = selectedFields[0];
 			var field = new showHex(sf[0], sf[1]);
-			var targets = field.neighbors();
+			var targets = field.neighbors(sf[0], sf[1]);
 			var target = targets[direction];
 			var found = undefined;
 			for(var i = 0; i < buildings.length; i++){
@@ -218,7 +218,7 @@
 		function addRiver(direction){
 			var sf = selectedFields[0];
 			var field = new showHex(sf[0], sf[1]);
-			var targets = field.neighbors();
+			var targets = field.neighbors(sf[0], sf[1]);
 			var target = targets[direction];
 			var found = false;
 			for(var i = 0; i < rivers.length; i++){
@@ -239,7 +239,7 @@
 		function removeRiver(direction){
 			var sf = selectedFields[0];
 			var field = new showHex(sf[0], sf[1]);
-			var targets = field.neighbors();
+			var targets = field.neighbors(sf[0], sf[1]);
 			var target = targets[direction];
 			var found = undefined;
 			for(var i = 0; i < rivers.length; i++){
