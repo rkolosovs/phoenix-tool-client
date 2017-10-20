@@ -533,10 +533,9 @@ function writeTurnNumber() {
 					saveFactionsTerritories();
 					saveArmies();
 				} else { //Players and SL during player's turn send events
-					sendAllPreparedEvents();
+					console.log(2);
+					sendEventlistInOrder();
 				}
-				pendingEvents = [];
-				preparedEvents = [];
 				sendNextTurn();
 			}
 		});
@@ -572,7 +571,8 @@ function writeTurnNumber() {
 			} else {
 				if (confirm("Do you want to save the events issued so far without ending the turn?" +
 				" Once saved the progress can only be reverted by the SL.")){
-					sendAllPreparedEvents();
+					console.log(3);
+					sendEventlistInOrder();
 				}
 			}
 		});

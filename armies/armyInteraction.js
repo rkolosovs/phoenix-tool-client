@@ -930,6 +930,7 @@ function splitSelectedArmy() {
 				y: listOfArmyCoordinates[selectedArmy].y
 			}
 		});
+		console.log("was pushed in the event list.");
 	}
 	if (listOfArmyCoordinates[selectedArmy].a.armyType() == 2) {
 		var newArmyId = generateArmyId(2, listOfArmyCoordinates[selectedArmy].owner);

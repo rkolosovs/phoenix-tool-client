@@ -186,8 +186,7 @@ function hide(element) {
 		function updateInfoBox(){
 			if(selectedArmy != undefined){
 				// info Box
-				console.log(listOfArmyCoordinates[selectedArmy].a.armyId);
-				console.log("This a guard army: " + listOfArmyCoordinates[selectedArmy].a.isGuard);
+				console.log(listOfArmyCoordinates[selectedArmy].a.armyId + " selected.");
 				if(listOfArmyCoordinates[selectedArmy].a.isGuard){
 					document.getElementById("guard").innerHTML = "Garde";
 				} else {

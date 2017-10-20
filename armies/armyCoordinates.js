@@ -74,7 +74,6 @@ function armyCoordinates(army, coordX, coordY, owner) {
 // direction as a number, 0 = NW, 1 = NO, 2 = O, 3 = SO, 4 = SW, 5 = W
 //tries to move a Unit in a direction and if possible saves the possible move
     this.moveToList = function(direction) {
-        console.log("moveToListInitiated");
         var destination = new showHex(this.x, this.y);
         var neighborCoords = destination.neighbors();
         var target = new showHex(neighborCoords[direction][0],neighborCoords[direction][1]);
@@ -287,7 +286,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 case 2:
                 case 4:
                 case 7:
-                console.log("there is a street: "+ thereIsAStreet);
+                // console.log("there is a street: "+ thereIsAStreet);
                 if(thereIsAStreet){  // target field is a lowland, hill or desert
                     if(this.remainingMovePoints >= 4){
                         //this.moveHelper(changeInHeight, direction, 4,1,true, target);
