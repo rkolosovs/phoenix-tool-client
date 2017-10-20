@@ -430,26 +430,19 @@ function battleHandler(participants, x, y) {
 
 
 function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, posY) {
-    this.armiesAttack = armiesAttack;
-    this.armiesDefense = armiesDefense;
-    this.charsAttack = charsAttack;
-    this.charsDefense = charsDefense;
-    this.posX = posX;
-    this.posY = posY;
-
     this.fieldType = function(){
-        return (new showHex(this.posX, this.posY)).fieldType();
+        return (new showHex(posX, posY)).fieldType();
 //        return fields.find((field) => (field.x === this.posX && field.y === this.posY)).type;
 	}
 
     this.overrunAttack = function() {
-        return this.armyArrayCount(this.armiesAttack) >= 10 * this.armyArrayCount(this.armiesDefense) &&
-            this.armiesDefense.filter((elem) => (elem.isGuard)).length === 0 && this.armyArrayCount(this.armiesAttack) > 0;
+        return this.armyArrayCount(armiesAttack) >= 10 * this.armyArrayCount(armiesDefense) &&
+            armiesDefense.filter((elem) => (elem.isGuard)).length === 0 && this.armyArrayCount(armiesAttack) > 0;
     }
 
     this.overrunDefense = function() {
-        return 10 * this.armyArrayCount(this.armiesAttack) <= this.armyArrayCount(this.armiesDefense) &&
-            this.armiesAttack.filter((elem) => (elem.isGuard)).length === 0 && this.armyArrayCount(this.armiesDefense) > 0;
+        return 10 * this.armyArrayCount(armiesAttack) <= this.armyArrayCount(armiesDefense) &&
+            armiesAttack.filter((elem) => (elem.isGuard)).length === 0 && this.armyArrayCount(armiesDefense) > 0;
     }
 
     this.armyArrayCount = function(armyArray) {
@@ -509,11 +502,8 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
     }
 
     this.result = function(attackRoll, defenseRoll){
-        this.attackRoll = attackRoll;
-        this.defenseRoll = defenseRoll;
-        
-        var totalStrengthAttackerArmy = this.armiesAttack.map((elem) => (elem.count));
-        var totalStrengthDefenderArmy = this.armiesDefense.map((elem) => {
+        var totalStrengthAttackerArmy = armiesAttack.map((elem) => (elem.count));
+        var totalStrengthDefenderArmy = armiesDefense.map((elem) => {
             if(elem.armyType() === 3){
                 return elem.count + elem.lkp * 5 + elem.skp * 10;
             } else {
@@ -521,11 +511,11 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
             }
         });
 
-        var totalAttackerArmyGP = this.armiesAttack.map((elem) => (
-            this.attackRoll + elem.leaderGp() + this.terrainGP(elem, true) + this.characterGP(elem) + this.directionalTerrainGP(elem)
+        var totalAttackerArmyGP = armiesAttack.map((elem) => (
+            attackRoll + elem.leaderGp() + this.terrainGP(elem, true) + this.characterGP(elem) + this.directionalTerrainGP(elem)
         ));
         var totalDefenderArmyGP = armiesDefense.map((elem) => (
-            this.defenseRoll + elem.leaderGp() + this.terrainGP(elem, false) + this.characterGP(elem) + this.directionalTerrainGP(elem)
+            defenseRoll + elem.leaderGp() + this.terrainGP(elem, false) + this.characterGP(elem) + this.directionalTerrainGP(elem)
         ));
 
         var combatRatingAttackerArmy = this.computeCombatRating(totalStrengthAttackerArmy, totalAttackerArmyGP);
