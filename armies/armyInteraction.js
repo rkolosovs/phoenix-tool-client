@@ -491,12 +491,14 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
         }
     }
 
-    this.computeFinalLosses = function(baseArmyLosses, armyGPDiff) {
+    this.computeFinalLosses = function(baseArmyLosses, armyGPDiff, armyStrength, totalStrength) {
+        var lossesWithGP = 0;
         if(armyGPDiff >= 0) {
-            return baseArmyLosses/(1 + armyGPDiff);
+            lossesWithGP = baseArmyLosses/(1 + armyGPDiff);
         } else {
-            return baseArmyLosses * (1 + (-1 * armyGPDiff));
+            lossesWithGP = baseArmyLosses * (1 + (-1 * armyGPDiff));
         }
+        return (lossesWithGP/totalStrength)*armyStrength;
     }
 
     this.result = function(attackRoll, defenseRoll){
@@ -553,10 +555,10 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
         var defenderGPDiffArmy = totalDefenderArmyGP.map((elem) => (((elem/2) - attackerMeanGP)/100));
 
         var finalLossesAttackerArmy = baseLossesAttackerArmy.map((elem, index) => (
-            this.computeFinalLosses(elem, attackerGPDiffArmy[index])
+            this.computeFinalLosses(elem, attackerGPDiffArmy[index], totalStrengthAttackerArmy[index], totalStrengthAttackerArmy[index])
         ));
         var finalLossesDefenderArmy = baseLossesDefenderArmy.map((elem, index) => (
-            this.computeFinalLosses(elem, defenderGPDiffArmy[index])
+            this.computeFinalLosses(elem, defenderGPDiffArmy[index], armiesDefense[index].count, totalStrengthDefenderArmy[index])
         ));
 
         return {victor: victor, attackerLosses: finalLossesAttackerArmy, defenderLosses: finalLossesDefenderArmy};
