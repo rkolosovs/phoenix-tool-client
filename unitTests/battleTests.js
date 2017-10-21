@@ -167,7 +167,7 @@ module( "Battle" , function() {
 			});
 			test( "Mixed fleet combat.", function(t) {
 				var battle = new schlacht([attackerArmies[15]], [defenderArmies[15]], [], [], 2, 2);
-				t.resultEquals( battle.result(5, 5), {victor: 'attacker', attackerLosses: [26.72], defenderLosses: [14.02]} );
+				t.resultEquals( battle.result(10, 1), {victor: 'attacker', attackerLosses: [32.39], defenderLosses: [14.02]} );
 			});
 		});
 		module( "Guard Battles", function() {
@@ -195,7 +195,7 @@ module( "Battle" , function() {
 			});
 			test( "Foot vs guard foot 10:1 fight.", function(t) {
 				var battle = new schlacht([attackerArmies[5]], [defenderArmies[5]], [], [], 0, 0);
-				t.resultEquals( battle.result(10, 1), {victor: 'defender', attackerLosses: [3929.27], defenderLosses: [0]} );
+				t.resultEquals( battle.result(10, 1), {victor: 'defender', attackerLosses: [3338.90], defenderLosses: [0]} );
 				//TODO Not sure if the rules work as intended here (victor losses being 0)
 			});
 			test( "Fleet vs guard fleet 10:1 fight.", function(t) {
@@ -205,11 +205,11 @@ module( "Battle" , function() {
 			});
 			test( "Mixed army vs guard foot and regular horse in forest.", function(t) {
 				var battle = new schlacht([attackerArmies[5], attackerArmies[9]], [defenderArmies[6], defenderArmies[10]], [], [], 1, 1);
-				t.resultEquals( battle.result(5, 5), {victor: 'attacker', attackerLosses: [1496, 387.32], defenderLosses: [1390, 2090]} );
+				t.resultEquals( battle.result(5, 5), {victor: 'attacker', attackerLosses: [471.83, 1822.4], defenderLosses: [1390, 2090]} );
 			});
 			test( "Mixed army vs regular foot and guard horse on plains.", function(t) {
 				var battle = new schlacht([attackerArmies[6], attackerArmies[8]], [defenderArmies[6], defenderArmies[10]], [], [], 0, 0);
-				t.resultEquals( battle.result(5, 5), {victor: 'attacker', attackerLosses: [1496, 387.32], defenderLosses: [2090, 1390]} );
+				t.resultEquals( battle.result(5, 5), {victor: 'attacker', attackerLosses: [1822.4, 471.83], defenderLosses: [2090, 1390]} );
 			});
 		});
 		module( "Complex Battles", function() {
@@ -240,7 +240,7 @@ module( "Battle" , function() {
 					new seeHeer(313, 100, 50, 0, 0, true)//army of a defending realm
 				];
 				var battle = new schlacht(attackingArmies, defendingArmies, [], [], 2, 2);
-				t.resultEquals( battle.result(12, 8), {victor: 'attacker', attackerLosses: [35.60, 184, 252.20], defenderLosses: [426.02, 331.39, 59.47]} );
+				t.resultEquals( battle.result(12, 8), {victor: 'attacker', attackerLosses: [35.60, 184, 252.20], defenderLosses: [426.08, 331.39, 59.47]} );
 				//TODO Defender not completely wiped out. Check in with the SL to see what is to be done about it.
 			});
 		});
