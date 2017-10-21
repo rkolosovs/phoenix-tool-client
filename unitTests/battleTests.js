@@ -204,7 +204,7 @@ module( "Battle" , function() {
 				//TODO Not sure if the rules work as intended here (victor losses being 0)
 			});
 			test( "Mixed army vs guard foot and regular horse in forest.", function(t) {
-				var battle = new schlacht([attackerArmies[5], attackerArmies[9]], [defenderArmies[6], defenderArmies[10]], [], [], 1, 1);
+				var battle = new schlacht([attackerArmies[4], attackerArmies[9]], [defenderArmies[6], defenderArmies[10]], [], [], 1, 1);
 				t.resultEquals( battle.result(5, 5), {victor: 'attacker', attackerLosses: [471.83, 1822.4], defenderLosses: [1390, 2090]} );
 			});
 			test( "Mixed army vs regular foot and guard horse on plains.", function(t) {
