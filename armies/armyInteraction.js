@@ -482,10 +482,11 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
     }
 
     this.computeLossFactor = function(ownForces, enemyForces, victorious) {
+        var baseFactor = (((enemyForces - ownForces)/10)/enemyForces);
         if (victorious && ownForces >= enemyForces) {
-            return (((enemyForces - ownForces)/10)/enemyForces) - 0.1;
+            return baseFactor - 0.1;
         } else if (victorious && ownForces < enemyForces) {
-            return (((enemyForces - ownForces)/10)/ownForces) + 0.1;
+            return baseFactor + 0.1;
         } else {
             return 0;
         }
