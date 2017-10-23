@@ -511,7 +511,7 @@ function determineEventStatus() {
 				if (army1 == undefined || army2 == undefined) {
 					pendingEvents[i].status = 'withheld';
 				}
-				else if ((army1.a.armyType() == army2.a.armyType() || (content.troops == 0 && content.mounts == 0 && content.lkp == 0 && conten.skp == 0))
+				else if ((army1.a.armyType() == army2.a.armyType() || (content.troops == 0 && content.mounts == 0 && content.lkp == 0 && content.skp == 0))
 					&& army1.x == army2.x && army1.y == army2.y) {
 					pendingEvents[i].status = 'available';
 				}
@@ -783,7 +783,6 @@ function checkEvent(num) {
 			event.status = 'checked';
 			fillEventList();
 			drawStuff();
-			//			sendCheckEvent(event.pk, event.type);
 		} else if (event.type === "battle") {
 			var battleBox = document.getElementById("battleBox");
 			show(battleBox);
@@ -806,8 +805,6 @@ function checkEvent(num) {
 				event.status = 'checked';
 				fillEventList();
 				drawStuff();
-				//				console.log(listOfArmyCoordinates);
-				//				sendCheckEvent(event.pk, event.type);
 			};
 			battleButton.disabled = true;
 			battleButton.style.cursor = "not-allowed";
@@ -858,8 +855,6 @@ function checkEvent(num) {
 			}
 			event.status = 'checked';
 			fillEventList();
-			//			sendCheckEvent(event.pk, event.type);
-			//saveArmies();
 			drawStuff();
 		} else if (event.type === "merge") {
 			var armyFromPlaceInList = -1;
@@ -886,8 +881,6 @@ function checkEvent(num) {
 			}
 			event.status = 'checked';
 			fillEventList();
-			//			sendCheckEvent(event.pk, event.type);
-			//saveArmies();
 			drawStuff();
 			selectedArmy = undefined;
 		} else if (event.type === "transfer") {
@@ -925,11 +918,19 @@ function checkEvent(num) {
 					listOfArmyCoordinates[armyFromPlaceInList].a.skp -= skpToSplit;
 					listOfArmyCoordinates[armyToPlaceInList].a.skp += skpToSplit;
 				}
+				if(leadersToSplit > 0 && 
+					listOfArmyCoordinates[armyFromPlaceInList].remainingMovePoints < listOfArmyCoordinates[armyFromPlaceInList].startingMovepoints())
+				{
+					listOfArmyCoordinates[armyToPlaceInList].setRemainingMovePoints(0);
+				} else if (listOfArmyCoordinates[armyFromPlaceInList].remainingMovePoints < listOfArmyCoordinates[armyToPlaceInList].remainingMovePoints) {
+					listOfArmyCoordinates[armyToPlaceInList].setRemainingMovePoints(listOfArmyCoordinates[armyFromPlaceInList].remainingMovePoints);
+				}
+				if (listOfArmyCoordinates[armyFromPlaceInList].remainingHeightPoints < listOfArmyCoordinates[armyToPlaceInList].remainingHeightPoints) {
+					listOfArmyCoordinates[armyToPlaceInList].setRemainingHeightPoints(listOfArmyCoordinates[armyFromPlaceInList].remainingHeightPoints);
+				}
 			}
 			event.status = 'checked';
 			fillEventList();
-			//			sendCheckEvent(event.pk, event.type);
-			//saveArmies();
 			drawStuff();
 		}
 	}

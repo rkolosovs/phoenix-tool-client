@@ -7,6 +7,7 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
     this.mounts = reittiere;
     this.isGuard = istGarde;
     this.isLoadedIn = null;
+    this.startingMovepoints = 9;
     // setze eine neue Id für das Heer
     this.setId = function(newId){
         this.armyId = newId;
@@ -273,6 +274,7 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde) {
     this.lkp = 0;
     this.isGuard = istGarde;
     this.isLoadedIn = null;
+    this.startingMovepoints = 21;
     this.leaderGp = function(){
         var gp = 0;
         if(this.leaders < 101){
@@ -354,7 +356,8 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde) {
     this.skp = leichte;
     this.lkp = schwere;
     this.isGuard = istGarde;
-    this.isLoadedIn = null; // for easier Data Saving 
+    this.isLoadedIn = null; // for easier Data Saving
+    this.startingMovepoints = 42;
     this.loadedArmies = [];
     //sollte 1 für heer, 2 für reiterheer, 3 für seeHeer
     this.armyType = function(){

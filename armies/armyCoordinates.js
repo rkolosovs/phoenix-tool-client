@@ -20,6 +20,16 @@ function armyCoordinates(army, coordX, coordY, owner) {
     	//TODO once characters are a thing, 0 officer armies with a character on the field should also be alive
     }
     
+    // returns the starting movement points of the army depending on its type.
+    // TODO: pirate has different values, remeber!
+    this.startingMovepoints = function(){
+        var type = this.a.armyType();
+        switch(type){
+            case 1: return 9;
+            case 2: return 21;
+            case 3: return 42;
+        } 
+    }
     // nur zu Testzwecken 300
     //TODO: make it the proper value once testing is done
     this.remainingMovePoints = 300;
