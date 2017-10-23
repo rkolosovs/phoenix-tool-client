@@ -695,12 +695,12 @@ function makeEventListItem(event, i) {
 		}
 		eli.innerHTML = html + "</div>";
 	} else if (event.type === "merge") {
-		eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " merges with army " + cont.toArmy + ".</div>";
+		eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " merges with army " + cont.toArmy + " in (" +cont.x+ ","+cont.y+ ").</div>";
 	} else if (event.type === "split") {
 		// TODO: detailed explanation
-		eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " splits off army " + cont.newArmy + ".</div>";
+		eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " splits off army " + cont.newArmy + " with " +cont.troops+ " troops, "+cont.leaders+ " leaders, " +cont.mounts + " mounts, "+ cont.lkp + " lkp, and " +cont.skp + " skp in (" +cont.x+ ","+cont.y+ ").</div>";
 	} else if (event.type === "transfer") {
-		eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " transfers troops to " + cont.toArmy + ".</div>";
+		eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " transfers " + cont.troops + " troops, " +cont.leaders+ " leaders, " +cont.mounts + " mounts, "+ cont.lkp + " lkp, and " +cont.skp + " skp to " + cont.toArmy + " in (" +cont.x+ ","+cont.y+ ").</div>";
 	}
 	var deleteButton = document.createElement("BUTTON");
 	deleteButton.id = "delBtn" + i;
