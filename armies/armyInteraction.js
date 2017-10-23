@@ -482,11 +482,11 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
     }
 
     this.computeLossFactor = function(ownForces, enemyForces, victorious) {
-        var baseFactor = (((enemyForces - ownForces)/10)/enemyForces);
+        var baseFactor = (ownForces/enemyForces)/10;
         if (victorious && ownForces >= enemyForces) {
-            return baseFactor - 0.1;
+            return - baseFactor;
         } else if (victorious && ownForces < enemyForces) {
-            return baseFactor + 0.1;
+            return 0.2 - baseFactor;
         } else {
             return 0;
         }
@@ -497,7 +497,7 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
         if(armyGPDiff >= 0) {
             lossesWithGP = baseArmyLosses/(1 + armyGPDiff);
         } else {
-            lossesWithGP = baseArmyLosses * (1 + (-1 * armyGPDiff));
+            lossesWithGP = baseArmyLosses * (1 - armyGPDiff);
         }
         return (lossesWithGP/totalStrength)*armyStrength;
     }
@@ -543,8 +543,9 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
         var attackerLossFactor = this.computeLossFactor(totalAttackerStrength, totalDefenderStrength, (victor === 'attacker'));
         var defenderLossFactor = this.computeLossFactor(totalDefenderStrength, totalAttackerStrength, (victor === 'defender'));
 
-        var attackerNewBaseLosses = Math.floor(attackerBaseLosses * (1 + attackerLossFactor));
-        var defenderNewBaseLosses = Math.floor(defenderBaseLosses * (1 + defenderLossFactor));
+        //multiplication and subsequent division by 100 done for reasons of numeric stability
+        var attackerNewBaseLosses = Math.floor((attackerBaseLosses * (100 + (attackerLossFactor * 100)))/100);
+        var defenderNewBaseLosses = Math.floor((defenderBaseLosses * (100 + (defenderLossFactor * 100)))/100);
 
         var baseLossesAttackerArmy = totalStrengthAttackerArmy.map((elem) => ((elem/totalAttackerStrength)*attackerNewBaseLosses));
         var baseLossesDefenderArmy = totalStrengthDefenderArmy.map((elem) => ((elem/totalDefenderStrength)*defenderNewBaseLosses));
@@ -552,8 +553,8 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
         var attackerMeanGP = ((attackerTotalCombatRating/totalAttackerStrength) - 1) * 100;
         var defenderMeanGP = ((defenderTotalCombatRating/totalDefenderStrength) - 1) * 100;
 
-        var attackerGPDiffArmy = totalAttackerArmyGP.map((elem) => (((elem/2) - defenderMeanGP)/100));
-        var defenderGPDiffArmy = totalDefenderArmyGP.map((elem) => (((elem/2) - attackerMeanGP)/100));
+        var attackerGPDiffArmy = totalAttackerArmyGP.map((elem) => ((elem/200) - (defenderMeanGP/100)));
+        var defenderGPDiffArmy = totalDefenderArmyGP.map((elem) => ((elem/200) - (attackerMeanGP/100)));
 
         var finalLossesAttackerArmy = baseLossesAttackerArmy.map((elem, index) => (
             this.computeFinalLosses(elem, attackerGPDiffArmy[index], totalStrengthAttackerArmy[index], totalStrengthAttackerArmy[index])
