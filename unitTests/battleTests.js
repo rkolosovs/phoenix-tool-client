@@ -32,12 +32,11 @@ var attackerArmies = [];
 var borders = [];
 var buildings = [];
 var fieldTypes = [];
-//mockup showHex method
-function showHex(posX, posY) {
-    this.fieldType = function(){
-    	return fieldTypes[posX];
-    }
+//mockup fielType method
+function fieldType(x,y){
+    return fieldTypes[posX];
 }
+
 
 module( "Battle" , function() {
 	module( "Results", {

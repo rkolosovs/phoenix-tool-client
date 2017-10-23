@@ -76,11 +76,9 @@ function armyCoordinates(army, coordX, coordY, owner) {
 //tries to move a Unit in a direction and if possible saves the possible move
     this.moveToList = function(direction) {
         console.log("moveToListInitiated");
-        var destination = new showHex(this.x, this.y);
-        var neighborCoords = destination.neighbors(this.x, this.y);
+        var neighborCoords = neighbors(this.x, this.y);
         var targetX = neighborCoords[direction][0];
         var targetY = neighborCoords[direction][1];
-        var target = new showHex(neighborCoords[direction][0],neighborCoords[direction][1]);
         var changeInHeight = false;
         var thereIsAStreet = false;
         // check if there is a steet on the route
@@ -95,9 +93,9 @@ function armyCoordinates(army, coordX, coordY, owner) {
             }
         }
         // check if there is a change in height on the route
-        if(destination.height(this.x, this.y) != target.height(neighborCoords[direction][0],neighborCoords[direction][1])){
-            if((destination.height(this.x, this.y) - target.height(neighborCoords[direction][0],neighborCoords[direction][1])) >= 2 || 
-            target.height(neighborCoords[direction][0],neighborCoords[direction][1]) - destination.height(this.x, this.y) >= 2){
+        if(height(this.x, this.y) != height(neighborCoords[direction][0],neighborCoords[direction][1])){
+            if((height(this.x, this.y) - height(neighborCoords[direction][0],neighborCoords[direction][1])) >= 2 || 
+            height(neighborCoords[direction][0],neighborCoords[direction][1]) - height(this.x, this.y) >= 2){
                 return "The height difference is too big."
             } else if((this.remainingHeightPoints < 2 && !thereIsAStreet)||this.remainingHeightPoints < 1){
                 return "No height points left."
@@ -107,7 +105,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
         }
         // ship movement
         if(Math.floor(this.a.armyId / 100) == 3){
-            switch(target.fieldType(this.x, this.y)){
+            switch(fieldType(this.x, this.y)){
                 case 0: 
                     if(this.a.lkp == 0 && this.a.skp == 0){
                         if(this.remainingMovePoints >= 12 ){
@@ -170,7 +168,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
             }
         // horse movement
         } else if(Math.floor(this.a.armyId / 100) == 2){
-            switch(target.fieldType(this.x, this.y)){
+            switch(fieldType(this.x, this.y)){
                 case 0:
                 case 1:
                 var fleetsOnDest = [];
@@ -179,7 +177,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 if(changeInHeight == true){
                     // is there an allied fleet on the target field?
                     for(var i = 0; i<listOfArmyCoordinates.length; i++){
-                        if((listOfArmyCoordinates[i].owner == this.owner) && (listOfArmyCoordinates[i].x == target.x) && (listOfArmyCoordinates[i].y == target.y) && 
+                        if((listOfArmyCoordinates[i].owner == this.owner) && (listOfArmyCoordinates[i].x == targetX) && (listOfArmyCoordinates[i].y == targetY) && 
                         (Math.floor(listOfArmyCoordinates[i].a.armyId / 100) == 3)){
                             if (listOfArmyCoordinates[i].a.isLoadable() == "ok")
                             {
@@ -260,7 +258,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
             }
         // normal troop movement
         } else if(Math.floor(this.a.armyId / 100) == 1){
-            switch(target.fieldType(this.x, this.y)){
+            switch(fieldType(this.x, this.y)){
                 case 0:
                 case 1:
                 var fleetsOnDest = [];
@@ -269,7 +267,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 if(changeInHeight == true){
                     // is there an allied fleet on the target field?
                     for(var i = 0; i<listOfArmyCoordinates.length; i++){
-                        if((listOfArmyCoordinates[i].owner == this.owner) && (listOfArmyCoordinates[i].x == target.x) && (listOfArmyCoordinates[i].y == target.y) && 
+                        if((listOfArmyCoordinates[i].owner == this.owner) && (listOfArmyCoordinates[i].x == targetX) && (listOfArmyCoordinates[i].y == targetY) && 
                         (Math.floor(listOfArmyCoordinates[i].a.armyId / 100) == 3)){
                             if (listOfArmyCoordinates[i].a.isLoadable() == "ok")
                             {
@@ -543,43 +541,40 @@ function armyCoordinates(army, coordX, coordY, owner) {
 
     //to find all fields in a two tile proximity
     this.findShootingTargets = function(){
-        let origin = new showHex(this.x, this.y);
 
         if(this.a.skp >0){//in a 2 tile range
-            this.targetList = origin.neighborInRange(this.x, this.y,2);
+            this.targetList = neighborInRange(this.x, this.y,2);
         }
         else{//ontile range
-            this.targetList = origin.neighborInRange(this.x, this.y,1);
+            this.targetList = neighborInRange(this.x, this.y,1);
         }
 
         //adding the range identifier showing the distange to origin
         for(let i = 0; i < this.targetList.length; i++){
-            this.targetList[i].push(origin.distance(this.x, this.y,this.targetList[i][0], this.targetList[i][1]));
+            this.targetList[i].push(distance(this.x, this.y,this.targetList[i][0], this.targetList[i][1]));
         }
         //console.log(this.targetList);
 
         let templist = this.targetList.slice();
         //to find out the conditions and maybe kick out if not shootable
         for(let i = templist.length -1; i >= 0; i--){
-            let target = new showHex(templist[i][0], templist[i][1]);
             if(this.a.skp > 0){//skp shooting
                 if(templist[i][2] == 1){//for range of 1
-                    if(target.height(templist[i][0], templist[i][1]) - origin.height(this.x, this.y) > 2){
+                    if(height(templist[i][0], templist[i][1]) - height(this.x, this.y) > 2){
                         this.targetList.splice(i,1);
                     }
                 }
                 else if(templist[i][2] == 2){//for range of 2
-                    if(target.height(templist[i][0], templist[i][1]) - origin.height(this.x, this.y) > 1){
+                    if(height(templist[i][0], templist[i][1]) - height(this.x, this.y) > 1){
                         this.targetList.splice(i,1);
                     }
                     else{//if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
-                        let targetNeighbors = target.neighbors(templist[i][0], templist[i][1]);
-                        let originNeighbors = origin.neighbors(this.x, this.y);
+                        let targetNeighbors = neighbors(templist[i][0], templist[i][1]);
+                        let originNeighbors = neighbors(this.x, this.y);
                         for(let j = 0; j < targetNeighbors.length; j++){
                             for(let k = 0; k < originNeighbors.length; k++){
                                 if(targetNeighbors[j][0] == originNeighbors[k][0] && targetNeighbors[j][1] == originNeighbors[k][1]){
-                                    let commonTile = new showHex(targetNeighbors[j][0], targetNeighbors[j][1]);
-                                    if(commonTile.height(targetNeighbors[j][0], targetNeighbors[j][1]) - origin.height(this.x, this.y) > 1){
+                                    if(height(targetNeighbors[j][0], targetNeighbors[j][1]) - height(this.x, this.y) > 1){
                                         this.targetList.splice(i,1);
                                     }
                                 }
@@ -589,7 +584,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 }
             }
             else{//for lkp shooting
-                if(target.height(templist[i][0], templist[i][1]) - origin.height(this.x, this.y) > 1){
+                if(height(templist[i][0], templist[i][1]) - height(this.x, this.y) > 1){
                     this.targetList.splice(i,1);
                 }
             }

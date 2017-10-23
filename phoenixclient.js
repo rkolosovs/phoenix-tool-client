@@ -183,8 +183,7 @@ function registerLeftClick(){
 		switchBtnBoxTo("buttonsBox");
 		switchModeTo("none");
 	} else if(worldCreationModeOnClick){
-		var clickedHex = new showHex(clickedField[0], clickedField[1]);
-		var posi = clickedHex.positionInList(clickedField[0], clickedField[1]);
+		var posi = positionInList(clickedField[0], clickedField[1]);
 		if(changeFieldToType == -1){
 			// checks if Field should be changed to a specific type, if not use
 			// normal world creation mode on click
@@ -270,8 +269,7 @@ function registerRightClick(){
 	var clickedField = getClickedField();
 	console.log(clickedField);
 	if(worldCreationModeOnClick){
-		var clickedHex = new showHex(clickedField[0], clickedField[1]);
-		var posi = clickedHex.positionInList(clickedField[0], clickedField[1]);
+		var posi = positionInList(clickedField[0], clickedField[1]);
 		if(changeFieldToType == -1){
 			// checks if Field should be changed to a specific type (then
 			// rightclick is disabled)
@@ -298,10 +296,9 @@ function registerRightClick(){
 		} else {
 			var clickedArmyX = listOfArmyCoordinates[selectedArmy].x;
 			var clickedArmyY = listOfArmyCoordinates[selectedArmy].y;
-			var clickedArmyCoords = new showHex(listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y);
-			var neighbors = clickedArmyCoords.neighbors(listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y);
-			for (var i = 0; i < neighbors.length; i++){
-				if(neighbors[i][0] == clickedField[0] && neighbors[i][1] == clickedField[1]){
+			var localNeighbors = neighbors(listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y);
+			for (var i = 0; i < localNeighbors.length; i++){
+				if(localNeighbors[i][0] == clickedField[0] && localNeighbors[i][1] == clickedField[1]){
 					var out;
 					if (listOfArmyCoordinates[selectedArmy].ownerTag() === login || login === "sl") {
 
