@@ -133,11 +133,14 @@ function registerLeftClick(){
 	if(armyWithNextClick){
 		switch(Math.floor(armyIdBuffer/100)){
 			// TODO: man soll garde erstellen können
-			case 3: var army = new seeHeer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, guardBuffer); break;
-			case 2: var army = new reiterHeer(armyIdBuffer, countBuffer, leaderBuffer, guardBuffer); break;
-			case 1: var army = new heer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, mountsBuffer ,guardBuffer); break;
+			case 3: var army = new seeHeer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, guardBuffer,
+			    clickedField[0], clickedField[1], ownerBuffer); break;
+			case 2: var army = new reiterHeer(armyIdBuffer, countBuffer, leaderBuffer, guardBuffer, clickedField[0],
+			    clickedField[1], ownerBuffer); break;
+			case 1: var army = new heer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, mountsBuffer,
+			    guardBuffer, clickedField[0], clickedField[1], ownerBuffer); break;
 		}
-        var armyCoords = new armyCoordinates(army, clickedField[0], clickedField[1], ownerBuffer);
+        var armyCoords = new armyCoordinates(army);
 		ownerBuffer = document.getElementById("ownerField").value;
 		armyIdBuffer = 0;
 		document.getElementById("armyNumberField").value = 0;
@@ -157,7 +160,7 @@ function registerLeftClick(){
 		var foundarmy;
 		for(var i = 0; i < listOfArmyCoordinates.length; i++){
 			var a = listOfArmyCoordinates[i];
-			if (a.x === armyCoords.x && a.y === armyCoords.y) {
+			if (a.a.x === armyCoords.a.x && a.a.y === armyCoords.a.y) {
 				if(a.multiArmyField === true){
 					onmulti = true;
 					foundarmy = a;
@@ -221,7 +224,7 @@ function registerLeftClick(){
 		selectedArmy = undefined;
 		var possibleSelections = [];
 		for(var i = 0; i < listOfArmyCoordinates.length; i++){
-			if(listOfArmyCoordinates[i].x == clickedField[0] && listOfArmyCoordinates[i].y == clickedField[1]){
+			if(listOfArmyCoordinates[i].a.x == clickedField[0] && listOfArmyCoordinates[i].a.y == clickedField[1]){
 				possibleSelections.push(i);
 				selectedArmy = i;
 			}
@@ -236,14 +239,14 @@ function registerLeftClick(){
 			for (var i = 0; i < possibleSelections.length; i++){
 				var btn = document.createElement("BUTTON");
 				btn.setAttribute("class", "fixedPrettyButton");
-				btn.name = listOfArmyCoordinates[possibleSelections[i]].a.armyId + " " + listOfArmyCoordinates[possibleSelections[i]].owner;
+				btn.name = listOfArmyCoordinates[possibleSelections[i]].a.armyId + " " + listOfArmyCoordinates[possibleSelections[i]].a.owner;
 				var t = document.createTextNode(listOfArmyCoordinates[possibleSelections[i]].a.armyId);
 				btn.appendChild(t);
 				btn.addEventListener('click', function(event) {
 					var idToSearchFor = this.name.split(" ")[0];
 					var ownerToSearchFor = this.name.split(" ")[1];
 					for (var j = 0; j < listOfArmyCoordinates.length ; j++){
-						if(listOfArmyCoordinates[j].a.armyId == idToSearchFor && listOfArmyCoordinates[j].owner == ownerToSearchFor){
+						if(listOfArmyCoordinates[j].a.armyId == idToSearchFor && listOfArmyCoordinates[j].a.owner == ownerToSearchFor){
 							selectedArmy = j;
 						}
 					}
@@ -296,12 +299,12 @@ function registerRightClick(){
 		if(selectedArmy === undefined){
 			console.log("Can't move with no army selected");
 		} else {
-			var clickedArmyCoords = new showHex(listOfArmyCoordinates[selectedArmy].x, listOfArmyCoordinates[selectedArmy].y);
+			var clickedArmyCoords = new showHex(listOfArmyCoordinates[selectedArmy].a.x, listOfArmyCoordinates[selectedArmy].a.y);
 			var neighbors = clickedArmyCoords.neighbors();
 			for (var i = 0; i < neighbors.length; i++){
 				if(neighbors[i][0] == clickedField[0] && neighbors[i][1] == clickedField[1]){
 					var out;
-					if (listOfArmyCoordinates[selectedArmy].ownerTag() === login || login === "sl") {
+					if (listOfArmyCoordinates[selectedArmy].a.ownerTag() === login || login === "sl") {
 
 						out = listOfArmyCoordinates[selectedArmy].move(i);
 						console.log(out);
@@ -312,9 +315,9 @@ function registerRightClick(){
 						preparedEvents.push({
 							type: "move", content: {
 								armyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
-								realm: listOfArmyCoordinates[selectedArmy].ownerTag(), 
+								realm: listOfArmyCoordinates[selectedArmy].a.ownerTag(),
 								fromX: clickedArmyCoords.x, fromY: clickedArmyCoords.y, 
-								toX: listOfArmyCoordinates[selectedArmy].x, toY: listOfArmyCoordinates[selectedArmy].y
+								toX: listOfArmyCoordinates[selectedArmy].a.x, toY: listOfArmyCoordinates[selectedArmy].a.y
 							}
 						});
 							
@@ -328,11 +331,11 @@ function registerRightClick(){
 
 						for (var j = 0; j < listOfArmyCoordinates.length; j++) {
 							var someArmy = listOfArmyCoordinates[j];
-							if (someArmy.x === listOfArmyCoordinates[selectedArmy].x && someArmy.y === listOfArmyCoordinates[selectedArmy].y 
+							if (someArmy.a.x === listOfArmyCoordinates[selectedArmy].a.x && someArmy.a.y === listOfArmyCoordinates[selectedArmy].a.y
 									&& someArmy.a !== listOfArmyCoordinates[selectedArmy].a) {
-								participants.push({armyId: someArmy.a.armyId, realm: someArmy.ownerTag()});
+								participants.push({armyId: someArmy.a.armyId, realm: someArmy.a.ownerTag()});
 								//in case they are enemies
-								if (someArmy.owner !== listOfArmyCoordinates[selectedArmy].owner) {
+								if (someArmy.a.owner !== listOfArmyCoordinates[selectedArmy].a.owner) {
 									battlePossible = true;
 								}
 								//MultipleArmies - even if not friendly
@@ -360,11 +363,11 @@ function registerRightClick(){
 						if (battlePossible) {
 							var inserted = false;
 							participants.push({armyId: listOfArmyCoordinates[selectedArmy].a.armyId, 
-								realm: listOfArmyCoordinates[selectedArmy].ownerTag()});
+								realm: listOfArmyCoordinates[selectedArmy].a.ownerTag()});
 							for (var j = 0; j < preparedEvents.length; j++){
 								if(preparedEvents[j].type === "battle" && 
-										preparedEvents[j].content.x === listOfArmyCoordinates[selectedArmy].x && 
-										preparedEvents[j].content.y === listOfArmyCoordinates[selectedArmy].y){
+										preparedEvents[j].content.x === listOfArmyCoordinates[selectedArmy].a.x &&
+										preparedEvents[j].content.y === listOfArmyCoordinates[selectedArmy].a.y){
 									preparedEvents[j].content.participants = participants;
 									inserted = true;
 								}
@@ -373,7 +376,7 @@ function registerRightClick(){
 								preparedEvents.push({
 									type: "battle", content: {
 										participants: participants, 
-										x: listOfArmyCoordinates[selectedArmy].x, y: listOfArmyCoordinates[selectedArmy].y
+										x: listOfArmyCoordinates[selectedArmy].a.x, y: listOfArmyCoordinates[selectedArmy].a.y
 									}
 								});
 							}
@@ -489,14 +492,14 @@ function determineEventStatus(){
 			{
 				var army1 = listOfArmyCoordinates[findArmyPlaceInList(content.fromArmy, content.realm)];
 				var army2 = listOfArmyCoordinates[findArmyPlaceInList(content.toArmy, content.realm)];
-				if(army1.a.armyType() == army2.a.armyType() && army1.x == army2.x && army1.y == army2.y)
+				if(army1.a.armyType() === army2.a.armyType() && army1.a.x === army2.a.x && army1.a.y === army2.a.y)
 				{
 					pendingEvents[i].status = 'available';
 				} 
-				else if((army1.a.armyType() != army2.a.armyType()) ||
-					((((army1.a.armyType() == 1 || army1.a.armyType() == 2) && army1.remainingMovePoints < 3) ||
-				army1.a.armyType() == 3 && army1.remainingMovePoints < 5) && (((army2.a.armyType() == 1 || army2.a.armyType() == 2) &&
-				 army2.remainingMovePoints < 3)|| army2.a.armyType() == 3 && army2.remainingMovePoints < 5)))
+				else if((army1.a.armyType() !== army2.a.armyType()) ||
+					((((army1.a.armyType() === 1 || army1.a.armyType() === 2) && army1.a.remainingMovePoints < 3) ||
+				    army1.a.armyType() === 3 && army1.a.remainingMovePoints < 5) && (((army2.a.armyType() === 1 || army2.a.armyType() === 2) &&
+				    army2.a.remainingMovePoints < 3)|| army2.a.armyType() === 3 && army2.a.remainingMovePoints < 5)))
 				{
 					pendingEvents[i].status = 'impossible';
 				} 
@@ -509,14 +512,14 @@ function determineEventStatus(){
 			{
 				var army1 = listOfArmyCoordinates[findArmyPlaceInList(content.fromArmy, content.realm)];
 				var army2 = listOfArmyCoordinates[findArmyPlaceInList(content.toArmy, content.realm)];
-				if((army1.a.armyType() == army2.a.armyType() || (content.troops == 0 && content.mounts == 0 && content.lkp == 0 && conten.skp == 0))
-				&& army1.x == army2.x && army1.y == army2.y)
+				if((army1.a.armyType() == army2.a.armyType() || (content.troops == 0 && content.mounts == 0 && content.lkp == 0 && content.skp == 0))
+				    && army1.a.x === army2.a.x && army1.a.y === army2.a.y)
 				{
 					pendingEvents[i].status = 'available';
 				}
-				else if(((((army1.a.armyType() == 1 || army1.a.armyType() == 2) && army1.remainingMovePoints < 3) ||
-				army1.a.armyType() == 3 && army1.remainingMovePoints < 5) && (((army2.a.armyType() == 1 || army2.a.armyType() == 2) &&
-			 	army2.remainingMovePoints < 3)|| army2.a.armyType() == 3 && army2.remainingMovePoints < 5)))
+				else if(((((army1.a.armyType() == 1 || army1.a.armyType() == 2) && army1.a.remainingMovePoints < 3) ||
+				    army1.a.armyType() == 3 && army1.a.remainingMovePoints < 5) && (((army2.a.armyType() == 1 || army2.a.armyType() == 2) &&
+			 	    army2.a.remainingMovePoints < 3)|| army2.a.armyType() == 3 && army2.a.remainingMovePoints < 5)))
 				{
 					pendingEvents[i].status = 'impossible';
 				}
@@ -567,7 +570,7 @@ function eachArmyExists(armies){
 
 function findArmyPlaceInList(armyId, owner){
 	for(var i = 0; i<listOfArmyCoordinates.length; i++){
-		if(listOfArmyCoordinates[i].a.armyId == armyId && listOfArmyCoordinates[i].owner == owner){
+		if(listOfArmyCoordinates[i].a.armyId === armyId && listOfArmyCoordinates[i].a.owner === owner){
 			return i;
 		}
 	}
@@ -595,16 +598,16 @@ function possibleMoveOfEachArmyTo(armies, x, y){
 function armyExists(realm, id){
 //	console.log("armyExists("+realm+", "+id+")");
 	return listOfArmyCoordinates.some(function(val){
-		return (val.ownerTag() === realm) && (val.a.armyId === id);
+		return (val.a.ownerTag() === realm) && (val.a.armyId === id);
 	}, this);
 }
 
 function armyExistsAndIsLocated(realm, id, x, y){
 //	console.log("armyExistsAndIsLocated("+realm+", "+id+", "+x+", "+y+")");
 	return listOfArmyCoordinates.some(function(val){
-		return (val.ownerTag() === realm) && 
+		return (val.a.ownerTag() === realm) &&
 			(val.a.armyId === id) && 
-			(val.x === x) && (val.y === y);
+			(val.a.x === x) && (val.a.y === y);
 	}, this);
 }
 
@@ -634,9 +637,9 @@ function unprocessedBattleAtContainingArmy(realm, id, x, y){
 
 function canMove(realm, id, fromX, fromY, toX, toY){
 	var foundArmy = listOfArmyCoordinates.find(function(army){
-		return (army.a.armyId === id) && (army.ownerTag() === realm);
+		return (army.a.armyId === id) && (army.a.ownerTag() === realm);
 	}, this);
-	if (foundArmy !== undefined && foundArmy.x === fromX && foundArmy.y === fromY) {
+	if (foundArmy !== undefined && foundArmy.a.x === fromX && foundArmy.a.y === fromY) {
 		var adjacency = getAdjacency([fromX, fromY],[[toX, toY]]);
 		
 		if (adjacency.reduce((total, current) => (total || current), false)){
@@ -758,11 +761,11 @@ function checkEvent(num) {
 			var army;
 			for(var i = 0; i<listOfArmyCoordinates.length; i++){
 				army = listOfArmyCoordinates[i];
-				if(army.ownerTag() === cont.realm && cont.armyId === army.a.armyId){
+				if(army.a.ownerTag() === cont.realm && cont.armyId === army.a.armyId){
 					break;
 				}
 			}
-			var adjacency = getAdjacency([army.x, army.y],[[cont.toX, cont.toY]]);
+			var adjacency = getAdjacency([army.a.x, army.a.y],[[cont.toX, cont.toY]]);
 			if (adjacency[0] === 1){
 				army.moveToList(1);
 				army.move(1);//move to ne
@@ -793,7 +796,7 @@ function checkEvent(num) {
 			var partips = [];
 			cont.participants.forEach(function(item){
 				var a = listOfArmyCoordinates.find(function(candidate){
-					return (item.realm === candidate.ownerTag()) && (item.armyId === candidate.a.armyId);
+					return (item.realm === candidate.a.ownerTag()) && (item.armyId === candidate.a.armyId);
 				});
 				partips.push(a);
 			});
@@ -830,7 +833,7 @@ function checkEvent(num) {
 			var skpToSplit = cont.skp;
 			for(var i = 0; i < listOfArmyCoordinates.length; i++)
 			{
-				if(listOfArmyCoordinates[i].a.armyId == armyFromId && listOfArmyCoordinates[i].owner == realm)
+				if(listOfArmyCoordinates[i].a.armyId == armyFromId && listOfArmyCoordinates[i].a.owner == realm)
 				{
 					armyFromPlaceInList = i;
 				}
@@ -861,7 +864,7 @@ function checkEvent(num) {
 				{
 					army = new seeHeer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, false);
 				}
-				var armyCoords = new armyCoordinates(army, listOfArmyCoordinates[armyFromPlaceInList].x, listOfArmyCoordinates[armyFromPlaceInList].y, realm);
+				var armyCoords = new armyCoordinates(army, listOfArmyCoordinates[armyFromPlaceInList].a.x, listOfArmyCoordinates[armyFromPlaceInList].a.y, realm);
 				listOfArmyCoordinates.push(armyCoords);
 			}
 			event.status = 'checked';
@@ -876,12 +879,12 @@ function checkEvent(num) {
 			var realm = cont.realm;
 			for(var i = 0; i < listOfArmyCoordinates.length; i++)
 			{
-				if(listOfArmyCoordinates[i].a.armyId == armyFromId && listOfArmyCoordinates[i].owner == realm)
+				if(listOfArmyCoordinates[i].a.armyId == armyFromId && listOfArmyCoordinates[i].a.owner == realm)
 				{
 					armyFromPlaceInList = i;
 					console.log("i1="+i);
 				} 
-				else if(listOfArmyCoordinates[i].a.armyId == armyToId && listOfArmyCoordinates[i].owner == realm)
+				else if(listOfArmyCoordinates[i].a.armyId == armyToId && listOfArmyCoordinates[i].a.owner == realm)
 				{
 					armyToPlaceInList = i;
 					console.log("i2="+i);
@@ -914,11 +917,11 @@ function checkEvent(num) {
 			var skpToSplit = cont.skp;
 			for(var i = 0; i < listOfArmyCoordinates.length; i++)
 			{
-				if(listOfArmyCoordinates[i].a.armyId == armyFromId && listOfArmyCoordinates[i].owner == realm)
+				if(listOfArmyCoordinates[i].a.armyId == armyFromId && listOfArmyCoordinates[i].a.owner == realm)
 				{
 					armyFromPlaceInList = i;
 				} 
-				else if(listOfArmyCoordinates[i].a.armyId == armyToId && listOfArmyCoordinates[i].owner == realm)
+				else if(listOfArmyCoordinates[i].a.armyId == armyToId && listOfArmyCoordinates[i].a.owner == realm)
 				{
 					armyToPlaceInList = i;
 				}

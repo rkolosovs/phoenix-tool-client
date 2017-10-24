@@ -1,4 +1,4 @@
-function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
+function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, coordX, coordY, owner) {
     this.armyId = id;
     this.count = truppen;
     this.leaders = heerfuehrer;
@@ -6,7 +6,39 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
     this.skp = schwere; //also heavy warships
     this.mounts = reittiere;
     this.isGuard = istGarde;
+    this.x = coordX;
+    this.y = coordY;
+    this.owner = owner;
     this.isLoadedIn = null;
+
+    // returns the tag of the owner, not full operational
+    // TODO do it right
+    this.ownerTag = function(){
+        switch(this.owner){
+            case 1: return "usa";
+            case 3: return "vvh";
+            case 2: return "eos";
+        }
+    }
+
+    this.isAlive = function(){
+    	return (this.a.raumpunkte() >= 100 && this.a.leaders >= 1);
+    	//TODO once characters are a thing, 0 officer armies with a character on the field should also be alive
+    }
+
+    // nur zu Testzwecken 300
+    //TODO: make it the proper value once testing is done
+    this.remainingMovePoints = 300;
+    this.setRemainingMovePoints = function(points){
+        this.remainingMovePoints = points;
+    }
+    // nur zu Testzwecken 30
+    //TODO: make it the proper value once testing is done
+    this.remainingHeightPoints = 30;
+    this.setRemainingHeightPoints = function(points){
+        this.remainingHeightPoints = points;
+    }
+
     // setze eine neue Id für das Heer
     this.setId = function(newId){
         this.armyId = newId;
@@ -265,7 +297,7 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde) {
 }// ende von Heer ------------------------------------------------------------------------------------------------------
 
 //Reiterheere müssen nach dem Kampf nur halb so stark dezimiert werden wie Fußheere.
-function reiterHeer(id, truppen, heerfuehrer, istGarde) {
+function reiterHeer(id, truppen, heerfuehrer, istGarde, coordX, coordY, owner) {
     this.armyId = id;
     this.count = truppen;
     this.mounts = 0;
@@ -273,7 +305,39 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde) {
     this.skp = 0;
     this.lkp = 0;
     this.isGuard = istGarde;
+    this.x = coordX;
+    this.y = coordY;
+    this.owner = owner;
     this.isLoadedIn = null;
+
+    // returns the tag of the owner, not full operational
+    // TODO do it right
+    this.ownerTag = function(){
+        switch(this.owner){
+            case 1: return "usa";
+            case 3: return "vvh";
+            case 2: return "eos";
+        }
+    }
+
+    this.isAlive = function(){
+    	return (this.a.raumpunkte() >= 100 && this.a.leaders >= 1);
+    	//TODO once characters are a thing, 0 officer armies with a character on the field should also be alive
+    }
+
+    // nur zu Testzwecken 300
+    //TODO: make it the proper value once testing is done
+    this.remainingMovePoints = 300;
+    this.setRemainingMovePoints = function(points){
+        this.remainingMovePoints = points;
+    }
+    // nur zu Testzwecken 30
+    //TODO: make it the proper value once testing is done
+    this.remainingHeightPoints = 30;
+    this.setRemainingHeightPoints = function(points){
+        this.remainingHeightPoints = points;
+    }
+
     this.leaderGp = function(){
         var gp = 0;
 
@@ -348,7 +412,7 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde) {
     this.fireSkp = function(dicerolls, badConditions){return 0;}
 } // ende von reiterHeer ------------------------------------------------------------------------------------------------------
 
-function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde) {
+function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, coordY, owner) {
     this.armyId = id;
     this.count = truppen;
     this.mounts = 0;
@@ -356,8 +420,40 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde) {
     this.lkp = leichte;
     this.skp = schwere;
     this.isGuard = istGarde;
+    this.x = coordX;
+    this.y = coordY;
+    this.owner = owner;
     this.isLoadedIn = null; // for easier Data Saving 
     this.loadedArmies = [];
+
+    // returns the tag of the owner, not full operational
+    // TODO do it right
+    this.ownerTag = function(){
+        switch(this.owner){
+            case 1: return "usa";
+            case 3: return "vvh";
+            case 2: return "eos";
+        }
+    }
+
+    this.isAlive = function(){
+    	return (this.a.raumpunkte() >= 100 && this.a.leaders >= 1);
+    	//TODO once characters are a thing, 0 officer armies with a character on the field should also be alive
+    }
+
+    // nur zu Testzwecken 300
+    //TODO: make it the proper value once testing is done
+    this.remainingMovePoints = 300;
+    this.setRemainingMovePoints = function(points){
+        this.remainingMovePoints = points;
+    }
+    // nur zu Testzwecken 30
+    //TODO: make it the proper value once testing is done
+    this.remainingHeightPoints = 30;
+    this.setRemainingHeightPoints = function(points){
+        this.remainingHeightPoints = points;
+    }
+
     //sollte 1 für heer, 2 für reiterheer, 3 für seeHeer
     this.armyType = function(){
         return(Math.floor(this.armyId / 100));

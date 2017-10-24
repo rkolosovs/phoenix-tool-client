@@ -424,7 +424,7 @@ function drawSelection(ctx, x, y, scale, selectedFields) {
 function drawArmies(ctx, x, y, scale, armyCoordinates) {
 	for (var i = 0; i < armyCoordinates.length; i++) {
 		var armyData = armyCoordinates[i]; // get army coordinates
-		var pos = computePosition(x, y, armyCoordinates[i].x, armyCoordinates[i].y, scale);
+		var pos = computePosition(x, y, armyCoordinates[i].a.x, armyCoordinates[i].a.y, scale);
 		ctx.fillStyle = 'black';
 		ctx.textAlign = 'center';
     	ctx.textBaseline = 'middle';
@@ -441,18 +441,18 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 				ctx.drawImage(boatsImg, pos[0], pos[1], (scale*SIN60), scale);
 			}
 		}
-		if (armyCoordinates[i].ownerTag() === login || login === "sl"){
+		if (armyCoordinates[i].a.ownerTag() === login || login === "sl"){
 			
 			if(armyCoordinates[i].possibleMoves.length > 0){
 				drawRemainingMovement(ctx, pos, scale);
 			}
-			else if(Math.floor(armyData.a.armyId/100) == 1 && armyCoordinates[i].remainingMovePoints == 9){
+			else if(Math.floor(armyData.a.armyId/100) == 1 && armyCoordinates[i].a.remainingMovePoints == 9){
 				drawRemainingMovement(ctx, pos, scale);
 			}
-			else if(Math.floor(armyData.a.armyId/100) == 2 && armyCoordinates[i].remainingMovePoints == 21){
+			else if(Math.floor(armyData.a.armyId/100) == 2 && armyCoordinates[i].a.remainingMovePoints == 21){
 				drawRemainingMovement(ctx, pos, scale);
 			}
-			else if(Math.floor(armyData.a.armyId/100) == 3 && armyCoordinates[i].remainingMovePoints >= 42){
+			else if(Math.floor(armyData.a.armyId/100) == 3 && armyCoordinates[i].a.remainingMovePoints >= 42){
 				drawRemainingMovement(ctx, pos, scale);
 			}
 		}
@@ -465,7 +465,7 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 		for(var i = 0; i < listOfMultiArmyFields[j].length; i++){//for every army on that field
 		
 		var armyData = listOfMultiArmyFields[j][i]; // get army coordinates
-		var pos = computePosition(x, y, listOfMultiArmyFields[j][i].x, listOfMultiArmyFields[j][i].y, scale);
+		var pos = computePosition(x, y, listOfMultiArmyFields[j][i].a.x, listOfMultiArmyFields[j][i].a.y, scale);
 
 		var circleScale = (scale*SIN60) / listOfMultiArmyFields[j].length;
 

@@ -421,28 +421,28 @@ function activateTransmuteBox(){
 			onlyLeaders = true;
 		}
 	}
-	var selectedX = listOfArmyCoordinates[selectedArmy].x;
-	var selectedY = listOfArmyCoordinates[selectedArmy].y;
+	var selectedX = listOfArmyCoordinates[selectedArmy].a.x;
+	var selectedY = listOfArmyCoordinates[selectedArmy].a.y;
 	var possibleTargets = [];
-	var targetOwner = listOfArmyCoordinates[selectedArmy].owner;
+	var targetOwner = listOfArmyCoordinates[selectedArmy].a.owner;
 	console.log("only Leaders?: " + onlyLeaders);
 	for(var i = 0; i < listOfArmyCoordinates.length; i++)
 	{
 		if(i != selectedArmy){
 			if(onlyLeaders)
 			{
-				if(listOfArmyCoordinates[i].owner == targetOwner &&
-				listOfArmyCoordinates[i].x == selectedX &&
-				 listOfArmyCoordinates[i].y == selectedY)
+				if(listOfArmyCoordinates[i].a.owner == targetOwner &&
+				listOfArmyCoordinates[i].a.x == selectedX &&
+				 listOfArmyCoordinates[i].a.y == selectedY)
 				{
 					possibleTargets.push(i);
 				}
 			}
 			else
 			{
-				if(listOfArmyCoordinates[i].owner == targetOwner &&
-				listOfArmyCoordinates[i].x == selectedX &&
-				 listOfArmyCoordinates[i].y == selectedY &&
+				if(listOfArmyCoordinates[i].a.owner == targetOwner &&
+				listOfArmyCoordinates[i].a.x == selectedX &&
+				 listOfArmyCoordinates[i].a.y == selectedY &&
 				  listOfArmyCoordinates[i].a.armyType() == targetType)
 				{
 					possibleTargets.push(i);
@@ -499,16 +499,16 @@ function activateMergeBox(){
 	{
 		document.getElementById("splitFleetBox").style.display = "none";
 	}
-	var selectedX = listOfArmyCoordinates[selectedArmy].x;
-	var selectedY = listOfArmyCoordinates[selectedArmy].y;
+	var selectedX = listOfArmyCoordinates[selectedArmy].a.x;
+	var selectedY = listOfArmyCoordinates[selectedArmy].a.y;
 	var possibleTargets = [];
-	var targetOwner = listOfArmyCoordinates[selectedArmy].owner;
+	var targetOwner = listOfArmyCoordinates[selectedArmy].a.owner;
 	for(var i = 0; i < listOfArmyCoordinates.length; i++)
 	{
 		if(i != selectedArmy){
-			if(listOfArmyCoordinates[i].owner == targetOwner &&
-			listOfArmyCoordinates[i].x == selectedX &&
-			 listOfArmyCoordinates[i].y == selectedY &&
+			if(listOfArmyCoordinates[i].a.owner == targetOwner &&
+			listOfArmyCoordinates[i].a.x == selectedX &&
+			 listOfArmyCoordinates[i].a.y == selectedY &&
 			  listOfArmyCoordinates[i].a.armyType() == targetType)
 			{
 				possibleTargets.push(i);

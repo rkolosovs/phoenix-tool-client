@@ -1,37 +1,7 @@
-function armyCoordinates(army, coordX, coordY, owner) {
+function armyCoordinates(army) {
     this.a = army;
-    this.x = coordX;
-    this.y = coordY;
-    this.owner = owner;
     this.possibleMoves = [];
     this.multiArmyField = false;
-    // returns the tag of the owner, not full operational
-    // TODO do it right
-    this.ownerTag = function(){
-        switch(this.owner){
-            case 1: return "usa";
-            case 3: return "vvh";
-            case 2: return "eos";
-        }
-    }
-    
-    this.isAlive = function(){
-    	return (this.a.raumpunkte() >= 100 && this.a.leaders >= 1);
-    	//TODO once characters are a thing, 0 officer armies with a character on the field should also be alive
-    }
-    
-    // nur zu Testzwecken 300
-    //TODO: make it the proper value once testing is done
-    this.remainingMovePoints = 300;
-    this.setRemainingMovePoints = function(points){
-        this.remainingMovePoints = points;
-    }
-    // nur zu Testzwecken 30
-    //TODO: make it the proper value once testing is done
-    this.remainingHeightPoints = 30;
-    this.setRemainingHeightPoints = function(points){
-        this.remainingHeightPoints = points;
-    }
     // direction as a number, 0 = NW, 1 = NO, 2 = O, 3 = SO, 4 = SW, 5 = W
     //TODO: Alles was nicht standard Bewegung auf ein benachbartes Feld ist.
     // done streets, height change
@@ -40,10 +10,10 @@ function armyCoordinates(army, coordX, coordY, owner) {
         //für i = 0 bis borders länge
         for(var i = 0; i<borders.length; i++){
             // sind das die Länder des Besitzers?
-            if (borders[i].tag == this.ownerTag()){
+            if (borders[i].tag == this.a.ownerTag()){
                 // ist das Zielland enthalten?
                 for(var j = 0; j<borders[i].land.length; j++){
-                    if(borders[i].land[j][0]==this.x && borders[i].land[j][1]==this.y){
+                    if(borders[i].land[j][0]==this.a.x && borders[i].land[j][1]==this.a.y){
                         // wenn ja, found = true
                         found = true;
                     }
@@ -52,7 +22,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
             } else {
                 // ist das Zielland enthalten?
                 for(var j = 0; j<borders[i].land.length; j++){
-                    if(borders[i].land[j][0]==this.x && borders[i].land[j][1]==this.y){
+                    if(borders[i].land[j][0]==this.a.x && borders[i].land[j][1]==this.a.y){
                         // wenn ja nimm es raus.
                         borders[i].land.splice(j,1);
                     }
@@ -63,9 +33,9 @@ function armyCoordinates(army, coordX, coordY, owner) {
         // war nicht bereits Land des Besitzers.
         if (found == false){
             for(var i = 0; i<borders.length; i++){
-                if (borders[i].tag == this.ownerTag()){
+                if (borders[i].tag == this.a.ownerTag()){
                     // tu es zu den Ländern des Besitzers.
-                    borders[i].land.push([this.x,this.y]);
+                    borders[i].land.push([this.a.x, this.a.y]);
                 }
             }
         }
@@ -75,7 +45,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
 //tries to move a Unit in a direction and if possible saves the possible move
     this.moveToList = function(direction) {
         console.log("moveToListInitiated");
-        var destination = new showHex(this.x, this.y);
+        var destination = new showHex(this.a.x, this.a.y);
         var neighborCoords = destination.neighbors();
         var target = new showHex(neighborCoords[direction][0],neighborCoords[direction][1]);
         var changeInHeight = false;
@@ -84,8 +54,8 @@ function armyCoordinates(army, coordX, coordY, owner) {
         for(var i = 0; i < buildings.length; i++){
             var building = buildings[i];
             if(building.type == 8){
-                if(((building.firstX == this.x && building.firstY == this.y) && (building.secondX == target.x && building.secondY == target.y)) || 
-                ((building.secondX == this.x && building.secondY == this.y) && (building.firstX == target.x && building.firstY == target.y))){
+                if(((building.firstX == this.a.x && building.firstY == this.a.y) && (building.secondX == target.x && building.secondY == target.y)) ||
+                ((building.secondX == this.a.x && building.secondY == this.a.y) && (building.firstX == target.x && building.firstY == target.y))){
                     thereIsAStreet = true;
                     break;
                 }
@@ -106,7 +76,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
             switch(target.fieldType()){
                 case 0: 
                     if(this.a.lkp == 0 && this.a.skp == 0){
-                        if(this.remainingMovePoints >= 12 ){
+                        if(this.a.remainingMovePoints >= 12 ){
                             //this.moveHelper(changeInHeight, direction, 12,2,false, target);
                             this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 12, height: 2,landunit: false,tar: target});
                             return "ok";
@@ -114,7 +84,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                             return "You don't have enough movement Points.";
                         }
                     } else if(this.a.skp > 0){
-                        if(this.remainingMovePoints >= 21 ){
+                        if(this.a.remainingMovePoints >= 21 ){
                             //this.moveHelper(changeInHeight, direction, 21,2,false, target);
                             this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2,landunit: false,tar: target});
                             return "ok";
@@ -122,7 +92,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                             return "You don't have enough movement Points.";
                         }
                     } else if(this.a.lkp > 0){
-                        if(this.remainingMovePoints >= 21 ){
+                        if(this.a.remainingMovePoints >= 21 ){
                             //this.moveHelper(changeInHeight, direction, 21,2,false, target);
                             this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2,landunit: false,tar: target});
                             return "ok";
@@ -132,7 +102,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                     }
                 case 1: 
                     if(this.a.lkp == 0 && this.a.skp == 0){
-                        if(this.remainingMovePoints >= 7 ){
+                        if(this.a.remainingMovePoints >= 7 ){
                             //this.moveHelper(changeInHeight, direction, 7,2,false, target);
                             this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: false,tar: target});
                             return "ok";
@@ -140,7 +110,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                             return "You don't have enough movement Points.";
                         }
                     } else if(this.a.skp > 0){
-                        if(this.remainingMovePoints >= 10 ){
+                        if(this.a.remainingMovePoints >= 10 ){
                             //this.moveHelper(changeInHeight, direction, 10,2,false, target);
                             this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 10, height: 2,landunit: false,tar: target});
                             return "ok";
@@ -148,7 +118,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                             return "You don't have enough movement Points.";
                         }
                     } else if(this.a.lkp > 0){
-                        if(this.remainingMovePoints >= 8 ){
+                        if(this.a.remainingMovePoints >= 8 ){
                             //this.moveHelper(changeInHeight, direction, 8,2,false, target);
                             this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 8, height: 2,landunit: false,tar: target});
                             return "ok";
@@ -175,7 +145,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 if(changeInHeight == true){
                     // is there an allied fleet on the target field?
                     for(var i = 0; i<listOfArmyCoordinates.length; i++){
-                        if((listOfArmyCoordinates[i].owner == this.owner) && (listOfArmyCoordinates[i].x == target.x) && (listOfArmyCoordinates[i].y == target.y) && 
+                        if((listOfArmyCoordinates[i].owner == this.a.owner) && (listOfArmyCoordinates[i].x == target.x) && (listOfArmyCoordinates[i].y == target.y) &&
                         (Math.floor(listOfArmyCoordinates[i].a.armyId / 100) == 3)){
                             if (listOfArmyCoordinates[i].a.isLoadable() == "ok")
                             {
@@ -197,14 +167,14 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 case 2:
                 case 4:
                 case 7: if(thereIsAStreet){
-                    if(this.remainingMovePoints >= 4 ){// 4
+                    if(this.a.remainingMovePoints >= 4 ){// 4
                         //this.moveHelper(changeInHeight, direction, 4,1,true, target);
                         this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 1,landunit: true ,tar: target});
                         return "ok";
                     } else {
                         return "You don't have enough movement Points.";
                     }
-                } else if(this.remainingMovePoints >= 7 ){// 7
+                } else if(this.a.remainingMovePoints >= 7 ){// 7
                     if(this.a.isLoadedIn != null){  // falls armee von flotte transportiert wird
                         this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: true});
                     }
@@ -217,14 +187,14 @@ function armyCoordinates(army, coordX, coordY, owner) {
                     return "You don't have enough movement Points.";
                 }
                 case 5: if(thereIsAStreet){
-                    if(this.remainingMovePoints >= 7 ){// 7
+                    if(this.a.remainingMovePoints >= 7 ){// 7
                         //this.moveHelper(changeInHeight, direction, 7,1,true, target);
                         this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 1,landunit: true ,tar: target});
                         return "ok";
                     } else {
                         return "You don't have enough movement Points.";
                     }
-                } else if(this.remainingMovePoints >= 21 ){// 21
+                } else if(this.a.remainingMovePoints >= 21 ){// 21
                     //this.moveHelper(changeInHeight, direction, 21,2,true, target);
                     this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2,landunit: true ,tar: target});
                     return "ok";
@@ -234,14 +204,14 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 case 6: return "Cavalry can not move through the mountains. "// can't
                 case 3:
                 case 8: if(thereIsAStreet){
-                    if(this.remainingMovePoints >= 5 ){// 5
+                    if(this.a.remainingMovePoints >= 5 ){// 5
                         //this.moveHelper(changeInHeight, direction, 5,1,true, target);
                         this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 5, height: 1,landunit: true ,tar: target});
                         return "ok";
                     } else {
                         return "You don't have enough movement Points.";
                     }
-                } else if(this.remainingMovePoints >= 10 ){// 10
+                } else if(this.a.remainingMovePoints >= 10 ){// 10
                     if(this.a.isLoadedIn != null){  // falls armee von flotte transportiert wird
                         this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 10, height: 2,landunit: true ,tar: target, unload: true});
                     }
@@ -265,7 +235,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 if(changeInHeight == true){
                     // is there an allied fleet on the target field?
                     for(var i = 0; i<listOfArmyCoordinates.length; i++){
-                        if((listOfArmyCoordinates[i].owner == this.owner) && (listOfArmyCoordinates[i].x == target.x) && (listOfArmyCoordinates[i].y == target.y) && 
+                        if((listOfArmyCoordinates[i].owner == this.a.owner) && (listOfArmyCoordinates[i].x == target.x) && (listOfArmyCoordinates[i].y == target.y) &&
                         (Math.floor(listOfArmyCoordinates[i].a.armyId / 100) == 3)){
                             if (listOfArmyCoordinates[i].a.isLoadable() == "ok")
                             {
@@ -289,14 +259,14 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 case 7:
                 console.log("there is a street: "+ thereIsAStreet);
                 if(thereIsAStreet){  // target field is a lowland, hill or desert
-                    if(this.remainingMovePoints >= 4){
+                    if(this.a.remainingMovePoints >= 4){
                         //this.moveHelper(changeInHeight, direction, 4,1,true, target);
                         this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 1,landunit: true ,tar: target});
                         return "ok";
                     } else {
                         return "You don't have enough movement Points.";
                     }
-                } else if(this.remainingMovePoints >= 7){
+                } else if(this.a.remainingMovePoints >= 7){
                     if(this.a.isLoadedIn != null){  // falls armee von flotte transportiert wird
                         this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: true});
                     }
@@ -309,14 +279,14 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 }
                 case 5: if(thereIsAStreet){  // target field is a highland
                         if(this.a.skp > 0){
-                            if(this.remainingMovePoints >= 7){
+                            if(this.a.remainingMovePoints >= 7){
                                 //this.moveHelper(changeInHeight, direction, 7,1,true, target);
                                 this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 1,landunit: true ,tar: target});
                                 return "ok";
                             } else {
                                 return "You don't have enough movement Points.";
                             }
-                        } if(this.remainingMovePoints >= 4){
+                        } if(this.a.remainingMovePoints >= 4){
                             //this.moveHelper(changeInHeight, direction, 4,1,true, target);
                             this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 1,landunit: true ,tar: target});
                             return "ok";
@@ -325,7 +295,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                         }
                     } else if(this.a.skp > 0){
                     return "You you need streets to move heavy catapults into the highlands.";
-                } if(this.remainingMovePoints >= 7){
+                } if(this.a.remainingMovePoints >= 7){
                     //this.moveHelper(changeInHeight, direction, 7,2,true, target);
                     this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target});
                     return "ok";
@@ -336,14 +306,14 @@ function armyCoordinates(army, coordX, coordY, owner) {
                     if(this.a.skp > 0){
                         return "You can't move into the mountains with heavy catapults.";
                     } else if(this.a.lkp > 0){
-                        if(this.remainingMovePoints >= 7 ){
+                        if(this.a.remainingMovePoints >= 7 ){
                             //this.moveHelper(changeInHeight, direction, 7,1,true, target);
                             this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 1,landunit: true ,tar: target});
                             return "ok";
                         } else {
                             return "You don't have enough movement Points.";
                         }
-                    } else if(this.remainingMovePoints >= 4 ){
+                    } else if(this.a.remainingMovePoints >= 4 ){
                         //this.moveHelper(changeInHeight, direction, 4,1,true, target);
                         this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 1,landunit: true ,tar: target});
                         return "ok";
@@ -356,14 +326,14 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 case 3:
                 case 8: if(thereIsAStreet){ // target field is a wood, or swamp
                     if(this.a.skp > 0){
-                        if(this.remainingMovePoints >= 7 ){
+                        if(this.a.remainingMovePoints >= 7 ){
                             //this.moveHelper(changeInHeight, direction, 7,1,true, target);
                             this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 1,landunit: true ,tar: target});
                             return "ok";
                         } else {
                             return "You don't have enough movement Points.";
                         }
-                    } else if(this.remainingMovePoints >= 4 ){
+                    } else if(this.a.remainingMovePoints >= 4 ){
                         //this.moveHelper(changeInHeight, direction, 4,1,true, target);
                         this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 1,landunit: true ,tar: target});
                         return "ok";
@@ -372,7 +342,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                     }
                 } else if(this.a.skp > 0){
                     return "You can't move into woods or swamps with heavy catapults unless you have streets.";
-                } else if(this.remainingMovePoints >= 7 ){
+                } else if(this.a.remainingMovePoints >= 7 ){
                     //this.moveHelper(changeInHeight, direction, 7,2,true, target);
                     if(this.a.isLoadedIn != null){  // falls armee von flotte transportiert wird
                         this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: true});
@@ -391,7 +361,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
     //when unit is clicked generates a list of neighbors that can be moved to
     this.clickedMoves = function(){
 
-        if(this.ownerTag() === login || login === "sl"){
+        if(this.a.ownerTag() === login || login === "sl"){
             this.possibleMoves = [];
             //goes through all neighbors to see if the army can move there
             for(var i =0; i < 6; i++)
@@ -404,14 +374,14 @@ function armyCoordinates(army, coordX, coordY, owner) {
 
     //to actually move units with the new method
     this.move = function(direction){//TODO needs new names
-        for(var i =0; i < this.possibleMoves.length; i++){
+        for(var i =0; i < this.a.possibleMoves.length; i++){
             if(this.possibleMoves[i].dir == direction){
                 var tempmove = this.possibleMoves[i];
                 //in case it is moving on land
                 if(tempmove.load == undefined){
-                    this.remainingMovePoints -= tempmove.movepoints;
-                    this.x = tempmove.tar.x;
-                    this.y = tempmove.tar.y;
+                    this.a.remainingMovePoints -= tempmove.movepoints;
+                    this.a.x = tempmove.tar.x;
+                    this.a.y = tempmove.tar.y;
 
                     //for ship movement
                     if(Math.floor(this.a.armyId / 100) == 3){
@@ -420,7 +390,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                             for(var i = 0; i < this.a.loadedArmies.length; i++){
                                 for(var j = 0; j < listOfArmyCoordinates.length; j++){
                                     console.log(this.a.loadedArmies[i]);
-                                    if(listOfArmyCoordinates[j].owner == this.owner && listOfArmyCoordinates[j].a.armyId == this.a.loadedArmies[i]){
+                                    if(listOfArmyCoordinates[j].owner == this.a.owner && listOfArmyCoordinates[j].a.armyId == this.a.loadedArmies[i]){
                                         listOfArmyCoordinates[j].x = tempmove.tar.x;
                                         listOfArmyCoordinates[j].y = tempmove.tar.y;
                                     }
@@ -434,7 +404,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                         console.log("MAAAAPMAAAAPMAAAAAP ------------This Totally Happened-------------------")
                         console.log("Armee war in " + this.a.isLoadedIn + " geladen.");
                         for(var i = 0; i < listOfArmyCoordinates.length; i++){
-                            if((listOfArmyCoordinates[i].owner == this.owner) && listOfArmyCoordinates[i].a.armyId == this.a.isLoadedIn){
+                            if((listOfArmyCoordinates[i].owner == this.a.owner) && listOfArmyCoordinates[i].a.armyId == this.a.isLoadedIn){
                                 var placeInList = -1;
                                 for(var j = 0; j < listOfArmyCoordinates[i].a.loadedArmies.length; j++){
                                     if(listOfArmyCoordinates[i].a.loadedArmies[j] == this.a.armyId){
@@ -453,7 +423,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                     }
 
                     if(tempmove.changHeight == true){
-                        this.setRemainingHeightPoints(this.remainingHeightPoints - tempmove.height);
+                        this.a.setRemainingHeightPoints(this.a.remainingHeightPoints - tempmove.height);
                     }
                     if(tempmove.landunit == true && this.a.canConquer())
                     {
@@ -466,7 +436,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                 else if(tempmove.load == true){
                     var fleetsOnDest = [];
                     for(var i = 0; i<listOfArmyCoordinates.length; i++){
-                        if((listOfArmyCoordinates[i].owner == this.owner) && (listOfArmyCoordinates[i].x == tempmove.tar.x) && (listOfArmyCoordinates[i].y == tempmove.tar.y) && 
+                        if((listOfArmyCoordinates[i].owner == this.a.owner) && (listOfArmyCoordinates[i].x == tempmove.tar.x) && (listOfArmyCoordinates[i].y == tempmove.tar.y) &&
                         (Math.floor(listOfArmyCoordinates[i].a.armyId / 100) == 3)){
                             fleetsOnDest.push(i);
                             console.log("fleets +1");
@@ -481,8 +451,8 @@ function armyCoordinates(army, coordX, coordY, owner) {
                         if(loadString == "ok"){
                             this.a.isLoadedIn = listOfArmyCoordinates[fleetsOnDest[0]].a.armyId;
                             console.log("army in now loaded in " + this.a.isLoadedIn);
-                            this.x = tempmove.tar.x;
-                            this.y = tempmove.tar.y;
+                            this.a.x = tempmove.tar.x;
+                            this.a.y = tempmove.tar.y;
                             return "ok";
                         } else {
                             return(loadString);
@@ -497,7 +467,7 @@ function armyCoordinates(army, coordX, coordY, owner) {
                         if(chosenFleet != null){
                             var findFleet = -1;
                             for(var i = 0; i < listOfArmyCoordinates.length; i++){
-                                if(listOfArmyCoordinates[i].a.armyId == chosenFleet && listOfArmyCoordinates[i].owner == this.owner){
+                                if(listOfArmyCoordinates[i].a.armyId == chosenFleet && listOfArmyCoordinates[i].owner == this.a.owner){
                                     findFleet = i;
                                 }
                             }
@@ -518,8 +488,8 @@ function armyCoordinates(army, coordX, coordY, owner) {
                                 if(loadString == "ok"){
                                     this.a.isLoadedIn = listOfArmyCoordinates[findFleet].a.armyId;
                                     console.log("army in now loaded in " + this.a.isLoadedIn);
-                                    this.x = tempmove.tar.x;
-                                    this.y = tempmove.tar.y;
+                                    this.a.x = tempmove.tar.x;
+                                    this.a.y = tempmove.tar.y;
                                     return "ok";
                                 } else {
                                     return(loadString);

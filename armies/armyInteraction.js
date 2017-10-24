@@ -543,7 +543,7 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
         var attackerLossFactor = this.computeLossFactor(totalAttackerStrength, totalDefenderStrength, (victor === 'attacker'));
         var defenderLossFactor = this.computeLossFactor(totalDefenderStrength, totalAttackerStrength, (victor === 'defender'));
 
-        //multiplication and subsequent division by 100 done for reasons of numeric stability
+        //multiplication and subsequent division by 100 done for reasons of numerical stability
         var attackerNewBaseLosses = Math.floor((attackerBaseLosses * (100 + (attackerLossFactor * 100)))/100);
         var defenderNewBaseLosses = Math.floor((defenderBaseLosses * (100 + (defenderLossFactor * 100)))/100);
 

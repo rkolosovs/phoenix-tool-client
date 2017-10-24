@@ -52,44 +52,44 @@ module( "Battle" , function() {
 	module( "Results", {
 		before: function() {
 			defenderArmies = [
-				new heer(111, 1000, 1, 0, 0, 0, false),//0
-				new heer(112, 1000, 5, 0, 0, 0, false),//1
-				new heer(115, 15000, 15, 0, 0, 0, false),//2
-				new heer(116, 1000, 36, 0, 0, 0, false),//3
-				new heer(117, 1500, 10, 0, 0, 0, false),//4
-				new heer(118, 10000, 10, 0, 0, 0, false),//5
-				new heer(119, 1200, 12, 0, 0, 0, false),//6
-				new reiterHeer(211, 5000, 5, false),//7
-				new reiterHeer(214, 10000, 5, false),//8
-				new reiterHeer(215, 1500, 10, false),//9
-				new reiterHeer(219, 1200, 12, false),//10
-				new seeHeer(311, 20, 5, 0, 0, false),//11
-				new seeHeer(312, 10, 5, 5, 0, false),//12
-				new seeHeer(313, 10, 5, 0, 5, false),//13
-				new seeHeer(314, 10, 5, 3, 2, false),//14
-				new seeHeer(315, 12, 2, 3, 1, false),//15
-				new seeHeer(316, 100, 10, 0, 0, false),//16
-				new seeHeer(317, 1000, 10, 0, 0, false)//17
+				new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1),//0
+				new heer(112, 1000, 5, 0, 0, 0, false, 0, 0, 1),//1
+				new heer(115, 15000, 15, 0, 0, 0, false, 0, 0, 1),//2
+				new heer(116, 1000, 36, 0, 0, 0, false, 0, 0, 1),//3
+				new heer(117, 1500, 10, 0, 0, 0, false, 0, 0, 1),//4
+				new heer(118, 10000, 10, 0, 0, 0, false, 0, 0, 1),//5
+				new heer(119, 1200, 12, 0, 0, 0, false, 0, 0, 1),//6
+				new reiterHeer(211, 5000, 5, false, 0, 0, 1),//7
+				new reiterHeer(214, 10000, 5, false, 0, 0, 1),//8
+				new reiterHeer(215, 1500, 10, false, 0, 0, 1),//9
+				new reiterHeer(219, 1200, 12, false, 0, 0, 1),//10
+				new seeHeer(311, 20, 5, 0, 0, false, 0, 0, 1),//11
+				new seeHeer(312, 10, 5, 5, 0, false, 0, 0, 1),//12
+				new seeHeer(313, 10, 5, 0, 5, false, 0, 0, 1),//13
+				new seeHeer(314, 10, 5, 3, 2, false, 0, 0, 1),//14
+				new seeHeer(315, 12, 2, 3, 1, false, 0, 0, 1),//15
+				new seeHeer(316, 100, 10, 0, 0, false, 0, 0, 1),//16
+				new seeHeer(317, 1000, 10, 0, 0, false, 0, 0, 1)//17
 			];
 			attackerArmies = [
-				new heer(121, 1000, 1, 0, 0, 0, false),//0
-				new heer(123, 10000, 5, 0, 0, 0, false),//1
-				new heer(124, 5000, 5, 0, 0, 0, false),//2
-				new heer(126, 1200, 4, 0, 0, 0, false),//3
-				new heer(127, 1000, 10, 0, 0, 0, true),//4
-				new heer(128, 1000, 100, 0, 0, 0, true),//5
-				new heer(129, 1000, 10, 0, 0, 0, false),//6
-				new reiterHeer(224, 15000, 15, false),//7
-				new reiterHeer(227, 1000, 10, true),//8
-				new reiterHeer(228, 1000, 10, false),//9
-				new seeHeer(321, 10, 5, 0, 0, false),//10
-				new seeHeer(322, 10, 5, 5, 0, false),//11
-				new seeHeer(323, 10, 5, 0, 5, false),//12
-				new seeHeer(324, 20, 5, 0, 0, false),//13
-				new seeHeer(325, 10, 5, 3, 2, false),//14
-				new seeHeer(326, 35, 40, 7, 6, false),//15
-				new seeHeer(327, 40, 35, 0, 0, true),//16
-				new seeHeer(328, 100, 100, 0, 0, true)//17
+				new heer(121, 1000, 1, 0, 0, 0, false, 0, 0, 2),//0
+				new heer(123, 10000, 5, 0, 0, 0, false, 0, 0, 2),//1
+				new heer(124, 5000, 5, 0, 0, 0, false, 0, 0, 2),//2
+				new heer(126, 1200, 4, 0, 0, 0, false, 0, 0, 2),//3
+				new heer(127, 1000, 10, 0, 0, 0, true, 0, 0, 2),//4
+				new heer(128, 1000, 100, 0, 0, 0, true, 0, 0, 2),//5
+				new heer(129, 1000, 10, 0, 0, 0, false, 0, 0, 2),//6
+				new reiterHeer(224, 15000, 15, false, 0, 0, 2),//7
+				new reiterHeer(227, 1000, 10, true, 0, 0, 2),//8
+				new reiterHeer(228, 1000, 10, false, 0, 0, 2),//9
+				new seeHeer(321, 10, 5, 0, 0, false, 0, 0, 2),//10
+				new seeHeer(322, 10, 5, 5, 0, false, 0, 0, 2),//11
+				new seeHeer(323, 10, 5, 0, 5, false, 0, 0, 2),//12
+				new seeHeer(324, 20, 5, 0, 0, false, 0, 0, 2),//13
+				new seeHeer(325, 10, 5, 3, 2, false, 0, 0, 2),//14
+				new seeHeer(326, 35, 40, 7, 6, false, 0, 0, 2),//15
+				new seeHeer(327, 40, 35, 0, 0, true, 0, 0, 2),//16
+				new seeHeer(328, 100, 100, 0, 0, true, 0, 0, 2)//17
 			];
 			borders = [{'tag': 'vvh', 'land': [[0, 0], [1, 1], [3, 3]]}];
 			buildings = [{'realm': 1, 'name': "", 'type': 0, 'x': 3, 'y': 3, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null}];

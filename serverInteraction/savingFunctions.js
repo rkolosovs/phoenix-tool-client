@@ -180,11 +180,11 @@ function saveArmies() { // saves the current armies on the server
 			lkp: elem.a.lkp,
 			skp: elem.a.skp,
 			mounts: elem.a.mounts,
-			x: elem.x,
-			y: elem.y,
-			ownerPk: elem.owner,
-			movementPoints: elem.remainingMovePoints,
-			heightPoints: elem.remainingHeightPoints,
+			x: elem.a.x,
+			y: elem.a.y,
+			ownerPk: elem.a.owner,
+			movementPoints: elem.a.remainingMovePoints,
+			heightPoints: elem.a.remainingHeightPoints,
 			isLoadedIn: elem.a.isLoadedIn
 		};
 	});

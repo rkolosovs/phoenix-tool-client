@@ -69,19 +69,22 @@ function loadArmies() {
             	var armyCoords = null;
             	var army = null;
                 if(Math.floor(armies[i].armyId/100) == 1){
-                	army = new heer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp, armies[i].skp, armies[i].mounts, armies[i].isGuard);
+                	army = new heer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp, armies[i].skp,
+                	    armies[i].mounts, armies[i].isGuard, armies[i].x, armies[i].y, armies[i].realm);
                 } else if(Math.floor(armies[i].armyId/100) == 2){
-                	army = new reiterHeer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].isGuard);
+                	army = new reiterHeer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].isGuard,
+                	    armies[i].x, armies[i].y, armies[i].realm);
                 } else if(Math.floor(armies[i].armyId/100) == 3){
-                	army = new seeHeer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp, armies[i].skp, armies[i].isGuard);
+                	army = new seeHeer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp,
+                	    armies[i].skp, armies[i].isGuard, armies[i].x, armies[i].y, armies[i].realm);
                 }
-                armyCoords = new armyCoordinates(army, armies[i].x, armies[i].y, armies[i].realm);
+                army.setRemainingMovePoints(armies[i].movementPoints);
+                army.setRemainingHeightPoints(armies[i].heightPoints);
+                armyCoords = new armyCoordinates(army);
 				if(armies[i].isLoadedIn != null){
 					armiesToLoadIn.push([armies[i].isLoadedIn, armies[i].realm, armies[i].armyId]);
 					armyCoords.a.isLoadedIn = armies[i].isLoadedIn;
 				}
-                armyCoords.setRemainingMovePoints(armies[i].movementPoints);
-                armyCoords.setRemainingHeightPoints(armies[i].heightPoints);
                 listOfArmyCoordinates.push(armyCoords);
             }
 			// if needed, load Troops into ships
@@ -114,7 +117,7 @@ function loadRiverData() {
 		var fluesse = json; 
 		var collector = [];
 		fluesse.forEach(function(element) {
-			collector.push([[element.firstX, element.firstY],[element.secondX,element.secondY]]);
+			collector.push([[element.firstX, element.firstY],[element.secondX, element.secondY]]);
 		}, this);
 		rivers = collector; //rivers are the coordinates of two fields on either side of the river
 	});
