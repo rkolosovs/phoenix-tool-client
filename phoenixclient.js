@@ -161,7 +161,7 @@ function registerLeftClick(){
 		for(var i = 0; i < listOfArmies.length; i++){
 			var a = listOfArmies[i];
 			if (a.a.x === armyCoords.a.x && a.a.y === armyCoords.a.y) {
-				if(a.multiArmyField === true){
+				if(a.a.multiArmyField === true){
 					onmulti = true;
 					foundarmy = a;
 				}
@@ -179,8 +179,8 @@ function registerLeftClick(){
 			templist.push(foundarmy);
 			templist.push(armyCoords);
 			listOfMultiArmyFields.push(templist);
-			foundarmy.multiArmyField = true;
-			armyCoords.multiArmyField = true;
+			foundarmy.a.multiArmyField = true;
+			armyCoords.a.multiArmyField = true;
 		}
 		listOfArmies.push(armyCoords);
 		switchBtnBoxTo("buttonsBox");
@@ -325,7 +325,7 @@ function registerRightClick(){
 						var participants = [];
 
 						//before moving check if you leave a Multi Army field
-						if(listOfArmies[selectedArmy].multiArmyField === true){
+						if(listOfArmies[selectedArmy].a.multiArmyField === true){
 							deleteFromMultifield(listOfArmies[selectedArmy]);
 						}
 
@@ -346,7 +346,7 @@ function registerRightClick(){
 								//4. move from multi but still multifield left
 								//5. move from multi to multi
 								
-								if(someArmy.multiArmyField === true){//2.
+								if(someArmy.a.multiArmyField === true){//2.
 									addToMultifield(someArmy, listOfArmies[selectedArmy]);
 								}
 								else{//1.
@@ -354,8 +354,8 @@ function registerRightClick(){
 									templist.push(someArmy);
 									templist.push(listOfArmies[selectedArmy]);
 									listOfMultiArmyFields.push(templist);
-									someArmy.multiArmyField = true;
-									listOfArmies[selectedArmy].multiArmyField = true;
+									someArmy.a.multiArmyField = true;
+									listOfArmies[selectedArmy].a.multiArmyField = true;
 								}
 							}
 						}
@@ -409,7 +409,7 @@ function addToMultifield(armyOnMultifield, armyToAdd){
 	if(alreadyInList == false){
 		listOfMultiArmyFields[placeToAdd].push(armyToAdd);
 	}
-	armyToAdd.multiArmyField = true;
+	armyToAdd.a.multiArmyField = true;
 }
 
 function deleteFromMultifield(armyToDelete){
@@ -421,7 +421,7 @@ function deleteFromMultifield(armyToDelete){
 
 				//check if remaining field is still multi
 				if(listOfMultiArmyFields[k].length < 2){
-					listOfMultiArmyFields[k][0].multiArmyField = false;
+					listOfMultiArmyFields[k][0].a.multiArmyField = false;
 					listOfMultiArmyFields.splice(k,1);
 				}
 				break;
@@ -429,7 +429,7 @@ function deleteFromMultifield(armyToDelete){
 		}
 	}
 	}
-	armyToDelete.multiArmyField = false;
+	armyToDelete.a.multiArmyField = false;
 }
 
 function getClickedField(){
@@ -646,10 +646,10 @@ function canMove(realm, id, fromX, fromY, toX, toY){
 		var adjacency = getAdjacency([fromX, fromY],[[toX, toY]]);
 		
 		if (adjacency.reduce((total, current) => (total || current), false)){
-			foundArmy.possibleMoves = [];
+			foundArmy.a.possibleMoves = [];
 			var direction = (adjacency.findIndex((dir) => dir === 1) + 1)%6;
 			foundArmy.moveToList(direction);
-			return foundArmy.possibleMoves.length > 0;
+			return foundArmy.a.possibleMoves.length > 0;
 		}
 //		var origin = new showHex(fromX, fromY);
 //        var destination = new showHex(toX, toY);

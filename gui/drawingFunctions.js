@@ -394,7 +394,7 @@ function drawFields(ctx, x, y, scale) { //draw the terrain fields
 
 function drawPossibleMoves(ctx, x, y, scale, selectedArmy){//drawing all possible moves to neighboring fields if army was selected
     if(selectedArmy !== undefined){
-		var moves = listOfArmies[selectedArmy].possibleMoves;
+		var moves = listOfArmies[selectedArmy].a.possibleMoves;
 		for (var i = 0; i < moves.length; i++) {
             ctx.lineWidth = scale/6;
 	        ctx.strokeStyle='#00FF00';
@@ -431,7 +431,7 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 		//ctx.fillText(armyData.a.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
 
 		//check if its is on a multifield. if it is ignore
-		if(armyData.multiArmyField == false){
+		if(armyData.a.multiArmyField == false){
 			// armies == 1, riders == 2, boats == 3
 			if(Math.floor(armyData.a.armyId/100) == 1){
 				ctx.drawImage(troopsImg, pos[0], pos[1], (scale*SIN60), scale); 
@@ -443,7 +443,7 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 		}
 		if (armyCoordinates[i].a.ownerTag() === login || login === "sl"){
 			
-			if(armyCoordinates[i].possibleMoves.length > 0){
+			if(armyCoordinates[i].a.possibleMoves.length > 0){
 				drawRemainingMovement(ctx, pos, scale);
 			}
 			else if(Math.floor(armyData.a.armyId/100) == 1 && armyCoordinates[i].a.remainingMovePoints == 9){

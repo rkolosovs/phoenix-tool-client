@@ -802,7 +802,7 @@ function mount(){
 		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch selectedArmy
 		var newArmyCoordinates = new armyCoordinates(newArmy,listOfArmies[selectedArmy].x,listOfArmies[selectedArmy].y ,listOfArmies[selectedArmy].owner);
 		listOfArmies.push(newArmyCoordinates);
-		if(listOfArmies[selectedArmy].multiArmyField === true){
+		if(listOfArmies[selectedArmy].a.multiArmyField === true){
 			addToMultifield(listOfArmies[selectedArmy], newArmyCoordinates);
 			deleteFromMultifield(listOfArmies[selectedArmy]);
 		}
@@ -853,7 +853,7 @@ function unMount(){
 		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch selectedArmy
 		var newArmyCoordinates = new armyCoordinates(newArmy, listOfArmies[selectedArmy].x, listOfArmies[selectedArmy].y, listOfArmies[selectedArmy].owner);
 		listOfArmies.push(newArmyCoordinates);
-		if(listOfArmies[selectedArmy].multiArmyField === true){
+		if(listOfArmies[selectedArmy].a.multiArmyField === true){
 			addToMultifield(listOfArmies[selectedArmy], newArmyCoordinates);
 			deleteFromMultifield(listOfArmies[selectedArmy]);
 		}

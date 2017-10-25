@@ -11,6 +11,9 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     this.owner = owner;
     this.isLoadedIn = null;
 
+    this.possibleMoves = [];
+    this.multiArmyField = false;
+
     // returns the tag of the owner, not full operational
     // TODO do it right
     this.ownerTag = function(){
@@ -310,6 +313,9 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde, coordX, coordY, owner) {
     this.owner = owner;
     this.isLoadedIn = null;
 
+    this.possibleMoves = [];
+    this.multiArmyField = false;
+
     // returns the tag of the owner, not full operational
     // TODO do it right
     this.ownerTag = function(){
@@ -425,6 +431,9 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     this.owner = owner;
     this.isLoadedIn = null; // for easier Data Saving 
     this.loadedArmies = [];
+
+    this.possibleMoves = [];
+    this.multiArmyField = false;
 
     // returns the tag of the owner, not full operational
     // TODO do it right
