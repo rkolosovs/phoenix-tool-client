@@ -1,140 +1,136 @@
 function armyCoordinates(army) {
     this.a = army;
+}
 
-    //to actually move units with the new method
-    this.move = function(direction){//TODO needs new names
-        for(var i =0; i < this.a.possibleMoves.length; i++){
-            if(this.a.possibleMoves[i].dir == direction){
-                var tempmove = this.a.possibleMoves[i];
-                //in case it is moving on land
-                if(tempmove.load == undefined){
-                    this.a.remainingMovePoints -= tempmove.movepoints;
-                    this.a.x = tempmove.tar.x;
-                    this.a.y = tempmove.tar.y;
-
-                    //for ship movement
-                    if(Math.floor(this.a.armyId / 100) == 3){
-                    // moves troops that are loaded in the fleet
-                        if(this.a.loadedArmies != undefined && this.a.loadedArmies != []){
-                            for(var i = 0; i < this.a.loadedArmies.length; i++){
-                                for(var j = 0; j < listOfArmies.length; j++){
-                                    console.log(this.a.loadedArmies[i]);
-                                    if(listOfArmies[j].owner == this.a.owner && listOfArmies[j].a.armyId == this.a.loadedArmies[i]){
-                                        listOfArmies[j].x = tempmove.tar.x;
-                                        listOfArmies[j].y = tempmove.tar.y;
-                                    }
+//to actually move units with the new method
+function move(army, direction){//TODO needs new names
+    for(var i =0; i < army.possibleMoves.length; i++){
+        if(army.possibleMoves[i].dir == direction){
+            var tempmove = army.possibleMoves[i];
+            //in case it is moving on land
+            if(tempmove.load == undefined){
+                army.remainingMovePoints -= tempmove.movepoints;
+                army.x = tempmove.tar.x;
+                army.y = tempmove.tar.y;
+                //for ship movement
+                if(Math.floor(army.armyId / 100) == 3){
+                // moves troops that are loaded in the fleet
+                    if(army.loadedArmies != undefined && army.loadedArmies != []){
+                        for(var i = 0; i < army.loadedArmies.length; i++){
+                            for(var j = 0; j < listOfArmies.length; j++){
+                                console.log(army.loadedArmies[i]);
+                                if(listOfArmies[j].owner == army.owner && listOfArmies[j].a.armyId == army.loadedArmies[i]){
+                                    listOfArmies[j].x = tempmove.tar.x;
+                                    listOfArmies[j].y = tempmove.tar.y;
                                 }
                             }
                         }
                     }
-
-                    //for moving off a ship
-                    if(tempmove.unload != undefined && tempmove.unload == true){
-                        console.log("MAAAAPMAAAAPMAAAAAP ------------This Totally Happened-------------------")
-                        console.log("Armee war in " + this.a.isLoadedIn + " geladen.");
-                        for(var i = 0; i < listOfArmies.length; i++){
-                            if((listOfArmies[i].owner == this.a.owner) && listOfArmies[i].a.armyId == this.a.isLoadedIn){
-                                var placeInList = -1;
-                                for(var j = 0; j < listOfArmies[i].a.loadedArmies.length; j++){
-                                    if(listOfArmies[i].a.loadedArmies[j] == this.a.armyId){
-                                        placeInList = j;
-                                    }
-                                }
-                                if(placeInList == (listOfArmies[i].a.loadedArmies.length-1)){
-                                    listOfArmies[i].a.loadedArmies.pop();
-                                } else {
-                                    listOfArmies[i].a.loadedArmies[j] = listOfArmies[i].a.loadedArmies[listOfArmies[i].a.loadedArmies.length-1];
-                                    listOfArmies[i].a.loadedArmies.pop();
-                                }
-                                this.a.isLoadedIn = null;
-                            }
-                        }
-                    }
-
-                    if(tempmove.changHeight == true){
-                        this.a.setRemainingHeightPoints(this.a.remainingHeightPoints - tempmove.height);
-                    }
-                    if(tempmove.landunit == true && this.a.canConquer())
-                    {
-                        conquer(this.a, direction);
-                    }
-                    clickedMoves(this.a);
-                    return "ok"
                 }
-                //in case of loading onto a ship
-                else if(tempmove.load == true){
-                    var fleetsOnDest = [];
-                    for(var i = 0; i<listOfArmies.length; i++){
-                        if((listOfArmies[i].owner == this.a.owner) && (listOfArmies[i].x == tempmove.tar.x) && (listOfArmies[i].y == tempmove.tar.y) &&
-                        (Math.floor(listOfArmies[i].a.armyId / 100) == 3)){
-                            fleetsOnDest.push(i);
-                            console.log("fleets +1");
+                //for moving off a ship
+                if(tempmove.unload != undefined && tempmove.unload == true){
+                    console.log("Armee war in " + army.isLoadedIn + " geladen.");
+                    for(var i = 0; i < listOfArmies.length; i++){
+                        if((listOfArmies[i].owner == army.owner) && listOfArmies[i].a.armyId == army.isLoadedIn){
+                            var placeInList = -1;
+                            for(var j = 0; j < listOfArmies[i].a.loadedArmies.length; j++){
+                                if(listOfArmies[i].a.loadedArmies[j] == army.armyId){
+                                    placeInList = j;
+                                }
+                            }
+                            if(placeInList == (listOfArmies[i].a.loadedArmies.length-1)){
+                                listOfArmies[i].a.loadedArmies.pop();
+                            } else {
+                                listOfArmies[i].a.loadedArmies[j] = listOfArmies[i].a.loadedArmies[listOfArmies[i].a.loadedArmies.length-1];
+                                listOfArmies[i].a.loadedArmies.pop();
+                            }
+                            army.isLoadedIn = null;
                         }
                     }
-                    // there is none
-                    if(fleetsOnDest.length == 0){
-                        return "You can't walk on Water.";
-                    // there is exactly one
-                    } else if(fleetsOnDest.length == 1){
-                        var loadString = listOfArmies[fleetsOnDest[0]].a.loadArmy();
-                        if(loadString == "ok"){
-                            this.a.isLoadedIn = listOfArmies[fleetsOnDest[0]].a.armyId;
-                            console.log("army in now loaded in " + this.a.isLoadedIn);
-                            this.a.x = tempmove.tar.x;
-                            this.a.y = tempmove.tar.y;
-                            return "ok";
-                        } else {
-                            return(loadString);
+                }
+                if(tempmove.changHeight == true){
+                    army.setRemainingHeightPoints(army.remainingHeightPoints - tempmove.height);
+                }
+                if(tempmove.landunit == true && army.canConquer())
+                {
+                    conquer(army, direction);
+                }
+                clickedMoves(army);
+                return "ok"
+            }
+            //in case of loading onto a ship
+            else if(tempmove.load == true){
+                var fleetsOnDest = [];
+                for(var i = 0; i<listOfArmies.length; i++){
+                    if((listOfArmies[i].owner == army.owner) && (listOfArmies[i].x == tempmove.tar.x) && (listOfArmies[i].y == tempmove.tar.y) &&
+                    (Math.floor(listOfArmies[i].a.armyId / 100) == 3)){
+                        fleetsOnDest.push(i);
+                        console.log("fleets +1");
+                    }
+                }
+                // there is none
+                if(fleetsOnDest.length == 0){
+                    return "You can't walk on Water.";
+                // there is exactly one
+                } else if(fleetsOnDest.length == 1){
+                    var loadString = listOfArmies[fleetsOnDest[0]].a.loadArmy();
+                    if(loadString == "ok"){
+                        army.isLoadedIn = listOfArmies[fleetsOnDest[0]].a.armyId;
+                        console.log("army in now loaded in " + army.isLoadedIn);
+                        army.x = tempmove.tar.x;
+                        army.y = tempmove.tar.y;
+                        return "ok";
+                    } else {
+                        return(loadString);
+                    }
+                // TODO: more than one
+                } else if(fleetsOnDest.length > 1){
+                    var fleetstring = "";
+                    for(var i = 0; i < fleetsOnDest.length; i++){
+                        fleetstring = fleetstring + listOfArmies[fleetsOnDest[i]].a.armyId + " ";
+                    }
+                    var chosenFleet = prompt("Mögliche Flotten sind: " + fleetstring);
+                    if(chosenFleet != null){
+                        var findFleet = -1;
+                        for(var i = 0; i < listOfArmies.length; i++){
+                            if(listOfArmies[i].a.armyId == chosenFleet && listOfArmies[i].owner == army.owner){
+                                findFleet = i;
+                            }
                         }
-                    // TODO: more than one
-                    } else if(fleetsOnDest.length > 1){
-                        var fleetstring = "";
+                        console.log("chosenFleet: ")
+                        console.log(chosenFleet);
+                        console.log("findFleet: ")
+                        console.log(findFleet);
+                        console.log("fleetsOnDest: ")
+                        console.log(fleetsOnDest);
+                        var found = false;
                         for(var i = 0; i < fleetsOnDest.length; i++){
-                            fleetstring = fleetstring + listOfArmies[fleetsOnDest[i]].a.armyId + " ";
+                            if(fleetsOnDest[i] == findFleet){
+                                found = true
+                            }
                         }
-                        var chosenFleet = prompt("Mögliche Flotten sind: " + fleetstring);
-                        if(chosenFleet != null){
-                            var findFleet = -1;
-                            for(var i = 0; i < listOfArmies.length; i++){
-                                if(listOfArmies[i].a.armyId == chosenFleet && listOfArmies[i].owner == this.a.owner){
-                                    findFleet = i;
-                                }
-                            }
-                            console.log("chosenFleet: ") 
-                            console.log(chosenFleet);
-                            console.log("findFleet: ") 
-                            console.log(findFleet);
-                            console.log("fleetsOnDest: ") 
-                            console.log(fleetsOnDest);
-                            var found = false;
-                            for(var i = 0; i < fleetsOnDest.length; i++){
-                                if(fleetsOnDest[i] == findFleet){
-                                    found = true
-                                }
-                            }
-                            if(found){
-                                var loadString = listOfArmies[findFleet].a.loadArmy();
-                                if(loadString == "ok"){
-                                    this.a.isLoadedIn = listOfArmies[findFleet].a.armyId;
-                                    console.log("army in now loaded in " + this.a.isLoadedIn);
-                                    this.a.x = tempmove.tar.x;
-                                    this.a.y = tempmove.tar.y;
-                                    return "ok";
-                                } else {
-                                    return(loadString);
-                                }
+                        if(found){
+                            var loadString = listOfArmies[findFleet].a.loadArmy();
+                            if(loadString == "ok"){
+                                army.isLoadedIn = listOfArmies[findFleet].a.armyId;
+                                console.log("army in now loaded in " + army.isLoadedIn);
+                                army.x = tempmove.tar.x;
+                                army.y = tempmove.tar.y;
+                                return "ok";
                             } else {
-                                window.alert("Bitte wähle eine der angegebenen Flotten aus.");
+                                return(loadString);
                             }
+                        } else {
+                            window.alert("Bitte wähle eine der angegebenen Flotten aus.");
                         }
                     }
                 }
             }
         }
-		//to see and return the error why you cant move
-        clickedMoves(this.a);
-        return moveToList(this.a, direction)
     }
+    //to see and return the error why you cant move
+    clickedMoves(army);
+    return moveToList(army, direction)
 }
 
 //when unit is clicked generates a list of neighbors that can be moved to

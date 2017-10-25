@@ -306,7 +306,7 @@ function registerRightClick(){
 					var out;
 					if (listOfArmies[selectedArmy].a.ownerTag() === login || login === "sl") {
 
-						out = listOfArmies[selectedArmy].move(i);
+						out = move(listOfArmies[selectedArmy].a, i);
 						console.log(out);
 					} else {
 						out = "Can only move your own armies."
@@ -771,22 +771,22 @@ function checkEvent(num) {
 			var adjacency = getAdjacency([army.a.x, army.a.y],[[cont.toX, cont.toY]]);
 			if (adjacency[0] === 1){
 				moveToList(army.a, 1);
-				army.move(1);//move to ne
+				move(army.a, 1);//move to ne
 			} else if (adjacency[1] === 1) {
 				moveToList(army.a, 2);
-				army.move(2);//move to e
+				move(army.a, 2);//move to e
 			} else if (adjacency[2] === 1) {
 				moveToList(army.a, 3);
-				army.move(3);//move to se
+				move(army.a, 3);//move to se
 			} else if (adjacency[3] === 1) {
 				moveToList(army.a, 4);
-				army.move(4);//move to sw
+				move(army.a, 4);//move to sw
 			} else if (adjacency[4] === 1) {
 				moveToList(army.a, 5);
-				army.move(5);//move to w
+				move(army.a, 5);//move to w
 			} else if (adjacency[5] === 1) {
 				moveToList(army.a, 0);
-				army.move(0);//move to nw
+				move(army.a, 0);//move to nw
 			}
 			event.status = 'checked';
 			fillEventList();
