@@ -1,323 +1,6 @@
 function armyCoordinates(army) {
     this.a = army;
 
-// direction as a number, 0 = NW, 1 = NO, 2 = O, 3 = SO, 4 = SW, 5 = W
-//tries to move a Unit in a direction and if possible saves the possible move
-    this.moveToList = function(direction) {
-        console.log("moveToListInitiated");
-        var destination = new showHex(this.a.x, this.a.y);
-        var neighborCoords = destination.neighbors();
-        var target = new showHex(neighborCoords[direction][0],neighborCoords[direction][1]);
-        var changeInHeight = false;
-        var thereIsAStreet = false;
-        // check if there is a steet on the route
-        for(var i = 0; i < buildings.length; i++){
-            var building = buildings[i];
-            if(building.type == 8){
-                if(((building.firstX == this.a.x && building.firstY == this.a.y) && (building.secondX == target.x && building.secondY == target.y)) ||
-                ((building.secondX == this.a.x && building.secondY == this.a.y) && (building.firstX == target.x && building.firstY == target.y))){
-                    thereIsAStreet = true;
-                    break;
-                }
-            }
-        }
-        // check if there is a change in height on the route
-        if(destination.height() != target.height()){
-            if((destination.height() - target.height()) >= 2 || target.height() - destination.height() >= 2){
-                return "The height difference is too big."
-            } else if((this.remainingHeightPoints < 2 && !thereIsAStreet)||this.remainingHeightPoints < 1){
-                return "No height points left."
-            } else {
-                changeInHeight = true;
-            }
-        }
-        // ship movement
-        if(Math.floor(this.a.armyId / 100) == 3){
-            switch(target.fieldType()){
-                case 0: 
-                    if(this.a.lkp == 0 && this.a.skp == 0){
-                        if(this.a.remainingMovePoints >= 12 ){
-                            //this.moveHelper(changeInHeight, direction, 12,2,false, target);
-                            this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 12, height: 2,landunit: false,tar: target});
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    } else if(this.a.skp > 0){
-                        if(this.a.remainingMovePoints >= 21 ){
-                            //this.moveHelper(changeInHeight, direction, 21,2,false, target);
-                            this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2,landunit: false,tar: target});
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    } else if(this.a.lkp > 0){
-                        if(this.a.remainingMovePoints >= 21 ){
-                            //this.moveHelper(changeInHeight, direction, 21,2,false, target);
-                            this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2,landunit: false,tar: target});
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    }
-                case 1: 
-                    if(this.a.lkp == 0 && this.a.skp == 0){
-                        if(this.a.remainingMovePoints >= 7 ){
-                            //this.moveHelper(changeInHeight, direction, 7,2,false, target);
-                            this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: false,tar: target});
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    } else if(this.a.skp > 0){
-                        if(this.a.remainingMovePoints >= 10 ){
-                            //this.moveHelper(changeInHeight, direction, 10,2,false, target);
-                            this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 10, height: 2,landunit: false,tar: target});
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    } else if(this.a.lkp > 0){
-                        if(this.a.remainingMovePoints >= 8 ){
-                            //this.moveHelper(changeInHeight, direction, 8,2,false, target);
-                            this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 8, height: 2,landunit: false,tar: target});
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    }
-                case 2:
-                case 4:
-                case 7:
-                case 5:
-                case 6:
-                case 3:
-                case 8: return "You can't drive your ships up land." // can't
-            }
-        // horse movement
-        } else if(Math.floor(this.a.armyId / 100) == 2){
-            switch(target.fieldType()){
-                case 0:
-                case 1:
-                var fleetsOnDest = [];
-                // target field is sea, or deepsea
-                // to see if there is the exact heightchange(not too high or on the sea switching boats)
-                if(changeInHeight == true){
-                    // is there an allied fleet on the target field?
-                    for(var i = 0; i<listOfArmies.length; i++){
-                        if((listOfArmies[i].owner == this.a.owner) && (listOfArmies[i].x == target.x) && (listOfArmies[i].y == target.y) &&
-                        (Math.floor(listOfArmies[i].a.armyId / 100) == 3)){
-                            if (listOfArmies[i].a.isLoadable() == "ok")
-                            {
-                                this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 2,landunit: true ,tar: target, load: true});
-                            }
-                            fleetsOnDest.push(i);
-                            console.log("fleets +1");
-                        }
-                    }
-                }
-                // there is none
-                if(fleetsOnDest.length == 0){
-                    return "You can't walk on Water.";
-                // already embarked
-                } else if(this.a.isLoadedIn != null){
-                    return "You are already embarked on a Fleet.";
-                // there is exactly one
-                }
-                case 2:
-                case 4:
-                case 7: if(thereIsAStreet){
-                    if(this.a.remainingMovePoints >= 4 ){// 4
-                        //this.moveHelper(changeInHeight, direction, 4,1,true, target);
-                        this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 1,landunit: true ,tar: target});
-                        return "ok";
-                    } else {
-                        return "You don't have enough movement Points.";
-                    }
-                } else if(this.a.remainingMovePoints >= 7 ){// 7
-                    if(this.a.isLoadedIn != null){  // falls armee von flotte transportiert wird
-                        this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: true});
-                    }
-                    else {
-                        //this.moveHelper(changeInHeight, direction, 7,2,true, target);
-                        this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: false});
-                    }
-                    return "ok";
-                } else {
-                    return "You don't have enough movement Points.";
-                }
-                case 5: if(thereIsAStreet){
-                    if(this.a.remainingMovePoints >= 7 ){// 7
-                        //this.moveHelper(changeInHeight, direction, 7,1,true, target);
-                        this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 1,landunit: true ,tar: target});
-                        return "ok";
-                    } else {
-                        return "You don't have enough movement Points.";
-                    }
-                } else if(this.a.remainingMovePoints >= 21 ){// 21
-                    //this.moveHelper(changeInHeight, direction, 21,2,true, target);
-                    this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2,landunit: true ,tar: target});
-                    return "ok";
-                } else {
-                    return "You don't have enough movement Points.";
-                }
-                case 6: return "Cavalry can not move through the mountains. "// can't
-                case 3:
-                case 8: if(thereIsAStreet){
-                    if(this.a.remainingMovePoints >= 5 ){// 5
-                        //this.moveHelper(changeInHeight, direction, 5,1,true, target);
-                        this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 5, height: 1,landunit: true ,tar: target});
-                        return "ok";
-                    } else {
-                        return "You don't have enough movement Points.";
-                    }
-                } else if(this.a.remainingMovePoints >= 10 ){// 10
-                    if(this.a.isLoadedIn != null){  // falls armee von flotte transportiert wird
-                        this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 10, height: 2,landunit: true ,tar: target, unload: true});
-                    }
-                    else {
-                        //this.moveHelper(changeInHeight, direction, 10,2,true, target);
-                        this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 10, height: 2,landunit: true ,tar: target});
-                    }
-                    return "ok";
-                } else {
-                    return "You don't have enough movement Points.";
-                }
-            }
-        // normal troop movement
-        } else if(Math.floor(this.a.armyId / 100) == 1){
-            switch(target.fieldType()){
-                case 0:
-                case 1:
-                var fleetsOnDest = [];
-                // target field is sea, or deepsea
-                // to see if there is the exact heightchange(not too high or on the sea switching boats)
-                if(changeInHeight == true){
-                    // is there an allied fleet on the target field?
-                    for(var i = 0; i<listOfArmies.length; i++){
-                        if((listOfArmies[i].owner == this.a.owner) && (listOfArmies[i].x == target.x) && (listOfArmies[i].y == target.y) &&
-                        (Math.floor(listOfArmies[i].a.armyId / 100) == 3)){
-                            if (listOfArmies[i].a.isLoadable() == "ok")
-                            {
-                                this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 2,landunit: true ,tar: target, load: true});
-                            }
-                            fleetsOnDest.push(i);
-                            console.log("fleets +1");
-                        }
-                    }
-                }
-                // there is none
-                if(fleetsOnDest.length == 0){
-                    return "You can't walk on Water.";
-                // already embarked
-                } else if(this.a.isLoadedIn != null){
-                    return "You are already embarked on a Fleet.";
-                // there is exactly one
-                }
-                case 2:
-                case 4:
-                case 7:
-                console.log("there is a street: "+ thereIsAStreet);
-                if(thereIsAStreet){  // target field is a lowland, hill or desert
-                    if(this.a.remainingMovePoints >= 4){
-                        //this.moveHelper(changeInHeight, direction, 4,1,true, target);
-                        this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 1,landunit: true ,tar: target});
-                        return "ok";
-                    } else {
-                        return "You don't have enough movement Points.";
-                    }
-                } else if(this.a.remainingMovePoints >= 7){
-                    if(this.a.isLoadedIn != null){  // falls armee von flotte transportiert wird
-                        this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: true});
-                    }
-                    else {
-                    this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: false});
-                    }
-                    return "ok";
-                } else {
-                    return "You don't have enough movement Points.";
-                }
-                case 5: if(thereIsAStreet){  // target field is a highland
-                        if(this.a.skp > 0){
-                            if(this.a.remainingMovePoints >= 7){
-                                //this.moveHelper(changeInHeight, direction, 7,1,true, target);
-                                this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 1,landunit: true ,tar: target});
-                                return "ok";
-                            } else {
-                                return "You don't have enough movement Points.";
-                            }
-                        } if(this.a.remainingMovePoints >= 4){
-                            //this.moveHelper(changeInHeight, direction, 4,1,true, target);
-                            this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 1,landunit: true ,tar: target});
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    } else if(this.a.skp > 0){
-                    return "You you need streets to move heavy catapults into the highlands.";
-                } if(this.a.remainingMovePoints >= 7){
-                    //this.moveHelper(changeInHeight, direction, 7,2,true, target);
-                    this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target});
-                    return "ok";
-                } else {
-                    return "You don't have enough movement Points.";
-                }
-                case 6: if(thereIsAStreet){  // target field is a mountain
-                    if(this.a.skp > 0){
-                        return "You can't move into the mountains with heavy catapults.";
-                    } else if(this.a.lkp > 0){
-                        if(this.a.remainingMovePoints >= 7 ){
-                            //this.moveHelper(changeInHeight, direction, 7,1,true, target);
-                            this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 1,landunit: true ,tar: target});
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    } else if(this.a.remainingMovePoints >= 4 ){
-                        //this.moveHelper(changeInHeight, direction, 4,1,true, target);
-                        this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 1,landunit: true ,tar: target});
-                        return "ok";
-                    } else {
-                        return "You don't have enough movement Points.";
-                    }
-                } else if(this.a.lkp > 0 || this.a.skp > 0){
-                    return "You can't move into the mountains with catapults.";
-                }
-                case 3:
-                case 8: if(thereIsAStreet){ // target field is a wood, or swamp
-                    if(this.a.skp > 0){
-                        if(this.a.remainingMovePoints >= 7 ){
-                            //this.moveHelper(changeInHeight, direction, 7,1,true, target);
-                            this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 1,landunit: true ,tar: target});
-                            return "ok";
-                        } else {
-                            return "You don't have enough movement Points.";
-                        }
-                    } else if(this.a.remainingMovePoints >= 4 ){
-                        //this.moveHelper(changeInHeight, direction, 4,1,true, target);
-                        this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 1,landunit: true ,tar: target});
-                        return "ok";
-                    } else {
-                        return "You don't have enough movement Points.";
-                    }
-                } else if(this.a.skp > 0){
-                    return "You can't move into woods or swamps with heavy catapults unless you have streets.";
-                } else if(this.a.remainingMovePoints >= 7 ){
-                    //this.moveHelper(changeInHeight, direction, 7,2,true, target);
-                    if(this.a.isLoadedIn != null){  // falls armee von flotte transportiert wird
-                        this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: true});
-                    }
-                    else{
-                        this.a.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2, landunit: true ,tar: target});
-                    }
-                    return "ok";
-                } else {
-                    return "You don't have enough movement Points.";
-                }
-            }
-        }
-    }
-
     //when unit is clicked generates a list of neighbors that can be moved to
     this.clickedMoves = function(){
 
@@ -326,7 +9,7 @@ function armyCoordinates(army) {
             //goes through all neighbors to see if the army can move there
             for(var i =0; i < 6; i++)
             {
-                this.moveToList(i);
+                moveToList(this.a, i);
             }
         }
 
@@ -464,7 +147,325 @@ function armyCoordinates(army) {
         }
 		//to see and return the error why you cant move
         this.clickedMoves();
-        return this.moveToList(direction)
+        return moveToList(this.a, direction)
+    }
+}
+
+// direction as a number, 0 = NW, 1 = NO, 2 = O, 3 = SO, 4 = SW, 5 = W
+//tries to move a Unit in a direction and if possible saves the possible move
+function moveToList(army, direction) {
+    console.log("moveToListInitiated");
+    var destination = new showHex(army.x, army.y);
+    var neighborCoords = destination.neighbors();
+    var target = new showHex(neighborCoords[direction][0], neighborCoords[direction][1]);
+    var changeInHeight = false;
+    var thereIsAStreet = false;
+    // check if there is a steet on the route
+    for(var i = 0; i < buildings.length; i++){
+        var building = buildings[i];
+        if(building.type == 8){
+            if(((building.firstX === army.x && building.firstY === army.y) && (building.secondX === target.x &&
+                building.secondY === target.y)) || ((building.secondX === army.x && building.secondY === army.y) &&
+                (building.firstX === target.x && building.firstY === target.y))){
+                thereIsAStreet = true;
+                break;
+            }
+        }
+    }
+    // check if there is a change in height on the route
+    if(destination.height() != target.height()){
+        if((destination.height() - target.height()) >= 2 || target.height() - destination.height() >= 2){
+            return "The height difference is too big."
+        } else if((army.remainingHeightPoints < 2 && !thereIsAStreet) || army.remainingHeightPoints < 1){
+            return "No height points left."
+        } else {
+            changeInHeight = true;
+        }
+    }
+    // ship movement
+    if(Math.floor(army.armyId / 100) == 3){
+        switch(target.fieldType()){
+            case 0:
+                if(army.lkp == 0 && army.skp == 0){
+                    if(army.remainingMovePoints >= 12 ){
+                        //this.moveHelper(changeInHeight, direction, 12,2,false, target);
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 12, height: 2,landunit: false,tar: target});
+                        return "ok";
+                    } else {
+                        return "You don't have enough movement Points.";
+                    }
+                } else if(army.skp > 0){
+                    if(army.remainingMovePoints >= 21 ){
+                        //this.moveHelper(changeInHeight, direction, 21,2,false, target);
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2,landunit: false,tar: target});
+                        return "ok";
+                    } else {
+                        return "You don't have enough movement Points.";
+                    }
+                } else if(army.lkp > 0){
+                    if(army.remainingMovePoints >= 21 ){
+                        //this.moveHelper(changeInHeight, direction, 21,2,false, target);
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2,landunit: false,tar: target});
+                        return "ok";
+                    } else {
+                        return "You don't have enough movement Points.";
+                    }
+                }
+            case 1:
+                if(army.lkp == 0 && army.skp == 0){
+                    if(army.remainingMovePoints >= 7 ){
+                        //this.moveHelper(changeInHeight, direction, 7,2,false, target);
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: false,tar: target});
+                        return "ok";
+                    } else {
+                        return "You don't have enough movement Points.";
+                    }
+                } else if(army.skp > 0){
+                    if(army.remainingMovePoints >= 10 ){
+                        //this.moveHelper(changeInHeight, direction, 10,2,false, target);
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 10, height: 2,landunit: false,tar: target});
+                        return "ok";
+                    } else {
+                        return "You don't have enough movement Points.";
+                    }
+                } else if(army.lkp > 0){
+                    if(army.remainingMovePoints >= 8 ){
+                        //this.moveHelper(changeInHeight, direction, 8,2,false, target);
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 8, height: 2,landunit: false,tar: target});
+                        return "ok";
+                    } else {
+                        return "You don't have enough movement Points.";
+                    }
+                }
+            case 2:
+            case 4:
+            case 7:
+            case 5:
+            case 6:
+            case 3:
+            case 8: return "You can't drive your ships up land." // can't
+        }
+    // horse movement
+    } else if(Math.floor(army.armyId / 100) == 2){
+        switch(target.fieldType()){
+            case 0:
+            case 1:
+            var fleetsOnDest = [];
+            // target field is sea, or deepsea
+            // to see if there is the exact heightchange(not too high or on the sea switching boats)
+            if(changeInHeight === true){
+                // is there an allied fleet on the target field?
+                for(var i = 0; i<listOfArmies.length; i++){
+                    if((listOfArmies[i].a.owner === army.owner) && (listOfArmies[i].a.x === target.x) && (listOfArmies[i].a.y === target.y) &&
+                    (Math.floor(listOfArmies[i].a.armyId / 100) == 3)){
+                        if (listOfArmies[i].a.isLoadable() == "ok")
+                        {
+                            army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 2,landunit: true ,tar: target, load: true});
+                        }
+                        fleetsOnDest.push(i);
+                        console.log("fleets +1");
+                    }
+                }
+            }
+            // there is none
+            if(fleetsOnDest.length == 0){
+                return "You can't walk on Water.";
+            // already embarked
+            } else if(army.isLoadedIn != null){
+                return "You are already embarked on a Fleet.";
+            // there is exactly one
+            }
+            case 2:
+            case 4:
+            case 7: if(thereIsAStreet){
+                if(army.remainingMovePoints >= 4 ){// 4
+                    //this.moveHelper(changeInHeight, direction, 4,1,true, target);
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 1,landunit: true ,tar: target});
+                    return "ok";
+                } else {
+                    return "You don't have enough movement Points.";
+                }
+            } else if(army.remainingMovePoints >= 7 ){// 7
+                if(army.isLoadedIn != null){  // falls armee von flotte transportiert wird
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: true});
+                }
+                else {
+                    //this.moveHelper(changeInHeight, direction, 7,2,true, target);
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: false});
+                }
+                return "ok";
+            } else {
+                return "You don't have enough movement Points.";
+            }
+            case 5: if(thereIsAStreet){
+                if(army.remainingMovePoints >= 7 ){// 7
+                    //this.moveHelper(changeInHeight, direction, 7,1,true, target);
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 1,landunit: true ,tar: target});
+                    return "ok";
+                } else {
+                    return "You don't have enough movement Points.";
+                }
+            } else if(army.remainingMovePoints >= 21 ){// 21
+                //this.moveHelper(changeInHeight, direction, 21,2,true, target);
+                army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2,landunit: true ,tar: target});
+                return "ok";
+            } else {
+                return "You don't have enough movement Points.";
+            }
+            case 6: return "Cavalry can not move through the mountains. "// can't
+            case 3:
+            case 8: if(thereIsAStreet){
+                if(army.remainingMovePoints >= 5 ){// 5
+                    //this.moveHelper(changeInHeight, direction, 5,1,true, target);
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 5, height: 1,landunit: true ,tar: target});
+                    return "ok";
+                } else {
+                    return "You don't have enough movement Points.";
+                }
+            } else if(army.remainingMovePoints >= 10 ){// 10
+                if(army.isLoadedIn != null){  // falls armee von flotte transportiert wird
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 10, height: 2,landunit: true ,tar: target, unload: true});
+                }
+                else {
+                    //this.moveHelper(changeInHeight, direction, 10,2,true, target);
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 10, height: 2,landunit: true ,tar: target});
+                }
+                return "ok";
+            } else {
+                return "You don't have enough movement Points.";
+            }
+        }
+    // normal troop movement
+    } else if(Math.floor(army.armyId / 100) == 1){
+        switch(target.fieldType()){
+            case 0:
+            case 1:
+            var fleetsOnDest = [];
+            // target field is sea, or deepsea
+            // to see if there is the exact heightchange(not too high or on the sea switching boats)
+            if(changeInHeight === true){
+                // is there an allied fleet on the target field?
+                for(var i = 0; i<listOfArmies.length; i++){
+                    if((listOfArmies[i].a.owner === army.owner) && (listOfArmies[i].a.x === target.x) && (listOfArmies[i].a.y === target.y) &&
+                    (Math.floor(listOfArmies[i].a.armyId / 100) == 3)){
+                        if (listOfArmies[i].a.isLoadable() == "ok")
+                        {
+                            army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 2,landunit: true ,tar: target, load: true});
+                        }
+                        fleetsOnDest.push(i);
+                        console.log("fleets +1");
+                    }
+                }
+            }
+            // there is none
+            if(fleetsOnDest.length == 0){
+                return "You can't walk on Water.";
+            // already embarked
+            } else if(army.isLoadedIn != null){
+                return "You are already embarked on a Fleet.";
+            // there is exactly one
+            }
+            case 2:
+            case 4:
+            case 7:
+            console.log("there is a street: "+ thereIsAStreet);
+            if(thereIsAStreet){  // target field is a lowland, hill or desert
+                if(army.remainingMovePoints >= 4){
+                    //this.moveHelper(changeInHeight, direction, 4,1,true, target);
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 1,landunit: true ,tar: target});
+                    return "ok";
+                } else {
+                    return "You don't have enough movement Points.";
+                }
+            } else if(army.remainingMovePoints >= 7){
+                if(army.isLoadedIn != null){  // falls armee von flotte transportiert wird
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: true});
+                }
+                else {
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: false});
+                }
+                return "ok";
+            } else {
+                return "You don't have enough movement Points.";
+            }
+            case 5: if(thereIsAStreet){  // target field is a highland
+                    if(army.skp > 0){
+                        if(army.remainingMovePoints >= 7){
+                            //this.moveHelper(changeInHeight, direction, 7,1,true, target);
+                            army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 1,landunit: true ,tar: target});
+                            return "ok";
+                        } else {
+                            return "You don't have enough movement Points.";
+                        }
+                    } if(army.remainingMovePoints >= 4){
+                        //this.moveHelper(changeInHeight, direction, 4,1,true, target);
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 1,landunit: true ,tar: target});
+                        return "ok";
+                    } else {
+                        return "You don't have enough movement Points.";
+                    }
+                } else if(army.skp > 0){
+                return "You you need streets to move heavy catapults into the highlands.";
+            } if(army.remainingMovePoints >= 7){
+                //this.moveHelper(changeInHeight, direction, 7,2,true, target);
+                army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target});
+                return "ok";
+            } else {
+                return "You don't have enough movement Points.";
+            }
+            case 6: if(thereIsAStreet){  // target field is a mountain
+                if(army.skp > 0){
+                    return "You can't move into the mountains with heavy catapults.";
+                } else if(army.lkp > 0){
+                    if(army.remainingMovePoints >= 7 ){
+                        //this.moveHelper(changeInHeight, direction, 7,1,true, target);
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 1,landunit: true ,tar: target});
+                        return "ok";
+                    } else {
+                        return "You don't have enough movement Points.";
+                    }
+                } else if(army.remainingMovePoints >= 4 ){
+                    //this.moveHelper(changeInHeight, direction, 4,1,true, target);
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 1,landunit: true ,tar: target});
+                    return "ok";
+                } else {
+                    return "You don't have enough movement Points.";
+                }
+            } else if(army.lkp > 0 || army.skp > 0){
+                return "You can't move into the mountains with catapults.";
+            }
+            case 3:
+            case 8: if(thereIsAStreet){ // target field is a wood, or swamp
+                if(army.skp > 0){
+                    if(army.remainingMovePoints >= 7 ){
+                        //this.moveHelper(changeInHeight, direction, 7,1,true, target);
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 1,landunit: true ,tar: target});
+                        return "ok";
+                    } else {
+                        return "You don't have enough movement Points.";
+                    }
+                } else if(army.remainingMovePoints >= 4 ){
+                    //this.moveHelper(changeInHeight, direction, 4,1,true, target);
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 1,landunit: true ,tar: target});
+                    return "ok";
+                } else {
+                    return "You don't have enough movement Points.";
+                }
+            } else if(army.skp > 0){
+                return "You can't move into woods or swamps with heavy catapults unless you have streets.";
+            } else if(army.remainingMovePoints >= 7 ){
+                //this.moveHelper(changeInHeight, direction, 7,2,true, target);
+                if(army.isLoadedIn != null){  // falls armee von flotte transportiert wird
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: true ,tar: target, unload: true});
+                }
+                else{
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2, landunit: true ,tar: target});
+                }
+                return "ok";
+            } else {
+                return "You don't have enough movement Points.";
+            }
+        }
     }
 }
 

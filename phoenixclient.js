@@ -648,7 +648,7 @@ function canMove(realm, id, fromX, fromY, toX, toY){
 		if (adjacency.reduce((total, current) => (total || current), false)){
 			foundArmy.a.possibleMoves = [];
 			var direction = (adjacency.findIndex((dir) => dir === 1) + 1)%6;
-			foundArmy.moveToList(direction);
+			moveToList(foundArmy.a, direction);
 			return foundArmy.a.possibleMoves.length > 0;
 		}
 //		var origin = new showHex(fromX, fromY);
@@ -770,22 +770,22 @@ function checkEvent(num) {
 			}
 			var adjacency = getAdjacency([army.a.x, army.a.y],[[cont.toX, cont.toY]]);
 			if (adjacency[0] === 1){
-				army.moveToList(1);
+				moveToList(army.a, 1);
 				army.move(1);//move to ne
 			} else if (adjacency[1] === 1) {
-				army.moveToList(2);
+				moveToList(army.a, 2);
 				army.move(2);//move to e
 			} else if (adjacency[2] === 1) {
-				army.moveToList(3);
+				moveToList(army.a, 3);
 				army.move(3);//move to se
 			} else if (adjacency[3] === 1) {
-				army.moveToList(4);
+				moveToList(army.a, 4);
 				army.move(4);//move to sw
 			} else if (adjacency[4] === 1) {
-				army.moveToList(5);
+				moveToList(army.a, 5);
 				army.move(5);//move to w
 			} else if (adjacency[5] === 1) {
-				army.moveToList(0);
+				moveToList(army.a, 0);
 				army.move(0);//move to nw
 			}
 			event.status = 'checked';
