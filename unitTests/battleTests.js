@@ -381,7 +381,7 @@ module( "Army" , function() {
 			test( "Fleet transporting at full capacity halved", function(t){
 				var fleet = new seeHeer(301, 100, 10, 0, 0, false);
 				var transportedArmy = new heer(101, 9000, 10, 0, 0, 0, false);
-				var listOfArmyCoordinates = [transportedArmy];
+				var listOfArmies = [transportedArmy];
 				var selectedArmy = 0;
 				fleet.loadArmy;
 				fleet.decimate(50);
@@ -390,7 +390,7 @@ module( "Army" , function() {
 			test( "Fleet transporting at 75% capacity halved", function(t){
 				var fleet = new seeHeer(301, 100, 10, 0, 0, false);
 				var transportedArmy = new heer(101, 7000, 5, 0, 0, 0, false);
-				var listOfArmyCoordinates = [transportedArmy];
+				var listOfArmies = [transportedArmy];
 				var selectedArmy = 0;
 				fleet.loadArmy;
 				fleet.decimate(50);
@@ -399,7 +399,7 @@ module( "Army" , function() {
 			test( "Fleet transporting riders at full capacity halved", function(t){
 				var fleet = new seeHeer(301, 100, 10, 0, 0, false);
 				var transportedArmy = new reiterHeer(201, 4500, 10, false);
-				var listOfArmyCoordinates = [transportedArmy];
+				var listOfArmies = [transportedArmy];
 				var selectedArmy = 0;
 				fleet.loadArmy;
 				fleet.decimate(50);
@@ -408,7 +408,7 @@ module( "Army" , function() {
 			test( "Fleet transporting army with catapults at full capacity halved", function(t){
 				var fleet = new seeHeer(301, 100, 10, 0, 0, false);
 				var transportedArmy = new heer(101, 1000, 10, 4, 2, 0, false);
-				var listOfArmyCoordinates = [transportedArmy];
+				var listOfArmies = [transportedArmy];
 				var selectedArmy = 0;
 				fleet.loadArmy;
 				fleet.decimate(50);
@@ -417,7 +417,7 @@ module( "Army" , function() {
 			test( "Fleet transporting army with mounts at full capacity halved", function(t){
 				var fleet = new seeHeer(301, 100, 10, 0, 0, false);
 				var transportedArmy = new heer(101, 4500, 10, 0, 0, 4500, false);
-				var listOfArmyCoordinates = [transportedArmy];
+				var listOfArmies = [transportedArmy];
 				var selectedArmy = 0;
 				fleet.loadArmy;
 				fleet.decimate(50);

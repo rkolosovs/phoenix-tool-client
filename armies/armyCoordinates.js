@@ -144,10 +144,10 @@ function armyCoordinates(army) {
                 // to see if there is the exact heightchange(not too high or on the sea switching boats)
                 if(changeInHeight == true){
                     // is there an allied fleet on the target field?
-                    for(var i = 0; i<listOfArmyCoordinates.length; i++){
-                        if((listOfArmyCoordinates[i].owner == this.a.owner) && (listOfArmyCoordinates[i].x == target.x) && (listOfArmyCoordinates[i].y == target.y) &&
-                        (Math.floor(listOfArmyCoordinates[i].a.armyId / 100) == 3)){
-                            if (listOfArmyCoordinates[i].a.isLoadable() == "ok")
+                    for(var i = 0; i<listOfArmies.length; i++){
+                        if((listOfArmies[i].owner == this.a.owner) && (listOfArmies[i].x == target.x) && (listOfArmies[i].y == target.y) &&
+                        (Math.floor(listOfArmies[i].a.armyId / 100) == 3)){
+                            if (listOfArmies[i].a.isLoadable() == "ok")
                             {
                                 this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 2,landunit: true ,tar: target, load: true});
                             }
@@ -234,10 +234,10 @@ function armyCoordinates(army) {
                 // to see if there is the exact heightchange(not too high or on the sea switching boats)
                 if(changeInHeight == true){
                     // is there an allied fleet on the target field?
-                    for(var i = 0; i<listOfArmyCoordinates.length; i++){
-                        if((listOfArmyCoordinates[i].owner == this.a.owner) && (listOfArmyCoordinates[i].x == target.x) && (listOfArmyCoordinates[i].y == target.y) &&
-                        (Math.floor(listOfArmyCoordinates[i].a.armyId / 100) == 3)){
-                            if (listOfArmyCoordinates[i].a.isLoadable() == "ok")
+                    for(var i = 0; i<listOfArmies.length; i++){
+                        if((listOfArmies[i].owner == this.a.owner) && (listOfArmies[i].x == target.x) && (listOfArmies[i].y == target.y) &&
+                        (Math.floor(listOfArmies[i].a.armyId / 100) == 3)){
+                            if (listOfArmies[i].a.isLoadable() == "ok")
                             {
                                 this.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 2,landunit: true ,tar: target, load: true});
                             }
@@ -374,7 +374,7 @@ function armyCoordinates(army) {
 
     //to actually move units with the new method
     this.move = function(direction){//TODO needs new names
-        for(var i =0; i < this.a.possibleMoves.length; i++){
+        for(var i =0; i < this.possibleMoves.length; i++){
             if(this.possibleMoves[i].dir == direction){
                 var tempmove = this.possibleMoves[i];
                 //in case it is moving on land
@@ -388,11 +388,11 @@ function armyCoordinates(army) {
                     // moves troops that are loaded in the fleet
                         if(this.a.loadedArmies != undefined && this.a.loadedArmies != []){
                             for(var i = 0; i < this.a.loadedArmies.length; i++){
-                                for(var j = 0; j < listOfArmyCoordinates.length; j++){
+                                for(var j = 0; j < listOfArmies.length; j++){
                                     console.log(this.a.loadedArmies[i]);
-                                    if(listOfArmyCoordinates[j].owner == this.a.owner && listOfArmyCoordinates[j].a.armyId == this.a.loadedArmies[i]){
-                                        listOfArmyCoordinates[j].x = tempmove.tar.x;
-                                        listOfArmyCoordinates[j].y = tempmove.tar.y;
+                                    if(listOfArmies[j].owner == this.a.owner && listOfArmies[j].a.armyId == this.a.loadedArmies[i]){
+                                        listOfArmies[j].x = tempmove.tar.x;
+                                        listOfArmies[j].y = tempmove.tar.y;
                                     }
                                 }
                             }
@@ -403,19 +403,19 @@ function armyCoordinates(army) {
                     if(tempmove.unload != undefined && tempmove.unload == true){
                         console.log("MAAAAPMAAAAPMAAAAAP ------------This Totally Happened-------------------")
                         console.log("Armee war in " + this.a.isLoadedIn + " geladen.");
-                        for(var i = 0; i < listOfArmyCoordinates.length; i++){
-                            if((listOfArmyCoordinates[i].owner == this.a.owner) && listOfArmyCoordinates[i].a.armyId == this.a.isLoadedIn){
+                        for(var i = 0; i < listOfArmies.length; i++){
+                            if((listOfArmies[i].owner == this.a.owner) && listOfArmies[i].a.armyId == this.a.isLoadedIn){
                                 var placeInList = -1;
-                                for(var j = 0; j < listOfArmyCoordinates[i].a.loadedArmies.length; j++){
-                                    if(listOfArmyCoordinates[i].a.loadedArmies[j] == this.a.armyId){
+                                for(var j = 0; j < listOfArmies[i].a.loadedArmies.length; j++){
+                                    if(listOfArmies[i].a.loadedArmies[j] == this.a.armyId){
                                         placeInList = j;
                                     }
                                 }
-                                if(placeInList == (listOfArmyCoordinates[i].a.loadedArmies.length-1)){
-                                    listOfArmyCoordinates[i].a.loadedArmies.pop();
+                                if(placeInList == (listOfArmies[i].a.loadedArmies.length-1)){
+                                    listOfArmies[i].a.loadedArmies.pop();
                                 } else {
-                                    listOfArmyCoordinates[i].a.loadedArmies[j] = listOfArmyCoordinates[i].a.loadedArmies[listOfArmyCoordinates[i].a.loadedArmies.length-1];
-                                    listOfArmyCoordinates[i].a.loadedArmies.pop();
+                                    listOfArmies[i].a.loadedArmies[j] = listOfArmies[i].a.loadedArmies[listOfArmies[i].a.loadedArmies.length-1];
+                                    listOfArmies[i].a.loadedArmies.pop();
                                 }
                                 this.a.isLoadedIn = null;
                             }
@@ -435,9 +435,9 @@ function armyCoordinates(army) {
                 //in case of loading onto a ship
                 else if(tempmove.load == true){
                     var fleetsOnDest = [];
-                    for(var i = 0; i<listOfArmyCoordinates.length; i++){
-                        if((listOfArmyCoordinates[i].owner == this.a.owner) && (listOfArmyCoordinates[i].x == tempmove.tar.x) && (listOfArmyCoordinates[i].y == tempmove.tar.y) &&
-                        (Math.floor(listOfArmyCoordinates[i].a.armyId / 100) == 3)){
+                    for(var i = 0; i<listOfArmies.length; i++){
+                        if((listOfArmies[i].owner == this.a.owner) && (listOfArmies[i].x == tempmove.tar.x) && (listOfArmies[i].y == tempmove.tar.y) &&
+                        (Math.floor(listOfArmies[i].a.armyId / 100) == 3)){
                             fleetsOnDest.push(i);
                             console.log("fleets +1");
                         }
@@ -447,9 +447,9 @@ function armyCoordinates(army) {
                         return "You can't walk on Water.";
                     // there is exactly one
                     } else if(fleetsOnDest.length == 1){
-                        var loadString = listOfArmyCoordinates[fleetsOnDest[0]].a.loadArmy();
+                        var loadString = listOfArmies[fleetsOnDest[0]].a.loadArmy();
                         if(loadString == "ok"){
-                            this.a.isLoadedIn = listOfArmyCoordinates[fleetsOnDest[0]].a.armyId;
+                            this.a.isLoadedIn = listOfArmies[fleetsOnDest[0]].a.armyId;
                             console.log("army in now loaded in " + this.a.isLoadedIn);
                             this.a.x = tempmove.tar.x;
                             this.a.y = tempmove.tar.y;
@@ -461,13 +461,13 @@ function armyCoordinates(army) {
                     } else if(fleetsOnDest.length > 1){
                         var fleetstring = "";
                         for(var i = 0; i < fleetsOnDest.length; i++){
-                            fleetstring = fleetstring + listOfArmyCoordinates[fleetsOnDest[i]].a.armyId + " ";
+                            fleetstring = fleetstring + listOfArmies[fleetsOnDest[i]].a.armyId + " ";
                         }
                         var chosenFleet = prompt("Mögliche Flotten sind: " + fleetstring);
                         if(chosenFleet != null){
                             var findFleet = -1;
-                            for(var i = 0; i < listOfArmyCoordinates.length; i++){
-                                if(listOfArmyCoordinates[i].a.armyId == chosenFleet && listOfArmyCoordinates[i].owner == this.a.owner){
+                            for(var i = 0; i < listOfArmies.length; i++){
+                                if(listOfArmies[i].a.armyId == chosenFleet && listOfArmies[i].owner == this.a.owner){
                                     findFleet = i;
                                 }
                             }
@@ -484,9 +484,9 @@ function armyCoordinates(army) {
                                 }
                             }
                             if(found){
-                                var loadString = listOfArmyCoordinates[findFleet].a.loadArmy();
+                                var loadString = listOfArmies[findFleet].a.loadArmy();
                                 if(loadString == "ok"){
-                                    this.a.isLoadedIn = listOfArmyCoordinates[findFleet].a.armyId;
+                                    this.a.isLoadedIn = listOfArmies[findFleet].a.armyId;
                                     console.log("army in now loaded in " + this.a.isLoadedIn);
                                     this.a.x = tempmove.tar.x;
                                     this.a.y = tempmove.tar.y;

@@ -19,7 +19,7 @@ function drawStuff() {
 
 	drawMap(ctx, x, y, scale);
 	drawSelection(ctx, x, y, scale, selectedFields);
-	drawArmies(ctx, x, y, scale, listOfArmyCoordinates);
+	drawArmies(ctx, x, y, scale, listOfArmies);
 	drawPossibleMoves(ctx, x, y, scale, selectedArmy);
 }
 
@@ -394,7 +394,7 @@ function drawFields(ctx, x, y, scale) { //draw the terrain fields
 
 function drawPossibleMoves(ctx, x, y, scale, selectedArmy){//drawing all possible moves to neighboring fields if army was selected
     if(selectedArmy !== undefined){
-		var moves = listOfArmyCoordinates[selectedArmy].possibleMoves;
+		var moves = listOfArmies[selectedArmy].possibleMoves;
 		for (var i = 0; i < moves.length; i++) {
             ctx.lineWidth = scale/6;
 	        ctx.strokeStyle='#00FF00';

@@ -186,33 +186,33 @@ function hide(element) {
 		function updateInfoBox(){
 			if(selectedArmy != undefined){
 				// info Box
-				console.log(listOfArmyCoordinates[selectedArmy].a.armyId);
-				console.log("This a guard army: " + listOfArmyCoordinates[selectedArmy].a.isGuard);
-				if(listOfArmyCoordinates[selectedArmy].a.isGuard){
+				console.log(listOfArmies[selectedArmy].a.armyId);
+				console.log("This a guard army: " + listOfArmies[selectedArmy].a.isGuard);
+				if(listOfArmies[selectedArmy].a.isGuard){
 					document.getElementById("guard").innerHTML = "Garde";
 				} else {
 					document.getElementById("guard").innerHTML = null;
 				}
-				if(listOfArmyCoordinates[selectedArmy].a.armyType() == 1 || listOfArmyCoordinates[selectedArmy].a.armyType() == 2)
+				if(listOfArmies[selectedArmy].a.armyType() == 1 || listOfArmies[selectedArmy].a.armyType() == 2)
 				{
-					document.getElementById("armyId").innerHTML = "Heer " + listOfArmyCoordinates[selectedArmy].a.armyId;
+					document.getElementById("armyId").innerHTML = "Heer " + listOfArmies[selectedArmy].a.armyId;
 				}
-				else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 3)
+				else if(listOfArmies[selectedArmy].a.armyType() == 3)
 				{
-					document.getElementById("armyId").innerHTML = "Flotte " + listOfArmyCoordinates[selectedArmy].a.armyId;
+					document.getElementById("armyId").innerHTML = "Flotte " + listOfArmies[selectedArmy].a.armyId;
 				}
-				document.getElementById("count").innerHTML = "Truppen: " + listOfArmyCoordinates[selectedArmy].a.count;
-				document.getElementById("leaders").innerHTML = "Heerführer: " + listOfArmyCoordinates[selectedArmy].a.leaders;
-				document.getElementById("mounts").innerHTML = "mitgeführte Reittiere: " + listOfArmyCoordinates[selectedArmy].a.mounts;
-				document.getElementById("lkp").innerHTML = "leichte Katapulte: " + listOfArmyCoordinates[selectedArmy].a.lkp;
-				document.getElementById("skp").innerHTML = "schwere Katapulte: " + listOfArmyCoordinates[selectedArmy].a.skp;
-				document.getElementById("movePoints").innerHTML = "Bewegungspunkte: " + listOfArmyCoordinates[selectedArmy].remainingMovePoints;
-				document.getElementById("heightPoints").innerHTML = "Höhenstufen: " + listOfArmyCoordinates[selectedArmy].remainingHeightPoints;
+				document.getElementById("count").innerHTML = "Truppen: " + listOfArmies[selectedArmy].a.count;
+				document.getElementById("leaders").innerHTML = "Heerführer: " + listOfArmies[selectedArmy].a.leaders;
+				document.getElementById("mounts").innerHTML = "mitgeführte Reittiere: " + listOfArmies[selectedArmy].a.mounts;
+				document.getElementById("lkp").innerHTML = "leichte Katapulte: " + listOfArmies[selectedArmy].a.lkp;
+				document.getElementById("skp").innerHTML = "schwere Katapulte: " + listOfArmies[selectedArmy].a.skp;
+				document.getElementById("movePoints").innerHTML = "Bewegungspunkte: " + listOfArmies[selectedArmy].a.remainingMovePoints;
+				document.getElementById("heightPoints").innerHTML = "Höhenstufen: " + listOfArmies[selectedArmy].a.remainingHeightPoints;
 				document.getElementById("splitBtn").style.display = "";
-				if(Math.floor(listOfArmyCoordinates[selectedArmy].a.armyId/100) == 1){
+				if(Math.floor(listOfArmies[selectedArmy].a.armyId/100) == 1){
 					document.getElementById("mount").style.display = "";
 					document.getElementById("unMount").style.display = "none";
-				} else if(Math.floor(listOfArmyCoordinates[selectedArmy].a.armyId/100) == 2){
+				} else if(Math.floor(listOfArmies[selectedArmy].a.armyId/100) == 2){
 					document.getElementById("unMount").style.display = "";
 					document.getElementById("mount").style.display = "none";
 				} else {
@@ -220,29 +220,29 @@ function hide(element) {
 					document.getElementById("unMount").style.display = "none";
 				}
 				// change Box (GodMode)
-				if(listOfArmyCoordinates[selectedArmy].a.isGuard){
+				if(listOfArmies[selectedArmy].a.isGuard){
 					document.getElementById("guardChangeInput").checked = true;
 				} else {
 					document.getElementById("guardChangeInput").checked = false;
 				}
 				document.getElementById("guardChangeInput").style.display = "";
-				document.getElementById("ownerChangeInput").value = listOfArmyCoordinates[selectedArmy].owner;
+				document.getElementById("ownerChangeInput").value = listOfArmies[selectedArmy].owner;
 				document.getElementById("ownerChange").style.display = "";
-				document.getElementById("armyIdChangeInput").value = listOfArmyCoordinates[selectedArmy].a.armyId;
+				document.getElementById("armyIdChangeInput").value = listOfArmies[selectedArmy].a.armyId;
 				document.getElementById("armyIdChange").style.display = "";
-				document.getElementById("countChangeInput").value = listOfArmyCoordinates[selectedArmy].a.count;
+				document.getElementById("countChangeInput").value = listOfArmies[selectedArmy].a.count;
 				document.getElementById("countChange").style.display = "";
-				document.getElementById("leadersChangeInput").value = listOfArmyCoordinates[selectedArmy].a.leaders;
+				document.getElementById("leadersChangeInput").value = listOfArmies[selectedArmy].a.leaders;
 				document.getElementById("leadersChange").style.display = "";
-				document.getElementById("mountsChangeInput").value = listOfArmyCoordinates[selectedArmy].a.mounts;
+				document.getElementById("mountsChangeInput").value = listOfArmies[selectedArmy].a.mounts;
 				document.getElementById("mountsChange").style.display = "";
-				document.getElementById("lkpChangeInput").value = listOfArmyCoordinates[selectedArmy].a.lkp;
+				document.getElementById("lkpChangeInput").value = listOfArmies[selectedArmy].a.lkp;
 				document.getElementById("lkpChange").style.display = "";
-				document.getElementById("skpChangeInput").value = listOfArmyCoordinates[selectedArmy].a.skp;
+				document.getElementById("skpChangeInput").value = listOfArmies[selectedArmy].a.skp;
 				document.getElementById("skpChange").style.display = "";
-				document.getElementById("movePointsChangeInput").value = listOfArmyCoordinates[selectedArmy].remainingMovePoints;
+				document.getElementById("movePointsChangeInput").value = listOfArmies[selectedArmy].a.remainingMovePoints;
 				document.getElementById("movePointsChange").style.display = "";
-				document.getElementById("heightPointsChangeInput").value = listOfArmyCoordinates[selectedArmy].remainingHeightPoints;
+				document.getElementById("heightPointsChangeInput").value = listOfArmies[selectedArmy].a.remainingHeightPoints;
 				document.getElementById("heightPointsChange").style.display = "";
 				document.getElementById("changeArmyInfo").style.display = "";
 			} else {
@@ -285,15 +285,15 @@ function activateUnMountBox(){
 }
 
 function activateSplitbox(){
-	if(listOfArmyCoordinates[selectedArmy].a.armyType() == 1)
+	if(listOfArmies[selectedArmy].a.armyType() == 1)
 	{
 		document.getElementById("splitBox").style.display = "";
 	} 
-	else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 2)
+	else if(listOfArmies[selectedArmy].a.armyType() == 2)
 	{
 		document.getElementById("splitMountedBox").style.display = "";
 	}
-	else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 3)
+	else if(listOfArmies[selectedArmy].a.armyType() == 3)
 	{
 		document.getElementById("splitFleetBox").style.display = "";
 	}
@@ -307,78 +307,78 @@ function activateTransmuteBox(){
 	var lkpToSplit = 0;
 	var skpToSplit = 0;
 	// depending on army type different fields are needed
-	if(listOfArmyCoordinates[selectedArmy].a.armyType() == 1)
+	if(listOfArmies[selectedArmy].a.armyType() == 1)
 	{
 		toSplit = parseInt(document.getElementById("splitInput").value);
 		leadersToSplit = parseInt(document.getElementById("splitLeadersInput").value);
 		mountsToSplit = parseInt(document.getElementById("splitMountsInput").value);
 		lkpToSplit = parseInt(document.getElementById("splitLkpInput").value);
 		skpToSplit = parseInt(document.getElementById("splitSkpInput").value);
-		if(toSplit > (listOfArmyCoordinates[selectedArmy].a.count-100))
+		if(toSplit > (listOfArmies[selectedArmy].a.count-100))
 		{
 			window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.")
 			return false;
 		}
-		if(mountsToSplit > listOfArmyCoordinates[selectedArmy].a.mounts)
+		if(mountsToSplit > listOfArmies[selectedArmy].a.mounts)
 		{
 			window.alert("So viele Reittiere hast du nicht.")
 			return false;
 		}
-		if(lkpToSplit > listOfArmyCoordinates[selectedArmy].a.lkp)
+		if(lkpToSplit > listOfArmies[selectedArmy].a.lkp)
 		{
 			window.alert("So viele leichte Katapulte hast du nicht.")
 			return false;
 		}
-		if(skpToSplit > listOfArmyCoordinates[selectedArmy].a.skp)
+		if(skpToSplit > listOfArmies[selectedArmy].a.skp)
 		{
 			window.alert("So viele schwere Katapulte hast du nicht.")
 			return false;
 		}
 	}
-	else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 2)
+	else if(listOfArmies[selectedArmy].a.armyType() == 2)
 	{
 		toSplit = parseInt(document.getElementById("splitMountedInput").value);
 		leadersToSplit = parseInt(document.getElementById("splitMountedLeadersInput").value);
-		if(toSplit > (listOfArmyCoordinates[selectedArmy].a.count-50))
+		if(toSplit > (listOfArmies[selectedArmy].a.count-50))
 		{
 			window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.")
 			return false;
 		}
 	}
-	else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 3)
+	else if(listOfArmies[selectedArmy].a.armyType() == 3)
 	{
 		toSplit = parseInt(document.getElementById("splitFleetInput").value);
 		leadersToSplit = parseInt(document.getElementById("splitFleetLeadersInput").value);
 		lkpToSplit = parseInt(document.getElementById("splitFleetLkpInput").value);
 		skpToSplit = parseInt(document.getElementById("splitFleetSkpInput").value);
-		if(toSplit > (listOfArmyCoordinates[selectedArmy].a.count-1))
+		if(toSplit > (listOfArmies[selectedArmy].a.count-1))
 		{
 			window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.")
 			return false;
 		}
-		if(toSplit*100 > (listOfArmyCoordinates[selectedArmy].a.currentCapacity()))
+		if(toSplit*100 > (listOfArmies[selectedArmy].a.currentCapacity()))
 		{
 			window.alert("Du kannst keine beladenen Schiffe verschieben.")
 			return false;
 		}
-		if(lkpToSplit > listOfArmyCoordinates[selectedArmy].a.lkp)
+		if(lkpToSplit > listOfArmies[selectedArmy].a.lkp)
 		{
 			window.alert("So viele leichte Kriegsschiffe hast du nicht.")
 			return false;
 		}
-		if(skpToSplit > listOfArmyCoordinates[selectedArmy].a.skp)
+		if(skpToSplit > listOfArmies[selectedArmy].a.skp)
 		{
 			window.alert("So viele schwere Kriegsschiffe hast du nicht.")
 			return false;
 		}
 	}
-	if(leadersToSplit > (listOfArmyCoordinates[selectedArmy].a.leaders-1))
+	if(leadersToSplit > (listOfArmies[selectedArmy].a.leaders-1))
 	{
 		window.alert("Es muss mindestens 1 Heerführer beim Ursprungsheer verbleiben.")
 		return false;
 	}
 	document.getElementById("transmuteBox").style.display = "";
-	var targetType = listOfArmyCoordinates[selectedArmy].a.armyType();
+	var targetType = listOfArmies[selectedArmy].a.armyType();
 	if(targetType == 1)
 	{
 		document.getElementById("splitBox").style.display = "none";
@@ -421,29 +421,29 @@ function activateTransmuteBox(){
 			onlyLeaders = true;
 		}
 	}
-	var selectedX = listOfArmyCoordinates[selectedArmy].a.x;
-	var selectedY = listOfArmyCoordinates[selectedArmy].a.y;
+	var selectedX = listOfArmies[selectedArmy].a.x;
+	var selectedY = listOfArmies[selectedArmy].a.y;
 	var possibleTargets = [];
-	var targetOwner = listOfArmyCoordinates[selectedArmy].a.owner;
+	var targetOwner = listOfArmies[selectedArmy].a.owner;
 	console.log("only Leaders?: " + onlyLeaders);
-	for(var i = 0; i < listOfArmyCoordinates.length; i++)
+	for(var i = 0; i < listOfArmies.length; i++)
 	{
 		if(i != selectedArmy){
 			if(onlyLeaders)
 			{
-				if(listOfArmyCoordinates[i].a.owner == targetOwner &&
-				listOfArmyCoordinates[i].a.x == selectedX &&
-				 listOfArmyCoordinates[i].a.y == selectedY)
+				if(listOfArmies[i].a.owner == targetOwner &&
+				listOfArmies[i].a.x == selectedX &&
+				 listOfArmies[i].a.y == selectedY)
 				{
 					possibleTargets.push(i);
 				}
 			}
 			else
 			{
-				if(listOfArmyCoordinates[i].a.owner == targetOwner &&
-				listOfArmyCoordinates[i].a.x == selectedX &&
-				 listOfArmyCoordinates[i].a.y == selectedY &&
-				  listOfArmyCoordinates[i].a.armyType() == targetType)
+				if(listOfArmies[i].a.owner == targetOwner &&
+				listOfArmies[i].a.x == selectedX &&
+				 listOfArmies[i].a.y == selectedY &&
+				  listOfArmies[i].a.armyType() == targetType)
 				{
 					possibleTargets.push(i);
 				}
@@ -463,7 +463,7 @@ function activateTransmuteBox(){
 				var btn = document.createElement("BUTTON");
 				btn.setAttribute("class", "fixedPrettyButton");
 				btn.name = "transmuteBtn " + possibleTargets[i];
-				var t = document.createTextNode(listOfArmyCoordinates[possibleTargets[i]].a.armyId);
+				var t = document.createTextNode(listOfArmies[possibleTargets[i]].a.armyId);
 				btn.appendChild(t);
 				btn.addEventListener('click', function(event) 
 				{
@@ -486,7 +486,7 @@ function activateTransmuteBox(){
 
 function activateMergeBox(){
 	document.getElementById("mergeBox").style.display = "";
-	var targetType = listOfArmyCoordinates[selectedArmy].a.armyType();
+	var targetType = listOfArmies[selectedArmy].a.armyType();
 	if(targetType == 1)
 	{
 		document.getElementById("splitBox").style.display = "none";
@@ -499,17 +499,17 @@ function activateMergeBox(){
 	{
 		document.getElementById("splitFleetBox").style.display = "none";
 	}
-	var selectedX = listOfArmyCoordinates[selectedArmy].a.x;
-	var selectedY = listOfArmyCoordinates[selectedArmy].a.y;
+	var selectedX = listOfArmies[selectedArmy].a.x;
+	var selectedY = listOfArmies[selectedArmy].a.y;
 	var possibleTargets = [];
-	var targetOwner = listOfArmyCoordinates[selectedArmy].a.owner;
-	for(var i = 0; i < listOfArmyCoordinates.length; i++)
+	var targetOwner = listOfArmies[selectedArmy].a.owner;
+	for(var i = 0; i < listOfArmies.length; i++)
 	{
 		if(i != selectedArmy){
-			if(listOfArmyCoordinates[i].a.owner == targetOwner &&
-			listOfArmyCoordinates[i].a.x == selectedX &&
-			 listOfArmyCoordinates[i].a.y == selectedY &&
-			  listOfArmyCoordinates[i].a.armyType() == targetType)
+			if(listOfArmies[i].a.owner == targetOwner &&
+			listOfArmies[i].a.x == selectedX &&
+			 listOfArmies[i].a.y == selectedY &&
+			  listOfArmies[i].a.armyType() == targetType)
 			{
 				possibleTargets.push(i);
 			}
@@ -528,7 +528,7 @@ function activateMergeBox(){
 				var btn = document.createElement("BUTTON");
 				btn.setAttribute("class", "fixedPrettyButton");
 				btn.name = "mergeBtn " + possibleTargets[i];
-				var t = document.createTextNode(listOfArmyCoordinates[possibleTargets[i]].a.armyId);
+				var t = document.createTextNode(listOfArmies[possibleTargets[i]].a.armyId);
 				btn.appendChild(t);
 				btn.addEventListener('click', function(event) 
 				{
@@ -552,15 +552,15 @@ function activateMergeBox(){
 function backToSplitBox(){
 	document.getElementById("mergeBox").style.display = "none";
 	document.getElementById("transmuteBox").style.display = "none";
-	if(listOfArmyCoordinates[selectedArmy].a.armyType() == 1)
+	if(listOfArmies[selectedArmy].a.armyType() == 1)
 	{
 		document.getElementById("splitBox").style.display = "";
 	}
-	else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 2)
+	else if(listOfArmies[selectedArmy].a.armyType() == 2)
 	{
 		document.getElementById("splitMountedBox").style.display = "";
 	}
-	else if(listOfArmyCoordinates[selectedArmy].a.armyType() == 3)
+	else if(listOfArmies[selectedArmy].a.armyType() == 3)
 	{
 		document.getElementById("splitFleetBox").style.display = "";
 	}

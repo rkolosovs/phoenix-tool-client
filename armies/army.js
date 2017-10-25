@@ -470,9 +470,9 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
         }
         var loaded = 0;
         for(var i = 0; i < this.loadedArmies.length; i++){
-            for(var j = 0; j < listOfArmyCoordinates.length; j++){
-                if((listOfArmyCoordinates[j].owner == listOfArmyCoordinates[selectedArmy].owner) && listOfArmyCoordinates[j].a.armyId == this.loadedArmies[i]){
-                    loaded += listOfArmyCoordinates[j].a.raumpunkte();
+            for(var j = 0; j < listOfArmies.length; j++){
+                if((listOfArmies[j].owner == listOfArmies[selectedArmy].owner) && listOfArmies[j].a.armyId == this.loadedArmies[i]){
+                    loaded += listOfArmies[j].a.raumpunkte();
                 }
             }
         }
@@ -488,9 +488,9 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     }
     //lädt armee ein
     this.loadArmy = function(){
-        if(listOfArmyCoordinates[selectedArmy].a.raumpunkte() <= this.currentCapacity()){
-            this.loadedArmies.push(listOfArmyCoordinates[selectedArmy].a.armyId);
-            console.log("Army " + listOfArmyCoordinates[selectedArmy].a.armyId +  " successfully loaded.");
+        if(listOfArmies[selectedArmy].a.raumpunkte() <= this.currentCapacity()){
+            this.loadedArmies.push(listOfArmies[selectedArmy].a.armyId);
+            console.log("Army " + listOfArmies[selectedArmy].a.armyId +  " successfully loaded.");
             this.currentCapacity();
             return "ok";
         } else {
@@ -499,8 +499,8 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     }
     //prüft ob die selectierte armee geladen werden kann
     this.isLoadable = function(){
-        if(listOfArmyCoordinates[selectedArmy].a.raumpunkte() <= this.currentCapacity()){
-            console.log("Army " + listOfArmyCoordinates[selectedArmy].a.armyId +  " is loadable.");
+        if(listOfArmies[selectedArmy].a.raumpunkte() <= this.currentCapacity()){
+            console.log("Army " + listOfArmies[selectedArmy].a.armyId +  " is loadable.");
             this.currentCapacity();
             return "ok";
         } else {

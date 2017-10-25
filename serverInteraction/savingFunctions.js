@@ -172,7 +172,7 @@ function saveBuildings() { // saves the current buildings on the server
 }
 
 function saveArmies() { // saves the current armies on the server
-	var sensibleArmyList = listOfArmyCoordinates.map(function(elem){
+	var sensibleArmyList = listOfArmies.map(function(elem){
 		return {
 			armyId: elem.a.armyId,
 			count: elem.a.count,
