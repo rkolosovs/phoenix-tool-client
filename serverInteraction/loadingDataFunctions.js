@@ -66,7 +66,6 @@ function loadArmies() {
 			var armiesToLoadIn = [];
             listOfArmies = [];
             for(var i = 0; i < armies.length; i++){
-            	var armyCoords = null;
             	var army = null;
                 if(Math.floor(armies[i].armyId/100) == 1){
                 	army = new heer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp, armies[i].skp,
@@ -80,20 +79,19 @@ function loadArmies() {
                 }
                 army.setRemainingMovePoints(armies[i].movementPoints);
                 army.setRemainingHeightPoints(armies[i].heightPoints);
-                armyCoords = new armyCoordinates(army);
 				if(armies[i].isLoadedIn != null){
 					armiesToLoadIn.push([armies[i].isLoadedIn, armies[i].realm, armies[i].armyId]);
-					armyCoords.a.isLoadedIn = armies[i].isLoadedIn;
+					army.isLoadedIn = armies[i].isLoadedIn;
 				}
-                listOfArmies.push(armyCoords);
+                listOfArmies.push(army);
             }
 			// if needed, load Troops into ships
 			if(armiesToLoadIn.length > 0){
 				for(var i = 0; i < armiesToLoadIn.length; i++){
 					for(var j = 0; j < listOfArmies.length; j++){
-						if(listOfArmies[j].a.armyId == armiesToLoadIn[i][0] && listOfArmies[j].owner == armiesToLoadIn[i][1]){
-							listOfArmies[j].a.loadedArmies.push(armiesToLoadIn[i][2]);
-							console.log(armiesToLoadIn[i][2] + " is loaded in " + listOfArmies[j].a.armyId);
+						if(listOfArmies[j].armyId == armiesToLoadIn[i][0] && listOfArmies[j].owner == armiesToLoadIn[i][1]){
+							listOfArmies[j].loadedArmies.push(armiesToLoadIn[i][2]);
+							console.log(armiesToLoadIn[i][2] + " is loaded in " + listOfArmies[j].armyId);
 						}
 					}
 				}

@@ -394,7 +394,7 @@ function drawFields(ctx, x, y, scale) { //draw the terrain fields
 
 function drawPossibleMoves(ctx, x, y, scale, selectedArmy){//drawing all possible moves to neighboring fields if army was selected
     if(selectedArmy !== undefined){
-		var moves = listOfArmies[selectedArmy].a.possibleMoves;
+		var moves = listOfArmies[selectedArmy].possibleMoves;
 		for (var i = 0; i < moves.length; i++) {
             ctx.lineWidth = scale/6;
 	        ctx.strokeStyle='#00FF00';
@@ -421,38 +421,38 @@ function drawSelection(ctx, x, y, scale, selectedFields) {
 	}
 }
 
-function drawArmies(ctx, x, y, scale, armyCoordinates) {
-	for (var i = 0; i < armyCoordinates.length; i++) {
-		var armyData = armyCoordinates[i]; // get army coordinates
-		var pos = computePosition(x, y, armyCoordinates[i].a.x, armyCoordinates[i].a.y, scale);
+function drawArmies(ctx, x, y, scale, armies) {
+	for (var i = 0; i < armies.length; i++) {
+		var armyData = armies[i]; // get army coordinates
+		var pos = computePosition(x, y, armies[i].x, armies[i].y, scale);
 		ctx.fillStyle = 'black';
 		ctx.textAlign = 'center';
     	ctx.textBaseline = 'middle';
-		//ctx.fillText(armyData.a.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
+		//ctx.fillText(armyData.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
 
 		//check if its is on a multifield. if it is ignore
-		if(armyData.a.multiArmyField == false){
+		if(armyData.multiArmyField == false){
 			// armies == 1, riders == 2, boats == 3
-			if(Math.floor(armyData.a.armyId/100) == 1){
+			if(Math.floor(armyData.armyId/100) == 1){
 				ctx.drawImage(troopsImg, pos[0], pos[1], (scale*SIN60), scale); 
-			} else if(Math.floor(armyData.a.armyId/100) == 2) {
+			} else if(Math.floor(armyData.armyId/100) == 2) {
 				ctx.drawImage(mountsImg, pos[0], pos[1], (scale*SIN60), scale);
-			} else if(Math.floor(armyData.a.armyId/100) == 3) {
+			} else if(Math.floor(armyData.armyId/100) == 3) {
 				ctx.drawImage(boatsImg, pos[0], pos[1], (scale*SIN60), scale);
 			}
 		}
-		if (armyCoordinates[i].a.ownerTag() === login || login === "sl"){
+		if (armies[i].ownerTag() === login || login === "sl"){
 			
-			if(armyCoordinates[i].a.possibleMoves.length > 0){
+			if(armies[i].possibleMoves.length > 0){
 				drawRemainingMovement(ctx, pos, scale);
 			}
-			else if(Math.floor(armyData.a.armyId/100) == 1 && armyCoordinates[i].a.remainingMovePoints == 9){
+			else if(Math.floor(armyData.armyId/100) == 1 && armies[i].remainingMovePoints == 9){
 				drawRemainingMovement(ctx, pos, scale);
 			}
-			else if(Math.floor(armyData.a.armyId/100) == 2 && armyCoordinates[i].a.remainingMovePoints == 21){
+			else if(Math.floor(armyData.armyId/100) == 2 && armies[i].remainingMovePoints == 21){
 				drawRemainingMovement(ctx, pos, scale);
 			}
-			else if(Math.floor(armyData.a.armyId/100) == 3 && armyCoordinates[i].a.remainingMovePoints >= 42){
+			else if(Math.floor(armyData.armyId/100) == 3 && armies[i].remainingMovePoints >= 42){
 				drawRemainingMovement(ctx, pos, scale);
 			}
 		}
@@ -465,7 +465,7 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 		for(var i = 0; i < listOfMultiArmyFields[j].length; i++){//for every army on that field
 		
 		var armyData = listOfMultiArmyFields[j][i]; // get army coordinates
-		var pos = computePosition(x, y, listOfMultiArmyFields[j][i].a.x, listOfMultiArmyFields[j][i].a.y, scale);
+		var pos = computePosition(x, y, listOfMultiArmyFields[j][i].x, listOfMultiArmyFields[j][i].y, scale);
 
 		var circleScale = (scale*SIN60) / listOfMultiArmyFields[j].length;
 
@@ -478,11 +478,11 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 		var yPosArmy = (Math.sin(angle * i) * scale/4) + pos[1];
 
 		// armies == 1, riders == 2, boats == 3
-			if(Math.floor(armyData.a.armyId/100) == 1){
+			if(Math.floor(armyData.armyId/100) == 1){
 				ctx.drawImage(troopsImg, xPosArmy, yPosArmy, circleScale, scale); 
-			} else if(Math.floor(armyData.a.armyId/100) == 2) {
+			} else if(Math.floor(armyData.armyId/100) == 2) {
 				ctx.drawImage(mountsImg, xPosArmy, yPosArmy, circleScale, scale);
-			} else if(Math.floor(armyData.a.armyId/100) == 3) {
+			} else if(Math.floor(armyData.armyId/100) == 3) {
 				ctx.drawImage(boatsImg, xPosArmy, yPosArmy, circleScale, scale);
 			}
 		}

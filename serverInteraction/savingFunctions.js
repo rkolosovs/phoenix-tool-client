@@ -174,18 +174,18 @@ function saveBuildings() { // saves the current buildings on the server
 function saveArmies() { // saves the current armies on the server
 	var sensibleArmyList = listOfArmies.map(function(elem){
 		return {
-			armyId: elem.a.armyId,
-			count: elem.a.count,
-			leaders: elem.a.leaders,
-			lkp: elem.a.lkp,
-			skp: elem.a.skp,
-			mounts: elem.a.mounts,
-			x: elem.a.x,
-			y: elem.a.y,
-			ownerPk: elem.a.owner,
-			movementPoints: elem.a.remainingMovePoints,
-			heightPoints: elem.a.remainingHeightPoints,
-			isLoadedIn: elem.a.isLoadedIn
+			armyId: elem.armyId,
+			count: elem.count,
+			leaders: elem.leaders,
+			lkp: elem.lkp,
+			skp: elem.skp,
+			mounts: elem.mounts,
+			x: elem.x,
+			y: elem.y,
+			ownerPk: elem.owner,
+			movementPoints: elem.remainingMovePoints,
+			heightPoints: elem.remainingHeightPoints,
+			isLoadedIn: elem.isLoadedIn
 		};
 	});
 	$.post({
