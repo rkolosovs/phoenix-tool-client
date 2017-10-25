@@ -329,7 +329,7 @@
 		// used to delete the selected army
 		function godDeleteSelectedArmy(){
 			if (confirm('Are you sure you want to delete your currenty selected army?')) {
-				listOfArmies.splice(selectedArmy, 1);
+				listOfArmies.splice(selectedArmyIndex, 1);
 			}
 			resizeCanvas();
 		}
@@ -337,24 +337,24 @@
 		// This is used by the infoChangeBox to manipulate an armies Stats.
 		function changeArmyInfo(){
 			for(var i = 0; i<listOfArmies.length; i++){
-				if(i!=selectedArmy && listOfArmies[i].owner == document.getElementById("ownerChangeInput").value &&
+				if(i!=selectedArmyIndex && listOfArmies[i].owner == document.getElementById("ownerChangeInput").value &&
 				listOfArmies[i].armyId == document.getElementById("armyIdChangeInput").value){
 					window.alert("Diese Armee-Id ist in diesem Reich bereits vergeben.");
 				} else {
 					if(document.getElementById("guardChangeInput").checked){
-						listOfArmies[selectedArmy].isGuard = true;
+						listOfArmies[selectedArmyIndex].isGuard = true;
 					} else {
-						listOfArmies[selectedArmy].isGuard = false;
+						listOfArmies[selectedArmyIndex].isGuard = false;
 					}
-					listOfArmies[selectedArmy].owner = Number(document.getElementById("ownerChangeInput").value);
-					listOfArmies[selectedArmy].armyId = Number(document.getElementById("armyIdChangeInput").value);
-					listOfArmies[selectedArmy].count = Number(document.getElementById("countChangeInput").value);
-					listOfArmies[selectedArmy].leaders = Number(document.getElementById("leadersChangeInput").value);
-					listOfArmies[selectedArmy].mounts = Number(document.getElementById("mountsChangeInput").value);
-					listOfArmies[selectedArmy].lkp = Number(document.getElementById("lkpChangeInput").value);
-					listOfArmies[selectedArmy].skp = Number(document.getElementById("skpChangeInput").value);
-					listOfArmies[selectedArmy].remainingMovePoints = Number(document.getElementById("movePointsChangeInput").value);
-					listOfArmies[selectedArmy].remainingHeightPoints = Number(document.getElementById("heightPointsChangeInput").value);
+					listOfArmies[selectedArmyIndex].owner = Number(document.getElementById("ownerChangeInput").value);
+					listOfArmies[selectedArmyIndex].armyId = Number(document.getElementById("armyIdChangeInput").value);
+					listOfArmies[selectedArmyIndex].count = Number(document.getElementById("countChangeInput").value);
+					listOfArmies[selectedArmyIndex].leaders = Number(document.getElementById("leadersChangeInput").value);
+					listOfArmies[selectedArmyIndex].mounts = Number(document.getElementById("mountsChangeInput").value);
+					listOfArmies[selectedArmyIndex].lkp = Number(document.getElementById("lkpChangeInput").value);
+					listOfArmies[selectedArmyIndex].skp = Number(document.getElementById("skpChangeInput").value);
+					listOfArmies[selectedArmyIndex].remainingMovePoints = Number(document.getElementById("movePointsChangeInput").value);
+					listOfArmies[selectedArmyIndex].remainingHeightPoints = Number(document.getElementById("heightPointsChangeInput").value);
 				}
 			}
 			resizeCanvas()

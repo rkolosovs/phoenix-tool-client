@@ -480,7 +480,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
         var loaded = 0;
         for(var i = 0; i < this.loadedArmies.length; i++){
             for(var j = 0; j < listOfArmies.length; j++){
-                if((listOfArmies[j].owner == listOfArmies[selectedArmy].owner) && listOfArmies[j].armyId == this.loadedArmies[i]){
+                if((listOfArmies[j].owner == listOfArmies[selectedArmyIndex].owner) && listOfArmies[j].armyId == this.loadedArmies[i]){
                     loaded += listOfArmies[j].raumpunkte();
                 }
             }
@@ -497,9 +497,9 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     }
     //lädt armee ein
     this.loadArmy = function(){
-        if(listOfArmies[selectedArmy].raumpunkte() <= this.currentCapacity()){
-            this.loadedArmies.push(listOfArmies[selectedArmy].armyId);
-            console.log("Army " + listOfArmies[selectedArmy].armyId +  " successfully loaded.");
+        if(listOfArmies[selectedArmyIndex].raumpunkte() <= this.currentCapacity()){
+            this.loadedArmies.push(listOfArmies[selectedArmyIndex].armyId);
+            console.log("Army " + listOfArmies[selectedArmyIndex].armyId +  " successfully loaded.");
             this.currentCapacity();
             return "ok";
         } else {
@@ -508,8 +508,8 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     }
     //prüft ob die selectierte armee geladen werden kann
     this.isLoadable = function(){
-        if(listOfArmies[selectedArmy].raumpunkte() <= this.currentCapacity()){
-            console.log("Army " + listOfArmies[selectedArmy].armyId +  " is loadable.");
+        if(listOfArmies[selectedArmyIndex].raumpunkte() <= this.currentCapacity()){
+            console.log("Army " + listOfArmies[selectedArmyIndex].armyId +  " is loadable.");
             this.currentCapacity();
             return "ok";
         } else {

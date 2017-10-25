@@ -596,14 +596,14 @@ function splitSelectedArmy(){
 	var lkpToSplit = 0;
 	var skpToSplit = 0;
 	// depending on army type different fields are needed
-	if(listOfArmies[selectedArmy].armyType() == 1)
+	if(listOfArmies[selectedArmyIndex].armyType() == 1)
 	{
 		toSplit = parseInt(document.getElementById("splitInput").value);
 		leadersToSplit = parseInt(document.getElementById("splitLeadersInput").value);
 		mountsToSplit = parseInt(document.getElementById("splitMountsInput").value);
 		lkpToSplit = parseInt(document.getElementById("splitLkpInput").value);
 		skpToSplit = parseInt(document.getElementById("splitSkpInput").value);
-		if(toSplit > (listOfArmies[selectedArmy].count-100))
+		if(toSplit > (listOfArmies[selectedArmyIndex].count-100))
 		{
 			window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.")
 			return false;
@@ -613,27 +613,27 @@ function splitSelectedArmy(){
 			window.alert("Es müssen mindestens 100 Heeresstärke abgespalten werden.")
 			return false;
 		}
-		if(mountsToSplit > listOfArmies[selectedArmy].mounts)
+		if(mountsToSplit > listOfArmies[selectedArmyIndex].mounts)
 		{
 			window.alert("So viele Reittiere hast du nicht.")
 			return false;
 		}
-		if(lkpToSplit > listOfArmies[selectedArmy].lkp)
+		if(lkpToSplit > listOfArmies[selectedArmyIndex].lkp)
 		{
 			window.alert("So viele leichte Katapulte hast du nicht.")
 			return false;
 		}
-		if(skpToSplit > listOfArmies[selectedArmy].skp)
+		if(skpToSplit > listOfArmies[selectedArmyIndex].skp)
 		{
 			window.alert("So viele schwere Katapulte hast du nicht.")
 			return false;
 		}
 	}
-	else if(listOfArmies[selectedArmy].armyType() == 2)
+	else if(listOfArmies[selectedArmyIndex].armyType() == 2)
 	{
 		toSplit = parseInt(document.getElementById("splitMountedInput").value);
 		leadersToSplit = parseInt(document.getElementById("splitMountedLeadersInput").value);
-		if(toSplit > (listOfArmies[selectedArmy].count-50))
+		if(toSplit > (listOfArmies[selectedArmyIndex].count-50))
 		{
 			window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.")
 			return false;
@@ -644,18 +644,18 @@ function splitSelectedArmy(){
 			return false;
 		}
 	}
-	else if(listOfArmies[selectedArmy].armyType() == 3)
+	else if(listOfArmies[selectedArmyIndex].armyType() == 3)
 	{
 		toSplit = parseInt(document.getElementById("splitFleetInput").value);
 		leadersToSplit = parseInt(document.getElementById("splitFleetLeadersInput").value);
 		lkpToSplit = parseInt(document.getElementById("splitFleetLkpInput").value);
 		skpToSplit = parseInt(document.getElementById("splitFleetSkpInput").value);
-		if(toSplit > (listOfArmies[selectedArmy].count-1))
+		if(toSplit > (listOfArmies[selectedArmyIndex].count-1))
 		{
 			window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.")
 			return false;
 		}
-		if(toSplit*100 > (listOfArmies[selectedArmy].currentCapacity()))
+		if(toSplit*100 > (listOfArmies[selectedArmyIndex].currentCapacity()))
 		{
 			window.alert("Du kannst keine beladenen Schiffe abspalten.")
 			return false;
@@ -665,18 +665,18 @@ function splitSelectedArmy(){
 			window.alert("Es müssen mindestens 100 Heeresstärke abgespalten werden. (1 Schiff)")
 			return false;
 		}
-		if(lkpToSplit > listOfArmies[selectedArmy].lkp)
+		if(lkpToSplit > listOfArmies[selectedArmyIndex].lkp)
 		{
 			window.alert("So viele leichte Kriegsschiffe hast du nicht.")
 			return false;
 		}
-		if(skpToSplit > listOfArmies[selectedArmy].skp)
+		if(skpToSplit > listOfArmies[selectedArmyIndex].skp)
 		{
 			window.alert("So viele schwere Kriegsschiffe hast du nicht.")
 			return false;
 		}
 	}
-	if(leadersToSplit > (listOfArmies[selectedArmy].leaders-1))
+	if(leadersToSplit > (listOfArmies[selectedArmyIndex].leaders-1))
 	{
 		window.alert("Es muss mindestens 1 Heerführer beim Ursprungsheer verbleiben.")
 		return false;
@@ -686,83 +686,83 @@ function splitSelectedArmy(){
 		window.alert("Es muss mindestens 1 Heerführer abgespalten werden.")
 		return false;
 	}
-	if(listOfArmies[selectedArmy].armyType() == 1)
+	if(listOfArmies[selectedArmyIndex].armyType() == 1)
 	{
-		var newArmyId = generateArmyId(1,listOfArmies[selectedArmy].owner);
+		var newArmyId = generateArmyId(1,listOfArmies[selectedArmyIndex].owner);
 		var newArmy = new heer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, false,
-		    listOfArmies[selectedArmy].x, listOfArmies[selectedArmy].y, listOfArmies[selectedArmy].owner);
+		    listOfArmies[selectedArmyIndex].x, listOfArmies[selectedArmyIndex].y, listOfArmies[selectedArmyIndex].owner);
 		listOfArmies.push(newArmy);
-		listOfArmies[selectedArmy].removeSoldiers(toSplit);
-		listOfArmies[selectedArmy].removeLeaders(leadersToSplit);
-		listOfArmies[selectedArmy].removeLkp(lkpToSplit);
-		listOfArmies[selectedArmy].removeSkp(skpToSplit);
-		listOfArmies[selectedArmy].removeMounts(mountsToSplit);
+		listOfArmies[selectedArmyIndex].removeSoldiers(toSplit);
+		listOfArmies[selectedArmyIndex].removeLeaders(leadersToSplit);
+		listOfArmies[selectedArmyIndex].removeLkp(lkpToSplit);
+		listOfArmies[selectedArmyIndex].removeSkp(skpToSplit);
+		listOfArmies[selectedArmyIndex].removeMounts(mountsToSplit);
 		if(login != 'sl')
 		{
 			preparedEvents.push({
 				type: "split", content: {
-					fromArmyId: listOfArmies[selectedArmy].armyId,
-					realm: listOfArmies[selectedArmy].ownerTag(), 
+					fromArmyId: listOfArmies[selectedArmyIndex].armyId,
+					realm: listOfArmies[selectedArmyIndex].ownerTag(), 
 					troops: toSplit,
 					leaders: leadersToSplit,
 					lkp: lkpToSplit,
 					skp: skpToSplit,
 					mounts: mountsToSplit,
-					x: listOfArmies[selectedArmy].x,
-					y: listOfArmies[selectedArmy].y,
+					x: listOfArmies[selectedArmyIndex].x,
+					y: listOfArmies[selectedArmyIndex].y,
 					newArmysId: newArmyId
 				}
 			});
 		}
 		
 	}
-	if(listOfArmies[selectedArmy].armyType() == 2)
+	if(listOfArmies[selectedArmyIndex].armyType() == 2)
 	{
-		var newArmy = new reiterHeer(generateArmyId(2,listOfArmies[selectedArmy].owner), toSplit, leadersToSplit, false,
-		    listOfArmies[selectedArmy].x, listOfArmies[selectedArmy].y, listOfArmies[selectedArmy].owner);
+		var newArmy = new reiterHeer(generateArmyId(2,listOfArmies[selectedArmyIndex].owner), toSplit, leadersToSplit, false,
+		    listOfArmies[selectedArmyIndex].x, listOfArmies[selectedArmyIndex].y, listOfArmies[selectedArmyIndex].owner);
 		listOfArmies.push(newArmy);
-		listOfArmies[selectedArmy].removeSoldiers(toSplit);
-		listOfArmies[selectedArmy].removeLeaders(leadersToSplit);
+		listOfArmies[selectedArmyIndex].removeSoldiers(toSplit);
+		listOfArmies[selectedArmyIndex].removeLeaders(leadersToSplit);
 		if(login != 'sl')
 		{
 			preparedEvents.push({
 				type: "split", content: {
-					fromArmyId: listOfArmies[selectedArmy].armyId,
-					realm: listOfArmies[selectedArmy].ownerTag(), 
+					fromArmyId: listOfArmies[selectedArmyIndex].armyId,
+					realm: listOfArmies[selectedArmyIndex].ownerTag(), 
 					troops: toSplit,
 					leaders: leadersToSplit,
 					lkp: 0,
 					skp: 0,
 					mounts: 0,
-					x: listOfArmies[selectedArmy].x,
-					y: listOfArmies[selectedArmy].y,
+					x: listOfArmies[selectedArmyIndex].x,
+					y: listOfArmies[selectedArmyIndex].y,
 					newArmysId: newArmyId
 				}
 			});
 		}
 	}
-	if(listOfArmies[selectedArmy].armyType() == 3)
+	if(listOfArmies[selectedArmyIndex].armyType() == 3)
 	{
-		var newArmy = new seeHeer(generateArmyId(3,listOfArmies[selectedArmy].owner), toSplit, leadersToSplit, lkpToSplit,
-		    skpToSplit, false, listOfArmies[selectedArmy].x, listOfArmies[selectedArmy].y, listOfArmies[selectedArmy].owner);
+		var newArmy = new seeHeer(generateArmyId(3,listOfArmies[selectedArmyIndex].owner), toSplit, leadersToSplit, lkpToSplit,
+		    skpToSplit, false, listOfArmies[selectedArmyIndex].x, listOfArmies[selectedArmyIndex].y, listOfArmies[selectedArmyIndex].owner);
 		listOfArmies.push(newArmy);
-		listOfArmies[selectedArmy].removeSoldiers(toSplit);
-		listOfArmies[selectedArmy].removeLeaders(leadersToSplit);
-		listOfArmies[selectedArmy].removeLkp(lkpToSplit);
-		listOfArmies[selectedArmy].removeSkp(skpToSplit);
+		listOfArmies[selectedArmyIndex].removeSoldiers(toSplit);
+		listOfArmies[selectedArmyIndex].removeLeaders(leadersToSplit);
+		listOfArmies[selectedArmyIndex].removeLkp(lkpToSplit);
+		listOfArmies[selectedArmyIndex].removeSkp(skpToSplit);
 		if(login != 'sl')
 		{
 			preparedEvents.push({
 				type: "split", content: {
-					fromArmyId: listOfArmies[selectedArmy].armyId,
-					realm: listOfArmies[selectedArmy].ownerTag(), 
+					fromArmyId: listOfArmies[selectedArmyIndex].armyId,
+					realm: listOfArmies[selectedArmyIndex].ownerTag(), 
 					troops: toSplit,
 					leaders: leadersToSplit,
 					lkp: lkpToSplit,
 					skp: skpToSplit,
 					mounts: 0,
-					x: listOfArmies[selectedArmy].x,
-					y: listOfArmies[selectedArmy].y,
+					x: listOfArmies[selectedArmyIndex].x,
+					y: listOfArmies[selectedArmyIndex].y,
 					newArmysId: newArmyId
 				}
 			});
@@ -778,61 +778,61 @@ function mount(){
 	var toMount = document.getElementById("mountInput").value;
 	var leadersToMount = document.getElementById("mountLeaderInput").value;
 	// genug Truppen vorhanden?
-	if(toMount > listOfArmies[selectedArmy].count)
+	if(toMount > listOfArmies[selectedArmyIndex].count)
 	{
 		window.alert("Du hast zu wenige Truppen zum aufsitzen")
 		return false;
 	// genug Reittiere vorhanden?
 
 	} 
-	else if(toMount > listOfArmies[selectedArmy].mounts)
+	else if(toMount > listOfArmies[selectedArmyIndex].mounts)
 	{
 		window.alert("Du hast zu wenige Reittiere zum aufsitzen")
 		return false;
 		// Sitzen alle auf?
 	} 
-	else if((toMount == listOfArmies[selectedArmy].count))
+	else if((toMount == listOfArmies[selectedArmyIndex].count))
 	{
 		// neues Reiterheer mit generierter Id an selben Koordinaten
-		var newArmy = new reiterHeer(generateArmyId(2,listOfArmies[selectedArmy].owner), toMount,
-		    listOfArmies[selectedArmy].leaders, listOfArmies[selectedArmy].isGuard, listOfArmies[selectedArmy].x,
-		    listOfArmies[selectedArmy].y, listOfArmies[selectedArmy].owner);
+		var newArmy = new reiterHeer(generateArmyId(2,listOfArmies[selectedArmyIndex].owner), toMount,
+		    listOfArmies[selectedArmyIndex].leaders, listOfArmies[selectedArmyIndex].isGuard, listOfArmies[selectedArmyIndex].x,
+		    listOfArmies[selectedArmyIndex].y, listOfArmies[selectedArmyIndex].owner);
 		// Nachricht, falls Katapulte vorhanden waren.
-		if(listOfArmies[selectedArmy].skp > 0 || listOfArmies[selectedArmy].lkp > 0){
+		if(listOfArmies[selectedArmyIndex].skp > 0 || listOfArmies[selectedArmyIndex].lkp > 0){
 			window.alert("Da kein Fußheer mehr Bestehen bleibt, wurden die Katapulte zerstört.")
 		}
-		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch selectedArmy
+		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch selectedArmyIndex
 		listOfArmies.push(newArmy);
-		if(listOfArmies[selectedArmy].multiArmyField === true){
-			addToMultifield(listOfArmies[selectedArmy], newArmy);
-			deleteFromMultifield(listOfArmies[selectedArmy]);
+		if(listOfArmies[selectedArmyIndex].multiArmyField === true){
+			addToMultifield(listOfArmies[selectedArmyIndex], newArmy);
+			deleteFromMultifield(listOfArmies[selectedArmyIndex]);
 		}
 		deleteSelectedArmy();
 		restoreInfoBox();
 		updateInfoBox();
 		// genug Heerführer?
 	} 
-	else if(leadersToMount >= listOfArmies[selectedArmy].leaders)
+	else if(leadersToMount >= listOfArmies[selectedArmyIndex].leaders)
 	{
 		window.alert("Du hast zu wenige Heerführer zum aufsitzen")
 	} 
-	else if(listOfArmies[selectedArmy].isGuard)
+	else if(listOfArmies[selectedArmyIndex].isGuard)
 	{
 		window.alert("Die Garde muss zusammen bleiben");
 	} 
 	else 
 	{
 		// neues Reiterheer mit generierter Id an selben Koordinaten
-		var newArmy = new reiterHeer(generateArmyId(2,listOfArmies[selectedArmy].owner), toMount, leadersToMount, false,
-		    listOfArmies[selectedArmy].x,listOfArmies[selectedArmy].y ,listOfArmies[selectedArmy].owner);
+		var newArmy = new reiterHeer(generateArmyId(2,listOfArmies[selectedArmyIndex].owner), toMount, leadersToMount, false,
+		    listOfArmies[selectedArmyIndex].x,listOfArmies[selectedArmyIndex].y ,listOfArmies[selectedArmyIndex].owner);
 		// zahlen im alten Heer anpassen
-		listOfArmies[selectedArmy].removeSoldiers(toMount);
-		listOfArmies[selectedArmy].removeLeaders(leadersToMount);
-		listOfArmies[selectedArmy].removeMounts(toMount);
+		listOfArmies[selectedArmyIndex].removeSoldiers(toMount);
+		listOfArmies[selectedArmyIndex].removeLeaders(leadersToMount);
+		listOfArmies[selectedArmyIndex].removeMounts(toMount);
 		// in listOfArmies einfügen
 		listOfArmies.push(newArmy);
-		// selectedArmy zeigt auf neues Heer
-		selectedArmy = listOfArmies.length-1;
+		// selectedArmyIndex zeigt auf neues Heer
+		selectedArmyIndex = listOfArmies.length-1;
 		restoreInfoBox();
 		updateInfoBox();
 	}
@@ -844,40 +844,40 @@ function unMount(){
 	var toUnMount = document.getElementById("unMountInput").value
 	var leadersToUnMount = document.getElementById("unMountLeaderInput").value;
 	console.log(toUnMount);
-	if(toUnMount > listOfArmies[selectedArmy].count){
+	if(toUnMount > listOfArmies[selectedArmyIndex].count){
 		window.alert("So viele Truppen hast du nicht zum absitzen")
 		return false;
 	// genug Truppen vorhanden?
-	} else if((toUnMount == listOfArmies[selectedArmy].count)){
+	} else if((toUnMount == listOfArmies[selectedArmyIndex].count)){
 		// neues Heer mit generierter Id an selben Koordinaten
-		var newArmy = new heer(generateArmyId(1,listOfArmies[selectedArmy].owner), toUnMount,
-		    listOfArmies[selectedArmy].leaders, 0, 0, toUnMount, listOfArmies[selectedArmy].isGuard,
-		    listOfArmies[selectedArmy].x, listOfArmies[selectedArmy].y, listOfArmies[selectedArmy].owner);
-		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch selectedArmy
+		var newArmy = new heer(generateArmyId(1,listOfArmies[selectedArmyIndex].owner), toUnMount,
+		    listOfArmies[selectedArmyIndex].leaders, 0, 0, toUnMount, listOfArmies[selectedArmyIndex].isGuard,
+		    listOfArmies[selectedArmyIndex].x, listOfArmies[selectedArmyIndex].y, listOfArmies[selectedArmyIndex].owner);
+		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch selectedArmyIndex
 		listOfArmies.push(newArmy);
-		if(listOfArmies[selectedArmy].multiArmyField === true){
-			addToMultifield(listOfArmies[selectedArmy], newArmy);
-			deleteFromMultifield(listOfArmies[selectedArmy]);
+		if(listOfArmies[selectedArmyIndex].multiArmyField === true){
+			addToMultifield(listOfArmies[selectedArmyIndex], newArmy);
+			deleteFromMultifield(listOfArmies[selectedArmyIndex]);
 		}
 		deleteSelectedArmy();
 		restoreInfoBox();
 		updateInfoBox();
 	// genug Heerführer?
-	} else if(leadersToUnMount >= listOfArmies[selectedArmy].leaders){
+	} else if(leadersToUnMount >= listOfArmies[selectedArmyIndex].leaders){
 		window.alert("Du hast zu wenige Heerführer zum absitzen");
-	} else if(listOfArmies[selectedArmy].isGuard){
+	} else if(listOfArmies[selectedArmyIndex].isGuard){
 		window.alert("Die Garde muss zusammen bleiben");
 	} else {
 		// neues Heer mit generierter Id an selben Koordinaten
-		var newArmy = new heer(generateArmyId(1,listOfArmies[selectedArmy].owner), toUnMount, leadersToUnMount, 0, 0,
-		    toUnMount, false, listOfArmies[selectedArmy].x, listOfArmies[selectedArmy].y, listOfArmies[selectedArmy].owner);
+		var newArmy = new heer(generateArmyId(1,listOfArmies[selectedArmyIndex].owner), toUnMount, leadersToUnMount, 0, 0,
+		    toUnMount, false, listOfArmies[selectedArmyIndex].x, listOfArmies[selectedArmyIndex].y, listOfArmies[selectedArmyIndex].owner);
 		// zahlen im alten Riterheer anpassen
-		listOfArmies[selectedArmy].removeSoldiers(toUnMount);
-		listOfArmies[selectedArmy].removeLeaders(leadersToUnMount);
+		listOfArmies[selectedArmyIndex].removeSoldiers(toUnMount);
+		listOfArmies[selectedArmyIndex].removeLeaders(leadersToUnMount);
 		// in listOfArmies einfügen
 		listOfArmies.push(newArmy);
-		// selectedArmy zeigt auf neues Heer
-		selectedArmy = listOfArmies.length-1;
+		// selectedArmyIndex zeigt auf neues Heer
+		selectedArmyIndex = listOfArmies.length-1;
 		restoreInfoBox();
 		updateInfoBox();
 	}
@@ -885,19 +885,19 @@ function unMount(){
 
 function allMount(){
 	// stellt ein, dass alle aufsitzen
-	document.getElementById("mountInput").value = listOfArmies[selectedArmy].count;
+	document.getElementById("mountInput").value = listOfArmies[selectedArmyIndex].count;
 	// sitzt auf
 	mount();
 }
 
 function allUnMount(){
 	// stellt ein, dass alle aufsitzen
-	document.getElementById("unMountInput").value = listOfArmies[selectedArmy].count;
+	document.getElementById("unMountInput").value = listOfArmies[selectedArmyIndex].count;
 	// sitzt auf
 	unMount();
 }
 
-// move troops or leaders from selectedArmy to the army at position mergeId in listOfArmies
+// move troops or leaders from selectedArmyIndex to the army at position mergeId in listOfArmies
 function transferTroopsFromSelectedArmy(mergeId){
 	var toSplit = 0;
 	var leadersToSplit = 0;
@@ -905,7 +905,7 @@ function transferTroopsFromSelectedArmy(mergeId){
 	var lkpToSplit = 0;
 	var skpToSplit = 0;
 	// depending on army type different fields are needed
-	if(listOfArmies[selectedArmy].armyType() == 1)
+	if(listOfArmies[selectedArmyIndex].armyType() == 1)
 	{
 		toSplit = parseInt(document.getElementById("splitInput").value);
 		leadersToSplit = parseInt(document.getElementById("splitLeadersInput").value);
@@ -914,23 +914,23 @@ function transferTroopsFromSelectedArmy(mergeId){
 		skpToSplit = parseInt(document.getElementById("splitSkpInput").value);
 		if(toSplit >= 0 && leadersToSplit >= 0 && mountsToSplit >= 0 && lkpToSplit >= 0 && skpToSplit >= 0)
 		{
-			listOfArmies[selectedArmy].count -= toSplit;
+			listOfArmies[selectedArmyIndex].count -= toSplit;
 			listOfArmies[mergeId].count += toSplit;
-			listOfArmies[selectedArmy].leaders -= leadersToSplit;
+			listOfArmies[selectedArmyIndex].leaders -= leadersToSplit;
 			listOfArmies[mergeId].leaders += leadersToSplit;
-			listOfArmies[selectedArmy].mounts -= mountsToSplit;
+			listOfArmies[selectedArmyIndex].mounts -= mountsToSplit;
 			listOfArmies[mergeId].mounts += mountsToSplit;
-			listOfArmies[selectedArmy].lkp -= lkpToSplit;
+			listOfArmies[selectedArmyIndex].lkp -= lkpToSplit;
 			listOfArmies[mergeId].lkp += lkpToSplit;
-			listOfArmies[selectedArmy].skp -= skpToSplit;
+			listOfArmies[selectedArmyIndex].skp -= skpToSplit;
 			listOfArmies[mergeId].skp += skpToSplit;
 			if(login != 'sl')
 			{
 				preparedEvents.push({
 					type: "transfer", content: {
-						fromArmyId: listOfArmies[selectedArmy].armyId,
+						fromArmyId: listOfArmies[selectedArmyIndex].armyId,
 						toArmyId: listOfArmies[mergeId].armyId,
-						realm: listOfArmies[selectedArmy].ownerTag(), 
+						realm: listOfArmies[selectedArmyIndex].ownerTag(), 
 						troops: toSplit,
 						leaders: leadersToSplit,
 						lkp: lkpToSplit,
@@ -945,27 +945,27 @@ function transferTroopsFromSelectedArmy(mergeId){
 			return false;
 		}
 	}
-	else if(listOfArmies[selectedArmy].armyType() == 2)
+	else if(listOfArmies[selectedArmyIndex].armyType() == 2)
 	{
 		toSplit = parseInt(document.getElementById("splitMountedInput").value);
 		leadersToSplit = parseInt(document.getElementById("splitMountedLeadersInput").value);
 		if(toSplit >= 0 && leadersToSplit >= 0)
 		{
-			listOfArmies[selectedArmy].count -= toSplit;
+			listOfArmies[selectedArmyIndex].count -= toSplit;
 			listOfArmies[mergeId].count += toSplit;
-			listOfArmies[selectedArmy].leaders -= leadersToSplit;
+			listOfArmies[selectedArmyIndex].leaders -= leadersToSplit;
 			listOfArmies[mergeId].leaders += leadersToSplit;
-			listOfArmies[selectedArmy].lkp -= lkpToSplit;
+			listOfArmies[selectedArmyIndex].lkp -= lkpToSplit;
 			listOfArmies[mergeId].lkp += lkpToSplit;
-			listOfArmies[selectedArmy].skp -= skpToSplit;
+			listOfArmies[selectedArmyIndex].skp -= skpToSplit;
 			listOfArmies[mergeId].skp += skpToSplit;
 			if(login != 'sl')
 			{
 				preparedEvents.push({
 					type: "transfer", content: {
-						fromArmyId: listOfArmies[selectedArmy].armyId,
+						fromArmyId: listOfArmies[selectedArmyIndex].armyId,
 						toArmyId: listOfArmies[mergeId].armyId,
-						realm: listOfArmies[selectedArmy].ownerTag(), 
+						realm: listOfArmies[selectedArmyIndex].ownerTag(), 
 						troops: toSplit,
 						leaders: leadersToSplit,
 						lkp: 0,
@@ -980,7 +980,7 @@ function transferTroopsFromSelectedArmy(mergeId){
 			return false;
 		}
 	}
-	else if(listOfArmies[selectedArmy].armyType() == 3)
+	else if(listOfArmies[selectedArmyIndex].armyType() == 3)
 	{
 		toSplit = parseInt(document.getElementById("splitFleetInput").value);
 		leadersToSplit = parseInt(document.getElementById("splitFleetLeadersInput").value);
@@ -988,21 +988,21 @@ function transferTroopsFromSelectedArmy(mergeId){
 		skpToSplit = parseInt(document.getElementById("splitFleetSkpInput").value);
 		if(toSplit >= 0 && leadersToSplit >= 0 && lkpToSplit >= 0 && skpToSplit >= 0)
 		{
-			listOfArmies[selectedArmy].count -= toSplit;
+			listOfArmies[selectedArmyIndex].count -= toSplit;
 			listOfArmies[mergeId].count += toSplit;
-			listOfArmies[selectedArmy].leaders -= leadersToSplit;
+			listOfArmies[selectedArmyIndex].leaders -= leadersToSplit;
 			listOfArmies[mergeId].leaders += leadersToSplit;
-			listOfArmies[selectedArmy].lkp -= lkpToSplit;
+			listOfArmies[selectedArmyIndex].lkp -= lkpToSplit;
 			listOfArmies[mergeId].lkp += lkpToSplit;
-			listOfArmies[selectedArmy].skp -= skpToSplit;
+			listOfArmies[selectedArmyIndex].skp -= skpToSplit;
 			listOfArmies[mergeId].skp += skpToSplit;
 			if(login != 'sl')
 			{
 				preparedEvents.push({
 					type: "transfer", content: {
-						fromArmyId: listOfArmies[selectedArmy].armyId,
+						fromArmyId: listOfArmies[selectedArmyIndex].armyId,
 						toArmyId: listOfArmies[mergeId].armyId,
-						realm: listOfArmies[selectedArmy].ownerTag(), 
+						realm: listOfArmies[selectedArmyIndex].ownerTag(), 
 						troops: toSplit,
 						leaders: leadersToSplit,
 						lkp: lkpToSplit,
@@ -1024,43 +1024,43 @@ function transferTroopsFromSelectedArmy(mergeId){
 // merges selectedArmy with the army at position mergeId in listOfArmies
 function mergeSelectedArmy(mergeId){
 	// depending on army type different fields are needed
-	if(listOfArmies[selectedArmy].armyType() == 1)
+	if(listOfArmies[selectedArmyIndex].armyType() == 1)
 	{
-		listOfArmies[mergeId].count += listOfArmies[selectedArmy].count;
-		listOfArmies[mergeId].leaders += listOfArmies[selectedArmy].leaders;
-		listOfArmies[mergeId].mounts += listOfArmies[selectedArmy].mounts;
-		listOfArmies[mergeId].lkp += listOfArmies[selectedArmy].lkp;
-		listOfArmies[mergeId].skp += listOfArmies[selectedArmy].skp;
+		listOfArmies[mergeId].count += listOfArmies[selectedArmyIndex].count;
+		listOfArmies[mergeId].leaders += listOfArmies[selectedArmyIndex].leaders;
+		listOfArmies[mergeId].mounts += listOfArmies[selectedArmyIndex].mounts;
+		listOfArmies[mergeId].lkp += listOfArmies[selectedArmyIndex].lkp;
+		listOfArmies[mergeId].skp += listOfArmies[selectedArmyIndex].skp;
 		if(login != 'sl')
 		{
 			preparedEvents.push({
 				type: "merge", content: {
-					fromArmyId: listOfArmies[selectedArmy].armyId,
+					fromArmyId: listOfArmies[selectedArmyIndex].armyId,
 					toArmyId: listOfArmies[mergeId].armyId,
-					realm: listOfArmies[selectedArmy].ownerTag(), 
-					troops: listOfArmies[selectedArmy].count,
-					leaders: listOfArmies[selectedArmy].leaders,
-					lkp: listOfArmies[selectedArmy].lkp,
-					skp: listOfArmies[selectedArmy].skp,
-					mounts: listOfArmies[selectedArmy].mounts
+					realm: listOfArmies[selectedArmyIndex].ownerTag(), 
+					troops: listOfArmies[selectedArmyIndex].count,
+					leaders: listOfArmies[selectedArmyIndex].leaders,
+					lkp: listOfArmies[selectedArmyIndex].lkp,
+					skp: listOfArmies[selectedArmyIndex].skp,
+					mounts: listOfArmies[selectedArmyIndex].mounts
 				}
 			});
 		}
 		deleteSelectedArmy();
 	}
-	else if(listOfArmies[selectedArmy].armyType() == 2)
+	else if(listOfArmies[selectedArmyIndex].armyType() == 2)
 	{
-		listOfArmies[mergeId].count += listOfArmies[selectedArmy].count;
-		listOfArmies[mergeId].leaders += listOfArmies[selectedArmy].leaders;
+		listOfArmies[mergeId].count += listOfArmies[selectedArmyIndex].count;
+		listOfArmies[mergeId].leaders += listOfArmies[selectedArmyIndex].leaders;
 		if(login != 'sl')
 		{
 			preparedEvents.push({
 				type: "merge", content: {
-					fromArmyId: listOfArmies[selectedArmy].armyId,
+					fromArmyId: listOfArmies[selectedArmyIndex].armyId,
 					toArmyId: listOfArmies[mergeId].armyId,
-					realm: listOfArmies[selectedArmy].ownerTag(), 
-					troops: listOfArmies[selectedArmy].count,
-					leaders: listOfArmies[selectedArmy].leaders,
+					realm: listOfArmies[selectedArmyIndex].ownerTag(), 
+					troops: listOfArmies[selectedArmyIndex].count,
+					leaders: listOfArmies[selectedArmyIndex].leaders,
 					lkp: 0,
 					skp: 0,
 					mounts: 0
@@ -1069,24 +1069,24 @@ function mergeSelectedArmy(mergeId){
 		}
 		deleteSelectedArmy();
 	}
-	else if(listOfArmies[selectedArmy].armyType() == 3)
+	else if(listOfArmies[selectedArmyIndex].armyType() == 3)
 	{
-		listOfArmies[mergeId].count += listOfArmies[selectedArmy].count;
-		listOfArmies[mergeId].leaders += listOfArmies[selectedArmy].leaders;
-		listOfArmies[mergeId].lkp += listOfArmies[selectedArmy].lkp;
-		listOfArmies[mergeId].skp += listOfArmies[selectedArmy].skp;
-		listOfArmies[mergeId].loadedArmies = listOfArmies[mergeId].loadedArmies.concat(listOfArmies[selectedArmy].loadedArmies);
+		listOfArmies[mergeId].count += listOfArmies[selectedArmyIndex].count;
+		listOfArmies[mergeId].leaders += listOfArmies[selectedArmyIndex].leaders;
+		listOfArmies[mergeId].lkp += listOfArmies[selectedArmyIndex].lkp;
+		listOfArmies[mergeId].skp += listOfArmies[selectedArmyIndex].skp;
+		listOfArmies[mergeId].loadedArmies = listOfArmies[mergeId].loadedArmies.concat(listOfArmies[selectedArmyIndex].loadedArmies);
 
 		console.log("the loaded armies in the new fleet are:");
 		console.log(listOfArmies[mergeId].loadedArmies);
-		if (listOfArmies[selectedArmy].loadedArmies.length > 0)
+		if (listOfArmies[selectedArmyIndex].loadedArmies.length > 0)
 		{
-			console.log("id = " + listOfArmies[selectedArmy].loadedArmies[i]);
-			for(var j = 0; j < listOfArmies[selectedArmy].loadedArmies.length; j++)
+			console.log("id = " + listOfArmies[selectedArmyIndex].loadedArmies[i]);
+			for(var j = 0; j < listOfArmies[selectedArmyIndex].loadedArmies.length; j++)
 			{
 				for(var i = 0; i < listOfArmies.length; i++)
 				{
-					if(listOfArmies[selectedArmy].loadedArmies[j] == listOfArmies[i].armyId &&
+					if(listOfArmies[selectedArmyIndex].loadedArmies[j] == listOfArmies[i].armyId &&
 						listOfArmies[mergeId].owner == listOfArmies[i].owner)
 					{
 						console.log(listOfArmies[i].armyId + " was loaded in " + listOfArmies[i].isLoadedIn + ",");
@@ -1111,11 +1111,11 @@ function mergeSelectedArmy(mergeId){
 		{
 			preparedEvents.push({
 				type: "merge", content: {
-					fromArmyId: listOfArmies[selectedArmy].armyId,
+					fromArmyId: listOfArmies[selectedArmyIndex].armyId,
 					toArmyId: listOfArmies[mergeId].armyId,
-					realm: listOfArmies[selectedArmy].ownerTag(), 
-					troops: listOfArmies[selectedArmy].count,
-					leaders: listOfArmies[selectedArmy].leaders,
+					realm: listOfArmies[selectedArmyIndex].ownerTag(), 
+					troops: listOfArmies[selectedArmyIndex].count,
+					leaders: listOfArmies[selectedArmyIndex].leaders,
 					lkp: 0,
 					skp: 0,
 					mounts: 0
@@ -1128,21 +1128,21 @@ function mergeSelectedArmy(mergeId){
 	{
 		mergeId -= 1;
 	}
-	selectedArmy = mergeId;
+	selectedArmyIndex = mergeId;
 	updateInfoBox();
 	restoreInfoBox();
 }
 
 // deletes the currently selected army und puts the last army in listOfArmies in its place
 function deleteSelectedArmy(){
-	deleteArmy(selectedArmy);
+	deleteArmy(selectedArmyIndex);
 }
 
 function deleteArmy(index){
 	listOfArmies.splice(index, 1);
-	if(selectedArmy === listOfArmies.length)
+	if(selectedArmyIndex === listOfArmies.length)
 	{
-		selectedArmy = undefined;
+		selectedArmyIndex = undefined;
 	}
 }
 

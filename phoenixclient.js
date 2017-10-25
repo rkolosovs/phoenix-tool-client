@@ -2,7 +2,7 @@
 'use strict';
 
 var selectedFields = []; // list of fields to be highlighted
-var selectedArmy; // index of the currently selected army in the listOfArmies
+var selectedArmyIndex; // index of the currently selected army in the listOfArmies
 var listOfArmies;
 var listOfMultiArmyFields = [];
 var switchScale = 50;
@@ -220,12 +220,12 @@ function registerLeftClick(){
 		}
 		// Armeeauswahl
 		restoreInfoBox();
-		selectedArmy = undefined;
+		selectedArmyIndex = undefined;
 		var possibleSelections = [];
 		for(var i = 0; i < listOfArmies.length; i++){
 			if(listOfArmies[i].x == clickedField[0] && listOfArmies[i].y == clickedField[1]){
 				possibleSelections.push(i);
-				selectedArmy = i;
+				selectedArmyIndex = i;
 			}
 		}
 		if(document.getElementById("btnSection") != null){
@@ -246,14 +246,14 @@ function registerLeftClick(){
 					var ownerToSearchFor = this.name.split(" ")[1];
 					for (var j = 0; j < listOfArmies.length ; j++){
 						if(listOfArmies[j].armyId == idToSearchFor && listOfArmies[j].owner == ownerToSearchFor){
-							selectedArmy = j;
+							selectedArmyIndex = j;
 						}
 					}
 					updateInfoBox();
 					restoreInfoBox();
-					console.log(selectedArmy);
-					if(selectedArmy !== undefined){
-						clickedMoves(listOfArmies[selectedArmy]);
+					console.log(selectedArmyIndex);
+					if(selectedArmyIndex !== undefined){
+						clickedMoves(listOfArmies[selectedArmyIndex]);
 					}
 					drawStuff();
 				});
@@ -262,8 +262,8 @@ function registerLeftClick(){
 			document.getElementById("buttonsBox").appendChild(x);
 		}
 		updateInfoBox();
-		if(selectedArmy !== undefined){
-		    clickedMoves(listOfArmies[selectedArmy]);
+		if(selectedArmyIndex !== undefined){
+		    clickedMoves(listOfArmies[selectedArmyIndex]);
 		}
 	}
 }
@@ -295,17 +295,17 @@ function registerRightClick(){
 			console.log(window.changedFields);
 		}
 	} else {
-		if(selectedArmy === undefined){
+		if(selectedArmyIndex === undefined){
 			console.log("Can't move with no army selected");
 		} else {
-			var clickedArmyCoords = new showHex(listOfArmies[selectedArmy].x, listOfArmies[selectedArmy].y);
+			var clickedArmyCoords = new showHex(listOfArmies[selectedArmyIndex].x, listOfArmies[selectedArmyIndex].y);
 			var neighbors = clickedArmyCoords.neighbors();
 			for (var i = 0; i < neighbors.length; i++){
 				if(neighbors[i][0] == clickedField[0] && neighbors[i][1] == clickedField[1]){
 					var out;
-					if (listOfArmies[selectedArmy].ownerTag() === login || login === "sl") {
+					if (listOfArmies[selectedArmyIndex].ownerTag() === login || login === "sl") {
 
-						out = move(listOfArmies[selectedArmy], i);
+						out = move(listOfArmies[selectedArmyIndex], i);
 						console.log(out);
 					} else {
 						out = "Can only move your own armies."
@@ -313,10 +313,10 @@ function registerRightClick(){
 					if(out === "ok"){
 						preparedEvents.push({
 							type: "move", content: {
-								armyId: listOfArmies[selectedArmy].armyId,
-								realm: listOfArmies[selectedArmy].ownerTag(),
+								armyId: listOfArmies[selectedArmyIndex].armyId,
+								realm: listOfArmies[selectedArmyIndex].ownerTag(),
 								fromX: clickedArmyCoords.x, fromY: clickedArmyCoords.y, 
-								toX: listOfArmies[selectedArmy].x, toY: listOfArmies[selectedArmy].y
+								toX: listOfArmies[selectedArmyIndex].x, toY: listOfArmies[selectedArmyIndex].y
 							}
 						});
 							
@@ -324,17 +324,17 @@ function registerRightClick(){
 						var participants = [];
 
 						//before moving check if you leave a Multi Army field
-						if(listOfArmies[selectedArmy].multiArmyField === true){
-							deleteFromMultifield(listOfArmies[selectedArmy]);
+						if(listOfArmies[selectedArmyIndex].multiArmyField === true){
+							deleteFromMultifield(listOfArmies[selectedArmyIndex]);
 						}
 
 						for (var j = 0; j < listOfArmies.length; j++) {
 							var someArmy = listOfArmies[j];
-							if (someArmy.x === listOfArmies[selectedArmy].x && someArmy.y === listOfArmies[selectedArmy].y
-									&& someArmy !== listOfArmies[selectedArmy]) {
+							if (someArmy.x === listOfArmies[selectedArmyIndex].x && someArmy.y === listOfArmies[selectedArmyIndex].y
+									&& someArmy !== listOfArmies[selectedArmyIndex]) {
 								participants.push({armyId: someArmy.armyId, realm: someArmy.ownerTag()});
 								//in case they are enemies
-								if (someArmy.owner !== listOfArmies[selectedArmy].owner) {
+								if (someArmy.owner !== listOfArmies[selectedArmyIndex].owner) {
 									battlePossible = true;
 								}
 								//MultipleArmies - even if not friendly
@@ -346,27 +346,27 @@ function registerRightClick(){
 								//5. move from multi to multi
 								
 								if(someArmy.multiArmyField === true){//2.
-									addToMultifield(someArmy, listOfArmies[selectedArmy]);
+									addToMultifield(someArmy, listOfArmies[selectedArmyIndex]);
 								}
 								else{//1.
 									var templist =[];//creating a list of armies to add to the list of multifieldarmies
 									templist.push(someArmy);
-									templist.push(listOfArmies[selectedArmy]);
+									templist.push(listOfArmies[selectedArmyIndex]);
 									listOfMultiArmyFields.push(templist);
 									someArmy.multiArmyField = true;
-									listOfArmies[selectedArmy].multiArmyField = true;
+									listOfArmies[selectedArmyIndex].multiArmyField = true;
 								}
 							}
 						}
 						
 						if (battlePossible) {
 							var inserted = false;
-							participants.push({armyId: listOfArmies[selectedArmy].armyId,
-								realm: listOfArmies[selectedArmy].ownerTag()});
+							participants.push({armyId: listOfArmies[selectedArmyIndex].armyId,
+								realm: listOfArmies[selectedArmyIndex].ownerTag()});
 							for (var j = 0; j < preparedEvents.length; j++){
 								if(preparedEvents[j].type === "battle" && 
-										preparedEvents[j].content.x === listOfArmies[selectedArmy].x &&
-										preparedEvents[j].content.y === listOfArmies[selectedArmy].y){
+										preparedEvents[j].content.x === listOfArmies[selectedArmyIndex].x &&
+										preparedEvents[j].content.y === listOfArmies[selectedArmyIndex].y){
 									preparedEvents[j].content.participants = participants;
 									inserted = true;
 								}
@@ -375,7 +375,7 @@ function registerRightClick(){
 								preparedEvents.push({
 									type: "battle", content: {
 										participants: participants, 
-										x: listOfArmies[selectedArmy].x, y: listOfArmies[selectedArmy].y
+										x: listOfArmies[selectedArmyIndex].x, y: listOfArmies[selectedArmyIndex].y
 									}
 								});
 							}
@@ -894,15 +894,15 @@ function checkEvent(num) {
 			console.log("armytoplace = " + armyToPlaceInList)
 			if(armyFromPlaceInList >= 0 && armyToPlaceInList >= 0)
 			{
-				selectedArmy = armyFromPlaceInList;
-				mergeSelectedArmy(armyToPlaceInList);
+				selectedArmyIndex = armyFromPlaceInList;
+				mergeselectedArmyIndex(armyToPlaceInList);
 				preparedEvents.pop();
 			}
 			event.status = 'checked';
 			fillEventList();
 			//sendCheckEvent(event.pk, event.type);
 			drawStuff();
-			selectedArmy = undefined;
+			selectedArmyIndex = undefined;
 		} else if (event.type === "transfer") {
 			console.log("this is a transfer event");
 			var armyFromPlaceInList = -1;
