@@ -771,18 +771,38 @@ function aim(){
 }
 
 //to actually shoot stuff, with events
-function shoot(){
-	var x = 1;//just temporary so it compiles
+function shoot(){//TODO make exceptions for invalid input
+	if(login == 'guest')
+	{
+		window.alert("Zuschauer haben keine Rechte.");
+		return false;
+	}
+	let LKPshooting = parseInt(document.getElementById("shootingLKPInput").value);
+	let SKPshooting = parseInt(document.getElementById("shootingSKPInput").value);
+
+	if(LKPshooting > listOfArmyCoordinates[selectedArmy].a.lkp){
+		window.alert("Die Armee hat nicht genug leichte Katapulte/Kriegsschiffe");
+		return false;
+	}
+	if(SKPshooting > listOfArmyCoordinates[selectedArmy].a.skp){
+		window.alert("Die Armee hat nicht genug schwere Katapulte/Kriegsschiffe");
+		return false;
+	}
+	if(LKPshooting == 0 && SKPshooting == 0){
+		window.alert("Sie müssen eine Anzahl Katapulte eintragen");
+		return false;
+	}
 	preparedEvents.push({
 		type: "shoot", content: {
 			shooterID: listOfArmyCoordinates[selectedArmy].a.armyId, 
 			realm: listOfArmyCoordinates[selectedArmy].ownerTag(),
-			LKPcount: x,
-			SKPcount: x,
-			toX: x,
-			toY: x
+			LKPcount: LKPshooting,
+			SKPcount: SKPshooting,
+			toX: listOfArmyCoordinates[selectedArmy].x,//temporary
+			toY: listOfArmyCoordinates[selectedArmy].y
 		}
 	});
+	window.alert("Die Geschosse sind unterwegs.");
 }
 
 // the splitArmy funtion of the split box

@@ -66,7 +66,7 @@ function distance(originX, originY, toX, toY){
     let thisCubeY = - thisCubeX - thisCubeZ;
 
     //this is the cube coordinates for the current Hex
-    let targetCubeX = toX - (toY + (toY&1)) / 2;
+    let targetCubeX = toX - (toY + (toY&1)) / 2;//bitwise & as an alternative to modulo that works without exceptions(negative numbers)
     let targetCubeZ = toY;
     let targetCubeY = - targetCubeX - targetCubeZ;
 

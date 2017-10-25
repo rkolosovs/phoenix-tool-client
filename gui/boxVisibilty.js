@@ -220,7 +220,7 @@ function hide(element) {
 					document.getElementById("unMount").style.display = "none";
 				}
 				//show shoot button
-				if(listOfArmyCoordinates[selectedArmy].a.lkp>0 | listOfArmyCoordinates[selectedArmy].a.skp > 0){
+				if(listOfArmyCoordinates[selectedArmy].a.lkp>0 || listOfArmyCoordinates[selectedArmy].a.skp > 0 || listOfArmyCoordinates[selectedArmy].a.isLoadedIn == false){
 					document.getElementById("shoot").style.display = "";
 				}
 				else{
