@@ -492,11 +492,12 @@ function determineEventStatus(){
 			{
 				var army1 = listOfArmyCoordinates[findArmyPlaceInList(content.fromArmy, content.realm)];
 				var army2 = listOfArmyCoordinates[findArmyPlaceInList(content.toArmy, content.realm)];
-				if(army1.a.armyType() === army2.a.armyType() && army1.a.x === army2.a.x && army1.a.y === army2.a.y)
+				if(army1 !== undefined && army2 !== undefined && army1.a.armyType() === army2.a.armyType() &&
+				   army1.a.x === army2.a.x && army1.a.y === army2.a.y)
 				{
 					pendingEvents[i].status = 'available';
 				} 
-				else if((army1.a.armyType() !== army2.a.armyType()) ||
+				else if(army1 !== undefined && army2 !== undefined && (army1.a.armyType() !== army2.a.armyType()) ||
 					((((army1.a.armyType() === 1 || army1.a.armyType() === 2) && army1.a.remainingMovePoints < 3) ||
 				    army1.a.armyType() === 3 && army1.a.remainingMovePoints < 5) && (((army2.a.armyType() === 1 || army2.a.armyType() === 2) &&
 				    army2.a.remainingMovePoints < 3)|| army2.a.armyType() === 3 && army2.a.remainingMovePoints < 5)))
@@ -512,13 +513,15 @@ function determineEventStatus(){
 			{
 				var army1 = listOfArmyCoordinates[findArmyPlaceInList(content.fromArmy, content.realm)];
 				var army2 = listOfArmyCoordinates[findArmyPlaceInList(content.toArmy, content.realm)];
-				if((army1.a.armyType() == army2.a.armyType() || (content.troops == 0 && content.mounts == 0 && content.lkp == 0 && content.skp == 0))
+				if(army1 !== undefined && army2 !== undefined && (army1.a.armyType() == army2.a.armyType() ||
+				    (content.troops == 0 && content.mounts == 0 && content.lkp == 0 && content.skp == 0))
 				    && army1.a.x === army2.a.x && army1.a.y === army2.a.y)
 				{
 					pendingEvents[i].status = 'available';
 				}
-				else if(((((army1.a.armyType() == 1 || army1.a.armyType() == 2) && army1.a.remainingMovePoints < 3) ||
-				    army1.a.armyType() == 3 && army1.a.remainingMovePoints < 5) && (((army2.a.armyType() == 1 || army2.a.armyType() == 2) &&
+				else if(army1 !== undefined && army2 !== undefined && ((((army1.a.armyType() == 1 ||
+				    army1.a.armyType() == 2) && army1.a.remainingMovePoints < 3) || army1.a.armyType() == 3 &&
+				    army1.a.remainingMovePoints < 5) && (((army2.a.armyType() == 1 || army2.a.armyType() == 2) &&
 			 	    army2.a.remainingMovePoints < 3)|| army2.a.armyType() == 3 && army2.a.remainingMovePoints < 5)))
 				{
 					pendingEvents[i].status = 'impossible';
