@@ -1,20 +1,6 @@
 function armyCoordinates(army) {
     this.a = army;
 
-    //when unit is clicked generates a list of neighbors that can be moved to
-    this.clickedMoves = function(){
-
-        if(this.a.ownerTag() === login || login === "sl"){
-            this.a.possibleMoves = [];
-            //goes through all neighbors to see if the army can move there
-            for(var i =0; i < 6; i++)
-            {
-                moveToList(this.a, i);
-            }
-        }
-
-    }
-
     //to actually move units with the new method
     this.move = function(direction){//TODO needs new names
         for(var i =0; i < this.a.possibleMoves.length; i++){
@@ -72,7 +58,7 @@ function armyCoordinates(army) {
                     {
                         conquer(this.a, direction);
                     }
-                    this.clickedMoves();
+                    clickedMoves(this.a);
                     return "ok"
                 }
                 //in case of loading onto a ship
@@ -146,8 +132,20 @@ function armyCoordinates(army) {
             }
         }
 		//to see and return the error why you cant move
-        this.clickedMoves();
+        clickedMoves(this.a);
         return moveToList(this.a, direction)
+    }
+}
+
+//when unit is clicked generates a list of neighbors that can be moved to
+function clickedMoves(army){
+    if(army.ownerTag() === login || login === "sl"){
+        army.possibleMoves = [];
+        //goes through all neighbors to see if the army can move there
+        for(var i = 0; i < 6; i++)
+        {
+            moveToList(army, i);
+        }
     }
 }
 

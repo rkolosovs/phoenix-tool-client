@@ -254,7 +254,7 @@ function registerLeftClick(){
 					restoreInfoBox();
 					console.log(selectedArmy);
 					if(selectedArmy !== undefined){
-						listOfArmies[selectedArmy].clickedMoves();
+						clickedMoves(listOfArmies[selectedArmy].a);
 					}
 					drawStuff();
 				});
@@ -264,7 +264,7 @@ function registerLeftClick(){
 		}
 		updateInfoBox();
 		if(selectedArmy !== undefined){
-		    listOfArmies[selectedArmy].clickedMoves();
+		    clickedMoves(listOfArmies[selectedArmy].a);
 		}
 	}
 }
