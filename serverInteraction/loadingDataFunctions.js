@@ -64,33 +64,34 @@ function loadArmies() {
         success: function(data){
         	var armies = data;
 			var armiesToLoadIn = [];
-            listOfArmyCoordinates = [];
+            listOfArmies = [];
             for(var i = 0; i < armies.length; i++){
-            	var armyCoords = null;
             	var army = null;
                 if(Math.floor(armies[i].armyId/100) == 1){
-                	army = new heer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp, armies[i].skp, armies[i].mounts, armies[i].isGuard);
+                	army = new heer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp, armies[i].skp,
+                	    armies[i].mounts, armies[i].isGuard, armies[i].x, armies[i].y, armies[i].realm);
                 } else if(Math.floor(armies[i].armyId/100) == 2){
-                	army = new reiterHeer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].isGuard);
+                	army = new reiterHeer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].isGuard,
+                	    armies[i].x, armies[i].y, armies[i].realm);
                 } else if(Math.floor(armies[i].armyId/100) == 3){
-                	army = new seeHeer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp, armies[i].skp, armies[i].isGuard);
+                	army = new seeHeer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp,
+                	    armies[i].skp, armies[i].isGuard, armies[i].x, armies[i].y, armies[i].realm);
                 }
-                armyCoords = new armyCoordinates(army, armies[i].x, armies[i].y, armies[i].realm);
+                army.setRemainingMovePoints(armies[i].movementPoints);
+                army.setRemainingHeightPoints(armies[i].heightPoints);
 				if(armies[i].isLoadedIn != null){
 					armiesToLoadIn.push([armies[i].isLoadedIn, armies[i].realm, armies[i].armyId]);
-					armyCoords.a.isLoadedIn = armies[i].isLoadedIn;
+					army.isLoadedIn = armies[i].isLoadedIn;
 				}
-                armyCoords.setRemainingMovePoints(armies[i].movementPoints);
-                armyCoords.setRemainingHeightPoints(armies[i].heightPoints);
-                listOfArmyCoordinates.push(armyCoords);
+                listOfArmies.push(army);
             }
 			// if needed, load Troops into ships
 			if(armiesToLoadIn.length > 0){
 				for(var i = 0; i < armiesToLoadIn.length; i++){
-					for(var j = 0; j < listOfArmyCoordinates.length; j++){
-						if(listOfArmyCoordinates[j].a.armyId == armiesToLoadIn[i][0] && listOfArmyCoordinates[j].owner == armiesToLoadIn[i][1]){
-							listOfArmyCoordinates[j].a.loadedArmies.push(armiesToLoadIn[i][2]);
-							console.log(armiesToLoadIn[i][2] + " is loaded in " + listOfArmyCoordinates[j].a.armyId);
+					for(var j = 0; j < listOfArmies.length; j++){
+						if(listOfArmies[j].armyId == armiesToLoadIn[i][0] && listOfArmies[j].owner == armiesToLoadIn[i][1]){
+							listOfArmies[j].loadedArmies.push(armiesToLoadIn[i][2]);
+							console.log(armiesToLoadIn[i][2] + " is loaded in " + listOfArmies[j].armyId);
 						}
 					}
 				}
@@ -114,7 +115,7 @@ function loadRiverData() {
 		var fluesse = json; 
 		var collector = [];
 		fluesse.forEach(function(element) {
-			collector.push([[element.firstX, element.firstY],[element.secondX,element.secondY]]);
+			collector.push([[element.firstX, element.firstY],[element.secondX, element.secondY]]);
 		}, this);
 		rivers = collector; //rivers are the coordinates of two fields on either side of the river
 	});

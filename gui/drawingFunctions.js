@@ -19,9 +19,9 @@ function drawStuff() {
 
 	drawMap(ctx, x, y, scale);
 	drawSelection(ctx, x, y, scale, selectedFields);
-	drawArmies(ctx, x, y, scale, listOfArmyCoordinates);
-	drawPossibleMoves(ctx, x, y, scale, selectedArmy);
-	drawShootingTargets(ctx, x, y, scale, selectedArmy);
+	drawArmies(ctx, x, y, scale, listOfArmies);
+	drawPossibleMoves(ctx, x, y, scale, selectedArmyIndex);
+	drawShootingTargets(ctx, x, y, scale, selectedArmyIndex);
 }
 
 function drawMap(ctx, x, y, scale) {
@@ -393,9 +393,9 @@ function drawFields(ctx, x, y, scale) { //draw the terrain fields
 	}
 }
 
-function drawPossibleMoves(ctx, x, y, scale, selectedArmy){//drawing all possible moves to neighboring fields if army was selected
-    if(selectedArmy !== undefined){
-		var moves = listOfArmyCoordinates[selectedArmy].possibleMoves;
+function drawPossibleMoves(ctx, x, y, scale, selectedArmyIndex){//drawing all possible moves to neighboring fields if army was selected
+    if(selectedArmyIndex !== undefined){
+		var moves = listOfArmies[selectedArmyIndex].possibleMoves;
 		for (var i = 0; i < moves.length; i++) {
             ctx.lineWidth = scale/6;
 	        ctx.strokeStyle='#00FF00';
@@ -422,43 +422,43 @@ function drawSelection(ctx, x, y, scale, selectedFields) {
 	}
 }
 
-function drawArmies(ctx, x, y, scale, armyCoordinates) {
-	for (var i = 0; i < armyCoordinates.length; i++) {
-		var armyData = armyCoordinates[i]; // get army coordinates
-		var pos = computePosition(x, y, armyCoordinates[i].x, armyCoordinates[i].y, scale);
+function drawArmies(ctx, x, y, scale, armies) {
+	for (var i = 0; i < armies.length; i++) {
+		var armyData = armies[i]; // get army coordinates
+		var pos = computePosition(x, y, armies[i].x, armies[i].y, scale);
 		ctx.fillStyle = 'black';
 		ctx.textAlign = 'center';
     	ctx.textBaseline = 'middle';
-		//ctx.fillText(armyData.a.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
+		//ctx.fillText(armyData.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
 
 		//check if its is on a multifield. if it is ignore
 		if(armyData.multiArmyField == false){
 			// armies == 1, riders == 2, boats == 3
-			if(Math.floor(armyData.a.armyId/100) == 1){
+			if(Math.floor(armyData.armyId/100) == 1){
 				ctx.drawImage(troopsImg, pos[0], pos[1], (scale*SIN60), scale); 
-			} else if(Math.floor(armyData.a.armyId/100) == 2) {
+			} else if(Math.floor(armyData.armyId/100) == 2) {
 				ctx.drawImage(mountsImg, pos[0], pos[1], (scale*SIN60), scale);
-			} else if(Math.floor(armyData.a.armyId/100) == 3) {
+			} else if(Math.floor(armyData.armyId/100) == 3) {
 				ctx.drawImage(boatsImg, pos[0], pos[1], (scale*SIN60), scale);
 			}
 		}
-		if (armyCoordinates[i].ownerTag() === login || login === "sl"){
-			//draw if you can move
-			if(armyCoordinates[i].possibleMoves.length > 0){
+		if (armies[i].ownerTag() === login || login === "sl"){
+			
+			if(armies[i].possibleMoves.length > 0){
 				drawRemainingMovement(ctx, pos, scale);
 			}
-			else if(Math.floor(armyData.a.armyId/100) == 1 && armyCoordinates[i].remainingMovePoints == 9){
+			else if(Math.floor(armyData.armyId/100) == 1 && armies[i].remainingMovePoints == 9){
 				drawRemainingMovement(ctx, pos, scale);
 			}
-			else if(Math.floor(armyData.a.armyId/100) == 2 && armyCoordinates[i].remainingMovePoints == 21){
+			else if(Math.floor(armyData.armyId/100) == 2 && armies[i].remainingMovePoints == 21){
 				drawRemainingMovement(ctx, pos, scale);
 			}
-			else if(Math.floor(armyData.a.armyId/100) == 3 && armyCoordinates[i].remainingMovePoints >= 42){
+			else if(Math.floor(armyData.armyId/100) == 3 && armies[i].remainingMovePoints >= 42){
 				drawRemainingMovement(ctx, pos, scale);
 			}
 
 			//draw if it took fire
-			if(armyData.a.wasShotAt === true){
+			if(armyData.wasShotAt === true){
 				drawTookFire(ctx, pos, scale);
 			}
 		}
@@ -484,11 +484,11 @@ function drawArmies(ctx, x, y, scale, armyCoordinates) {
 		var yPosArmy = (Math.sin(angle * i) * scale/4) + pos[1];
 
 		// armies == 1, riders == 2, boats == 3
-			if(Math.floor(armyData.a.armyId/100) == 1){
+			if(Math.floor(armyData.armyId/100) == 1){
 				ctx.drawImage(troopsImg, xPosArmy, yPosArmy, circleScale, scale); 
-			} else if(Math.floor(armyData.a.armyId/100) == 2) {
+			} else if(Math.floor(armyData.armyId/100) == 2) {
 				ctx.drawImage(mountsImg, xPosArmy, yPosArmy, circleScale, scale);
-			} else if(Math.floor(armyData.a.armyId/100) == 3) {
+			} else if(Math.floor(armyData.armyId/100) == 3) {
 				ctx.drawImage(boatsImg, xPosArmy, yPosArmy, circleScale, scale);
 			}
 		}
@@ -675,8 +675,8 @@ function drawTookFire(ctx, pos, scale){
 }
 
 function drawShootingTargets(ctx, x, y, scale, selectedArmy){
-	if(selectedArmy !== undefined){
-		var targets = listOfArmyCoordinates[selectedArmy].targetList;
+	if(selectedArmy !== undefined && listOfArmies[selectedArmyIndex].targetList !== undefined){
+		var targets = listOfArmies[selectedArmyIndex].targetList;
 		for (var i = 0; i < targets.length; i++) {
 			ctx.lineWidth = scale/10;
 			ctx.strokeStyle='#FF0000';

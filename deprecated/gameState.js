@@ -6,18 +6,18 @@ function gameState(count, factions, order, subTurns){
     this.currentPlayer = order[0];
     this.subTurnNr = subTurns;
     this.startNewTurn = function(){
-        var armyCount = listOfArmyCoordinates.length;
+        var armyCount = listOfArmies.length;
         for(var i = 0; i< armyCount; i++){
-            if(listOfArmyCoordinates[i].owner == this.currentPlayer){
-                if(Math.floor(listOfArmyCoordinates[i].a.armyId/100) == 1){
-                    listOfArmyCoordinates[i].setRemainingMovePoints(9);
-                    listOfArmyCoordinates[i].setRemainingHeightPoints(2);
-                } else if(Math.floor(listOfArmyCoordinates[i].a.armyId/100) == 2){
-                    listOfArmyCoordinates[i].setRemainingMovePoints(21);
-                    listOfArmyCoordinates[i].setRemainingHeightPoints(2);
-                } else if(Math.floor(listOfArmyCoordinates[i].a.armyId/100) == 3){
-                    listOfArmyCoordinates[i].setRemainingMovePoints(42);
-                    listOfArmyCoordinates[i].setRemainingHeightPoints(2);
+            if(listOfArmies[i].owner == this.currentPlayer){
+                if(Math.floor(listOfArmies[i].a.armyId/100) == 1){
+                    listOfArmies[i].setRemainingMovePoints(9);
+                    listOfArmies[i].setRemainingHeightPoints(2);
+                } else if(Math.floor(listOfArmies[i].a.armyId/100) == 2){
+                    listOfArmies[i].setRemainingMovePoints(21);
+                    listOfArmies[i].setRemainingHeightPoints(2);
+                } else if(Math.floor(listOfArmies[i].a.armyId/100) == 3){
+                    listOfArmies[i].setRemainingMovePoints(42);
+                    listOfArmies[i].setRemainingHeightPoints(2);
                 }
             }
         }
