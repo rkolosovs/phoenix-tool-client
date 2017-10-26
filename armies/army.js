@@ -8,6 +8,8 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     this.isGuard = istGarde;
     this.x = coordX;
     this.y = coordY;
+    this.oldX = coordX; //save the old position when moving the unit
+    this.oldY = coordY; //use it to determine what terrain this unit moved from etc.
     this.owner = owner;
     this.isLoadedIn = null;
 
@@ -310,6 +312,8 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde, coordX, coordY, owner) {
     this.isGuard = istGarde;
     this.x = coordX;
     this.y = coordY;
+    this.oldX = coordX; //save the old position when moving the unit
+    this.oldY = coordY; //use it to determine what terrain this unit moved from etc.
     this.owner = owner;
     this.isLoadedIn = null;
 
@@ -428,6 +432,8 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     this.isGuard = istGarde;
     this.x = coordX;
     this.y = coordY;
+    this.oldX = coordX; //save the old position when moving the unit
+    this.oldY = coordY; //use it to determine what terrain this unit moved from etc.
     this.owner = owner;
     this.isLoadedIn = null; // for easier Data Saving 
     this.loadedArmies = [];

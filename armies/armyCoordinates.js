@@ -1,21 +1,25 @@
 //to actually move units with the new method
 function move(army, direction){//TODO needs new names
     for(var i =0; i < army.possibleMoves.length; i++){
-        if(army.possibleMoves[i].dir == direction){
+        if(army.possibleMoves[i].dir === direction){
             var tempmove = army.possibleMoves[i];
             //in case it is moving on land
-            if(tempmove.load == undefined){
+            if(tempmove.load === undefined){
                 army.remainingMovePoints -= tempmove.movepoints;
+                army.oldX = army.x;
+                army.oldY = army.y;
                 army.x = tempmove.tar.x;
                 army.y = tempmove.tar.y;
                 //for ship movement
                 if(Math.floor(army.armyId / 100) == 3){
                 // moves troops that are loaded in the fleet
-                    if(army.loadedArmies != undefined && army.loadedArmies != []){
+                    if(army.loadedArmies !== undefined && army.loadedArmies !== []){
                         for(var i = 0; i < army.loadedArmies.length; i++){
                             for(var j = 0; j < listOfArmies.length; j++){
                                 console.log(army.loadedArmies[i]);
-                                if(listOfArmies[j].owner == army.owner && listOfArmies[j].armyId == army.loadedArmies[i]){
+                                if(listOfArmies[j].owner === army.owner && listOfArmies[j].armyId === army.loadedArmies[i]){
+                                    listOfArmies[j].oldX = listOfArmies[j].x;
+                                    listOfArmies[j].oldY = listOfArmies[j].y;
                                     listOfArmies[j].x = tempmove.tar.x;
                                     listOfArmies[j].y = tempmove.tar.y;
                                 }
@@ -24,7 +28,7 @@ function move(army, direction){//TODO needs new names
                     }
                 }
                 //for moving off a ship
-                if(tempmove.unload != undefined && tempmove.unload == true){
+                if(tempmove.unload !== undefined && tempmove.unload === true){
                     console.log("Armee war in " + army.isLoadedIn + " geladen.");
                     for(var i = 0; i < listOfArmies.length; i++){
                         if((listOfArmies[i].owner == army.owner) && listOfArmies[i].armyId == army.isLoadedIn){
@@ -58,7 +62,7 @@ function move(army, direction){//TODO needs new names
             else if(tempmove.load == true){
                 var fleetsOnDest = [];
                 for(var i = 0; i<listOfArmies.length; i++){
-                    if((listOfArmies[i].owner == army.owner) && (listOfArmies[i].x == tempmove.tar.x) && (listOfArmies[i].y == tempmove.tar.y) &&
+                    if((listOfArmies[i].owner === army.owner) && (listOfArmies[i].x === tempmove.tar.x) && (listOfArmies[i].y === tempmove.tar.y) &&
                     (Math.floor(listOfArmies[i].armyId / 100) == 3)){
                         fleetsOnDest.push(i);
                         console.log("fleets +1");
@@ -68,11 +72,13 @@ function move(army, direction){//TODO needs new names
                 if(fleetsOnDest.length == 0){
                     return "You can't walk on Water.";
                 // there is exactly one
-                } else if(fleetsOnDest.length == 1){
+                } else if(fleetsOnDest.length === 1){
                     var loadString = listOfArmies[fleetsOnDest[0]].loadArmy();
-                    if(loadString == "ok"){
+                    if(loadString === "ok"){
                         army.isLoadedIn = listOfArmies[fleetsOnDest[0]].armyId;
                         console.log("army in now loaded in " + army.isLoadedIn);
+                        army.oldX = army.x;
+                        army.oldY = army.y;
                         army.x = tempmove.tar.x;
                         army.y = tempmove.tar.y;
                         return "ok";
@@ -86,10 +92,10 @@ function move(army, direction){//TODO needs new names
                         fleetstring = fleetstring + listOfArmies[fleetsOnDest[i]].armyId + " ";
                     }
                     var chosenFleet = prompt("Mögliche Flotten sind: " + fleetstring);
-                    if(chosenFleet != null){
+                    if(chosenFleet !== null){
                         var foundFleet = -1;
                         for(var i = 0; i < listOfArmies.length; i++){
-                            if(listOfArmies[i].armyId == chosenFleet && listOfArmies[i].owner == army.owner){
+                            if(listOfArmies[i].armyId === chosenFleet && listOfArmies[i].owner === army.owner){
                                 foundFleet = i;
                             }
                         }
@@ -101,7 +107,7 @@ function move(army, direction){//TODO needs new names
                         console.log(fleetsOnDest);
                         var found = false;
                         for(var i = 0; i < fleetsOnDest.length; i++){
-                            if(fleetsOnDest[i] == foundFleet){
+                            if(fleetsOnDest[i] === foundFleet){
                                 found = true
                             }
                         }
@@ -110,6 +116,8 @@ function move(army, direction){//TODO needs new names
                             if(loadString == "ok"){
                                 army.isLoadedIn = listOfArmies[foundFleet].armyId;
                                 console.log("army in now loaded in " + army.isLoadedIn);
+                                army.oldX = army.x;
+                                army.oldY = army.y;
                                 army.x = tempmove.tar.x;
                                 army.y = tempmove.tar.y;
                                 return "ok";
