@@ -1139,6 +1139,7 @@ function deleteSelectedArmy(){
 }
 
 function deleteArmy(index){
+	deleteFromMultifield(selectedArmyIndex);
 	listOfArmies.splice(index, 1);
 	if(selectedArmyIndex === listOfArmies.length)
 	{
@@ -1203,5 +1204,9 @@ function generateArmyId(type, owner){
 
 function checkArmiesForLiveliness(){
 	listOfArmies = listOfArmies.filter(
-			function(armyCoord){return armyCoord.isAlive();});
+			function(armyCoord){
+				if(!armyCoord.isAlive())
+					deleteFromMultifield(armyCoord);
+				return armyCoord.isAlive();
+			});
 }
