@@ -468,7 +468,7 @@ function activateTransmuteBox(){
 				btn.addEventListener('click', function(event) 
 				{
 					var posiInList = this.name.split(" ")[1];
-					transferTroopsFromselectedArmyIndex(posiInList);	
+					transferTroopsFromSelectedArmy(posiInList);
 				});
 				x.appendChild(btn);
 			}
@@ -533,7 +533,7 @@ function activateMergeBox(){
 				btn.addEventListener('click', function(event) 
 				{
 					var posiInList = this.name.split(" ")[1];
-					mergeselectedArmyIndex(posiInList);	
+					mergeSelectedArmy(posiInList);
 				});
 				x.appendChild(btn);
 			}

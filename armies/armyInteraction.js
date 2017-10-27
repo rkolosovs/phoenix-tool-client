@@ -905,7 +905,7 @@ function transferTroopsFromSelectedArmy(mergeId){
 	var lkpToSplit = 0;
 	var skpToSplit = 0;
 	// depending on army type different fields are needed
-	if(listOfArmies[selectedArmyIndex].armyType() == 1)
+	if(listOfArmies[selectedArmyIndex].armyType() === 1)
 	{
 		toSplit = parseInt(document.getElementById("splitInput").value);
 		leadersToSplit = parseInt(document.getElementById("splitLeadersInput").value);
@@ -924,7 +924,7 @@ function transferTroopsFromSelectedArmy(mergeId){
 			listOfArmies[mergeId].lkp += lkpToSplit;
 			listOfArmies[selectedArmyIndex].skp -= skpToSplit;
 			listOfArmies[mergeId].skp += skpToSplit;
-			if(login != 'sl')
+			if(login !== 'sl')
 			{
 				preparedEvents.push({
 					type: "transfer", content: {
@@ -945,7 +945,7 @@ function transferTroopsFromSelectedArmy(mergeId){
 			return false;
 		}
 	}
-	else if(listOfArmies[selectedArmyIndex].armyType() == 2)
+	else if(listOfArmies[selectedArmyIndex].armyType() === 2)
 	{
 		toSplit = parseInt(document.getElementById("splitMountedInput").value);
 		leadersToSplit = parseInt(document.getElementById("splitMountedLeadersInput").value);
@@ -980,7 +980,7 @@ function transferTroopsFromSelectedArmy(mergeId){
 			return false;
 		}
 	}
-	else if(listOfArmies[selectedArmyIndex].armyType() == 3)
+	else if(listOfArmies[selectedArmyIndex].armyType() === 3)
 	{
 		toSplit = parseInt(document.getElementById("splitFleetInput").value);
 		leadersToSplit = parseInt(document.getElementById("splitFleetLeadersInput").value);

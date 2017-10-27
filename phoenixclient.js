@@ -895,7 +895,7 @@ function checkEvent(num) {
 			if(armyFromPlaceInList >= 0 && armyToPlaceInList >= 0)
 			{
 				selectedArmyIndex = armyFromPlaceInList;
-				mergeselectedArmyIndex(armyToPlaceInList);
+				mergeSelectedArmy(armyToPlaceInList);
 				preparedEvents.pop();
 			}
 			event.status = 'checked';
