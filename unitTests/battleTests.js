@@ -40,13 +40,7 @@ var attackerArmies = [];
 //mockup arrays of borders, bildings and field
 var borders = [];
 var buildings = [];
-var fieldTypes = [];
-//mockup showHex method
-function showHex(posX, posY) {
-    this.fieldType = function(){
-    	return fieldTypes[posX];
-    }
-}
+var fields = [];
 
 module( "Battle" , function() {
 	module( "Results", {
@@ -93,14 +87,14 @@ module( "Battle" , function() {
 			];
 			borders = [{'tag': 'vvh', 'land': [[0, 0], [1, 1], [3, 3]]}];
 			buildings = [{'realm': 1, 'name': "", 'type': 0, 'x': 3, 'y': 3, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null}];
-			fieldTypes = [2, 3, 0, 2];//plains, woods, water, plains (with castle)
+			fields = [{'x':0, 'y':0, 'type':2}, {'x':1, 'y':1, 'type':3}, {'x':2, 'y':2, 'type':0}, {'x':3, 'y':3, 'type':2}];//plains, woods, water, plains (with castle)
 		},
 		after: function() {
 			defenderArmies = [];
 			attackerArmies = [];
 			borders = [];
 			buildings = [];
-			fieldTypes = [];
+			fields = [];
 		}}, function() {
 		module( "Land Battles", function() {
 			test( "Minimal armies, defenders win by dice roll.", function(t) {
@@ -222,7 +216,20 @@ module( "Battle" , function() {
 				t.resultEquals( battle.result(5, 5), {victor: 'attacker', attackerLosses: [1822.4, 471.83], defenderLosses: [2090, 1390]} );
 			});
 		});
-		module( "Directional Terrain Bonuses", function() {
+		module( "Directional Terrain Bonuses", {
+		    before: function() {
+		        defenderArmies = [
+				    new heer(111, 1000, 10, 0, 0, 0, false, 0, 0, 1),//0
+			    ];
+			    attackerArmies = [
+				    new heer(121, 1000, 10, 0, 0, 0, false, 0, 0, 2),//0
+			    ];
+			},
+		    after: function() {
+		        defenderArmies = [];
+		        attackerArmies = [];
+		    }
+		    }, function() {
 		    test( "Attack onto a street.", function(t) {
 		        //TODO
 		    });
