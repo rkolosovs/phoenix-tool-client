@@ -236,7 +236,11 @@ module( "Battle" , function() {
 				t.resultEquals( battle.result(5, 5), {victor: 'attacker', attackerLosses: [1822.4, 471.83], defenderLosses: [2090, 1390]} );
 			});
 		});
-		module( "Directional Terrain Bonuses", function() {
+		module( "Directional Terrain Bonuses", {
+		    beforeEach: function() {
+                defenderArmies[18].owner = 1;
+		    }
+		    },function() {
 		    test( "Attack onto a street.", function(t) {
                 attackerArmies[18].x = 9;
                 attackerArmies[18].y = 8;
@@ -382,9 +386,9 @@ module( "Battle" , function() {
                 attackerArmies[18].y = 4;
                 attackerArmies[18].oldX = 3;
                 attackerArmies[18].oldY = 4;
-                attackerArmies[18].owner = 3;
                 defenderArmies[18].x = 4;
                 defenderArmies[18].y = 4;
+                defenderArmies[18].owner = 3;
                 var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 4, 4);
                 t.resultEquals( battle.result(10, 10), {victor: 'defender', attackerLosses: [1250], defenderLosses: [720]} );
 		    });
@@ -392,14 +396,14 @@ module( "Battle" , function() {
 		module( "Complex Battles", function() {
 			test( "Large land battle at the defenders castle.", function(t) {
 				var attackingArmies = [
-					new heer(121, 12000, 40, 0, 0, 0, true, 0, 0, 1),//army of attacker realm
-					new heer(122, 32000, 80, 0, 0, 0, false, 0, 0, 1),//army of attacker realm
-					new reiterHeer(221, 16000, 80, false, 0, 0, 1)//army of attacker realm
+					new heer(121, 12000, 40, 0, 0, 0, true, 0, 0, 2),//army of attacker realm
+					new heer(122, 32000, 80, 0, 0, 0, false, 0, 0, 2),//army of attacker realm
+					new reiterHeer(221, 16000, 80, false, 0, 0, 2)//army of attacker realm
 				];
 				var defendingArmies = [
-					new heer(111, 29000, 80, 0, 0, 0, false, 0, 0, 2),//army of realm vvh
-					new reiterHeer(211, 13500, 70, false, 0, 0, 2),//army of realm vvh
-					new heer(112, 8000, 50, 0, 0, 0, true, 0, 0, 2)//army of a third realm
+					new heer(111, 29000, 80, 0, 0, 0, false, 0, 0, 1),//army of realm usa
+					new reiterHeer(211, 13500, 70, false, 0, 0, 1),//army of realm usa
+					new heer(112, 8000, 50, 0, 0, 0, true, 0, 0, 3)//army of a third realm
 				];
 				var battle = new schlacht(attackingArmies, defendingArmies, [], [], 3, 3);
 				t.resultEquals( battle.result(18, 3), {victor: 'attacker', attackerLosses: [5192.2, 37638.48, 18819.24], defenderLosses: [29575.49, 14385.3, 4196.45]} );

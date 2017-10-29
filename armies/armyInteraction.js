@@ -451,30 +451,37 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
     }
 
     this.terrainGP = function(army, attacker) {
-        //TODO: including bonuses form defending a production building. remember that that negates usual terrain bonus
-        //BLOCKER: requires the army to know its real, allegiance.
-        //TODO: once an army knows its previous position the attacker parameter can be removed
+        //TODO: home terrain bonus missing
+        //BLOCKER: The home terrain of a realm isn't saved anywhere
         var fieldType = this.fieldType;
-        if((army.armyType() === 1 && (fieldType === 3 || fieldType === 8)) ||
-            (army.armyType() === 2 && (fieldType === 2 || fieldType === 4 || fieldType === 7))) {
-            return 140;
-        } else if(false) {
-            //TODO: defending a production building bonus comes here.
+        var buildingsOnTheField = buildings.filter((current) => (current.x === posX && current.y === posY && current.type <= 4));
+        if(buildingsOnTheField.length > 0){
+            if(attacker){return 0;}
+            if(buildingsOnTheField[0].realm !== army.owner){return 50;}
+            switch(buildingsOnTheField[0].type){
+                case 0: return 100;
+                case 1: return 200;
+                case 2: return 300;
+                case 3: return 400;
+                case 4: return 500;
+            }
         } else {
-            return 0;
+            //TODO: home terrain bonus goes here
+            if((army.armyType() === 1 && (fieldType === 3 || fieldType === 8)) ||
+            (army.armyType() === 2 && (fieldType === 2 || fieldType === 4 || fieldType === 7))) {
+                return 140;
+            } else {return 0;}
         }
     }
 
     this.characterGP = function(army) {
         //TODO: compute GP from own character fighting in battle.
-        //BLOCKER: requires characters and armies to know their realm allegiance.
-        //currently army coordinates have the owner of an army and chars don't have it at all
+        //BLOCKER: requires characters to know their realm allegiance.
         return 0;
     }
 
     this.directionalTerrainGP = function(army) {
         //TODO: compute GP from directional terrain like attacking from a forest, up/down hill, over a wall etc.
-        //BLOCKER: an army doesn't know its position or former position
         return 0;
     }
 
