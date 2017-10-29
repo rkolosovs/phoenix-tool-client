@@ -71,17 +71,17 @@
 	    }
     }
 
-var testArmy1 = new heer(101, 1000, 1, 0, 0, 0, false);
-var testArmy2 = new reiterHeer(201, 500, 1, false);
-var testArmy3 = new seeHeer(301, 10, 1, 0, 0, false)
+var testArmy1 = new heer(101, 1000, 1, 0, 0, 0, false, 0, 0, 2);
+var testArmy2 = new reiterHeer(201, 500, 1, false, 0, 0, 2);
+var testArmy3 = new seeHeer(301, 10, 1, 0, 0, false, 0, 0, 2)
 
-var testArmyRnd1 = new heer(102, 37890, 141, 2, 3, 500, false);
-var testArmyRnd2 = new reiterHeer(202, 500000000000000000, 931, false);
-var testArmyRnd3 = new seeHeer(302, 132, 9, 17, 5, false)
+var testArmyRnd1 = new heer(102, 37890, 141, 2, 3, 500, false, 0, 0, 2);
+var testArmyRnd2 = new reiterHeer(202, 500000000000000000, 931, false, 0, 0, 2);
+var testArmyRnd3 = new seeHeer(302, 132, 9, 17, 5, false, 0, 0, 2)
 
-var testArmyNot1 = new heer(103, -1000, -1, 0, 0, 0, false);
-var testArmyNot2 = new reiterHeer(203, 500, 0, false);
-var testArmyNot3 = new seeHeer(303, 9, 1, 0, 0, false)
+var testArmyNot1 = new heer(103, -1000, -1, 0, 0, 0, false, 0, 0, 2);
+var testArmyNot2 = new reiterHeer(203, 500, 0, false, 0, 0, 2);
+var testArmyNot3 = new seeHeer(303, 9, 1, 0, 0, false, 0, 0, 2)
 
 var testDicerolls = [0,1,2,3,4,5,6,7,8,9];
 
@@ -94,9 +94,9 @@ document.getElementById("test4").innerHTML = testArmy1.raumpunkte() + " " + test
 document.getElementById("test5").innerHTML = testArmyRnd1.raumpunkte() + " " + testArmyRnd2.raumpunkte() + " " + testArmyRnd3.raumpunkte();
 document.getElementById("test6").innerHTML = testArmyNot1.raumpunkte() + " " + testArmyNot2.raumpunkte() + " " + testArmyNot3.raumpunkte();
 //test decimate
-var testDecimate1 = new heer(104, 100000, 100, 1, 1, 1000, false);
-var testDecimate2 = new heer(105, 100000, 10, 100, 1, 1000, false);
-var testDecimate3 = new heer(106, 100000, 10, 1, 100, 1000, false);
+var testDecimate1 = new heer(104, 100000, 100, 1, 1, 1000, false, 0, 0, 2);
+var testDecimate2 = new heer(105, 100000, 10, 100, 1, 1000, false, 0, 0, 2);
+var testDecimate3 = new heer(106, 100000, 10, 1, 100, 1000, false, 0, 0, 2);
 
 testDecimate1.decimate(50000);
 testDecimate2.decimate(99000);
@@ -111,9 +111,9 @@ document.getElementById("test11").innerHTML = testArmy1.canConquer() + " " + tes
 document.getElementById("test12").innerHTML = testArmyRnd1.canConquer() + " " + testArmyRnd2.canConquer() + " " + testArmyRnd3.canConquer();
 document.getElementById("test13").innerHTML = testArmyNot1.canConquer() + " " + testArmyNot2.canConquer() + " " + testArmyNot3.canConquer();
 // test takeFire
-var testTakeFire1 = new heer(107, 100000, 100, 10, 10, 1000, false);
-var testTakeFire2 = new reiterHeer(204, 100000, 100, false);
-var testTakeFire3 = new seeHeer(304, 100000, 100, 10, 10, false);
+var testTakeFire1 = new heer(107, 100000, 100, 10, 10, 1000, false, 0, 0, 2);
+var testTakeFire2 = new reiterHeer(204, 100000, 100, false, 0, 0, 2);
+var testTakeFire3 = new seeHeer(304, 100000, 100, 10, 10, false, 0, 0, 2);
 
 testTakeFire1.takeFire(10000);
 testTakeFire2.takeFire(10000);
@@ -125,14 +125,14 @@ document.getElementById("test16").innerHTML = "lkp: " + testTakeFire1.lkp + " " 
 document.getElementById("test17").innerHTML = "skp: " + testTakeFire1.skp + " " + testTakeFire2.skp + " " + testTakeFire3.skp;
 document.getElementById("test18").innerHTML = "sumBP: " + testTakeFire1.sumBP() + " " + testTakeFire2.sumBP() + " " + testTakeFire3.sumBP();
 // test fire/fernkampf
-var testFk = new heer(108, 100000, 100, 10, 10, 1000, false);
-var testFkReiter= new reiterHeer(205, 100000, 100, false);
-var testFkSee = new seeHeer(305, 100000, 100, 10, 10, false);
+var testFk = new heer(108, 100000, 100, 10, 10, 1000, false, 0, 0, 2);
+var testFkReiter= new reiterHeer(205, 100000, 100, false, 0, 0, 2);
+var testFkSee = new seeHeer(305, 100000, 100, 10, 10, false, 0, 0, 2);
 
-var testFk2Armies = new heer(109, 1000, 1, 10, 10, 0, false);
-var testFk2ArmiesTarget = new heer(109, 100000, 0, 0, 0, 0, false);
-var testFk2ArmiesTarget2 = new heer(109, 100000, 100, 0, 0, 0, false);
-var testFk2ArmiesTarget3 = new heer(109, 100000, 250, 0, 0, 0, false);
+var testFk2Armies = new heer(109, 1000, 1, 10, 10, 0, false, 0, 0, 2);
+var testFk2ArmiesTarget = new heer(109, 100000, 0, 0, 0, 0, false, 0, 0, 2);
+var testFk2ArmiesTarget2 = new heer(109, 100000, 100, 0, 0, 0, false, 0, 0, 2);
+var testFk2ArmiesTarget3 = new heer(109, 100000, 250, 0, 0, 0, false, 0, 0, 2);
 
 fernkampf(testDicerolls, testDicerolls, null, testFk2Armies, testFk2ArmiesTarget, null);
 fernkampf(testDicerolls, testDicerolls, null, testFk2Armies, testFk2ArmiesTarget2, null);
@@ -150,13 +150,13 @@ document.getElementById("test27").innerHTML = "testFK2Armies 100 heerfuehrer, 10
 document.getElementById("test28").innerHTML = "testFK2Armies 250 heerfuehrer, 150GP: " + testFk2ArmiesTarget3.count + " " + testFk2ArmiesTarget3.leaders
 
 // test schlacht
-var testBattle1 = new heer(110, 10000, 10, 0, 0, 0, false);
-var testBattle2 = new heer(111, 20000, 20, 0, 0, 0, false);
-var testGuard = new heer(199, 1000, 100, 0, 0, 0, true);
-var testBattleTenToOne = new heer(112, 100000, 1, 0, 0, 0, false);
-var testBattleMounted1 = new reiterHeer(206, 10000, 30, false);
-var testBattleMounted2 = new reiterHeer(207, 5000, 5, false);
-var testBattleTenToOneMounted = new reiterHeer(208, 100000, 1, false);
+var testBattle1 = new heer(110, 10000, 10, 0, 0, 0, false, 0, 0, 2);
+var testBattle2 = new heer(111, 20000, 20, 0, 0, 0, false, 0, 0, 2);
+var testGuard = new heer(199, 1000, 100, 0, 0, 0, true, 0, 0, 2);
+var testBattleTenToOne = new heer(112, 100000, 1, 0, 0, 0, false, 0, 0, 2);
+var testBattleMounted1 = new reiterHeer(206, 10000, 30, false, 0, 0, 2);
+var testBattleMounted2 = new reiterHeer(207, 5000, 5, false, 0, 0, 2);
+var testBattleTenToOneMounted = new reiterHeer(208, 100000, 1, false, 0, 0, 2);
 
 var testSchlachtMixed = new schlacht([testBattle1, testBattleMounted1],[testBattle2, testBattleMounted2], null, null, 0, 0);
 var testSchlachtFoot = new schlacht([testBattle1], [testBattle2],  null, null, 0, 0);
@@ -198,10 +198,10 @@ document.getElementById("test37").innerHTML = "Test Overrun without ten to one. 
 document.getElementById("test38").innerHTML = "arrayBattleTest " + testSchlachtArray.overrun1() + " " + testSchlachtArray.overrun2() + " " + testSchlachtArray.result([10, 10]);
 document.getElementById("test39").innerHTML = "testGuardBattle " + testGuardBattle.overrun1() + " " + testGuardBattle.overrun2() + " " + testGuardBattle.result([10, 10]);
 
-var testFleet1 = new seeHeer(301, 10, 1, 0, 0, false);
-var testFleet2 = new seeHeer(302, 10, 1, 0, 0, false);
-var testFleetBig = new seeHeer(303, 100, 1, 0, 0, false);
-var testFleetGuard = new seeHeer(399, 10, 1, 0, 0, true);
+var testFleet1 = new seeHeer(301, 10, 1, 0, 0, false, 0, 0, 2);
+var testFleet2 = new seeHeer(302, 10, 1, 0, 0, false, 0, 0, 2);
+var testFleetBig = new seeHeer(303, 100, 1, 0, 0, false, 0, 0, 2);
+var testFleetGuard = new seeHeer(399, 10, 1, 0, 0, true, 0, 0, 2);
 
 var testSeeSchlachtTwoVOne = new schlacht([testFleet1, testFleet2], [testFleetBig], null, null, 0, 0);
 var testSeeSchlachtTenToOne = new schlacht([testFleet1], [testFleetBig], null, null, 0, 0);
