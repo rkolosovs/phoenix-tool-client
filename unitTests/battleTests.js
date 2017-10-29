@@ -88,9 +88,24 @@ module( "Battle" , function() {
 				new seeHeer(328, 100, 100, 0, 0, true, 0, 0, 2),//17
 				new heer(199, 1000, 10, 0, 0, 0, false, 0, 0, 2)//18
 			];
-			borders = [{'tag': 'vvh', 'land': [[0, 0], [1, 1], [3, 3]]}];
-			buildings = [{'realm': 1, 'name': "", 'type': 0, 'x': 3, 'y': 3, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null}];
-			fields = [{'x':0, 'y':0, 'type':2}, {'x':1, 'y':1, 'type':3}, {'x':2, 'y':2, 'type':0}, {'x':3, 'y':3, 'type':2}];//plains, woods, water, plains (with castle)
+			borders = [{'tag': 'usa', 'land': [[0, 0], [1, 1], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 8],
+			    [9, 9], [10, 10], [11, 11]]}];
+			rivers = [{'firstX':8, 'firstY':8, 'secondX':8, 'secondY':7}, {'firstX':8, 'firstY':8, 'secondX':9, 'secondY':7}];
+			buildings = [{'realm': 1, 'name': "", 'type': 0, 'x': 3, 'y': 3, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
+			    {'realm': 1, 'name': "", 'type': 1, 'x': 4, 'y': 4, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
+			    {'realm': 1, 'name': "", 'type': 2, 'x': 5, 'y': 5, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
+			    {'realm': 1, 'name': "", 'type': 3, 'x': 6, 'y': 6, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
+			    {'realm': 1, 'name': "", 'type': 4, 'x': 7, 'y': 7, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
+			    {'realm': 1, 'name': "", 'type': 5, 'x': 8, 'y': 8, 'direction': "w", 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
+			    {'realm': 1, 'name': "", 'type': 7, 'x': 8, 'y': 8, 'direction': "nw", 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
+			    {'realm': 1, 'name': "", 'type': 8, 'x': null, 'y': null, 'direction': null, 'firstX': 9, 'firstY': 8, 'secondX': 10, 'secondY': 8}];
+			fields = [{'x':-1, 'y':0, 'type':2}, {'x':0, 'y':0, 'type':2}, {'x':0, 'y':1, 'type':2}, {'x':1, 'y':1, 'type':3},
+			    {'x':1, 'y':2, 'type':0}, {'x':2, 'y':2, 'type':0}, {'x':2, 'y':3, 'type':2}, {'x':3, 'y':3, 'type':2},
+			    {'x':3, 'y':4, 'type':2}, {'x':4, 'y':4, 'type':2}, {'x':4, 'y':5, 'type':2}, {'x':5, 'y':5, 'type':2},
+			    {'x':5, 'y':6, 'type':2}, {'x':6, 'y':6, 'type':2}, {'x':6, 'y':7, 'type':2}, {'x':7, 'y':7, 'type':2},
+			    {'x':8, 'y':7, 'type':5}, {'x':9, 'y':7, 'type':5}, {'x':7, 'y':8, 'type':5}, {'x':8, 'y':8, 'type':5},
+			    {'x':9, 'y':8, 'type':5}, {'x':8, 'y':9, 'type':4}, {'x':9, 'y':9, 'type':3}, {'x':10, 'y':9, 'type':3},
+			    {'x':9, 'y':10, 'type':2}, {'x':10, 'y':10, 'type':8}, {'x':10, 'y':11, 'type':2}, {'x':11, 'y':11, 'type':7}];
 		},
 		after: function() {
 			defenderArmies = [];
@@ -133,12 +148,14 @@ module( "Battle" , function() {
 				t.resultEquals( battle.result(1, 10), {victor: 'tie', attackerLosses: [1205], defenderLosses: [995.85]} );
 			});
 			test( "Combat in attackers home terrain.", function(t) {
-			    //TODO
+			    //TODO: Write this test once a proper interface for handling realms is decided
+			    t.ok(false, "TODO: Write this test once a proper interface for handling realms is decided");
 //				var battle = new schlacht([attackerArmies[3]], [defenderArmies[3]], [], [], 0, 0);
 //				t.resultEquals( battle.result(1, 10), {victor: 'tie', attackerLosses: [1205], defenderLosses: [995.85]} );
 			});
 			test( "Combat in defenders home terrain.", function(t) {
-			    //TODO
+			    //TODO: Write this test once a proper interface for handling realms is decided
+			    t.ok(false, "TODO: Write this test once a proper interface for handling realms is decided");
 //				var battle = new schlacht([attackerArmies[3]], [defenderArmies[3]], [], [], 0, 0);
 //				t.resultEquals( battle.result(1, 10), {victor: 'tie', attackerLosses: [1205], defenderLosses: [995.85]} );
 			});
@@ -221,49 +238,155 @@ module( "Battle" , function() {
 		});
 		module( "Directional Terrain Bonuses", function() {
 		    test( "Attack onto a street.", function(t) {
-		        //TODO
+                attackerArmies[18].x = 9;
+                attackerArmies[18].y = 8;
+                attackerArmies[18].oldX = 9;
+                attackerArmies[18].oldY = 7;
+                defenderArmies[18].x = 9;
+                defenderArmies[18].y = 8;
+                var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 9, 8);
+                t.resultEquals( battle.result(10, 10), {victor: 'attacker', attackerLosses: [818.18], defenderLosses: [1100]} );
 		    });
 		    test( "Attack out of a forest.", function(t) {
-		        //TODO
+                attackerArmies[18].x = 9;
+                attackerArmies[18].y = 9;
+                attackerArmies[18].oldX = 10;
+                attackerArmies[18].oldY = 9;
+                defenderArmies[18].x = 9;
+                defenderArmies[18].y = 9;
+                var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 9, 9);
+                t.resultEquals( battle.result(10, 10), {victor: 'attacker', attackerLosses: [818.18], defenderLosses: [1100]} );
 		    });
 		    test( "Attack into a swamp.", function(t) {
-		        //TODO
+                attackerArmies[18].x = 10;
+                attackerArmies[18].y = 10;
+                attackerArmies[18].oldX = 9;
+                attackerArmies[18].oldY = 10;
+                defenderArmies[18].x = 10;
+                defenderArmies[18].y = 10;
+                var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 10, 10);
+                t.resultEquals( battle.result(10, 10), {victor: 'attacker', attackerLosses: [818.18], defenderLosses: [1100]} );
 		    });
 		    test( "Attack into a desert.", function(t) {
-		        //TODO
+                attackerArmies[18].x = 11;
+                attackerArmies[18].y = 11;
+                attackerArmies[18].oldX = 10;
+                attackerArmies[18].oldY = 11;
+                defenderArmies[18].x = 11;
+                defenderArmies[18].y = 11;
+                var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 11, 11);
+                t.resultEquals( battle.result(10, 10), {victor: 'attacker', attackerLosses: [818.18], defenderLosses: [1100]} );
 		    });
 		    test( "Attack downhill.", function(t) {
-		        //TODO
+                attackerArmies[18].x = 9;
+                attackerArmies[18].y = 9;
+                attackerArmies[18].oldX = 8;
+                attackerArmies[18].oldY = 9;
+                defenderArmies[18].x = 9;
+                defenderArmies[18].y = 9;
+                var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 9, 9);
+                t.resultEquals( battle.result(10, 10), {victor: 'attacker', attackerLosses: [818.18], defenderLosses: [1100]} );
 		    });
 		    test( "Defense downhill (attack uphill).", function(t) {
-		        //TODO
+                attackerArmies[18].x = 8;
+                attackerArmies[18].y = 8;
+                attackerArmies[18].oldX = 8;
+                attackerArmies[18].oldY = 9;
+                defenderArmies[18].x = 8;
+                defenderArmies[18].y = 8;
+                var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 8, 8);
+                t.resultEquals( battle.result(10, 10), {victor: 'defender', attackerLosses: [1100], defenderLosses: [818.18]} );
 		    });
 		    test( "Defense behind a river.", function(t) {
-		        //TODO
+                attackerArmies[18].x = 8;
+                attackerArmies[18].y = 8;
+                attackerArmies[18].oldX = 9;
+                attackerArmies[18].oldY = 7;
+                defenderArmies[18].x = 8;
+                defenderArmies[18].y = 8;
+                var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 8, 8);
+                t.resultEquals( battle.result(10, 10), {victor: 'defender', attackerLosses: [1250], defenderLosses: [720]} );
 		    });
 		    test( "Defense behind a bridge.", function(t) {
-		        //TODO
+                attackerArmies[18].x = 8;
+                attackerArmies[18].y = 8;
+                attackerArmies[18].oldX = 8;
+                attackerArmies[18].oldY = 7;
+                defenderArmies[18].x = 8;
+                defenderArmies[18].y = 8;
+                var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 8, 8);
+                t.resultEquals( battle.result(10, 10), {victor: 'defender', attackerLosses: [1150], defenderLosses: [782.61]} );
 		    });
 		    test( "Defense behind a wall.", function(t) {
-		        //TODO
+                attackerArmies[18].x = 8;
+                attackerArmies[18].y = 8;
+                attackerArmies[18].oldX = 7;
+                attackerArmies[18].oldY = 8;
+                defenderArmies[18].x = 8;
+                defenderArmies[18].y = 8;
+                var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 8, 8);
+                t.resultEquals( battle.result(10, 10), {victor: 'defender', attackerLosses: [1250], defenderLosses: [720]} );
 		    });
 		    test( "Defense in own caste.", function(t) {
-		        //TODO
+                attackerArmies[18].x = 3;
+                attackerArmies[18].y = 3;
+                attackerArmies[18].oldX = 2;
+                attackerArmies[18].oldY = 3;
+                defenderArmies[18].x = 3;
+                defenderArmies[18].y = 3;
+                var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 3, 3);
+                t.resultEquals( battle.result(10, 10), {victor: 'defender', attackerLosses: [1500], defenderLosses: [600]} );
 		    });
 		    test( "Defense in own city.", function(t) {
-		        //TODO
+                attackerArmies[18].x = 4;
+                attackerArmies[18].y = 4;
+                attackerArmies[18].oldX = 3;
+                attackerArmies[18].oldY = 4;
+                defenderArmies[18].x = 4;
+                defenderArmies[18].y = 4;
+                var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 4, 4);
+                t.resultEquals( battle.result(10, 10), {victor: 'defender', attackerLosses: [2000], defenderLosses: [450]} );
 		    });
 		    test( "Defense in own fortress.", function(t) {
-		        //TODO
+                attackerArmies[18].x = 5;
+                attackerArmies[18].y = 5;
+                attackerArmies[18].oldX = 4;
+                attackerArmies[18].oldY = 5;
+                defenderArmies[18].x = 5;
+                defenderArmies[18].y = 5;
+                var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 5, 5);
+                t.resultEquals( battle.result(10, 10), {victor: 'defender', attackerLosses: [2500], defenderLosses: [360]} );
 		    });
 		    test( "Defense in own capital.", function(t) {
-		        //TODO
+                attackerArmies[18].x = 6;
+                attackerArmies[18].y = 6;
+                attackerArmies[18].oldX = 5;
+                attackerArmies[18].oldY = 6;
+                defenderArmies[18].x = 6;
+                defenderArmies[18].y = 6;
+                var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 6, 6);
+                t.resultEquals( battle.result(10, 10), {victor: 'defender', attackerLosses: [3000], defenderLosses: [300]} );
 		    });
 		    test( "Defense in own capital fortress.", function(t) {
-		        //TODO
+                attackerArmies[18].x = 7;
+                attackerArmies[18].y = 7;
+                attackerArmies[18].oldX = 6;
+                attackerArmies[18].oldY = 7;
+                defenderArmies[18].x = 7;
+                defenderArmies[18].y = 7;
+                var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 7, 7);
+                t.resultEquals( battle.result(10, 10), {victor: 'defender', attackerLosses: [3500], defenderLosses: [257.14]} );
 		    });
 		    test( "Defense in foreign production building.", function(t) {
-		        //TODO
+                attackerArmies[18].x = 4;
+                attackerArmies[18].y = 4;
+                attackerArmies[18].oldX = 3;
+                attackerArmies[18].oldY = 4;
+                attackerArmies[18].owner = 3;
+                defenderArmies[18].x = 4;
+                defenderArmies[18].y = 4;
+                var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 4, 4);
+                t.resultEquals( battle.result(10, 10), {victor: 'defender', attackerLosses: [1250], defenderLosses: [720]} );
 		    });
 		});
 		module( "Complex Battles", function() {
