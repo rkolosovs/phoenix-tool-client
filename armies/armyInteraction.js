@@ -480,9 +480,24 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
         return 0;
     }
 
-    this.directionalTerrainGP = function(army) {
+    this.directionalTerrainGP = function(army, attacker, attackingArmies) {
         //TODO: compute GP from directional terrain like attacking from a forest, up/down hill, over a wall etc.
-        return 0;
+        var result = 0;
+        let targetField = new showHex(army.x, army.y);
+        if(attacker) {
+            let startingField = new showHex(army.oldX, army.oldY);
+            let targetField = new showHex(army.x, army.y);
+            if(startingField.height() > targetField.height()){result += 20;}//fighting downhill
+            if(targetField.fieldType() === 7 || targetField.fieldType() === 8){result += 20;}//attacking into swamp or desert
+            if(startingField.fieldType() === 3) {result += 20;}//attacking out of a forest
+            if(targetField.hasStreet()){result += 20;}//attacking onto a street
+        } else {
+
+            if(attackingArmies.find((elem) =>
+                (new showHex(army.oldX, army.oldY)).height() < targetField.height())){result += 20;}//fighting downhill
+//            let adjacentWalls =
+        }
+        return result;
     }
 
     this.computeCombatRating = function(strengthArmy, totalArmyGP) {
@@ -521,10 +536,10 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
         });
 
         var totalAttackerArmyGP = armiesAttack.map((elem) => (
-            attackRoll + elem.leaderGp() + this.terrainGP(elem, true) + this.characterGP(elem) + this.directionalTerrainGP(elem)
+            attackRoll + elem.leaderGp() + this.terrainGP(elem, true) + this.characterGP(elem) + this.directionalTerrainGP(elem, true, null)
         ));
         var totalDefenderArmyGP = armiesDefense.map((elem) => (
-            defenseRoll + elem.leaderGp() + this.terrainGP(elem, false) + this.characterGP(elem) + this.directionalTerrainGP(elem)
+            defenseRoll + elem.leaderGp() + this.terrainGP(elem, false) + this.characterGP(elem) + this.directionalTerrainGP(elem, false, armiesAttack)
         ));
 
         var combatRatingAttackerArmy = this.computeCombatRating(totalStrengthAttackerArmy, totalAttackerArmyGP);

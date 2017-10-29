@@ -530,6 +530,10 @@ function showHex(positionX, positionY) {
     	}
 		return flussAcc;
 	}
+	this.hasStreet = function() {
+	    return buildings.find((elem) => elem.type === 8 && ((elem.firstX === this.x && elem.firstY === this.y) ||
+	        (elem.secondX === this.x && elem.secondY === this.y)));
+	}
     // where in the field list is this field
     this.positionInList = function(){
         for (var i = 0; i < fields.length; i++) {
