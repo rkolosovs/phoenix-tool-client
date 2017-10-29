@@ -37,10 +37,11 @@ QUnit.assert.resultEquals = function(actual, expected) {
 //arrays to hold prepared armies for test
 var defenderArmies = [];
 var attackerArmies = [];
-//mockup arrays of borders, bildings and field
+//mock-up arrays of borders, buildings and field
 var borders = [];
 var buildings = [];
 var fields = [];
+var rivers = [];
 
 module( "Battle" , function() {
 	module( "Results", {
@@ -63,7 +64,8 @@ module( "Battle" , function() {
 				new seeHeer(314, 10, 5, 3, 2, false, 0, 0, 1),//14
 				new seeHeer(315, 12, 2, 3, 1, false, 0, 0, 1),//15
 				new seeHeer(316, 100, 10, 0, 0, false, 0, 0, 1),//16
-				new seeHeer(317, 1000, 10, 0, 0, false, 0, 0, 1)//17
+				new seeHeer(317, 1000, 10, 0, 0, false, 0, 0, 1),//17
+				new heer(199, 1000, 10, 0, 0, 0, false, 0, 0, 1)//18
 			];
 			attackerArmies = [
 				new heer(121, 1000, 1, 0, 0, 0, false, 0, 0, 2),//0
@@ -83,7 +85,8 @@ module( "Battle" , function() {
 				new seeHeer(325, 10, 5, 3, 2, false, 0, 0, 2),//14
 				new seeHeer(326, 35, 40, 7, 6, false, 0, 0, 2),//15
 				new seeHeer(327, 40, 35, 0, 0, true, 0, 0, 2),//16
-				new seeHeer(328, 100, 100, 0, 0, true, 0, 0, 2)//17
+				new seeHeer(328, 100, 100, 0, 0, true, 0, 0, 2),//17
+				new heer(199, 1000, 10, 0, 0, 0, false, 0, 0, 2)//18
 			];
 			borders = [{'tag': 'vvh', 'land': [[0, 0], [1, 1], [3, 3]]}];
 			buildings = [{'realm': 1, 'name': "", 'type': 0, 'x': 3, 'y': 3, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null}];
@@ -129,16 +132,16 @@ module( "Battle" , function() {
 				var battle = new schlacht([attackerArmies[3]], [defenderArmies[3]], [], [], 0, 0);
 				t.resultEquals( battle.result(1, 10), {victor: 'tie', attackerLosses: [1205], defenderLosses: [995.85]} );
 			});
-			test( "Combat in attackers home terrain.", function(t) {
+//			test( "Combat in attackers home terrain.", function(t) {
 			    //TODO
 //				var battle = new schlacht([attackerArmies[3]], [defenderArmies[3]], [], [], 0, 0);
 //				t.resultEquals( battle.result(1, 10), {victor: 'tie', attackerLosses: [1205], defenderLosses: [995.85]} );
-			});
-			test( "Combat in defenders home terrain.", function(t) {
+//			});
+//			test( "Combat in defenders home terrain.", function(t) {
 			    //TODO
 //				var battle = new schlacht([attackerArmies[3]], [defenderArmies[3]], [], [], 0, 0);
 //				t.resultEquals( battle.result(1, 10), {victor: 'tie', attackerLosses: [1205], defenderLosses: [995.85]} );
-			});
+//			});
 		});
 		module( "Naval Battles", function() {
 			test( "Basic fleet combat.", function(t) {
@@ -216,77 +219,64 @@ module( "Battle" , function() {
 				t.resultEquals( battle.result(5, 5), {victor: 'attacker', attackerLosses: [1822.4, 471.83], defenderLosses: [2090, 1390]} );
 			});
 		});
-		module( "Directional Terrain Bonuses", {
-		    before: function() {
-		        defenderArmies = [
-				    new heer(111, 1000, 10, 0, 0, 0, false, 0, 0, 1),//0
-			    ];
-			    attackerArmies = [
-				    new heer(121, 1000, 10, 0, 0, 0, false, 0, 0, 2),//0
-			    ];
-			},
-		    after: function() {
-		        defenderArmies = [];
-		        attackerArmies = [];
-		    }
-		    }, function() {
-		    test( "Attack onto a street.", function(t) {
-		        //TODO
-		    });
-		    test( "Attack out of a forest.", function(t) {
-		        //TODO
-		    });
-		    test( "Attack into a swamp.", function(t) {
-		        //TODO
-		    });
-		    test( "Attack into a desert.", function(t) {
-		        //TODO
-		    });
-		    test( "Attack downhill.", function(t) {
-		        //TODO
-		    });
-		    test( "Defense downhill (attack uphill).", function(t) {
-		        //TODO
-		    });
-		    test( "Defense behind a river.", function(t) {
-		        //TODO
-		    });
-		    test( "Defense behind a bridge.", function(t) {
-		        //TODO
-		    });
-		    test( "Defense behind a wall.", function(t) {
-		        //TODO
-		    });
-		    test( "Defense in own caste.", function(t) {
-		        //TODO
-		    });
-		    test( "Defense in own city.", function(t) {
-		        //TODO
-		    });
-		    test( "Defense in own fortress.", function(t) {
-		        //TODO
-		    });
-		    test( "Defense in own capital.", function(t) {
-		        //TODO
-		    });
-		    test( "Defense in own capital fortress.", function(t) {
-		        //TODO
-		    });
-		    test( "Defense in foreign production building.", function(t) {
-		        //TODO
-		    });
-		});
+//		module( "Directional Terrain Bonuses", function() {
+//		    test( "Attack onto a street.", function(t) {
+//		        //TODO
+//		    });
+//		    test( "Attack out of a forest.", function(t) {
+//		        //TODO
+//		    });
+//		    test( "Attack into a swamp.", function(t) {
+//		        //TODO
+//		    });
+//		    test( "Attack into a desert.", function(t) {
+//		        //TODO
+//		    });
+//		    test( "Attack downhill.", function(t) {
+//		        //TODO
+//		    });
+//		    test( "Defense downhill (attack uphill).", function(t) {
+//		        //TODO
+//		    });
+//		    test( "Defense behind a river.", function(t) {
+//		        //TODO
+//		    });
+//		    test( "Defense behind a bridge.", function(t) {
+//		        //TODO
+//		    });
+//		    test( "Defense behind a wall.", function(t) {
+//		        //TODO
+//		    });
+//		    test( "Defense in own caste.", function(t) {
+//		        //TODO
+//		    });
+//		    test( "Defense in own city.", function(t) {
+//		        //TODO
+//		    });
+//		    test( "Defense in own fortress.", function(t) {
+//		        //TODO
+//		    });
+//		    test( "Defense in own capital.", function(t) {
+//		        //TODO
+//		    });
+//		    test( "Defense in own capital fortress.", function(t) {
+//		        //TODO
+//		    });
+//		    test( "Defense in foreign production building.", function(t) {
+//		        //TODO
+//		    });
+//		});
 		module( "Complex Battles", function() {
 			test( "Large land battle at the defenders castle.", function(t) {
 				var attackingArmies = [
-					new heer(121, 12000, 40, 0, 0, 0, true),//army of attacker realm
-					new heer(122, 32000, 80, 0, 0, 0, false),//army of attacker realm
-					new reiterHeer(221, 16000, 80, false)//army of attacker realm
+					new heer(121, 12000, 40, 0, 0, 0, true, 0, 0, 1),//army of attacker realm
+					new heer(122, 32000, 80, 0, 0, 0, false, 0, 0, 1),//army of attacker realm
+					new reiterHeer(221, 16000, 80, false, 0, 0, 1)//army of attacker realm
 				];
 				var defendingArmies = [
-					new heer(111, 29000, 80, 0, 0, 0, false),//army of realm vvh
-					new reiterHeer(211, 13500, 70, false),//army of realm vvh
-					new heer(112, 8000, 50, 0, 0, 0, true)//army of a third realm
+					new heer(111, 29000, 80, 0, 0, 0, false, 0, 0, 2),//army of realm vvh
+					new reiterHeer(211, 13500, 70, false, 0, 0, 2),//army of realm vvh
+					new heer(112, 8000, 50, 0, 0, 0, true, 0, 0, 2)//army of a third realm
 				];
 				var battle = new schlacht(attackingArmies, defendingArmies, [], [], 3, 3);
 				t.resultEquals( battle.result(18, 3), {victor: 'attacker', attackerLosses: [5192.2, 37638.48, 18819.24], defenderLosses: [29575.49, 14385.3, 4196.45]} );
@@ -294,14 +284,14 @@ module( "Battle" , function() {
 			});
 			test( "Large naval battle.", function(t) {
 				var attackingArmies = [
-					new seeHeer(321, 120, 40, 0, 0, true),//army of attacker realm
-					new seeHeer(322, 300, 100, 0, 0, false),//army of attacker realm
-					new seeHeer(323, 340, 60, 0, 0, false)//army of attacker realm
+					new seeHeer(321, 120, 40, 0, 0, true, 0, 0, 1),//army of attacker realm
+					new seeHeer(322, 300, 100, 0, 0, false, 0, 0, 1),//army of attacker realm
+					new seeHeer(323, 340, 60, 0, 0, false, 0, 0, 1)//army of attacker realm
 				];
 				var defendingArmies = [
-					new seeHeer(311, 225, 25, 10, 0, false),//army of defending realm
-					new seeHeer(312, 175, 25, 0, 5, false),//army of defending realm
-					new seeHeer(313, 100, 50, 0, 0, true)//army of a defending realm
+					new seeHeer(311, 225, 25, 10, 0, false, 0, 0, 2),//army of defending realm
+					new seeHeer(312, 175, 25, 0, 5, false, 0, 0, 2),//army of defending realm
+					new seeHeer(313, 100, 50, 0, 0, true, 0, 0, 2)//army of a defending realm
 				];
 				var battle = new schlacht(attackingArmies, defendingArmies, [], [], 2, 2);
 				t.resultEquals( battle.result(12, 8), {victor: 'attacker', attackerLosses: [35.60, 184, 252.20], defenderLosses: [426.08, 331.39, 59.47]} );
@@ -312,24 +302,24 @@ module( "Battle" , function() {
 	module( "Overrun", {
 		before: function() {
 			defenderArmies = [
-				new heer(111, 1500, 10, 0, 0, 0, false),//0
-				new heer(112, 1000, 10, 0, 0, 0, false),//1
-				new heer(113, 1000, 10, 0, 0, 0, true),//2
-				new reiterHeer(211, 1000, 15, false),//3
-				new seeHeer(311, 20, 5, 0, 0, false),//4
-				new seeHeer(314, 10, 5, 3, 2, false),//5
-				new seeHeer(315, 10, 5, 0, 0, true)//6
+				new heer(111, 1500, 10, 0, 0, 0, false, 0, 0, 1),//0
+				new heer(112, 1000, 10, 0, 0, 0, false, 0, 0, 1),//1
+				new heer(113, 1000, 10, 0, 0, 0, true, 0, 0, 1),//2
+				new reiterHeer(211, 1000, 15, false, 0, 0, 1),//3
+				new seeHeer(311, 20, 5, 0, 0, false, 0, 0, 1),//4
+				new seeHeer(314, 10, 5, 3, 2, false, 0, 0, 1),//5
+				new seeHeer(315, 10, 5, 0, 0, true, 0, 0, 1)//6
 			];
 			attackerArmies = [
-				new heer(123, 15000, 1, 0, 0, 0, false),//0
-				new heer(124, 10000, 1, 0, 0, 0, true),//1
-				new reiterHeer(224, 10000, 1, false),//2
-				new seeHeer(321, 200, 5, 0, 0, false),//3
-				new seeHeer(322, 100, 5, 0, 0, false),//4
-				new seeHeer(325, 99, 5, 3, 2, false),//5
-				new seeHeer(326, 200, 5, 0, 0, true)//6
+				new heer(123, 15000, 1, 0, 0, 0, false, 0, 0, 2),//0
+				new heer(124, 10000, 1, 0, 0, 0, true, 0, 0, 2),//1
+				new reiterHeer(224, 10000, 1, false, 0, 0, 2),//2
+				new seeHeer(321, 200, 5, 0, 0, false, 0, 0, 2),//3
+				new seeHeer(322, 100, 5, 0, 0, false, 0, 0, 2),//4
+				new seeHeer(325, 99, 5, 3, 2, false, 0, 0, 2),//5
+				new seeHeer(326, 200, 5, 0, 0, true, 0, 0, 2)//6
 			];
-			fieldTypes = [2, 0];//plains, water
+			fields = [{'x':0, 'y':0, 'type':2}, {'x':1, 'y':1, 'type':0}];//plains, water
 		},
 		after: function() {
 			defenderArmies = [];
@@ -411,81 +401,81 @@ module( "Army" , function() {
 	module( "Decimation" , function() {
 		module( "Regular" , function() {
 			test( "Foot army decimation", function(t){
-				var army = new heer(101, 10000, 100, 0, 0, 0, false);
+				var army = new heer(101, 10000, 100, 0, 0, 0, false, 0, 0, 1);
 				army.decimate(1000);
-				t.armyEquals(army, new heer(101, 9000, 90, 0, 0, 0, false));
+				t.armyEquals(army, new heer(101, 9000, 90, 0, 0, 0, false, 0, 0, 1));
 			});
 			test( "Foot army with catapults decimation", function(t){
-				var army = new heer(101, 10000, 100, 10, 10, 0, false);
+				var army = new heer(101, 10000, 100, 10, 10, 0, false, 0, 0, 1);
 				army.decimate(1000);
-				t.armyEquals(army, new heer(101, 9000, 90, 9, 9, 0, false));
+				t.armyEquals(army, new heer(101, 9000, 90, 9, 9, 0, false, 0, 0, 1));
 			});
 			test( "Foot army with mounts decimation", function(t){
-				var army = new heer(101, 10000, 100, 0, 0, 10000, false);
+				var army = new heer(101, 10000, 100, 0, 0, 10000, false, 0, 0, 1);
 				army.decimate(1000);
-				t.armyEquals(army, new heer(101, 9000, 90, 0, 0, 9000, false));
+				t.armyEquals(army, new heer(101, 9000, 90, 0, 0, 9000, false, 0, 0, 1));
 			});
 			test( "Rider army decimation", function(t){
-				var army = new reiterHeer(201, 10000, 100, false);
+				var army = new reiterHeer(201, 10000, 100, false, 0, 0, 1);
 				army.decimate(1000);
-				t.armyEquals(army, new reiterHeer(201, 9000, 90, false));
+				t.armyEquals(army, new reiterHeer(201, 9000, 90, false, 0, 0, 1));
 			});
 			test( "Fleet decimation", function(t){
-				var army = new seeHeer(301, 100, 10, 0, 0, false);
+				var army = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
 				army.decimate(10);
-				t.armyEquals(army, new seeHeer(301, 90, 9, 0, 0, false));
+				t.armyEquals(army, new seeHeer(301, 90, 9, 0, 0, false, 0, 0, 1));
 			});
 			test( "Fleet with warships decimation", function(t){
-				var army = new seeHeer(301, 100, 10, 10, 10, false);
+				var army = new seeHeer(301, 100, 10, 10, 10, false, 0, 0, 1);
 				army.decimate(10);
-				t.armyEquals(army, new seeHeer(301, 90, 9, 9, 9, false));
+				t.armyEquals(army, new seeHeer(301, 90, 9, 9, 9, false, 0, 0, 1));
 			});
 		});
 		module( "Transported Troops" , function() {
 			test( "Fleet transporting at full capacity halved", function(t){
-				var fleet = new seeHeer(301, 100, 10, 0, 0, false);
-				var transportedArmy = new heer(101, 9000, 10, 0, 0, 0, false);
+				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
+				var transportedArmy = new heer(101, 9000, 10, 0, 0, 0, false, 0, 0, 1);
 				var listOfArmies = [transportedArmy];
 				var selectedArmyIndex = 0;
 				fleet.loadArmy;
 				fleet.decimate(50);
-				t.armyEquals(transportedArmy, new heer(101, 4500, 5, 0, 0, 0, false));
+				t.armyEquals(transportedArmy, new heer(101, 4500, 5, 0, 0, 0, false, 0, 0, 1));
 			});
 			test( "Fleet transporting at 75% capacity halved", function(t){
-				var fleet = new seeHeer(301, 100, 10, 0, 0, false);
-				var transportedArmy = new heer(101, 7000, 5, 0, 0, 0, false);
+				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
+				var transportedArmy = new heer(101, 7000, 5, 0, 0, 0, false, 0, 0, 1);
 				var listOfArmies = [transportedArmy];
 				var selectedArmyIndex = 0;
 				fleet.loadArmy;
 				fleet.decimate(50);
-				t.armyEquals(transportedArmy, new heer(101, 4666, 3, 0, 0, 0, false));
+				t.armyEquals(transportedArmy, new heer(101, 4666, 3, 0, 0, 0, false, 0, 0, 1));
 			});
 			test( "Fleet transporting riders at full capacity halved", function(t){
-				var fleet = new seeHeer(301, 100, 10, 0, 0, false);
-				var transportedArmy = new reiterHeer(201, 4500, 10, false);
+				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
+				var transportedArmy = new reiterHeer(201, 4500, 10, false, 0, 0, 1);
 				var listOfArmies = [transportedArmy];
 				var selectedArmyIndex = 0;
 				fleet.loadArmy;
 				fleet.decimate(50);
-				t.armyEquals(transportedArmy, new reiterHeer(201, 2250, 5, false));
+				t.armyEquals(transportedArmy, new reiterHeer(201, 2250, 5, false, 0, 0, 1));
 			});
 			test( "Fleet transporting army with catapults at full capacity halved", function(t){
-				var fleet = new seeHeer(301, 100, 10, 0, 0, false);
-				var transportedArmy = new heer(101, 1000, 10, 4, 2, 0, false);
+				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
+				var transportedArmy = new heer(101, 1000, 10, 4, 2, 0, false, 0, 0, 1);
 				var listOfArmies = [transportedArmy];
 				var selectedArmyIndex = 0;
 				fleet.loadArmy;
 				fleet.decimate(50);
-				t.armyEquals(transportedArmy, new heer(101, 500, 5, 2, 1, 0, false));
+				t.armyEquals(transportedArmy, new heer(101, 500, 5, 2, 1, 0, false, 0, 0, 1));
 			});
 			test( "Fleet transporting army with mounts at full capacity halved", function(t){
-				var fleet = new seeHeer(301, 100, 10, 0, 0, false);
-				var transportedArmy = new heer(101, 4500, 10, 0, 0, 4500, false);
+				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
+				var transportedArmy = new heer(101, 4500, 10, 0, 0, 4500, false, 0, 0, 1);
 				var listOfArmies = [transportedArmy];
 				var selectedArmyIndex = 0;
 				fleet.loadArmy;
 				fleet.decimate(50);
-				t.armyEquals(transportedArmy, new heer(101, 2250, 5, 0, 0, 2250, false));
+				t.armyEquals(transportedArmy, new heer(101, 2250, 5, 0, 0, 2250, false, 0, 0, 1));
 			});
 		});
 	});

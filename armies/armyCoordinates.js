@@ -519,9 +519,10 @@ function showHex(positionX, positionY) {
 		var surroundings = this.neighbors();
         for (var i = 0; i < rivers.length; i++) {
 			var river = rivers[i];
-			if((this.x == river[1][1] && this.y == river[1][2]) || (this.x == river[2][1] && this.y == river[2][2])){
+			if((this.x === river[1][1] && this.y === river[1][2]) || (this.x === river[2][1] && this.y === river[2][2])){
 				for(var j = 0; j < surroundings.length; j++){
-					if((surroundings[j][1] == river[1][1] && surroundings[j][2] == river[1][2]) || (surroundings[j][1] == river[2][1] && surroundings[j][2] == river[2][2])){
+					if((surroundings[j][1] === river[1][1] && surroundings[j][2] === river[1][2]) ||
+					    (surroundings[j][1] === river[2][1] && surroundings[j][2] === river[2][2])){
 						flussAcc[j] = 1;
 					}
 				}
@@ -532,7 +533,7 @@ function showHex(positionX, positionY) {
     // where in the field list is this field
     this.positionInList = function(){
         for (var i = 0; i < fields.length; i++) {
-			if((fields[i].x == this.x) && (fields[i].y == this.y)){return i;}
+			if((fields[i].x === this.x) && (fields[i].y === this.y)){return i;}
 		}
     }
     // what type is this field
@@ -558,7 +559,7 @@ function showHex(positionX, positionY) {
     // returns the fields neighbors in the usual order
 	this.neighbors = function(){
 		//reihenfolge NW,NO,O,SO,SW,W
-		if(this.y % 2 == 0){
+		if(this.y % 2 === 0){
 			return [[this.x,this.y-1],[this.x+1,this.y-1],[this.x+1,this.y],[this.x+1,this.y+1],[this.x,this.y+1],[this.x-1,this.y]];
 		} else {
 			return [[this.x-1,this.y-1],[this.x,this.y-1],[this.x+1,this.y],[this.x,this.y+1],[this.x-1,this.y+1],[this.x-1,this.y]];

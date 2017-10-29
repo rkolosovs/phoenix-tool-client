@@ -430,8 +430,15 @@ function battleHandler(participants, x, y) {
 
 
 function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, posY) {
-    this.fieldType = (new showHex(posX, posY)).fieldType();
-//        return fields.find((field) => (field.x === this.posX && field.y === this.posY)).type;
+    this.fieldType =
+        (new showHex(posX, posY)).fieldType();
+//        fields.find((field) => (field.x === posX && field.y === posY)).type;
+
+    this.armyArrayCount = function(armyArray) {
+        return armyArray.filter((val) => (
+            (val.armyType() === 3 && this.fieldType <= 1) || (this.fieldType >= 2 && val.armyType() <= 2)), this).
+            reduce((total, elem) => (elem.count + total), 0);
+    }
 
     this.overrunAttack = function() {
         return this.armyArrayCount(armiesAttack) >= 10 * this.armyArrayCount(armiesDefense) &&
@@ -441,12 +448,6 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
     this.overrunDefense = function() {
         return 10 * this.armyArrayCount(armiesAttack) <= this.armyArrayCount(armiesDefense) &&
             armiesAttack.filter((elem) => (elem.isGuard)).length === 0 && this.armyArrayCount(armiesDefense) > 0;
-    }
-
-    this.armyArrayCount = function(armyArray) {
-        return armyArray.filter((val) => (
-            (val.armyType() === 3 && this.fieldType <= 1) || (this.fieldType >= 2 && val.armyType() <= 2)), this).
-            reduce((total, elem) => (elem.count + total), 0);
     }
 
     this.terrainGP = function(army, attacker) {
