@@ -132,16 +132,16 @@ module( "Battle" , function() {
 				var battle = new schlacht([attackerArmies[3]], [defenderArmies[3]], [], [], 0, 0);
 				t.resultEquals( battle.result(1, 10), {victor: 'tie', attackerLosses: [1205], defenderLosses: [995.85]} );
 			});
-//			test( "Combat in attackers home terrain.", function(t) {
+			test( "Combat in attackers home terrain.", function(t) {
 			    //TODO
 //				var battle = new schlacht([attackerArmies[3]], [defenderArmies[3]], [], [], 0, 0);
 //				t.resultEquals( battle.result(1, 10), {victor: 'tie', attackerLosses: [1205], defenderLosses: [995.85]} );
-//			});
-//			test( "Combat in defenders home terrain.", function(t) {
+			});
+			test( "Combat in defenders home terrain.", function(t) {
 			    //TODO
 //				var battle = new schlacht([attackerArmies[3]], [defenderArmies[3]], [], [], 0, 0);
 //				t.resultEquals( battle.result(1, 10), {victor: 'tie', attackerLosses: [1205], defenderLosses: [995.85]} );
-//			});
+			});
 		});
 		module( "Naval Battles", function() {
 			test( "Basic fleet combat.", function(t) {
@@ -219,53 +219,53 @@ module( "Battle" , function() {
 				t.resultEquals( battle.result(5, 5), {victor: 'attacker', attackerLosses: [1822.4, 471.83], defenderLosses: [2090, 1390]} );
 			});
 		});
-//		module( "Directional Terrain Bonuses", function() {
-//		    test( "Attack onto a street.", function(t) {
-//		        //TODO
-//		    });
-//		    test( "Attack out of a forest.", function(t) {
-//		        //TODO
-//		    });
-//		    test( "Attack into a swamp.", function(t) {
-//		        //TODO
-//		    });
-//		    test( "Attack into a desert.", function(t) {
-//		        //TODO
-//		    });
-//		    test( "Attack downhill.", function(t) {
-//		        //TODO
-//		    });
-//		    test( "Defense downhill (attack uphill).", function(t) {
-//		        //TODO
-//		    });
-//		    test( "Defense behind a river.", function(t) {
-//		        //TODO
-//		    });
-//		    test( "Defense behind a bridge.", function(t) {
-//		        //TODO
-//		    });
-//		    test( "Defense behind a wall.", function(t) {
-//		        //TODO
-//		    });
-//		    test( "Defense in own caste.", function(t) {
-//		        //TODO
-//		    });
-//		    test( "Defense in own city.", function(t) {
-//		        //TODO
-//		    });
-//		    test( "Defense in own fortress.", function(t) {
-//		        //TODO
-//		    });
-//		    test( "Defense in own capital.", function(t) {
-//		        //TODO
-//		    });
-//		    test( "Defense in own capital fortress.", function(t) {
-//		        //TODO
-//		    });
-//		    test( "Defense in foreign production building.", function(t) {
-//		        //TODO
-//		    });
-//		});
+		module( "Directional Terrain Bonuses", function() {
+		    test( "Attack onto a street.", function(t) {
+		        //TODO
+		    });
+		    test( "Attack out of a forest.", function(t) {
+		        //TODO
+		    });
+		    test( "Attack into a swamp.", function(t) {
+		        //TODO
+		    });
+		    test( "Attack into a desert.", function(t) {
+		        //TODO
+		    });
+		    test( "Attack downhill.", function(t) {
+		        //TODO
+		    });
+		    test( "Defense downhill (attack uphill).", function(t) {
+		        //TODO
+		    });
+		    test( "Defense behind a river.", function(t) {
+		        //TODO
+		    });
+		    test( "Defense behind a bridge.", function(t) {
+		        //TODO
+		    });
+		    test( "Defense behind a wall.", function(t) {
+		        //TODO
+		    });
+		    test( "Defense in own caste.", function(t) {
+		        //TODO
+		    });
+		    test( "Defense in own city.", function(t) {
+		        //TODO
+		    });
+		    test( "Defense in own fortress.", function(t) {
+		        //TODO
+		    });
+		    test( "Defense in own capital.", function(t) {
+		        //TODO
+		    });
+		    test( "Defense in own capital fortress.", function(t) {
+		        //TODO
+		    });
+		    test( "Defense in foreign production building.", function(t) {
+		        //TODO
+		    });
+		});
 		module( "Complex Battles", function() {
 			test( "Large land battle at the defenders castle.", function(t) {
 				var attackingArmies = [
