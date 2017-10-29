@@ -698,9 +698,43 @@ function makeEventListItem(event, i) {
 		eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " merges with army " + cont.toArmy + " in (" +cont.x+ ","+cont.y+ ").</div>";
 	} else if (event.type === "split") {
 		// TODO: detailed explanation
-		eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " splits off army " + cont.newArmy + " with " +cont.troops+ " troops, "+cont.leaders+ " leaders, " +cont.mounts + " mounts, "+ cont.lkp + " lkp, and " +cont.skp + " skp in (" +cont.x+ ","+cont.y+ ").</div>";
+		var innerHTMLString = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " splits off army " + cont.newArmy + " with ";
+		if(cont.troops != 0){
+			innerHTMLString += cont.troops+ " troops, ";
+		}
+		if(cont.leaders != 0){
+			innerHTMLString += cont.leaders+ " leaders, ";
+		}
+		if(cont.mounts != 0){
+			innerHTMLString += cont.mounts + " mounts, ";
+		}
+		if(cont.lkp != 0){
+			innerHTMLString += cont.lkp + " lkp, ";
+		}
+		if(cont.skp != 0){
+			innerHTMLString += cont.skp + " skp ";
+		}
+		innerHTMLString += "in (" +cont.x+ ","+cont.y+ ").</div>";
+		eli.innerHTML =  innerHTMLString;
 	} else if (event.type === "transfer") {
-		eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " transfers " + cont.troops + " troops, " +cont.leaders+ " leaders, " +cont.mounts + " mounts, "+ cont.lkp + " lkp, and " +cont.skp + " skp to " + cont.toArmy + " in (" +cont.x+ ","+cont.y+ ").</div>";
+		var innerHTMLString = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " transfers ";
+		if(cont.troops != 0){
+			innerHTMLString += cont.troops+ " troops, ";
+		}
+		if(cont.leaders != 0){
+			innerHTMLString += cont.leaders+ " leaders, ";
+		}
+		if(cont.mounts != 0){
+			innerHTMLString += cont.mounts + " mounts, ";
+		}
+		if(cont.lkp != 0){
+			innerHTMLString += cont.lkp + " lkp, ";
+		}
+		if(cont.skp != 0){
+			innerHTMLString += cont.skp + " skp ";
+		}
+		innerHTMLString += "to " + cont.toArmy + " in (" +cont.x+ ","+cont.y+ ").</div>";
+		eli.innerHTML =  innerHTMLString;
 	}
 	var deleteButton = document.createElement("BUTTON");
 	deleteButton.id = "delBtn" + i;
