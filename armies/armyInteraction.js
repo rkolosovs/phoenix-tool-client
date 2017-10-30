@@ -481,7 +481,6 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
     }
 
     this.directionalTerrainGP = function(army, attacker, attackingArmies) {
-        //TODO: compute GP from directional terrain like attacking from a forest, up/down hill, over a wall etc.
         let result = 0;
         let targetField = new showHex(army.x, army.y);
         if(attacker) {
