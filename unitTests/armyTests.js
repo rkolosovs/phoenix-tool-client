@@ -23,6 +23,9 @@ QUnit.assert.armyEquals = function(actual, expected) {
     return true;
 };
 
+var listOfArmies = [];
+var selectedArmyIndex = 0;
+
 module( "Army" , function() {
 	module( "Decimation" , function() {
 		module( "Regular" , function() {
@@ -61,45 +64,45 @@ module( "Army" , function() {
 			test( "Fleet transporting at full capacity halved", function(t){
 				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
 				var transportedArmy = new heer(101, 9000, 10, 0, 0, 0, false, 0, 0, 1);
-				var listOfArmies = [transportedArmy];
-				var selectedArmyIndex = 0;
-				fleet.loadArmy;
+				listOfArmies = [transportedArmy];
+				selectedArmyIndex = 0;
+				fleet.loadArmy();
 				fleet.decimate(50);
 				t.armyEquals(transportedArmy, new heer(101, 4500, 5, 0, 0, 0, false, 0, 0, 1));
 			});
 			test( "Fleet transporting at 75% capacity halved", function(t){
 				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
 				var transportedArmy = new heer(101, 7000, 5, 0, 0, 0, false, 0, 0, 1);
-				var listOfArmies = [transportedArmy];
-				var selectedArmyIndex = 0;
-				fleet.loadArmy;
+				listOfArmies = [transportedArmy];
+				selectedArmyIndex = 0;
+				fleet.loadArmy();
 				fleet.decimate(50);
 				t.armyEquals(transportedArmy, new heer(101, 4666, 3, 0, 0, 0, false, 0, 0, 1));
 			});
 			test( "Fleet transporting riders at full capacity halved", function(t){
 				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
 				var transportedArmy = new reiterHeer(201, 4500, 10, false, 0, 0, 1);
-				var listOfArmies = [transportedArmy];
-				var selectedArmyIndex = 0;
-				fleet.loadArmy;
+				listOfArmies = [transportedArmy];
+				selectedArmyIndex = 0;
+				fleet.loadArmy();
 				fleet.decimate(50);
 				t.armyEquals(transportedArmy, new reiterHeer(201, 2250, 5, false, 0, 0, 1));
 			});
 			test( "Fleet transporting army with catapults at full capacity halved", function(t){
 				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
 				var transportedArmy = new heer(101, 1000, 10, 4, 2, 0, false, 0, 0, 1);
-				var listOfArmies = [transportedArmy];
-				var selectedArmyIndex = 0;
-				fleet.loadArmy;
+				listOfArmies = [transportedArmy];
+				selectedArmyIndex = 0;
+				fleet.loadArmy();
 				fleet.decimate(50);
 				t.armyEquals(transportedArmy, new heer(101, 500, 5, 2, 1, 0, false, 0, 0, 1));
 			});
 			test( "Fleet transporting army with mounts at full capacity halved", function(t){
 				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
 				var transportedArmy = new heer(101, 4500, 10, 0, 0, 4500, false, 0, 0, 1);
-				var listOfArmies = [transportedArmy];
-				var selectedArmyIndex = 0;
-				fleet.loadArmy;
+				listOfArmies = [transportedArmy];
+				selectedArmyIndex = 0;
+				fleet.loadArmy();
 				fleet.decimate(50);
 				t.armyEquals(transportedArmy, new heer(101, 2250, 5, 0, 0, 2250, false, 0, 0, 1));
 			});
