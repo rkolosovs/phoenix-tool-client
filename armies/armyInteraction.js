@@ -491,10 +491,32 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
             if(startingField.fieldType() === 3) {result += 20;}//attacking out of a forest
             if(targetField.hasStreet()){result += 20;}//attacking onto a street
         } else {
-
-            if(attackingArmies.find((elem) =>
-                (new showHex(elem.oldX, elem.oldY)).height() < targetField.height())){result += 20;}//fighting downhill
-//            let adjacentWalls =
+            let adjacentWalls = targetField.walls();
+            let adjacentRivers = targetField.fluesse();
+            let adjacentBridges = targetField.bridges();
+            let neighbors = targetField.neighbors();
+            let downhillBonus = false;
+            let wallBonus = false;
+            let bridgeBonus = false;
+            let riverBonus = false;
+            attackingArmies.forEach((attackingArmy) => {
+                if((new showHex(attackingArmy.oldX, attackingArmy.oldY)).height() < targetField.height()){
+                    downhillBonus = true;
+                }
+                neighbors.forEach((neighbor, index) => {
+                    if(neighbor[0] === attackingArmy.oldX && neighbor[1] === attackingArmy.oldY){
+                        if(adjacentWalls[index] === 1){wallBonus = true;}
+                        if(adjacentRivers[index] === 1){
+                            if(adjacentBridges[index] === 1){
+                                bridgeBonus = true;
+                            } else {
+                                riverBonus = true;
+                            }
+                        }
+                    }
+                });
+            });
+            result = downhillBonus?20:0 + wallBonus?50:0 + riverBonus?50:0 + bridgeBonus?30:0;
         }
         return result;
     }

@@ -90,7 +90,7 @@ module( "Battle" , function() {
 			];
 			borders = [{'tag': 'usa', 'land': [[0, 0], [1, 1], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 8],
 			    [9, 9], [10, 10], [11, 11]]}];
-			rivers = [{'firstX':8, 'firstY':8, 'secondX':8, 'secondY':7}, {'firstX':8, 'firstY':8, 'secondX':9, 'secondY':7}];
+			rivers = [ [[8,8],[8,7]], [[8,8],[9,7]] ];
 			buildings = [{'realm': 1, 'name': "", 'type': 0, 'x': 3, 'y': 3, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
 			    {'realm': 1, 'name': "", 'type': 1, 'x': 4, 'y': 4, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
 			    {'realm': 1, 'name': "", 'type': 2, 'x': 5, 'y': 5, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
