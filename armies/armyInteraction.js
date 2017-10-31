@@ -429,7 +429,7 @@ function battleHandler(participants, x, y) {
 			this.defenseSide.forEach(function (item) {
 				item.decimate(item.count);
 			});
-		} else if (battle.overrunDefense()) {
+		} else if (this.battle.overrunDefense()) {
 			this.defenseSide.forEach(function (item) {
 				item.remainingMovePoints -= 7;
 			});
