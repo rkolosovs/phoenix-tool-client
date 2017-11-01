@@ -384,19 +384,18 @@ function registerRightClick(){
 
 //checks the current field for other armies and adds it accordingly
 function createMultifield(army){
-	for (var j = 0; j < listOfArmies.length; j++) {
+	for (let j = 0; j < listOfArmies.length; j++) {
 		var someArmy = listOfArmies[j];
 		if (someArmy.x === army.x && someArmy.y === army.y && someArmy !== army) {
 			if(someArmy.multiArmyField === true){
-				addToMultifield(someArmy, listOfArmies[selectedArmyIndex]);
+				addToMultifield(someArmy, army);
 			}
 			else{
-				var templist =[];//creating a list of armies to add to the list of multifieldarmies
-				templist.push(someArmy);
-				templist.push(listOfArmies[selectedArmyIndex]);
+				let templist = [someArmy, army];//creating a list of armies to add to the list of multifieldarmies
 				listOfMultiArmyFields.push(templist);
 				someArmy.multiArmyField = true;
-				listOfArmies[selectedArmyIndex].multiArmyField = true;
+				army.multiArmyField = true;
+				console.log("created multi");
 			}
 		}
 	}
@@ -405,29 +404,32 @@ function createMultifield(army){
 
 //Adds an army to an existing multifield
 function addToMultifield(armyOnMultifield, armyToAdd){
-	var alreadyInList = false;
-	var placeToAdd;
-	for(var i = 0; i < listOfMultiArmyFields.length; i++){
-		for(var j = 0; j < listOfMultiArmyFields[i].length; j++){
-			if(listOfMultiArmyFields[i][j] === armyOnMultifield){
-				placeToAdd = i;
-			}
-			else if(listOfMultiArmyFields[i][j] === armyToAdd){
-				alreadyInList = true;
+	if(listOfMultiArmyFields !== undefined){
+		let alreadyInList = false;
+		let placeToAdd;
+		for(let i = 0; i < listOfMultiArmyFields.length; i++){
+			for(let j = 0; j < listOfMultiArmyFields[i].length; j++){
+				if(listOfMultiArmyFields[i][j] === armyOnMultifield){
+					placeToAdd = i;
+				}
+				else if(listOfMultiArmyFields[i][j] === armyToAdd){
+					alreadyInList = true;
+				}
 			}
 		}
+		if(alreadyInList == false){
+			listOfMultiArmyFields[placeToAdd].push(armyToAdd);
+			console.log("added to multi");
+		}
+		armyToAdd.multiArmyField = true;
 	}
-	if(alreadyInList == false){
-		listOfMultiArmyFields[placeToAdd].push(armyToAdd);
-	}
-	armyToAdd.multiArmyField = true;
 }
 
 //deletes from multifield in case of beeing on multifield 
 function deleteFromMultifield(armyToDelete){
 	addArmyToMulti:{//label to jump out when its found and added
-	for(var k = 0; k < listOfMultiArmyFields.length; k++){
-		for(var l = 0; l < listOfMultiArmyFields[k].length; l++){
+	for(let k = 0; k < listOfMultiArmyFields.length; k++){
+		for(let l = 0; l < listOfMultiArmyFields[k].length; l++){
 			if(listOfMultiArmyFields[k][l] === armyToDelete){
 				listOfMultiArmyFields[k].splice(l,1);
 

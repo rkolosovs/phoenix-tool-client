@@ -45,6 +45,7 @@ function loadMap() {
 			loadRiverData();
 			loadBuildingData();
 			loadBorderData();
+			loadMultifieldArray();
 		}
 	});
 }
@@ -175,3 +176,10 @@ function loadImages(tileset) { //load the images needed for visualization
 	bridgeNEImg.src = pathPrefix+'/bridge_ne.svg';
 	bridgeSEImg.src = pathPrefix+'/bridge_se.svg';
 }
+
+function loadMultifieldArray(){
+	listOfMultiArmyFields = [];
+	for (let i = 0; i < listOfArmies.length; i++) {
+		createMultifield(listOfArmies[i]);
+		}
+} 

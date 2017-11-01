@@ -45,6 +45,7 @@ function loginToServer() {
 	// change loginBox to infoBox
 	document.getElementById("infoBox").style.display = "";
 	document.getElementById("loginBox").style.display = "none";
+	loadMultifieldArray();
 }
 
 
@@ -77,4 +78,5 @@ function logoutFromServer() {
 	pendingEvents = [];
 	preparedEvents = [];
 	writeTurnNumber();
+	loadMultifieldArray();
 }
