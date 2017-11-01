@@ -417,7 +417,7 @@ function addToMultifield(armyOnMultifield, armyToAdd){
 				}
 			}
 		}
-		if(alreadyInList == false){
+		if(alreadyInList == false && placeToAdd !== undefined){
 			listOfMultiArmyFields[placeToAdd].push(armyToAdd);
 			console.log("added to multi");
 		}

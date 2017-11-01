@@ -45,7 +45,6 @@ function loadMap() {
 			loadRiverData();
 			loadBuildingData();
 			loadBorderData();
-			loadMultifieldArray();
 		}
 	});
 }
@@ -99,6 +98,7 @@ function loadArmies() {
 			}
 			// if the event loading finishes before the army loading is is needed, eventlist may be wrong otherwise
 			fillEventList();
+			loadMultifieldArray();
 		},
 		dataType: "json"
 	});
