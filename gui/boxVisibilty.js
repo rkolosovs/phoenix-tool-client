@@ -8,6 +8,7 @@ var streetBuildingModeOn = false;
 var harborBuildingModeOn = false;
 var bridgeBuildingModeOn = false;
 var wallBuildingModeOn = false;
+var shootingModeOn = false;
 var changeFieldToType = -1;
 var armyCreationModeOn = false;
 var armyWithNextClick = false;
@@ -69,6 +70,7 @@ function hide(element) {
 			harborBuildingModeOn = false;
 			bridgeBuildingModeOn = false;
 			wallBuildingModeOn = false;
+			shootingModeOn = false;
 			changeFieldToType = -1;
 			armyWithNextClick = false;
 			armyCreationModeOn = false;
@@ -84,6 +86,7 @@ function hide(element) {
 				case "wallBuildingModeOn": wallBuildingModeOn = true; break;
 				case "armyWithNextClick": armyWithNextClick = true; break;
 				case "armyCreationModeOn": armyCreationModeOn = true; break;
+				case "shootingModeOn": shootingModeOn = true; break;
 				case "none": break;
 			}
 		}
@@ -165,6 +168,16 @@ function hide(element) {
 			} else if (!wallBuildingModeOn){
 				switchModeTo("wallBuildingModeOn");
 				switchBtnBoxTo("wallCreationBox");
+			}
+		}
+
+		function toggleShootingMode(){
+			if(shootingModeOn){
+				switchModeTo("none");
+				closeShootBox();
+			} else if (!shootingModeOn){
+				switchModeTo("shootingModeOn");
+				activateShootBox();
 			}
 		}
 
@@ -297,6 +310,10 @@ function activateShootBox(){
 	document.getElementById("shootBox").style.display = "";
 }
 
+function closeShootBox(){
+	document.getElementById("shootBox").style.display = "none";
+	switchModeTo("none");
+}
 
 function activateSplitbox(){
 	if(listOfArmies[selectedArmyIndex].armyType() == 1)
@@ -589,7 +606,7 @@ function restoreInfoBox(){
 	document.getElementById("splitFleetBox").style.display = "none";
 	document.getElementById("transmuteBox").style.display = "none";
 	document.getElementById("mergeBox").style.display = "none";
-	document.getElementById("shootBox").style.display = "none";
+	closeShootBox();
 	if(document.getElementById("godmodeBox").style.visibility != "visible")
 	{
 		document.getElementById("infoBox").style.display = "";

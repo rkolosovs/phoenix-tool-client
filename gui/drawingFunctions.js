@@ -675,7 +675,7 @@ function drawTookFire(ctx, pos, scale){
 }
 
 function drawShootingTargets(ctx, x, y, scale, selectedArmy){
-	if(selectedArmy !== undefined && listOfArmies[selectedArmyIndex].targetList !== undefined){
+	if(selectedArmy !== undefined && listOfArmies[selectedArmyIndex].targetList !== undefined && shootingModeOn === true){
 		var targets = listOfArmies[selectedArmyIndex].targetList;
 		for (var i = 0; i < targets.length; i++) {
 			ctx.lineWidth = scale/10;

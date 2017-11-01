@@ -548,4 +548,4 @@ findShootingTargets = function(army){
             }
         }
     }
-    }
+}
