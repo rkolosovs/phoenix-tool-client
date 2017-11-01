@@ -323,11 +323,6 @@ function registerRightClick(){
 						var battlePossible = false;
 						var participants = [];
 
-						//before moving check if you leave a Multi Army field
-						if(listOfArmies[selectedArmyIndex].multiArmyField === true){
-							deleteFromMultifield(listOfArmies[selectedArmyIndex]);
-						}
-
 						for (var j = 0; j < listOfArmies.length; j++) {
 							var someArmy = listOfArmies[j];
 							if (someArmy.x === listOfArmies[selectedArmyIndex].x && someArmy.y === listOfArmies[selectedArmyIndex].y
@@ -345,7 +340,6 @@ function registerRightClick(){
 								//4. move from multi but still multifield left
 								//5. move from multi to multi
 								
-								createMultifield(listOfArmies[selectedArmyIndex]);
 							}
 						}
 						

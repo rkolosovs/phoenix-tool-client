@@ -51,6 +51,12 @@ function move(army, direction){//TODO needs new names
                 {
                     conquer(army, direction);
                 }
+                //before moving check if you leave a Multi Army field
+                if(army.multiArmyField === true){
+                    deleteFromMultifield(army);
+                }
+
+                createMultifield(army);
                 clickedMoves(army);
                 return "ok"
             }
@@ -75,6 +81,12 @@ function move(army, direction){//TODO needs new names
                         console.log("army in now loaded in " + army.isLoadedIn);
                         army.x = tempmove.tar.x;
                         army.y = tempmove.tar.y;
+                        //before moving check if you leave a Multi Army field
+                        if(army.multiArmyField === true){
+                            deleteFromMultifield(army);
+                        }
+
+                        createMultifield(army);
                         return "ok";
                     } else {
                         return(loadString);
@@ -112,6 +124,12 @@ function move(army, direction){//TODO needs new names
                                 console.log("army in now loaded in " + army.isLoadedIn);
                                 army.x = tempmove.tar.x;
                                 army.y = tempmove.tar.y;
+                                //before moving check if you leave a Multi Army field
+                                if(army.multiArmyField === true){
+                                    deleteFromMultifield(army);
+                                }
+
+                                createMultifield(army);
                                 return "ok";
                             } else {
                                 return(loadString);
@@ -126,7 +144,7 @@ function move(army, direction){//TODO needs new names
     }
     //to see and return the error why you cant move
     clickedMoves(army);
-    return moveToList(army, direction)
+    return moveToList(army, direction);
 }
 
 //when unit is clicked generates a list of neighbors that can be moved to
@@ -144,7 +162,7 @@ function clickedMoves(army){
 // direction as a number, 0 = NW, 1 = NO, 2 = O, 3 = SO, 4 = SW, 5 = W
 //tries to move a Unit in a direction and if possible saves the possible move
 function moveToList(army, direction) {
-    console.log("moveToListInitiated");
+    //console.log("moveToListInitiated");
     var destination = new showHex(army.x, army.y);
     var neighborCoords = destination.neighbors();
     var target = new showHex(neighborCoords[direction][0], neighborCoords[direction][1]);
