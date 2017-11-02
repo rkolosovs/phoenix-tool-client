@@ -585,7 +585,7 @@ function fernkampf(dicerollsL, dicerollsS, badConditions, shooter, target, chars
 //to fill the targetList
 function aim(){
 	//shootTODO check if loaded in ship
-	listOfArmies[selectedArmyIndex].findShootingTargets();
+	findShootingTargets(listOfArmies[selectedArmyIndex]);
 }
 
 //to actually shoot stuff, with events
@@ -597,18 +597,39 @@ function shoot(){//TODO make exceptions for invalid input
 	}
 	let LKPshooting = parseInt(document.getElementById("shootingLKPInput").value);
 	let SKPshooting = parseInt(document.getElementById("shootingSKPInput").value);
+	let shootingarmy = listOfArmies[selectedArmyIndex];
 
-	if(LKPshooting > listOfArmies[selectedArmyIndex].lkp){
+	if(LKPshooting > shootingarmy.lkp){
 		window.alert("Die Armee hat nicht genug leichte Katapulte/Kriegsschiffe");
 		return false;
 	}
-	if(SKPshooting > listOfArmies[selectedArmyIndex].skp){
+	if(SKPshooting > shootingarmy.skp){
 		window.alert("Die Armee hat nicht genug schwere Katapulte/Kriegsschiffe");
 		return false;
 	}
 	if(LKPshooting == 0 && SKPshooting == 0){
 		window.alert("Sie müssen eine Anzahl Katapulte eintragen");
 		return false;
+	}
+	if(selectedFields[1] === undefined){
+		window.alert("Wählen Sie ein Feld auf das Sie schießen wollen");
+		return false;
+	}
+
+	if(shootingarmy.targetList === undefined){
+		window.alert("bitte Zielen Sie erst");
+		return false;
+	}else{
+		let aimedTargetFound = false;
+		for(let i = 0; i < shootingarmy.targetList.length; i++){
+			if(shootingarmy.targetList[i][0] === selectedFields[1][0] && shootingarmy.targetList[i][1] === selectedFields[1][1]){
+				aimedTargetFound = true;
+			}
+		}
+		if(aimedTargetFound === false){
+			window.alert("Schießen Sie auf ein markiertes Feld");
+			return false;
+		}
 	}
 	preparedEvents.push({
 		type: "shoot", content: {

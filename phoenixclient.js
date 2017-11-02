@@ -208,15 +208,17 @@ function registerLeftClick(){
 			window.changedFields.push({"type": fields[posi].type,"x": fields[posi].x,"y": fields[posi].y});
 		}
 		console.log(window.changedFields);
-	} else {
+	} else if(shootingModeOn){
+		//for shooting the bastards
+		
+		selectedFields[1] = clickedField;
+		
+	}else {
 		// Feldauswahl
 		var index = -1;
-		var sf = selectedFields[0];
-		if (sf != undefined && (sf[0] === clickedField[0]) && (sf[1] === clickedField[1])){
-			selectedFields = [];
-		} else {
-			selectedFields[0] = clickedField;
-		}
+		selectedFields = [];
+		selectedFields[0] = clickedField;
+
 		// Armeeauswahl
 		restoreInfoBox();
 		selectedArmyIndex = undefined;
@@ -292,7 +294,9 @@ function registerRightClick(){
 			}
 			console.log(window.changedFields);
 		}
-	} else {
+	} else if(shootingModeOn){
+		
+	}else {
 		if(selectedArmyIndex === undefined){
 			console.log("Can't move with no army selected");
 		} else {

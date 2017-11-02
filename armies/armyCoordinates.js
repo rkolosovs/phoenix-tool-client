@@ -499,10 +499,10 @@ function conquer(army, direction) {
 }
 
 //to find all fields in a two tile proximity
-findShootingTargets = function(army){
+function findShootingTargets(army){
 
     if(army.skp >0){//in a 2 tile range
-        armytargetList = neighborInRange(army.x, army.y,2);
+        army.targetList = neighborInRange(army.x, army.y,2);
     }
     else{//ontile range
         army.targetList = neighborInRange(army.x, army.y,1);
@@ -524,7 +524,7 @@ findShootingTargets = function(army){
                 }
             }
             else if(templist[i][2] == 2){//for range of 2
-                if(height(templist[i][0], templist[i][1]) - height(army.x, tharmyis.y) > 1){
+                if(height(templist[i][0], templist[i][1]) - height(army.x, army.y) > 1){
                     army.targetList.splice(i,1);
                 }
                 else{//if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)

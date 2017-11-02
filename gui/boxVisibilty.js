@@ -173,7 +173,6 @@ function hide(element) {
 
 		function toggleShootingMode(){
 			if(shootingModeOn){
-				switchModeTo("none");
 				closeShootBox();
 			} else if (!shootingModeOn){
 				switchModeTo("shootingModeOn");
