@@ -493,7 +493,9 @@ function determineEventStatus() {
 				if (army1 === undefined || army2 === undefined) {
 					pendingEvents[i].status = 'withheld';
 				}
-				else if (army1.armyType() === army2.armyType() &&
+				else if (army.x != content.x || army.y != content.y) {
+					pendingEvents[i].status = 'withheld';
+				} else if (army1.armyType() === army2.armyType() &&
 					army1.x === army2.x && army1.y === army2.y) {
 					pendingEvents[i].status = 'available';
 				}
@@ -514,7 +516,9 @@ function determineEventStatus() {
 					pendingEvents[i].status = 'withheld';
 				}
 				else
-					if ((army1.armyType() == army2.armyType() || (content.troops == 0 && content.mounts == 0 && content.lkp == 0 && content.skp == 0))
+					if (army.x != content.x || army.y != content.y) {
+						pendingEvents[i].status = 'withheld';
+					} else if ((army1.armyType() == army2.armyType() || (content.troops == 0 && content.mounts == 0 && content.lkp == 0 && content.skp == 0))
 						&& army1.x === army2.x && army1.y === army2.y) {
 						pendingEvents[i].status = 'available';
 					}
@@ -534,14 +538,17 @@ function determineEventStatus() {
 				if (army == undefined) {
 					pendingEvents[i].status = 'withheld';
 				} else {
-					if (army.armyType() == 2) {
+
+					if (army.armyType() === 2) {
 						typefactor = 2;
 					}
-					else if (army.armyType() == 3) {
+					else if (army.armyType() === 3) {
 						typefactor = 100;
 					}
 					console.log(army.count - content.troops);
-					if (((army.count - content.troops) >= (100 / typefactor)) &&
+					if (army.x != content.x || army.y != content.y) {
+						pendingEvents[i].status = 'withheld';
+					} else if (((army.count - content.troops) >= (100 / typefactor)) &&
 						((army.leaders - content.leaders) >= 1) &&
 						((army.mounts - content.mounts) >= 0) &&
 						((army.lkp - content.lkp) >= 0) &&
@@ -551,6 +558,32 @@ function determineEventStatus() {
 					else {
 						pendingEvents[i].status = 'impossible';
 					}
+				}
+			}
+		} else if (event.type === 'mount') {
+			var typefactor = 1;
+
+			var army = listOfArmies[findArmyPlaceInList(content.fromArmy, content.realm)];
+			if (army == undefined) {
+				pendingEvents[i].status = 'withheld';
+			} else {
+				if (army.armyType() === 2) {
+					typefactor = 2;
+				}
+				else if (army.armyType() === 3) {
+					typefactor = 100;
+				}
+				console.log(army.count - content.troops);
+				if (army.x != content.x || army.y != content.y) {
+					pendingEvents[i].status = 'withheld';
+				} else if ((army.armyType() === 1 && (((army.count - content.troops) >= (100 / typefactor)) &&
+					((army.leaders - content.leaders) >= 1) && ((army.mounts - content.troops) >= 0))) ||
+					(army.armyType() === 2 && (((army.count - content.troops) >= (100 / typefactor)) &&
+						((army.leaders - content.leaders) >= 1)))) {
+					pendingEvents[i].status = 'available';
+				}
+				else {
+					pendingEvents[i].status = 'impossible';
 				}
 			}
 		}
@@ -739,6 +772,9 @@ function makeEventListItem(event, i) {
 		}
 		innerHTMLString += "to " + cont.toArmy + " in (" + cont.x + "," + cont.y + ").</div>";
 		eli.innerHTML = innerHTMLString;
+	} else if (event.type === "mount") {
+		eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " mounts " + cont.troops + " troops, and "
+			+ cont.leaders + " leaders to " + cont.newArmy + " in (" + cont.x + "," + cont.y + ").</div>";
 	}
 	var deleteButton = document.createElement("BUTTON");
 	deleteButton.id = "delBtn" + i;
@@ -959,12 +995,39 @@ function checkEvent(num) {
 				}
 				if (leadersToSplit > 0 &&
 					listOfArmies[armyFromPlaceInList].remainingMovePoints < listOfArmies[armyFromPlaceInList].startingMovepoints()) {
-						listOfArmies[armyToPlaceInList].setRemainingMovePoints(0);
+					listOfArmies[armyToPlaceInList].setRemainingMovePoints(0);
 				} else if (listOfArmies[armyFromPlaceInList].remainingMovePoints < listOfArmies[armyToPlaceInList].remainingMovePoints) {
 					listOfArmies[armyToPlaceInList].setRemainingMovePoints(listOfArmies[armyFromPlaceInList].remainingMovePoints);
 				}
 				if (listOfArmies[armyFromPlaceInList].remainingHeightPoints < listOfArmies[armyToPlaceInList].remainingHeightPoints) {
 					listOfArmies[armyToPlaceInList].setRemainingHeightPoints(listOfArmies[armyFromPlaceInList].remainingHeightPoints);
+				}
+			}
+			event.status = 'checked';
+			fillEventList();
+			drawStuff();
+		} else if (event.type === "mount") {
+			console.log("this is a mount event");
+			var armyFromPlaceInList = -1;
+			var armyFromId = cont.fromArmy;
+			var newArmyId = cont.newArmy;
+			var realm = cont.realm;
+			var toSplit = cont.troops;
+			var leadersToSplit = cont.leaders;
+			for (var i = 0; i < listOfArmies.length; i++) {
+				if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
+					armyFromPlaceInList = i;
+				}
+			}
+			console.log("place: "+armyFromPlaceInList);
+			if (armyFromPlaceInList >= 0) {
+				console.log("type: " + listOfArmies[armyFromPlaceInList].armyType());
+				if(listOfArmies[armyFromPlaceInList].armyType() == 1){
+					console.log("mountWithParams");
+					mountWithParams(armyFromPlaceInList, toSplit, leadersToSplit, newArmyId);
+				} else if (listOfArmies[armyFromPlaceInList].armyType() == 2){
+					console.log("unMountWithParams");
+					unMountWithParams(armyFromPlaceInList, toSplit, leadersToSplit, newArmyId);
 				}
 			}
 			event.status = 'checked';

@@ -176,6 +176,29 @@ function sendEventlistInOrderRecursion(index) {
 					}
 				}
 			});
+		} else if (cPE.type === "mount") {
+			$.post({
+				url: url + "/databaseLink/mountevent/",
+				data: {
+					authorization: authenticationToken,
+					content: cPEContent
+				},
+				success: function () { sendEventlistInOrderRecursion(index + 1) },
+				statusCode: {
+					200: function () {
+						console.log("success");
+					},
+					400: function () {
+						alert("Invalid input. Something went wrong with the splitting of armies.");
+					},
+					401: function () {
+						alert('Authorisation failure. Please log in.');
+					},
+					403: function () {
+						alert('Access denied. You can only send split events involving your troops.');
+					}
+				}
+			});
 		}
 	}
 	else {

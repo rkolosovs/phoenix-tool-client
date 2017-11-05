@@ -794,58 +794,87 @@ function splitSelectedArmy() {
 }
 
 // the mount function of the mount box
-//TODO: If the army has moved, set the new mounted army's move points to the apropriate, non-max value.
-function mount() {
+function mountSelected(){
 	var toMount = document.getElementById("mountInput").value;
 	var leadersToMount = document.getElementById("mountLeaderInput").value;
+	mountWithParams(selectedArmyIndex, toMount, leadersToMount, null);
+}
+
+// mounting with parameters
+//TODO: If the army has moved, set the new mounted army's move points to the apropriate, non-max value.
+function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
+	if(newArmyId === null){
+		newArmyId = generateArmyId(2, listOfArmies[armyIndex].owner);
+	}
 	// genug Truppen vorhanden?
-	if (toMount > listOfArmies[selectedArmyIndex].count) {
+	if (toMount > listOfArmies[armyIndex].count) {
 		window.alert("Du hast zu wenige Truppen zum aufsitzen")
 		return false;
 		// genug Reittiere vorhanden?
-
 	}
-	else if (toMount > listOfArmies[selectedArmyIndex].mounts) {
+	else if (toMount > listOfArmies[armyIndex].mounts) {
 		window.alert("Du hast zu wenige Reittiere zum aufsitzen")
 		return false;
 		// Sitzen alle auf?
 	}
-	else if ((toMount == listOfArmies[selectedArmyIndex].count)) {
+	else if ((toMount == listOfArmies[armyIndex].count)) {
 		// neues Reiterheer mit generierter Id an selben Koordinaten
-		var newArmy = new reiterHeer(generateArmyId(2, listOfArmies[selectedArmyIndex].owner), toMount,
-			listOfArmies[selectedArmyIndex].leaders, listOfArmies[selectedArmyIndex].isGuard, listOfArmies[selectedArmyIndex].x,
-			listOfArmies[selectedArmyIndex].y, listOfArmies[selectedArmyIndex].owner);
+		var newArmy = new reiterHeer(newArmyId, toMount,
+			listOfArmies[armyIndex].leaders, listOfArmies[armyIndex].isGuard, listOfArmies[selectedArmyIndex].x,
+			listOfArmies[armyIndex].y, listOfArmies[armyIndex].owner);
 		// Nachricht, falls Katapulte vorhanden waren.
-		if (listOfArmies[selectedArmyIndex].skp > 0 || listOfArmies[selectedArmyIndex].lkp > 0) {
+		if (listOfArmies[armyIndex].skp > 0 || listOfArmies[selectedArmyIndex].lkp > 0) {
 			window.alert("Da kein Fußheer mehr Bestehen bleibt, wurden die Katapulte zerstört.")
 		}
-		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch selectedArmyIndex
+		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch armyIndex
 		listOfArmies.push(newArmy);
-		if (listOfArmies[selectedArmyIndex].multiArmyField === true) {
-			addToMultifield(listOfArmies[selectedArmyIndex], newArmy);
-			deleteFromMultifield(listOfArmies[selectedArmyIndex]);
+		if (listOfArmies[armyIndex].multiArmyField === true) {
+			addToMultifield(listOfArmies[armyIndex], newArmy);
+			deleteFromMultifield(listOfArmies[armyIndex]);
 		}
 		deleteSelectedArmy();
+		preparedEvents.push({
+			type: "mount", content: {
+				fromArmyId: listOfArmies[armyIndex].armyId,
+				realm: listOfArmies[armyIndex].ownerTag(),
+				troops: toMount,
+				leaders: leadersToMount,
+				x: listOfArmies[armyIndex].x,
+				y: listOfArmies[armyIndex].y,
+				newArmysId: newArmy.armyId
+			}
+		});
 		restoreInfoBox();
 		updateInfoBox();
 		// genug Heerführer?
 	}
-	else if (leadersToMount >= listOfArmies[selectedArmyIndex].leaders) {
+	else if (leadersToMount >= listOfArmies[armyIndex].leaders) {
 		window.alert("Du hast zu wenige Heerführer zum aufsitzen")
 	}
-	else if (listOfArmies[selectedArmyIndex].isGuard) {
+	else if (listOfArmies[armyIndex].isGuard) {
 		window.alert("Die Garde muss zusammen bleiben");
 	}
 	else {
 		// neues Reiterheer mit generierter Id an selben Koordinaten
-		var newArmy = new reiterHeer(generateArmyId(2, listOfArmies[selectedArmyIndex].owner), toMount, leadersToMount, false,
-			listOfArmies[selectedArmyIndex].x, listOfArmies[selectedArmyIndex].y, listOfArmies[selectedArmyIndex].owner);
+		var newArmy = new reiterHeer(newArmyId, toMount, leadersToMount, false,
+			listOfArmies[armyIndex].x, listOfArmies[armyIndex].y, listOfArmies[selectedArmyIndex].owner);
 		// zahlen im alten Heer anpassen
-		listOfArmies[selectedArmyIndex].removeSoldiers(toMount);
-		listOfArmies[selectedArmyIndex].removeLeaders(leadersToMount);
-		listOfArmies[selectedArmyIndex].removeMounts(toMount);
+		listOfArmies[armyIndex].removeSoldiers(toMount);
+		listOfArmies[armyIndex].removeLeaders(leadersToMount);
+		listOfArmies[armyIndex].removeMounts(toMount);
 		// in listOfArmies einfügen
 		listOfArmies.push(newArmy);
+		preparedEvents.push({
+			type: "mount", content: {
+				fromArmyId: listOfArmies[armyIndex].armyId,
+				realm: listOfArmies[armyIndex].ownerTag(),
+				troops: toMount,
+				leaders: leadersToMount,
+				x: listOfArmies[armyIndex].x,
+				y: listOfArmies[armyIndex].y,
+				newArmysId: newArmy.armyId
+			}
+		});
 		// selectedArmyIndex zeigt auf neues Heer
 		selectedArmyIndex = listOfArmies.length - 1;
 		restoreInfoBox();
@@ -854,62 +883,92 @@ function mount() {
 }
 
 // the unMount function of the unMount box
-//TODO: If the mounted army has moved, set the new foot army's move points to the apropriate, non-max value.
-function unMount() {
-	var toUnMount = document.getElementById("unMountInput").value
+function unMountSelected(){
+	var toUnMount = document.getElementById("unMountInput").value;
 	var leadersToUnMount = document.getElementById("unMountLeaderInput").value;
+	unMountWithParams(selectedArmyIndex, toUnMount, leadersToUnMount, null);
+}
+
+// the unMount function of the unMount box
+//TODO: If the mounted army has moved, set the new foot army's move points to the apropriate, non-max value.
+function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
+	if(newArmyId === null){
+		newArmyId = generateArmyId(1, listOfArmies[armyIndex].owner);
+	}
 	console.log(toUnMount);
-	if (toUnMount > listOfArmies[selectedArmyIndex].count) {
+	if (toUnMount > listOfArmies[armyIndex].count) {
 		window.alert("So viele Truppen hast du nicht zum absitzen")
 		return false;
 		// genug Truppen vorhanden?
-	} else if ((toUnMount == listOfArmies[selectedArmyIndex].count)) {
+	} else if ((toUnMount == listOfArmies[armyIndex].count)) {
 		// neues Heer mit generierter Id an selben Koordinaten
-		var newArmy = new heer(generateArmyId(1, listOfArmies[selectedArmyIndex].owner), toUnMount,
-			listOfArmies[selectedArmyIndex].leaders, 0, 0, toUnMount, listOfArmies[selectedArmyIndex].isGuard,
-			listOfArmies[selectedArmyIndex].x, listOfArmies[selectedArmyIndex].y, listOfArmies[selectedArmyIndex].owner);
-		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch selectedArmyIndex
+		var newArmy = new heer(newArmyId, toUnMount,
+			listOfArmies[armyIndex].leaders, 0, 0, toUnMount, listOfArmies[armyIndex].isGuard,
+			listOfArmies[armyIndex].x, listOfArmies[armyIndex].y, listOfArmies[armyIndex].owner);
+		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch armyIndex
 		listOfArmies.push(newArmy);
-		if (listOfArmies[selectedArmyIndex].multiArmyField === true) {
-			addToMultifield(listOfArmies[selectedArmyIndex], newArmy);
-			deleteFromMultifield(listOfArmies[selectedArmyIndex]);
+		if (listOfArmies[armyIndex].multiArmyField === true) {
+			addToMultifield(listOfArmies[armyIndex], newArmy);
+			deleteFromMultifield(listOfArmies[armyIndex]);
 		}
+		preparedEvents.push({
+			type: "mount", content: {
+				fromArmyId: listOfArmies[armyIndex].armyId,
+				realm: listOfArmies[armyIndex].ownerTag(),
+				troops: toUnMount,
+				leaders: leadersToUnMount,
+				x: listOfArmies[armyIndex].x,
+				y: listOfArmies[armyIndex].y,
+				newArmysId: newArmy.armyId
+			}
+		});
 		deleteSelectedArmy();
 		restoreInfoBox();
 		updateInfoBox();
 		// genug Heerführer?
-	} else if (leadersToUnMount >= listOfArmies[selectedArmyIndex].leaders) {
+	} else if (leadersToUnMount >= listOfArmies[armyIndex].leaders) {
 		window.alert("Du hast zu wenige Heerführer zum absitzen");
-	} else if (listOfArmies[selectedArmyIndex].isGuard) {
+	} else if (listOfArmies[armyIndex].isGuard) {
 		window.alert("Die Garde muss zusammen bleiben");
 	} else {
 		// neues Heer mit generierter Id an selben Koordinaten
-		var newArmy = new heer(generateArmyId(1, listOfArmies[selectedArmyIndex].owner), toUnMount, leadersToUnMount, 0, 0,
-			toUnMount, false, listOfArmies[selectedArmyIndex].x, listOfArmies[selectedArmyIndex].y, listOfArmies[selectedArmyIndex].owner);
+		var newArmy = new heer(newArmyId, toUnMount, leadersToUnMount, 0, 0,
+			toUnMount, false, listOfArmies[armyIndex].x, listOfArmies[armyIndex].y, listOfArmies[armyIndex].owner);
 		// zahlen im alten Riterheer anpassen
-		listOfArmies[selectedArmyIndex].removeSoldiers(toUnMount);
-		listOfArmies[selectedArmyIndex].removeLeaders(leadersToUnMount);
+		listOfArmies[armyIndex].removeSoldiers(toUnMount);
+		listOfArmies[armyIndex].removeLeaders(leadersToUnMount);
 		// in listOfArmies einfügen
 		listOfArmies.push(newArmy);
-		// selectedArmyIndex zeigt auf neues Heer
+		preparedEvents.push({
+			type: "mount", content: {
+				fromArmyId: listOfArmies[armyIndex].armyId,
+				realm: listOfArmies[armyIndex].ownerTag(),
+				troops: toUnMount,
+				leaders: leadersToUnMount,
+				x: listOfArmies[armyIndex].x,
+				y: listOfArmies[armyIndex].y,
+				newArmysId: newArmy.armyId
+			}
+		});
+		// armyIndex zeigt auf neues Heer
 		selectedArmyIndex = listOfArmies.length - 1;
 		restoreInfoBox();
 		updateInfoBox();
 	}
 }
 
-function allMount() {
+function allMountSelected() {
 	// stellt ein, dass alle aufsitzen
 	document.getElementById("mountInput").value = listOfArmies[selectedArmyIndex].count;
 	// sitzt auf
-	mount();
+	mountSelected();
 }
 
-function allUnMount() {
+function allUnMountSelected() {
 	// stellt ein, dass alle aufsitzen
 	document.getElementById("unMountInput").value = listOfArmies[selectedArmyIndex].count;
 	// sitzt auf
-	unMount();
+	unMountSelected();
 }
 
 // move troops or leaders from selectedArmyIndex to the army at position mergeId in listOfArmies
