@@ -69,7 +69,8 @@ function move(army, direction){//TODO needs new names
                     return "You can't walk on Water.";
                 // there is exactly one
                 } else if(fleetsOnDest.length == 1){
-                    var loadString = listOfArmies[fleetsOnDest[0]].loadArmy();
+                    army.indexInListOfArmies
+                    var loadString = listOfArmies[fleetsOnDest[0]].loadArmy(army.indexInListOfArmies());
                     if(loadString == "ok"){
                         army.isLoadedIn = listOfArmies[fleetsOnDest[0]].armyId;
                         console.log("army in now loaded in " + army.isLoadedIn);
@@ -106,7 +107,7 @@ function move(army, direction){//TODO needs new names
                             }
                         }
                         if(found){
-                            var loadString = listOfArmies[foundFleet].loadArmy();
+                            var loadString = listOfArmies[foundFleet].loadArmy(army.indexInListOfArmies());
                             if(loadString == "ok"){
                                 army.isLoadedIn = listOfArmies[foundFleet].armyId;
                                 console.log("army in now loaded in " + army.isLoadedIn);
@@ -248,7 +249,7 @@ function moveToList(army, direction) {
                 for(var i = 0; i<listOfArmies.length; i++){
                     if((listOfArmies[i].owner === army.owner) && (listOfArmies[i].x === target.x) && (listOfArmies[i].y === target.y) &&
                     (Math.floor(listOfArmies[i].armyId / 100) == 3)){
-                        if (listOfArmies[i].isLoadable() == "ok")
+                        if (listOfArmies[i].isLoadable(army.indexInListOfArmies()) == "ok")
                         {
                             army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 2,landunit: true ,tar: target, load: true});
                         }
@@ -338,7 +339,7 @@ function moveToList(army, direction) {
                 for(var i = 0; i<listOfArmies.length; i++){
                     if((listOfArmies[i].owner === army.owner) && (listOfArmies[i].x === target.x) && (listOfArmies[i].y === target.y) &&
                     (Math.floor(listOfArmies[i].armyId / 100) == 3)){
-                        if (listOfArmies[i].isLoadable() == "ok")
+                        if (listOfArmies[i].isLoadable(army.indexInListOfArmies()) == "ok")
                         {
                             army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 2,landunit: true ,tar: target, load: true});
                         }
