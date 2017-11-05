@@ -30,6 +30,16 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     	//TODO once characters are a thing, 0 officer armies with a character on the field should also be alive
     }
 
+    // returns the index of the army in listOfArmies
+    this.indexInListOfArmies = function(){
+        var index = -1;
+        for(var i = 0; i < listOfArmies.length; i++){
+            if(listOfArmies[i].owner === this.owner && listOfArmies[i].armyId === this.armyId){
+                index = i;
+            }
+        }
+        return index;
+    }
     // nur zu Testzwecken 300
     //TODO: make it the proper value once testing is done
     this.remainingMovePoints = 9;
@@ -346,6 +356,16 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde, coordX, coordY, owner) {
         this.remainingHeightPoints = points;
     }
 
+    // returns the index of the army in listOfArmies
+    this.indexInListOfArmies = function(){
+        var index = -1;
+        for(var i = 0; i < listOfArmies.length; i++){
+            if(listOfArmies[i].owner === this.owner && listOfArmies[i].armyId === this.armyId){
+                index = i;
+            }
+        }
+        return index;
+    }
     this.leaderGp = function(){
         var gp = 0;
 
@@ -483,7 +503,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
         var loaded = 0;
         for(var i = 0; i < this.loadedArmies.length; i++){
             for(var j = 0; j < listOfArmies.length; j++){
-                if((listOfArmies[j].owner == listOfArmies[selectedArmyIndex].owner) && listOfArmies[j].armyId == this.loadedArmies[i]){
+                if((listOfArmies[j].owner == this.owner) && listOfArmies[j].armyId == this.loadedArmies[i]){
                     loaded += listOfArmies[j].raumpunkte();
                 }
             }
@@ -499,20 +519,36 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
         return(maxCapacity - spaceLoaded);
     }
     //lädt armee ein
-    this.loadArmy = function(){
-        if(listOfArmies[selectedArmyIndex].raumpunkte() <= this.currentCapacity()){
-            this.loadedArmies.push(listOfArmies[selectedArmyIndex].armyId);
-            console.log("Army " + listOfArmies[selectedArmyIndex].armyId +  " successfully loaded.");
+    this.loadArmy = function(index){
+        console.log("loadArmy");
+        if(listOfArmies[index].raumpunkte() <= this.currentCapacity()){
+            this.loadedArmies.push(listOfArmies[index].armyId);
+            console.log("Army " + listOfArmies[index].armyId +  " successfully loaded.");
             this.currentCapacity();
             return "ok";
         } else {
             return "This army is too big for this fleet.";
         }
     }
-    //prüft ob die selectierte armee geladen werden kann
-    this.isLoadable = function(){
-        if(listOfArmies[selectedArmyIndex].raumpunkte() <= this.currentCapacity()){
-            console.log("Army " + listOfArmies[selectedArmyIndex].armyId +  " is loadable.");
+    // returns the index of the army in listOfArmies
+    this.indexInListOfArmies = function(){
+        var index = -1;
+        for(var i = 0; i < listOfArmies.length; i++){
+            if(listOfArmies[i].owner === this.owner && listOfArmies[i].armyId === this.armyId){
+                index = i;
+            }
+        }
+        return index;
+    }
+    // prüft pb die selektierte armee eingeladen werden kann
+    this.selectedIsLoadable = function(){
+        return this.isLoadable(selectedArmyIndex);
+    }
+    //prüft ob die armee an Stelle index in der listOfArmies eingeladen werden kann
+    this.isLoadable = function(index){
+        console.log(index);
+        if(listOfArmies[index].raumpunkte() <= this.currentCapacity()){
+            console.log("Army " + listOfArmies[index].armyId +  " is loadable.");
             this.currentCapacity();
             return "ok";
         } else {

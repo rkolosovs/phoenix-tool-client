@@ -469,8 +469,14 @@ function determineEventStatus() {
 			if (event.type === 'move') {
 				if (armyExistsAndIsLocated(content.realm, content.armyId, content.fromX, content.fromY) &&
 					!unprocessedBattleAtContainingArmy(content.realm, content.armyId, content.fromX, content.fromY) &&
-					canMove(content.realm, content.armyId, content.fromX, content.fromY, content.toX, content.toY)) {
+					canMove(content.realm, content.armyId, content.fromX, content.fromY, content.toX, content.toY) &&
+					noPendingLoadEvents(content.realm, content.armyId, content.fromX, content.fromY)) {
 					pendingEvents[i].status = 'available';
+				} else if (armyExistsAndIsLocated(content.realm, content.armyId, content.fromX, content.fromY) &&
+					!unprocessedBattleAtContainingArmy(content.realm, content.armyId, content.fromX, content.fromY) &&
+					canMove(content.realm, content.armyId, content.fromX, content.fromY, content.toX, content.toY) &&
+					!noPendingLoadEvents(content.realm, content.armyId, content.fromX, content.fromY)) {
+					pendingEvents[i].status = 'withheld';
 				} else if (armyExists(content.realm, content.armyId) &&
 					possibleMoveOfArmyTo(content.realm, content.armyId, content.fromX, content.fromY)) {
 					pendingEvents[i].status = 'withheld';
@@ -591,6 +597,23 @@ function determineEventStatus() {
 }
 
 //begin of helper methods for event status determining
+function noPendingLoadEvents(realm, armyId, fromX, fromY) {
+	if (Math.floor(armyId / 100) != 3) {
+		return true;
+	} else {
+		for (var i = 0; i < pendingEvents.length; i++) {
+			var event = pendingEvents[i];
+			if ((event.status === 'withheld' || event.status === 'available') && event.type === 'move' && Math.floor(event.content.armyId / 100) !== 3 &&
+				((event.content.fromX === fromX && event.content.fromY === fromY) ||
+				(event.content.toX === fromX && event.content.toY === fromY))) {
+				console.log(event);
+				return false;
+			}
+		}
+		return true;
+	}
+}
+
 function eachArmyExists(armies) {
 	//	console.log("eachArmyExits("+armies+")");
 	return (armies.length > 0) && (armies.map(function (army) {
