@@ -5,9 +5,14 @@ function move(army, direction){//TODO needs new names
             var tempmove = army.possibleMoves[i];
             //in case it is moving on land
             if(tempmove.load == undefined){
+                //before moving check if you leave a Multi Army field
+                if(army.multiArmyField === true){
+                    deleteFromMultifield(army);
+                }
                 army.remainingMovePoints -= tempmove.movepoints;
                 army.x = tempmove.tar.x;
                 army.y = tempmove.tar.y;
+                createMultifield(army);
                 //for ship movement
                 if(Math.floor(army.armyId / 100) == 3){
                 // moves troops that are loaded in the fleet
@@ -16,8 +21,10 @@ function move(army, direction){//TODO needs new names
                             for(var j = 0; j < listOfArmies.length; j++){
                                 console.log(army.loadedArmies[i]);
                                 if(listOfArmies[j].owner == army.owner && listOfArmies[j].armyId == army.loadedArmies[i]){
+                                    deleteFromMultifield(listOfArmies[j]);
                                     listOfArmies[j].x = tempmove.tar.x;
                                     listOfArmies[j].y = tempmove.tar.y;
+                                    createMultifield(listOfArmies[j]);
                                 }
                             }
                         }
@@ -51,12 +58,6 @@ function move(army, direction){//TODO needs new names
                 {
                     conquer(army, direction);
                 }
-                //before moving check if you leave a Multi Army field
-                if(army.multiArmyField === true){
-                    deleteFromMultifield(army);
-                }
-
-                createMultifield(army);
                 clickedMoves(army);
                 return "ok"
             }
