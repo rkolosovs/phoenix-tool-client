@@ -832,7 +832,6 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 			addToMultifield(listOfArmies[armyIndex], newArmy);
 			deleteFromMultifield(listOfArmies[armyIndex]);
 		}
-		deleteArmy(armyIndex);
 		preparedEvents.push({
 			type: "mount", content: {
 				fromArmyId: listOfArmies[armyIndex].armyId,
@@ -844,6 +843,7 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 				newArmysId: newArmy.armyId
 			}
 		});
+		deleteArmy(armyIndex);
 		restoreInfoBox();
 		updateInfoBox();
 		// genug Heerführer?
