@@ -637,8 +637,8 @@ function shoot(){//TODO make exceptions for invalid input
 			realm: listOfArmies[selectedArmyIndex].ownerTag(),
 			LKPcount: LKPshooting,
 			SKPcount: SKPshooting,
-			toX: listOfArmies[selectedArmyIndex].x,//temporary
-			toY: listOfArmies[selectedArmyIndex].y
+			toX: selectedFields[1][0],//temporary
+			toY: selectedFields[1][1]
 		}
 	});
 	window.alert("Die Geschosse sind unterwegs.");
