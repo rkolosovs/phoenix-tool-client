@@ -768,6 +768,7 @@ function splitSelectedArmy(){
 			});
 		}
 	}
+	createMultifield(listOfArmies[selectedArmyIndex]);
 	restoreInfoBox();
 	updateInfoBox();
 }
@@ -1139,7 +1140,7 @@ function deleteSelectedArmy(){
 }
 
 function deleteArmy(index){
-	deleteFromMultifield(selectedArmyIndex);
+	deleteFromMultifield(listOfArmies[selectedArmyIndex]);
 	listOfArmies.splice(index, 1);
 	if(selectedArmyIndex === listOfArmies.length)
 	{
