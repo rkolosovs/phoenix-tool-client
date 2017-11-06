@@ -804,10 +804,7 @@ function mount(){
 		}
 		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch selectedArmyIndex
 		listOfArmies.push(newArmy);
-		if(listOfArmies[selectedArmyIndex].multiArmyField === true){
-			addToMultifield(listOfArmies[selectedArmyIndex], newArmy);
-			deleteFromMultifield(listOfArmies[selectedArmyIndex]);
-		}
+		createMultifield(newArmy);
 		deleteSelectedArmy();
 		restoreInfoBox();
 		updateInfoBox();
@@ -832,6 +829,7 @@ function mount(){
 		listOfArmies[selectedArmyIndex].removeMounts(toMount);
 		// in listOfArmies einfügen
 		listOfArmies.push(newArmy);
+		createMultifield(newArmy);
 		// selectedArmyIndex zeigt auf neues Heer
 		selectedArmyIndex = listOfArmies.length-1;
 		restoreInfoBox();
@@ -856,10 +854,7 @@ function unMount(){
 		    listOfArmies[selectedArmyIndex].x, listOfArmies[selectedArmyIndex].y, listOfArmies[selectedArmyIndex].owner);
 		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch selectedArmyIndex
 		listOfArmies.push(newArmy);
-		if(listOfArmies[selectedArmyIndex].multiArmyField === true){
-			addToMultifield(listOfArmies[selectedArmyIndex], newArmy);
-			deleteFromMultifield(listOfArmies[selectedArmyIndex]);
-		}
+		createMultifield(newArmy);
 		deleteSelectedArmy();
 		restoreInfoBox();
 		updateInfoBox();
@@ -877,6 +872,7 @@ function unMount(){
 		listOfArmies[selectedArmyIndex].removeLeaders(leadersToUnMount);
 		// in listOfArmies einfügen
 		listOfArmies.push(newArmy);
+		createMultifield(newArmy);
 		// selectedArmyIndex zeigt auf neues Heer
 		selectedArmyIndex = listOfArmies.length-1;
 		restoreInfoBox();
