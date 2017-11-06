@@ -154,33 +154,7 @@ function registerLeftClick(){
 		skpBuffer = 0;
 		document.getElementById("skpField").value = 0;
 		//before adding to list check if there is an army on the field and add multifield accordingly
-		var onmulti = false;
-		var newmulti = false;
-		var foundarmy;
-		for(var i = 0; i < listOfArmies.length; i++){
-			var a = listOfArmies[i];
-			if (a.x === army.x && a.y === army.y) {
-				if(a.multiArmyField === true){
-					onmulti = true;
-					foundarmy = a;
-				}
-				else{
-					newmulti = true;
-					foundarmy = a;
-				}
-			}
-		}
-		if(onmulti == true){
-			addToMultifield(foundarmy, army)
-		}
-		else if(newmulti == true){
-			var templist =[];//creating a list of armies to add to the list of multifieldarmies
-			templist.push(foundarmy);
-			templist.push(army);
-			listOfMultiArmyFields.push(templist);
-			foundarmy.multiArmyField = true;
-			army.multiArmyField = true;
-		}
+		createMultifield(army);
 		listOfArmies.push(army);
 		switchBtnBoxTo("buttonsBox");
 		switchModeTo("none");
