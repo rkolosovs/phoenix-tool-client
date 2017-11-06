@@ -768,7 +768,7 @@ function splitSelectedArmy(){
 			});
 		}
 	}
-	createMultifield(listOfArmies[selectedArmyIndex]);
+	createMultifield(newArmy);
 	restoreInfoBox();
 	updateInfoBox();
 }
