@@ -189,7 +189,7 @@ function sendEventlistInOrderRecursion(index) {
 						console.log("success");
 					},
 					400: function () {
-						alert("Invalid input. Something went wrong with the splitting of armies.");
+						alert("Invalid input. Something went wrong with mounting or unmounting.");
 					},
 					401: function () {
 						alert('Authorisation failure. Please log in.');

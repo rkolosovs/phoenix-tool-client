@@ -832,7 +832,7 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 			addToMultifield(listOfArmies[armyIndex], newArmy);
 			deleteFromMultifield(listOfArmies[armyIndex]);
 		}
-		deleteSelectedArmy();
+		deleteArmy(armyIndex);
 		preparedEvents.push({
 			type: "mount", content: {
 				fromArmyId: listOfArmies[armyIndex].armyId,
@@ -922,7 +922,7 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 				newArmysId: newArmy.armyId
 			}
 		});
-		deleteSelectedArmy();
+		deleteArmy(armyIndex);
 		restoreInfoBox();
 		updateInfoBox();
 		// genug Heerführer?
@@ -1139,7 +1139,7 @@ function mergeSelectedArmy(mergeId) {
 				y: listOfArmies[selectedArmyIndex].y
 			}
 		});
-		deleteSelectedArmy();
+		deleteArmy(selectedArmyIndex)();
 	}
 	else if (listOfArmies[selectedArmyIndex].armyType() == 2) {
 		listOfArmies[mergeId].count += listOfArmies[selectedArmyIndex].count;
@@ -1164,7 +1164,7 @@ function mergeSelectedArmy(mergeId) {
 				y: listOfArmies[selectedArmyIndex].y
 			}
 		});
-		deleteSelectedArmy();
+		deleteArmy(selectedArmyIndex)();
 	}
 	else if (listOfArmies[selectedArmyIndex].armyType() == 3) {
 		listOfArmies[mergeId].count += listOfArmies[selectedArmyIndex].count;
@@ -1215,7 +1215,7 @@ function mergeSelectedArmy(mergeId) {
 				y: listOfArmies[selectedArmyIndex].y
 			}
 		});
-		deleteSelectedArmy();
+		deleteArmy(selectedArmyIndex)();
 	}
 	if (mergeId = listOfArmies.length) {
 		mergeId -= 1;
@@ -1223,11 +1223,6 @@ function mergeSelectedArmy(mergeId) {
 	selectedArmyIndex = mergeId;
 	updateInfoBox();
 	restoreInfoBox();
-}
-
-// deletes the currently selected army und puts the last army in listOfArmies in its place
-function deleteSelectedArmy() {
-	deleteArmy(selectedArmyIndex);
 }
 
 function deleteArmy(index) {

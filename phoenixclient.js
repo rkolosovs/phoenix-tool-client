@@ -566,30 +566,31 @@ function determineEventStatus() {
 					}
 				}
 			}
-		} else if (event.type === 'mount') {
-			var typefactor = 1;
+			else if (event.type === 'mount') {
+				var typefactor = 1;
 
-			var army = listOfArmies[findArmyPlaceInList(content.fromArmy, content.realm)];
-			if (army == undefined) {
-				pendingEvents[i].status = 'withheld';
-			} else {
-				if (army.armyType() === 2) {
-					typefactor = 2;
-				}
-				else if (army.armyType() === 3) {
-					typefactor = 100;
-				}
-				console.log(army.count - content.troops);
-				if (army.x != content.x || army.y != content.y) {
+				var army = listOfArmies[findArmyPlaceInList(content.fromArmy, content.realm)];
+				if (army === undefined) {
 					pendingEvents[i].status = 'withheld';
-				} else if ((army.armyType() === 1 && (((army.count - content.troops) >= (100 / typefactor)) &&
-					((army.leaders - content.leaders) >= 1) && ((army.mounts - content.troops) >= 0))) ||
-					(army.armyType() === 2 && (((army.count - content.troops) >= (100 / typefactor)) &&
-						((army.leaders - content.leaders) >= 1)))) {
-					pendingEvents[i].status = 'available';
-				}
-				else {
-					pendingEvents[i].status = 'impossible';
+				} else {
+					if (army.armyType() === 2) {
+						typefactor = 2;
+					}
+					else if (army.armyType() === 3) {
+						typefactor = 100;
+					}
+					console.log(army.count + " - " + content.troops);
+					if (army.x != content.x || army.y != content.y) {
+						pendingEvents[i].status = 'withheld';
+					} else if ((army.armyType() === 1 && (((army.count - content.troops) >= (100 / typefactor)) &&
+						((army.leaders - content.leaders) >= 1) && ((army.mounts - content.troops) >= 0))) ||
+						(army.armyType() === 2 && (((army.count - content.troops) >= (100 / typefactor)) &&
+							((army.leaders - content.leaders) >= 1)))) {
+						console.log("Status should be available!")
+						pendingEvents[i].status = 'available';
+					} else {
+						pendingEvents[i].status = 'impossible';
+					}
 				}
 			}
 		}
@@ -605,7 +606,7 @@ function noPendingLoadEvents(realm, armyId, fromX, fromY) {
 			var event = pendingEvents[i];
 			if ((event.status === 'withheld' || event.status === 'available') && event.type === 'move' && Math.floor(event.content.armyId / 100) !== 3 &&
 				((event.content.fromX === fromX && event.content.fromY === fromY) ||
-				(event.content.toX === fromX && event.content.toY === fromY))) {
+					(event.content.toX === fromX && event.content.toY === fromY))) {
 				console.log(event);
 				return false;
 			}
@@ -1042,18 +1043,19 @@ function checkEvent(num) {
 					armyFromPlaceInList = i;
 				}
 			}
-			console.log("place: "+armyFromPlaceInList);
+			console.log("place: " + armyFromPlaceInList);
 			if (armyFromPlaceInList >= 0) {
 				console.log("type: " + listOfArmies[armyFromPlaceInList].armyType());
-				if(listOfArmies[armyFromPlaceInList].armyType() == 1){
+				if (listOfArmies[armyFromPlaceInList].armyType() == 1) {
 					console.log("mountWithParams");
 					mountWithParams(armyFromPlaceInList, toSplit, leadersToSplit, newArmyId);
-				} else if (listOfArmies[armyFromPlaceInList].armyType() == 2){
+					event.status = 'checked';
+				} else if (listOfArmies[armyFromPlaceInList].armyType() == 2) {
 					console.log("unMountWithParams");
 					unMountWithParams(armyFromPlaceInList, toSplit, leadersToSplit, newArmyId);
+					event.status = 'checked';
 				}
 			}
-			event.status = 'checked';
 			fillEventList();
 			drawStuff();
 		}
