@@ -558,7 +558,16 @@ function determineEventStatus(){
 				 {
 					 pendingEvents[i].status = 'impossible';
 				 }
-			}
+			}else if(event.type === 'shoot'){
+				//if (armyExistsAndIsLocated(content.realm, content.armyId, content.armyId.x, content.armyId.y)) {
+					pendingEvents[i].status = 'available';
+				//} else if (armyExists(content.realm, content.armyId) && 
+				//		possibleMoveOfArmyTo(content.realm, content.armyId, content.armyId.x, content.armyId.y)) {
+				//	pendingEvents[i].status = 'withheld';
+				//} else {
+				//	pendingEvents[i].status = 'impossible';
+				//}
+			} 
 		}
 	}
 }
@@ -712,7 +721,7 @@ function makeEventListItem(event, i) {
 	} else if(event.type === "transfer"){
 		eli.innerHTML = "<div>"+realmIdToshort(cont.realm)+"'s army "+cont.fromArmy+" transfers troops to "+cont.toArmy+".</div>";
 	}else if(event.type === "shoot"){
-		eli.innerHTML = "<div>"+realmIdToshort(cont.realm)+"'s army "+cont.shooterID+" shoots a Field ("+cont.toX+", "+cont.toY+").</div>";
+		eli.innerHTML = "<div>"+realmIdToshort(cont.realm)+"'s army "+cont.armyId+" shoots a Field ("+cont.toX+", "+cont.toY+").</div>";
 	}
 	var deleteButton = document.createElement("BUTTON");
 	deleteButton.id = "delBtn"+i;
@@ -956,46 +965,21 @@ function checkEvent(num) {
 			drawStuff();
 		} else if (event.type === "shoot") {
 			console.log("this is a shooting event");
-			var armyFromPlaceInList = -1;
-			var armyToPlaceInList = -1;
-			var armyFromId = cont.fromArmy;
-			var armyToId = cont.toArmy;
-			var realm = cont.realm;
-			var lkpCount = cont.LKPcount;
-			var skpCount = cont.SKPcount;
-			var toX = cont.toX;
-			var toY = cont.toY;
+			var shootBox = document.getElementById("shootBigBox");
+			show(shootBox);
 
-			for(var i = 0; i < listOfArmies.length; i++)
-			{
-				if(listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm)
-				{
-					armyFromPlaceInList = i;
-				} 
-				else if(listOfArmies[i].armyId == armyToId && listOfArmies[i].owner == realm)
-				{
-					armyToPlaceInList = i;
-				}
-			}
-			if(armyFromPlaceInList >= 0 && armyToPlaceInList >= 0)
-			{
-				listOfArmies[armyFromPlaceInList].count -= toSplit;
-				listOfArmies[armyToPlaceInList].count += toSplit;
-				listOfArmies[armyFromPlaceInList].leaders -= leadersToSplit;
-				listOfArmies[armyToPlaceInList].leaders += leadersToSplit;
-				if(listOfArmies[armyFromPlaceInList].armyType == 1)
-				{
-					listOfArmies[armyFromPlaceInList].mounts -= mountsToSplit;
-					listOfArmies[armyToPlaceInList].mounts += mountsToSplit;
-				}
-				if(listOfArmies[armyFromPlaceInList].armyType == 1 || listOfArmies[armyFromPlaceInList].armyType == 3)
-				{
-					listOfArmies[armyFromPlaceInList].lkp -= lkpToSplit;
-					listOfArmies[armyToPlaceInList].lkp += lkpToSplit;
-					listOfArmies[armyFromPlaceInList].skp -= skpToSplit;
-					listOfArmies[armyToPlaceInList].skp += skpToSplit;
-				}
-			}
+			var shootButton = document.getElementById("rangedBattleButton");
+			shootButton.onclick = function(){
+				fernkampf();// TODO needs proper parameter
+				hide(shootBox);
+				event.status = 'checked';
+				fillEventList();
+				drawStuff();
+			};
+
+			document.getElementById("closeRangedBattleButton").onclick = function(){
+				hide(shootBox);
+			};
 			event.status = 'checked';
 			fillEventList();
 			//sendCheckEvent(event.pk, event.type);
