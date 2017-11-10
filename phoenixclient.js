@@ -559,14 +559,14 @@ function determineEventStatus(){
 					 pendingEvents[i].status = 'impossible';
 				 }
 			}else if(event.type === 'shoot'){
-				//if (armyExistsAndIsLocated(content.realm, content.armyId, content.armyId.x, content.armyId.y)) {
+				if (armyExistsAndIsLocated(content.realm, content.armyId, content.fromX, content.fromY)) {
 					pendingEvents[i].status = 'available';
-				//} else if (armyExists(content.realm, content.armyId) && 
-				//		possibleMoveOfArmyTo(content.realm, content.armyId, content.armyId.x, content.armyId.y)) {
-				//	pendingEvents[i].status = 'withheld';
-				//} else {
-				//	pendingEvents[i].status = 'impossible';
-				//}
+				} else if (armyExists(content.realm, content.armyId) && 
+						possibleMoveOfArmyTo(content.realm, content.armyId, content.fromX, content.fromY)) {
+					pendingEvents[i].status = 'withheld';
+				} else {
+					pendingEvents[i].status = 'impossible';
+				}
 			} 
 		}
 	}
@@ -721,7 +721,7 @@ function makeEventListItem(event, i) {
 	} else if(event.type === "transfer"){
 		eli.innerHTML = "<div>"+realmIdToshort(cont.realm)+"'s army "+cont.fromArmy+" transfers troops to "+cont.toArmy+".</div>";
 	}else if(event.type === "shoot"){
-		eli.innerHTML = "<div>"+realmIdToshort(cont.realm)+"'s army "+cont.armyId+" shoots a Field ("+cont.toX+", "+cont.toY+").</div>";
+		eli.innerHTML = "<div>"+cont.realm+"'s army "+cont.armyId+" shoots a Field ("+cont.toX+", "+cont.toY+").</div>";
 	}
 	var deleteButton = document.createElement("BUTTON");
 	deleteButton.id = "delBtn"+i;
@@ -964,7 +964,7 @@ function checkEvent(num) {
 			//sendCheckEvent(event.pk, event.type);
 			drawStuff();
 		} else if (event.type === "shoot") {
-			console.log("this is a shooting event");
+			//console.log("this is a shooting event");
 			var shootBox = document.getElementById("shootBigBox");
 			show(shootBox);
 

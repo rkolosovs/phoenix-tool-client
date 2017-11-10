@@ -638,7 +638,9 @@ function shoot(){//TODO make exceptions for invalid input
 			LKPcount: LKPshooting,
 			SKPcount: SKPshooting,
 			toX: selectedFields[1][0],//temporary
-			toY: selectedFields[1][1]
+			toY: selectedFields[1][1],
+			fromX: listOfArmies[selectedArmyIndex].x,
+			fromY: listOfArmies[selectedArmyIndex].y
 		}
 	});
 	window.alert("Die Geschosse sind unterwegs.");

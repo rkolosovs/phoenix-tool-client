@@ -514,38 +514,60 @@ function findShootingTargets(army){
     }
     //console.log(army.targetList);
 
-    let templist = army.targetList.slice();
+    army.targetList = checkAllConditions(army, army.targetList);
+    
+}
+
+function checkAllConditions(army, targetList){
+    
+    let templist = targetList.slice();
     //to find out the conditions and maybe kick out if not shootable
     for(let i = templist.length -1; i >= 0; i--){
-        if(army.skp > 0){//skp shooting
-            if(templist[i][2] == 1){//for range of 1
-                if(height(templist[i][0], templist[i][1]) - height(army.x, army.y) > 2){
-                    army.targetList.splice(i,1);
-                }
+        if(checkCondition(army,templist[i][0], templist[i][1], templist[i][2]) === 'impossible shot'){
+            targetList.splice(i,1);
+        }
+    }
+
+    return targetList;
+}
+function checkCondition(army, x, y, range){
+    let condition = 'impossible shot';
+    if(army.skp > 0){//skp shooting
+        if(range == 1){//for range of 1
+            if(height(x, y) - height(army.x, army.y) <= 2){
+                //targetList.splice(i,1);
+                condition = 'high';
             }
-            else if(templist[i][2] == 2){//for range of 2
-                if(height(templist[i][0], templist[i][1]) - height(army.x, army.y) > 1){
-                    army.targetList.splice(i,1);
-                }
-                else{//if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
-                    let targetNeighbors = neighbors(templist[i][0], templist[i][1]);
-                    let originNeighbors = neighbors(army.x, army.y);
-                    for(let j = 0; j < targetNeighbors.length; j++){
-                        for(let k = 0; k < originNeighbors.length; k++){
-                            if(targetNeighbors[j][0] == originNeighbors[k][0] && targetNeighbors[j][1] == originNeighbors[k][1]){
-                                if(height(targetNeighbors[j][0], targetNeighbors[j][1]) - height(army.x, army.y) > 1){
-                                    army.targetList.splice(i,1);
-                                }
-                            }
+            if(height(x, y) - height(army.x, army.y) <= 1){
+                condition = 'short';
+            }
+        }else if(range == 2){//for range of 2
+            if(height(x, y) - height(army.x, army.y) <= 1){
+                //targetList.splice(i,1);
+                condition = 'farAndUp';
+            }
+            if(height(x, y) - height(army.x, army.y) <= 1){
+                condition = 'far';
+            }
+            //if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
+            let targetNeighbors = neighbors(x, y);
+            let originNeighbors = neighbors(army.x, army.y);
+            for(let j = 0; j < targetNeighbors.length; j++){
+                for(let k = 0; k < originNeighbors.length; k++){
+                    if(targetNeighbors[j][0] == originNeighbors[k][0] && targetNeighbors[j][1] == originNeighbors[k][1]){
+                        if(height(targetNeighbors[j][0], targetNeighbors[j][1]) - height(army.x, army.y) > 1){
+                            //targetList.splice(i,1);
+                            condition = 'impossible shot';
                         }
                     }
                 }
             }
         }
-        else{//for lkp shooting
-            if(height(templist[i][0], templist[i][1]) - height(army.x, army.y) > 1){
-                army.targetList.splice(i,1);
-            }
+    }else{//for lkp shooting
+        if(height(x, y) - height(army.x, army.y) <= 1){
+            //targetList.splice(i,1);
+            condition = 'lkp';
         }
     }
+    return condition;
 }

@@ -163,7 +163,7 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     this.fireLkp = function(dicerolls, badConditions){
         var rollLen = dicerolls.length;
         var damageBP = 0;
-        if(badConditions == null){
+        if(badConditions == 'lkp'){
              for (var i = 0; i < rollLen; i++){
                 switch(dicerolls[i]){
                     case 9: damageBP += 5;
@@ -196,7 +196,7 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     this.fireSkp = function(dicerolls, badConditions){
         var rollLen = dicerolls.length;
         var damageBP = 0;
-        if(badConditions == null){
+        if(badConditions == 'short'){
              for (var i = 0; i < rollLen; i++){
                 switch(dicerolls[i]){
                     case 9: damageBP += 30;
@@ -616,7 +616,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     this.fireLkp = function(dicerolls, badConditions){
         var rollLen = dicerolls.length;
         var damageBP = 0;
-        if(badConditions == null){
+        if(badConditions == 'lkp'){
              for (var i = 0; i < rollLen; i++){
                 switch(dicerolls[i]){
                     case 9: damageBP += 0;
@@ -650,7 +650,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     this.fireSkp = function(dicerolls, badConditions){
         var rollLen = dicerolls.length;
         var damageBP = 0;
-        if(badConditions == null){
+        if(badConditions == 'short'){
             for (var i = 0; i < rollLen; i++){
                 switch(dicerolls[i]){
                     case 9: damageBP += 5;
