@@ -965,12 +965,34 @@ function checkEvent(num) {
 			drawStuff();
 		} else if (event.type === "shoot") {
 			//console.log("this is a shooting event");
+			let shooter;
+			let lkpRolls = [];
+			let skpRolls = [];
+			for(let i = 0; i < listOfArmies.length; i++){
+				if(listOfArmies[i].armyId == cont.armyId && listOfArmies[i].owner == cont.realm)
+				shooter = listOfArmies[i];
+			}
 			var shootBox = document.getElementById("shootBigBox");
 			show(shootBox);
 
 			var shootButton = document.getElementById("rangedBattleButton");
 			shootButton.onclick = function(){
-				fernkampf();// TODO needs proper parameter
+				for(let i = 0; i < 10; i++){//creating the dice roll array
+					let currentRollLKP = parseInt(document.getElementById("LKP" + i + "Input").value, 10);
+					let currentRollSKP = parseInt(document.getElementById("SKP" + i + "Input").value, 10);
+					if(currentRollLKP !== NaN && currentRollLKP !== 0){
+						for(let j = 0; j < currentRollLKP; j++){
+							lkpRolls.push(i);
+						}
+					}
+					if(currentRollSKP !== NaN && currentRollSKP !== 0){
+						for(let j = 0; j < currentRollSKP; j++){
+							skpRolls.push(i);
+						}
+					}
+				}
+				fernkampf(lkpRolls, skpRolls, checkCondition(shooter, cont.toX, cont.toY, distance(shooter.x, shooter.y, cont.toX, cont.toY)),
+				 shooter, target, null);// TODO proper target and chars
 				hide(shootBox);
 				event.status = 'checked';
 				fillEventList();
