@@ -582,11 +582,11 @@ function determineEventStatus() {
 					console.log(army.count + " - " + content.troops);
 					if (army.x != content.x || army.y != content.y) {
 						pendingEvents[i].status = 'withheld';
-					} else if ((army.armyType() === 1 && (((army.count - content.troops) >= (100 / typefactor)) &&
-						((army.leaders - content.leaders) >= 1) && ((army.mounts - content.troops) >= 0))) ||
-						(army.armyType() === 2 && (((army.count - content.troops) >= (100 / typefactor)) &&
-							((army.leaders - content.leaders) >= 1)))) {
-						console.log("Status should be available!")
+					} else if ((army.armyType() === 1 && (((army.count - content.troops) >= 0) &&
+						((army.leaders - content.leaders) >= 0) && ((army.mounts - content.troops) >= 0))) ||
+						(army.armyType() === 2 && (((army.count - content.troops) >= 0) &&
+							((army.leaders - content.leaders) >= 0)))) {
+						console.log("Status should be available!");
 						pendingEvents[i].status = 'available';
 					} else {
 						pendingEvents[i].status = 'impossible';

@@ -803,17 +803,32 @@ function mountSelected(){
 // mounting with parameters
 //TODO: If the army has moved, set the new mounted army's move points to the apropriate, non-max value.
 function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
+	if(toMount === "" || leadersToMount ==="" || toMount === null || leadersToMount === null){
+		window.alert("Alle felder müssen ausgefüllt sein");
+		return false;
+	}
+	// generiere armyId falls keine vorhanden
 	if(newArmyId === null){
 		newArmyId = generateArmyId(2, listOfArmies[armyIndex].owner);
 	}
+	// sitzen genug Truppen auf?
+	if(toMount < 50){
+		window.alert("Es müssen mindestens 50 Reiter in einem Reiterheer sein.");
+		return false;
+	}
+	// sitzen genug Heerführer auf?
+	if(leadersToMount < 1){
+		window.alert("Es muss mindestens ein Heerführer bei der neuen Armee sein.");
+		return false;
+	}
 	// genug Truppen vorhanden?
 	if (toMount > listOfArmies[armyIndex].count) {
-		window.alert("Du hast zu wenige Truppen zum aufsitzen")
+		window.alert("Du hast zu wenige Truppen zum aufsitzen");
 		return false;
 		// genug Reittiere vorhanden?
 	}
 	else if (toMount > listOfArmies[armyIndex].mounts) {
-		window.alert("Du hast zu wenige Reittiere zum aufsitzen")
+		window.alert("Du hast zu wenige Reittiere zum aufsitzen");
 		return false;
 		// Sitzen alle auf?
 	}
@@ -892,8 +907,23 @@ function unMountSelected(){
 // the unMount function of the unMount box
 //TODO: If the mounted army has moved, set the new foot army's move points to the apropriate, non-max value.
 function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
+	if(toUnMount === "" || leadersToUnMount ==="" || toUnMount === null || leadersToUnMount === null){
+		window.alert("Alle felder müssen ausgefüllt sein");
+		return false;
+	}
+	// generiere armyId falls keine vorhanden
 	if(newArmyId === null){
 		newArmyId = generateArmyId(1, listOfArmies[armyIndex].owner);
+	}
+	// sitzen genug Truppen ab?
+	if(toUnMount < 100){
+		window.alert("Es müssen mindestens 100 Truppen in einem Fußheer sein.");
+		return false;
+	}
+	// sitzen genug Heerführer ab?
+	if(leadersToUnMount < 1){
+		window.alert("Es muss mindestens ein Heerführer bei der neuen Armee sein.");
+		return false;
 	}
 	console.log(toUnMount);
 	if (toUnMount > listOfArmies[armyIndex].count) {
@@ -958,17 +988,11 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 }
 
 function allMountSelected() {
-	// stellt ein, dass alle aufsitzen
-	document.getElementById("mountInput").value = listOfArmies[selectedArmyIndex].count;
-	// sitzt auf
-	mountSelected();
+	mountWithParams(selectedArmyIndex, listOfArmies[selectedArmyIndex].count, listOfArmies[selectedArmyIndex].leaders, null);
 }
 
 function allUnMountSelected() {
-	// stellt ein, dass alle aufsitzen
-	document.getElementById("unMountInput").value = listOfArmies[selectedArmyIndex].count;
-	// sitzt auf
-	unMountSelected();
+	unMountWithParams(selectedArmyIndex, listOfArmies[selectedArmyIndex].count, listOfArmies[selectedArmyIndex].leaders, null);
 }
 
 // move troops or leaders from selectedArmyIndex to the army at position mergeId in listOfArmies
