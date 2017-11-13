@@ -98,6 +98,7 @@ function loadArmies() {
 			}
 			// if the event loading finishes before the army loading is is needed, eventlist may be wrong otherwise
 			fillEventList();
+			loadMultifieldArray();
 		},
 		dataType: "json"
 	});
@@ -175,3 +176,10 @@ function loadImages(tileset) { //load the images needed for visualization
 	bridgeNEImg.src = pathPrefix+'/bridge_ne.svg';
 	bridgeSEImg.src = pathPrefix+'/bridge_se.svg';
 }
+
+function loadMultifieldArray(){
+	listOfMultiArmyFields = [];
+	for (let i = 0; i < listOfArmies.length; i++) {
+		createMultifield(listOfArmies[i]);
+		}
+} 

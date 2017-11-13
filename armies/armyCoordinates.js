@@ -5,11 +5,16 @@ function move(army, direction){//TODO needs new names
             var tempmove = army.possibleMoves[i];
             //in case it is moving on land
             if(tempmove.load === undefined){
+                //before moving check if you leave a Multi Army field
+                if(army.multiArmyField === true){
+                    deleteFromMultifield(army);
+                }
                 army.remainingMovePoints -= tempmove.movepoints;
                 army.oldX = army.x;
                 army.oldY = army.y;
                 army.x = tempmove.tar.x;
                 army.y = tempmove.tar.y;
+                createMultifield(army);
                 //for ship movement
                 if(Math.floor(army.armyId / 100) == 3){
                 // moves troops that are loaded in the fleet
@@ -20,8 +25,10 @@ function move(army, direction){//TODO needs new names
                                 if(listOfArmies[j].owner === army.owner && listOfArmies[j].armyId === army.loadedArmies[i]){
                                     listOfArmies[j].oldX = listOfArmies[j].x;
                                     listOfArmies[j].oldY = listOfArmies[j].y;
+                                    deleteFromMultifield(listOfArmies[j]);
                                     listOfArmies[j].x = tempmove.tar.x;
                                     listOfArmies[j].y = tempmove.tar.y;
+                                    createMultifield(listOfArmies[j]);
                                 }
                             }
                         }
@@ -81,6 +88,12 @@ function move(army, direction){//TODO needs new names
                         army.oldY = army.y;
                         army.x = tempmove.tar.x;
                         army.y = tempmove.tar.y;
+                        //before moving check if you leave a Multi Army field
+                        if(army.multiArmyField === true){
+                            deleteFromMultifield(army);
+                        }
+
+                        createMultifield(army);
                         return "ok";
                     } else {
                         return(loadString);
@@ -120,6 +133,12 @@ function move(army, direction){//TODO needs new names
                                 army.oldY = army.y;
                                 army.x = tempmove.tar.x;
                                 army.y = tempmove.tar.y;
+                                //before moving check if you leave a Multi Army field
+                                if(army.multiArmyField === true){
+                                    deleteFromMultifield(army);
+                                }
+
+                                createMultifield(army);
                                 return "ok";
                             } else {
                                 return(loadString);
@@ -134,7 +153,7 @@ function move(army, direction){//TODO needs new names
     }
     //to see and return the error why you cant move
     clickedMoves(army);
-    return moveToList(army, direction)
+    return moveToList(army, direction);
 }
 
 //when unit is clicked generates a list of neighbors that can be moved to
@@ -152,7 +171,7 @@ function clickedMoves(army){
 // direction as a number, 0 = NW, 1 = NO, 2 = O, 3 = SO, 4 = SW, 5 = W
 //tries to move a Unit in a direction and if possible saves the possible move
 function moveToList(army, direction) {
-    console.log("moveToListInitiated");
+    //console.log("moveToListInitiated");
     var destination = new showHex(army.x, army.y);
     var neighborCoords = destination.neighbors();
     var target = new showHex(neighborCoords[direction][0], neighborCoords[direction][1]);
@@ -496,7 +515,7 @@ function conquer(army, direction) {
         //console.log(borders[i]);
     }
     // war nicht bereits Land des Besitzers.
-    if (found == false){
+    if (!found){
         for(var i = 0; i<borders.length; i++){
             if (borders[i].tag === army.ownerTag()){
                 // tu es zu den Ländern des Besitzers.
