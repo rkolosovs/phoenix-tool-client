@@ -535,7 +535,6 @@ function checkCondition(army, x, y, range){
     if(army.skp > 0){//skp shooting
         if(range == 1){//for range of 1
             if(height(x, y) - height(army.x, army.y) <= 2){
-                //targetList.splice(i,1);
                 condition = 'high';
             }
             if(height(x, y) - height(army.x, army.y) <= 1){
@@ -543,7 +542,6 @@ function checkCondition(army, x, y, range){
             }
         }else if(range == 2){//for range of 2
             if(height(x, y) - height(army.x, army.y) <= 1){
-                //targetList.splice(i,1);
                 condition = 'farAndUp';
             }
             if(height(x, y) - height(army.x, army.y) <= 1){
@@ -556,16 +554,15 @@ function checkCondition(army, x, y, range){
                 for(let k = 0; k < originNeighbors.length; k++){
                     if(targetNeighbors[j][0] == originNeighbors[k][0] && targetNeighbors[j][1] == originNeighbors[k][1]){
                         if(height(targetNeighbors[j][0], targetNeighbors[j][1]) - height(army.x, army.y) > 1){
-                            //targetList.splice(i,1);
                             condition = 'impossible shot';
                         }
+                        //TODO add Wall targeting
                     }
                 }
             }
         }
     }else{//for lkp shooting
         if(height(x, y) - height(army.x, army.y) <= 1){
-            //targetList.splice(i,1);
             condition = 'lkp';
         }
     }
