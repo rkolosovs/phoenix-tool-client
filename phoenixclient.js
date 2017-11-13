@@ -154,33 +154,7 @@ function registerLeftClick() {
 		skpBuffer = 0;
 		document.getElementById("skpField").value = 0;
 		//before adding to list check if there is an army on the field and add multifield accordingly
-		var onmulti = false;
-		var newmulti = false;
-		var foundarmy;
-		for (var i = 0; i < listOfArmies.length; i++) {
-			var a = listOfArmies[i];
-			if (a.x === army.x && a.y === army.y) {
-				if (a.multiArmyField === true) {
-					onmulti = true;
-					foundarmy = a;
-				}
-				else {
-					newmulti = true;
-					foundarmy = a;
-				}
-			}
-		}
-		if (onmulti == true) {
-			addToMultifield(foundarmy, army)
-		}
-		else if (newmulti == true) {
-			var templist = [];//creating a list of armies to add to the list of multifieldarmies
-			templist.push(foundarmy);
-			templist.push(army);
-			listOfMultiArmyFields.push(templist);
-			foundarmy.multiArmyField = true;
-			army.multiArmyField = true;
-		}
+		createMultifield(army);
 		listOfArmies.push(army);
 		switchBtnBoxTo("buttonsBox");
 		switchModeTo("none");
@@ -322,11 +296,6 @@ function registerRightClick() {
 						var battlePossible = false;
 						var participants = [];
 
-						//before moving check if you leave a Multi Army field
-						if (listOfArmies[selectedArmyIndex].multiArmyField === true) {
-							deleteFromMultifield(listOfArmies[selectedArmyIndex]);
-						}
-
 						for (var j = 0; j < listOfArmies.length; j++) {
 							var someArmy = listOfArmies[j];
 							if (someArmy.x === listOfArmies[selectedArmyIndex].x && someArmy.y === listOfArmies[selectedArmyIndex].y
@@ -343,18 +312,6 @@ function registerRightClick() {
 								//3. move from multi and leaving regular field
 								//4. move from multi but still multifield left
 								//5. move from multi to multi
-
-								if (someArmy.multiArmyField === true) {//2.
-									addToMultifield(someArmy, listOfArmies[selectedArmyIndex]);
-								}
-								else {//1.
-									var templist = [];//creating a list of armies to add to the list of multifieldarmies
-									templist.push(someArmy);
-									templist.push(listOfArmies[selectedArmyIndex]);
-									listOfMultiArmyFields.push(templist);
-									someArmy.multiArmyField = true;
-									listOfArmies[selectedArmyIndex].multiArmyField = true;
-								}
 							}
 						}
 
@@ -393,42 +350,69 @@ function registerRightClick() {
 	}
 }
 
-function addToMultifield(armyOnMultifield, armyToAdd) {
-	var alreadyInList = false;
-	var placeToAdd;
-	for (var i = 0; i < listOfMultiArmyFields.length; i++) {
-		for (var j = 0; j < listOfMultiArmyFields[i].length; j++) {
-			if (listOfMultiArmyFields[i][j] === armyOnMultifield) {
-				placeToAdd = i;
+
+//checks the current field for other armies and adds it accordingly
+function createMultifield(army){
+	for (let j = 0; j < listOfArmies.length; j++) {
+		var someArmy = listOfArmies[j];
+		if (someArmy.x === army.x && someArmy.y === army.y && someArmy !== army) {
+			if(someArmy.multiArmyField === true){
+				addToMultifield(someArmy, army);
 			}
-			else if (listOfMultiArmyFields[i][j] === armyToAdd) {
-				alreadyInList = true;
+			else{
+				let templist = [someArmy, army];//creating a list of armies to add to the list of multifieldarmies
+				listOfMultiArmyFields.push(templist);
+				someArmy.multiArmyField = true;
+				army.multiArmyField = true;
+				console.log("created multi");
 			}
 		}
 	}
-	if (alreadyInList == false) {
-		listOfMultiArmyFields[placeToAdd].push(armyToAdd);
-	}
-	armyToAdd.multiArmyField = true;
 }
 
-function deleteFromMultifield(armyToDelete) {
-	addArmyToMulti: {//label to jump out when its found and added
-		for (var k = 0; k < listOfMultiArmyFields.length; k++) {
-			for (var l = 0; l < listOfMultiArmyFields[k].length; l++) {
-				if (listOfMultiArmyFields[k][l] === armyToDelete) {
-					listOfMultiArmyFields[k].splice(l, 1);
 
-					//check if remaining field is still multi
-					if (listOfMultiArmyFields[k].length < 2) {
-						listOfMultiArmyFields[k][0].multiArmyField = false;
-						listOfMultiArmyFields.splice(k, 1);
-					}
+//Adds an army to an existing multifield
+function addToMultifield(armyOnMultifield, armyToAdd){
+	if(listOfMultiArmyFields !== undefined){
+		let alreadyInList = false;
+		let placeToAdd;
+		for(let i = 0; i < listOfMultiArmyFields.length; i++){
+			for(let j = 0; j < listOfMultiArmyFields[i].length; j++){
+				if(listOfMultiArmyFields[i][j] === armyOnMultifield){
+					placeToAdd = i;
+				}
+				else if(listOfMultiArmyFields[i][j] === armyToAdd){
+					alreadyInList = true;
 				}
 			}
 		}
-		armyToDelete.multiArmyField = false;
+		if(alreadyInList == false && placeToAdd !== undefined){
+			listOfMultiArmyFields[placeToAdd].push(armyToAdd);
+			console.log("added to multi");
+		}
+		armyToAdd.multiArmyField = true;
 	}
+}
+
+//deletes from multifield in case of beeing on multifield 
+function deleteFromMultifield(armyToDelete){
+	addArmyToMulti:{//label to jump out when its found and added
+	for(let k = 0; k < listOfMultiArmyFields.length; k++){
+		for(let l = 0; l < listOfMultiArmyFields[k].length; l++){
+			if(listOfMultiArmyFields[k][l] === armyToDelete){
+				listOfMultiArmyFields[k].splice(l,1);
+
+				//check if remaining field is still multi
+				if(listOfMultiArmyFields[k].length < 2){
+					listOfMultiArmyFields[k][0].multiArmyField = false;
+					listOfMultiArmyFields.splice(k,1);
+				}
+				break;
+			}
+		}
+	}
+	}
+	armyToDelete.multiArmyField = false;
 }
 
 function getClickedField() {
@@ -541,7 +525,7 @@ function determineEventStatus() {
 				var typefactor = 1;
 
 				var army = listOfArmies[findArmyPlaceInList(content.fromArmy, content.realm)];
-				if (army == undefined) {
+				if (army === undefined) {
 					pendingEvents[i].status = 'withheld';
 				} else {
 
@@ -921,7 +905,7 @@ function checkEvent(num) {
 			var lkpToSplit = cont.lkp;
 			var skpToSplit = cont.skp;
 			for (var i = 0; i < listOfArmies.length; i++) {
-				if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
+				if (listOfArmies[i].armyId === armyFromId && listOfArmies[i].owner === realm) {
 					armyFromPlaceInList = i;
 				}
 			}

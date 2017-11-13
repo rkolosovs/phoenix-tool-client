@@ -431,7 +431,7 @@ function drawArmies(ctx, x, y, scale, armies) {
 		//ctx.fillText(armyData.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
 
 		//check if its is on a multifield. if it is ignore
-		if(armyData.multiArmyField == false){
+		if(!armyData.multiArmyField){
 			// armies == 1, riders == 2, boats == 3
 			if(Math.floor(armyData.armyId/100) == 1){
 				ctx.drawImage(troopsImg, pos[0], pos[1], (scale*SIN60), scale); 

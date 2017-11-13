@@ -429,8 +429,8 @@ function battleHandler(participants, x, y) {
 			this.defenseSide.forEach(function (item) {
 				item.decimate(item.count);
 			});
-		} else if (this.battle.overrunDefense()) {
-			this.attackSide.forEach(function (item) {
+		} else if(this.battle.overrunDefense()) {
+			this.attackSide.forEach(function(item){
 				item.decimate(item.count);
 			});
 		} else {
@@ -472,141 +472,184 @@ function battleHandler(participants, x, y) {
 
 
 function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, posY) {
-	this.fieldType = (new showHex(posX, posY)).fieldType();
-	//        return fields.find((field) => (field.x === this.posX && field.y === this.posY)).type;
+    this.fieldType =
+        (new showHex(posX, posY)).fieldType();
+//        fields.find((field) => (field.x === posX && field.y === posY)).type;
 
-	this.overrunAttack = function () {
-		return this.armyArrayCount(armiesAttack) >= 10 * this.armyArrayCount(armiesDefense) &&
-			armiesDefense.filter((elem) => (elem.isGuard)).length === 0 && this.armyArrayCount(armiesAttack) > 0;
-	}
+    this.armyArrayCount = function(armyArray) {
+        return armyArray.filter((val) => (
+            (val.armyType() === 3 && this.fieldType <= 1) || (this.fieldType >= 2 && val.armyType() <= 2)), this).
+            reduce((total, elem) => (elem.count + total), 0);
+    }
 
-	this.overrunDefense = function () {
-		return 10 * this.armyArrayCount(armiesAttack) <= this.armyArrayCount(armiesDefense) &&
-			armiesAttack.filter((elem) => (elem.isGuard)).length === 0 && this.armyArrayCount(armiesDefense) > 0;
-	}
+    this.overrunAttack = function() {
+        return this.armyArrayCount(armiesAttack) >= 10 * this.armyArrayCount(armiesDefense) &&
+            armiesDefense.filter((elem) => (elem.isGuard)).length === 0 && this.armyArrayCount(armiesAttack) > 0;
+    }
 
-	this.armyArrayCount = function (armyArray) {
-		return armyArray.filter((val) => (
-			(val.armyType() === 3 && this.fieldType <= 1) || (this.fieldType >= 2 && val.armyType() <= 2)), this).
-			reduce((total, elem) => (elem.count + total), 0);
-	}
+    this.overrunDefense = function() {
+        return 10 * this.armyArrayCount(armiesAttack) <= this.armyArrayCount(armiesDefense) &&
+            armiesAttack.filter((elem) => (elem.isGuard)).length === 0 && this.armyArrayCount(armiesDefense) > 0;
+    }
 
-	this.terrainGP = function (army, attacker) {
-		//TODO: including bonuses form defending a production building. remember that that negates usual terrain bonus
-		//BLOCKER: requires the army to know its real, allegiance.
-		//TODO: once an army knows its previous position the attacker parameter can be removed
-		var fieldType = this.fieldType;
-		if ((army.armyType() === 1 && (fieldType === 3 || fieldType === 8)) ||
-			(army.armyType() === 2 && (fieldType === 2 || fieldType === 4 || fieldType === 7))) {
-			return 140;
-		} else if (false) {
-			//TODO: defending a production building bonus comes here.
-		} else {
-			return 0;
-		}
-	}
+    this.terrainGP = function(army, attacker) {
+        //TODO: home terrain bonus missing
+        //BLOCKER: The home terrain of a realm isn't saved anywhere
+        var fieldType = this.fieldType;
+        var buildingsOnTheField = buildings.filter((current) => (current.x === posX && current.y === posY && current.type <= 4));
+        if(buildingsOnTheField.length > 0){
+            if(attacker){return 0;}
+            if(buildingsOnTheField[0].realm !== army.owner){return 50;}
+            switch(buildingsOnTheField[0].type){
+                case 0: return 100;
+                case 1: return 200;
+                case 2: return 300;
+                case 3: return 400;
+                case 4: return 500;
+            }
+        } else {
+            //TODO: home terrain bonus goes here
+            if((army.armyType() === 1 && (fieldType === 3 || fieldType === 8)) ||
+            (army.armyType() === 2 && (fieldType === 2 || fieldType === 4 || fieldType === 7))) {
+                return 140;
+            } else {return 0;}
+        }
+    }
 
-	this.characterGP = function (army) {
-		//TODO: compute GP from own character fighting in battle.
-		//BLOCKER: requires characters and armies to know their realm allegiance.
-		//currently army coordinates have the owner of an army and chars don't have it at all
-		return 0;
-	}
+    this.characterGP = function(army) {
+        //TODO: compute GP from own character fighting in battle.
+        //BLOCKER: requires characters to know their realm allegiance.
+        return 0;
+    }
 
-	this.directionalTerrainGP = function (army) {
-		//TODO: compute GP from directional terrain like attacking from a forest, up/down hill, over a wall etc.
-		//BLOCKER: an army doesn't know its position or former position
-		return 0;
-	}
+    this.directionalTerrainGP = function(army, attacker, attackingArmies) {
+        let result = 0;
+        let targetField = new showHex(army.x, army.y);
+        if(attacker) {
+            let startingField = new showHex(army.oldX, army.oldY);
+            if(startingField.height() > targetField.height()){result += 20;}//fighting downhill
+            if(targetField.fieldType() === 7 || targetField.fieldType() === 8){result += 20;}//attacking into swamp or desert
+            if(startingField.fieldType() === 3) {result += 20;}//attacking out of a forest
+            if(targetField.hasStreet()){result += 20;}//attacking onto a street
+        } else {
+            let adjacentWalls = targetField.walls();
+            let adjacentRivers = targetField.fluesse();
+            let adjacentBridges = targetField.bridges();
+            let neighbors = targetField.neighbors();
+            let downhillBonus = false;
+            let wallBonus = false;
+            let bridgeBonus = false;
+            let riverBonus = false;
+            attackingArmies.forEach((attackingArmy) => {
+                if((new showHex(attackingArmy.oldX, attackingArmy.oldY)).height() < targetField.height()){
+                    downhillBonus = true;
+                }
+                neighbors.forEach((neighbor, index) => {
+                    if(neighbor[0] === attackingArmy.oldX && neighbor[1] === attackingArmy.oldY){
+                        if(adjacentWalls[index] === 1){wallBonus = true;}
+                        if(adjacentRivers[index] === 1){
+                            if(adjacentBridges[index] === 1){
+                                bridgeBonus = true;
+                            } else {
+                                riverBonus = true;
+                            }
+                        }
+                    }
+                });
+            });
+            result = downhillBonus?20:0 + wallBonus?50:0 + riverBonus?50:0 + bridgeBonus?30:0;
+        }
+        return result;
+    }
 
-	this.computeCombatRating = function (strengthArmy, totalArmyGP) {
-		return strengthArmy.map((elem, index) => (elem * (1 + (totalArmyGP[index] / 200))));
-	}
+    this.computeCombatRating = function(strengthArmy, totalArmyGP) {
+        return strengthArmy.map((elem, index) => (elem * (1 + (totalArmyGP[index]/200))));
+    }
 
-	this.computeLossFactor = function (ownForces, enemyForces, victorious) {
-		var baseFactor = (ownForces / enemyForces) / 10;
-		if (victorious && ownForces >= enemyForces) {
-			return - baseFactor;
-		} else if (victorious && ownForces < enemyForces) {
-			return 0.2 - baseFactor;
-		} else {
-			return 0;
-		}
-	}
+    this.computeLossFactor = function(ownForces, enemyForces, victorious) {
+        var baseFactor = (ownForces/enemyForces)/10;
+        if (victorious && ownForces >= enemyForces) {
+            return - baseFactor;
+        } else if (victorious && ownForces < enemyForces) {
+            return 0.2 - baseFactor;
+        } else {
+            return 0;
+        }
+    }
 
-	this.computeFinalLosses = function (baseArmyLosses, armyGPDiff, armyStrength, totalStrength) {
-		var lossesWithGP = 0;
-		if (armyGPDiff >= 0) {
-			lossesWithGP = baseArmyLosses / (1 + armyGPDiff);
-		} else {
-			lossesWithGP = baseArmyLosses * (1 - armyGPDiff);
-		}
-		return (lossesWithGP / totalStrength) * armyStrength;
-	}
+    this.computeFinalLosses = function(baseArmyLosses, armyGPDiff, armyStrength, totalStrength) {
+        var lossesWithGP = 0;
+        if(armyGPDiff >= 0) {
+            lossesWithGP = baseArmyLosses/(1 + armyGPDiff);
+        } else {
+            lossesWithGP = baseArmyLosses * (1 - armyGPDiff);
+        }
+        return (lossesWithGP/totalStrength)*armyStrength;
+    }
 
-	this.result = function (attackRoll, defenseRoll) {
-		var totalStrengthAttackerArmy = armiesAttack.map((elem) => (elem.count));
-		var totalStrengthDefenderArmy = armiesDefense.map((elem) => {
-			if (elem.armyType() === 3) {
-				return elem.count + elem.lkp * 5 + elem.skp * 10;
-			} else {
-				return elem.count;
-			}
-		});
+    this.result = function(attackRoll, defenseRoll){
+        var totalStrengthAttackerArmy = armiesAttack.map((elem) => (elem.count));
+        var totalStrengthDefenderArmy = armiesDefense.map((elem) => {
+            if(elem.armyType() === 3){
+                return elem.count + elem.lkp * 5 + elem.skp * 10;
+            } else {
+                return elem.count;
+            }
+        });
 
-		var totalAttackerArmyGP = armiesAttack.map((elem) => (
-			attackRoll + elem.leaderGp() + this.terrainGP(elem, true) + this.characterGP(elem) + this.directionalTerrainGP(elem)
-		));
-		var totalDefenderArmyGP = armiesDefense.map((elem) => (
-			defenseRoll + elem.leaderGp() + this.terrainGP(elem, false) + this.characterGP(elem) + this.directionalTerrainGP(elem)
-		));
+        var totalAttackerArmyGP = armiesAttack.map((elem) => (
+            attackRoll + elem.leaderGp() + this.terrainGP(elem, true) + this.characterGP(elem) + this.directionalTerrainGP(elem, true, null)
+        ));
+        var totalDefenderArmyGP = armiesDefense.map((elem) => (
+            defenseRoll + elem.leaderGp() + this.terrainGP(elem, false) + this.characterGP(elem) + this.directionalTerrainGP(elem, false, armiesAttack)
+        ));
 
-		var combatRatingAttackerArmy = this.computeCombatRating(totalStrengthAttackerArmy, totalAttackerArmyGP);
-		var combatRatingDefenderArmy = this.computeCombatRating(totalStrengthDefenderArmy, totalDefenderArmyGP);
+        var combatRatingAttackerArmy = this.computeCombatRating(totalStrengthAttackerArmy, totalAttackerArmyGP);
+        var combatRatingDefenderArmy = this.computeCombatRating(totalStrengthDefenderArmy, totalDefenderArmyGP);
 
-		var totalAttackerStrength = totalStrengthAttackerArmy.reduce((total, elem) => (total + elem), 0);
-		var totalDefenderStrength = totalStrengthDefenderArmy.reduce((total, elem) => (total + elem), 0);
+        var totalAttackerStrength = totalStrengthAttackerArmy.reduce((total, elem) => (total + elem), 0);
+        var totalDefenderStrength = totalStrengthDefenderArmy.reduce((total, elem) => (total + elem), 0);
 
-		var attackerTotalCombatRating = combatRatingAttackerArmy.reduce((total, elem) => (total + elem), 0);
-		var defenderTotalCombatRating = combatRatingDefenderArmy.reduce((total, elem) => (total + elem), 0);
+        var attackerTotalCombatRating = combatRatingAttackerArmy.reduce((total, elem) => (total + elem), 0);
+        var defenderTotalCombatRating = combatRatingDefenderArmy.reduce((total, elem) => (total + elem), 0);
 
-		var victor = '';
-		if (this.overrunAttack() || attackerTotalCombatRating > defenderTotalCombatRating) {
-			victor = 'attacker';
-		} else if (this.overrunDefense() || attackerTotalCombatRating < defenderTotalCombatRating) {
-			victor = 'defender';
-		} else {
-			victor = 'tie';
-		}
+        var victor = '';
+        if (this.overrunAttack() || attackerTotalCombatRating > defenderTotalCombatRating) {
+            victor = 'attacker';
+        } else if (this.overrunDefense() || attackerTotalCombatRating < defenderTotalCombatRating) {
+            victor = 'defender';
+        } else {
+            victor = 'tie';
+        }
 
-		var attackerBaseLosses = totalDefenderStrength;
-		var defenderBaseLosses = totalAttackerStrength;
+        var attackerBaseLosses = totalDefenderStrength;
+        var defenderBaseLosses = totalAttackerStrength;
 
-		var attackerLossFactor = this.computeLossFactor(totalAttackerStrength, totalDefenderStrength, (victor === 'attacker'));
-		var defenderLossFactor = this.computeLossFactor(totalDefenderStrength, totalAttackerStrength, (victor === 'defender'));
+        var attackerLossFactor = this.computeLossFactor(totalAttackerStrength, totalDefenderStrength, (victor === 'attacker'));
+        var defenderLossFactor = this.computeLossFactor(totalDefenderStrength, totalAttackerStrength, (victor === 'defender'));
 
-		//multiplication and subsequent division by 100 done for reasons of numerical stability
-		var attackerNewBaseLosses = Math.floor((attackerBaseLosses * (100 + (attackerLossFactor * 100))) / 100);
-		var defenderNewBaseLosses = Math.floor((defenderBaseLosses * (100 + (defenderLossFactor * 100))) / 100);
+        //multiplication and subsequent division by 100 done for reasons of numerical stability
+        var attackerNewBaseLosses = Math.floor((attackerBaseLosses * (100 + (attackerLossFactor * 100)))/100);
+        var defenderNewBaseLosses = Math.floor((defenderBaseLosses * (100 + (defenderLossFactor * 100)))/100);
 
-		var baseLossesAttackerArmy = totalStrengthAttackerArmy.map((elem) => ((elem / totalAttackerStrength) * attackerNewBaseLosses));
-		var baseLossesDefenderArmy = totalStrengthDefenderArmy.map((elem) => ((elem / totalDefenderStrength) * defenderNewBaseLosses));
+        var baseLossesAttackerArmy = totalStrengthAttackerArmy.map((elem) => ((elem/totalAttackerStrength)*attackerNewBaseLosses));
+        var baseLossesDefenderArmy = totalStrengthDefenderArmy.map((elem) => ((elem/totalDefenderStrength)*defenderNewBaseLosses));
 
-		var attackerMeanGP = ((attackerTotalCombatRating / totalAttackerStrength) - 1) * 100;
-		var defenderMeanGP = ((defenderTotalCombatRating / totalDefenderStrength) - 1) * 100;
+        var attackerMeanGP = ((attackerTotalCombatRating/totalAttackerStrength) - 1) * 100;
+        var defenderMeanGP = ((defenderTotalCombatRating/totalDefenderStrength) - 1) * 100;
 
-		var attackerGPDiffArmy = totalAttackerArmyGP.map((elem) => ((elem / 200) - (defenderMeanGP / 100)));
-		var defenderGPDiffArmy = totalDefenderArmyGP.map((elem) => ((elem / 200) - (attackerMeanGP / 100)));
+        var attackerGPDiffArmy = totalAttackerArmyGP.map((elem) => ((elem/200) - (defenderMeanGP/100)));
+        var defenderGPDiffArmy = totalDefenderArmyGP.map((elem) => ((elem/200) - (attackerMeanGP/100)));
 
-		var finalLossesAttackerArmy = baseLossesAttackerArmy.map((elem, index) => (
-			this.computeFinalLosses(elem, attackerGPDiffArmy[index], totalStrengthAttackerArmy[index], totalStrengthAttackerArmy[index])
-		));
-		var finalLossesDefenderArmy = baseLossesDefenderArmy.map((elem, index) => (
-			this.computeFinalLosses(elem, defenderGPDiffArmy[index], armiesDefense[index].count, totalStrengthDefenderArmy[index])
-		));
+        var finalLossesAttackerArmy = baseLossesAttackerArmy.map((elem, index) => (
+            this.computeFinalLosses(elem, attackerGPDiffArmy[index], totalStrengthAttackerArmy[index], totalStrengthAttackerArmy[index])
+        ));
+        var finalLossesDefenderArmy = baseLossesDefenderArmy.map((elem, index) => (
+            this.computeFinalLosses(elem, defenderGPDiffArmy[index], armiesDefense[index].count, totalStrengthDefenderArmy[index])
+        ));
 
-		return { victor: victor, attackerLosses: finalLossesAttackerArmy, defenderLosses: finalLossesDefenderArmy };
-	}
+        return {victor: victor, attackerLosses: finalLossesAttackerArmy, defenderLosses: finalLossesDefenderArmy};
+    }
 }
 
 
@@ -783,6 +826,7 @@ function splitSelectedArmy() {
 			}
 		});
 	}
+	createMultifield(newArmy);
 	restoreInfoBox();
 	updateInfoBox();
 }
@@ -837,10 +881,7 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 		}
 		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch armyIndex
 		listOfArmies.push(newArmy);
-		if (listOfArmies[armyIndex].multiArmyField === true) {
-			addToMultifield(listOfArmies[armyIndex], newArmy);
-			deleteFromMultifield(listOfArmies[armyIndex]);
-		}
+		createMultifield(newArmy);
 		preparedEvents.push({
 			type: "mount", content: {
 				fromArmyId: listOfArmies[armyIndex].armyId,
@@ -884,6 +925,7 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 				newArmysId: newArmy.armyId
 			}
 		});
+		createMultifield(newArmy);
 		// selectedArmyIndex zeigt auf neues Heer
 		selectedArmyIndex = listOfArmies.length - 1;
 		restoreInfoBox();
@@ -931,10 +973,6 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 			listOfArmies[armyIndex].x, listOfArmies[armyIndex].y, listOfArmies[armyIndex].owner);
 		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch armyIndex
 		listOfArmies.push(newArmy);
-		if (listOfArmies[armyIndex].multiArmyField === true) {
-			addToMultifield(listOfArmies[armyIndex], newArmy);
-			deleteFromMultifield(listOfArmies[armyIndex]);
-		}
 		preparedEvents.push({
 			type: "mount", content: {
 				fromArmyId: listOfArmies[armyIndex].armyId,
@@ -947,6 +985,7 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 			}
 		});
 		deleteArmy(armyIndex);
+		createMultifield(newArmy);
 		restoreInfoBox();
 		updateInfoBox();
 		// genug Heerführer?
@@ -974,8 +1013,9 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 				newArmysId: newArmy.armyId
 			}
 		});
-		// armyIndex zeigt auf neues Heer
-		selectedArmyIndex = listOfArmies.length - 1;
+		createMultifield(newArmy);
+		// selectedArmyIndex zeigt auf neues Heer
+		selectedArmyIndex = listOfArmies.length-1;
 		restoreInfoBox();
 		updateInfoBox();
 	}
@@ -1243,7 +1283,13 @@ function mergeSelectedArmy(mergeId) {
 	restoreInfoBox();
 }
 
-function deleteArmy(index) {
+// deletes the currently selected army und puts the last army in listOfArmies in its place
+function deleteSelectedArmy(){
+	deleteArmy(selectedArmyIndex);
+}
+
+function deleteArmy(index){
+	deleteFromMultifield(listOfArmies[index]);
 	listOfArmies.splice(index, 1);
 	if (selectedArmyIndex === listOfArmies.length) {
 		selectedArmyIndex = undefined;
@@ -1307,5 +1353,9 @@ function generateArmyId(type, owner) {
 
 function checkArmiesForLiveliness() {
 	listOfArmies = listOfArmies.filter(
-		function (armyCoord) { return armyCoord.isAlive(); });
+		function(armyCoord){
+			if(!armyCoord.isAlive()){deleteFromMultifield(armyCoord);}
+			return armyCoord.isAlive();
+		}
+	);
 }

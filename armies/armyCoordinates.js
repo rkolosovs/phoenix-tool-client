@@ -1,30 +1,41 @@
 //to actually move units with the new method
 function move(army, direction){//TODO needs new names
     for(var i =0; i < army.possibleMoves.length; i++){
-        if(army.possibleMoves[i].dir == direction){
+        if(army.possibleMoves[i].dir === direction){
             var tempmove = army.possibleMoves[i];
             //in case it is moving on land
-            if(tempmove.load == undefined){
+            if(tempmove.load === undefined){
+                //before moving check if you leave a Multi Army field
+                if(army.multiArmyField === true){
+                    deleteFromMultifield(army);
+                }
                 army.remainingMovePoints -= tempmove.movepoints;
+                army.oldX = army.x;
+                army.oldY = army.y;
                 army.x = tempmove.tar.x;
                 army.y = tempmove.tar.y;
+                createMultifield(army);
                 //for ship movement
                 if(Math.floor(army.armyId / 100) == 3){
                 // moves troops that are loaded in the fleet
-                    if(army.loadedArmies != undefined && army.loadedArmies != []){
+                    if(army.loadedArmies !== undefined && army.loadedArmies !== []){
                         for(var i = 0; i < army.loadedArmies.length; i++){
                             for(var j = 0; j < listOfArmies.length; j++){
                                 console.log(army.loadedArmies[i]);
-                                if(listOfArmies[j].owner == army.owner && listOfArmies[j].armyId == army.loadedArmies[i]){
+                                if(listOfArmies[j].owner === army.owner && listOfArmies[j].armyId === army.loadedArmies[i]){
+                                    listOfArmies[j].oldX = listOfArmies[j].x;
+                                    listOfArmies[j].oldY = listOfArmies[j].y;
+                                    deleteFromMultifield(listOfArmies[j]);
                                     listOfArmies[j].x = tempmove.tar.x;
                                     listOfArmies[j].y = tempmove.tar.y;
+                                    createMultifield(listOfArmies[j]);
                                 }
                             }
                         }
                     }
                 }
                 //for moving off a ship
-                if(tempmove.unload != undefined && tempmove.unload == true){
+                if(tempmove.unload !== undefined && tempmove.unload === true){
                     console.log("Armee war in " + army.isLoadedIn + " geladen.");
                     for(var i = 0; i < listOfArmies.length; i++){
                         if((listOfArmies[i].owner == army.owner) && listOfArmies[i].armyId == army.isLoadedIn){
@@ -58,7 +69,7 @@ function move(army, direction){//TODO needs new names
             else if(tempmove.load == true){
                 var fleetsOnDest = [];
                 for(var i = 0; i<listOfArmies.length; i++){
-                    if((listOfArmies[i].owner == army.owner) && (listOfArmies[i].x == tempmove.tar.x) && (listOfArmies[i].y == tempmove.tar.y) &&
+                    if((listOfArmies[i].owner === army.owner) && (listOfArmies[i].x === tempmove.tar.x) && (listOfArmies[i].y === tempmove.tar.y) &&
                     (Math.floor(listOfArmies[i].armyId / 100) == 3)){
                         fleetsOnDest.push(i);
                         console.log("fleets +1");
@@ -68,14 +79,21 @@ function move(army, direction){//TODO needs new names
                 if(fleetsOnDest.length == 0){
                     return "You can't walk on Water.";
                 // there is exactly one
-                } else if(fleetsOnDest.length == 1){
-                    army.indexInListOfArmies
+                } else if(fleetsOnDest.length === 1){
                     var loadString = listOfArmies[fleetsOnDest[0]].loadArmy(army.indexInListOfArmies());
-                    if(loadString == "ok"){
+                    if(loadString === "ok"){
                         army.isLoadedIn = listOfArmies[fleetsOnDest[0]].armyId;
                         console.log("army in now loaded in " + army.isLoadedIn);
+                        army.oldX = army.x;
+                        army.oldY = army.y;
                         army.x = tempmove.tar.x;
                         army.y = tempmove.tar.y;
+                        //before moving check if you leave a Multi Army field
+                        if(army.multiArmyField === true){
+                            deleteFromMultifield(army);
+                        }
+
+                        createMultifield(army);
                         return "ok";
                     } else {
                         return(loadString);
@@ -87,10 +105,10 @@ function move(army, direction){//TODO needs new names
                         fleetstring = fleetstring + listOfArmies[fleetsOnDest[i]].armyId + " ";
                     }
                     var chosenFleet = prompt("Mögliche Flotten sind: " + fleetstring);
-                    if(chosenFleet != null){
+                    if(chosenFleet !== null){
                         var foundFleet = -1;
                         for(var i = 0; i < listOfArmies.length; i++){
-                            if(listOfArmies[i].armyId == chosenFleet && listOfArmies[i].owner == army.owner){
+                            if(listOfArmies[i].armyId === chosenFleet && listOfArmies[i].owner === army.owner){
                                 foundFleet = i;
                             }
                         }
@@ -102,7 +120,7 @@ function move(army, direction){//TODO needs new names
                         console.log(fleetsOnDest);
                         var found = false;
                         for(var i = 0; i < fleetsOnDest.length; i++){
-                            if(fleetsOnDest[i] == foundFleet){
+                            if(fleetsOnDest[i] === foundFleet){
                                 found = true
                             }
                         }
@@ -111,8 +129,16 @@ function move(army, direction){//TODO needs new names
                             if(loadString == "ok"){
                                 army.isLoadedIn = listOfArmies[foundFleet].armyId;
                                 console.log("army in now loaded in " + army.isLoadedIn);
+                                army.oldX = army.x;
+                                army.oldY = army.y;
                                 army.x = tempmove.tar.x;
                                 army.y = tempmove.tar.y;
+                                //before moving check if you leave a Multi Army field
+                                if(army.multiArmyField === true){
+                                    deleteFromMultifield(army);
+                                }
+
+                                createMultifield(army);
                                 return "ok";
                             } else {
                                 return(loadString);
@@ -127,7 +153,7 @@ function move(army, direction){//TODO needs new names
     }
     //to see and return the error why you cant move
     clickedMoves(army);
-    return moveToList(army, direction)
+    return moveToList(army, direction);
 }
 
 //when unit is clicked generates a list of neighbors that can be moved to
@@ -145,7 +171,7 @@ function clickedMoves(army){
 // direction as a number, 0 = NW, 1 = NO, 2 = O, 3 = SO, 4 = SW, 5 = W
 //tries to move a Unit in a direction and if possible saves the possible move
 function moveToList(army, direction) {
-    console.log("moveToListInitiated");
+    //console.log("moveToListInitiated");
     var destination = new showHex(army.x, army.y);
     var neighborCoords = destination.neighbors();
     var target = new showHex(neighborCoords[direction][0], neighborCoords[direction][1]);
@@ -489,7 +515,7 @@ function conquer(army, direction) {
         //console.log(borders[i]);
     }
     // war nicht bereits Land des Besitzers.
-    if (found == false){
+    if (!found){
         for(var i = 0; i<borders.length; i++){
             if (borders[i].tag === army.ownerTag()){
                 // tu es zu den Ländern des Besitzers.
@@ -512,9 +538,10 @@ function showHex(positionX, positionY) {
 		var surroundings = this.neighbors();
         for (var i = 0; i < rivers.length; i++) {
 			var river = rivers[i];
-			if((this.x == river[1][1] && this.y == river[1][2]) || (this.x == river[2][1] && this.y == river[2][2])){
+			if((this.x === river[0][0] && this.y === river[0][1]) || (this.x === river[1][0] && this.y === river[1][1])){
 				for(var j = 0; j < surroundings.length; j++){
-					if((surroundings[j][1] == river[1][1] && surroundings[j][2] == river[1][2]) || (surroundings[j][1] == river[2][1] && surroundings[j][2] == river[2][2])){
+					if((surroundings[j][0] === river[0][0] && surroundings[j][1] === river[0][1]) ||
+					    (surroundings[j][0] === river[1][0] && surroundings[j][1] === river[1][1])){
 						flussAcc[j] = 1;
 					}
 				}
@@ -522,10 +549,64 @@ function showHex(positionX, positionY) {
     	}
 		return flussAcc;
 	}
+	// in which directions does this field have walls (order as above, only walls build on this field)
+    this.walls = function() {
+        let result = [0,0,0,0,0,0];
+        let walls = buildings.filter((elem) => (elem.type === 5 && elem.x === this.x && elem.y === this.y));
+        walls.forEach((wall) => {
+            switch(wall.direction){
+                case "nw": result[0] = 1; break;
+                case "ne": result[1] = 1; break;
+                case "e": result[2] = 1; break;
+                case "se": result[3] = 1; break;
+                case "se": result[4] = 1; break;
+                case "w": result[5] = 1; break;
+            }
+        });
+        return result;
+    }
+    // in which directions does this field have bridges (order as above)
+    this.bridges = function() {
+        let result = [0,0,0,0,0,0];
+        let neighbors = this.neighbors();
+        let bridges = buildings.forEach((elem) => {
+            if(elem.type === 7){//bridge type
+                if(elem.x === this.x && elem.y === this.y) {//bridge on this field
+                    switch(elem.direction){//put into result
+                        case "nw": result[0] = 1; break;
+                        case "ne": result[1] = 1; break;
+                        case "e": result[2] = 1; break;
+                        case "se": result[3] = 1; break;
+                        case "se": result[4] = 1; break;
+                        case "w": result[5] = 1; break;
+                    }
+                } else {
+                    neighbors.forEach((val, index) => {
+                        if(val[0] === elem.x && val[1] === elem.y){//bridge on the neighboring field
+                            switch(index){//pointing the right way
+                                case 0: elem.direction === "se"?result[0] = 1:0; break;
+                                case 1: elem.direction === "sw"?result[1] = 1:0; break;
+                                case 2: elem.direction === "w"?result[2] = 1:0; break;
+                                case 3: elem.direction === "nw"?result[3] = 1:0; break;
+                                case 4: elem.direction === "ne"?result[4] = 1:0; break;
+                                case 5: elem.direction === "e"?result[5] = 1:0; break;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        return result;
+    }
+	// does the field has a street on it in any direction
+	this.hasStreet = function() {
+	    return buildings.some((elem) => elem.type === 8 && ((elem.firstX === this.x && elem.firstY === this.y) ||
+	        (elem.secondX === this.x && elem.secondY === this.y)));
+	}
     // where in the field list is this field
     this.positionInList = function(){
         for (var i = 0; i < fields.length; i++) {
-			if((fields[i].x == this.x) && (fields[i].y == this.y)){return i;}
+			if((fields[i].x === this.x) && (fields[i].y === this.y)){return i;}
 		}
     }
     // what type is this field
@@ -551,7 +632,7 @@ function showHex(positionX, positionY) {
     // returns the fields neighbors in the usual order
 	this.neighbors = function(){
 		//reihenfolge NW,NO,O,SO,SW,W
-		if(this.y % 2 == 0){
+		if(this.y % 2 === 0){
 			return [[this.x,this.y-1],[this.x+1,this.y-1],[this.x+1,this.y],[this.x+1,this.y+1],[this.x,this.y+1],[this.x-1,this.y]];
 		} else {
 			return [[this.x-1,this.y-1],[this.x,this.y-1],[this.x+1,this.y],[this.x,this.y+1],[this.x-1,this.y+1],[this.x-1,this.y]];
