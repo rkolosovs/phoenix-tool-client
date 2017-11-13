@@ -430,9 +430,6 @@ function battleHandler(participants, x, y) {
 				item.decimate(item.count);
 			});
 		} else if (this.battle.overrunDefense()) {
-			this.defenseSide.forEach(function (item) {
-				item.remainingMovePoints -= 7;
-			});
 			this.attackSide.forEach(function (item) {
 				item.decimate(item.count);
 			});
@@ -445,9 +442,8 @@ function battleHandler(participants, x, y) {
 				});
 				//null move points of the victor and inflict losses
 				this.attackSide.forEach(function (item, index) {
-					var army = item;
 					item.remainingMovePoints = 0;
-					army.decimate(result.attackerLosses[index]);
+					item.decimate(result.attackerLosses[index]);
 				}, this);
 			} else if (result.victor === 'defender') {
 				//wipe the looser out
@@ -456,9 +452,7 @@ function battleHandler(participants, x, y) {
 				});
 				//null move points of the victor and inflict losses
 				this.defenseSide.forEach(function (item, index) {
-					var army = item;
-					item.remainingMovePoints = 0;
-					army.decimate(result.defenderLosses[index]);
+					item.decimate(result.defenderLosses[index]);
 				}, this);
 			} else if (result.victor === 'tie') {
 				//wipe all combatants out
@@ -1137,7 +1131,7 @@ function transferTroopsFromSelectedArmy(mergeId) {
 // merges selectedArmy with the army at position mergeId in listOfArmies
 function mergeSelectedArmy(mergeId) {
 	// depending on army type different fields are needed
-	if (listOfArmies[selectedArmyIndex].armyType() == 1) {
+	if (listOfArmies[selectedArmyIndex].armyType() === 1) {
 		listOfArmies[mergeId].count += listOfArmies[selectedArmyIndex].count;
 		listOfArmies[mergeId].leaders += listOfArmies[selectedArmyIndex].leaders;
 		listOfArmies[mergeId].mounts += listOfArmies[selectedArmyIndex].mounts;
@@ -1165,7 +1159,7 @@ function mergeSelectedArmy(mergeId) {
 		});
 		deleteArmy(selectedArmyIndex)();
 	}
-	else if (listOfArmies[selectedArmyIndex].armyType() == 2) {
+	else if (listOfArmies[selectedArmyIndex].armyType() === 2) {
 		listOfArmies[mergeId].count += listOfArmies[selectedArmyIndex].count;
 		listOfArmies[mergeId].leaders += listOfArmies[selectedArmyIndex].leaders;
 		if (listOfArmies[selectedArmyIndex].remainingMovePoints < listOfArmies[mergeId].remainingMovePoints) {
@@ -1190,7 +1184,7 @@ function mergeSelectedArmy(mergeId) {
 		});
 		deleteArmy(selectedArmyIndex)();
 	}
-	else if (listOfArmies[selectedArmyIndex].armyType() == 3) {
+	else if (listOfArmies[selectedArmyIndex].armyType() === 3) {
 		listOfArmies[mergeId].count += listOfArmies[selectedArmyIndex].count;
 		listOfArmies[mergeId].leaders += listOfArmies[selectedArmyIndex].leaders;
 		listOfArmies[mergeId].lkp += listOfArmies[selectedArmyIndex].lkp;
