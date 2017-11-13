@@ -54,7 +54,7 @@ canvas.addEventListener('mousedown', function(event){
 	drawStuff();
 }, {passive: true});
 
-canvas.addEventListener('mouseup', function(event){
+document.addEventListener('mouseup', function(event){
 	if (leftMousePressed && event.button === 0) {
 		if (isDragging) { // mouse was dragged; run panning finish routine
    			originX += moveX; // add the x offset from dragged mouse to the
