@@ -192,6 +192,7 @@ function registerLeftClick() {
 		} else {
 			selectedFields[0] = clickedField;
 		}
+		writeFieldInfo();
 		// Armeeauswahl
 		restoreInfoBox();
 		selectedArmyIndex = undefined;

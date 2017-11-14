@@ -659,3 +659,34 @@ function drawRemainingMovement(ctx, pos, scale){
     ctx.arc(pos[0]+(0.5 * scale * SIN60)-c, pos[1]+(scale * 0.5)-c, scale/16, Math.PI*1.25, Math.PI*1.75, false);
     ctx.stroke();
 }
+
+function writeFieldInfo(){
+    var minimapBox = document.getElementById('minimapBox');
+    if(selectedFields[0] === undefined){
+        minimapBox.innerHTML = '';
+    } else {
+        var hex = new showHex(selectedFields[0][0], selectedFields[0][1]);
+        var fieldPositionInList = hex.positionInList();
+        var fieldType = '';
+        switch(hex.fieldType()){
+			case 0: fieldType = 'Wasser'; break;
+			case 1: fieldType = 'Tiefsee'; break;
+			case 2: fieldType = 'Tiefland'; break;
+			case 3: fieldType = 'Wald'; break;
+			case 4: fieldType = 'Hochland'; break;
+			case 5: fieldType = 'Bergland'; break;
+			case 6: fieldType = 'Gebirge'; break;
+			case 7: fieldType = 'Wüste'; break;
+			case 8: fieldType = 'Sumpf'; break;
+			default: fieldType = 'Unbekannt'; break;
+        }
+        var fieldOwner = borders.find((value) =>
+            (value.land.some((field) => (field[0] === selectedFields[0][0] && field[1] === selectedFields[0][1])))
+        );
+        var fieldOwnerString = (fieldOwner === undefined)?'keiner':fieldOwner.tag;
+        minimapBox.innerHTML = '<p>Feld: ('+hex.x+', '+hex.y+')'+
+            '</p><p>Gelände: '+fieldType+
+            '</p><p>Höhe: '+hex.height()+
+            '</p><p>Besitzer: '+fieldOwnerString+'</p>';
+    }
+}
