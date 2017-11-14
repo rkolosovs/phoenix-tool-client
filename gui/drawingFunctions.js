@@ -1,5 +1,7 @@
 'use strict';
 
+var listOfMultiArmyFields = [];
+
 // canvas resizing method
 function resizeCanvas() {
    	canvas.width = window.innerWidth;
@@ -422,6 +424,20 @@ function drawSelection(ctx, x, y, scale, selectedFields) {
 }
 
 function drawArmies(ctx, x, y, scale, armies) {
+	
+	//delete all multifields
+	for(let k = 0; k < listOfMultiArmyFields.length; k++){
+		for(let l = 0; l < listOfMultiArmyFields[k].length; l++){
+			listOfMultiArmyFields[k][l].multiArmyField = false;
+		}
+	}
+	listOfMultiArmyFields = [];
+
+	//getting the multifield list ready
+	for (let i = 0; i < listOfArmies.length; i++) {
+		createMultifield(listOfArmies[i]);
+	}
+
 	for (var i = 0; i < armies.length; i++) {
 		var armyData = armies[i]; // get army coordinates
 		var pos = computePosition(x, y, armies[i].x, armies[i].y, scale);
