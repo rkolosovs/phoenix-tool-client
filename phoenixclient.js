@@ -4,7 +4,6 @@
 var selectedFields = []; // list of fields to be highlighted
 var selectedArmyIndex; // index of the currently selected army in the listOfArmies
 var listOfArmies;
-var listOfMultiArmyFields = [];
 var switchScale = 50;
 var login = 'guest'; // either realm tag, 'sl', or 'guest'
 var pendingEvents = [];
@@ -153,8 +152,7 @@ function registerLeftClick() {
 		document.getElementById("lkpField").value = 0;
 		skpBuffer = 0;
 		document.getElementById("skpField").value = 0;
-		//before adding to list check if there is an army on the field and add multifield accordingly
-		createMultifield(army);
+
 		listOfArmies.push(army);
 		switchBtnBoxTo("buttonsBox");
 		switchModeTo("none");
@@ -351,72 +349,7 @@ function registerRightClick() {
 	}
 }
 
-
-//checks the current field for other armies and adds it accordingly
-function createMultifield(army){
-	for (let j = 0; j < listOfArmies.length; j++) {
-		var someArmy = listOfArmies[j];
-		if (someArmy.x === army.x && someArmy.y === army.y && someArmy !== army) {
-			if(someArmy.multiArmyField === true){
-				addToMultifield(someArmy, army);
-			}
-			else{
-				let templist = [someArmy, army];//creating a list of armies to add to the list of multifieldarmies
-				listOfMultiArmyFields.push(templist);
-				someArmy.multiArmyField = true;
-				army.multiArmyField = true;
-				console.log("created multi");
-			}
-		}
-	}
-}
-
-
-//Adds an army to an existing multifield
-function addToMultifield(armyOnMultifield, armyToAdd){
-	if(listOfMultiArmyFields !== undefined){
-		let alreadyInList = false;
-		let placeToAdd;
-		for(let i = 0; i < listOfMultiArmyFields.length; i++){
-			for(let j = 0; j < listOfMultiArmyFields[i].length; j++){
-				if(listOfMultiArmyFields[i][j] === armyOnMultifield){
-					placeToAdd = i;
-				}
-				else if(listOfMultiArmyFields[i][j] === armyToAdd){
-					alreadyInList = true;
-				}
-			}
-		}
-		if(alreadyInList == false && placeToAdd !== undefined){
-			listOfMultiArmyFields[placeToAdd].push(armyToAdd);
-			console.log("added to multi");
-		}
-		armyToAdd.multiArmyField = true;
-	}
-}
-
-//deletes from multifield in case of beeing on multifield 
-function deleteFromMultifield(armyToDelete){
-	addArmyToMulti:{//label to jump out when its found and added
-	for(let k = 0; k < listOfMultiArmyFields.length; k++){
-		for(let l = 0; l < listOfMultiArmyFields[k].length; l++){
-			if(listOfMultiArmyFields[k][l] === armyToDelete){
-				listOfMultiArmyFields[k].splice(l,1);
-
-				//check if remaining field is still multi
-				if(listOfMultiArmyFields[k].length < 2){
-					listOfMultiArmyFields[k][0].multiArmyField = false;
-					listOfMultiArmyFields.splice(k,1);
-				}
-				break;
-			}
-		}
-	}
-	}
-	armyToDelete.multiArmyField = false;
-}
-
-function getClickedField() {
+function getClickedField(){
 	var x = clickX - originX; // reverse our x/y origin offset
 	var y = clickY - originY;
 	var m = c / (gW * 0.5); // the inclination of the hexes upper triangle side

@@ -826,7 +826,6 @@ function splitSelectedArmy() {
 			}
 		});
 	}
-	createMultifield(newArmy);
 	restoreInfoBox();
 	updateInfoBox();
 }
@@ -881,19 +880,7 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 		}
 		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch armyIndex
 		listOfArmies.push(newArmy);
-		createMultifield(newArmy);
-		preparedEvents.push({
-			type: "mount", content: {
-				fromArmyId: listOfArmies[armyIndex].armyId,
-				realm: listOfArmies[armyIndex].ownerTag(),
-				troops: toMount,
-				leaders: leadersToMount,
-				x: listOfArmies[armyIndex].x,
-				y: listOfArmies[armyIndex].y,
-				newArmysId: newArmy.armyId
-			}
-		});
-		deleteArmy(armyIndex);
+		deleteSelectedArmy();
 		restoreInfoBox();
 		updateInfoBox();
 		// genug Heerführer?
@@ -914,18 +901,6 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 		listOfArmies[armyIndex].removeMounts(toMount);
 		// in listOfArmies einfügen
 		listOfArmies.push(newArmy);
-		preparedEvents.push({
-			type: "mount", content: {
-				fromArmyId: listOfArmies[armyIndex].armyId,
-				realm: listOfArmies[armyIndex].ownerTag(),
-				troops: toMount,
-				leaders: leadersToMount,
-				x: listOfArmies[armyIndex].x,
-				y: listOfArmies[armyIndex].y,
-				newArmysId: newArmy.armyId
-			}
-		});
-		createMultifield(newArmy);
 		// selectedArmyIndex zeigt auf neues Heer
 		selectedArmyIndex = listOfArmies.length - 1;
 		restoreInfoBox();
@@ -973,19 +948,7 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 			listOfArmies[armyIndex].x, listOfArmies[armyIndex].y, listOfArmies[armyIndex].owner);
 		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch armyIndex
 		listOfArmies.push(newArmy);
-		preparedEvents.push({
-			type: "mount", content: {
-				fromArmyId: listOfArmies[armyIndex].armyId,
-				realm: listOfArmies[armyIndex].ownerTag(),
-				troops: toUnMount,
-				leaders: leadersToUnMount,
-				x: listOfArmies[armyIndex].x,
-				y: listOfArmies[armyIndex].y,
-				newArmysId: newArmy.armyId
-			}
-		});
-		deleteArmy(armyIndex);
-		createMultifield(newArmy);
+		deleteSelectedArmy();
 		restoreInfoBox();
 		updateInfoBox();
 		// genug Heerführer?
@@ -1002,18 +965,6 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 		listOfArmies[armyIndex].removeLeaders(leadersToUnMount);
 		// in listOfArmies einfügen
 		listOfArmies.push(newArmy);
-		preparedEvents.push({
-			type: "mount", content: {
-				fromArmyId: listOfArmies[armyIndex].armyId,
-				realm: listOfArmies[armyIndex].ownerTag(),
-				troops: toUnMount,
-				leaders: leadersToUnMount,
-				x: listOfArmies[armyIndex].x,
-				y: listOfArmies[armyIndex].y,
-				newArmysId: newArmy.armyId
-			}
-		});
-		createMultifield(newArmy);
 		// selectedArmyIndex zeigt auf neues Heer
 		selectedArmyIndex = listOfArmies.length-1;
 		restoreInfoBox();
@@ -1289,7 +1240,6 @@ function deleteSelectedArmy(){
 }
 
 function deleteArmy(index){
-	deleteFromMultifield(listOfArmies[index]);
 	listOfArmies.splice(index, 1);
 	if (selectedArmyIndex === listOfArmies.length) {
 		selectedArmyIndex = undefined;
@@ -1352,10 +1302,5 @@ function generateArmyId(type, owner) {
 }
 
 function checkArmiesForLiveliness() {
-	listOfArmies = listOfArmies.filter(
-		function(armyCoord){
-			if(!armyCoord.isAlive()){deleteFromMultifield(armyCoord);}
-			return armyCoord.isAlive();
-		}
-	);
+	listOfArmies = listOfArmies.filter((armyCoord) => (armyCoord.isAlive()));
 }

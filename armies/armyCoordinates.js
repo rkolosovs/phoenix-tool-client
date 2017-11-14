@@ -5,16 +5,11 @@ function move(army, direction){//TODO needs new names
             var tempmove = army.possibleMoves[i];
             //in case it is moving on land
             if(tempmove.load === undefined){
-                //before moving check if you leave a Multi Army field
-                if(army.multiArmyField === true){
-                    deleteFromMultifield(army);
-                }
                 army.remainingMovePoints -= tempmove.movepoints;
                 army.oldX = army.x;
                 army.oldY = army.y;
                 army.x = tempmove.tar.x;
                 army.y = tempmove.tar.y;
-                createMultifield(army);
                 //for ship movement
                 if(Math.floor(army.armyId / 100) == 3){
                 // moves troops that are loaded in the fleet
@@ -23,12 +18,8 @@ function move(army, direction){//TODO needs new names
                             for(var j = 0; j < listOfArmies.length; j++){
                                 console.log(army.loadedArmies[i]);
                                 if(listOfArmies[j].owner === army.owner && listOfArmies[j].armyId === army.loadedArmies[i]){
-                                    listOfArmies[j].oldX = listOfArmies[j].x;
-                                    listOfArmies[j].oldY = listOfArmies[j].y;
-                                    deleteFromMultifield(listOfArmies[j]);
                                     listOfArmies[j].x = tempmove.tar.x;
                                     listOfArmies[j].y = tempmove.tar.y;
-                                    createMultifield(listOfArmies[j]);
                                 }
                             }
                         }
@@ -88,12 +79,6 @@ function move(army, direction){//TODO needs new names
                         army.oldY = army.y;
                         army.x = tempmove.tar.x;
                         army.y = tempmove.tar.y;
-                        //before moving check if you leave a Multi Army field
-                        if(army.multiArmyField === true){
-                            deleteFromMultifield(army);
-                        }
-
-                        createMultifield(army);
                         return "ok";
                     } else {
                         return(loadString);
@@ -133,12 +118,6 @@ function move(army, direction){//TODO needs new names
                                 army.oldY = army.y;
                                 army.x = tempmove.tar.x;
                                 army.y = tempmove.tar.y;
-                                //before moving check if you leave a Multi Army field
-                                if(army.multiArmyField === true){
-                                    deleteFromMultifield(army);
-                                }
-
-                                createMultifield(army);
                                 return "ok";
                             } else {
                                 return(loadString);
@@ -485,6 +464,50 @@ function moveToList(army, direction) {
         }
     }
 }
+
+
+//checks the current field for other armies and adds it accordingly
+function createMultifield(army){
+	for (let j = 0; j < listOfArmies.length; j++) {
+		var someArmy = listOfArmies[j];
+		if (someArmy.x === army.x && someArmy.y === army.y && someArmy !== army) {
+			if(someArmy.multiArmyField === true || army.multiArmyField === true){
+				addToMultifield(someArmy, army);
+			}
+			else{
+				let templist = [someArmy, army];//creating a list of armies to add to the list of multifieldarmies
+				listOfMultiArmyFields.push(templist);
+				someArmy.multiArmyField = true;
+				army.multiArmyField = true;
+				console.log("created multi");
+			}
+		}
+	}
+}
+
+//Adds an army to an existing multifield
+function addToMultifield(armyOnMultifield, armyToAdd){
+	if(listOfMultiArmyFields !== undefined){
+		let alreadyInList = false;
+		let placeToAdd;
+		for(let i = 0; i < listOfMultiArmyFields.length; i++){
+			for(let j = 0; j < listOfMultiArmyFields[i].length; j++){
+				if(listOfMultiArmyFields[i][j] === armyOnMultifield){
+					placeToAdd = i;
+				}
+				else if(listOfMultiArmyFields[i][j] === armyToAdd){
+					alreadyInList = true;
+				}
+			}
+		}
+		if(alreadyInList == false && placeToAdd !== undefined){
+			listOfMultiArmyFields[placeToAdd].push(armyToAdd);
+			console.log("added to multi");
+		}
+		armyToAdd.multiArmyField = true;
+	}
+}
+
 
 // direction as a number, 0 = NW, 1 = NO, 2 = O, 3 = SO, 4 = SW, 5 = W
 //TODO: Alles was nicht standard Bewegung auf ein benachbartes Feld ist.
