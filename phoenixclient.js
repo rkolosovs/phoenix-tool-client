@@ -704,6 +704,9 @@ function checkEvent(num) {
 				moveToList(army, 0);
 				move(army, 0);//move to nw
 			}
+			if(!unprocessedBattleAtContainingArmy(army.ownerTag(), army.armyId, army.x, army.y)){
+			    conquer(army);
+			}
 			event.status = 'checked';
 			fillEventList();
 			drawStuff();
