@@ -1197,7 +1197,7 @@ function mergeSelectedArmy(mergeId) {
 				y: listOfArmies[selectedArmyIndex].y
 			}
 		});
-		deleteArmy(selectedArmyIndex)();
+		deleteArmy(selectedArmyIndex);
 	}
 	else if (listOfArmies[selectedArmyIndex].armyType() === 2) {
 		listOfArmies[mergeId].count += listOfArmies[selectedArmyIndex].count;
