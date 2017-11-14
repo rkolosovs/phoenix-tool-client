@@ -65,8 +65,7 @@ module( "Army" , function() {
 				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
 				var transportedArmy = new heer(101, 9000, 10, 0, 0, 0, false, 0, 0, 1);
 				listOfArmies = [transportedArmy];
-				selectedArmyIndex = 0;
-				fleet.loadArmy();
+				fleet.loadArmy(0);
 				fleet.decimate(50);
 				t.armyEquals(transportedArmy, new heer(101, 4500, 5, 0, 0, 0, false, 0, 0, 1));
 			});
@@ -74,8 +73,7 @@ module( "Army" , function() {
 				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
 				var transportedArmy = new heer(101, 7000, 5, 0, 0, 0, false, 0, 0, 1);
 				listOfArmies = [transportedArmy];
-				selectedArmyIndex = 0;
-				fleet.loadArmy();
+				fleet.loadArmy(0);
 				fleet.decimate(50);
 				t.armyEquals(transportedArmy, new heer(101, 4666, 3, 0, 0, 0, false, 0, 0, 1));
 			});
@@ -83,8 +81,7 @@ module( "Army" , function() {
 				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
 				var transportedArmy = new reiterHeer(201, 4500, 10, false, 0, 0, 1);
 				listOfArmies = [transportedArmy];
-				selectedArmyIndex = 0;
-				fleet.loadArmy();
+				fleet.loadArmy(0);
 				fleet.decimate(50);
 				t.armyEquals(transportedArmy, new reiterHeer(201, 2250, 5, false, 0, 0, 1));
 			});
@@ -92,8 +89,7 @@ module( "Army" , function() {
 				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
 				var transportedArmy = new heer(101, 1000, 10, 4, 2, 0, false, 0, 0, 1);
 				listOfArmies = [transportedArmy];
-				selectedArmyIndex = 0;
-				fleet.loadArmy();
+				fleet.loadArmy(0);
 				fleet.decimate(50);
 				t.armyEquals(transportedArmy, new heer(101, 500, 5, 2, 1, 0, false, 0, 0, 1));
 			});
@@ -101,8 +97,7 @@ module( "Army" , function() {
 				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
 				var transportedArmy = new heer(101, 4500, 10, 0, 0, 4500, false, 0, 0, 1);
 				listOfArmies = [transportedArmy];
-				selectedArmyIndex = 0;
-				fleet.loadArmy();
+				fleet.loadArmy(0);
 				fleet.decimate(50);
 				t.armyEquals(transportedArmy, new heer(101, 2250, 5, 0, 0, 2250, false, 0, 0, 1));
 			});
