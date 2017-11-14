@@ -377,11 +377,12 @@ function battleHandler(participants, x, y) {
 		if(this.battle.overrunAttack()) {
 			this.attackSide.forEach(function(item){
 				item.remainingMovePoints -= 7;
+				conquer(army);//try to conquer the land
 			});
 			this.defenseSide.forEach(function(item){
 				item.decimate(item.count);
 			});
-		} else if(battle.overrunDefense()) {
+		} else if(this.battle.overrunDefense()) {
 			this.defenseSide.forEach(function(item){
 				item.remainingMovePoints -= 7;
 			});
@@ -400,6 +401,7 @@ function battleHandler(participants, x, y) {
 					var army = item;
 					item.remainingMovePoints = 0;
 					army.decimate(result.attackerLosses[index]);
+					conquer(army);//try to conquer the land
 				}, this);
 			} else if(result.victor === 'defender'){
 				//wipe the looser out

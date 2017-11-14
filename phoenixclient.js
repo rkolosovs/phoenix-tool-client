@@ -335,8 +335,9 @@ function registerRightClick(){
 									}
 								});
 							}
+						} else { //no battle -> conquer land (diplomacy goes here)
+						    conquer(listOfArmies[selectedArmyIndex]);
 						}
-
 
 					} else {
 						alert(out);
