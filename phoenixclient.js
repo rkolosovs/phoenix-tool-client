@@ -4,7 +4,6 @@
 var selectedFields = []; // list of fields to be highlighted
 var selectedArmyIndex; // index of the currently selected army in the listOfArmies
 var listOfArmies;
-var listOfMultiArmyFields = [];
 var switchScale = 50;
 var login = 'guest'; // either realm tag, 'sl', or 'guest'
 var pendingEvents = [];
@@ -54,7 +53,7 @@ canvas.addEventListener('mousedown', function(event){
 	drawStuff();
 }, {passive: true});
 
-canvas.addEventListener('mouseup', function(event){
+document.addEventListener('mouseup', function(event){
 	if (leftMousePressed && event.button === 0) {
 		if (isDragging) { // mouse was dragged; run panning finish routine
    			originX += moveX; // add the x offset from dragged mouse to the
@@ -153,34 +152,7 @@ function registerLeftClick(){
 		document.getElementById("lkpField").value = 0; 
 		skpBuffer = 0;
 		document.getElementById("skpField").value = 0;
-		//before adding to list check if there is an army on the field and add multifield accordingly
-		var onmulti = false;
-		var newmulti = false;
-		var foundarmy;
-		for(var i = 0; i < listOfArmies.length; i++){
-			var a = listOfArmies[i];
-			if (a.x === army.x && a.y === army.y) {
-				if(a.multiArmyField === true){
-					onmulti = true;
-					foundarmy = a;
-				}
-				else{
-					newmulti = true;
-					foundarmy = a;
-				}
-			}
-		}
-		if(onmulti == true){
-			addToMultifield(foundarmy, army)
-		}
-		else if(newmulti == true){
-			var templist =[];//creating a list of armies to add to the list of multifieldarmies
-			templist.push(foundarmy);
-			templist.push(army);
-			listOfMultiArmyFields.push(templist);
-			foundarmy.multiArmyField = true;
-			army.multiArmyField = true;
-		}
+
 		listOfArmies.push(army);
 		switchBtnBoxTo("buttonsBox");
 		switchModeTo("none");
@@ -326,11 +298,6 @@ function registerRightClick(){
 						var battlePossible = false;
 						var participants = [];
 
-						//before moving check if you leave a Multi Army field
-						if(listOfArmies[selectedArmyIndex].multiArmyField === true){
-							deleteFromMultifield(listOfArmies[selectedArmyIndex]);
-						}
-
 						for (var j = 0; j < listOfArmies.length; j++) {
 							var someArmy = listOfArmies[j];
 							if (someArmy.x === listOfArmies[selectedArmyIndex].x && someArmy.y === listOfArmies[selectedArmyIndex].y
@@ -348,17 +315,6 @@ function registerRightClick(){
 								//4. move from multi but still multifield left
 								//5. move from multi to multi
 								
-								if(someArmy.multiArmyField === true){//2.
-									addToMultifield(someArmy, listOfArmies[selectedArmyIndex]);
-								}
-								else{//1.
-									var templist =[];//creating a list of armies to add to the list of multifieldarmies
-									templist.push(someArmy);
-									templist.push(listOfArmies[selectedArmyIndex]);
-									listOfMultiArmyFields.push(templist);
-									someArmy.multiArmyField = true;
-									listOfArmies[selectedArmyIndex].multiArmyField = true;
-								}
 							}
 						}
 						
@@ -382,8 +338,9 @@ function registerRightClick(){
 									}
 								});
 							}
+						} else { //no battle -> conquer land (diplomacy goes here)
+						    conquer(listOfArmies[selectedArmyIndex]);
 						}
-
 
 					} else {
 						alert(out);
@@ -393,45 +350,6 @@ function registerRightClick(){
 			updateInfoBox();
 		}
 	}
-}
-
-function addToMultifield(armyOnMultifield, armyToAdd){
-	var alreadyInList = false;
-	var placeToAdd;
-	for(var i = 0; i < listOfMultiArmyFields.length; i++){
-		for(var j = 0; j < listOfMultiArmyFields[i].length; j++){
-			if(listOfMultiArmyFields[i][j] === armyOnMultifield){
-				placeToAdd = i;
-			}
-			else if(listOfMultiArmyFields[i][j] === armyToAdd){
-				alreadyInList = true;
-			}
-		}
-	}
-	if(alreadyInList == false){
-		listOfMultiArmyFields[placeToAdd].push(armyToAdd);
-	}
-	armyToAdd.multiArmyField = true;
-}
-
-function deleteFromMultifield(armyToDelete){
-	addArmyToMulti:{//label to jump out when its found and added
-	for(var k = 0; k < listOfMultiArmyFields.length; k++){
-		for(var l = 0; l < listOfMultiArmyFields[k].length; l++){
-			if(listOfMultiArmyFields[k][l] === armyToDelete){
-				listOfMultiArmyFields[k].splice(l,1);
-
-				//check if remaining field is still multi
-				if(listOfMultiArmyFields[k].length < 2){
-					listOfMultiArmyFields[k][0].multiArmyField = false;
-					listOfMultiArmyFields.splice(k,1);
-				}
-				break;
-			}
-		}
-	}
-	}
-	armyToDelete.multiArmyField = false;
 }
 
 function getClickedField(){
@@ -799,6 +717,9 @@ function checkEvent(num) {
 			} else if (adjacency[5] === 1) {
 				moveToList(army, 0);
 				move(army, 0);//move to nw
+			}
+			if(!unprocessedBattleAtContainingArmy(army.ownerTag(), army.armyId, army.x, army.y)){
+			    conquer(army);
 			}
 			event.status = 'checked';
 			fillEventList();

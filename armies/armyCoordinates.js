@@ -47,10 +47,6 @@ function move(army, direction){//TODO needs new names
                 if(tempmove.changHeight == true){
                     army.setRemainingHeightPoints(army.remainingHeightPoints - tempmove.height);
                 }
-                if(tempmove.landunit == true && army.canConquer())
-                {
-                    conquer(army, direction);
-                }
                 clickedMoves(army);
                 return "ok"
             }
@@ -126,7 +122,7 @@ function move(army, direction){//TODO needs new names
     }
     //to see and return the error why you cant move
     clickedMoves(army);
-    return moveToList(army, direction)
+    return moveToList(army, direction);
 }
 
 //when unit is clicked generates a list of neighbors that can be moved to
@@ -459,40 +455,82 @@ function moveToList(army, direction) {
     }
 }
 
-// direction as a number, 0 = NW, 1 = NO, 2 = O, 3 = SO, 4 = SW, 5 = W
-//TODO: Alles was nicht standard Bewegung auf ein benachbartes Feld ist.
-// done streets, height change
-function conquer(army, direction) {
-    var found = false;
-    //für i = 0 bis borders länge
-    for(var i = 0; i<borders.length; i++){
-        // sind das die Länder des Besitzers?
-        if (borders[i].tag == army.ownerTag()){
-            // ist das Zielland enthalten?
-            for(var j = 0; j<borders[i].land.length; j++){
-                if(borders[i].land[j][0] === army.x && borders[i].land[j][1] === army.y){
-                    // wenn ja, found = true
-                    found = true;
-                }
-            }
-        // nicht die Länder des Besitzers
-        } else {
-            // ist das Zielland enthalten?
-            for(var j = 0; j<borders[i].land.length; j++){
-                if(borders[i].land[j][0] === army.x && borders[i].land[j][1] === army.y){
-                    // wenn ja nimm es raus.
-                    borders[i].land.splice(j,1);
-                }
-            }
-        }
-        //console.log(borders[i]);
-    }
-    // war nicht bereits Land des Besitzers.
-    if (found == false){
+
+//checks the current field for other armies and adds it accordingly
+function createMultifield(army){
+	for (let j = 0; j < listOfArmies.length; j++) {
+		var someArmy = listOfArmies[j];
+		if (someArmy.x === army.x && someArmy.y === army.y && someArmy !== army) {
+			if(someArmy.multiArmyField === true || army.multiArmyField === true){
+				addToMultifield(someArmy, army);
+			}
+			else{
+				let templist = [someArmy, army];//creating a list of armies to add to the list of multifieldarmies
+				listOfMultiArmyFields.push(templist);
+				someArmy.multiArmyField = true;
+				army.multiArmyField = true;
+				console.log("created multi");
+			}
+		}
+	}
+}
+
+//Adds an army to an existing multifield
+function addToMultifield(armyOnMultifield, armyToAdd){
+	if(listOfMultiArmyFields !== undefined){
+		let alreadyInList = false;
+		let placeToAdd;
+		for(let i = 0; i < listOfMultiArmyFields.length; i++){
+			for(let j = 0; j < listOfMultiArmyFields[i].length; j++){
+				if(listOfMultiArmyFields[i][j] === armyOnMultifield){
+					placeToAdd = i;
+				}
+				else if(listOfMultiArmyFields[i][j] === armyToAdd){
+					alreadyInList = true;
+				}
+			}
+		}
+		if(alreadyInList == false && placeToAdd !== undefined){
+			listOfMultiArmyFields[placeToAdd].push(armyToAdd);
+			console.log("added to multi");
+		}
+		armyToAdd.multiArmyField = true;
+	}
+}
+
+function conquer(army) {
+    if((new showHex(army.x, army.y)).fieldType() >= 2 && army.canConquer()){
+        var found = false;
+        //für i = 0 bis borders länge
         for(var i = 0; i<borders.length; i++){
+            // sind das die Länder des Besitzers?
             if (borders[i].tag === army.ownerTag()){
-                // tu es zu den Ländern des Besitzers.
-                borders[i].land.push([army.x, army.y]);
+                // ist das Zielland enthalten?
+                for(var j = 0; j<borders[i].land.length; j++){
+                    if(borders[i].land[j][0] === army.x && borders[i].land[j][1] === army.y){
+                        // wenn ja, found = true
+                        found = true;
+                    }
+                }
+            // nicht die Länder des Besitzers
+            } else {
+                // ist das Zielland enthalten?
+                for(var j = 0; j<borders[i].land.length; j++){
+                    if(borders[i].land[j][0] === army.x && borders[i].land[j][1] === army.y){
+                        // wenn ja nimm es raus.
+                        borders[i].land.splice(j,1);
+                    }
+                }
+            }
+            //console.log(borders[i]);
+        }
+        // war nicht bereits Land des Besitzers.
+        if (!found){
+            for(var i = 0; i<borders.length; i++){
+                if (borders[i].tag === army.ownerTag()){
+                    // tu es zu den Ländern des Besitzers.
+                    borders[i].land.push([army.x, army.y]);
+                }
             }
         }
     }

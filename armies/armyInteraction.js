@@ -377,11 +377,12 @@ function battleHandler(participants, x, y) {
 		if(this.battle.overrunAttack()) {
 			this.attackSide.forEach(function(item){
 				item.remainingMovePoints -= 7;
+				conquer(item);//try to conquer the land
 			});
 			this.defenseSide.forEach(function(item){
 				item.decimate(item.count);
 			});
-		} else if(battle.overrunDefense()) {
+		} else if(this.battle.overrunDefense()) {
 			this.defenseSide.forEach(function(item){
 				item.remainingMovePoints -= 7;
 			});
@@ -400,6 +401,7 @@ function battleHandler(participants, x, y) {
 					var army = item;
 					item.remainingMovePoints = 0;
 					army.decimate(result.attackerLosses[index]);
+					conquer(army);//try to conquer the land
 				}, this);
 			} else if(result.victor === 'defender'){
 				//wipe the looser out
@@ -867,10 +869,6 @@ function mount(){
 		}
 		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch selectedArmyIndex
 		listOfArmies.push(newArmy);
-		if(listOfArmies[selectedArmyIndex].multiArmyField === true){
-			addToMultifield(listOfArmies[selectedArmyIndex], newArmy);
-			deleteFromMultifield(listOfArmies[selectedArmyIndex]);
-		}
 		deleteSelectedArmy();
 		restoreInfoBox();
 		updateInfoBox();
@@ -919,10 +917,6 @@ function unMount(){
 		    listOfArmies[selectedArmyIndex].x, listOfArmies[selectedArmyIndex].y, listOfArmies[selectedArmyIndex].owner);
 		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch selectedArmyIndex
 		listOfArmies.push(newArmy);
-		if(listOfArmies[selectedArmyIndex].multiArmyField === true){
-			addToMultifield(listOfArmies[selectedArmyIndex], newArmy);
-			deleteFromMultifield(listOfArmies[selectedArmyIndex]);
-		}
 		deleteSelectedArmy();
 		restoreInfoBox();
 		updateInfoBox();
