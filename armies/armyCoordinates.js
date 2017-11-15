@@ -11,7 +11,7 @@ function move(army, direction){//TODO needs new names
                 army.x = tempmove.tar.x;
                 army.y = tempmove.tar.y;
                 //for ship movement
-                if(Math.floor(army.armyId / 100) == 3){
+                if(Math.floor(army.armyId / 100) === 3){
                 // moves troops that are loaded in the fleet
                     if(army.loadedArmies !== undefined && army.loadedArmies !== []){
                         for(var i = 0; i < army.loadedArmies.length; i++){
@@ -26,13 +26,13 @@ function move(army, direction){//TODO needs new names
                     }
                 }
                 //for moving off a ship
-                if(tempmove.unload !== undefined && tempmove.unload === true){
+                if(tempmove.unload !== undefined && tempmove.unload){
                     console.log("Armee war in " + army.isLoadedIn + " geladen.");
                     for(var i = 0; i < listOfArmies.length; i++){
-                        if((listOfArmies[i].owner == army.owner) && listOfArmies[i].armyId == army.isLoadedIn){
+                        if((listOfArmies[i].owner === army.owner) && listOfArmies[i].armyId === army.isLoadedIn){
                             var placeInList = -1;
                             for(var j = 0; j < listOfArmies[i].loadedArmies.length; j++){
-                                if(listOfArmies[i].loadedArmies[j] == army.armyId){
+                                if(listOfArmies[i].loadedArmies[j] === army.armyId){
                                     placeInList = j;
                                 }
                             }
@@ -46,20 +46,20 @@ function move(army, direction){//TODO needs new names
                         }
                     }
                 }
-                if(tempmove.changHeight == true){
+                if(tempmove.changHeight){
                     army.setRemainingHeightPoints(army.remainingHeightPoints - tempmove.height);
                 }
                 clickedMoves(army);
                 return "ok"
             }
             //in case of loading onto a ship
-            else if(tempmove.load == true){
+            else if(tempmove.load){
                 var fleetsOnDest = [];
                 for(var i = 0; i<listOfArmies.length; i++){
                     if((listOfArmies[i].owner === army.owner) && (listOfArmies[i].x === tempmove.tar.x) && (listOfArmies[i].y === tempmove.tar.y) &&
-                    (Math.floor(listOfArmies[i].armyId / 100) == 3)){
-                        fleetsOnDest.push(i);
-                        console.log("fleets +1");
+                        (Math.floor(listOfArmies[i].armyId / 100) === 3)){
+                            fleetsOnDest.push(i);
+                            console.log("fleets +1");
                     }
                 }
                 // there is none
@@ -150,20 +150,39 @@ function moveToList(army, direction) {
     var destination = new showHex(army.x, army.y);
     var neighborCoords = destination.neighbors();
     var target = new showHex(neighborCoords[direction][0], neighborCoords[direction][1]);
+    var directionString = '';
+    var reverseDirection = '';
+    switch(direction){
+        case 0: directionString = 'nw'; reverseDirection = 'se'; break;
+        case 1: directionString = 'ne'; reverseDirection = 'sw'; break;
+        case 2: directionString = 'e'; reverseDirection = 'w'; break;
+        case 3: directionString = 'se'; reverseDirection = 'nw'; break;
+        case 4: directionString = 'sw'; reverseDirection = 'ne'; break;
+        case 5: directionString = 'w'; reverseDirection = 'e'; break;
+        default: directionString = 'nw'; reverseDirection = 'se'; break;
+    }
     var changeInHeight = false;
     var thereIsAStreet = false;
-    // check if there is a steet on the route
-    for(var i = 0; i < buildings.length; i++){
-        var building = buildings[i];
-        if(building.type == 8){
-            if(((building.firstX === army.x && building.firstY === army.y) && (building.secondX === target.x &&
-                building.secondY === target.y)) || ((building.secondX === army.x && building.secondY === army.y) &&
-                (building.firstX === target.x && building.firstY === target.y))){
+    var thereIsABridge = false;
+    var thereIsAHarbor = false;
+    var rightOfPassage = false;
+    // check if there is a steet, a harbor or a bridge on the route
+    buildings.forEach((building) => {
+        if(building.type === 8 && (((building.firstX === army.x && building.firstY === army.y) &&
+            (building.secondX === target.x && building.secondY === target.y)) || ((building.secondX === army.x &&
+            building.secondY === army.y) && (building.firstX === target.x && building.firstY === target.y)))){
                 thereIsAStreet = true;
-                break;
-            }
         }
-    }
+        if(building.type === 6 && ((building.x === army.x && building.y === army.y && building.direction === directionString) ||
+            (building.x === target.x && building.y === target.y && building.direction === reverseDirection))){
+                thereIsAHarbor = true;
+        }
+        if(building.type === 7 && ((building.x === army.x && building.y === army.y && building.direction === directionString) ||
+            (building.x === target.x && building.y === target.y && building.direction === reverseDirection))){
+                thereIsABridge = true;
+        }
+        //TODO: Walls!
+    });
     // check if there is a change in height on the route
     if(destination.height() != target.height()){
         if((destination.height() - target.height()) >= 2 || target.height() - destination.height() >= 2){
@@ -175,10 +194,10 @@ function moveToList(army, direction) {
         }
     }
     // ship movement
-    if(Math.floor(army.armyId / 100) == 3){
+    if(Math.floor(army.armyId / 100) === 3){
         switch(target.fieldType()){
             case 0:
-                if(army.lkp == 0 && army.skp == 0){
+                if(army.lkp === 0 && army.skp === 0){
                     if(army.remainingMovePoints >= 12 ){
                         //this.moveHelper(changeInHeight, direction, 12,2,false, target);
                         army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 12, height: 2,landunit: false,tar: target});
@@ -204,7 +223,7 @@ function moveToList(army, direction) {
                     }
                 }
             case 1:
-                if(army.lkp == 0 && army.skp == 0){
+                if(army.lkp === 0 && army.skp === 0){
                     if(army.remainingMovePoints >= 7 ){
                         //this.moveHelper(changeInHeight, direction, 7,2,false, target);
                         army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2,landunit: false,tar: target});
