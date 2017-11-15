@@ -199,6 +199,7 @@ function moveToList(army, direction) {
             return "No height points left."
         } else {
             changeInHeight = true;
+            if(thereIsARiver){ return "Can't traverse height difference with a river." }
         }
     }
     // ship movement
