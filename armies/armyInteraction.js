@@ -584,10 +584,15 @@ function fernkampf(dicerollsL, dicerollsS, badConditions, shooter, target, chars
     target.takeFire((shooter.fireLkp(dicerollsL, badConditions) + shooter.fireSkp(dicerollsS, badConditions))/(1+(target.leaderGp()+charGpSum)/100));
 }
 
-//to fill the targetList
-function aim(){
+//to fill the targetList(fields)
+function findPossibleTargetFields(){
 	//shootTODO check if loaded in ship
 	findShootingTargets(listOfArmies[selectedArmyIndex]);
+}
+
+//to find Targets on the selected field
+function aim(){
+
 }
 
 //to actually shoot stuff, with events
@@ -601,6 +606,10 @@ function shoot(){//TODO make exceptions for invalid input
 	let SKPshooting = parseInt(document.getElementById("shootingSKPInput").value);
 	let shootingarmy = listOfArmies[selectedArmyIndex];
 
+	if(shootingarmy.hasShotThisTurn === true){
+		window.alert("Die Armee hat diesn Zug schon geschossen");
+		return false;
+	}
 	if(LKPshooting > shootingarmy.lkp){
 		window.alert("Die Armee hat nicht genug leichte Katapulte/Kriegsschiffe");
 		return false;
@@ -645,6 +654,8 @@ function shoot(){//TODO make exceptions for invalid input
 			fromY: listOfArmies[selectedArmyIndex].y
 		}
 	});
+
+	shootingarmy.hasShotThisTurn = true;
 	window.alert("Die Geschosse sind unterwegs.");
 }
 

@@ -307,6 +307,7 @@ function activateUnMountBox(){
 
 function activateShootBox(){
 	document.getElementById("shootBox").style.display = "";
+	findPossibleTargetFields();
 }
 
 function closeShootBox(){
