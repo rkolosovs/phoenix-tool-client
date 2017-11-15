@@ -168,6 +168,10 @@ function moveToList(army, direction) {
     var thereIsABridge = false;
     var thereIsAHarbor = false;
     var rightOfPassage = false;
+    var thereIsARiver = rivers.some((river) =>
+        (river.firstX === army.x && river.firstY === army.y && river.secondX === target.x && river.secondY === target.y) ||
+        (river.firstX === target.x && river.firstY === target.y && river.secondX === army.x && river.secondY === army.y)
+    );
     // check if there is a steet, a harbor or a bridge on the route
     buildings.forEach((building) => {
         if(building.type === 8 && (((building.firstX === army.x && building.firstY === army.y) &&
@@ -185,6 +189,8 @@ function moveToList(army, direction) {
         }
         //TODO: Walls!
     });
+
+
     // check if there is a change in height on the route
     if(destination.height() != target.height()){
         if((destination.height() - target.height()) >= 2 || target.height() - destination.height() >= 2){
