@@ -377,7 +377,7 @@ function battleHandler(participants, x, y) {
 		if(this.battle.overrunAttack()) {
 			this.attackSide.forEach(function(item){
 				item.remainingMovePoints -= 7;
-				conquer(army);//try to conquer the land
+				conquer(item);//try to conquer the land
 			});
 			this.defenseSide.forEach(function(item){
 				item.decimate(item.count);
