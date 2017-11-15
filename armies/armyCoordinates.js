@@ -297,7 +297,13 @@ function moveToList(army, direction) {
             }
             case 2:
             case 4:
-            case 7: if(thereIsAStreet){
+            case 7: if(thereIsARiver && !thereIsABridge){
+                if(army.remainingMovePoints >= 21){
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2, landunit: true, tar: target});
+                } else {
+                    return "You need you full movement to cross a river."
+                }
+            } else if(thereIsAStreet){
                 if(army.remainingMovePoints >= 4 ){// 4
                     //this.moveHelper(changeInHeight, direction, 4,1,true, target);
                     army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 1, landunit: true, tar: target});
@@ -317,7 +323,13 @@ function moveToList(army, direction) {
             } else {
                 return "You don't have enough movement Points.";
             }
-            case 5: if(thereIsAStreet){
+            case 5: if(thereIsARiver && !thereIsABridge){
+                if(army.remainingMovePoints >= 21){
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2, landunit: true, tar: target});
+                } else {
+                    return "You need you full movement to cross a river."
+                }
+            } else if(thereIsAStreet){
                 if(army.remainingMovePoints >= 7 ){// 7
                     //this.moveHelper(changeInHeight, direction, 7,1,true, target);
                     army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 1, landunit: true, tar: target});
@@ -334,7 +346,13 @@ function moveToList(army, direction) {
             }
             case 6: return "Cavalry can not move through the mountains. "// can't
             case 3:
-            case 8: if(thereIsAStreet){
+            case 8: if(thereIsARiver && !thereIsABridge){
+                if(army.remainingMovePoints >= 21){
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2, landunit: true, tar: target});
+                } else {
+                    return "You need you full movement to cross a river."
+                }
+            } else if(thereIsAStreet){
                 if(army.remainingMovePoints >= 5 ){// 5
                     //this.moveHelper(changeInHeight, direction, 5,1,true, target);
                     army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 5, height: 1, landunit: true, tar: target});
@@ -387,9 +405,13 @@ function moveToList(army, direction) {
             }
             case 2:
             case 4:
-            case 7:
-            console.log("there is a street: "+ thereIsAStreet);
-            if(thereIsAStreet){  // target field is a lowland, hill or desert
+            case 7: if(thereIsARiver && !thereIsABridge){
+                if(army.remainingMovePoints >= 9){
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 9, height: 2, landunit: true, tar: target});
+                } else {
+                    return "You need you full movement to cross a river."
+                }
+            } else if(thereIsAStreet){  // target field is a lowland, hill or desert
                 if(army.remainingMovePoints >= 4){
                     //this.moveHelper(changeInHeight, direction, 4,1,true, target);
                     army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 1, landunit: true, tar: target});
@@ -408,7 +430,13 @@ function moveToList(army, direction) {
             } else {
                 return "You don't have enough movement Points.";
             }
-            case 5: if(thereIsAStreet){  // target field is a highland
+            case 5: if(thereIsARiver && !thereIsABridge){
+                if(army.remainingMovePoints >= 9){
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 9, height: 2, landunit: true, tar: target});
+                } else {
+                    return "You need you full movement to cross a river."
+                }
+            } else if(thereIsAStreet){  // target field is a highland
                     if(army.skp > 0){
                         if(army.remainingMovePoints >= 7){
                             //this.moveHelper(changeInHeight, direction, 7,1,true, target);
@@ -433,7 +461,13 @@ function moveToList(army, direction) {
             } else {
                 return "You don't have enough movement Points.";
             }
-            case 6: if(thereIsAStreet){  // target field is a mountain
+            case 6: if(thereIsARiver && !thereIsABridge){
+                if(army.remainingMovePoints >= 9){
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 9, height: 2, landunit: true, tar: target});
+                } else {
+                    return "You need you full movement to cross a river."
+                }
+            } else if(thereIsAStreet){  // target field is a mountain
                 if(army.skp > 0){
                     return "You can't move into the mountains with heavy catapults.";
                 } else if(army.lkp > 0){
@@ -455,7 +489,13 @@ function moveToList(army, direction) {
                 return "You can't move into the mountains with catapults.";
             }
             case 3:
-            case 8: if(thereIsAStreet){ // target field is a wood, or swamp
+            case 8: if(thereIsARiver && !thereIsABridge){
+                if(army.remainingMovePoints >= 9){
+                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 9, height: 2, landunit: true, tar: target});
+                } else {
+                    return "You need you full movement to cross a river."
+                }
+            } else if(thereIsAStreet){ // target field is a wood, or swamp
                 if(army.skp > 0){
                     if(army.remainingMovePoints >= 7 ){
                         //this.moveHelper(changeInHeight, direction, 7,1,true, target);
