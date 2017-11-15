@@ -336,8 +336,9 @@ function registerRightClick() {
 									}
 								});
 							}
+						} else { //no battle -> conquer land (diplomacy goes here)
+						    conquer(listOfArmies[selectedArmyIndex]);
 						}
-
 
 					} else {
 						alert(out);
@@ -794,6 +795,9 @@ function checkEvent(num) {
 			} else if (adjacency[5] === 1) {
 				moveToList(army, 0);
 				move(army, 0);//move to nw
+			}
+			if(!unprocessedBattleAtContainingArmy(army.ownerTag(), army.armyId, army.x, army.y)){
+			    conquer(army);
 			}
 			event.status = 'checked';
 			fillEventList();

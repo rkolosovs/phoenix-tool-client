@@ -425,6 +425,7 @@ function battleHandler(participants, x, y) {
 		if (this.battle.overrunAttack()) {
 			this.attackSide.forEach(function (item) {
 				item.remainingMovePoints -= 7;
+				conquer(item);//try to conquer the land
 			});
 			this.defenseSide.forEach(function (item) {
 				item.decimate(item.count);
@@ -444,6 +445,7 @@ function battleHandler(participants, x, y) {
 				this.attackSide.forEach(function (item, index) {
 					item.remainingMovePoints = 0;
 					item.decimate(result.attackerLosses[index]);
+					conquer(item);//try to conquer the land
 				}, this);
 			} else if (result.victor === 'defender') {
 				//wipe the looser out
