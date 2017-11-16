@@ -154,6 +154,8 @@ function moveToList(army, direction) {
     var target = new showHex(neighborCoords[direction][0], neighborCoords[direction][1]);
     var directionString = '';
     var reverseDirection = '';
+    var neighborsOfNeighbors = target.neighbors().map((neighbor) => (new showHex(neighbor[0], neighbor[1])).neighbors()).
+        reduce((total, current) => (total.concat(current)), []);
     switch(direction){
         case 0: directionString = 'nw'; reverseDirection = 'se'; break;
         case 1: directionString = 'ne'; reverseDirection = 'sw'; break;
@@ -167,7 +169,10 @@ function moveToList(army, direction) {
     var thereIsAStreet = false;
     var thereIsABridge = false;
     var thereIsAHarbor = false;
-    var rightOfPassage = false;
+    var rightOfPassage = borders.some((realm) => (realm.tag === army.ownerTag() && realm.land.some((field) =>
+        (target.x === field[0] && target.y === field[1])))); //effects of diplomacy go here
+    var coastalSailing = borders.some((realm) => (realm.tag === army.ownerTag() && realm.land.some((field) =>
+        neighborsOfNeighbors.some((neighbor) => (field[0] === neighbor[0] && field[1] === neighbor[1]))))); //effects of diplomacy go here
     var thereIsARiver = rivers.some((river) =>
         (river.firstX === army.x && river.firstY === army.y && river.secondX === target.x && river.secondY === target.y) ||
         (river.firstX === target.x && river.firstY === target.y && river.secondX === army.x && river.secondY === army.y)
@@ -205,52 +210,64 @@ function moveToList(army, direction) {
     // ship movement
     if(Math.floor(army.armyId / 100) === 3){
         switch(target.fieldType()){
-            case 0:
+            case 0: //shallow sea
                 if(army.lkp === 0 && army.skp === 0){
-                    if(army.remainingMovePoints >= 7 ){
-                        //this.moveHelper(changeInHeight, direction, 12,2,false, target);
+                    if(coastalSailing && army.remainingMovePoints >= 5){
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 5, height: 2, landunit: false, tar: target});
+                        return "ok";
+                    } else if(army.remainingMovePoints >= 7 ){
                         army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2, landunit: false, tar: target});
                         return "ok";
                     } else {
                         return "You don't have enough movement Points.";
                     }
                 } else if(army.skp > 0){
-                    if(army.remainingMovePoints >= 10 ){
-                        //this.moveHelper(changeInHeight, direction, 21,2,false, target);
+                    if(coastalSailing && army.remainingMovePoints >= 7){
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2, landunit: false, tar: target});
+                        return "ok";
+                    } else if(army.remainingMovePoints >= 10 ){
                         army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 10, height: 2, landunit: false, tar: target});
                         return "ok";
                     } else {
                         return "You don't have enough movement Points.";
                     }
                 } else if(army.lkp > 0){
-                    if(army.remainingMovePoints >= 8 ){
-                        //this.moveHelper(changeInHeight, direction, 21,2,false, target);
+                    if(coastalSailing && army.remainingMovePoints >= 6){
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 6, height: 2, landunit: false, tar: target});
+                        return "ok";
+                    } else if(army.remainingMovePoints >= 8 ){
                         army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 8, height: 2, landunit: false, tar: target});
                         return "ok";
                     } else {
                         return "You don't have enough movement Points.";
                     }
                 }
-            case 1:
+            case 1: //deep sea
                 if(army.lkp === 0 && army.skp === 0){
-                    if(army.remainingMovePoints >= 12 ){
-                        //this.moveHelper(changeInHeight, direction, 7,2,false, target);
+                    if(coastalSailing && army.remainingMovePoints >= 8){
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 8, height: 2, landunit: false, tar: target});
+                        return "ok";
+                    } else if(army.remainingMovePoints >= 12 ){
                         army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 12, height: 2, landunit: false, tar: target});
                         return "ok";
                     } else {
                         return "You don't have enough movement Points.";
                     }
                 } else if(army.skp > 0){
-                    if(army.remainingMovePoints >= 21 ){
-                        //this.moveHelper(changeInHeight, direction, 10,2,false, target);
+                    if(coastalSailing && army.remainingMovePoints >= 14){
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 14, height: 2, landunit: false, tar: target});
+                        return "ok";
+                    } else if(army.remainingMovePoints >= 21 ){
                         army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2, landunit: false, tar: target});
                         return "ok";
                     } else {
                         return "You don't have enough movement Points.";
                     }
                 } else if(army.lkp > 0){
-                    if(army.remainingMovePoints >= 21 ){
-                        //this.moveHelper(changeInHeight, direction, 8,2,false, target);
+                    if(coastalSailing && army.remainingMovePoints >= 14){
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 14, height: 2, landunit: false, tar: target});
+                        return "ok";
+                    } else if(army.remainingMovePoints >= 21 ){
                         army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2, landunit: false, tar: target});
                         return "ok";
                     } else {
