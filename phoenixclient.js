@@ -470,12 +470,14 @@ function determineEventStatus() {
 				if (armyExistsAndIsLocated(content.realm, content.armyId, content.fromX, content.fromY) &&
 					!unprocessedBattleAtContainingArmy(content.realm, content.armyId, content.fromX, content.fromY) &&
 					canMove(content.realm, content.armyId, content.fromX, content.fromY, content.toX, content.toY) &&
-					noPendingLoadEvents(content.realm, content.armyId, content.fromX, content.fromY)) {
+					noPendingLoadEvents(content.realm, content.armyId, content.fromX, content.fromY) &&
+					noPendingMountEvents(content.realm, content.armyId, content.fromX, content.fromY)) {
 					pendingEvents[i].status = 'available';
 				} else if (armyExistsAndIsLocated(content.realm, content.armyId, content.fromX, content.fromY) &&
 					!unprocessedBattleAtContainingArmy(content.realm, content.armyId, content.fromX, content.fromY) &&
 					canMove(content.realm, content.armyId, content.fromX, content.fromY, content.toX, content.toY) &&
-					!noPendingLoadEvents(content.realm, content.armyId, content.fromX, content.fromY)) {
+					(!noPendingLoadEvents(content.realm, content.armyId, content.fromX, content.fromY) || 
+					!noPendingMountEvents(content.realm, content.armyId, content.fromX, content.fromY))) {
 					pendingEvents[i].status = 'withheld';
 				} else if (armyExists(content.realm, content.armyId) &&
 					possibleMoveOfArmyTo(content.realm, content.armyId, content.fromX, content.fromY)) {
@@ -607,7 +609,6 @@ function noPendingLoadEvents(realm, armyId, fromX, fromY) {
 			if ((event.status === 'withheld' || event.status === 'available') && event.type === 'move' && Math.floor(event.content.armyId / 100) !== 3 &&
 				((event.content.fromX === fromX && event.content.fromY === fromY) ||
 					(event.content.toX === fromX && event.content.toY === fromY))) {
-				console.log(event);
 				return false;
 			}
 		}
@@ -615,486 +616,498 @@ function noPendingLoadEvents(realm, armyId, fromX, fromY) {
 	}
 }
 
-function eachArmyExists(armies) {
-	//	console.log("eachArmyExits("+armies+")");
-	return (armies.length > 0) && (armies.map(function (army) {
-		return armyExists(army.realm, army.armyId);
-	}).reduce(function (total, current) {
-		return total && current;
-	}, true));
-}
-
-function findArmyPlaceInList(armyId, owner) {
-	for (var i = 0; i < listOfArmies.length; i++) {
-		if (listOfArmies[i].armyId === armyId && listOfArmies[i].owner === owner) {
-			return i;
+function noPendingMountEvents(realm, armyId, fromX, fromY){
+	if (Math.floor(armyId / 100) != 3) {
+		for (var i = 0; i < pendingEvents.length; i++) {
+			var event = pendingEvents[i];
+			if ((event.status === 'withheld' || event.status === 'available' || event.status === 'undetermined') && event.type === 'mount' && Math.floor(event.content.fromArmy) === armyId &&
+				(event.content.x === fromX && event.content.y === fromY)) {
+				return false;
+			}
 		}
-	}
-}
-
-function eachArmyExistsAndIsLocated(armies, x, y) {
-	//	console.log("eachArmyExistsAndIsLocated("+armies+", "+x+", "+y+")");
-	return (armies.length > 0) && (armies.map(function (army) {
-		return armyExistsAndIsLocated(army.realm, army.armyId, x, y);
-	}, this).reduce(function (total, current) {
-		return total && current;
-	}, true));
-}
-
-function possibleMoveOfEachArmyTo(armies, x, y) {
-	//	console.log("possibleMoveOfEachArmyTo("+armies+", "+x+", "+y+")");
-	return (armies.length > 0) && (armies.map(function (army) {
-		return armyExistsAndIsLocated(army.realm, army.armyId, x, y) ||
-			possibleMoveOfArmyTo(army.realm, army.armyId, x, y);
-	}, this).reduce(function (total, current) {
-		return total && current;
-	}, true));
-}
-
-function armyExists(realm, id) {
-	//	console.log("armyExists("+realm+", "+id+")");
-	return listOfArmies.some(function (val) {
-		return (val.ownerTag() === realm) && (val.armyId === id);
-	}, this);
-}
-
-function armyExistsAndIsLocated(realm, id, x, y) {
-	//	console.log("armyExistsAndIsLocated("+realm+", "+id+", "+x+", "+y+")");
-	return listOfArmies.some(function (val) {
-		return (val.ownerTag() === realm) &&
-			(val.armyId === id) &&
-			(val.x === x) && (val.y === y);
-	}, this);
-}
-
-function possibleMoveOfArmyTo(realm, id, x, y) {
-	//	console.log("possibleMoveOfArmyTo("+realm+", "+id+", "+x+", "+y+")");
-	return pendingEvents.some(function (pEv) {
-		return (pEv.type === 'move') && (pEv.content.realm === realm) &&
-			(pEv.content.armyId === id) && (pEv.status !== 'deleted' || pEv.status !== 'checked') &&
-			(pEv.content.toX === x) && (pEv.content.toY === y) &&
-			(canMove(realm, id, pEv.content.fromX, pEv.content.fromY, x, y));
-	}, this);
-}
-
-function unprocessedBattleAtContainingArmy(realm, id, x, y) {
-	//	console.log("unprocessedBattleAtContainingArmy("+realm+", "+id+", "+x+", "+y+")");
-	return pendingEvents.some(function (pEv) {
-		return (pEv.type === 'battle') &&
-			(pEv.status !== 'deleted') &&
-			(pEv.status !== 'checked') &&
-			(pEv.content.x === x) &&
-			(pEv.content.y === y) &&
-			(pEv.content.participants.some(function (part) {
-				return (part.armyId === id) && (part.realm === realm);
-			}, this));
-	}, this);
-}
-
-function canMove(realm, id, fromX, fromY, toX, toY) {
-	var foundArmy = listOfArmies.find(function (army) {
-		return (army.armyId === id) && (army.ownerTag() === realm);
-	}, this);
-	if (foundArmy !== undefined && foundArmy.x === fromX && foundArmy.y === fromY) {
-		var adjacency = getAdjacency([fromX, fromY], [[toX, toY]]);
-
-		if (adjacency.reduce((total, current) => (total || current), false)) {
-			foundArmy.possibleMoves = [];
-			var direction = (adjacency.findIndex((dir) => dir === 1) + 1) % 6;
-			moveToList(foundArmy, direction);
-			return foundArmy.possibleMoves.length > 0;
-		}
-		//		var origin = new showHex(fromX, fromY);
-		//        var destination = new showHex(toX, toY);
-		//		var streetPresent = buildings.some(function(building){
-		//			return (building.type === 8) &&
-		//				(((building.firstX == fromX && building.firstY == fromY) && (building.secondX == toX && building.secondY == toY)) ||
-		//					((building.secondX == toX && building.secondY == toY) && (building.firstX == fromX && building.firstY == fromY)));
-		//		});
-		//		var heightDifference = Math.abs((origin.height() - destination.height()));
-		//		//TODO: This is missing harbors
-		//		var enoughHeightPoints =  (foundArmy.remainingHeightPoints >= 1) &&
-		//			((heightDifference <= 2 && streetPresent) || (heightDifference <= 1));
-		//		//TODO: This is missing basically everything. Now the movement points are set serverside and no longer to high so this should work or not be here.
-		//		var enoughMovePoints = (foundArmy.remainingMovePoints >= 7);
-		//		return enoughHeightPoints && enoughMovePoints;
+		return true;
 	} else {
-		return false;
-	}
-}
-//end of helper methods for event status determining
-
-function fillEventList() {
-	var eventList = document.getElementById("eventsTab");
-	eventList.innerHTML = "";
-	determineEventStatus();
-	for (var i = 0; i < pendingEvents.length; i++) {
-		eventList.appendChild(makeEventListItem(pendingEvents[i], i));
+		return true;
 	}
 }
 
-function realmIdToshort(id) {
-	switch (id) {
-		case 1: return "usa";
-		case 2: return "eos";
-		case 3: return "vvh";
-	}
-}
-
-function makeEventListItem(event, i) {
-	var eli = document.createElement("DIV");
-	eli.classList.add("eventListItem");
-	eli.id = "eli" + i;
-	var cont = event.content;
-	if (event.type === "move") {
-		eli.innerHTML = "<div>Move " + cont.realm + " army " + cont.armyId + " from (" + cont.fromX + ", " + cont.fromY + ") to (" + cont.toX + ", " + cont.toY + ")</div>";
-	} else if (event.type === "battle") {
-		var html = "<div>Battle at (" + cont.x + ", " + cont.y + ") involving";
-		var partips = cont.participants
-		for (var j = 0; j < partips.length; j++) {
-			html += " [" + partips[j].realm + " " + partips[j].armyId + "]";
-		}
-		eli.innerHTML = html + "</div>";
-	} else if (event.type === "merge") {
-		eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " merges with army " + cont.toArmy + " in (" + cont.x + "," + cont.y + ").</div>";
-	} else if (event.type === "split") {
-		// TODO: detailed explanation
-		var innerHTMLString = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " splits off army " + cont.newArmy + " with ";
-		if (cont.troops != 0) {
-			innerHTMLString += cont.troops + " troops, ";
-		}
-		if (cont.leaders != 0) {
-			innerHTMLString += cont.leaders + " leaders, ";
-		}
-		if (cont.mounts != 0) {
-			innerHTMLString += cont.mounts + " mounts, ";
-		}
-		if (cont.lkp != 0) {
-			innerHTMLString += cont.lkp + " lkp, ";
-		}
-		if (cont.skp != 0) {
-			innerHTMLString += cont.skp + " skp ";
-		}
-		innerHTMLString += "in (" + cont.x + "," + cont.y + ").</div>";
-		eli.innerHTML = innerHTMLString;
-	} else if (event.type === "transfer") {
-		var innerHTMLString = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " transfers ";
-		if (cont.troops != 0) {
-			innerHTMLString += cont.troops + " troops, ";
-		}
-		if (cont.leaders != 0) {
-			innerHTMLString += cont.leaders + " leaders, ";
-		}
-		if (cont.mounts != 0) {
-			innerHTMLString += cont.mounts + " mounts, ";
-		}
-		if (cont.lkp != 0) {
-			innerHTMLString += cont.lkp + " lkp, ";
-		}
-		if (cont.skp != 0) {
-			innerHTMLString += cont.skp + " skp ";
-		}
-		innerHTMLString += "to " + cont.toArmy + " in (" + cont.x + "," + cont.y + ").</div>";
-		eli.innerHTML = innerHTMLString;
-	} else if (event.type === "mount") {
-		eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " mounts " + cont.troops + " troops, and "
-			+ cont.leaders + " leaders to " + cont.newArmy + " in (" + cont.x + "," + cont.y + ").</div>";
-	}
-	var deleteButton = document.createElement("BUTTON");
-	deleteButton.id = "delBtn" + i;
-	deleteButton.classList.add("eventListButton");
-	deleteButton.classList.add("eventListDeleteButton");
-	deleteButton.onclick = deleteEvent(i);
-	var checkButton = document.createElement("BUTTON");
-	checkButton.id = "checkBtn" + i;
-	checkButton.classList.add("eventListButton");
-	checkButton.classList.add("eventListCheckButton");
-	checkButton.onclick = checkEvent(i);
-	eli.appendChild(deleteButton);
-	eli.appendChild(checkButton);
-
-	if (event.status === 'checked') {
-		eli.classList.add("checkedELI");
-		deleteButton.disabled = true;
-		checkButton.disabled = true;
-	} else if (event.status === 'deleted') {
-		eli.classList.add("deletedELI");
-		deleteButton.disabled = true;
-		checkButton.disabled = true;
-	} else if (event.status === 'impossible') {
-		eli.classList.add("impossibleELI");
-		checkButton.disabled = true;
-	} else if (event.status === 'withheld') {
-		eli.classList.add("withheldELI");
-		checkButton.disabled = true;
-	} else if (event.status === 'available') {
-		eli.classList.add("availableELI");
+	function eachArmyExists(armies) {
+		//	console.log("eachArmyExits("+armies+")");
+		return (armies.length > 0) && (armies.map(function (army) {
+			return armyExists(army.realm, army.armyId);
+		}).reduce(function (total, current) {
+			return total && current;
+		}, true));
 	}
 
-	return eli;
-}
-
-function deleteEvent(num) {
-	function del() {
-		var eli = document.getElementById("eli" + num);
-		var event = pendingEvents[num];
-		event.status = 'deleted';
-		fillEventList();
+	function findArmyPlaceInList(armyId, owner) {
+		for (var i = 0; i < listOfArmies.length; i++) {
+			if (listOfArmies[i].armyId === armyId && listOfArmies[i].owner === owner) {
+				return i;
+			}
+		}
 	}
-	return del;
-}
 
-function checkEvent(num) {
-	function check() {
-		var eli = document.getElementById("eli" + num);
-		var event = pendingEvents[num];
+	function eachArmyExistsAndIsLocated(armies, x, y) {
+		//	console.log("eachArmyExistsAndIsLocated("+armies+", "+x+", "+y+")");
+		return (armies.length > 0) && (armies.map(function (army) {
+			return armyExistsAndIsLocated(army.realm, army.armyId, x, y);
+		}, this).reduce(function (total, current) {
+			return total && current;
+		}, true));
+	}
+
+	function possibleMoveOfEachArmyTo(armies, x, y) {
+		//	console.log("possibleMoveOfEachArmyTo("+armies+", "+x+", "+y+")");
+		return (armies.length > 0) && (armies.map(function (army) {
+			return armyExistsAndIsLocated(army.realm, army.armyId, x, y) ||
+				possibleMoveOfArmyTo(army.realm, army.armyId, x, y);
+		}, this).reduce(function (total, current) {
+			return total && current;
+		}, true));
+	}
+
+	function armyExists(realm, id) {
+		//	console.log("armyExists("+realm+", "+id+")");
+		return listOfArmies.some(function (val) {
+			return (val.ownerTag() === realm) && (val.armyId === id);
+		}, this);
+	}
+
+	function armyExistsAndIsLocated(realm, id, x, y) {
+		//	console.log("armyExistsAndIsLocated("+realm+", "+id+", "+x+", "+y+")");
+		return listOfArmies.some(function (val) {
+			return (val.ownerTag() === realm) &&
+				(val.armyId === id) &&
+				(val.x === x) && (val.y === y);
+		}, this);
+	}
+
+	function possibleMoveOfArmyTo(realm, id, x, y) {
+		//	console.log("possibleMoveOfArmyTo("+realm+", "+id+", "+x+", "+y+")");
+		return pendingEvents.some(function (pEv) {
+			return (pEv.type === 'move') && (pEv.content.realm === realm) &&
+				(pEv.content.armyId === id) && (pEv.status !== 'deleted' || pEv.status !== 'checked') &&
+				(pEv.content.toX === x) && (pEv.content.toY === y) &&
+				(canMove(realm, id, pEv.content.fromX, pEv.content.fromY, x, y));
+		}, this);
+	}
+
+	function unprocessedBattleAtContainingArmy(realm, id, x, y) {
+		//	console.log("unprocessedBattleAtContainingArmy("+realm+", "+id+", "+x+", "+y+")");
+		return pendingEvents.some(function (pEv) {
+			return (pEv.type === 'battle') &&
+				(pEv.status !== 'deleted') &&
+				(pEv.status !== 'checked') &&
+				(pEv.content.x === x) &&
+				(pEv.content.y === y) &&
+				(pEv.content.participants.some(function (part) {
+					return (part.armyId === id) && (part.realm === realm);
+				}, this));
+		}, this);
+	}
+
+	function canMove(realm, id, fromX, fromY, toX, toY) {
+		var foundArmy = listOfArmies.find(function (army) {
+			return (army.armyId === id) && (army.ownerTag() === realm);
+		}, this);
+		if (foundArmy !== undefined && foundArmy.x === fromX && foundArmy.y === fromY) {
+			var adjacency = getAdjacency([fromX, fromY], [[toX, toY]]);
+
+			if (adjacency.reduce((total, current) => (total || current), false)) {
+				foundArmy.possibleMoves = [];
+				var direction = (adjacency.findIndex((dir) => dir === 1) + 1) % 6;
+				moveToList(foundArmy, direction);
+				return foundArmy.possibleMoves.length > 0;
+			}
+			//		var origin = new showHex(fromX, fromY);
+			//        var destination = new showHex(toX, toY);
+			//		var streetPresent = buildings.some(function(building){
+			//			return (building.type === 8) &&
+			//				(((building.firstX == fromX && building.firstY == fromY) && (building.secondX == toX && building.secondY == toY)) ||
+			//					((building.secondX == toX && building.secondY == toY) && (building.firstX == fromX && building.firstY == fromY)));
+			//		});
+			//		var heightDifference = Math.abs((origin.height() - destination.height()));
+			//		//TODO: This is missing harbors
+			//		var enoughHeightPoints =  (foundArmy.remainingHeightPoints >= 1) &&
+			//			((heightDifference <= 2 && streetPresent) || (heightDifference <= 1));
+			//		//TODO: This is missing basically everything. Now the movement points are set serverside and no longer to high so this should work or not be here.
+			//		var enoughMovePoints = (foundArmy.remainingMovePoints >= 7);
+			//		return enoughHeightPoints && enoughMovePoints;
+		} else {
+			return false;
+		}
+	}
+	//end of helper methods for event status determining
+
+	function fillEventList() {
+		var eventList = document.getElementById("eventsTab");
+		eventList.innerHTML = "";
+		determineEventStatus();
+		for (var i = 0; i < pendingEvents.length; i++) {
+			eventList.appendChild(makeEventListItem(pendingEvents[i], i));
+		}
+	}
+
+	function realmIdToshort(id) {
+		switch (id) {
+			case 1: return "usa";
+			case 2: return "eos";
+			case 3: return "vvh";
+		}
+	}
+
+	function makeEventListItem(event, i) {
+		var eli = document.createElement("DIV");
+		eli.classList.add("eventListItem");
+		eli.id = "eli" + i;
 		var cont = event.content;
 		if (event.type === "move") {
-			var army;
-			for (var i = 0; i < listOfArmies.length; i++) {
-				army = listOfArmies[i];
-				if (army.ownerTag() === cont.realm && cont.armyId === army.armyId) {
-					break;
-				}
-			}
-			var adjacency = getAdjacency([army.x, army.y], [[cont.toX, cont.toY]]);
-			if (adjacency[0] === 1) {
-				moveToList(army, 1);
-				move(army, 1);//move to ne
-			} else if (adjacency[1] === 1) {
-				moveToList(army, 2);
-				move(army, 2);//move to e
-			} else if (adjacency[2] === 1) {
-				moveToList(army, 3);
-				move(army, 3);//move to se
-			} else if (adjacency[3] === 1) {
-				moveToList(army, 4);
-				move(army, 4);//move to sw
-			} else if (adjacency[4] === 1) {
-				moveToList(army, 5);
-				move(army, 5);//move to w
-			} else if (adjacency[5] === 1) {
-				moveToList(army, 0);
-				move(army, 0);//move to nw
-			}
-			event.status = 'checked';
-			fillEventList();
-			drawStuff();
+			eli.innerHTML = "<div>Move " + cont.realm + " army " + cont.armyId + " from (" + cont.fromX + ", " + cont.fromY + ") to (" + cont.toX + ", " + cont.toY + ")</div>";
 		} else if (event.type === "battle") {
-			var battleBox = document.getElementById("battleBox");
-			show(battleBox);
+			var html = "<div>Battle at (" + cont.x + ", " + cont.y + ") involving";
+			var partips = cont.participants
+			for (var j = 0; j < partips.length; j++) {
+				html += " [" + partips[j].realm + " " + partips[j].armyId + "]";
+			}
+			eli.innerHTML = html + "</div>";
+		} else if (event.type === "merge") {
+			eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " merges with army " + cont.toArmy + " in (" + cont.x + "," + cont.y + ").</div>";
+		} else if (event.type === "split") {
+			// TODO: detailed explanation
+			var innerHTMLString = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " splits off army " + cont.newArmy + " with ";
+			if (cont.troops != 0) {
+				innerHTMLString += cont.troops + " troops, ";
+			}
+			if (cont.leaders != 0) {
+				innerHTMLString += cont.leaders + " leaders, ";
+			}
+			if (cont.mounts != 0) {
+				innerHTMLString += cont.mounts + " mounts, ";
+			}
+			if (cont.lkp != 0) {
+				innerHTMLString += cont.lkp + " lkp, ";
+			}
+			if (cont.skp != 0) {
+				innerHTMLString += cont.skp + " skp ";
+			}
+			innerHTMLString += "in (" + cont.x + "," + cont.y + ").</div>";
+			eli.innerHTML = innerHTMLString;
+		} else if (event.type === "transfer") {
+			var innerHTMLString = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " transfers ";
+			if (cont.troops != 0) {
+				innerHTMLString += cont.troops + " troops, ";
+			}
+			if (cont.leaders != 0) {
+				innerHTMLString += cont.leaders + " leaders, ";
+			}
+			if (cont.mounts != 0) {
+				innerHTMLString += cont.mounts + " mounts, ";
+			}
+			if (cont.lkp != 0) {
+				innerHTMLString += cont.lkp + " lkp, ";
+			}
+			if (cont.skp != 0) {
+				innerHTMLString += cont.skp + " skp ";
+			}
+			innerHTMLString += "to " + cont.toArmy + " in (" + cont.x + "," + cont.y + ").</div>";
+			eli.innerHTML = innerHTMLString;
+		} else if (event.type === "mount") {
+			eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " mounts " + cont.troops + " troops, and "
+				+ cont.leaders + " leaders to " + cont.newArmy + " in (" + cont.x + "," + cont.y + ").</div>";
+		}
+		var deleteButton = document.createElement("BUTTON");
+		deleteButton.id = "delBtn" + i;
+		deleteButton.classList.add("eventListButton");
+		deleteButton.classList.add("eventListDeleteButton");
+		deleteButton.onclick = deleteEvent(i);
+		var checkButton = document.createElement("BUTTON");
+		checkButton.id = "checkBtn" + i;
+		checkButton.classList.add("eventListButton");
+		checkButton.classList.add("eventListCheckButton");
+		checkButton.onclick = checkEvent(i);
+		eli.appendChild(deleteButton);
+		eli.appendChild(checkButton);
 
-			var partips = [];
-			cont.participants.forEach(function (item) {
-				var a = listOfArmies.find(function (candidate) {
-					return (item.realm === candidate.ownerTag()) && (item.armyId === candidate.armyId);
-				});
-				partips.push(a);
-			});
+		if (event.status === 'checked') {
+			eli.classList.add("checkedELI");
+			deleteButton.disabled = true;
+			checkButton.disabled = true;
+		} else if (event.status === 'deleted') {
+			eli.classList.add("deletedELI");
+			deleteButton.disabled = true;
+			checkButton.disabled = true;
+		} else if (event.status === 'impossible') {
+			eli.classList.add("impossibleELI");
+			checkButton.disabled = true;
+		} else if (event.status === 'withheld') {
+			eli.classList.add("withheldELI");
+			checkButton.disabled = true;
+		} else if (event.status === 'available') {
+			eli.classList.add("availableELI");
+		}
 
-			var battle = new battleHandler(partips, cont.x, cont.y);
-			document.getElementById("attackDiceRoll").onchange = function () { battle.updateDisplay() };
-			document.getElementById("defenseDiceRoll").onchange = function () { battle.updateDisplay() };
-			var battleButton = document.getElementById("battleButton");
-			battleButton.onclick = function () {
-				battle.resolve();
-				hide(battleBox);
+		return eli;
+	}
+
+	function deleteEvent(num) {
+		function del() {
+			var eli = document.getElementById("eli" + num);
+			var event = pendingEvents[num];
+			event.status = 'deleted';
+			fillEventList();
+		}
+		return del;
+	}
+
+	function checkEvent(num) {
+		function check() {
+			var eli = document.getElementById("eli" + num);
+			var event = pendingEvents[num];
+			var cont = event.content;
+			if (event.type === "move") {
+				var army;
+				for (var i = 0; i < listOfArmies.length; i++) {
+					army = listOfArmies[i];
+					if (army.ownerTag() === cont.realm && cont.armyId === army.armyId) {
+						break;
+					}
+				}
+				var adjacency = getAdjacency([army.x, army.y], [[cont.toX, cont.toY]]);
+				if (adjacency[0] === 1) {
+					moveToList(army, 1);
+					move(army, 1);//move to ne
+				} else if (adjacency[1] === 1) {
+					moveToList(army, 2);
+					move(army, 2);//move to e
+				} else if (adjacency[2] === 1) {
+					moveToList(army, 3);
+					move(army, 3);//move to se
+				} else if (adjacency[3] === 1) {
+					moveToList(army, 4);
+					move(army, 4);//move to sw
+				} else if (adjacency[4] === 1) {
+					moveToList(army, 5);
+					move(army, 5);//move to w
+				} else if (adjacency[5] === 1) {
+					moveToList(army, 0);
+					move(army, 0);//move to nw
+				}
 				event.status = 'checked';
 				fillEventList();
 				drawStuff();
-			};
-			battleButton.disabled = true;
-			battleButton.style.cursor = "not-allowed";
-			document.getElementById("closeBattleButton").onclick = function () {
-				hide(battleBox);
-			};
-			battle.updateDisplay();
-		} else if (event.type === "split") {
-			console.log("this is a split event");
-			var armyFromPlaceInList = -1;
-			var armyFromId = cont.fromArmy;
-			var newArmyId = cont.newArmy;
-			var realm = cont.realm;
-			var toSplit = cont.troops;
-			var leadersToSplit = cont.leaders;
-			var mountsToSplit = cont.mounts;
-			var lkpToSplit = cont.lkp;
-			var skpToSplit = cont.skp;
-			for (var i = 0; i < listOfArmies.length; i++) {
-				if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
-					armyFromPlaceInList = i;
-				}
-			}
-			if (armyFromPlaceInList >= 0) {
-				listOfArmies[armyFromPlaceInList].count -= toSplit;
-				listOfArmies[armyFromPlaceInList].leaders -= leadersToSplit;
-				if (listOfArmies[armyFromPlaceInList].armyType == 1) {
-					listOfArmies[armyFromPlaceInList].mounts -= mountsToSplit;
-				}
-				if (listOfArmies[armyFromPlaceInList].armyType == 1 || listOfArmies[armyFromPlaceInList].armyType == 3) {
-					listOfArmies[armyFromPlaceInList].lkp -= lkpToSplit;
-					listOfArmies[armyFromPlaceInList].skp -= skpToSplit;
-				}
-				var army = null;
-				if (Math.floor(newArmyId / 100) == 1) {
-					army = new heer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, false,
-						listOfArmies[armyFromPlaceInList].x, listOfArmies[armyFromPlaceInList].y, realm);
-				}
-				else if (Math.floor(newArmyId / 100) == 2) {
-					army = new reiterHeer(newArmyId, toSplit, leadersToSplit, false, listOfArmies[armyFromPlaceInList].x,
-						listOfArmies[armyFromPlaceInList].y, realm);
-				}
-				else if (Math.floor(newArmyId / 100) == 3) {
-					army = new seeHeer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, false,
-						listOfArmies[armyFromPlaceInList].x, listOfArmies[armyFromPlaceInList].y, realm);
-				}
-				army.setRemainingMovePoints(listOfArmies[armyFromPlaceInList].remainingMovePoints);
-				army.setRemainingHeightPoints(listOfArmies[armyFromPlaceInList].remainingHeightPoints);
-				listOfArmies.push(army);
-			}
-			event.status = 'checked';
-			fillEventList();
-			drawStuff();
-		} else if (event.type === "merge") {
-			var armyFromPlaceInList = -1;
-			var armyToPlaceInList = -1;
-			var armyFromId = cont.fromArmy;
-			var armyToId = cont.toArmy;
-			var realm = cont.realm;
-			for (var i = 0; i < listOfArmies.length; i++) {
-				if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
-					armyFromPlaceInList = i;
-					console.log("i1=" + i);
-				}
-				else if (listOfArmies[i].armyId == armyToId && listOfArmies[i].owner == realm) {
-					armyToPlaceInList = i;
-					console.log("i2=" + i);
-				}
-			}
-			console.log("armyfromplace = " + armyFromPlaceInList);
-			console.log("armytoplace = " + armyToPlaceInList)
-			if (armyFromPlaceInList >= 0 && armyToPlaceInList >= 0) {
-				selectedArmyIndex = armyFromPlaceInList;
-				mergeSelectedArmy(armyToPlaceInList);
-				preparedEvents.pop();
-			}
-			event.status = 'checked';
-			fillEventList();
-			drawStuff();
-			selectedArmyIndex = undefined;
-		} else if (event.type === "transfer") {
-			console.log("this is a transfer event");
-			var armyFromPlaceInList = -1;
-			var armyToPlaceInList = -1;
-			var armyFromId = cont.fromArmy;
-			var armyToId = cont.toArmy;
-			var realm = cont.realm;
-			var toSplit = cont.troops;
-			var leadersToSplit = cont.leaders;
-			var mountsToSplit = cont.mounts;
-			var lkpToSplit = cont.lkp;
-			var skpToSplit = cont.skp;
-			for (var i = 0; i < listOfArmies.length; i++) {
-				if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
-					armyFromPlaceInList = i;
-				}
-				else if (listOfArmies[i].armyId == armyToId && listOfArmies[i].owner == realm) {
-					armyToPlaceInList = i;
-				}
-			}
-			if (armyFromPlaceInList >= 0 && armyToPlaceInList >= 0) {
-				listOfArmies[armyFromPlaceInList].count -= toSplit;
-				listOfArmies[armyToPlaceInList].count += toSplit;
-				listOfArmies[armyFromPlaceInList].leaders -= leadersToSplit;
-				listOfArmies[armyToPlaceInList].leaders += leadersToSplit;
-				if (listOfArmies[armyFromPlaceInList].armyType == 1) {
-					listOfArmies[armyFromPlaceInList].mounts -= mountsToSplit;
-					listOfArmies[armyToPlaceInList].mounts += mountsToSplit;
-				}
-				if (listOfArmies[armyFromPlaceInList].armyType == 1 || listOfArmies[armyFromPlaceInList].armyType == 3) {
-					listOfArmies[armyFromPlaceInList].lkp -= lkpToSplit;
-					listOfArmies[armyToPlaceInList].lkp += lkpToSplit;
-					listOfArmies[armyFromPlaceInList].skp -= skpToSplit;
-					listOfArmies[armyToPlaceInList].skp += skpToSplit;
-				}
-				if (leadersToSplit > 0 &&
-					listOfArmies[armyFromPlaceInList].remainingMovePoints < listOfArmies[armyFromPlaceInList].startingMovepoints()) {
-					listOfArmies[armyToPlaceInList].setRemainingMovePoints(0);
-				} else if (listOfArmies[armyFromPlaceInList].remainingMovePoints < listOfArmies[armyToPlaceInList].remainingMovePoints) {
-					listOfArmies[armyToPlaceInList].setRemainingMovePoints(listOfArmies[armyFromPlaceInList].remainingMovePoints);
-				}
-				if (listOfArmies[armyFromPlaceInList].remainingHeightPoints < listOfArmies[armyToPlaceInList].remainingHeightPoints) {
-					listOfArmies[armyToPlaceInList].setRemainingHeightPoints(listOfArmies[armyFromPlaceInList].remainingHeightPoints);
-				}
-			}
-			event.status = 'checked';
-			fillEventList();
-			drawStuff();
-		} else if (event.type === "mount") {
-			console.log("this is a mount event");
-			var armyFromPlaceInList = -1;
-			var armyFromId = cont.fromArmy;
-			var newArmyId = cont.newArmy;
-			var realm = cont.realm;
-			var toSplit = cont.troops;
-			var leadersToSplit = cont.leaders;
-			for (var i = 0; i < listOfArmies.length; i++) {
-				if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
-					armyFromPlaceInList = i;
-				}
-			}
-			console.log("place: " + armyFromPlaceInList);
-			if (armyFromPlaceInList >= 0) {
-				console.log("type: " + listOfArmies[armyFromPlaceInList].armyType());
-				if (listOfArmies[armyFromPlaceInList].armyType() == 1) {
-					console.log("mountWithParams");
-					mountWithParams(armyFromPlaceInList, toSplit, leadersToSplit, newArmyId);
+			} else if (event.type === "battle") {
+				var battleBox = document.getElementById("battleBox");
+				show(battleBox);
+
+				var partips = [];
+				cont.participants.forEach(function (item) {
+					var a = listOfArmies.find(function (candidate) {
+						return (item.realm === candidate.ownerTag()) && (item.armyId === candidate.armyId);
+					});
+					partips.push(a);
+				});
+
+				var battle = new battleHandler(partips, cont.x, cont.y);
+				document.getElementById("attackDiceRoll").onchange = function () { battle.updateDisplay() };
+				document.getElementById("defenseDiceRoll").onchange = function () { battle.updateDisplay() };
+				var battleButton = document.getElementById("battleButton");
+				battleButton.onclick = function () {
+					battle.resolve();
+					hide(battleBox);
 					event.status = 'checked';
-				} else if (listOfArmies[armyFromPlaceInList].armyType() == 2) {
-					console.log("unMountWithParams");
-					unMountWithParams(armyFromPlaceInList, toSplit, leadersToSplit, newArmyId);
-					event.status = 'checked';
+					fillEventList();
+					drawStuff();
+				};
+				battleButton.disabled = true;
+				battleButton.style.cursor = "not-allowed";
+				document.getElementById("closeBattleButton").onclick = function () {
+					hide(battleBox);
+				};
+				battle.updateDisplay();
+			} else if (event.type === "split") {
+				console.log("this is a split event");
+				var armyFromPlaceInList = -1;
+				var armyFromId = cont.fromArmy;
+				var newArmyId = cont.newArmy;
+				var realm = cont.realm;
+				var toSplit = cont.troops;
+				var leadersToSplit = cont.leaders;
+				var mountsToSplit = cont.mounts;
+				var lkpToSplit = cont.lkp;
+				var skpToSplit = cont.skp;
+				for (var i = 0; i < listOfArmies.length; i++) {
+					if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
+						armyFromPlaceInList = i;
+					}
 				}
+				if (armyFromPlaceInList >= 0) {
+					listOfArmies[armyFromPlaceInList].count -= toSplit;
+					listOfArmies[armyFromPlaceInList].leaders -= leadersToSplit;
+					if (listOfArmies[armyFromPlaceInList].armyType == 1) {
+						listOfArmies[armyFromPlaceInList].mounts -= mountsToSplit;
+					}
+					if (listOfArmies[armyFromPlaceInList].armyType == 1 || listOfArmies[armyFromPlaceInList].armyType == 3) {
+						listOfArmies[armyFromPlaceInList].lkp -= lkpToSplit;
+						listOfArmies[armyFromPlaceInList].skp -= skpToSplit;
+					}
+					var army = null;
+					if (Math.floor(newArmyId / 100) == 1) {
+						army = new heer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, false,
+							listOfArmies[armyFromPlaceInList].x, listOfArmies[armyFromPlaceInList].y, realm);
+					}
+					else if (Math.floor(newArmyId / 100) == 2) {
+						army = new reiterHeer(newArmyId, toSplit, leadersToSplit, false, listOfArmies[armyFromPlaceInList].x,
+							listOfArmies[armyFromPlaceInList].y, realm);
+					}
+					else if (Math.floor(newArmyId / 100) == 3) {
+						army = new seeHeer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, false,
+							listOfArmies[armyFromPlaceInList].x, listOfArmies[armyFromPlaceInList].y, realm);
+					}
+					army.setRemainingMovePoints(listOfArmies[armyFromPlaceInList].remainingMovePoints);
+					army.setRemainingHeightPoints(listOfArmies[armyFromPlaceInList].remainingHeightPoints);
+					listOfArmies.push(army);
+				}
+				event.status = 'checked';
+				fillEventList();
+				drawStuff();
+			} else if (event.type === "merge") {
+				var armyFromPlaceInList = -1;
+				var armyToPlaceInList = -1;
+				var armyFromId = cont.fromArmy;
+				var armyToId = cont.toArmy;
+				var realm = cont.realm;
+				for (var i = 0; i < listOfArmies.length; i++) {
+					if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
+						armyFromPlaceInList = i;
+						console.log("i1=" + i);
+					}
+					else if (listOfArmies[i].armyId == armyToId && listOfArmies[i].owner == realm) {
+						armyToPlaceInList = i;
+						console.log("i2=" + i);
+					}
+				}
+				console.log("armyfromplace = " + armyFromPlaceInList);
+				console.log("armytoplace = " + armyToPlaceInList)
+				if (armyFromPlaceInList >= 0 && armyToPlaceInList >= 0) {
+					selectedArmyIndex = armyFromPlaceInList;
+					mergeSelectedArmy(armyToPlaceInList);
+					preparedEvents.pop();
+				}
+				event.status = 'checked';
+				fillEventList();
+				drawStuff();
+				selectedArmyIndex = undefined;
+			} else if (event.type === "transfer") {
+				console.log("this is a transfer event");
+				var armyFromPlaceInList = -1;
+				var armyToPlaceInList = -1;
+				var armyFromId = cont.fromArmy;
+				var armyToId = cont.toArmy;
+				var realm = cont.realm;
+				var toSplit = cont.troops;
+				var leadersToSplit = cont.leaders;
+				var mountsToSplit = cont.mounts;
+				var lkpToSplit = cont.lkp;
+				var skpToSplit = cont.skp;
+				for (var i = 0; i < listOfArmies.length; i++) {
+					if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
+						armyFromPlaceInList = i;
+					}
+					else if (listOfArmies[i].armyId == armyToId && listOfArmies[i].owner == realm) {
+						armyToPlaceInList = i;
+					}
+				}
+				if (armyFromPlaceInList >= 0 && armyToPlaceInList >= 0) {
+					listOfArmies[armyFromPlaceInList].count -= toSplit;
+					listOfArmies[armyToPlaceInList].count += toSplit;
+					listOfArmies[armyFromPlaceInList].leaders -= leadersToSplit;
+					listOfArmies[armyToPlaceInList].leaders += leadersToSplit;
+					if (listOfArmies[armyFromPlaceInList].armyType == 1) {
+						listOfArmies[armyFromPlaceInList].mounts -= mountsToSplit;
+						listOfArmies[armyToPlaceInList].mounts += mountsToSplit;
+					}
+					if (listOfArmies[armyFromPlaceInList].armyType == 1 || listOfArmies[armyFromPlaceInList].armyType == 3) {
+						listOfArmies[armyFromPlaceInList].lkp -= lkpToSplit;
+						listOfArmies[armyToPlaceInList].lkp += lkpToSplit;
+						listOfArmies[armyFromPlaceInList].skp -= skpToSplit;
+						listOfArmies[armyToPlaceInList].skp += skpToSplit;
+					}
+					if (leadersToSplit > 0 &&
+						listOfArmies[armyFromPlaceInList].remainingMovePoints < listOfArmies[armyFromPlaceInList].startingMovepoints()) {
+						listOfArmies[armyToPlaceInList].setRemainingMovePoints(0);
+					} else if (listOfArmies[armyFromPlaceInList].remainingMovePoints < listOfArmies[armyToPlaceInList].remainingMovePoints) {
+						listOfArmies[armyToPlaceInList].setRemainingMovePoints(listOfArmies[armyFromPlaceInList].remainingMovePoints);
+					}
+					if (listOfArmies[armyFromPlaceInList].remainingHeightPoints < listOfArmies[armyToPlaceInList].remainingHeightPoints) {
+						listOfArmies[armyToPlaceInList].setRemainingHeightPoints(listOfArmies[armyFromPlaceInList].remainingHeightPoints);
+					}
+				}
+				event.status = 'checked';
+				fillEventList();
+				drawStuff();
+			} else if (event.type === "mount") {
+				console.log("this is a mount event");
+				var armyFromPlaceInList = -1;
+				var armyFromId = cont.fromArmy;
+				var newArmyId = cont.newArmy;
+				var realm = cont.realm;
+				var toSplit = cont.troops;
+				var leadersToSplit = cont.leaders;
+				for (var i = 0; i < listOfArmies.length; i++) {
+					if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
+						armyFromPlaceInList = i;
+					}
+				}
+				console.log("place: " + armyFromPlaceInList);
+				if (armyFromPlaceInList >= 0) {
+					if (listOfArmies[armyFromPlaceInList].armyType() == 1) {
+						mountWithParams(armyFromPlaceInList, toSplit, leadersToSplit, newArmyId);
+						event.status = 'checked';
+					} else if (listOfArmies[armyFromPlaceInList].armyType() == 2) {
+						unMountWithParams(armyFromPlaceInList, toSplit, leadersToSplit, newArmyId);
+						event.status = 'checked';
+					}
+				}
+				fillEventList();
+				drawStuff();
 			}
-			fillEventList();
-			drawStuff();
+		}
+		return check;
+	}
+
+	function openTab(evt, tabName) {
+		// Declare all variables
+		var i, tabcontent, tablinks;
+
+		// Get all elements with class="tabcontent" and hide them
+		tabcontent = document.getElementsByClassName("tabcontent");
+		for (i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+		}
+
+		// Get all elements with class="tablinks" and remove the class "active"
+		tablinks = document.getElementsByClassName("tablinks");
+		for (i = 0; i < tablinks.length; i++) {
+			tablinks[i].className = tablinks[i].className.replace(" active", "");
+		}
+
+		// Show the current tab, and add an "active" class to the button that opened
+		// the tab
+		if (evt !== undefined && tabName !== "") {
+			document.getElementById(tabName).style.display = "block";
+			evt.currentTarget.className += " active";
 		}
 	}
-	return check;
-}
 
-function openTab(evt, tabName) {
-	// Declare all variables
-	var i, tabcontent, tablinks;
-
-	// Get all elements with class="tabcontent" and hide them
-	tabcontent = document.getElementsByClassName("tabcontent");
-	for (i = 0; i < tabcontent.length; i++) {
-		tabcontent[i].style.display = "none";
+	function init() {
+		getNewDataFromServer();
+		loadTurnNumber();
+		loadImages(tileset);
+		setHexParts(scale);
 	}
 
-	// Get all elements with class="tablinks" and remove the class "active"
-	tablinks = document.getElementsByClassName("tablinks");
-	for (i = 0; i < tablinks.length; i++) {
-		tablinks[i].className = tablinks[i].className.replace(" active", "");
-	}
-
-	// Show the current tab, and add an "active" class to the button that opened
-	// the tab
-	if (evt !== undefined && tabName !== "") {
-		document.getElementById(tabName).style.display = "block";
-		evt.currentTarget.className += " active";
-	}
-}
-
-function init() {
-	getNewDataFromServer();
-	loadTurnNumber();
-	loadImages(tileset);
-	setHexParts(scale);
-}
-
-init();
-setInterval(function () {
-	getNewDataFromServer();
-}, 30000);
+	init();
+	setInterval(function () {
+		getNewDataFromServer();
+	}, 30000);

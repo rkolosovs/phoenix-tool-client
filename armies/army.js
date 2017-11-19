@@ -87,6 +87,14 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
         }
         return (this.count + this.mounts + this.skp*2000 + this.lkp*1000 + this.leaders * 100);
     }
+    //berechnet die verbrauchten Raumpunkte
+    this.raumpunkteOhneHf = function(){
+        if(this.isGuard){
+            // Garde zählt 3 fach
+            return (this.count * 3 + this.mounts + this.skp*2000 + this.lkp*1000);
+        }
+        return (this.count + this.mounts + this.skp*2000 + this.lkp*1000);
+    }
     // entfernt Soldaten aus der Armee
     this.removeSoldiers = function(amount){
         if(this.count >= amount){
@@ -395,6 +403,14 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde, coordX, coordY, owner) {
         }
         return (this.count * 2 + this.leaders * 100);
     };
+    //berechnet die verbrauchten Raumpunkte
+    this.raumpunkteOhneHf = function(){
+        if(this.isGuard){
+            // Garde zählt 3 fach
+            return (this.count * 3);
+        }
+        return (this.count * 2);
+    }
     // entfernt Soldaten aus der Armee
     this.removeSoldiers = function(amount){
         if(this.count >= amount){
@@ -562,6 +578,14 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
         }
         return (this.count * 100 + this.leaders * 100 + this.lkp * 1000 + this.skp * 2000);
     };
+    //berechnet die verbrauchten Raumpunkte
+    this.raumpunkteOhneHf = function(){
+        if(this.isGuard){
+            // Garde zählt 3 fach
+            return (this.count * 100 * 3 + this.skp*2000 + this.lkp*1000);
+        }
+        return (this.count *100 + this.skp*2000 + this.lkp*1000);
+    }
     // berechnet gutpunkte durch heerführer
     this.leaderGp = function(){
         var gp = 0;

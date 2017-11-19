@@ -746,7 +746,8 @@ function splitSelectedArmy() {
 		});
 	}
 	if (listOfArmies[selectedArmyIndex].armyType() == 2) {
-		var newArmy = new reiterHeer(generateArmyId(2, listOfArmies[selectedArmyIndex].owner), toSplit, leadersToSplit, false,
+		var newArmyId = generateArmyId(2, listOfArmies[selectedArmyIndex].owner);
+		var newArmy = new reiterHeer(newArmyId, toSplit, leadersToSplit, false,
 			listOfArmies[selectedArmyIndex].x, listOfArmies[selectedArmyIndex].y, listOfArmies[selectedArmyIndex].owner);
 		listOfArmies.push(newArmy);
 		listOfArmies[selectedArmyIndex].removeSoldiers(toSplit);
@@ -767,7 +768,8 @@ function splitSelectedArmy() {
 		});
 	}
 	if (listOfArmies[selectedArmyIndex].armyType() == 3) {
-		var newArmy = new seeHeer(generateArmyId(3, listOfArmies[selectedArmyIndex].owner), toSplit, leadersToSplit, lkpToSplit,
+		var newArmyId = generateArmyId(3, listOfArmies[selectedArmyIndex].owner);
+		var newArmy = new seeHeer(newArmyId, toSplit, leadersToSplit, lkpToSplit,
 			skpToSplit, false, listOfArmies[selectedArmyIndex].x, listOfArmies[selectedArmyIndex].y, listOfArmies[selectedArmyIndex].owner);
 		listOfArmies.push(newArmy);
 		listOfArmies[selectedArmyIndex].removeSoldiers(toSplit);
@@ -821,6 +823,17 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 		window.alert("Es muss mindestens ein Heerführer bei der neuen Armee sein.");
 		return false;
 	}
+	// bleibt ein Hf bei der armee zurück?
+	if(toMount != listOfArmies[armyIndex].count && leadersToMount === listOfArmies[armyIndex].leaders){
+		window.alert("Es muss mindestens ein Heerführer bei der Armee verbleiben.");
+		return false;
+	}
+	// genug Truppen vorhanden?
+	if (toMount != listOfArmies[armyIndex].count && (toMount * 2 > listOfArmies[armyIndex].raumpunkteOhneHf() - 100)) {
+		window.alert("Es müssen alle aufsitzen, oder mindestens 100 Raumpunkte verbleiben");
+		return false;
+		// genug Reittiere vorhanden?
+	}
 	// genug Truppen vorhanden?
 	if (toMount > listOfArmies[armyIndex].count) {
 		window.alert("Du hast zu wenige Truppen zum aufsitzen");
@@ -832,14 +845,14 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 		return false;
 		// Sitzen alle auf?
 	}
-	else if ((toMount == listOfArmies[armyIndex].count)) {
+	else if (toMount === listOfArmies[armyIndex].count) {
 		// neues Reiterheer mit generierter Id an selben Koordinaten
 		var newArmy = new reiterHeer(newArmyId, toMount,
 			listOfArmies[armyIndex].leaders, listOfArmies[armyIndex].isGuard, listOfArmies[selectedArmyIndex].x,
 			listOfArmies[armyIndex].y, listOfArmies[armyIndex].owner);
 		// Nachricht, falls Katapulte vorhanden waren.
 		if (listOfArmies[armyIndex].skp > 0 || listOfArmies[selectedArmyIndex].lkp > 0) {
-			window.alert("Da kein Fußheer mehr Bestehen bleibt, wurden die Katapulte zerstört.")
+			window.alert("Da kein Fußheer mehr bestehen bleibt, wurden die Katapulte zerstört.")
 		}
 		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch armyIndex
 		listOfArmies.push(newArmy);
@@ -860,8 +873,8 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 		});
 		deleteArmy(armyIndex);
 		restoreInfoBox();
+		drawStuff();
 		updateInfoBox();
-		// genug Heerführer?
 	}
 	else if (leadersToMount >= listOfArmies[armyIndex].leaders) {
 		window.alert("Du hast zu wenige Heerführer zum aufsitzen")
@@ -892,6 +905,7 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 		});
 		// selectedArmyIndex zeigt auf neues Heer
 		selectedArmyIndex = listOfArmies.length - 1;
+		drawStuff();
 		restoreInfoBox();
 		updateInfoBox();
 	}
@@ -919,6 +933,17 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 	if(toUnMount < 100){
 		window.alert("Es müssen mindestens 100 Truppen in einem Fußheer sein.");
 		return false;
+	}
+	// bleibt ein hf be der Armee?
+	if(toUnMount != listOfArmies[armyIndex].count && leadersToUnMount === listOfArmies[armyIndex].leaders){
+		window.alert("Es muss mindestens ein Heerführer bei der Armee verbleiben.");
+		return false;
+	}
+	// genug Truppen vorhanden?
+	if (toUnMount != listOfArmies[armyIndex].count && (toUnMount*2 > listOfArmies[armyIndex].raumpunkteOhneHf() - 100)) {
+		window.alert("Es müssen alle aufsitzen, oder mindestens 100 Raumpunkte verbleiben");
+		return false;
+		// genug Reittiere vorhanden?
 	}
 	// sitzen genug Heerführer ab?
 	if(leadersToUnMount < 1){
@@ -953,6 +978,7 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 			}
 		});
 		deleteArmy(armyIndex);
+		drawStuff();
 		restoreInfoBox();
 		updateInfoBox();
 		// genug Heerführer?
@@ -982,6 +1008,7 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 		});
 		// armyIndex zeigt auf neues Heer
 		selectedArmyIndex = listOfArmies.length - 1;
+		drawStuff();
 		restoreInfoBox();
 		updateInfoBox();
 	}
