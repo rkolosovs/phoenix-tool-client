@@ -1,5 +1,7 @@
 'use strict';
 
+var listOfMultiArmyFields = [];
+
 // canvas resizing method
 function resizeCanvas() {
    	canvas.width = window.innerWidth;
@@ -422,6 +424,20 @@ function drawSelection(ctx, x, y, scale, selectedFields) {
 }
 
 function drawArmies(ctx, x, y, scale, armies) {
+	
+	//delete all multifields
+	for(let k = 0; k < listOfMultiArmyFields.length; k++){
+		for(let l = 0; l < listOfMultiArmyFields[k].length; l++){
+			listOfMultiArmyFields[k][l].multiArmyField = false;
+		}
+	}
+	listOfMultiArmyFields = [];
+
+	//getting the multifield list ready
+	for (let i = 0; i < listOfArmies.length; i++) {
+		createMultifield(listOfArmies[i]);
+	}
+
 	for (var i = 0; i < armies.length; i++) {
 		var armyData = armies[i]; // get army coordinates
 		var pos = computePosition(x, y, armies[i].x, armies[i].y, scale);
@@ -431,7 +447,7 @@ function drawArmies(ctx, x, y, scale, armies) {
 		//ctx.fillText(armyData.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
 
 		//check if its is on a multifield. if it is ignore
-		if(armyData.multiArmyField == false){
+		if(!armyData.multiArmyField){
 			// armies == 1, riders == 2, boats == 3
 			if(Math.floor(armyData.armyId/100) == 1){
 				ctx.drawImage(troopsImg, pos[0], pos[1], (scale*SIN60), scale); 
@@ -658,4 +674,35 @@ function drawRemainingMovement(ctx, pos, scale){
 	ctx.beginPath();
     ctx.arc(pos[0]+(0.5 * scale * SIN60)-c, pos[1]+(scale * 0.5)-c, scale/16, Math.PI*1.25, Math.PI*1.75, false);
     ctx.stroke();
+}
+
+function writeFieldInfo(){
+    var minimapBox = document.getElementById('minimapBox');
+    if(selectedFields[0] === undefined){
+        minimapBox.innerHTML = '';
+    } else {
+        var hex = new showHex(selectedFields[0][0], selectedFields[0][1]);
+        var fieldPositionInList = hex.positionInList();
+        var fieldType = '';
+        switch(hex.fieldType()){
+			case 0: fieldType = 'Wasser'; break;
+			case 1: fieldType = 'Tiefsee'; break;
+			case 2: fieldType = 'Tiefland'; break;
+			case 3: fieldType = 'Wald'; break;
+			case 4: fieldType = 'Hochland'; break;
+			case 5: fieldType = 'Bergland'; break;
+			case 6: fieldType = 'Gebirge'; break;
+			case 7: fieldType = 'Wüste'; break;
+			case 8: fieldType = 'Sumpf'; break;
+			default: fieldType = 'Unbekannt'; break;
+        }
+        var fieldOwner = borders.find((value) =>
+            (value.land.some((field) => (field[0] === selectedFields[0][0] && field[1] === selectedFields[0][1])))
+        );
+        var fieldOwnerString = (fieldOwner === undefined)?'keiner':fieldOwner.tag;
+        minimapBox.innerHTML = '<p>Feld: ('+hex.x+', '+hex.y+')'+
+            '</p><p>Gelände: '+fieldType+
+            '</p><p>Höhe: '+hex.height()+
+            '</p><p>Besitzer: '+fieldOwnerString+'</p>';
+    }
 }
