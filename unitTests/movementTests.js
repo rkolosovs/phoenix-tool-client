@@ -1,21 +1,20 @@
-QUnit.assert.movePossible = function(possibleMoves, expected) {
+QUnit.assert.movePossible = function(actual, expected) {
     var expectedProps = Object.getOwnPropertyNames(expected);
-    possibleMoves.forEach((possibleMove) => {
-        if(!expectedProps.every((propName) => possibleMove[propName] === expected[propName])){
-            this.pushResult({result: false, actual: possibleMoves, expected: expected,
-                message: "Expected move was not possible."});
-            return false;
-        }
-    });
-    this.pushResult({result: true, actual: actual, expected: expected, message: "Success!"});
-    return true;
+    if(actual.some((possibleMove) => (expectedProps.every((propName) => possibleMove[propName] === expected[propName])))){
+        this.pushResult({result: true, actual: actual, expected: expected, message: "Success!"});
+        return true;
+    } else {
+        this.pushResult({result: false, actual: actual, expected: expected,
+            message: "Expected move was not possible."});
+        return false;
+    }
 };
 
-QUnit.assert.moveImpossible = function(possibleMoves, expected) {
+QUnit.assert.moveImpossible = function(actual, expected) {
     var expectedProps = Object.getOwnPropertyNames(expected);
-    possibleMoves.forEach((possibleMove) => {
+    actual.forEach((possibleMove) => {
         if(expectedProps.every((propName) => possibleMove[propName] === expected[propName])){
-            this.pushResult({result: false, actual: possibleMoves, expected: expected,
+            this.pushResult({result: false, actual: actual, expected: expected,
                 message: "Impossible move was marked as possible."});
             return false;
         }
@@ -24,12 +23,21 @@ QUnit.assert.moveImpossible = function(possibleMoves, expected) {
     return true;
 };
 
-var listOfArmies = [];
-var selectedArmyIndex = 0;
+var army = null;
+var borders = [];
+var buildings = [];
+var fields = [];
+var rivers = [];
+var login = "sl";
 
 module( "Movement" , function() {
 	module( "Foot" , function() {
 	    test( "Lowlands -> lowlands", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':1, 'y':0, 'type':1}, {'x':1, 'y':1, 'type':1}, {'x':0, 'y':1, 'type':1},
+	            {'x':-1, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':2}, {'x':1, 'y':-1, 'type':1}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 7, height: 2, landunit: true, tar: (new showHex(0, -1)), unload: false} );
 		});
 	    test( "Lowlands -> lowlands on street", function(t) {
 		});
