@@ -1,3 +1,29 @@
+QUnit.assert.movePossible = function(possibleMoves, expected) {
+    var expectedProps = Object.getOwnPropertyNames(expected);
+    possibleMoves.forEach((possibleMove) => {
+        if(!expectedProps.every((propName) => possibleMove[propName] === expected[propName])){
+            this.pushResult({result: false, actual: possibleMoves, expected: expected,
+                message: "Expected move was not possible."});
+            return false;
+        }
+    });
+    this.pushResult({result: true, actual: actual, expected: expected, message: "Success!"});
+    return true;
+};
+
+QUnit.assert.moveImpossible = function(possibleMoves, expected) {
+    var expectedProps = Object.getOwnPropertyNames(expected);
+    possibleMoves.forEach((possibleMove) => {
+        if(expectedProps.every((propName) => possibleMove[propName] === expected[propName])){
+            this.pushResult({result: false, actual: possibleMoves, expected: expected,
+                message: "Impossible move was marked as possible."});
+            return false;
+        }
+    });
+    this.pushResult({result: true, actual: actual, expected: expected, message: "Success!"});
+    return true;
+};
+
 var listOfArmies = [];
 var selectedArmyIndex = 0;
 
