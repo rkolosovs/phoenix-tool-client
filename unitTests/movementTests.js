@@ -1,6 +1,8 @@
 QUnit.assert.movePossible = function(actual, expected) {
     var expectedProps = Object.getOwnPropertyNames(expected);
-    if(actual.some((possibleMove) => (expectedProps.every((propName) => possibleMove[propName] === expected[propName])))){
+    if(actual.some((possibleMove) => (expectedProps.every((propName) => (propName === "tar" &&
+        possibleMove[propName].x === expected[propName].x && possibleMove[propName].y === expected[propName].y) ||
+        possibleMove[propName] === expected[propName])))){
         this.pushResult({result: true, actual: actual, expected: expected, message: "Success!"});
         return true;
     } else {
