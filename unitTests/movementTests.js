@@ -15,7 +15,9 @@ QUnit.assert.movePossible = function(actual, expected) {
 QUnit.assert.moveImpossible = function(actual, expected) {
     var expectedProps = Object.getOwnPropertyNames(expected);
     actual.forEach((possibleMove) => {
-        if(expectedProps.every((propName) => possibleMove[propName] === expected[propName])){
+        if(expectedProps.every((propName) => (expectedProps.every((propName) => (propName === "tar" &&
+            possibleMove[propName].x === expected[propName].x && possibleMove[propName].y === expected[propName].y) ||
+            possibleMove[propName] === expected[propName])))){
             this.pushResult({result: false, actual: actual, expected: expected,
                 message: "Impossible move was marked as possible."});
             return false;
@@ -80,6 +82,11 @@ module( "Movement" , function() {
 	    test( "Lowlands -> hills on street in homeland", function(t) {
 		});
 	    test( "Lowlands -> highlands", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':1, 'y':0, 'type':1}, {'x':1, 'y':1, 'type':1}, {'x':0, 'y':1, 'type':2},
+	            {'x':-1, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':5}, {'x':1, 'y':-1, 'type':1}];
+	        clickedMoves(army);
+	        t.moveImpossible( army.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Lowlands -> mountains", function(t) {
 		});
