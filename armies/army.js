@@ -541,6 +541,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
         console.log("loadArmy");
         if(listOfArmies[index].raumpunkte() <= this.currentCapacity()){
             this.loadedArmies.push(listOfArmies[index].armyId);
+            listOfArmies[index].isLoadedIn = true;
             console.log("Army " + listOfArmies[index].armyId +  " successfully loaded.");
             this.currentCapacity();
             return "ok";

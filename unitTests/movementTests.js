@@ -1233,7 +1233,7 @@ module( "Movement" , {
 	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':2}];
 	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': -1, 'direction': "se"}];
 	        clickedMoves(army);
-	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 7, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
 		});
 	    test( "Shallows -> lowlands in homeland", function(t) {
 	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1254,7 +1254,7 @@ module( "Movement" , {
 	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': -1, 'direction': "se"}];
 	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
 	        clickedMoves(army);
-	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 3, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
 		});
 	    test( "Shallows -> desert", function(t) {
 	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1273,7 +1273,7 @@ module( "Movement" , {
 	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':7}];
 	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': -1, 'direction': "se"}];
 	        clickedMoves(army);
-	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 7, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
 		});
 	    test( "Shallows -> desert in homeland", function(t) {
 	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1294,7 +1294,7 @@ module( "Movement" , {
 	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': -1, 'direction': "se"}];
 	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
 	        clickedMoves(army);
-	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 3, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
 		});
 	    test( "Shallows -> woods", function(t) {
 	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1313,7 +1313,7 @@ module( "Movement" , {
 	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':3}];
 	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': -1, 'direction': "se"}];
 	        clickedMoves(army);
-	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 7, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
 		});
 	    test( "Shallows -> woods in homeland", function(t) {
 	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1334,7 +1334,7 @@ module( "Movement" , {
 	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': -1, 'direction': "se"}];
 	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
 	        clickedMoves(army);
-	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 3, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
 		});
 	    test( "Shallows -> swamp", function(t) {
 	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1353,7 +1353,7 @@ module( "Movement" , {
 	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':8}];
 	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': -1, 'direction': "se"}];
 	        clickedMoves(army);
-	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 7, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
 		});
 	    test( "Shallows -> swamp in homeland", function(t) {
 	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1374,7 +1374,7 @@ module( "Movement" , {
 	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': -1, 'direction': "se"}];
 	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
 	        clickedMoves(army);
-	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 3, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
 		});
 	    test( "Shallows -> hills", function(t) {
 	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1440,7 +1440,7 @@ module( "Movement" , {
 	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':2}];
 	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': -1, 'direction': "se"}];
 	        clickedMoves(army);
-	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 7, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
 		});
 	    test( "Deepsea -> lowlands in homeland", function(t) {
 	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1461,7 +1461,7 @@ module( "Movement" , {
 	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': -1, 'direction': "se"}];
 	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
 	        clickedMoves(army);
-	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 3, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
 		});
 	    test( "Deepsea -> desert", function(t) {
 	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1480,7 +1480,7 @@ module( "Movement" , {
 	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':7}];
 	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': -1, 'direction': "se"}];
 	        clickedMoves(army);
-	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 7, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
 		});
 	    test( "Deepsea -> desert in homeland", function(t) {
 	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1501,7 +1501,7 @@ module( "Movement" , {
 	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': -1, 'direction': "se"}];
 	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
 	        clickedMoves(army);
-	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 3, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
 		});
 	    test( "Deepsea -> woods", function(t) {
 	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1520,7 +1520,7 @@ module( "Movement" , {
 	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':3}];
 	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': -1, 'direction': "se"}];
 	        clickedMoves(army);
-	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 7, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
 		});
 	    test( "Deepsea -> woods in homeland", function(t) {
 	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1541,7 +1541,7 @@ module( "Movement" , {
 	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': -1, 'direction': "se"}];
 	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
 	        clickedMoves(army);
-	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 3, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
 		});
 	    test( "Deepsea -> swamp", function(t) {
 	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1560,7 +1560,7 @@ module( "Movement" , {
 	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':8}];
 	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': -1, 'direction': "se"}];
 	        clickedMoves(army);
-	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 7, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
 		});
 	    test( "Deepsea -> swamp in homeland", function(t) {
 	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1581,7 +1581,7 @@ module( "Movement" , {
 	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': -1, 'direction': "se"}];
 	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
 	        clickedMoves(army);
-	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 3, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1)), unload: true} );
 		});
 	    test( "Deepsea -> hills", function(t) {
 	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
