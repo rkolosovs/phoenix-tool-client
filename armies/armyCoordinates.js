@@ -297,7 +297,7 @@ function moveToList(army, direction) {
                     (Math.floor(listOfArmies[i].armyId / 100) === 3)){
                         if (listOfArmies[i].isLoadable(army.indexInListOfArmies()) === "ok")
                         {
-                            army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: thereIsAHarbor?1:2, landunit: true, tar: target, load: true});
+                            army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 0, height: thereIsAHarbor?1:2, landunit: true, tar: target, load: true});
                         }
                         fleetsOnDest.push(i);
                         console.log("fleets +1");
@@ -311,6 +311,8 @@ function moveToList(army, direction) {
             } else if(army.isLoadedIn != null){
                 return "You are already embarked on a Fleet.";
             // there is exactly one
+            } else {
+                return "ok";
             }
             case 2:
             case 4:
@@ -431,7 +433,7 @@ function moveToList(army, direction) {
                     if((listOfArmies[i].owner === army.owner) && (listOfArmies[i].x === target.x) && (listOfArmies[i].y === target.y) &&
                     (Math.floor(listOfArmies[i].armyId / 100) === 3)){
                         if (listOfArmies[i].isLoadable(army.indexInListOfArmies()) === "ok"){
-                            army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: thereIsAHarbor?1:2, landunit: true, tar: target, load: true});
+                            army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 0, height: thereIsAHarbor?1:2, landunit: true, tar: target, load: true});
                         }
                         fleetsOnDest.push(i);
                         console.log("fleets +1");
@@ -445,6 +447,8 @@ function moveToList(army, direction) {
             } else if(army.isLoadedIn != null){
                 return "You are already embarked on a Fleet.";
             // there is exactly one
+            } else {
+                return "ok";
             }
             case 2:
             case 4:
