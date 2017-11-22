@@ -222,60 +222,209 @@ module( "Movement" , {
 	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 0, height: 1, landunit: true, tar: (new showHex(0, -1)), load: true} );
 		});
 	    test( "Lowlands -> deepsea", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fleet = new seeHeer(311, 20, 1, 0, 0, false, 0, -1, 1);
+	        listOfArmies = [army, fleet];
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':1}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 0, height: 2, landunit: true, tar: (new showHex(0, -1)), load: true} );
 		});
 	    test( "Lowlands -> deepsea with harbor", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fleet = new seeHeer(311, 20, 1, 0, 0, false, 0, -1, 1);
+	        listOfArmies = [army, fleet];
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':1}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': 0, 'direction': "nw"}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 0, height: 1, landunit: true, tar: (new showHex(0, -1)), load: true} );
 		});
 	    test( "Desert -> lowlands", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':2}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 7, height: 2, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> lowlands on street", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':2}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'x': null, 'y': null, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> lowlands in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':2}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 4, height: 2, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> lowlands on street in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':2}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'x': null, 'y': null, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 3, height: 1, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> desert", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':7}];
+
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 7, height: 2, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> desert on street", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':7}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'x': null, 'y': null, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> desert in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':7}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 4, height: 2, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> desert on street in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':7}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'x': null, 'y': null, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 3, height: 1, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> woods", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':3}];
+
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 7, height: 2, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> woods on street", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':3}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'x': null, 'y': null, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> woods in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':3}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 4, height: 2, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> woods on street in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':3}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'x': null, 'y': null, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 3, height: 1, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> swamp", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':8}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 7, height: 2, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> swamp on street", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':8}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'x': null, 'y': null, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> swamp in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':8}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 4, height: 2, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> swamp on street in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':8}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'x': null, 'y': null, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 3, height: 1, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> hills", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':4}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 7, height: 2, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> hills on street", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':4}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'x': null, 'y': null, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> hills in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':4}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 4, height: 2, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> hills on street in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':4}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'x': null, 'y': null, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 3, height: 1, landunit: true, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> highlands", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':5}];
+	        clickedMoves(army);
+	        t.moveImpossible( army.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> mountains", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':7}, {'x':0, 'y':-1, 'type':6}];
+	        clickedMoves(army);
+	        t.moveImpossible( army.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Desert -> shallows", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fleet = new seeHeer(311, 20, 1, 0, 0, false, 0, -1, 1);
+	        listOfArmies = [army, fleet];
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':0}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 0, height: 2, landunit: true, tar: (new showHex(0, -1)), load: true} );
 		});
 	    test( "Desert -> shallows with harbor", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fleet = new seeHeer(311, 20, 1, 0, 0, false, 0, -1, 1);
+	        listOfArmies = [army, fleet];
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':0}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': 0, 'direction': "nw"}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 0, height: 1, landunit: true, tar: (new showHex(0, -1)), load: true} );
 		});
 	    test( "Desert -> deepsea", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fleet = new seeHeer(311, 20, 1, 0, 0, false, 0, -1, 1);
+	        listOfArmies = [army, fleet];
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':1}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 0, height: 2, landunit: true, tar: (new showHex(0, -1)), load: true} );
 		});
 	    test( "Desert -> deepsea with harbor", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fleet = new seeHeer(311, 20, 1, 0, 0, false, 0, -1, 1);
+	        listOfArmies = [army, fleet];
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':1}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 6, 'x': 0, 'y': 0, 'direction': "nw"}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: true, dir: 0, movepoints: 0, height: 1, landunit: true, tar: (new showHex(0, -1)), load: true} );
 		});
 	    test( "Woods -> lowlands", function(t) {
 		});
