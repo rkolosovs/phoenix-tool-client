@@ -318,7 +318,11 @@ function moveToList(army, direction) {
             case 4:
             case 7: if(thereIsARiver && !thereIsABridge){ //plains, hills, desert
                 if(army.remainingMovePoints >= 21){
-                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2, landunit: true, tar: target});
+                    if(thereIsAStreet){
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 1, landunit: true, tar: target});
+                    } else {
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2, landunit: true, tar: target});
+                    }
                     return "ok";
                 } else {
                     return "You need you full movement to cross a river."
@@ -354,7 +358,11 @@ function moveToList(army, direction) {
             }
             case 5: if(thereIsARiver && !thereIsABridge){ //highlands
                 if(army.remainingMovePoints >= 21){
-                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2, landunit: true, tar: target});
+                    if(thereIsAStreet){
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 1, landunit: true, tar: target});
+                    } else {
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2, landunit: true, tar: target});
+                    }
                     return "ok";
                 } else {
                     return "You need you full movement to cross a river."
@@ -382,7 +390,11 @@ function moveToList(army, direction) {
             case 3:
             case 8: if(thereIsARiver && !thereIsABridge){ //forest, swamp
                 if(army.remainingMovePoints >= 21){
-                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2, landunit: true, tar: target});
+                    if(thereIsAStreet){
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 1, landunit: true, tar: target});
+                    } else {
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 21, height: 2, landunit: true, tar: target});
+                    }
                     return "ok";
                 } else {
                     return "You need you full movement to cross a river."
@@ -454,7 +466,12 @@ function moveToList(army, direction) {
             case 4:
             case 7: if(thereIsARiver && !thereIsABridge){ //plains, hills, desert
                 if(army.remainingMovePoints >= 9){
-                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 9, height: 2, landunit: true, tar: target});
+                    if(thereIsAStreet){
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 9, height: 1, landunit: true, tar: target});
+                    } else {
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 9, height: 2, landunit: true, tar: target});
+                    }
+                    return "ok";
                 } else {
                     return "You need you full movement to cross a river."
                 }
@@ -504,7 +521,12 @@ function moveToList(army, direction) {
             }
             case 5: if(thereIsARiver && !thereIsABridge){ //highlands
                 if(army.remainingMovePoints >= 9){
-                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 9, height: 2, landunit: true, tar: target});
+                    if(thereIsAStreet){
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 9, height: 1, landunit: true, tar: target});
+                    } else {
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 9, height: 2, landunit: true, tar: target});
+                    }
+                    return "ok";
                 } else {
                     return "You need you full movement to cross a river."
                 }
@@ -555,7 +577,12 @@ function moveToList(army, direction) {
             }
             case 6: if(thereIsARiver && !thereIsABridge){ //mountains
                 if(army.remainingMovePoints >= 9){
-                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 9, height: 2, landunit: true, tar: target});
+                    if(thereIsAStreet){
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 9, height: 1, landunit: true, tar: target});
+                    } else {
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 9, height: 2, landunit: true, tar: target});
+                    }
+                    return "ok";
                 } else {
                     return "You need you full movement to cross a river."
                 }
@@ -597,7 +624,12 @@ function moveToList(army, direction) {
             case 3:
             case 8: if(thereIsARiver && !thereIsABridge){ //forest, swamp
                 if(army.remainingMovePoints >= 9){
-                    army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 9, height: 2, landunit: true, tar: target});
+                    if(thereIsAStreet){
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 9, height: 1, landunit: true, tar: target});
+                    } else {
+                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 9, height: 2, landunit: true, tar: target});
+                    }
+                    return "ok";
                 } else {
                     return "You need you full movement to cross a river."
                 }
