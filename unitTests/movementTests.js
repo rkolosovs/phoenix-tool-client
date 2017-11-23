@@ -6300,4 +6300,160 @@ module( "Movement" , {
 	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 14, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	});
+	module( "Rivers" , function() {
+	    test( "Foot lowlands -> lowlands over a river", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':2}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 9, height: 2, landunit: true, tar: (new showHex(0, -1))} );
+		});
+	    test( "Foot lowlands -> lowlands over a river with a bridge", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':2}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 7, 'x': 0, 'y': 0, 'direction': "nw"}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 7, height: 2, landunit: true, tar: (new showHex(0, -1))} );
+		});
+	    test( "Foot lowlands -> lowlands over a river with a street", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':2}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 9, height: 1, landunit: true, tar: (new showHex(0, -1))} );
+		});
+	    test( "Foot lowlands -> lowlands over a river with a bridge and a street", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':2}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1},
+	            {'realm': 1, 'name': '', 'type': 7, 'x': 0, 'y': 0, 'direction': "nw"}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 4, height: 1, landunit: true, tar: (new showHex(0, -1))} );
+		});
+	    test( "Foot lowlands -> lowlands over a river in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':2}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 9, height: 2, landunit: true, tar: (new showHex(0, -1))} );
+		});
+	    test( "Foot lowlands -> lowlands over a river with a bridge in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':2}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 7, 'x': 0, 'y': 0, 'direction': "nw"}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 4, height: 2, landunit: true, tar: (new showHex(0, -1))} );
+		});
+	    test( "Foot lowlands -> lowlands over a river with a street in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':2}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 9, height: 1, landunit: true, tar: (new showHex(0, -1))} );
+		});
+	    test( "Foot lowlands -> lowlands over a river with a bridge and a street in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':2}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1},
+	            {'realm': 1, 'name': '', 'type': 7, 'x': 0, 'y': 0, 'direction': "nw"}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 3, height: 1, landunit: true, tar: (new showHex(0, -1))} );
+		});
+	    test( "Foot lowlands -> hills over a river", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':4}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        clickedMoves(army);
+	        t.moveImpossible( army.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
+		});
+	    test( "Foot lowlands -> hills over a river with a street", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':4}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        clickedMoves(army);
+	        t.moveImpossible( army.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
+		});
+	    test( "Foot lowlands -> hills over a river in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':4}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.moveImpossible( army.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
+		});
+	    test( "Foot lowlands -> hills over a river with a street in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':4}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.moveImpossible( army.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
+		});
+	    test( "Foot hills -> lowlands over a river", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':4}, {'x':0, 'y':-1, 'type':2}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        clickedMoves(army);
+	        t.moveImpossible( army.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
+		});
+	    test( "Foot hills -> lowlands over a river with a street", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':4}, {'x':0, 'y':-1, 'type':2}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        clickedMoves(army);
+	        t.moveImpossible( army.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
+		});
+	    test( "Foot hills -> lowlands over a river in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':4}, {'x':0, 'y':-1, 'type':2}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.moveImpossible( army.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
+		});
+	    test( "Foot hills -> lowlands over a river with a street in homeland", function(t) {
+	        army = new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':4}, {'x':0, 'y':-1, 'type':2}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 8, 'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        borders = [{'tag': 'usa', 'land': [[0, -1]]}];
+	        clickedMoves(army);
+	        t.moveImpossible( army.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
+		});
+	    test( "Horse lowlands -> lowlands over a river", function(t) {
+	        army = new reiterHeer(211, 1000, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':2}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 21, height: 2, landunit: true, tar: (new showHex(0, -1))} );
+		});
+	    test( "Horse lowlands -> lowlands over a river with a bridge", function(t) {
+	        army = new reiterHeer(211, 1000, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':2}];
+	        buildings = [{'realm': 1, 'name': '', 'type': 7, 'x': 0, 'y': 0, 'direction': "nw"}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        clickedMoves(army);
+	        t.movePossible( army.possibleMoves, {changHeight: false, dir: 0, movepoints: 7, height: 2, landunit: true, tar: (new showHex(0, -1))} );
+		});
+	    test( "Horse lowlands -> hills over a river", function(t) {
+	        army = new reiterHeer(211, 1000, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':2}, {'x':0, 'y':-1, 'type':4}];
+	        rivers = [{'firstX': 0, 'firstY': 0, 'secondX': 0, 'secondY': -1}];
+	        clickedMoves(army);
+	        t.moveImpossible( army.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
+		});
+	});
 });
