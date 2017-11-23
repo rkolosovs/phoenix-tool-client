@@ -56,6 +56,16 @@ function neighbors(x,y){
     }
 }
 
+//reihenfolge NW,NO,O,SO,SW,W
+function getDirectionToNeighbor(fromX, fromY, toX, toY){
+    let possibleDir = neighbors(fromX, fromY);
+    for(let i = 0; i < possibleDir.length; i++){
+        if(possibleDir[i][0] == toX && possibleDir[i][1] == toY)
+            return i;
+    }
+    return -1;//in case the to field is not a neighbor
+}
+
 //returns the distance from here to target Hex
 //to properly do this we use a 3D/Cube coordinate system as described at
 //https://www.redblobgames.com/grids/hexagons/
