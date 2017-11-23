@@ -5881,142 +5881,423 @@ module( "Movement" , {
 	});
 	module( "Fleet" , function() {
 	    test( "Shallows -> lowlands", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':2}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> desert", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':7}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> woods", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':3}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> swamp", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':8}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> hills", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':4}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> highlands", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':5}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> mountains", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':6}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> shallows", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':0}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 7, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> shallows on coast", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':0}, {'x':1, 'y':-1, 'type':2}];
+	        borders = [{'tag': 'usa', 'land': [[1, -1]]}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 5, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> shallows on coast (distance two)", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':0}, {'x':1, 'y':-1, 'type':0}, {'x':2, 'y':-1, 'type':2}];
+	        borders = [{'tag': 'usa', 'land': [[2, -1]]}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 5, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> deepsea", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':1}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 12, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> deepsea on coast", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':1}, {'x':1, 'y':-1, 'type':2}];
+	        borders = [{'tag': 'usa', 'land': [[1, -1]]}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 8, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> lowlands", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':2}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> desert", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':7}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> woods", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':3}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> swamp", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':8}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> hills", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':4}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> highlands", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':5}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> mountains", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':6}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> shallows", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':0}, {'x':1, 'y':-1, 'type':2}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 7, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> shallows on coast", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':0}, {'x':1, 'y':-1, 'type':2}];
+	        borders = [{'tag': 'usa', 'land': [[1, -1]]}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 5, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> deepsea", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':1}, {'x':1, 'y':-1, 'type':2}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 12, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> deepsea on coast", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':1}, {'x':1, 'y':-1, 'type':2}];
+	        borders = [{'tag': 'usa', 'land': [[1, -1]]}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 8, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	});
 	module( "Light Warships" , function() {
 	    test( "Shallows -> lowlands", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':2}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> desert", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':7}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> woods", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':3}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> swamp", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':8}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> hills", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':4}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> highlands", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':5}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> mountains", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':6}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> shallows", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':0}, {'x':1, 'y':-1, 'type':2}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 8, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> shallows on coast", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':0}, {'x':1, 'y':-1, 'type':2}];
+	        borders = [{'tag': 'usa', 'land': [[1, -1]]}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 6, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> deepsea", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':1}, {'x':1, 'y':-1, 'type':2}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 21, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> deepsea on coast", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':1}, {'x':1, 'y':-1, 'type':2}];
+	        borders = [{'tag': 'usa', 'land': [[1, -1]]}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 14, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> lowlands", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':2}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> desert", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':7}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> woods", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':3}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> swamp", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':8}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> hills", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':4}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> highlands", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':5}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> mountains", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':6}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> shallows", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':0}, {'x':1, 'y':-1, 'type':2}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 8, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> shallows on coast", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':0}, {'x':1, 'y':-1, 'type':2}];
+	        borders = [{'tag': 'usa', 'land': [[1, -1]]}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 6, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> deepsea", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':1}, {'x':1, 'y':-1, 'type':2}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 21, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> deepsea on coast", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 1, 0, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':1}, {'x':1, 'y':-1, 'type':2}];
+	        borders = [{'tag': 'usa', 'land': [[1, -1]]}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 14, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	});
 	module( "Heavy Warships" , function() {
 	    test( "Shallows -> lowlands", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':2}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> desert", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':7}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> woods", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':3}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> swamp", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':8}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> hills", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':4}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> highlands", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':5}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> mountains", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':6}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> shallows", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':0}, {'x':1, 'y':-1, 'type':2}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 10, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> shallows on coast", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':0}, {'x':1, 'y':-1, 'type':2}];
+	        borders = [{'tag': 'usa', 'land': [[1, -1]]}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 7, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> deepsea", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':1}, {'x':1, 'y':-1, 'type':2}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 21, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Shallows -> deepsea on coast", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':0}, {'x':0, 'y':-1, 'type':1}, {'x':1, 'y':-1, 'type':2}];
+	        borders = [{'tag': 'usa', 'land': [[1, -1]]}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 14, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> lowlands", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':2}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> desert", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':7}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> woods", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':3}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> swamp", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':8}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> hills", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':4}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> highlands", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':5}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> mountains", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':6}];
+	        clickedMoves(fleet);
+	        t.moveImpossible( fleet.possibleMoves, {dir: 0, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> shallows", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':0}, {'x':1, 'y':-1, 'type':2}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 10, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> shallows on coast", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':0}, {'x':1, 'y':-1, 'type':2}];
+	        borders = [{'tag': 'usa', 'land': [[1, -1]]}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 7, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> deepsea", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':1}, {'x':1, 'y':-1, 'type':2}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 21, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	    test( "Deepsea -> deepsea on coast", function(t) {
+	        fleet = new seeHeer(311, 21, 1, 0, 1, false, 0, 0, 1);
+	        fields = [{'x':0, 'y':0, 'type':1}, {'x':0, 'y':-1, 'type':1}, {'x':1, 'y':-1, 'type':2}];
+	        borders = [{'tag': 'usa', 'land': [[1, -1]]}];
+	        clickedMoves(fleet);
+	        t.movePossible( fleet.possibleMoves, {changHeight: false, dir: 0, movepoints: 14, height: 2, landunit: false, tar: (new showHex(0, -1))} );
 		});
 	});
 });
