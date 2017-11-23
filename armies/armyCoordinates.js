@@ -476,21 +476,28 @@ function moveToList(army, direction) {
             } else {//no street
                 if(rightOfPassage){//right of passage
                     if(army.skp + army.lkp > 0 && army.remainingMovePoints >= 7){ //catapults, no street & right of passage
-                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2, landunit: true, tar: target});
+                        if(army.isLoadedIn != null){  //falls armee von flotte transportiert wird
+                            army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: thereIsAHarbor?1:2, landunit: true, tar: target, unload: true});
+                        } else {
+                            army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2, landunit: true, tar: target, unload: false});
+                        }
                         return "ok";
                     } else if (army.remainingMovePoints >= 4){ //no catapults, no street & right of passage
-                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 2, landunit: true, tar: target});
+                        if(army.isLoadedIn != null){  //falls armee von flotte transportiert wird
+                            army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: thereIsAHarbor?1:2, landunit: true, tar: target, unload: true});
+                        } else {
+                            army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 2, landunit: true, tar: target, unload: false});
+                        }
                         return "ok";
                     } else {return "You don't have enough movement Points.";}
                 } else if(army.remainingMovePoints >= 7){//no street & no right of passage
                     if(army.isLoadedIn != null){  //falls armee von flotte transportiert wird
                         army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: thereIsAHarbor?1:2, landunit: true, tar: target, unload: true});
-                        return "ok";
                     }
                     else {
                         army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2, landunit: true, tar: target, unload: false});
-                        return "ok";
                     }
+                    return "ok";
                 } else {
                     return "You don't have enough movement Points.";
                 }
@@ -620,17 +627,29 @@ function moveToList(army, direction) {
                     if(army.skp > 0){//heavy catas, no street & right of passage
                         return "You need a street to move into forest or swamp with heavy catapults.";
                     } else if (army.lkp > 0 && army.skp <= 0 && army.remainingMovePoints >= 7){//light catas, no street & right of passage
-                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2, landunit: true, tar: target});
+                        if(army.isLoadedIn != null){  //falls armee von flotte transportiert wird
+                            army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: thereIsAHarbor?1:2, landunit: true, tar: target, unload: true});
+                        } else {
+                            army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2, landunit: true, tar: target, unload: false});
+                        }
                         return "ok";
                     } else if (army.skp + army.lkp <= 0 && army.remainingMovePoints >= 4){//no catas, no street & right of passage
-                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 2, landunit: true, tar: target});
+                        if(army.isLoadedIn != null){  //falls armee von flotte transportiert wird
+                            army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: thereIsAHarbor?1:2, landunit: true, tar: target, unload: true});
+                        } else {
+                            army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 4, height: 2, landunit: true, tar: target, unload: false});
+                        }
                         return "ok";
                     } else {return "You don't have enough movement Points.";}
                 } else { //no street & no right of passage
                     if(army.skp > 0){//heavy catas, no street & no right of passage
                         return "You need a street to move into forest or swamp with heavy catapults.";
                     } else if (army.skp <= 0 && army.remainingMovePoints >= 7){//light or no catas, no street & no right of passage
-                        army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2, landunit: true, tar: target});
+                        if(army.isLoadedIn != null){  //falls armee von flotte transportiert wird
+                            army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: thereIsAHarbor?1:2, landunit: true, tar: target, unload: true});
+                        } else {
+                            army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 7, height: 2, landunit: true, tar: target, unload: false});
+                        }
                         return "ok";
                     } else {return "You don't have enough movement Points.";}
                 }
