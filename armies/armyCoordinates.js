@@ -86,7 +86,7 @@ function move(army, direction){//TODO needs new names
                         fleetstring = fleetstring + listOfArmies[fleetsOnDest[i]].armyId + " ";
                     }
                     var chosenFleet = prompt("Mögliche Flotten sind: " + fleetstring);
-                    if(chosenFleet !== ''){
+                    if(chosenFleet !== undefined && chosenFleet !== ''){
                         var foundFleet = -1;
                         for(var i = 0; i < listOfArmies.length; i++){
                             if(listOfArmies[i].armyId === parseInt(chosenFleet) && listOfArmies[i].owner === army.owner){
