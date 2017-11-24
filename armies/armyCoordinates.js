@@ -63,7 +63,7 @@ function move(army, direction){//TODO needs new names
                     }
                 }
                 // there is none
-                if(fleetsOnDest.length == 0){
+                if(fleetsOnDest.length === 0){
                     return "You can't walk on Water.";
                 // there is exactly one
                 } else if(fleetsOnDest.length === 1){
@@ -80,17 +80,16 @@ function move(army, direction){//TODO needs new names
                     } else {
                         return(loadString);
                     }
-                // TODO: more than one
                 } else if(fleetsOnDest.length > 1){
                     var fleetstring = "";
                     for(var i = 0; i < fleetsOnDest.length; i++){
                         fleetstring = fleetstring + listOfArmies[fleetsOnDest[i]].armyId + " ";
                     }
                     var chosenFleet = prompt("Mögliche Flotten sind: " + fleetstring);
-                    if(chosenFleet !== null){
+                    if(chosenFleet !== ''){
                         var foundFleet = -1;
                         for(var i = 0; i < listOfArmies.length; i++){
-                            if(listOfArmies[i].armyId === chosenFleet && listOfArmies[i].owner === army.owner){
+                            if(listOfArmies[i].armyId === parseInt(chosenFleet) && listOfArmies[i].owner === army.owner){
                                 foundFleet = i;
                             }
                         }
