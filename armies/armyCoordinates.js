@@ -5,7 +5,7 @@ function move(army, direction){//TODO needs new names
             var tempmove = army.possibleMoves[i];
             //in case it is moving on land
             if(tempmove.load === undefined){
-                army.remainingMovePoints -= tempmove.movepoints;
+                army.setRemainingMovePoints(army.remainingMovePoints - tempmove.movepoints);
                 army.oldX = army.x;
                 army.oldY = army.y;
                 army.x = tempmove.tar.x;
@@ -53,7 +53,7 @@ function move(army, direction){//TODO needs new names
                 return "ok"
             }
             //in case of loading onto a ship
-            else if(tempmove.load){
+            else if(tempmove.load !== undefined && tempmove.load){
                 var fleetsOnDest = [];
                 for(var i = 0; i<listOfArmies.length; i++){
                     if((listOfArmies[i].owner === army.owner) && (listOfArmies[i].x === tempmove.tar.x) && (listOfArmies[i].y === tempmove.tar.y) &&
@@ -704,7 +704,6 @@ function createMultifield(army){
 				listOfMultiArmyFields.push(templist);
 				someArmy.multiArmyField = true;
 				army.multiArmyField = true;
-				console.log("created multi");
 			}
 		}
 	}
