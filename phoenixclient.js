@@ -274,7 +274,7 @@ function registerRightClick() {
 			var clickedArmyCoords = new showHex(listOfArmies[selectedArmyIndex].x, listOfArmies[selectedArmyIndex].y);
 			var neighbors = clickedArmyCoords.neighbors();
 			for (var i = 0; i < neighbors.length; i++) {
-				if (neighbors[i][0] == clickedField[0] && neighbors[i][1] == clickedField[1]) {
+				if (neighbors[i][0] === clickedField[0] && neighbors[i][1] === clickedField[1]) {
 					var out;
 					if (listOfArmies[selectedArmyIndex].ownerTag() === login || login === "sl") {
 						out = move(listOfArmies[selectedArmyIndex], i);

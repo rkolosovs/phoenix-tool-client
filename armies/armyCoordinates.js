@@ -174,8 +174,8 @@ function moveToList(army, direction) {
     var coastalSailing = borders.some((realm) => (realm.tag === army.ownerTag() && realm.land.some((field) =>
         neighborsOfNeighbors.some((neighbor) => (field[0] === neighbor[0] && field[1] === neighbor[1]))))); //effects of diplomacy go here
     var thereIsARiver = rivers.some((river) =>
-        (river.firstX === army.x && river.firstY === army.y && river.secondX === target.x && river.secondY === target.y) ||
-        (river.firstX === target.x && river.firstY === target.y && river.secondX === army.x && river.secondY === army.y)
+        (river[0][0] === army.x && river[0][1] === army.y && river[1][0] === target.x && river[1][1] === target.y) ||
+        (river[0][0] === target.x && river[0][1] === target.y && river[1][0] === army.x && river[1][1] === army.y)
     );
     // check if there is a steet, a harbor or a bridge on the route
     buildings.forEach((building) => {
