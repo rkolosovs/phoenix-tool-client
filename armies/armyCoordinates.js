@@ -86,7 +86,9 @@ function move(army, direction){//TODO needs new names
                         fleetstring = fleetstring + listOfArmies[fleetsOnDest[i]].armyId + " ";
                     }
                     var chosenFleet = prompt("Mögliche Flotten sind: " + fleetstring);
-                    if(chosenFleet !== undefined && chosenFleet !== ''){
+                    if(chosenFleet === null){
+                        return "Embarkation canceled."
+                    } else if(chosenFleet !== undefined && chosenFleet !== ''){
                         var foundFleet = -1;
                         for(var i = 0; i < listOfArmies.length; i++){
                             if(listOfArmies[i].armyId === parseInt(chosenFleet) && listOfArmies[i].owner === army.owner){
@@ -107,7 +109,7 @@ function move(army, direction){//TODO needs new names
                         }
                         if(found){
                             var loadString = listOfArmies[foundFleet].loadArmy(army.indexInListOfArmies());
-                            if(loadString == "ok"){
+                            if(loadString === "ok"){
                                 army.isLoadedIn = listOfArmies[foundFleet].armyId;
                                 console.log("army in now loaded in " + army.isLoadedIn);
                                 army.oldX = army.x;
