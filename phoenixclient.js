@@ -521,7 +521,7 @@ function determineEventStatus() {
 function stillSplitEventsInFaction(realm){
 	for (var i = 0; i < pendingEvents.length; i++) {
 		var event = pendingEvents[i];
-		if ((event.status === 'withheld' || event.status === 'available') && event.type === 'split' ) {
+		if ((event.status === 'withheld' || event.status === 'available' || event.status === 'undetermined') && event.type === 'split' ) {
 			return true;
 		}
 	}
