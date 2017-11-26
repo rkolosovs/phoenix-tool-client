@@ -392,14 +392,14 @@ function determineEventStatus() {
 					noPendingLoadEvents(content.realm, content.armyId, content.fromX, content.fromY) &&
 					noPendingMountEvents(content.realm, content.armyId, content.fromX, content.fromY)) {
 					pendingEvents[i].status = 'available';
-				} else if (armyExistsAndIsLocated(content.realm, content.armyId, content.fromX, content.fromY) &&
+				} else if ((stillSplitEventsInFaction(content.realm) || armyExistsAndIsLocated(content.realm, content.armyId, content.fromX, content.fromY)) &&
 					!unprocessedBattleAtContainingArmy(content.realm, content.armyId, content.fromX, content.fromY) &&
 					canMove(content.realm, content.armyId, content.fromX, content.fromY, content.toX, content.toY) &&
 					(!noPendingLoadEvents(content.realm, content.armyId, content.fromX, content.fromY) ||
 						!noPendingMountEvents(content.realm, content.armyId, content.fromX, content.fromY))) {
 					pendingEvents[i].status = 'withheld';
-				} else if (armyExists(content.realm, content.armyId) &&
-					possibleMoveOfArmyTo(content.realm, content.armyId, content.fromX, content.fromY)) {
+				} else if (stillSplitEventsInFaction(content.realm) || (armyExists(content.realm, content.armyId) &&
+					possibleMoveOfArmyTo(content.realm, content.armyId, content.fromX, content.fromY))) {
 					pendingEvents[i].status = 'withheld';
 				} else {
 					pendingEvents[i].status = 'impossible';
@@ -407,8 +407,8 @@ function determineEventStatus() {
 			} else if (event.type === 'battle') {
 				if (eachArmyExistsAndIsLocated(content.participants, content.x, content.y)) {
 					pendingEvents[i].status = 'available';
-				} else if (eachArmyExists(content.participants) &&
-					possibleMoveOfEachArmyTo(content.participants, content.x, content.y)) {
+				} else if (stillSplitEventsInFaction(content.realm) ||(eachArmyExists(content.participants) &&
+					possibleMoveOfEachArmyTo(content.participants, content.x, content.y))) {
 					pendingEvents[i].status = 'withheld';
 				} else {
 					pendingEvents[i].status = 'impossible';
@@ -420,7 +420,7 @@ function determineEventStatus() {
 				if (army1 === undefined || army2 === undefined) {
 					pendingEvents[i].status = 'withheld';
 				}
-				else if (army.x != content.x || army.y != content.y) {
+				else if (army1.x !== content.x || army1.y !== content.y || army2.x !== content.x || army2.y !== content.y) {
 					pendingEvents[i].status = 'withheld';
 				} else if (army1.armyType() === army2.armyType() &&
 					army1.x === army2.x && army1.y === army2.y) {
@@ -442,21 +442,20 @@ function determineEventStatus() {
 				if (army1 == undefined || army2 == undefined) {
 					pendingEvents[i].status = 'withheld';
 				}
-				else
-					if (army.x != content.x || army.y != content.y) {
-						pendingEvents[i].status = 'withheld';
-					} else if ((army1.armyType() == army2.armyType() || (content.troops == 0 && content.mounts == 0 && content.lkp == 0 && content.skp == 0))
-						&& army1.x === army2.x && army1.y === army2.y) {
-						pendingEvents[i].status = 'available';
-					}
-					else if (((((army1.armyType() == 1 || army1.armyType() == 2) && army1.remainingMovePoints < 3) || army1.armyType() == 3 &&
-						army1.remainingMovePoints < 5) && (((army2.armyType() == 1 || army2.armyType() == 2) &&
-							army2.remainingMovePoints < 3) || army2.armyType() == 3 && army2.remainingMovePoints < 5))) {
-						pendingEvents[i].status = 'impossible';
-					}
-					else {
-						pendingEvents[i].status = 'withheld';
-					}
+				else if (army1.x !== content.x || army1.y !== content.y || army2.x !== content.x || army2.y !== content.y) {
+					pendingEvents[i].status = 'withheld';
+				} else if ((army1.armyType() == army2.armyType() || (content.troops == 0 && content.mounts == 0 && content.lkp == 0 && content.skp == 0))
+					&& army1.x === army2.x && army1.y === army2.y) {
+					pendingEvents[i].status = 'available';
+				}
+				else if (((((army1.armyType() == 1 || army1.armyType() == 2) && army1.remainingMovePoints < 3) || army1.armyType() == 3 &&
+					army1.remainingMovePoints < 5) && (((army2.armyType() == 1 || army2.armyType() == 2) &&
+						army2.remainingMovePoints < 3) || army2.armyType() == 3 && army2.remainingMovePoints < 5))) {
+					pendingEvents[i].status = 'impossible';
+				}
+				else {
+					pendingEvents[i].status = 'withheld';
+				}
 			}
 			else if (event.type === 'split') {
 				var typefactor = 1;
@@ -519,6 +518,16 @@ function determineEventStatus() {
 }
 
 //begin of helper methods for event status determining
+function stillSplitEventsInFaction(realm){
+	for (var i = 0; i < pendingEvents.length; i++) {
+		var event = pendingEvents[i];
+		if ((event.status === 'withheld' || event.status === 'available') && event.type === 'split' ) {
+			return true;
+		}
+	}
+	return false;
+}
+
 function noPendingLoadEvents(realm, armyId, fromX, fromY) {
 	if (Math.floor(armyId / 100) != 3) {
 		return true;

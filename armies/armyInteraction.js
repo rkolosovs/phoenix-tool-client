@@ -430,8 +430,8 @@ function battleHandler(participants, x, y) {
 			this.defenseSide.forEach(function (item) {
 				item.decimate(item.count);
 			});
-		} else if(this.battle.overrunDefense()) {
-			this.attackSide.forEach(function(item){
+		} else if (this.battle.overrunDefense()) {
+			this.attackSide.forEach(function (item) {
 				item.decimate(item.count);
 			});
 		} else {
@@ -474,184 +474,184 @@ function battleHandler(participants, x, y) {
 
 
 function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, posY) {
-    this.fieldType =
-        (new showHex(posX, posY)).fieldType();
-//        fields.find((field) => (field.x === posX && field.y === posY)).type;
+	this.fieldType =
+		(new showHex(posX, posY)).fieldType();
+	//        fields.find((field) => (field.x === posX && field.y === posY)).type;
 
-    this.armyArrayCount = function(armyArray) {
-        return armyArray.filter((val) => (
-            (val.armyType() === 3 && this.fieldType <= 1) || (this.fieldType >= 2 && val.armyType() <= 2)), this).
-            reduce((total, elem) => (elem.count + total), 0);
-    }
+	this.armyArrayCount = function (armyArray) {
+		return armyArray.filter((val) => (
+			(val.armyType() === 3 && this.fieldType <= 1) || (this.fieldType >= 2 && val.armyType() <= 2)), this).
+			reduce((total, elem) => (elem.count + total), 0);
+	}
 
-    this.overrunAttack = function() {
-        return this.armyArrayCount(armiesAttack) >= 10 * this.armyArrayCount(armiesDefense) &&
-            armiesDefense.filter((elem) => (elem.isGuard)).length === 0 && this.armyArrayCount(armiesAttack) > 0;
-    }
+	this.overrunAttack = function () {
+		return this.armyArrayCount(armiesAttack) >= 10 * this.armyArrayCount(armiesDefense) &&
+			armiesDefense.filter((elem) => (elem.isGuard)).length === 0 && this.armyArrayCount(armiesAttack) > 0;
+	}
 
-    this.overrunDefense = function() {
-        return 10 * this.armyArrayCount(armiesAttack) <= this.armyArrayCount(armiesDefense) &&
-            armiesAttack.filter((elem) => (elem.isGuard)).length === 0 && this.armyArrayCount(armiesDefense) > 0;
-    }
+	this.overrunDefense = function () {
+		return 10 * this.armyArrayCount(armiesAttack) <= this.armyArrayCount(armiesDefense) &&
+			armiesAttack.filter((elem) => (elem.isGuard)).length === 0 && this.armyArrayCount(armiesDefense) > 0;
+	}
 
-    this.terrainGP = function(army, attacker) {
-        //TODO: home terrain bonus missing
-        //BLOCKER: The home terrain of a realm isn't saved anywhere
-        var fieldType = this.fieldType;
-        var buildingsOnTheField = buildings.filter((current) => (current.x === posX && current.y === posY && current.type <= 4));
-        if(buildingsOnTheField.length > 0){
-            if(attacker){return 0;}
-            if(buildingsOnTheField[0].realm !== army.owner){return 50;}
-            switch(buildingsOnTheField[0].type){
-                case 0: return 100;
-                case 1: return 200;
-                case 2: return 300;
-                case 3: return 400;
-                case 4: return 500;
-            }
-        } else {
-            //TODO: home terrain bonus goes here
-            if((army.armyType() === 1 && (fieldType === 3 || fieldType === 8)) ||
-            (army.armyType() === 2 && (fieldType === 2 || fieldType === 4 || fieldType === 7))) {
-                return 140;
-            } else {return 0;}
-        }
-    }
+	this.terrainGP = function (army, attacker) {
+		//TODO: home terrain bonus missing
+		//BLOCKER: The home terrain of a realm isn't saved anywhere
+		var fieldType = this.fieldType;
+		var buildingsOnTheField = buildings.filter((current) => (current.x === posX && current.y === posY && current.type <= 4));
+		if (buildingsOnTheField.length > 0) {
+			if (attacker) { return 0; }
+			if (buildingsOnTheField[0].realm !== army.owner) { return 50; }
+			switch (buildingsOnTheField[0].type) {
+				case 0: return 100;
+				case 1: return 200;
+				case 2: return 300;
+				case 3: return 400;
+				case 4: return 500;
+			}
+		} else {
+			//TODO: home terrain bonus goes here
+			if ((army.armyType() === 1 && (fieldType === 3 || fieldType === 8)) ||
+				(army.armyType() === 2 && (fieldType === 2 || fieldType === 4 || fieldType === 7))) {
+				return 140;
+			} else { return 0; }
+		}
+	}
 
-    this.characterGP = function(army) {
-        //TODO: compute GP from own character fighting in battle.
-        //BLOCKER: requires characters to know their realm allegiance.
-        return 0;
-    }
+	this.characterGP = function (army) {
+		//TODO: compute GP from own character fighting in battle.
+		//BLOCKER: requires characters to know their realm allegiance.
+		return 0;
+	}
 
-    this.directionalTerrainGP = function(army, attacker, attackingArmies) {
-        let result = 0;
-        let targetField = new showHex(army.x, army.y);
-        if(attacker) {
-            let startingField = new showHex(army.oldX, army.oldY);
-            if(startingField.height() > targetField.height()){result += 20;}//fighting downhill
-            if(targetField.fieldType() === 7 || targetField.fieldType() === 8){result += 20;}//attacking into swamp or desert
-            if(startingField.fieldType() === 3) {result += 20;}//attacking out of a forest
-            if(targetField.hasStreet()){result += 20;}//attacking onto a street
-        } else {
-            let adjacentWalls = targetField.walls();
-            let adjacentRivers = targetField.fluesse();
-            let adjacentBridges = targetField.bridges();
-            let neighbors = targetField.neighbors();
-            let downhillBonus = false;
-            let wallBonus = false;
-            let bridgeBonus = false;
-            let riverBonus = false;
-            attackingArmies.forEach((attackingArmy) => {
-                if((new showHex(attackingArmy.oldX, attackingArmy.oldY)).height() < targetField.height()){
-                    downhillBonus = true;
-                }
-                neighbors.forEach((neighbor, index) => {
-                    if(neighbor[0] === attackingArmy.oldX && neighbor[1] === attackingArmy.oldY){
-                        if(adjacentWalls[index] === 1){wallBonus = true;}
-                        if(adjacentRivers[index] === 1){
-                            if(adjacentBridges[index] === 1){
-                                bridgeBonus = true;
-                            } else {
-                                riverBonus = true;
-                            }
-                        }
-                    }
-                });
-            });
-            result = downhillBonus?20:0 + wallBonus?50:0 + riverBonus?50:0 + bridgeBonus?30:0;
-        }
-        return result;
-    }
+	this.directionalTerrainGP = function (army, attacker, attackingArmies) {
+		let result = 0;
+		let targetField = new showHex(army.x, army.y);
+		if (attacker) {
+			let startingField = new showHex(army.oldX, army.oldY);
+			if (startingField.height() > targetField.height()) { result += 20; }//fighting downhill
+			if (targetField.fieldType() === 7 || targetField.fieldType() === 8) { result += 20; }//attacking into swamp or desert
+			if (startingField.fieldType() === 3) { result += 20; }//attacking out of a forest
+			if (targetField.hasStreet()) { result += 20; }//attacking onto a street
+		} else {
+			let adjacentWalls = targetField.walls();
+			let adjacentRivers = targetField.fluesse();
+			let adjacentBridges = targetField.bridges();
+			let neighbors = targetField.neighbors();
+			let downhillBonus = false;
+			let wallBonus = false;
+			let bridgeBonus = false;
+			let riverBonus = false;
+			attackingArmies.forEach((attackingArmy) => {
+				if ((new showHex(attackingArmy.oldX, attackingArmy.oldY)).height() < targetField.height()) {
+					downhillBonus = true;
+				}
+				neighbors.forEach((neighbor, index) => {
+					if (neighbor[0] === attackingArmy.oldX && neighbor[1] === attackingArmy.oldY) {
+						if (adjacentWalls[index] === 1) { wallBonus = true; }
+						if (adjacentRivers[index] === 1) {
+							if (adjacentBridges[index] === 1) {
+								bridgeBonus = true;
+							} else {
+								riverBonus = true;
+							}
+						}
+					}
+				});
+			});
+			result = downhillBonus ? 20 : 0 + wallBonus ? 50 : 0 + riverBonus ? 50 : 0 + bridgeBonus ? 30 : 0;
+		}
+		return result;
+	}
 
-    this.computeCombatRating = function(strengthArmy, totalArmyGP) {
-        return strengthArmy.map((elem, index) => (elem * (1 + (totalArmyGP[index]/200))));
-    }
+	this.computeCombatRating = function (strengthArmy, totalArmyGP) {
+		return strengthArmy.map((elem, index) => (elem * (1 + (totalArmyGP[index] / 200))));
+	}
 
-    this.computeLossFactor = function(ownForces, enemyForces, victorious) {
-        var baseFactor = (ownForces/enemyForces)/10;
-        if (victorious && ownForces >= enemyForces) {
-            return - baseFactor;
-        } else if (victorious && ownForces < enemyForces) {
-            return 0.2 - baseFactor;
-        } else {
-            return 0;
-        }
-    }
+	this.computeLossFactor = function (ownForces, enemyForces, victorious) {
+		var baseFactor = (ownForces / enemyForces) / 10;
+		if (victorious && ownForces >= enemyForces) {
+			return - baseFactor;
+		} else if (victorious && ownForces < enemyForces) {
+			return 0.2 - baseFactor;
+		} else {
+			return 0;
+		}
+	}
 
-    this.computeFinalLosses = function(baseArmyLosses, armyGPDiff, armyStrength, totalStrength) {
-        var lossesWithGP = 0;
-        if(armyGPDiff >= 0) {
-            lossesWithGP = baseArmyLosses/(1 + armyGPDiff);
-        } else {
-            lossesWithGP = baseArmyLosses * (1 - armyGPDiff);
-        }
-        return (lossesWithGP/totalStrength)*armyStrength;
-    }
+	this.computeFinalLosses = function (baseArmyLosses, armyGPDiff, armyStrength, totalStrength) {
+		var lossesWithGP = 0;
+		if (armyGPDiff >= 0) {
+			lossesWithGP = baseArmyLosses / (1 + armyGPDiff);
+		} else {
+			lossesWithGP = baseArmyLosses * (1 - armyGPDiff);
+		}
+		return (lossesWithGP / totalStrength) * armyStrength;
+	}
 
-    this.result = function(attackRoll, defenseRoll){
-        var totalStrengthAttackerArmy = armiesAttack.map((elem) => (elem.count));
-        var totalStrengthDefenderArmy = armiesDefense.map((elem) => {
-            if(elem.armyType() === 3){
-                return elem.count + elem.lkp * 5 + elem.skp * 10;
-            } else {
-                return elem.count;
-            }
-        });
+	this.result = function (attackRoll, defenseRoll) {
+		var totalStrengthAttackerArmy = armiesAttack.map((elem) => (elem.count));
+		var totalStrengthDefenderArmy = armiesDefense.map((elem) => {
+			if (elem.armyType() === 3) {
+				return elem.count + elem.lkp * 5 + elem.skp * 10;
+			} else {
+				return elem.count;
+			}
+		});
 
-        var totalAttackerArmyGP = armiesAttack.map((elem) => (
-            attackRoll + elem.leaderGp() + this.terrainGP(elem, true) + this.characterGP(elem) + this.directionalTerrainGP(elem, true, null)
-        ));
-        var totalDefenderArmyGP = armiesDefense.map((elem) => (
-            defenseRoll + elem.leaderGp() + this.terrainGP(elem, false) + this.characterGP(elem) + this.directionalTerrainGP(elem, false, armiesAttack)
-        ));
+		var totalAttackerArmyGP = armiesAttack.map((elem) => (
+			attackRoll + elem.leaderGp() + this.terrainGP(elem, true) + this.characterGP(elem) + this.directionalTerrainGP(elem, true, null)
+		));
+		var totalDefenderArmyGP = armiesDefense.map((elem) => (
+			defenseRoll + elem.leaderGp() + this.terrainGP(elem, false) + this.characterGP(elem) + this.directionalTerrainGP(elem, false, armiesAttack)
+		));
 
-        var combatRatingAttackerArmy = this.computeCombatRating(totalStrengthAttackerArmy, totalAttackerArmyGP);
-        var combatRatingDefenderArmy = this.computeCombatRating(totalStrengthDefenderArmy, totalDefenderArmyGP);
+		var combatRatingAttackerArmy = this.computeCombatRating(totalStrengthAttackerArmy, totalAttackerArmyGP);
+		var combatRatingDefenderArmy = this.computeCombatRating(totalStrengthDefenderArmy, totalDefenderArmyGP);
 
-        var totalAttackerStrength = totalStrengthAttackerArmy.reduce((total, elem) => (total + elem), 0);
-        var totalDefenderStrength = totalStrengthDefenderArmy.reduce((total, elem) => (total + elem), 0);
+		var totalAttackerStrength = totalStrengthAttackerArmy.reduce((total, elem) => (total + elem), 0);
+		var totalDefenderStrength = totalStrengthDefenderArmy.reduce((total, elem) => (total + elem), 0);
 
-        var attackerTotalCombatRating = combatRatingAttackerArmy.reduce((total, elem) => (total + elem), 0);
-        var defenderTotalCombatRating = combatRatingDefenderArmy.reduce((total, elem) => (total + elem), 0);
+		var attackerTotalCombatRating = combatRatingAttackerArmy.reduce((total, elem) => (total + elem), 0);
+		var defenderTotalCombatRating = combatRatingDefenderArmy.reduce((total, elem) => (total + elem), 0);
 
-        var victor = '';
-        if (this.overrunAttack() || attackerTotalCombatRating > defenderTotalCombatRating) {
-            victor = 'attacker';
-        } else if (this.overrunDefense() || attackerTotalCombatRating < defenderTotalCombatRating) {
-            victor = 'defender';
-        } else {
-            victor = 'tie';
-        }
+		var victor = '';
+		if (this.overrunAttack() || attackerTotalCombatRating > defenderTotalCombatRating) {
+			victor = 'attacker';
+		} else if (this.overrunDefense() || attackerTotalCombatRating < defenderTotalCombatRating) {
+			victor = 'defender';
+		} else {
+			victor = 'tie';
+		}
 
-        var attackerBaseLosses = totalDefenderStrength;
-        var defenderBaseLosses = totalAttackerStrength;
+		var attackerBaseLosses = totalDefenderStrength;
+		var defenderBaseLosses = totalAttackerStrength;
 
-        var attackerLossFactor = this.computeLossFactor(totalAttackerStrength, totalDefenderStrength, (victor === 'attacker'));
-        var defenderLossFactor = this.computeLossFactor(totalDefenderStrength, totalAttackerStrength, (victor === 'defender'));
+		var attackerLossFactor = this.computeLossFactor(totalAttackerStrength, totalDefenderStrength, (victor === 'attacker'));
+		var defenderLossFactor = this.computeLossFactor(totalDefenderStrength, totalAttackerStrength, (victor === 'defender'));
 
-        //multiplication and subsequent division by 100 done for reasons of numerical stability
-        var attackerNewBaseLosses = Math.floor((attackerBaseLosses * (100 + (attackerLossFactor * 100)))/100);
-        var defenderNewBaseLosses = Math.floor((defenderBaseLosses * (100 + (defenderLossFactor * 100)))/100);
+		//multiplication and subsequent division by 100 done for reasons of numerical stability
+		var attackerNewBaseLosses = Math.floor((attackerBaseLosses * (100 + (attackerLossFactor * 100))) / 100);
+		var defenderNewBaseLosses = Math.floor((defenderBaseLosses * (100 + (defenderLossFactor * 100))) / 100);
 
-        var baseLossesAttackerArmy = totalStrengthAttackerArmy.map((elem) => ((elem/totalAttackerStrength)*attackerNewBaseLosses));
-        var baseLossesDefenderArmy = totalStrengthDefenderArmy.map((elem) => ((elem/totalDefenderStrength)*defenderNewBaseLosses));
+		var baseLossesAttackerArmy = totalStrengthAttackerArmy.map((elem) => ((elem / totalAttackerStrength) * attackerNewBaseLosses));
+		var baseLossesDefenderArmy = totalStrengthDefenderArmy.map((elem) => ((elem / totalDefenderStrength) * defenderNewBaseLosses));
 
-        var attackerMeanGP = ((attackerTotalCombatRating/totalAttackerStrength) - 1) * 100;
-        var defenderMeanGP = ((defenderTotalCombatRating/totalDefenderStrength) - 1) * 100;
+		var attackerMeanGP = ((attackerTotalCombatRating / totalAttackerStrength) - 1) * 100;
+		var defenderMeanGP = ((defenderTotalCombatRating / totalDefenderStrength) - 1) * 100;
 
-        var attackerGPDiffArmy = totalAttackerArmyGP.map((elem) => ((elem/200) - (defenderMeanGP/100)));
-        var defenderGPDiffArmy = totalDefenderArmyGP.map((elem) => ((elem/200) - (attackerMeanGP/100)));
+		var attackerGPDiffArmy = totalAttackerArmyGP.map((elem) => ((elem / 200) - (defenderMeanGP / 100)));
+		var defenderGPDiffArmy = totalDefenderArmyGP.map((elem) => ((elem / 200) - (attackerMeanGP / 100)));
 
-        var finalLossesAttackerArmy = baseLossesAttackerArmy.map((elem, index) => (
-            this.computeFinalLosses(elem, attackerGPDiffArmy[index], totalStrengthAttackerArmy[index], totalStrengthAttackerArmy[index])
-        ));
-        var finalLossesDefenderArmy = baseLossesDefenderArmy.map((elem, index) => (
-            this.computeFinalLosses(elem, defenderGPDiffArmy[index], armiesDefense[index].count, totalStrengthDefenderArmy[index])
-        ));
+		var finalLossesAttackerArmy = baseLossesAttackerArmy.map((elem, index) => (
+			this.computeFinalLosses(elem, attackerGPDiffArmy[index], totalStrengthAttackerArmy[index], totalStrengthAttackerArmy[index])
+		));
+		var finalLossesDefenderArmy = baseLossesDefenderArmy.map((elem, index) => (
+			this.computeFinalLosses(elem, defenderGPDiffArmy[index], armiesDefense[index].count, totalStrengthDefenderArmy[index])
+		));
 
-        return {victor: victor, attackerLosses: finalLossesAttackerArmy, defenderLosses: finalLossesDefenderArmy};
-    }
+		return { victor: victor, attackerLosses: finalLossesAttackerArmy, defenderLosses: finalLossesDefenderArmy };
+	}
 }
 
 
@@ -835,7 +835,7 @@ function splitSelectedArmy() {
 }
 
 // the mount function of the mount box
-function mountSelected(){
+function mountSelected() {
 	var toMount = document.getElementById("mountInput").value;
 	var leadersToMount = document.getElementById("mountLeaderInput").value;
 	mountWithParams(selectedArmyIndex, toMount, leadersToMount, null);
@@ -844,26 +844,26 @@ function mountSelected(){
 // mounting with parameters
 //TODO: If the army has moved, set the new mounted army's move points to the apropriate, non-max value.
 function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
-	if(toMount === "" || leadersToMount ==="" || toMount === null || leadersToMount === null){
+	if (toMount === "" || leadersToMount === "" || toMount === null || leadersToMount === null) {
 		window.alert("Alle felder müssen ausgefüllt sein");
 		return false;
 	}
 	// generiere armyId falls keine vorhanden
-	if(newArmyId === null){
+	if (newArmyId === null) {
 		newArmyId = generateArmyId(2, listOfArmies[armyIndex].owner);
 	}
 	// sitzen genug Truppen auf?
-	if(toMount < 50){
+	if (toMount < 50) {
 		window.alert("Es müssen mindestens 50 Reiter in einem Reiterheer sein.");
 		return false;
 	}
 	// sitzen genug Heerführer auf?
-	if(leadersToMount < 1){
+	if (leadersToMount < 1) {
 		window.alert("Es muss mindestens ein Heerführer bei der neuen Armee sein.");
 		return false;
 	}
 	// bleibt ein Hf bei der armee zurück?
-	if(toMount != listOfArmies[armyIndex].count && leadersToMount === listOfArmies[armyIndex].leaders){
+	if (toMount != listOfArmies[armyIndex].count && leadersToMount === listOfArmies[armyIndex].leaders) {
 		window.alert("Es muss mindestens ein Heerführer bei der Armee verbleiben.");
 		return false;
 	}
@@ -889,13 +889,29 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 		var newArmy = new reiterHeer(newArmyId, toMount,
 			listOfArmies[armyIndex].leaders, listOfArmies[armyIndex].isGuard, listOfArmies[selectedArmyIndex].x,
 			listOfArmies[armyIndex].y, listOfArmies[armyIndex].owner);
+		newArmy.setRemainingHeightPoints(listOfArmies[armyIndex].remainingHeightPoints);
+		if (listOfArmies[armyIndex].remainingMovePoints !== listOfArmies[armyIndex].startingMovepoints) {
+			newArmy.setRemainingMovePoints(0);
+		} else newArmy.setRemainingMovePoints(newArmy.startingMovepoints);
 		// Nachricht, falls Katapulte vorhanden waren.
 		if (listOfArmies[armyIndex].skp > 0 || listOfArmies[selectedArmyIndex].lkp > 0) {
 			window.alert("Da kein Fußheer mehr bestehen bleibt, wurden die Katapulte zerstört.")
 		}
 		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch armyIndex
 		listOfArmies.push(newArmy);
-		deleteSelectedArmy();
+		//in preparedEvents pushen
+		preparedEvents.push({
+			type: "mount", content: {
+				fromArmyId: listOfArmies[armyIndex].armyId,
+				realm: listOfArmies[armyIndex].ownerTag(),
+				troops: toMount,
+				leaders: leadersToMount,
+				x: listOfArmies[armyIndex].x,
+				y: listOfArmies[armyIndex].y,
+				newArmysId: newArmy.armyId
+			}
+		});
+		deleteArmy(armyIndex);
 		restoreInfoBox();
 		drawStuff();
 		updateInfoBox();
@@ -910,12 +926,28 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 		// neues Reiterheer mit generierter Id an selben Koordinaten
 		var newArmy = new reiterHeer(newArmyId, toMount, leadersToMount, false,
 			listOfArmies[armyIndex].x, listOfArmies[armyIndex].y, listOfArmies[selectedArmyIndex].owner);
+		newArmy.setRemainingHeightPoints(listOfArmies[armyIndex].remainingHeightPoints);
+		if (listOfArmies[armyIndex].remainingMovePoints !== listOfArmies[armyIndex].startingMovepoints) {
+			newArmy.setRemainingMovePoints(0);
+		} else newArmy.setRemainingMovePoints(newArmy.startingMovepoints);
 		// zahlen im alten Heer anpassen
 		listOfArmies[armyIndex].removeSoldiers(toMount);
 		listOfArmies[armyIndex].removeLeaders(leadersToMount);
 		listOfArmies[armyIndex].removeMounts(toMount);
 		// in listOfArmies einfügen
 		listOfArmies.push(newArmy);
+		//in preparedEvents pushen
+		preparedEvents.push({
+			type: "mount", content: {
+				fromArmyId: listOfArmies[armyIndex].armyId,
+				realm: listOfArmies[armyIndex].ownerTag(),
+				troops: toMount,
+				leaders: leadersToMount,
+				x: listOfArmies[armyIndex].x,
+				y: listOfArmies[armyIndex].y,
+				newArmysId: newArmy.armyId
+			}
+		});
 		// selectedArmyIndex zeigt auf neues Heer
 		selectedArmyIndex = listOfArmies.length - 1;
 		drawStuff();
@@ -925,7 +957,7 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 }
 
 // the unMount function of the unMount box
-function unMountSelected(){
+function unMountSelected() {
 	var toUnMount = document.getElementById("unMountInput").value;
 	var leadersToUnMount = document.getElementById("unMountLeaderInput").value;
 	unMountWithParams(selectedArmyIndex, toUnMount, leadersToUnMount, null);
@@ -934,32 +966,32 @@ function unMountSelected(){
 // the unMount function of the unMount box
 //TODO: If the mounted army has moved, set the new foot army's move points to the apropriate, non-max value.
 function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
-	if(toUnMount === "" || leadersToUnMount ==="" || toUnMount === null || leadersToUnMount === null){
+	if (toUnMount === "" || leadersToUnMount === "" || toUnMount === null || leadersToUnMount === null) {
 		window.alert("Alle felder müssen ausgefüllt sein");
 		return false;
 	}
 	// generiere armyId falls keine vorhanden
-	if(newArmyId === null){
+	if (newArmyId === null) {
 		newArmyId = generateArmyId(1, listOfArmies[armyIndex].owner);
 	}
 	// sitzen genug Truppen ab?
-	if(toUnMount < 100){
+	if (toUnMount < 100) {
 		window.alert("Es müssen mindestens 100 Truppen in einem Fußheer sein.");
 		return false;
 	}
 	// bleibt ein hf be der Armee?
-	if(toUnMount != listOfArmies[armyIndex].count && leadersToUnMount === listOfArmies[armyIndex].leaders){
+	if (toUnMount != listOfArmies[armyIndex].count && leadersToUnMount === listOfArmies[armyIndex].leaders) {
 		window.alert("Es muss mindestens ein Heerführer bei der Armee verbleiben.");
 		return false;
 	}
 	// genug Truppen vorhanden?
-	if (toUnMount != listOfArmies[armyIndex].count && (toUnMount*2 > listOfArmies[armyIndex].raumpunkteOhneHf() - 100)) {
+	if (toUnMount != listOfArmies[armyIndex].count && (toUnMount * 2 > listOfArmies[armyIndex].raumpunkteOhneHf() - 100)) {
 		window.alert("Es müssen alle aufsitzen, oder mindestens 100 Raumpunkte verbleiben");
 		return false;
 		// genug Reittiere vorhanden?
 	}
 	// sitzen genug Heerführer ab?
-	if(leadersToUnMount < 1){
+	if (leadersToUnMount < 1) {
 		window.alert("Es muss mindestens ein Heerführer bei der neuen Armee sein.");
 		return false;
 	}
@@ -973,6 +1005,10 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 		var newArmy = new heer(newArmyId, toUnMount,
 			listOfArmies[armyIndex].leaders, 0, 0, toUnMount, listOfArmies[armyIndex].isGuard,
 			listOfArmies[armyIndex].x, listOfArmies[armyIndex].y, listOfArmies[armyIndex].owner);
+		newArmy.setRemainingHeightPoints(listOfArmies[armyIndex].remainingHeightPoints);
+		if (listOfArmies[armyIndex].remainingMovePoints !== listOfArmies[armyIndex].startingMovepoints) {
+			newArmy.setRemainingMovePoints(0);
+		} else newArmy.setRemainingMovePoints(newArmy.startingMovepoints);
 		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch armyIndex
 		listOfArmies.push(newArmy);
 		if (listOfArmies[armyIndex].multiArmyField === true) {
@@ -1003,11 +1039,19 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 		// neues Heer mit generierter Id an selben Koordinaten
 		var newArmy = new heer(newArmyId, toUnMount, leadersToUnMount, 0, 0,
 			toUnMount, false, listOfArmies[armyIndex].x, listOfArmies[armyIndex].y, listOfArmies[armyIndex].owner);
-		// zahlen im alten Riterheer anpassen
+		newArmy.setRemainingHeightPoints(listOfArmies[armyIndex].remainingHeightPoints);
+		if (listOfArmies[armyIndex].remainingMovePoints !== listOfArmies[armyIndex].startingMovepoints) {
+			newArmy.setRemainingMovePoints(0);
+		}  else newArmy.setRemainingMovePoints(newArmy.startingMovepoints);
+		// zahlen im alten Reiterheer anpassen
 		listOfArmies[armyIndex].removeSoldiers(toUnMount);
 		listOfArmies[armyIndex].removeLeaders(leadersToUnMount);
 		// in listOfArmies einfügen
 		listOfArmies.push(newArmy);
+		if (listOfArmies[armyIndex].multiArmyField === true) {
+			addToMultifield(listOfArmies[armyIndex], newArmy);
+			deleteFromMultifield(listOfArmies[armyIndex]);
+		}
 		preparedEvents.push({
 			type: "mount", content: {
 				fromArmyId: listOfArmies[armyIndex].armyId,
@@ -1289,12 +1333,7 @@ function mergeSelectedArmy(mergeId) {
 	restoreInfoBox();
 }
 
-// deletes the currently selected army und puts the last army in listOfArmies in its place
-function deleteSelectedArmy(){
-	deleteArmy(selectedArmyIndex);
-}
-
-function deleteArmy(index){
+function deleteArmy(index) {
 	listOfArmies.splice(index, 1);
 	if (selectedArmyIndex === listOfArmies.length) {
 		selectedArmyIndex = undefined;
