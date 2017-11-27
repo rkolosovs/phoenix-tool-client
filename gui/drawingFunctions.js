@@ -20,8 +20,8 @@ function drawStuff() {
 								// dragged mouse
 
 	drawMap(ctx, x, y, scale);
-	drawSelection(ctx, x, y, scale, selectedFields);
 	drawArmies(ctx, x, y, scale, listOfArmies);
+	drawArmySelection(ctx, x, y, scale, selectedArmyIndex);
 	drawPossibleMoves(ctx, x, y, scale, selectedArmyIndex);
 }
 
@@ -409,18 +409,15 @@ function drawPossibleMoves(ctx, x, y, scale, selectedArmyIndex){//drawing all po
 }
 
 
-function drawSelection(ctx, x, y, scale, selectedFields) {
+function drawArmySelection(ctx, x, y, scale, armyIndex) {
 	ctx.lineWidth = 5;
 	ctx.strokeStyle="green";
-	for (var i = 0; i < selectedFields.length; i++) {
-		var selectedField = selectedFields[i]; //get selected field
-		var pos = computePosition(x, y, selectedField[0], selectedField[1], scale); //get fields position
-
-		//draw a simple circle; TODO: draw propper selection (if desired)
-		ctx.beginPath();
-      	ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/2, 0, 2 * Math.PI, false);
-      	ctx.stroke();
-	}
+    if(armyIndex !== undefined){
+        var pos = computePosition(x, y, listOfArmies[armyIndex].x, listOfArmies[armyIndex].y, scale);
+        ctx.beginPath();
+        ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/2, 0, 2 * Math.PI, false);
+        ctx.stroke();
+    }
 }
 
 function drawArmies(ctx, x, y, scale, armies) {

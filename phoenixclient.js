@@ -3,7 +3,7 @@
 
 var selectedFields = []; // list of fields to be highlighted
 var selectedArmyIndex; // index of the currently selected army in the listOfArmies
-var listOfArmies;
+var listOfArmies = [];
 var switchScale = 50;
 var login = 'guest'; // either realm tag, 'sl', or 'guest'
 var pendingEvents = [];
