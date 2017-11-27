@@ -21,7 +21,6 @@ QUnit.assert.resultEquals = function(actual, expected) {
 
     for (var i = 0; i < actualProps.length; i++) {
         var propName = actualProps[i];
-        //TODO: Fix checking
         if ((propName === "victor" && actual[propName] !== expected[propName]) ||
             (propName !== "victor" && !this.lossesMatch(actual[propName], expected[propName]))) {
         	this.pushResult({result: false, actual: actual, expected: expected,

@@ -10,7 +10,7 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     this.y = coordY;
     this.oldX = coordX; //save the old position when moving the unit
     this.oldY = coordY; //use it to determine what terrain this unit moved from etc.
-    this.owner = owner;
+    this.owner = owner; //currently owner pk in the DB
     this.isLoadedIn = null;
     this.startingMovepoints = 9;
 
@@ -557,6 +557,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
         console.log("loadArmy");
         if(listOfArmies[index].raumpunkte() <= this.currentCapacity()){
             this.loadedArmies.push(listOfArmies[index].armyId);
+            listOfArmies[index].isLoadedIn = true;
             console.log("Army " + listOfArmies[index].armyId +  " successfully loaded.");
             this.currentCapacity();
             return "ok";
