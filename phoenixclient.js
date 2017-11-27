@@ -407,7 +407,7 @@ function determineEventStatus() {
 			} else if (event.type === 'battle') {
 				if (eachArmyExistsAndIsLocated(content.participants, content.x, content.y)) {
 					pendingEvents[i].status = 'available';
-				} else if (stillSplitEventsInFaction(content.realm) ||(eachArmyExists(content.participants) &&
+				} else if (stillSplitEventsInFaction(content.realm) || (eachArmyExists(content.participants) &&
 					possibleMoveOfEachArmyTo(content.participants, content.x, content.y))) {
 					pendingEvents[i].status = 'withheld';
 				} else {
@@ -518,10 +518,10 @@ function determineEventStatus() {
 }
 
 //begin of helper methods for event status determining
-function stillSplitEventsInFaction(realm){
+function stillSplitEventsInFaction(realm) {
 	for (var i = 0; i < pendingEvents.length; i++) {
 		var event = pendingEvents[i];
-		if ((event.status === 'withheld' || event.status === 'available' || event.status === 'undetermined') && event.type === 'split' ) {
+		if ((event.status === 'withheld' || event.status === 'available' || event.status === 'undetermined') && event.type === 'split') {
 			return true;
 		}
 	}
@@ -965,7 +965,7 @@ function checkEvent(num) {
 					listOfArmies[armyToPlaceInList].skp += skpToSplit;
 				}
 				if (leadersToSplit > 0 &&
-					listOfArmies[armyFromPlaceInList].remainingMovePoints < listOfArmies[armyFromPlaceInList].startingMovepoints()) {
+					listOfArmies[armyFromPlaceInList].remainingMovePoints < listOfArmies[armyFromPlaceInList].startingMovepoints) {
 					listOfArmies[armyToPlaceInList].setRemainingMovePoints(0);
 				} else if (listOfArmies[armyFromPlaceInList].remainingMovePoints < listOfArmies[armyToPlaceInList].remainingMovePoints) {
 					listOfArmies[armyToPlaceInList].setRemainingMovePoints(listOfArmies[armyFromPlaceInList].remainingMovePoints);

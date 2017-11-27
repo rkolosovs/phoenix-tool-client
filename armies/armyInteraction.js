@@ -1104,7 +1104,7 @@ function transferTroopsFromSelectedArmy(mergeId) {
 			listOfArmies[mergeId].lkp += lkpToSplit;
 			listOfArmies[selectedArmyIndex].skp -= skpToSplit;
 			listOfArmies[mergeId].skp += skpToSplit;
-			if (leadersToSplit > 0 && listOfArmies[selectedArmyIndex].remainingMovePoints < listOfArmies[selectedArmyIndex].startingMovepoints()) {
+			if (leadersToSplit > 0 && listOfArmies[selectedArmyIndex].remainingMovePoints < listOfArmies[selectedArmyIndex].startingMovepoints) {
 				listOfArmies[mergeId].setRemainingMovePoints(0);
 			} else if (listOfArmies[selectedArmyIndex].remainingMovePoints < listOfArmies[mergeId].remainingMovePoints) {
 				listOfArmies[mergeId].setRemainingMovePoints(listOfArmies[selectedArmyIndex].remainingMovePoints);
@@ -1146,7 +1146,7 @@ function transferTroopsFromSelectedArmy(mergeId) {
 			listOfArmies[selectedArmyIndex].skp -= skpToSplit;
 			listOfArmies[mergeId].skp += skpToSplit;
 
-			if (leadersToSplit > 0 && listOfArmies[selectedArmyIndex].remainingMovePoints < listOfArmies[selectedArmyIndex].startingMovepoints()) {
+			if (leadersToSplit > 0 && listOfArmies[selectedArmyIndex].remainingMovePoints < listOfArmies[selectedArmyIndex].startingMovepoints) {
 				listOfArmies[mergeId].setRemainingMovePoints(0);
 			} else if (listOfArmies[selectedArmyIndex].remainingMovePoints < listOfArmies[mergeId].remainingMovePoints) {
 				listOfArmies[mergeId].setRemainingMovePoints(listOfArmies[selectedArmyIndex].remainingMovePoints);
@@ -1187,7 +1187,7 @@ function transferTroopsFromSelectedArmy(mergeId) {
 			listOfArmies[mergeId].lkp += lkpToSplit;
 			listOfArmies[selectedArmyIndex].skp -= skpToSplit;
 			listOfArmies[mergeId].skp += skpToSplit;
-			if (leadersToSplit > 0 && listOfArmies[selectedArmyIndex].remainingMovePoints < listOfArmies[selectedArmyIndex].startingMovepoints()) {
+			if (leadersToSplit > 0 && listOfArmies[selectedArmyIndex].remainingMovePoints < listOfArmies[selectedArmyIndex].startingMovepoints) {
 				listOfArmies[mergeId].setRemainingMovePoints(0);
 			} else if (listOfArmies[selectedArmyIndex].remainingMovePoints < listOfArmies[mergeId].remainingMovePoints) {
 				listOfArmies[mergeId].setRemainingMovePoints(listOfArmies[selectedArmyIndex].remainingMovePoints);
