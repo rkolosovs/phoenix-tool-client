@@ -887,14 +887,14 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 	else if (toMount === listOfArmies[armyIndex].count) {
 		// neues Reiterheer mit generierter Id an selben Koordinaten
 		var newArmy = new reiterHeer(newArmyId, toMount,
-			listOfArmies[armyIndex].leaders, listOfArmies[armyIndex].isGuard, listOfArmies[selectedArmyIndex].x,
+			listOfArmies[armyIndex].leaders, listOfArmies[armyIndex].isGuard, listOfArmies[armyIndex].x,
 			listOfArmies[armyIndex].y, listOfArmies[armyIndex].owner);
 		newArmy.setRemainingHeightPoints(listOfArmies[armyIndex].remainingHeightPoints);
 		if (listOfArmies[armyIndex].remainingMovePoints !== listOfArmies[armyIndex].startingMovepoints) {
 			newArmy.setRemainingMovePoints(0);
 		} else newArmy.setRemainingMovePoints(newArmy.startingMovepoints);
 		// Nachricht, falls Katapulte vorhanden waren.
-		if (listOfArmies[armyIndex].skp > 0 || listOfArmies[selectedArmyIndex].lkp > 0) {
+		if (listOfArmies[armyIndex].skp > 0 || listOfArmies[armyIndex].lkp > 0) {
 			window.alert("Da kein Fußheer mehr bestehen bleibt, wurden die Katapulte zerstört.")
 		}
 		// in listOfArmies einfügen und alte Armee löschen, ist dann automatisch armyIndex
