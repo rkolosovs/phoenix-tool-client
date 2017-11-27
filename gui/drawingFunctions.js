@@ -20,6 +20,7 @@ function drawStuff() {
 								// dragged mouse
 
 	drawMap(ctx, x, y, scale);
+	drawFieldSelection(ctx, x, y, scale);
 	drawArmies(ctx, x, y, scale, listOfArmies);
 	drawArmySelection(ctx, x, y, scale, selectedArmyIndex);
 	drawPossibleMoves(ctx, x, y, scale, selectedArmyIndex);
@@ -408,6 +409,16 @@ function drawPossibleMoves(ctx, x, y, scale, selectedArmyIndex){//drawing all po
 	}
 }
 
+function drawFieldSelection(ctx, x, y, scale) {
+	ctx.lineWidth = 5;
+	ctx.strokeStyle="blue";
+	if(selectedFields.length > 0){
+        var pos = computePosition(x, y, selectedFields[0][0], selectedFields[0][1], scale);
+        ctx.beginPath();
+        ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/2, 0, 2 * Math.PI, false);
+        ctx.stroke();
+	}
+}
 
 function drawArmySelection(ctx, x, y, scale, armyIndex) {
 	ctx.lineWidth = 5;
@@ -415,7 +426,7 @@ function drawArmySelection(ctx, x, y, scale, armyIndex) {
     if(armyIndex !== undefined){
         var pos = computePosition(x, y, listOfArmies[armyIndex].x, listOfArmies[armyIndex].y, scale);
         ctx.beginPath();
-        ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/2, 0, 2 * Math.PI, false);
+        ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/2.2, 0, 2 * Math.PI, false);
         ctx.stroke();
     }
 }
