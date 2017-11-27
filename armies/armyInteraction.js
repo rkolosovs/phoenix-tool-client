@@ -580,7 +580,8 @@ function fernkampf(dicerollsL, dicerollsS, badConditions, shooter, target, chars
         for (var i = 0; i<cLen; i++){
             charGpSum += chars[i].gp;
         }
-    }
+	}
+	//target may be a building. buildings need to have this funktion
     target.takeFire((shooter.fireLkp(dicerollsL, badConditions) + shooter.fireSkp(dicerollsS, badConditions))/(1+(target.leaderGp()+charGpSum)/100));
 }
 

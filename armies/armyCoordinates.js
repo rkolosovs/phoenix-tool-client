@@ -582,7 +582,7 @@ function checkCondition(army, x, y, range){
             if(height(x, y) - height(army.x, army.y) <= 1){
                 condition = 'farAndUp';
             }
-            if(height(x, y) - height(army.x, army.y) <= 1){
+            if(height(x, y) - height(army.x, army.y) < 1){
                 condition = 'far';
             }
             //if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
@@ -605,4 +605,37 @@ function checkCondition(army, x, y, range){
         }
     }
     return condition;
+}
+
+function findWallInWay(fromX, fromY, toX, toY){
+    let foundWalls;
+    if(distance(fromX, fromY, toX, toY) === 1){
+        let dir = convertDirection(getDirectionToNeighbor(fromX, fromY, toX, toY));
+        
+    }else if(distance(fromX, fromY, toX, toY) === 2){
+
+    }
+
+}
+
+//returns all walls on target field
+function getWallsOnField(x,y){
+    let walls = [];
+    for(let i = 0; i < buildings.length; i++){
+        if(buildings[i].type === 5 && buildings[i].x === x && buildings[i].y === y){
+            walls.push(buildings[i]);
+        }
+    }
+    return walls;
+}
+
+function convertDirection(dir){
+    switch(dir){
+        case 0: return "nw";
+        case 1: return "ne";
+        case 2: return "e";
+        case 3: return "se";
+        case 4: return "sw";
+        case 5: return "w";
+    }
 }

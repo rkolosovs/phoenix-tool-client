@@ -57,11 +57,33 @@ function neighbors(x,y){
 }
 
 //reihenfolge NW,NO,O,SO,SW,W
+//returns the number value corresponting to the direction. if it has a .5 it is 
 function getDirectionToNeighbor(fromX, fromY, toX, toY){
-    let possibleDir = neighbors(fromX, fromY);
-    for(let i = 0; i < possibleDir.length; i++){
-        if(possibleDir[i][0] == toX && possibleDir[i][1] == toY)
-            return i;
+    if(distance(fromX, fromY, toX, toY) === 1){
+        let possibleDir = neighbors(fromX, fromY);
+        for(let i = 0; i < possibleDir.length; i++){
+            if(possibleDir[i][0] == toX && possibleDir[i][1] == toY)
+                return i;
+        }
+    } else if(distance(fromX, fromY, toX, toY) === 2){
+        let targetNeighbors = neighbors(toX, toY);
+        let originNeighbors = neighbors(fromX, fromY);
+        let foundNeigh = false;
+        let direction;
+        for(let j = 0; j < targetNeighbors.length; j++){
+            for(let k = 0; k < originNeighbors.length; k++){
+                if(targetNeighbors[j][0] == originNeighbors[k][0] && targetNeighbors[j][1] == originNeighbors[k][1]){
+                    if(foundNeigh === false){
+                        foundNeigh = true;
+                        direction = k;
+                    }
+                    else{
+                        direction += 0.5;
+                    }
+                }
+            }
+        }
+        return direction;
     }
     return -1;//in case the to field is not a neighbor
 }
