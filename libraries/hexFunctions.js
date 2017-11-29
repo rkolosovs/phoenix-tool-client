@@ -119,3 +119,18 @@ function neighborInRange(x,y,range){
     }
     return neighbors;
 }
+
+
+function findCommonNeighbor(fromX, fromY, toX, toY){
+    let targetNeighbors = neighbors(fromX, fromY);
+    let originNeighbors = neighbors(toX, toY);
+    let foundCommon = [];
+    for(let j = 0; j < targetNeighbors.length; j++){
+        for(let k = 0; k < originNeighbors.length; k++){
+            if(targetNeighbors[j][0] == originNeighbors[k][0] && targetNeighbors[j][1] == originNeighbors[k][1]){
+                foundCommon.push(targetNeighbors[j]);
+            }
+        }
+    }
+    return foundCommon;
+}

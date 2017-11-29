@@ -586,18 +586,13 @@ function checkCondition(army, x, y, range){
                 condition = 'far';
             }
             //if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
-            let targetNeighbors = neighbors(x, y);
-            let originNeighbors = neighbors(army.x, army.y);
-            for(let j = 0; j < targetNeighbors.length; j++){
-                for(let k = 0; k < originNeighbors.length; k++){
-                    if(targetNeighbors[j][0] == originNeighbors[k][0] && targetNeighbors[j][1] == originNeighbors[k][1]){
-                        if(height(targetNeighbors[j][0], targetNeighbors[j][1]) - height(army.x, army.y) > 1){
-                            condition = 'impossible shot';
-                        }
-                        //TODO add Wall targeting
-                    }
+            let commonNeig = findCommonNeighbor(x, y, army.x, army.y);
+            for(let i = 0; i < commonNeig.length; i++){
+                if(height(commonNeig[i][0], commonNeig[i][1]) - height(army.x, army.y) > 1){
+                    condition = 'impossible shot';
                 }
             }
+            //TODO add Wall targeting
         }
     }else{//for lkp shooting
         if(height(x, y) - height(army.x, army.y) <= 1){
@@ -608,26 +603,72 @@ function checkCondition(army, x, y, range){
 }
 
 function findWallInWay(fromX, fromY, toX, toY){
-    let foundWalls;
+    let foundWallsIndeces = [];
+    let dir = getDirectionToNeighbor(fromX, fromY, toX, toY);
     if(distance(fromX, fromY, toX, toY) === 1){
-        let dir = convertDirection(getDirectionToNeighbor(fromX, fromY, toX, toY));
-        
+        dir = convertDirection((dir + 3) % 6);
+        let wallIndex = getWallIndexOnFieldInDirection(toX, toY, dir);
+        if(wallIndex != -1){
+            foundWallsIndeces.push(wallIndex)
+            return foundWallsIndeces;
+        }
     }else if(distance(fromX, fromY, toX, toY) === 2){
+        if(dir % 1 === 0){
+            let commonNeig = findCommonNeighbor(fromX, fromY, toX, toY);
+            if(getWallIndexOnFieldInDirection(commonNeig[0][0], commonNeig[0][1], dir) !== -1){//case back facing wall on common neighbor
+                foundWallsIndeces.push(getWallIndexOnFieldInDirection(commonNeig[0][0], commonNeig[0][1], dir));
+            }
+            dir = convertDirection((dir + 3) % 6);
+            if(getWallIndexOnFieldInDirection(commonNeig[0][0], commonNeig[0][1], dir) !== -1){//case front facing wall on common neighbor
+                foundWallsIndeces.push(getWallIndexOnFieldInDirection(commonNeig[0][0], commonNeig[0][1], dir));
+            }
+            if(getWallIndexOnFieldInDirection(toX, toY, dir) !== -1){//case front wall on target
+                foundWallsIndeces.push(getWallIndexOnFieldInDirection(toX, toY, dir));
+            }
+        }else{
+            let commonNeig = findCommonNeighbor(fromX, fromY, toX, toY);
+            dir = Math.floor(dir);
+            let dirCommon1 = convertDirection((dir + 3) % 6);
+            if(getWallIndexOnFieldInDirection(commonNeig[0][0], commonNeig[0][1], dirCommon1) !== -1){//case front facing wall on common neighbor 1
+                foundWallsIndeces.push(getWallIndexOnFieldInDirection(commonNeig[0][0], commonNeig[0][1], dirCommon1));
+            }
+            dirCommon1 = convertDirection((dir + 1) % 6);
+            if(getWallIndexOnFieldInDirection(commonNeig[0][0], commonNeig[0][1], dirCommon1) !== -1){//case back facing wall on common neighbor 1
+                foundWallsIndeces.push(getWallIndexOnFieldInDirection(commonNeig[0][0], commonNeig[0][1], dirCommon1));
+            }
 
+            let dirCommon2 = convertDirection((dir + 4) % 6);
+            if(getWallIndexOnFieldInDirection(commonNeig[1][0], commonNeig[1][1], dirCommon2) !== -1){//case front facing wall on common neighbor 2
+                foundWallsIndeces.push(getWallIndexOnFieldInDirection(commonNeig[1][0], commonNeig[1][1], dirCommon2));
+            }
+            dirCommon2 = convertDirection(dir);
+            if(getWallIndexOnFieldInDirection(commonNeig[1][0], commonNeig[1][1], dirCommon2) !== -1){//case back facing wall on common neighbor 2
+                foundWallsIndeces.push(getWallIndexOnFieldInDirection(commonNeig[1][0], commonNeig[1][1], dirCommon2));
+            }
+
+            let dirTarget = convertDirection((dir + 3) % 6);
+            if(getWallIndexOnFieldInDirection(toX, toY, dirTarget) !== -1){//case front facing wall on target
+                foundWallsIndeces.push(getWallIndexOnFieldInDirection(toX, toY, dirTarget));
+            }
+            dirTarget = convertDirection((dir + 4) % 6);
+            if(getWallIndexOnFieldInDirection(toX, toY, dirTarget) !== -1){//case front facing wall on target
+                foundWallsIndeces.push(getWallIndexOnFieldInDirection(toX, toY, dirTarget));
+            }
+        }
     }
-
+    return foundWallsIndeces;
 }
 
 //returns all walls on target field
-function getWallsOnField(x,y){
-    let walls = [];
+function getWallIndexOnFieldInDirection(x,y, direction){
     for(let i = 0; i < buildings.length; i++){
-        if(buildings[i].type === 5 && buildings[i].x === x && buildings[i].y === y){
-            walls.push(buildings[i]);
+        if(buildings[i].type === 5 && buildings[i].x === x && buildings[i].y === y && buildings[i].direction === direction){
+           return i;
         }
     }
-    return walls;
+    return -1;
 }
+
 
 function convertDirection(dir){
     switch(dir){

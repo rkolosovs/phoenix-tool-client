@@ -591,11 +591,6 @@ function findPossibleTargetFields(){
 	findShootingTargets(listOfArmies[selectedArmyIndex]);
 }
 
-//to find Targets on the selected field
-function aim(){
-
-}
-
 //to actually shoot stuff, with events
 function shoot(){//TODO make exceptions for invalid input
 	if(login == 'guest')
@@ -606,12 +601,13 @@ function shoot(){//TODO make exceptions for invalid input
 	let LKPshooting = parseInt(document.getElementById("shootingLKPInput").value);
 	let SKPshooting = parseInt(document.getElementById("shootingSKPInput").value);
 	let shootingarmy = listOfArmies[selectedArmyIndex];
+	let target;
 
 	if(shootingarmy.hasShotThisTurn === true){
 		window.alert("Die Armee hat diesn Zug schon geschossen");
 		return false;
 	}
-	if(LKPshooting > shootingarmy.lkp){
+	if(LKPshooting > shootingarmy.lkp){//TODO check for empty
 		window.alert("Die Armee hat nicht genug leichte Katapulte/Kriegsschiffe");
 		return false;
 	}
@@ -650,7 +646,7 @@ function shoot(){//TODO make exceptions for invalid input
 			LKPcount: LKPshooting,
 			SKPcount: SKPshooting,
 			toX: selectedFields[1][0],//temporary
-			toY: selectedFields[1][1],
+			toY: selectedFields[1][1],//TODO add actaul target
 			fromX: listOfArmies[selectedArmyIndex].x,
 			fromY: listOfArmies[selectedArmyIndex].y
 		}

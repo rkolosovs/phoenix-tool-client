@@ -911,7 +911,7 @@ function checkEvent(num) {
 							skpRolls.push(i);
 						}
 					}
-				}
+				}//TODO check target field
 				fernkampf(lkpRolls, skpRolls, checkCondition(shooter, cont.toX, cont.toY, distance(shooter.x, shooter.y, cont.toX, cont.toY)),
 				 shooter, target, null);// TODO proper target and chars
 				hide(shootBox);
