@@ -573,7 +573,7 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
 // array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null), 
 // schießende Armee, ziel Armee, Charaktere und Zauberer auf dem Zielfeld
 // TODO rüstorte vermindern Schaden
-function fernkampf(dicerollsL, dicerollsS, badConditions, shooter, target, chars) {
+function fernkampf(dicerollsL, dicerollsS, badConditions, shooter, target, x, y, chars) {
     var charGpSum = 0;      
     if(chars != null){
         var cLen = chars.length;
@@ -581,8 +581,32 @@ function fernkampf(dicerollsL, dicerollsS, badConditions, shooter, target, chars
             charGpSum += chars[i].gp;
         }
 	}
-	//target may be a building. buildings need to have this funktion
-    target.takeFire((shooter.fireLkp(dicerollsL, badConditions) + shooter.fireSkp(dicerollsS, badConditions))/(1+(target.leaderGp()+charGpSum)/100));
+
+	let damage = shooter.fireLkp(dicerollsL, badConditions) + shooter.fireSkp(dicerollsS, badConditions);
+	let allTargets = [];
+	let sumAllBP = 0;
+	if(target === "On Field"){
+		for(let i = 0; i < buildings.length; i++){
+			if(buildings[i].x === x && buildings[i].y === y && buildings[i].type < 5){
+				//TODO building takes 2/3 damage
+				//building[i].takeFire(damage * (2/3));
+				damage = damage * (1/3);
+			}
+		}
+
+		for(let i = 0; i < listOfArmies.length; i++){
+			if(listOfArmies[i].x === x && listOfArmies[i].y === y){
+				allTargets.push(listOfArmies[i]);
+				sumAllBP += listOfArmies[i].sumBP();
+			}
+		}
+		for(let i = 0; i < allTargets.length; i++){
+			//target may be a building. buildings need to have this funktion
+			allTargets[i].takeFire(damage/(1+(allTargets[i].leaderGp()+charGpSum)/100) * (allTargets[i].sumBP / sumAllBP));
+		}
+	}
+	//TODO Wall Damage
+	
 }
 
 //to fill the targetList(fields)
@@ -601,13 +625,22 @@ function shoot(){//TODO make exceptions for invalid input
 	let LKPshooting = parseInt(document.getElementById("shootingLKPInput").value);
 	let SKPshooting = parseInt(document.getElementById("shootingSKPInput").value);
 	let shootingarmy = listOfArmies[selectedArmyIndex];
-	let target;
 
-	if(shootingarmy.hasShotThisTurn === true){
-		window.alert("Die Armee hat diesn Zug schon geschossen");
+	if(LKPshooting === NaN){
+		LKPshooting = 0;
+	}
+	if(SKPshooting === NaN){
+		SKPshooting = 0;
+	}
+	if(shootingarmy.lkp - shootingarmy.LKPShotThisTurn >= LKPshooting){//check if remaining Lkp that have not shot yet
+		window.alert("Die Armee hat nur noch " + (shootingarmy.lkp - shootingarmy.LKPShotThisTurn) +" leichte Katapulte/Kriegsschiffe die noch nicht geschossen haben.");
 		return false;
 	}
-	if(LKPshooting > shootingarmy.lkp){//TODO check for empty
+	if(shootingarmy.skp - shootingarmy.SKPShotThisTurn >= SKPshooting){//check if remaining Skp that have not shot yet
+		window.alert("Die Armee hat nur noch " + (shootingarmy.skp - shootingarmy.SKPShotThisTurn) +" schwere Katapulte/Kriegsschiffe die noch nicht geschossen haben.");
+		return false;
+	}
+	if(LKPshooting > shootingarmy.lkp){
 		window.alert("Die Armee hat nicht genug leichte Katapulte/Kriegsschiffe");
 		return false;
 	}
@@ -623,7 +656,6 @@ function shoot(){//TODO make exceptions for invalid input
 		window.alert("Wählen Sie ein Feld auf das Sie schießen wollen");
 		return false;
 	}
-
 	if(shootingarmy.targetList === undefined){
 		window.alert("bitte Zielen Sie erst");
 		return false;
@@ -638,21 +670,25 @@ function shoot(){//TODO make exceptions for invalid input
 			window.alert("Schießen Sie auf ein markiertes Feld");
 			return false;
 		}
-	}
+	}//TODO get target to shoot at
+	let target = "On Field";
+
 	preparedEvents.push({
 		type: "shoot", content: {
 			shooterID: listOfArmies[selectedArmyIndex].armyId, 
 			realm: listOfArmies[selectedArmyIndex].ownerTag(),
 			LKPcount: LKPshooting,
 			SKPcount: SKPshooting,
-			toX: selectedFields[1][0],//temporary
-			toY: selectedFields[1][1],//TODO add actaul target
+			toX: selectedFields[1][0],
+			toY: selectedFields[1][1],
+			target: target,
 			fromX: listOfArmies[selectedArmyIndex].x,
 			fromY: listOfArmies[selectedArmyIndex].y
 		}
 	});
 
-	shootingarmy.hasShotThisTurn = true;
+	shootingarmy.LKPShotThisTurn += LKPshooting;
+	shootingarmy.SKPShotThisTurn += SKPshooting;
 	window.alert("Die Geschosse sind unterwegs.");
 }
 

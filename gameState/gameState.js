@@ -127,7 +127,7 @@ function nextTurn() {
     					}
 					}
 				});
-			}else if (cPE.type === "shoot") { //shootTODO
+			}else if (cPE.type === "shoot") {
 				$.post({
 					url: url + "/databaseLink/shootevent/",
 					data: {

@@ -34,7 +34,6 @@ function loginToServer() {
 			var eventList = document.getElementById("eventsTab");
 			eventList.innerHTML = "";
 			writeTurnNumber();
-			untagHitArmys();
 		},
 		error: function(data){
 			// alert for a failed login

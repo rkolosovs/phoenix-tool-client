@@ -122,8 +122,8 @@ function neighborInRange(x,y,range){
 
 
 function findCommonNeighbor(fromX, fromY, toX, toY){
-    let targetNeighbors = neighbors(fromX, fromY);
-    let originNeighbors = neighbors(toX, toY);
+    let targetNeighbors = neighbors(toX, toY);
+    let originNeighbors = neighbors(fromX, fromY);
     let foundCommon = [];
     for(let j = 0; j < targetNeighbors.length; j++){
         for(let k = 0; k < originNeighbors.length; k++){

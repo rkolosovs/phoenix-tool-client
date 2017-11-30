@@ -14,7 +14,8 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     this.possibleMoves = [];
     this.targetList = [];
     this.multiArmyField = false;
-    this.hasShotThisTurn = false;
+    this.LKPShotThisTurn = 0;
+    this.SKPShotThisTurn = 0;
 
     // returns the tag of the owner, not full operational
     // TODO do it right
@@ -438,7 +439,8 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     this.possibleMoves = [];
     this.targetList = [];
     this.multiArmyField = false;
-    this.hasShotThisTurn = false;
+    this.LKPShotThisTurn = 0;
+    this.SKPShotThisTurn = 0;
 
     // returns the tag of the owner, not full operational
     // TODO do it right

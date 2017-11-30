@@ -586,13 +586,17 @@ function checkCondition(army, x, y, range){
                 condition = 'far';
             }
             //if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
-            let commonNeig = findCommonNeighbor(x, y, army.x, army.y);
+            let commonNeig = findCommonNeighbor(army.x, army.y, x, y);
+            let walls = findWallInWay(army.x, army.y, x, y);
             for(let i = 0; i < commonNeig.length; i++){
-                if(height(commonNeig[i][0], commonNeig[i][1]) - height(army.x, army.y) > 1){
-                    condition = 'impossible shot';
+                for(let j = 0; j < walls.length; j++){
+                    if(height(commonNeig[i][0], commonNeig[i][1]) - height(army.x, army.y) > 1 || 
+                    (height(commonNeig[i][0], commonNeig[i][1]) - height(army.x, army.y) == 1 && buildings[walls[j]].x === commonNeig[i][0] && buildings[walls[j]].y === commonNeig[i][1])){
+                        condition = 'impossible shot';
+                    }
                 }
             }
-            //TODO add Wall targeting
+            
         }
     }else{//for lkp shooting
         if(height(x, y) - height(army.x, army.y) <= 1){
