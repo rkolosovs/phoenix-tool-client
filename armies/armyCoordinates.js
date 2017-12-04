@@ -301,7 +301,7 @@ function moveToList(army, direction) {
                             army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 0, height: thereIsAHarbor?1:2, landunit: true, tar: target, load: true});
                         }
                         fleetsOnDest.push(i);
-                        console.log("fleets +1");
+//                        console.log("fleets +1");
                     }
                 }
             }
@@ -449,7 +449,7 @@ function moveToList(army, direction) {
                             army.possibleMoves.push({changHeight: changeInHeight, dir: direction, movepoints: 0, height: thereIsAHarbor?1:2, landunit: true, tar: target, load: true});
                         }
                         fleetsOnDest.push(i);
-                        console.log("fleets +1");
+//                        console.log("fleets +1");
                     }
                 }
             }

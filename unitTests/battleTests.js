@@ -41,10 +41,14 @@ var borders = [];
 var buildings = [];
 var fields = [];
 var rivers = [];
+var realms = [];
 
 module( "Battle" , function() {
 	module( "Results", {
 		before: function() {
+		    realms = [{active: true, color: '000,000,000', homeTurf: 9, name: "Realm 1", tag: 'r01'},
+                {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 2", tag: 'r02'},
+                {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 3", tag: 'r03'}];
 			defenderArmies = [
 				new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1),//0
 				new heer(112, 1000, 5, 0, 0, 0, false, 0, 0, 1),//1
@@ -87,7 +91,7 @@ module( "Battle" , function() {
 				new seeHeer(328, 100, 100, 0, 0, true, 0, 0, 2),//17
 				new heer(199, 1000, 10, 0, 0, 0, false, 0, 0, 2)//18
 			];
-			borders = [{'tag': 'usa', 'land': [[0, 0], [1, 1], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 8],
+			borders = [{'tag': 'r01', 'land': [[0, 0], [1, 1], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 8],
 			    [9, 9], [10, 10], [11, 11]]}];
 			rivers = [ [[8,8],[8,7]], [[8,8],[9,7]] ];
 			buildings = [{'realm': 1, 'name': "", 'type': 0, 'x': 3, 'y': 3, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
@@ -112,6 +116,7 @@ module( "Battle" , function() {
 			borders = [];
 			buildings = [];
 			fields = [];
+			realms = [];
 		}}, function() {
 		module( "Land Battles", function() {
 			test( "Minimal armies, defenders win by dice roll.", function(t) {
@@ -237,6 +242,9 @@ module( "Battle" , function() {
 		});
 		module( "Directional Terrain Bonuses", {
 		    beforeEach: function() {
+		        realms = [{active: true, color: '000,000,000', homeTurf: 9, name: "Realm 1", tag: 'r01'},
+                    {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 2", tag: 'r02'},
+                    {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 3", tag: 'r03'}];
                 defenderArmies[18].owner = 1;
 		    }
 		    },function() {
@@ -394,14 +402,17 @@ module( "Battle" , function() {
 		});
 		module( "Complex Battles", function() {
 			test( "Large land battle at the defenders castle.", function(t) {
+			    realms = [{active: true, color: '000,000,000', homeTurf: 9, name: "Realm 1", tag: 'r01'},
+                    {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 2", tag: 'r02'},
+                    {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 3", tag: 'r03'}];
 				var attackingArmies = [
 					new heer(121, 12000, 40, 0, 0, 0, true, 0, 0, 2),//army of attacker realm
 					new heer(122, 32000, 80, 0, 0, 0, false, 0, 0, 2),//army of attacker realm
 					new reiterHeer(221, 16000, 80, false, 0, 0, 2)//army of attacker realm
 				];
 				var defendingArmies = [
-					new heer(111, 29000, 80, 0, 0, 0, false, 0, 0, 1),//army of realm usa
-					new reiterHeer(211, 13500, 70, false, 0, 0, 1),//army of realm usa
+					new heer(111, 29000, 80, 0, 0, 0, false, 0, 0, 1),//army of realm r01
+					new reiterHeer(211, 13500, 70, false, 0, 0, 1),//army of realm r01
 					new heer(112, 8000, 50, 0, 0, 0, true, 0, 0, 3)//army of a third realm
 				];
 				var battle = new schlacht(attackingArmies, defendingArmies, [], [], 3, 3);
@@ -427,6 +438,9 @@ module( "Battle" , function() {
 	});
 	module( "Overrun", {
 		before: function() {
+		    realms = [{active: true, color: '000,000,000', homeTurf: 9, name: "Realm 1", tag: 'r01'},
+                {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 2", tag: 'r02'},
+                {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 3", tag: 'r03'}];
 			defenderArmies = [
 				new heer(111, 1500, 10, 0, 0, 0, false, 0, 0, 1),//0
 				new heer(112, 1000, 10, 0, 0, 0, false, 0, 0, 1),//1

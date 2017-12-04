@@ -143,8 +143,8 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     }
     // remove an amount of basic soldiers an equal proportion of officers, transported mounts and catapults
     this.decimate = function(amount){
-        console.log("troops lost: "); 
-        console.log(amount);
+//        console.log("troops lost: ");
+//        console.log(amount);
         var factor = amount/ this.count;
         this.removeSoldiers(amount);
         this.removeLeaders(this.leaders*factor);
@@ -512,7 +512,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     }
     // berechnet von armeen belegten platz
     this.spaceLoaded = function(){
-        console.log(this.loadedArmies);
+//        console.log(this.loadedArmies);
         if(this.loadedArmies === undefined || this.loadedArmies === []){
             return 0;
         }
@@ -524,23 +524,23 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
                 }
             }
         }
-        console.log("loaded armies RP sum is: " + loaded);
+//        console.log("loaded armies RP sum is: " + loaded);
         return loaded;
     }
     // berechnet gerade freien platz
     this.currentCapacity = function(){
         var spaceLoaded = this.spaceLoaded();
         var maxCapacity = this.maxCapacity();
-        console.log("current Capacity is: " + (maxCapacity - spaceLoaded));
+//        console.log("current Capacity is: " + (maxCapacity - spaceLoaded));
         return(maxCapacity - spaceLoaded);
     }
     //lädt armee ein
     this.loadArmy = function(index){
-        console.log("loadArmy");
+//        console.log("loadArmy");
         if(listOfArmies[index].raumpunkte() <= this.currentCapacity()){
             this.loadedArmies.push(listOfArmies[index].armyId);
             listOfArmies[index].isLoadedIn = true;
-            console.log("Army " + listOfArmies[index].armyId +  " successfully loaded.");
+//            console.log("Army " + listOfArmies[index].armyId +  " successfully loaded.");
             this.currentCapacity();
             return "ok";
         } else {
@@ -563,9 +563,9 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     }
     //prüft ob die armee an Stelle index in der listOfArmies eingeladen werden kann
     this.isLoadable = function(index){
-        console.log(index);
+//        console.log(index);
         if(listOfArmies[index].raumpunkte() <= this.currentCapacity()){
-            console.log("Army " + listOfArmies[index].armyId +  " is loadable.");
+//            console.log("Army " + listOfArmies[index].armyId +  " is loadable.");
             this.currentCapacity();
             return "ok";
         } else {
