@@ -17,14 +17,8 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     this.possibleMoves = [];
     this.multiArmyField = false;
 
-    // returns the tag of the owner, not full operational
-    // TODO do it right
     this.ownerTag = function(){
-        switch(this.owner){
-            case 1: return "usa";
-            case 3: return "vvh";
-            case 2: return "eos";
-        }
+        return realms[this.owner-1].tag;
     }
 
     this.isAlive = function(){
@@ -348,14 +342,8 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde, coordX, coordY, owner) {
     this.possibleMoves = [];
     this.multiArmyField = false;
 
-    // returns the tag of the owner, not full operational
-    // TODO do it right
     this.ownerTag = function(){
-        switch(this.owner){
-            case 1: return "usa";
-            case 3: return "vvh";
-            case 2: return "eos";
-        }
+        return realms[this.owner-1].tag;
     }
 
     this.isAlive = function(){
@@ -492,14 +480,8 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     this.possibleMoves = [];
     this.multiArmyField = false;
 
-    // returns the tag of the owner, not full operational
-    // TODO do it right
     this.ownerTag = function(){
-        switch(this.owner){
-            case 1: return "usa";
-            case 3: return "vvh";
-            case 2: return "eos";
-        }
+        return realms[this.owner-1].tag;
     }
 
     this.isAlive = function(){
