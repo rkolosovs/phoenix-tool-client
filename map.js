@@ -48,6 +48,7 @@ var fields; //declare fields variable; holds the terrain fields
 var rivers; //declare rivers variable; holds the rivers
 var buildings; //declare buildings variable; holds the buildings
 var borders; //declare borders variable; holds the borders
+var realms; //declare realms variable; holds the names, colors and home turf
 var loginZeit;
 
 //declare variables for all used images
