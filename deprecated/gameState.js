@@ -9,13 +9,13 @@ function gameState(count, factions, order, subTurns){
         var armyCount = listOfArmies.length;
         for(var i = 0; i< armyCount; i++){
             if(listOfArmies[i].owner == this.currentPlayer){
-                if(Math.floor(listOfArmies[i].a.armyId/100) == 1){
+                if(Math.floor(listOfArmies[i].armyId/100) == 1){
                     listOfArmies[i].setRemainingMovePoints(9);
                     listOfArmies[i].setRemainingHeightPoints(2);
-                } else if(Math.floor(listOfArmies[i].a.armyId/100) == 2){
+                } else if(Math.floor(listOfArmies[i].armyId/100) == 2){
                     listOfArmies[i].setRemainingMovePoints(21);
                     listOfArmies[i].setRemainingHeightPoints(2);
-                } else if(Math.floor(listOfArmies[i].a.armyId/100) == 3){
+                } else if(Math.floor(listOfArmies[i].armyId/100) == 3){
                     listOfArmies[i].setRemainingMovePoints(42);
                     listOfArmies[i].setRemainingHeightPoints(2);
                 }

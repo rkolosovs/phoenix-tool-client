@@ -38,6 +38,7 @@ function saveFields() { // saves the current fields on the server
 	});
 }
 
+// probably deprecated
 function sendAllPreparedEvents(){
 	for (var i = 0; i < preparedEvents.length; i++) {
 		var cPE = preparedEvents[i];

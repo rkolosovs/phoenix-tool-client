@@ -134,3 +134,9 @@ function findCommonNeighbor(fromX, fromY, toX, toY){
     }
     return foundCommon;
 }
+
+// does the field has a street on it in any direction
+function hasStreet(x,y) {
+    return buildings.some((elem) => elem.type === 8 && ((elem.firstX === x && elem.firstY === y) ||
+        (elem.secondX === x && elem.secondY === y)));
+}

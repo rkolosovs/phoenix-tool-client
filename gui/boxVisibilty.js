@@ -198,7 +198,7 @@ function hide(element) {
 		function updateInfoBox(){
 			if(selectedArmyIndex !== undefined){
 				// info Box
-				console.log(listOfArmies[selectedArmyIndex].armyId);
+				console.log(listOfArmies[selectedArmyIndex].armyId + " selected.");
 				console.log("This a guard army: " + listOfArmies[selectedArmyIndex].isGuard);
 				if(listOfArmies[selectedArmyIndex].isGuard){
 					document.getElementById("guard").innerHTML = "Garde";

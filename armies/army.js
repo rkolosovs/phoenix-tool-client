@@ -8,9 +8,13 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     this.isGuard = istGarde;
     this.x = coordX;
     this.y = coordY;
-    this.owner = owner;
+    this.oldX = coordX; //save the old position when moving the unit
+    this.oldY = coordY; //use it to determine what terrain this unit moved from etc.
+    this.owner = owner; //currently owner pk in the DB
     this.isLoadedIn = null;
     this.wasShotAt = false;
+    this.startingMovepoints = 9;
+
     this.possibleMoves = [];
     this.targetList = [];
     this.multiArmyField = false;
@@ -32,15 +36,25 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     	//TODO once characters are a thing, 0 officer armies with a character on the field should also be alive
     }
 
+    // returns the index of the army in listOfArmies
+    this.indexInListOfArmies = function(){
+        var index = -1;
+        for(var i = 0; i < listOfArmies.length; i++){
+            if(listOfArmies[i].owner === this.owner && listOfArmies[i].armyId === this.armyId){
+                index = i;
+            }
+        }
+        return index;
+    }
     // nur zu Testzwecken 300
     //TODO: make it the proper value once testing is done
-    this.remainingMovePoints = 300;
+    this.remainingMovePoints = 9;
     this.setRemainingMovePoints = function(points){
         this.remainingMovePoints = points;
     }
     // nur zu Testzwecken 30
     //TODO: make it the proper value once testing is done
-    this.remainingHeightPoints = 30;
+    this.remainingHeightPoints = 2;
     this.setRemainingHeightPoints = function(points){
         this.remainingHeightPoints = points;
     }
@@ -79,10 +93,18 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
         }
         return (this.count + this.mounts + this.skp*2000 + this.lkp*1000 + this.leaders * 100);
     }
+    //berechnet die verbrauchten Raumpunkte
+    this.raumpunkteOhneHf = function(){
+        if(this.isGuard){
+            // Garde zählt 3 fach
+            return (this.count * 3 + this.mounts + this.skp*2000 + this.lkp*1000);
+        }
+        return (this.count + this.mounts + this.skp*2000 + this.lkp*1000);
+    }
     // entfernt Soldaten aus der Armee
     this.removeSoldiers = function(amount){
         if(this.count >= amount){
-            this.count -= Math.floor(amount);
+            this.count -= Math.round(amount);
         } else {this.count = 0;}
     }
     // fügt Soldaten zu der Armee hinzu
@@ -92,7 +114,7 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     // entfernt Heerführer aus der Armee
     this.removeLeaders = function(amount){
         if(this.leaders >= amount){
-            this.leaders -= Math.floor(amount);
+            this.leaders -= Math.round(amount);
         } else {this.leaders = 0;}
     }
     // fügt Heerführer zu der Armee hinzu
@@ -102,13 +124,13 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     // entfernt leichte Katapulte aus der Armee
     this.removeLkp = function(amount){
         if(this.lkp >= amount){
-            this.lkp -= Math.floor(amount);
+            this.lkp -= Math.round(amount);
         } else {this.lkp = 0;}
     }
     // entfernt schwere Katapulte aus der Armee
     this.removeSkp = function(amount){
         if(this.skp >= amount){
-            this.skp -= Math.floor(amount);
+            this.skp -= Math.round(amount);
         } else {this.skp = 0;}
     }
     // fügt leichte Katapulte zu der Armee hinzu
@@ -122,14 +144,14 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     // entfernt Reittiere aus der Armee
     this.removeMounts = function(amount){
         if(this.mounts >= amount){
-            this.mounts -= Math.floor(amount);
+            this.mounts -= Math.round(amount);
         } else {this.mounts = 0;}
     }
     // fügt Reittiere zu der Armee hinzu
     this.addMounts = function(amount){
         this.mounts += amount;
     }
-    // enfernt Truppen, Heerführer und Katapulte entsprechend dem Kampfergebnis
+    // remove an amount of basic soldiers an equal proportion of officers, transported mounts and catapults
     this.decimate = function(amount){
         console.log("troops lost: "); 
         console.log(amount);
@@ -139,6 +161,14 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
         this.removeMounts(this.mounts*factor);
         this.removeSkp(this.skp*factor);
         this.removeLkp(this.lkp*factor);
+    }
+    // remove an amount of basic soldiers, mounts, catapults and officers to reduce the army's rp by rpDamage
+    this.takeRPDamage = function(rpDamage){
+        this.decimate(Math.ceil(rpDamage/(1+
+            100*(this.leaders/this.count)+
+            this.mounts/this.count+
+            1000*(this.lkp/this.count)+
+            2000*(this.skp/this.count))));
     }
     // zeigt an, ob ein Heer eroberungsfähig ist
     this.canConquer = function(){
@@ -314,9 +344,13 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde, coordX, coordY, owner) {
     this.isGuard = istGarde;
     this.x = coordX;
     this.y = coordY;
+    this.oldX = coordX; //save the old position when moving the unit
+    this.oldY = coordY; //use it to determine what terrain this unit moved from etc.
     this.owner = owner;
     this.isLoadedIn = null;
     this.wasShotAt = false;
+    this.startingMovepoints = 21;
+
     this.possibleMoves = [];
     this.multiArmyField = false;
 
@@ -337,17 +371,27 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde, coordX, coordY, owner) {
 
     // nur zu Testzwecken 300
     //TODO: make it the proper value once testing is done
-    this.remainingMovePoints = 300;
+    this.remainingMovePoints = 21;
     this.setRemainingMovePoints = function(points){
         this.remainingMovePoints = points;
     }
     // nur zu Testzwecken 30
     //TODO: make it the proper value once testing is done
-    this.remainingHeightPoints = 30;
+    this.remainingHeightPoints = 2;
     this.setRemainingHeightPoints = function(points){
         this.remainingHeightPoints = points;
     }
 
+    // returns the index of the army in listOfArmies
+    this.indexInListOfArmies = function(){
+        var index = -1;
+        for(var i = 0; i < listOfArmies.length; i++){
+            if(listOfArmies[i].owner === this.owner && listOfArmies[i].armyId === this.armyId){
+                index = i;
+            }
+        }
+        return index;
+    }
     this.leaderGp = function(){
         var gp = 0;
 
@@ -377,10 +421,18 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde, coordX, coordY, owner) {
         }
         return (this.count * 2 + this.leaders * 100);
     };
+    //berechnet die verbrauchten Raumpunkte
+    this.raumpunkteOhneHf = function(){
+        if(this.isGuard){
+            // Garde zählt 3 fach
+            return (this.count * 3);
+        }
+        return (this.count * 2);
+    }
     // entfernt Soldaten aus der Armee
     this.removeSoldiers = function(amount){
         if(this.count >= amount){
-            this.count -= Math.floor(amount);
+            this.count -= Math.round(amount);
         } else {this.count = 0;}
     }
     // fügt Soldaten zu der Armee hinzu
@@ -390,18 +442,22 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde, coordX, coordY, owner) {
     // entfernt Heerführer aus der Armee
     this.removeLeaders = function(amount){
         if(this.leaders >= amount){
-            this.leaders -= Math.floor(amount);
+            this.leaders -= Math.round(amount);
         } else {this.leaders = 0;}
     }
     // fügt Heerführer zu der Armee hinzu
     this.addLeaders = function(amount){
         this.leaders += amount;
     }
-    // Reiter zählen Doppelt so viel wie Soldaten
+    // remove an amount of basic soldiers an equal proportion of officers
     this.decimate = function(amount){
         var factor = (amount) / this.count;
         this.removeSoldiers(amount);
         this.removeLeaders(this.leaders*factor);
+    }
+    // remove an amount of basic soldiers and officers to reduce the army's rp by rpDamage
+    this.takeRPDamage = function(rpDamage){
+        this.decimate(Math.ceil(rpDamage/(2+100*(this.leaders/this.count))));
     }
     // Reiter zählen Doppelt so viel wie Soldaten
     this.canConquer = function(){
@@ -430,8 +486,11 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     this.lkp = leichte;
     this.skp = schwere;
     this.isGuard = istGarde;
+    this.startingMovepoints = 42;
     this.x = coordX;
     this.y = coordY;
+    this.oldX = coordX; //save the old position when moving the unit
+    this.oldY = coordY; //use it to determine what terrain this unit moved from etc.
     this.owner = owner;
     this.isLoadedIn = null; // for easier Data Saving 
     this.loadedArmies = [];
@@ -459,13 +518,13 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
 
     // nur zu Testzwecken 300
     //TODO: make it the proper value once testing is done
-    this.remainingMovePoints = 300;
+    this.remainingMovePoints = 42;
     this.setRemainingMovePoints = function(points){
         this.remainingMovePoints = points;
     }
     // nur zu Testzwecken 30
     //TODO: make it the proper value once testing is done
-    this.remainingHeightPoints = 30;
+    this.remainingHeightPoints = 2;
     this.setRemainingHeightPoints = function(points){
         this.remainingHeightPoints = points;
     }
@@ -481,13 +540,13 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     // berechnet von armeen belegten platz
     this.spaceLoaded = function(){
         console.log(this.loadedArmies);
-        if(this.loadedArmies == undefined || this.loadedArmies == []){
+        if(this.loadedArmies === undefined || this.loadedArmies === []){
             return 0;
         }
         var loaded = 0;
         for(var i = 0; i < this.loadedArmies.length; i++){
             for(var j = 0; j < listOfArmies.length; j++){
-                if((listOfArmies[j].owner == listOfArmies[selectedArmyIndex].owner) && listOfArmies[j].armyId == this.loadedArmies[i]){
+                if((listOfArmies[j].owner === this.owner) && listOfArmies[j].armyId === this.loadedArmies[i]){
                     loaded += listOfArmies[j].raumpunkte();
                 }
             }
@@ -503,20 +562,37 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
         return(maxCapacity - spaceLoaded);
     }
     //lädt armee ein
-    this.loadArmy = function(){
-        if(listOfArmies[selectedArmyIndex].raumpunkte() <= this.currentCapacity()){
-            this.loadedArmies.push(listOfArmies[selectedArmyIndex].armyId);
-            console.log("Army " + listOfArmies[selectedArmyIndex].armyId +  " successfully loaded.");
+    this.loadArmy = function(index){
+        console.log("loadArmy");
+        if(listOfArmies[index].raumpunkte() <= this.currentCapacity()){
+            this.loadedArmies.push(listOfArmies[index].armyId);
+            listOfArmies[index].isLoadedIn = true;
+            console.log("Army " + listOfArmies[index].armyId +  " successfully loaded.");
             this.currentCapacity();
             return "ok";
         } else {
             return "This army is too big for this fleet.";
         }
     }
-    //prüft ob die selectierte armee geladen werden kann
-    this.isLoadable = function(){
-        if(listOfArmies[selectedArmyIndex].raumpunkte() <= this.currentCapacity()){
-            console.log("Army " + listOfArmies[selectedArmyIndex].armyId +  " is loadable.");
+    // returns the index of the army in listOfArmies
+    this.indexInListOfArmies = function(){
+        var index = -1;
+        for(var i = 0; i < listOfArmies.length; i++){
+            if(listOfArmies[i].owner === this.owner && listOfArmies[i].armyId === this.armyId){
+                index = i;
+            }
+        }
+        return index;
+    }
+    // prüft pb die selektierte armee eingeladen werden kann
+    this.selectedIsLoadable = function(){
+        return this.isLoadable(selectedArmyIndex);
+    }
+    //prüft ob die armee an Stelle index in der listOfArmies eingeladen werden kann
+    this.isLoadable = function(index){
+        console.log(index);
+        if(listOfArmies[index].raumpunkte() <= this.currentCapacity()){
+            console.log("Army " + listOfArmies[index].armyId +  " is loadable.");
             this.currentCapacity();
             return "ok";
         } else {
@@ -530,6 +606,14 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
         }
         return (this.count * 100 + this.leaders * 100 + this.lkp * 1000 + this.skp * 2000);
     };
+    //berechnet die verbrauchten Raumpunkte
+    this.raumpunkteOhneHf = function(){
+        if(this.isGuard){
+            // Garde zählt 3 fach
+            return (this.count * 100 * 3 + this.skp*2000 + this.lkp*1000);
+        }
+        return (this.count *100 + this.skp*2000 + this.lkp*1000);
+    }
     // berechnet gutpunkte durch heerführer
     this.leaderGp = function(){
         var gp = 0;
@@ -595,6 +679,17 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
         this.removeLeaders(this.leaders*factor);
         this.removeSkp(this.skp*factor);
         this.removeLkp(this.lkp*factor);
+        if(this.loadedArmies !== undefined && this.loadedArmies.length > 0){
+            let loadedArmiesList = listOfArmies.filter((army) =>
+                army.owner === this.owner && this.loadedArmies.some((loadedArmy) => loadedArmy === army.armyId)
+            );
+            let overload = this.spaceLoaded() - this.maxCapacity();
+            if(overload > 0){
+                loadedArmiesList.forEach((loadedArmy) =>
+                    loadedArmy.takeRPDamage(Math.ceil(overload * (loadedArmy.raumpunkte()/this.spaceLoaded())))
+                );
+            }
+        }
     }
     // Schiffe zählen 100x so viel wie Soldaten
     this.canConquer = function(){
