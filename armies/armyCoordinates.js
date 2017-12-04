@@ -568,7 +568,7 @@ function checkAllConditions(army, targetList){
 
     return targetList;
 }
-function checkCondition(army, x, y, range){
+function checkCondition(army, x, y, range){//TODO mixed shooting
     let condition = 'impossible shot';
     if(army.skp > 0){//skp shooting
         if(range == 1){//for range of 1

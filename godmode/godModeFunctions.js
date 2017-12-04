@@ -302,7 +302,7 @@ function generateArmyBtn(){
 	}
 	// check for any other armies with the same armyId
 	for(var i=0; i < listOfArmies.length; i++){
-		if(listOfArmies[i].a.armyId == armyIdBuffer && listOfArmies[i].owner == ownerBuffer){
+		if(listOfArmies[i].armyId == armyIdBuffer && listOfArmies[i].owner == ownerBuffer){
 			window.alert("Ein Heer mit dieser Nummer existiert bereits in diesem Königreich.");
 			return false;
 		}
@@ -337,7 +337,7 @@ function godDeleteSelectedArmy(){
 function changeArmyInfo(){
 	for(var i = 0; i<listOfArmies.length; i++){
 		if(i!=selectedArmy && listOfArmies[i].owner == document.getElementById("ownerChangeInput").value &&
-		listOfArmies[i].a.armyId == document.getElementById("armyIdChangeInput").value){
+		listOfArmies[i].armyId == document.getElementById("armyIdChangeInput").value){
 			window.alert("Diese Armee-Id ist in diesem Reich bereits vergeben.");
 		} else {
 			if(document.getElementById("guardChangeInput").checked){

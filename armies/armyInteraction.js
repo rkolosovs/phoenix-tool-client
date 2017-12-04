@@ -602,7 +602,7 @@ function fernkampf(dicerollsL, dicerollsS, badConditions, shooter, target, x, y,
 		}
 		for(let i = 0; i < allTargets.length; i++){
 			//target may be a building. buildings need to have this funktion
-			allTargets[i].takeFire(damage/(1+(allTargets[i].leaderGp()+charGpSum)/100) * (allTargets[i].sumBP / sumAllBP));
+			allTargets[i].takeFire(damage/(1+(allTargets[i].leaderGp()+charGpSum)/100) * (allTargets[i].sumBP() / sumAllBP));
 		}
 	}
 	//TODO Wall Damage
@@ -632,11 +632,11 @@ function shoot(){//TODO make exceptions for invalid input
 	if(SKPshooting === NaN){
 		SKPshooting = 0;
 	}
-	if(shootingarmy.lkp - shootingarmy.LKPShotThisTurn >= LKPshooting){//check if remaining Lkp that have not shot yet
+	if(shootingarmy.lkp - shootingarmy.LKPShotThisTurn < LKPshooting){//check if remaining Lkp that have not shot yet
 		window.alert("Die Armee hat nur noch " + (shootingarmy.lkp - shootingarmy.LKPShotThisTurn) +" leichte Katapulte/Kriegsschiffe die noch nicht geschossen haben.");
 		return false;
 	}
-	if(shootingarmy.skp - shootingarmy.SKPShotThisTurn >= SKPshooting){//check if remaining Skp that have not shot yet
+	if(shootingarmy.skp - shootingarmy.SKPShotThisTurn < SKPshooting){//check if remaining Skp that have not shot yet
 		window.alert("Die Armee hat nur noch " + (shootingarmy.skp - shootingarmy.SKPShotThisTurn) +" schwere Katapulte/Kriegsschiffe die noch nicht geschossen haben.");
 		return false;
 	}

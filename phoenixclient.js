@@ -886,18 +886,19 @@ function checkEvent(num) {
 			drawStuff();
 		} else if (event.type === "shoot") {
 			//console.log("this is a shooting event");
-			let shooter;
-			let lkpRolls = [];
-			let skpRolls = [];
-			for(let i = 0; i < listOfArmies.length; i++){
-				if(listOfArmies[i].armyId == cont.armyId && listOfArmies[i].owner == cont.realm)
-				shooter = listOfArmies[i];
-			}
+			
 			var shootBox = document.getElementById("shootBigBox");
 			show(shootBox);
 
 			var shootButton = document.getElementById("rangedBattleButton");
 			shootButton.onclick = function(){
+				let shooter;
+				let lkpRolls = [];
+				let skpRolls = [];
+				for(let i = 0; i < listOfArmies.length; i++){
+					if(listOfArmies[i].armyId == cont.armyId && listOfArmies[i].ownerTag() == cont.realm)
+					shooter = listOfArmies[i];
+				}
 				for(let i = 0; i < 10; i++){//creating the dice roll array
 					let currentRollLKP = parseInt(document.getElementById("LKP" + i + "Input").value, 10);
 					let currentRollSKP = parseInt(document.getElementById("SKP" + i + "Input").value, 10);
@@ -914,9 +915,9 @@ function checkEvent(num) {
 				}
 				//TODO check target field
 
-
+				//TODO check if numbers entered are equal shooting count
 				fernkampf(lkpRolls, skpRolls, checkCondition(shooter, cont.toX, cont.toY, distance(shooter.x, shooter.y, cont.toX, cont.toY)),
-				 shooter, target, cont.toX, cont.toY, null);// TODO chars
+				 shooter, cont.target, cont.toX, cont.toY, null);// TODO chars
 				hide(shootBox);
 				event.status = 'checked';
 				fillEventList();
