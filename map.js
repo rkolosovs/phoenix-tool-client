@@ -27,12 +27,6 @@ var buildingTypes = {
 	street: 8 //"Straße" in Erkenfara rules
 };
 
-var realmColors = [ //TODO: This should be dynamically fetched form the server
-	{tag: "eos", color: [128, 0, 128]},
-	{tag: "usa", color: [255, 140, 0]},
-	{tag: "vvh", color: [0, 100, 0]}
-];
-
 //hex parts: values used to compute coordinates of a hexes corners 
 //when given upper left point of inscribing rectangle
 var c;

@@ -39,17 +39,17 @@ function drawBorders(ctx, x, y, scale) {
 		var tag = borders[i].tag;
 		var land = borders[i].land;
 		var color;
-		for (var j = 0; j < realmColors.length; j++) { //find the color corresponding to the tag
-			if(realmColors[j].tag === tag){
-				color = realmColors[j].color;
+		for (var j = 0; j < realms.length; j++) { //find the color corresponding to the tag
+			if(realms[j].tag === tag){
+				color = realms[j].color;
 				break;
 			}
 		}
 
 		ctx.lineWidth = (scale/14); //line thickness for borders
-		ctx.strokeStyle = 'rgb('+color[0]+', '+color[1]+', '+color[2]+')'; //set line color
+		ctx.strokeStyle = 'rgb('+color+')'; //set line color
 		ctx.lineCap="round";
-		ctx.fillStyle='rgba('+color[0]+', '+color[1]+', '+color[2]+', 0.3)'; //set fill color	
+		ctx.fillStyle='rgba('+color+', 0.3)'; //set fill color
 		for (var j = 0; j < land.length; j++) { //for each occupied hex
 			var hex = land[j];
 			var point = computePosition(x, y, hex[0], hex[1], scale);
