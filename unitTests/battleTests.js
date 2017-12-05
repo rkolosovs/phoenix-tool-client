@@ -46,9 +46,6 @@ var realms = [];
 module( "Battle" , function() {
 	module( "Results", {
 		before: function() {
-		    realms = [{active: true, color: '000,000,000', homeTurf: 9, name: "Realm 1", tag: 'r01'},
-                {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 2", tag: 'r02'},
-                {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 3", tag: 'r03'}];
 			defenderArmies = [
 				new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1),//0
 				new heer(112, 1000, 5, 0, 0, 0, false, 0, 0, 1),//1
@@ -110,6 +107,11 @@ module( "Battle" , function() {
 			    {'x':9, 'y':8, 'type':5}, {'x':8, 'y':9, 'type':4}, {'x':9, 'y':9, 'type':3}, {'x':10, 'y':9, 'type':3},
 			    {'x':9, 'y':10, 'type':2}, {'x':10, 'y':10, 'type':8}, {'x':10, 'y':11, 'type':2}, {'x':11, 'y':11, 'type':7}];
 		},
+		beforeEach: function() {
+		    realms = [{active: true, color: '000,000,000', homeTurf: 9, name: "Realm 1", tag: 'r01'},
+                {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 2", tag: 'r02'},
+                {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 3", tag: 'r03'}];
+		},
 		after: function() {
 			defenderArmies = [];
 			attackerArmies = [];
@@ -152,16 +154,26 @@ module( "Battle" , function() {
 				t.resultEquals( battle.result(1, 10), {victor: 'tie', attackerLosses: [1205], defenderLosses: [995.85]} );
 			});
 			test( "Combat in attackers home terrain.", function(t) {
-			    //TODO: Write this test once a proper interface for handling realms is decided
-			    t.ok(false, "TODO: Write this test once a proper interface for handling realms is decided");
-//				var battle = new schlacht([attackerArmies[3]], [defenderArmies[3]], [], [], 0, 0);
-//				t.resultEquals( battle.result(1, 10), {victor: 'tie', attackerLosses: [1205], defenderLosses: [995.85]} );
+			    realms[1].homeTurf = 2;
+			    attackerArmies[18].x = 0;
+                attackerArmies[18].y = 0;
+                attackerArmies[18].oldX = -1;
+                attackerArmies[18].oldY = 0;
+                defenderArmies[18].x = 0;
+                defenderArmies[18].y = 0;
+				var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 0, 0);
+				t.resultEquals( battle.result(10, 10), {victor: 'attacker', attackerLosses: [720], defenderLosses: [1250]} );
 			});
 			test( "Combat in defenders home terrain.", function(t) {
-			    //TODO: Write this test once a proper interface for handling realms is decided
-			    t.ok(false, "TODO: Write this test once a proper interface for handling realms is decided");
-//				var battle = new schlacht([attackerArmies[3]], [defenderArmies[3]], [], [], 0, 0);
-//				t.resultEquals( battle.result(1, 10), {victor: 'tie', attackerLosses: [1205], defenderLosses: [995.85]} );
+			    realms[0].homeTurf = 2;
+			    attackerArmies[18].x = 0;
+                attackerArmies[18].y = 0;
+                attackerArmies[18].oldX = -1;
+                attackerArmies[18].oldY = 0;
+                defenderArmies[18].x = 0;
+                defenderArmies[18].y = 0;
+				var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 0, 0);
+				t.resultEquals( battle.result(10, 10), {victor: 'defender', attackerLosses: [1250], defenderLosses: [720]} );
 			});
 		});
 		module( "Naval Battles", function() {

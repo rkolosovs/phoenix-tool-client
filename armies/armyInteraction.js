@@ -508,7 +508,7 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
 				case 4: return 500;
 			}
 		} else { //usual terrain bonus applies
-		    let terrainGPBonus = 0;
+		    var terrainGPBonus = 0;
 
 			if(realms[army.owner - 1].homeTurf === fieldType) { //home terrain bonus applies
 			    terrainGPBonus += 50;

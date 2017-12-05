@@ -34,9 +34,9 @@ var login = "sl";
 
 module( "Movement" , {
     before: function () {
-        realms = [{active: true, color: "000,000,000", homeTurf: 1, name: "Realm 1", tag: 'r01'},
-                {active: true, color: "000,000,000", homeTurf: 1, name: "Realm 2", tag: 'r02'},
-                {active: true, color: "000,000,000", homeTurf: 1, name: "Realm 3", tag: 'r03'}];
+        realms = [{active: true, color: "000,000,000", homeTurf: 9, name: "Realm 1", tag: 'r01'},
+                {active: true, color: "000,000,000", homeTurf: 9, name: "Realm 2", tag: 'r02'},
+                {active: true, color: "000,000,000", homeTurf: 9, name: "Realm 3", tag: 'r03'}];
     },
     beforeEach: function () {
         army = null;
