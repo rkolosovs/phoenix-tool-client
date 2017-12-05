@@ -495,11 +495,9 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
 	}
 
 	this.terrainGP = function (army, attacker) {
-		//TODO: home terrain bonus missing
-		//BLOCKER: The home terrain of a realm isn't saved anywhere
 		var fieldType = this.fieldType;
 		var buildingsOnTheField = buildings.filter((current) => (current.x === posX && current.y === posY && current.type <= 4));
-		if (buildingsOnTheField.length > 0) {
+		if (buildingsOnTheField.length > 0) { //production buildings on field negate usual terrain bonus
 			if (attacker) { return 0; }
 			if (buildingsOnTheField[0].realm !== army.owner) { return 50; }
 			switch (buildingsOnTheField[0].type) {
@@ -509,12 +507,17 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
 				case 3: return 400;
 				case 4: return 500;
 			}
-		} else {
-			//TODO: home terrain bonus goes here
+		} else { //usual terrain bonus applies
+		    let terrainGPBonus = 0;
+
+			if(realms[army.owner - 1].homeTurf === fieldType) { //home terrain bonus applies
+			    terrainGPBonus += 50;
+			}
 			if ((army.armyType() === 1 && (fieldType === 3 || fieldType === 8)) ||
-				(army.armyType() === 2 && (fieldType === 2 || fieldType === 4 || fieldType === 7))) {
-				return 140;
-			} else { return 0; }
+				(army.armyType() === 2 && (fieldType === 2 || fieldType === 4 || fieldType === 7))) { //footmen/rider terrain bonus
+				terrainGPBonus += 140;
+			}
+			return terrainGPBonus;
 		}
 	}
 
