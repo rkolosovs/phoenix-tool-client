@@ -174,7 +174,6 @@ function hide(element) {
 		function toggleShootingMode(){
 			if(shootingModeOn){
 				closeShootBox();
-				selectedFields.pop();
 			} else if (!shootingModeOn){
 				switchModeTo("shootingModeOn");
 				activateShootBox();
@@ -314,6 +313,8 @@ function activateShootBox(){
 function closeShootBox(){
 	document.getElementById("shootBox").style.display = "none";
 	switchModeTo("none");
+	if(selectedFields[1] !== undefined)
+		selectedFields.pop();
 }
 
 function activateSplitbox(){

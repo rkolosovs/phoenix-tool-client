@@ -78,7 +78,7 @@ function getDirectionToNeighbor(fromX, fromY, toX, toY){
                         direction = k;
                     }
                     else{
-                        direction += 0.5;
+                        direction -= 0.5;
                     }
                 }
             }
