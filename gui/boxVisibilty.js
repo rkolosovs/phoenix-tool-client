@@ -174,6 +174,7 @@ function hide(element) {
 		function toggleShootingMode(){
 			if(shootingModeOn){
 				closeShootBox();
+				selectedFields.pop();
 			} else if (!shootingModeOn){
 				switchModeTo("shootingModeOn");
 				activateShootBox();

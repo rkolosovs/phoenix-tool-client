@@ -525,24 +525,22 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
 
 	this.directionalTerrainGP = function (army, attacker, attackingArmies) {
 		let result = 0;
-		let targetField = new showHex(army.x, army.y);
 		if (attacker) {
-			let startingField = new showHex(army.oldX, army.oldY);
-			if (startingField.height() > targetField.height()) { result += 20; }//fighting downhill
-			if (targetField.fieldType() === 7 || targetField.fieldType() === 8) { result += 20; }//attacking into swamp or desert
-			if (startingField.fieldType() === 3) { result += 20; }//attacking out of a forest
-			if (targetField.hasStreet()) { result += 20; }//attacking onto a street
+			if (height(army.oldX, army.oldY) > height(army.x, army.y)) { result += 20; }//fighting downhill
+			if (fieldType(army.x, army.y) === 7 || fieldType(army.x, army.y) === 8) { result += 20; }//attacking into swamp or desert
+			if (fieldType(army.oldX, army.oldY) === 3) { result += 20; }//attacking out of a forest
+			if (hasStreet(army.x, army.y)) { result += 20; }//attacking onto a street
 		} else {
-			let adjacentWalls = targetField.walls();
-			let adjacentRivers = targetField.fluesse();
-			let adjacentBridges = targetField.bridges();
-			let neighbors = targetField.neighbors();
+			let adjacentWalls = walls(army.x, army.y);
+			let adjacentRivers = fluesse(army.x, army.y);
+			let adjacentBridges = bridges(army.x, army.y);
+			let neighbors = neighbors(army.x, army.y);
 			let downhillBonus = false;
 			let wallBonus = false;
 			let bridgeBonus = false;
 			let riverBonus = false;
 			attackingArmies.forEach((attackingArmy) => {
-				if ((new showHex(attackingArmy.oldX, attackingArmy.oldY)).height() < targetField.height()) {
+				if (height(attackingArmy.oldX, attackingArmy.oldY) < height(army.x, army.y)) {
 					downhillBonus = true;
 				}
 				neighbors.forEach((neighbor, index) => {

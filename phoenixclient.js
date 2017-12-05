@@ -187,14 +187,13 @@ function registerLeftClick() {
 		
 	}else {
 		// Feldauswahl
-		var index = -1;
+		let index = -1;
 		var sf = selectedFields[0];
 		if (sf != undefined && (sf[0] === clickedField[0]) && (sf[1] === clickedField[1])) {
 			selectedFields = [];
 		} else {
 			selectedFields[0] = clickedField;
 		}
-		writeFieldInfo();
 		// Armeeauswahl
 		restoreInfoBox();
 		selectedArmyIndex = undefined;

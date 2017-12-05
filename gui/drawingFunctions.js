@@ -25,6 +25,7 @@ function drawStuff() {
 	drawArmySelection(ctx, x, y, scale, selectedArmyIndex);
 	drawPossibleMoves(ctx, x, y, scale, selectedArmyIndex);
 	drawShootingTargets(ctx, x, y, scale, selectedArmyIndex);
+	writeFieldInfo();
 }
 
 function drawMap(ctx, x, y, scale) {
@@ -413,8 +414,8 @@ function drawPossibleMoves(ctx, x, y, scale, selectedArmyIndex){//drawing all po
 function drawFieldSelection(ctx, x, y, scale) {
 	ctx.lineWidth = 5;
 	ctx.strokeStyle="blue";
-	if(selectedFields.length > 0){
-        var pos = computePosition(x, y, selectedFields[0][0], selectedFields[0][1], scale);
+	for( let i = 0; i < selectedFields.length; i++){
+        var pos = computePosition(x, y, selectedFields[i][0], selectedFields[i][1], scale);
         ctx.beginPath();
         ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/2, 0, 2 * Math.PI, false);
         ctx.stroke();
@@ -713,32 +714,35 @@ function drawShootingTargets(ctx, x, y, scale, selectedArmy){
 }
 
 function writeFieldInfo(){
-    var minimapBox = document.getElementById('minimapBox');
-    if(selectedFields[0] === undefined){
+	var minimapBox = document.getElementById('minimapBox');
+	let index = 0;
+	if(shootingModeOn){
+		index = 1;
+	}
+    if(selectedFields[index] === undefined){
         minimapBox.innerHTML = '';
-    } else {
-        var hex = new showHex(selectedFields[0][0], selectedFields[0][1]);
-        var fieldPositionInList = hex.positionInList();
-        var fieldType = '';
-        switch(hex.fieldType()){
-			case 0: fieldType = 'Wasser'; break;
-			case 1: fieldType = 'Tiefsee'; break;
-			case 2: fieldType = 'Tiefland'; break;
-			case 3: fieldType = 'Wald'; break;
-			case 4: fieldType = 'Hochland'; break;
-			case 5: fieldType = 'Bergland'; break;
-			case 6: fieldType = 'Gebirge'; break;
-			case 7: fieldType = 'Wüste'; break;
-			case 8: fieldType = 'Sumpf'; break;
-			default: fieldType = 'Unbekannt'; break;
+	}else {
+        var fieldPositionInList = positionInList(selectedFields[index][0], selectedFields[index][1]);
+        var localfieldType = '';
+        switch(fieldType(selectedFields[index][0], selectedFields[index][1])){
+			case 0: localfieldType = 'Wasser'; break;
+			case 1: localfieldType = 'Tiefsee'; break;
+			case 2: localfieldType = 'Tiefland'; break;
+			case 3: localfieldType = 'Wald'; break;
+			case 4: localfieldType = 'Hochland'; break;
+			case 5: localfieldType = 'Bergland'; break;
+			case 6: localfieldType = 'Gebirge'; break;
+			case 7: localfieldType = 'Wüste'; break;
+			case 8: localfieldType = 'Sumpf'; break;
+			default: localfieldType = 'Unbekannt'; break;
         }
         var fieldOwner = borders.find((value) =>
-            (value.land.some((field) => (field[0] === selectedFields[0][0] && field[1] === selectedFields[0][1])))
+            (value.land.some((field) => (field[0] === selectedFields[index][0] && field[1] === selectedFields[index][1])))
         );
         var fieldOwnerString = (fieldOwner === undefined)?'keiner':fieldOwner.tag;
-        minimapBox.innerHTML = '<p>Feld: ('+hex.x+', '+hex.y+')'+
-            '</p><p>Gelände: '+fieldType+
-            '</p><p>Höhe: '+hex.height()+
+        minimapBox.innerHTML = '<p>Feld: ('+selectedFields[index][0]+', '+selectedFields[index][1]+')'+
+            '</p><p>Gelände: '+localfieldType+
+            '</p><p>Höhe: '+height(selectedFields[index][0], selectedFields[index][1])+
             '</p><p>Besitzer: '+fieldOwnerString+'</p>';
     }
 }

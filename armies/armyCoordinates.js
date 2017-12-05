@@ -735,7 +735,7 @@ function addToMultifield(armyOnMultifield, armyToAdd){
 }
 
 function conquer(army) {
-    if((new showHex(army.x, army.y)).fieldType() >= 2 && army.canConquer()){
+    if(fieldType(army.x, army.y) >= 2 && army.canConquer()){
         var found = false;
         //für i = 0 bis borders länge
         for(var i = 0; i<borders.length; i++){
