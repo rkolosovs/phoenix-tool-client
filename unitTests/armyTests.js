@@ -24,7 +24,6 @@ QUnit.assert.armyEquals = function(actual, expected) {
 };
 
 var listOfArmies = [];
-var realms = [];
 var selectedArmyIndex = 0;
 
 module( "Army" , function() {

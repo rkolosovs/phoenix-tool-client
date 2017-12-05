@@ -18,7 +18,7 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     this.multiArmyField = false;
 
     this.ownerTag = function(){
-        return realms[this.owner-1].tag;
+        return realms[this.owner - 1].tag;
     }
 
     this.isAlive = function(){
@@ -36,14 +36,12 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
         }
         return index;
     }
-    // nur zu Testzwecken 300
-    //TODO: make it the proper value once testing is done
+
     this.remainingMovePoints = 9;
     this.setRemainingMovePoints = function(points){
         this.remainingMovePoints = points;
     }
-    // nur zu Testzwecken 30
-    //TODO: make it the proper value once testing is done
+
     this.remainingHeightPoints = 2;
     this.setRemainingHeightPoints = function(points){
         this.remainingHeightPoints = points;
@@ -343,7 +341,7 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde, coordX, coordY, owner) {
     this.multiArmyField = false;
 
     this.ownerTag = function(){
-        return realms[this.owner-1].tag;
+        return realms[this.owner - 1].tag;
     }
 
     this.isAlive = function(){
@@ -351,14 +349,11 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde, coordX, coordY, owner) {
     	//TODO once characters are a thing, 0 officer armies with a character on the field should also be alive
     }
 
-    // nur zu Testzwecken 300
-    //TODO: make it the proper value once testing is done
     this.remainingMovePoints = 21;
     this.setRemainingMovePoints = function(points){
         this.remainingMovePoints = points;
     }
-    // nur zu Testzwecken 30
-    //TODO: make it the proper value once testing is done
+
     this.remainingHeightPoints = 2;
     this.setRemainingHeightPoints = function(points){
         this.remainingHeightPoints = points;
@@ -481,7 +476,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     this.multiArmyField = false;
 
     this.ownerTag = function(){
-        return realms[this.owner-1].tag;
+        return realms[this.owner - 1].tag;
     }
 
     this.isAlive = function(){
@@ -489,14 +484,11 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     	//TODO once characters are a thing, 0 officer armies with a character on the field should also be alive
     }
 
-    // nur zu Testzwecken 300
-    //TODO: make it the proper value once testing is done
     this.remainingMovePoints = 42;
     this.setRemainingMovePoints = function(points){
         this.remainingMovePoints = points;
     }
-    // nur zu Testzwecken 30
-    //TODO: make it the proper value once testing is done
+
     this.remainingHeightPoints = 2;
     this.setRemainingHeightPoints = function(points){
         this.remainingHeightPoints = points;

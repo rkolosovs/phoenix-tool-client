@@ -27,7 +27,7 @@ function move(army, direction){//TODO needs new names
                 }
                 //for moving off a ship
                 if(tempmove.unload !== undefined && tempmove.unload){
-                    console.log("Armee war in " + army.isLoadedIn + " geladen.");
+//                    console.log("Armee war in " + army.isLoadedIn + " geladen.");
                     for(var i = 0; i < listOfArmies.length; i++){
                         if((listOfArmies[i].owner === army.owner) && listOfArmies[i].armyId === army.isLoadedIn){
                             var placeInList = -1;
@@ -59,7 +59,7 @@ function move(army, direction){//TODO needs new names
                     if((listOfArmies[i].owner === army.owner) && (listOfArmies[i].x === tempmove.tar.x) && (listOfArmies[i].y === tempmove.tar.y) &&
                         (Math.floor(listOfArmies[i].armyId / 100) === 3)){
                             fleetsOnDest.push(i);
-                            console.log("fleets +1");
+//                            console.log("fleets +1");
                     }
                 }
                 // there is none
@@ -70,7 +70,7 @@ function move(army, direction){//TODO needs new names
                     var loadString = listOfArmies[fleetsOnDest[0]].loadArmy(army.indexInListOfArmies());
                     if(loadString === "ok"){
                         army.isLoadedIn = listOfArmies[fleetsOnDest[0]].armyId;
-                        console.log("army in now loaded in " + army.isLoadedIn);
+//                        console.log("army in now loaded in " + army.isLoadedIn);
                         army.oldX = army.x;
                         army.oldY = army.y;
                         army.x = tempmove.tar.x;
@@ -95,12 +95,12 @@ function move(army, direction){//TODO needs new names
                                 foundFleet = i;
                             }
                         }
-                        console.log("chosenFleet: ")
-                        console.log(chosenFleet);
-                        console.log("foundFleet: ")
-                        console.log(foundFleet);
-                        console.log("fleetsOnDest: ")
-                        console.log(fleetsOnDest);
+//                        console.log("chosenFleet: ")
+//                        console.log(chosenFleet);
+//                        console.log("foundFleet: ")
+//                        console.log(foundFleet);
+//                        console.log("fleetsOnDest: ")
+//                        console.log(fleetsOnDest);
                         var found = false;
                         for(var i = 0; i < fleetsOnDest.length; i++){
                             if(fleetsOnDest[i] === foundFleet){
@@ -111,7 +111,7 @@ function move(army, direction){//TODO needs new names
                             var loadString = listOfArmies[foundFleet].loadArmy(army.indexInListOfArmies());
                             if(loadString === "ok"){
                                 army.isLoadedIn = listOfArmies[foundFleet].armyId;
-                                console.log("army in now loaded in " + army.isLoadedIn);
+//                                console.log("army in now loaded in " + army.isLoadedIn);
                                 army.oldX = army.x;
                                 army.oldY = army.y;
                                 army.x = tempmove.tar.x;
