@@ -336,7 +336,7 @@ function godDeleteSelectedArmy(){
 // This is used by the infoChangeBox to manipulate an armies Stats.
 function changeArmyInfo(){
 	for(var i = 0; i<listOfArmies.length; i++){
-		if(i!=selectedArmy && listOfArmies[i].owner == document.getElementById("ownerChangeInput").value &&
+		if(i!=selectedArmyIndex && listOfArmies[i].owner == document.getElementById("ownerChangeInput").value &&
 		listOfArmies[i].armyId == document.getElementById("armyIdChangeInput").value){
 			window.alert("Diese Armee-Id ist in diesem Reich bereits vergeben.");
 		} else {

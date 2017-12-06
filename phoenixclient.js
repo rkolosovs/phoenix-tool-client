@@ -1032,10 +1032,15 @@ function checkEvent(num) {
 			fillEventList();
 			drawStuff();
 		} else if (event.type === "shoot") {
-			//console.log("this is a shooting event");
-			
 			var shootBox = document.getElementById("shootBigBox");
 			show(shootBox);
+
+			document.getElementById("shooterTitleText").innerHTML = cont.armyId + ", " + cont.realm;
+			document.getElementById("attackersLKPText").innerHTML = cont.LKPcount;
+			document.getElementById("attackersSKPText").innerHTML = cont.SKPcount;
+			document.getElementById("targetText").innerHTML = cont.target;
+			document.getElementById("xTargetText").innerHTML = cont.toX;
+			document.getElementById("yTargetText").innerHTML = cont.toY;
 
 			var shootButton = document.getElementById("rangedBattleButton");
 			shootButton.onclick = function(){
@@ -1062,13 +1067,26 @@ function checkEvent(num) {
 				}
 				//TODO check target field
 
-				//TODO check if numbers entered are equal shooting count
-				fernkampf(lkpRolls, skpRolls, checkCondition(shooter, cont.toX, cont.toY, distance(shooter.x, shooter.y, cont.toX, cont.toY)),
-				 shooter, cont.target, cont.toX, cont.toY, null);// TODO chars
-				hide(shootBox);
-				event.status = 'checked';
-				fillEventList();
-				drawStuff();
+				if(lkpRolls.length < cont.LKPcount){
+					window.alert("Sie haben zu wenig Würfe für leichte Katapulte/Kriegsschiffe eingetragenen");
+					return false;
+				}else if(skpRolls.length < cont.SKPcount){
+					window.alert("Sie haben zu wenig Würfe für schwere Katapulte/Kriegsschiffe eingetragenen");
+					return false;
+				}else if(lkpRolls.length > cont.LKPcount){
+					window.alert("Sie haben zu viele Würfe für leichte Katapulte/Kriegsschiffe eingetragenen");
+					return false;
+				}else if(skpRolls.length > cont.SKPcount){
+					window.alert("Sie haben zu viele Würfe für schwere Katapulte/Kriegsschiffe eingetragenen");
+					return false;
+				}else{
+					fernkampf(lkpRolls, skpRolls, checkCondition(shooter, cont.toX, cont.toY, distance(shooter.x, shooter.y, cont.toX, cont.toY)),
+					shooter, cont.target, cont.toX, cont.toY, null);// TODO chars
+					hide(shootBox);
+					event.status = 'checked';
+					fillEventList();
+					drawStuff();
+				}
 			};
 
 			document.getElementById("closeRangedBattleButton").onclick = function(){

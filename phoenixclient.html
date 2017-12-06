@@ -115,14 +115,26 @@
 	<div id="shootBigBox" class="prettyBox invisible">
 		<button id="closeRangedBattleButton" class="prettyButton">X</button>
 		<div id="shootingInfo" class="shootInfoBox"><!--this is for info of the shooting event-->
-			<div id="shooterTitleText" class="shootInfoText">Sch&uuml;tze</div>
-			<div id="attackersLKPText" class="shootInfoText">LKP</div>
-			<div id="attackersSKPText" class="shootInfoText">SKP</div>
-			<div id="targetText" class="shootInfoText">Ziel</div>
-			<div id="xTargetText" class="shootInfoText">X Ziel</div>
-			<div id="yTargetText" class="shootInfoText">Y Ziel</div>
+			<table class="shootingInfoTable">
+			<tr>
+				<th>Sch&uuml;tze</th>
+				<th>Anzahl leichte</th>
+				<th>Anzahl schwere</th>
+				<th>Ziel</th>
+				<th>X</th>
+				<th>Y</th>
+			</tr>
+			<tr>
+				<th><div id="shooterTitleText" class="shootInfoText"></div></th>
+				<th><div id="attackersLKPText" class="shootInfoText"></div></th>
+				<th><div id="attackersSKPText" class="shootInfoText"></div></th>
+				<th><div id="targetText" class="shootInfoText"></div></th>
+				<th><div id="xTargetText" class="shootInfoText"></div></th>
+				<th><div id="yTargetText" class="shootInfoText"></div></th>
+			</tr>
+		</table>
 		</div>
-		<label for="attackLKPBox">Leichte Katapult Wuerfe</label>
+		<label for="attackLKPBox">Leichte Katapult W&uuml;rfe: Anzahl der Ergebnisse</label>
 		<div id="attackLKPBox" class="LKPShootListBox">
 			<label for="LKP0Input">0</label>
 			<input id="LKP0Input" class="shootInput"></input>
@@ -145,7 +157,7 @@
 			<label for="LKP9Input">9</label>
 			<input id="LKP9Input" class="shootInput"></input>
 		</div>
-		<label for="attackSKPBox">Schwere Katapult Wuerfe</label>
+		<label for="attackSKPBox">Schwere Katapult W&uuml;rfe: Anzahl der Ergebnisse</label>
 		<div id="attackSKPBox" class="SKPShootListBox">
 			<label for="SKP0Input">0</label>
 			<input id="SKP0Input" class="shootInput"></input>
