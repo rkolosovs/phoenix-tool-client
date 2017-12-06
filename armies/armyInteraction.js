@@ -655,7 +655,7 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
 // array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null), 
 // schießende Armee, ziel Armee, Charaktere und Zauberer auf dem Zielfeld
 // TODO rüstorte vermindern Schaden
-function fernkampf(dicerollsL, dicerollsS, badConditions, shooter, target, x, y, chars) {
+function fernkampf(dicerollsL, dicerollsS, shooter, target, x, y, chars) {
     var charGpSum = 0;      
     if(chars != null){
         var cLen = chars.length;
@@ -663,6 +663,8 @@ function fernkampf(dicerollsL, dicerollsS, badConditions, shooter, target, x, y,
             charGpSum += chars[i].gp;
         }
 	}
+
+	//checkCondition(shooter, x, y,);
 
 	let damage = shooter.fireLkp(dicerollsL, badConditions) + shooter.fireSkp(dicerollsS, badConditions);
 	let allTargets = [];
@@ -754,6 +756,15 @@ function shoot(){//TODO make exceptions for invalid input
 		}
 	}//TODO get target to shoot at
 	let target = "On Field";
+
+	//TODO check for mixed shooting(reachable by both lkp and skp)
+	if(LKPshooting < 0){
+		let cond = checkCondition(shootingarmy, selectedFields[1][0], selectedFields[1][1], false);
+		if(cond === 'impossible shot'){
+			window.alert("Sie müssen auf ein gemeinsam erreichbares Feld schießen");
+			return false;
+		}
+	}
 
 	preparedEvents.push({
 		type: "shoot", content: {

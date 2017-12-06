@@ -216,8 +216,8 @@ function hide(element) {
 				document.getElementById("count").innerHTML = "Truppen: " + listOfArmies[selectedArmyIndex].count;
 				document.getElementById("leaders").innerHTML = "Heerführer: " + listOfArmies[selectedArmyIndex].leaders;
 				document.getElementById("mounts").innerHTML = "mitgeführte Reittiere: " + listOfArmies[selectedArmyIndex].mounts;
-				document.getElementById("lkp").innerHTML = "leichte Katapulte: " + listOfArmies[selectedArmyIndex].lkp;
-				document.getElementById("skp").innerHTML = "schwere Katapulte: " + listOfArmies[selectedArmyIndex].skp;
+				document.getElementById("lkp").innerHTML = "leichte Katapulte: " + listOfArmies[selectedArmyIndex].lkp + " (" + (listOfArmies[selectedArmyIndex].lkp - listOfArmies[selectedArmyIndex].LKPShotThisTurn) + ")";
+				document.getElementById("skp").innerHTML = "schwere Katapulte: " + listOfArmies[selectedArmyIndex].skp + " (" + (listOfArmies[selectedArmyIndex].skp - listOfArmies[selectedArmyIndex].SKPShotThisTurn) + ")";
 				document.getElementById("movePoints").innerHTML = "Bewegungspunkte: " + listOfArmies[selectedArmyIndex].remainingMovePoints;
 				document.getElementById("heightPoints").innerHTML = "Höhenstufen: " + listOfArmies[selectedArmyIndex].remainingHeightPoints;
 				document.getElementById("splitBtn").style.display = "";

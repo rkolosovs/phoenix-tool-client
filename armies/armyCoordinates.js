@@ -775,38 +775,33 @@ function conquer(army) {
 //to find all fields in a two tile proximity
 function findShootingTargets(army){
 
-    if(army.skp >0){//in a 2 tile range
+    if(army.skp - army.SKPShotThisTurn > 0){//in a 2 tile range
         army.targetList = neighborInRange(army.x, army.y,2);
     }
-    else{//ontile range
+    else if(army.lkp - army.LKPShotThisTurn > 0){//one tile range
         army.targetList = neighborInRange(army.x, army.y,1);
     }
-
-    //adding the range identifier showing the distange to origin
-    for(let i = 0; i < army.targetList.length; i++){
-        army.targetList[i].push(distance(army.x, army.y,army.targetList[i][0], army.targetList[i][1]));
-    }
-    //console.log(army.targetList);
-
     army.targetList = checkAllConditions(army, army.targetList);
-    
 }
 
 function checkAllConditions(army, targetList){
-    
     let templist = targetList.slice();
+    let hasSKP = false;
+    if(army.skp - army.SKPShotThisTurn > 0)
+        hasSKP = true;
     //to find out the conditions and maybe kick out if not shootable
     for(let i = templist.length -1; i >= 0; i--){
-        if(checkCondition(army,templist[i][0], templist[i][1], templist[i][2]) === 'impossible shot'){
+        if(checkCondition(army,templist[i][0], templist[i][1], hasSKP) === 'impossible shot'){
             targetList.splice(i,1);
         }
     }
 
     return targetList;
 }
-function checkCondition(army, x, y, range){//TODO mixed shooting
+function checkCondition(army, x, y, skpShot){//TODO mixed shooting
     let condition = 'impossible shot';
-    if(army.skp > 0){//skp shooting
+    let range = distance(army.x, army.y, x, y);
+    if(skpShot){//skp shooting
         if(range == 1){//for range of 1
             if(height(x, y) - height(army.x, army.y) <= 2){
                 condition = 'high';

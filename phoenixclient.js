@@ -1080,8 +1080,7 @@ function checkEvent(num) {
 					window.alert("Sie haben zu viele Würfe für schwere Katapulte/Kriegsschiffe eingetragenen");
 					return false;
 				}else{
-					fernkampf(lkpRolls, skpRolls, checkCondition(shooter, cont.toX, cont.toY, distance(shooter.x, shooter.y, cont.toX, cont.toY)),
-					shooter, cont.target, cont.toX, cont.toY, null);// TODO chars
+					fernkampf(lkpRolls, skpRolls, shooter, cont.target, cont.toX, cont.toY, null);// TODO chars
 					hide(shootBox);
 					event.status = 'checked';
 					fillEventList();
