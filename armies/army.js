@@ -679,6 +679,10 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
         this.removeLeaders(this.leaders*factor);
         this.removeSkp(this.skp*factor);
         this.removeLkp(this.lkp*factor);
+        this.killTransportedTroops();
+    }
+
+    this.killTransportedTroops = function() {
         if(this.loadedArmies !== undefined && this.loadedArmies.length > 0){
             let loadedArmiesList = listOfArmies.filter((army) =>
                 army.owner === this.owner && this.loadedArmies.some((loadedArmy) => loadedArmy === army.armyId)
@@ -691,6 +695,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
             }
         }
     }
+
     // Schiffe zählen 100x so viel wie Soldaten
     this.canConquer = function(){
         if(this.count >= 10 && this.leaders >= 1){
@@ -708,6 +713,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
         this.removeSoldiers(damageBP * (this.count*10 / saveBp) / 10);
         this.removeLkp(damageBP * (this.lkp*200 / saveBp) / 200);
         this.removeSkp(damageBP * (this.skp*400 / saveBp) / 400);
+        this.killTransportedTroops();
     }
     
     //array der Würfelergebnisse, badConditions("far"/"high"/null)

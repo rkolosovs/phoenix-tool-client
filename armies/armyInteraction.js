@@ -663,10 +663,12 @@ function fernkampf(dicerollsL, dicerollsS, shooter, target, x, y, chars) {
             charGpSum += chars[i].gp;
         }
 	}
+	let lkpCond = checkCondition(shooter, x, y, false);
+	let skpCond = checkCondition(shooter, x, y, true);
 
 	//checkCondition(shooter, x, y,);
 
-	let damage = shooter.fireLkp(dicerollsL, badConditions) + shooter.fireSkp(dicerollsS, badConditions);
+	let damage = shooter.fireLkp(dicerollsL, lkpCond) + shooter.fireSkp(dicerollsS, skpCond);
 	let allTargets = [];
 	let sumAllBP = 0;
 	if(target === "On Field"){
@@ -690,7 +692,7 @@ function fernkampf(dicerollsL, dicerollsS, shooter, target, x, y, chars) {
 		}
 	}
 	//TODO Wall Damage
-	
+	checkArmiesForLiveliness();
 }
 
 //to fill the targetList(fields)
@@ -710,10 +712,10 @@ function shoot(){//TODO make exceptions for invalid input
 	let SKPshooting = parseInt(document.getElementById("shootingSKPInput").value);
 	let shootingarmy = listOfArmies[selectedArmyIndex];
 
-	if(LKPshooting === NaN){
+	if(isNaN(LKPshooting)|| LKPshooting === undefined){
 		LKPshooting = 0;
 	}
-	if(SKPshooting === NaN){
+	if(isNaN(SKPshooting) || SKPshooting === undefined){
 		SKPshooting = 0;
 	}
 	if(shootingarmy.lkp - shootingarmy.LKPShotThisTurn < LKPshooting){//check if remaining Lkp that have not shot yet
@@ -732,7 +734,7 @@ function shoot(){//TODO make exceptions for invalid input
 		window.alert("Die Armee hat nicht genug schwere Katapulte/Kriegsschiffe");
 		return false;
 	}
-	if(LKPshooting == 0 && SKPshooting == 0){
+	if(LKPshooting === 0 && SKPshooting === 0){
 		window.alert("Sie müssen eine Anzahl Katapulte eintragen");
 		return false;
 	}

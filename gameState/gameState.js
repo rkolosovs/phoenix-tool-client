@@ -199,14 +199,14 @@ function sendEventlistInOrderRecursion(index) {
 					}
 				}
 			});
-		}
-	}else if (cPE.type === "shoot") {
+		}else if (cPE.type === "shoot") {
 		$.post({
 			url: url + "/databaseLink/shootevent/",
 			data: {
 				authorization: authenticationToken,
 				content: cPEContent
 			},
+			success: function () { sendEventlistInOrderRecursion(index + 1) },
 			statusCode: {
 				200: function() {
 					console.log("success");
@@ -228,4 +228,5 @@ function sendEventlistInOrderRecursion(index) {
 		pendingEvents = [];
 		preparedEvents = [];
 	}
+}
 }

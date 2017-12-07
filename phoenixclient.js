@@ -1054,12 +1054,12 @@ function checkEvent(num) {
 				for(let i = 0; i < 10; i++){//creating the dice roll array
 					let currentRollLKP = parseInt(document.getElementById("LKP" + i + "Input").value, 10);
 					let currentRollSKP = parseInt(document.getElementById("SKP" + i + "Input").value, 10);
-					if(currentRollLKP !== NaN && currentRollLKP !== 0){
+					if(!isNaN(currentRollLKP) && currentRollLKP !== 0){
 						for(let j = 0; j < currentRollLKP; j++){
 							lkpRolls.push(i);
 						}
 					}
-					if(currentRollSKP !== NaN && currentRollSKP !== 0){
+					if(!isNaN(currentRollSKP) && currentRollSKP !== 0){
 						for(let j = 0; j < currentRollSKP; j++){
 							skpRolls.push(i);
 						}
@@ -1091,7 +1091,6 @@ function checkEvent(num) {
 			document.getElementById("closeRangedBattleButton").onclick = function(){
 				hide(shootBox);
 			};
-			event.status = 'checked';
 			fillEventList();
 			//sendCheckEvent(event.pk, event.type);
 			drawStuff();

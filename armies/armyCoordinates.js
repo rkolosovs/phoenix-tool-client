@@ -787,8 +787,9 @@ function findShootingTargets(army){
 function checkAllConditions(army, targetList){
     let templist = targetList.slice();
     let hasSKP = false;
-    if(army.skp - army.SKPShotThisTurn > 0)
+    if(army.skp - army.SKPShotThisTurn > 0){
         hasSKP = true;
+    }
     //to find out the conditions and maybe kick out if not shootable
     for(let i = templist.length -1; i >= 0; i--){
         if(checkCondition(army,templist[i][0], templist[i][1], hasSKP) === 'impossible shot'){
