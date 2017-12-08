@@ -654,7 +654,6 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
 
 // array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null), 
 // schießende Armee, ziel Armee, Charaktere und Zauberer auf dem Zielfeld
-// TODO rüstorte vermindern Schaden
 function fernkampf(dicerollsL, dicerollsS, shooter, target, x, y, chars) {
     var charGpSum = 0;      
     if(chars != null){
@@ -663,12 +662,8 @@ function fernkampf(dicerollsL, dicerollsS, shooter, target, x, y, chars) {
             charGpSum += chars[i].gp;
         }
 	}
-	let lkpCond = checkCondition(shooter, x, y, false);
-	let skpCond = checkCondition(shooter, x, y, true);
 
-	//checkCondition(shooter, x, y,);
-
-	let damage = shooter.fireLkp(dicerollsL, lkpCond) + shooter.fireSkp(dicerollsS, skpCond);
+	let damage = shooter.fireLkp(dicerollsL, checkCondition(shooter, x, y, false)) + shooter.fireSkp(dicerollsS, checkCondition(shooter, x, y, true));
 	let allTargets = [];
 	let sumAllBP = 0;
 	if(target === "On Field"){
@@ -693,16 +688,21 @@ function fernkampf(dicerollsL, dicerollsS, shooter, target, x, y, chars) {
 	}
 	//TODO Wall Damage
 	checkArmiesForLiveliness();
+
+	//check to see if shooting after moving and stop the army if it moved this turn.
+	if(shooter.remainingMovePoints <= shooter.startingMovepoints){
+		shooter.remainingMovePoints = 0;
+		shooter.possibleMoves = [];
+	}
 }
 
 //to fill the targetList(fields)
 function findPossibleTargetFields(){
-	//shootTODO check if loaded in ship
 	findShootingTargets(listOfArmies[selectedArmyIndex]);
 }
 
 //to actually shoot stuff, with events
-function shoot(){//TODO make exceptions for invalid input
+function shoot(){
 	if(login == 'guest')
 	{
 		window.alert("Zuschauer haben keine Rechte.");
@@ -759,7 +759,7 @@ function shoot(){//TODO make exceptions for invalid input
 	}//TODO get target to shoot at
 	let target = "On Field";
 
-	//TODO check for mixed shooting(reachable by both lkp and skp)
+	//check for mixed shooting(reachable by both lkp and skp)
 	if(LKPshooting < 0){
 		let cond = checkCondition(shootingarmy, selectedFields[1][0], selectedFields[1][1], false);
 		if(cond === 'impossible shot'){
@@ -784,6 +784,12 @@ function shoot(){//TODO make exceptions for invalid input
 
 	shootingarmy.LKPShotThisTurn += LKPshooting;
 	shootingarmy.SKPShotThisTurn += SKPshooting;
+
+	//check to see if shooting after moving and stop the army if it moved this turn.
+	if(shootingarmy.remainingMovePoints <= shootingarmy.startingMovepoints){
+		shootingarmy.remainingMovePoints = 0;
+		shootingarmy.possibleMoves = [];
+	}
 	window.alert("Die Geschosse sind unterwegs.");
 }
 
