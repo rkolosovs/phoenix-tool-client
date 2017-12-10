@@ -286,7 +286,7 @@ div.inline {
     top:15%;
     margin-left:5%;
 	width:90%;
-	height:20%;
+	height:16%;
 	border: 2px solid grey;
 
 }
@@ -294,7 +294,7 @@ div.inline {
 #attackSKPBox {
     width:90%;
     margin-left:5%;
-	height:20%;
+	height:16%;
 	top:40%;
 	border: 2px solid grey;
 
@@ -307,13 +307,14 @@ input.shootInput{
 #shootingInfo{
     margin: 2%;
     width:90%;
-    height:15%;
+    height:20%;
     border: 2px solid grey;
 }
 
-div.shootInfoText{
-    float: left;
-    margin: 1% 2%;
+table.shootingInfoTable{
+    float: center;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 #battleBox {

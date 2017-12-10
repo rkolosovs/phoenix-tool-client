@@ -78,7 +78,7 @@ function getDirectionToNeighbor(fromX, fromY, toX, toY){
                         direction = k;
                     }
                     else{
-                        direction += 0.5;
+                        direction -= 0.5;
                     }
                 }
             }
@@ -133,4 +133,10 @@ function findCommonNeighbor(fromX, fromY, toX, toY){
         }
     }
     return foundCommon;
+}
+
+// does the field has a street on it in any direction
+function hasStreet(x,y) {
+    return buildings.some((elem) => elem.type === 8 && ((elem.firstX === x && elem.firstY === y) ||
+        (elem.secondX === x && elem.secondY === y)));
 }

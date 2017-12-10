@@ -20,10 +20,12 @@ function drawStuff() {
 								// dragged mouse
 
 	drawMap(ctx, x, y, scale);
-	drawSelection(ctx, x, y, scale, selectedFields);
+	drawFieldSelection(ctx, x, y, scale);
 	drawArmies(ctx, x, y, scale, listOfArmies);
+	drawArmySelection(ctx, x, y, scale, selectedArmyIndex);
 	drawPossibleMoves(ctx, x, y, scale, selectedArmyIndex);
 	drawShootingTargets(ctx, x, y, scale, selectedArmyIndex);
+	writeFieldInfo();
 }
 
 function drawMap(ctx, x, y, scale) {
@@ -409,19 +411,26 @@ function drawPossibleMoves(ctx, x, y, scale, selectedArmyIndex){//drawing all po
 	}
 }
 
+function drawFieldSelection(ctx, x, y, scale) {
+	ctx.lineWidth = 5;
+	ctx.strokeStyle="blue";
+	for( let i = 0; i < selectedFields.length; i++){
+        var pos = computePosition(x, y, selectedFields[i][0], selectedFields[i][1], scale);
+        ctx.beginPath();
+        ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/2, 0, 2 * Math.PI, false);
+        ctx.stroke();
+	}
+}
 
-function drawSelection(ctx, x, y, scale, selectedFields) {
+function drawArmySelection(ctx, x, y, scale, armyIndex) {
 	ctx.lineWidth = 5;
 	ctx.strokeStyle="green";
-	for (var i = 0; i < selectedFields.length; i++) {
-		var selectedField = selectedFields[i]; //get selected field
-		var pos = computePosition(x, y, selectedField[0], selectedField[1], scale); //get fields position
-
-		//draw a simple circle; TODO: draw propper selection (if desired)
-		ctx.beginPath();
-      	ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/2, 0, 2 * Math.PI, false);
-      	ctx.stroke();
-	}
+    if(armyIndex !== undefined){
+        var pos = computePosition(x, y, listOfArmies[armyIndex].x, listOfArmies[armyIndex].y, scale);
+        ctx.beginPath();
+        ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/2.2, 0, 2 * Math.PI, false);
+        ctx.stroke();
+    }
 }
 
 function drawArmies(ctx, x, y, scale, armies) {
@@ -448,7 +457,7 @@ function drawArmies(ctx, x, y, scale, armies) {
 		//ctx.fillText(armyData.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
 
 		//check if its is on a multifield. if it is ignore
-		if(armyData.multiArmyField == false){
+		if(!armyData.multiArmyField){
 			// armies == 1, riders == 2, boats == 3
 			if(Math.floor(armyData.armyId/100) == 1){
 				ctx.drawImage(troopsImg, pos[0], pos[1], (scale*SIN60), scale); 
@@ -555,10 +564,9 @@ function writeTurnNumber() {
 					saveFactionsTerritories();
 					saveArmies();
 				} else { //Players and SL during player's turn send events
-					sendAllPreparedEvents();
+					console.log(2);
+					sendEventlistInOrder();
 				}
-				pendingEvents = [];
-				preparedEvents = [];
 				sendNextTurn();
 			}
 		});
@@ -594,7 +602,8 @@ function writeTurnNumber() {
 			} else {
 				if (confirm("Do you want to save the events issued so far without ending the turn?" +
 				" Once saved the progress can only be reverted by the SL.")){
-					sendAllPreparedEvents();
+					console.log(3);
+					sendEventlistInOrder();
 				}
 			}
 		});
@@ -702,4 +711,38 @@ function drawShootingTargets(ctx, x, y, scale, selectedArmy){
 			ctx.stroke();
 		}
 	}
+}
+
+function writeFieldInfo(){
+	var minimapBox = document.getElementById('minimapBox');
+	let index = 0;
+	if(shootingModeOn){
+		index = 1;
+	}
+    if(selectedFields[index] === undefined){
+        minimapBox.innerHTML = '';
+	}else {
+        var fieldPositionInList = positionInList(selectedFields[index][0], selectedFields[index][1]);
+        var localfieldType = '';
+        switch(fieldType(selectedFields[index][0], selectedFields[index][1])){
+			case 0: localfieldType = 'Wasser'; break;
+			case 1: localfieldType = 'Tiefsee'; break;
+			case 2: localfieldType = 'Tiefland'; break;
+			case 3: localfieldType = 'Wald'; break;
+			case 4: localfieldType = 'Hochland'; break;
+			case 5: localfieldType = 'Bergland'; break;
+			case 6: localfieldType = 'Gebirge'; break;
+			case 7: localfieldType = 'Wüste'; break;
+			case 8: localfieldType = 'Sumpf'; break;
+			default: localfieldType = 'Unbekannt'; break;
+        }
+        var fieldOwner = borders.find((value) =>
+            (value.land.some((field) => (field[0] === selectedFields[index][0] && field[1] === selectedFields[index][1])))
+        );
+        var fieldOwnerString = (fieldOwner === undefined)?'keiner':fieldOwner.tag;
+        minimapBox.innerHTML = '<p>Feld: ('+selectedFields[index][0]+', '+selectedFields[index][1]+')'+
+            '</p><p>Gelände: '+localfieldType+
+            '</p><p>Höhe: '+height(selectedFields[index][0], selectedFields[index][1])+
+            '</p><p>Besitzer: '+fieldOwnerString+'</p>';
+    }
 }

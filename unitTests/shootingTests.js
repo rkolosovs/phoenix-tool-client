@@ -15,15 +15,31 @@ module( "Shooting" , function() {
 			buildings = [];
 			fieldTypes = [];
 		}}, function() {
-		module( "LKP shooting", function() {
-			test( "Minimal armies, defenders win by dice roll.", function(t) {
-				
-            });
+		test( "Light catas shooting.", function(t) {
         });
-        module( "SKP shooting", function() {
-			test( "Minimal armies, defenders win by dice roll.", function(t) {
-				
-            });
+        test( "Heavy catas shooting.", function(t) {
         });
-    });
+        test( "Mixed catas shooting.", function(t) {
+        });
+        test( "Light warships shooting.", function(t) {
+        });
+        test( "Heavy warships shooting.", function(t) {
+        });
+        test( "Mixed warships shooting.", function(t) {
+        });
+	});
+	module( "Conditions", function() {
+		test( "Light catas conditions.", function(t) {
+        });
+        test( "Heavy catas conditions.", function(t) {
+        });
+        test( "Mixed catas conditions.", function(t) {
+        });
+        test( "Light warships conditions.", function(t) {
+        });
+        test( "Heavy warships conditions.", function(t) {
+        });
+        test( "Mixed warships conditions.", function(t) {
+        });
+	});
 });
