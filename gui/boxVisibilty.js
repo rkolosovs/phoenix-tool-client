@@ -308,6 +308,7 @@ function activateUnMountBox(){
 function activateShootBox(){
 	document.getElementById("shootBox").style.display = "";
 	findPossibleTargetFields();
+	drawStuff();
 }
 
 function closeShootBox(){
@@ -315,6 +316,7 @@ function closeShootBox(){
 	switchModeTo("none");
 	if(selectedFields[1] !== undefined)
 		selectedFields.pop();
+	drawStuff();
 }
 
 function activateSplitbox(){
