@@ -541,10 +541,10 @@ function determineEventStatus() {
 					canShoot = false;
 				}
 
-				if (armyExistsAndIsLocated(content.realm, content.armyId, content.fromX, content.fromY) && canShoot) {
+				if (armyExistsAndIsLocated(realmIdToshort(content.realm), content.armyId, content.fromX, content.fromY) && canShoot) {
 					pendingEvents[i].status = 'available';
 				} else if (armyExists(content.realm, content.armyId) && 
-						possibleMoveOfArmyTo(content.realm, content.armyId, content.fromX, content.fromY)) {
+						possibleMoveOfArmyTo(realmIdToshort(content.realm), content.armyId, content.fromX, content.fromY)) {
 					pendingEvents[i].status = 'withheld';
 				} else {
 					pendingEvents[i].status = 'impossible';
@@ -781,7 +781,7 @@ function makeEventListItem(event, i) {
 		eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " mounts " + cont.troops + " troops, and "
 			+ cont.leaders + " leaders to " + cont.newArmy + " in (" + cont.x + "," + cont.y + ").</div>";
 	}else if(event.type === "shoot"){
-		eli.innerHTML = "<div>"+cont.realm+"'s army "+cont.armyId+" shoots a Field ("+cont.toX+", "+cont.toY+") with "
+		eli.innerHTML = "<div>"+ realmIdToshort(cont.realm) +"'s army "+cont.armyId+" shoots a Field ("+cont.toX+", "+cont.toY+") with "
 		 +cont.LKPcount + " LKP and " + cont.SKPcount + " SKP.</div>";
 	}
 	var deleteButton = document.createElement("BUTTON");
@@ -1046,7 +1046,7 @@ function checkEvent(num) {
 			var shootBox = document.getElementById("shootBigBox");
 			show(shootBox);
 
-			document.getElementById("shooterTitleText").innerHTML = cont.armyId + ", " + cont.realm;
+			document.getElementById("shooterTitleText").innerHTML = cont.armyId + ", " + realmIdToshort(cont.realm);
 			document.getElementById("attackersLKPText").innerHTML = cont.LKPcount;
 			document.getElementById("attackersSKPText").innerHTML = cont.SKPcount;
 			document.getElementById("targetText").innerHTML = cont.target;
@@ -1059,7 +1059,7 @@ function checkEvent(num) {
 				let lkpRolls = [];
 				let skpRolls = [];
 				for(let i = 0; i < listOfArmies.length; i++){
-					if(listOfArmies[i].armyId == cont.armyId && listOfArmies[i].ownerTag() == cont.realm)
+					if(listOfArmies[i].armyId === cont.armyId && listOfArmies[i].owner === cont.realm)
 					shooter = listOfArmies[i];
 				}
 				for(let i = 0; i < 10; i++){//creating the dice roll array
