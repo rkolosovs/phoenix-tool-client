@@ -531,7 +531,7 @@ function determineEventStatus() {
 					 pendingEvents[i].status = 'impossible';
 				 }
 			}else if(event.type === 'shoot'){
-				let shooter = listOfArmies[findArmyPlaceInList(content.fromArmy, content.realm)];
+				let shooter = listOfArmies[findArmyPlaceInList(content.armyId, content.realm)];
 				let canShoot = true;
 
 				if(shooter.lkp - shooter.LKPShotThisTurn < content.LKPcount){//check if remaining Lkp that have not shot yet
