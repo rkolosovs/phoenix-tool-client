@@ -810,12 +810,18 @@ function checkCondition(army, x, y, skpShot){//TODO mixed shooting
             if(height(x, y) - height(army.x, army.y) <= 1){
                 condition = 'short';
             }
+            if(height(x, y) - height(army.x, army.y) === 1 && findWallInWay(army.x, army.y, x, y).length > 0){
+                condition = 'high';
+            }
         }else if(range == 2){//for range of 2
             if(height(x, y) - height(army.x, army.y) <= 1){
                 condition = 'farAndUp';
             }
             if(height(x, y) - height(army.x, army.y) < 1){
                 condition = 'far';
+            }
+            if(height(x, y) - height(army.x, army.y) === 0 && findWallInWay(army.x, army.y, x, y).length > 0){
+                condition = 'farAndUp';
             }
             //if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
             let commonNeig = findCommonNeighbor(army.x, army.y, x, y);

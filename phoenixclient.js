@@ -534,10 +534,10 @@ function determineEventStatus() {
 				let shooter = listOfArmies[findArmyPlaceInList(content.fromArmy, content.realm)];
 				let canShoot = true;
 
-				if(shooter.lkp - shooter.LKPShotThisTurn < cont.LKPcount){//check if remaining Lkp that have not shot yet
+				if(shooter.lkp - shooter.LKPShotThisTurn < content.LKPcount){//check if remaining Lkp that have not shot yet
 					canShoot = false;
 				}
-				if(shooter.skp - shooter.SKPShotThisTurn < cont.SKPcount){//check if remaining Lkp that have not shot yet
+				if(shooter.skp - shooter.SKPShotThisTurn < content.SKPcount){//check if remaining Lkp that have not shot yet
 					canShoot = false;
 				}
 
