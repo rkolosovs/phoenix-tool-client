@@ -531,7 +531,17 @@ function determineEventStatus() {
 					 pendingEvents[i].status = 'impossible';
 				 }
 			}else if(event.type === 'shoot'){
-				if (armyExistsAndIsLocated(content.realm, content.armyId, content.fromX, content.fromY)) {
+				let shooter = listOfArmies[findArmyPlaceInList(content.fromArmy, content.realm)];
+				let canShoot = true;
+
+				if(shooter.lkp - shooter.LKPShotThisTurn < cont.LKPcount){//check if remaining Lkp that have not shot yet
+					canShoot = false;
+				}
+				if(shooter.skp - shooter.SKPShotThisTurn < cont.SKPcount){//check if remaining Lkp that have not shot yet
+					canShoot = false;
+				}
+
+				if (armyExistsAndIsLocated(content.realm, content.armyId, content.fromX, content.fromY) && canShoot) {
 					pendingEvents[i].status = 'available';
 				} else if (armyExists(content.realm, content.armyId) && 
 						possibleMoveOfArmyTo(content.realm, content.armyId, content.fromX, content.fromY)) {
@@ -771,7 +781,8 @@ function makeEventListItem(event, i) {
 		eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " mounts " + cont.troops + " troops, and "
 			+ cont.leaders + " leaders to " + cont.newArmy + " in (" + cont.x + "," + cont.y + ").</div>";
 	}else if(event.type === "shoot"){
-		eli.innerHTML = "<div>"+cont.realm+"'s army "+cont.armyId+" shoots a Field ("+cont.toX+", "+cont.toY+").</div>";
+		eli.innerHTML = "<div>"+cont.realm+"'s army "+cont.armyId+" shoots a Field ("+cont.toX+", "+cont.toY+") with "
+		 +cont.LKPcount + " LKP and " + cont.SKPcount + " SKP.</div>";
 	}
 	var deleteButton = document.createElement("BUTTON");
 	deleteButton.id = "delBtn" + i;

@@ -689,6 +689,9 @@ function fernkampf(dicerollsL, dicerollsS, shooter, target, x, y, chars) {
 	//TODO Wall Damage
 	checkArmiesForLiveliness();
 
+	shooter.LKPShotThisTurn += dicerollsL.length;
+	shooter.SKPShotThisTurn += dicerollsS.length;
+
 	//check to see if shooting after moving and stop the army if it moved this turn.
 	if(shooter.remainingMovePoints <= shooter.startingMovepoints){
 		shooter.remainingMovePoints = 0;
@@ -790,6 +793,7 @@ function shoot(){
 		shootingarmy.remainingMovePoints = 0;
 		shootingarmy.possibleMoves = [];
 	}
+	updateInfoBox();
 	window.alert("Die Geschosse sind unterwegs.");
 }
 
