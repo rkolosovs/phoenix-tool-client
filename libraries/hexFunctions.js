@@ -20,9 +20,9 @@ function fluesse(x,y) {
     var surroundings = neighbors(x,y);
     for (var i = 0; i < rivers.length; i++) {
         var river = rivers[i];
-        if((x === river[0][1] && y === river[0][2]) || (x === river[1][1] && y === river[1][2])){
+        if((x === river[0][0] && y === river[0][1]) || (x === river[1][0] && y === river[1][1])){
             for(var j = 0; j < surroundings.length; j++){
-                if((surroundings[j][1] === river[0][1] && surroundings[j][2] === river[0][2]) || (surroundings[j][1] === river[1][1] && surroundings[j][2] === river[1][2])){
+                if((surroundings[j][0] === river[0][0] && surroundings[j][1] === river[0][1]) || (surroundings[j][0] === river[1][0] && surroundings[j][1] === river[1][1])){
                     flussAcc[j] = 1;
                 }
             }
