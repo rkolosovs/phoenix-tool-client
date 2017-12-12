@@ -155,8 +155,8 @@ function moveToList(army, direction) {
     var targetY = neighborCoords[direction][1];
     var directionString = '';
     var reverseDirection = '';
-    var neighborsOfNeighbors = neighbors(targetX, targetY).map((neighbor) => neighbors(neighbor[0], neighbor[1]).
-        reduce((total, current) => (total.concat(current)), []));
+    var neighborsOfNeighbors = neighbors(targetX, targetY).map((neighbor) => neighbors(neighbor[0], neighbor[1])).
+        reduce((total, current) => (total.concat(current)), []);
     switch(direction){
         case 0: directionString = 'nw'; reverseDirection = 'se'; break;
         case 1: directionString = 'ne'; reverseDirection = 'sw'; break;
