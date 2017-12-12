@@ -7,7 +7,7 @@
 // returns the fields neighbors in the usual order
 function neighbors(x,y){
     //reihenfolge NW,NO,O,SO,SW,W
-    if(y % 2 == 0){
+    if(y % 2 === 0){
         return [[x,y-1], [x+1,y-1], [x+1,y], [x+1,y+1], [x,y+1], [x-1,y]];
     } else {
         return [[x-1,y-1], [x,y-1], [x+1,y], [x,y+1], [x-1,y+1], [x-1,y]];
@@ -20,9 +20,9 @@ function fluesse(x,y) {
     var surroundings = neighbors(x,y);
     for (var i = 0; i < rivers.length; i++) {
         var river = rivers[i];
-        if((x == river[0][1] && y == river[0][2]) || (x == river[1][1] && y == river[1][2])){
+        if((x === river[0][1] && y === river[0][2]) || (x === river[1][1] && y === river[1][2])){
             for(var j = 0; j < surroundings.length; j++){
-                if((surroundings[j][1] == river[0][1] && surroundings[j][2] == river[0][2]) || (surroundings[j][1] == river[1][1] && surroundings[j][2] == river[1][2])){
+                if((surroundings[j][1] === river[0][1] && surroundings[j][2] === river[0][2]) || (surroundings[j][1] === river[1][1] && surroundings[j][2] === river[1][2])){
                     flussAcc[j] = 1;
                 }
             }
@@ -33,13 +33,13 @@ function fluesse(x,y) {
 // where in the field list is this field
 function positionInList(x,y){
     for (var i = 0; i < fields.length; i++) {
-        if((fields[i].x == x) && (fields[i].y == y)){return i;}
+        if((fields[i].x === x) && (fields[i].y === y)){return i;}
     }
 }
 // what type is this field
 function fieldType(x,y){
     for (var i = 0; i < fields.length; i++) {
-        if((fields[i].x == x) && (fields[i].y == y)){return fields[i].type;}
+        if((fields[i].x === x) && (fields[i].y === y)){return fields[i].type;}
     }
 }
 // what height is this field
@@ -63,7 +63,7 @@ function getDirectionToNeighbor(fromX, fromY, toX, toY){
     if(distance(fromX, fromY, toX, toY) === 1){
         let possibleDir = neighbors(fromX, fromY);
         for(let i = 0; i < possibleDir.length; i++){
-            if(possibleDir[i][0] == toX && possibleDir[i][1] == toY)
+            if(possibleDir[i][0] == toX && possibleDir[i][1] === toY)
                 return i;
         }
     } else if(distance(fromX, fromY, toX, toY) === 2){
@@ -73,7 +73,7 @@ function getDirectionToNeighbor(fromX, fromY, toX, toY){
         let direction;
         for(let j = 0; j < targetNeighbors.length; j++){
             for(let k = 0; k < originNeighbors.length; k++){
-                if(targetNeighbors[j][0] == originNeighbors[k][0] && targetNeighbors[j][1] == originNeighbors[k][1]){
+                if(targetNeighbors[j][0] === originNeighbors[k][0] && targetNeighbors[j][1] === originNeighbors[k][1]){
                     if(foundNeigh === false){
                         foundNeigh = true;
                         direction = k;

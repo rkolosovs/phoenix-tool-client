@@ -714,13 +714,6 @@ function fillEventList() {
 	}
 }
 
-function realmIdToshort(id) {
-	switch (id) {
-		case 1: return "usa";
-		case 2: return "eos";
-		case 3: return "vvh";
-	}
-}
 
 function makeEventListItem(event, i) {
 	var eli = document.createElement("DIV");
