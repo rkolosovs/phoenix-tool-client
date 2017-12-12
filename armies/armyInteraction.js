@@ -537,7 +537,7 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
 			let adjacentWalls = walls(army.x, army.y);
 			let adjacentRivers = fluesse(army.x, army.y);
 			let adjacentBridges = bridges(army.x, army.y);
-			let neighbors = neighbors(army.x, army.y);
+			let neighbor = neighbors(army.x, army.y);
 			let downhillBonus = false;
 			let wallBonus = false;
 			let bridgeBonus = false;
@@ -546,7 +546,7 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
 				if (height(attackingArmy.oldX, attackingArmy.oldY) < height(army.x, army.y)) {
 					downhillBonus = true;
 				}
-				neighbors.forEach((neighbor, index) => {
+				neighbor.forEach((neighbor, index) => {
 					if (neighbor[0] === attackingArmy.oldX && neighbor[1] === attackingArmy.oldY) {
 						if (adjacentWalls[index] === 1) { wallBonus = true; }
 						if (adjacentRivers[index] === 1) {

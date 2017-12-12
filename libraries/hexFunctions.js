@@ -4,15 +4,25 @@
 //     //TODO: GroßhexKleinhex Zahl bestimmen.
 // }
 
+// returns the fields neighbors in the usual order
+function neighbors(x,y){
+    //reihenfolge NW,NO,O,SO,SW,W
+    if(y % 2 == 0){
+        return [[x,y-1], [x+1,y-1], [x+1,y], [x+1,y+1], [x,y+1], [x-1,y]];
+    } else {
+        return [[x-1,y-1], [x,y-1], [x+1,y], [x,y+1], [x-1,y+1], [x-1,y]];
+    }
+}
+
 // reihenfolge NW,NO,O,SO,SW,W, 0 heißt kein fluss, 1 heißt fluss
 function fluesse(x,y) {
     var flussAcc = [0,0,0,0,0,0];
-    var surroundings = this.neighbors(x,y);
+    var surroundings = neighbors(x,y);
     for (var i = 0; i < rivers.length; i++) {
         var river = rivers[i];
-        if((x == river[1][1] && y == river[1][2]) || (x == river[2][1] && y == river[2][2])){
+        if((x == river[0][1] && y == river[0][2]) || (x == river[1][1] && y == river[1][2])){
             for(var j = 0; j < surroundings.length; j++){
-                if((surroundings[j][1] == river[1][1] && surroundings[j][2] == river[1][2]) || (surroundings[j][1] == river[2][1] && surroundings[j][2] == river[2][2])){
+                if((surroundings[j][1] == river[0][1] && surroundings[j][2] == river[0][2]) || (surroundings[j][1] == river[1][1] && surroundings[j][2] == river[1][2])){
                     flussAcc[j] = 1;
                 }
             }
@@ -44,15 +54,6 @@ function height(x,y){
         case 4: return 2;
         case 5: return 3;
         case 6: return 4;
-    }
-}
-// returns the fields neighbors in the usual order
-function neighbors(x,y){
-    //reihenfolge NW,NO,O,SO,SW,W
-    if(y % 2 == 0){
-        return [[x,y-1], [x+1,y-1], [x+1,y], [x+1,y+1], [x,y+1], [x-1,y]];
-    } else {
-        return [[x-1,y-1], [x,y-1], [x+1,y], [x,y+1], [x-1,y+1], [x-1,y]];
     }
 }
 
@@ -109,7 +110,7 @@ function neighborInRange(x,y,range){
     let neighbors = [];
     for(var i = x - range; i <= x + range; i++){
         for(var j = y - range; j <= y + range; j++){
-            let dist = this.distance(x,y,i,j);
+            let dist = distance(x,y,i,j);
             if(i != x || j != y){
                 if(dist <= range){
                     neighbors.push([i,j]);
@@ -140,3 +141,54 @@ function hasStreet(x,y) {
     return buildings.some((elem) => elem.type === 8 && ((elem.firstX === x && elem.firstY === y) ||
         (elem.secondX === x && elem.secondY === y)));
 }
+
+// in which directions does this field have walls (order as above, only walls build on this field)
+function walls(x,y) {
+    let result = [0,0,0,0,0,0];
+    let walls = buildings.filter((elem) => (elem.type === 5 && elem.x === x && elem.y === y));
+    walls.forEach((wall) => {
+        switch(wall.direction){
+            case "nw": result[0] = 1; break;
+            case "ne": result[1] = 1; break;
+            case "e": result[2] = 1; break;
+            case "se": result[3] = 1; break;
+            case "se": result[4] = 1; break;
+            case "w": result[5] = 1; break;
+        }
+    });
+    return result;
+}
+// in which directions does this field have bridges (order as above)
+function bridges(x,y) {
+    let result = [0,0,0,0,0,0];
+    let neighbor = neighbors(x,y);
+    let bridges = buildings.forEach((elem) => {
+        if(elem.type === 7){//bridge type
+            if(elem.x === x && elem.y === y) {//bridge on this field
+                switch(elem.direction){//put into result
+                    case "nw": result[0] = 1; break;
+                    case "ne": result[1] = 1; break;
+                    case "e": result[2] = 1; break;
+                    case "se": result[3] = 1; break;
+                    case "se": result[4] = 1; break;
+                    case "w": result[5] = 1; break;
+                }
+            } else {
+                neighbor.forEach((val, index) => {
+                    if(val[0] === elem.x && val[1] === elem.y){//bridge on the neighboring field
+                        switch(index){//pointing the right way
+                            case 0: elem.direction === "se"?result[0] = 1:0; break;
+                            case 1: elem.direction === "sw"?result[1] = 1:0; break;
+                            case 2: elem.direction === "w"?result[2] = 1:0; break;
+                            case 3: elem.direction === "nw"?result[3] = 1:0; break;
+                            case 4: elem.direction === "ne"?result[4] = 1:0; break;
+                            case 5: elem.direction === "e"?result[5] = 1:0; break;
+                        }
+                    }
+                });
+            }
+        }
+    });
+    return result;
+}
+// does the field has a street on it in any direction
