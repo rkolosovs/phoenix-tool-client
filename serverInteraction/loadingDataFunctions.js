@@ -40,6 +40,7 @@ function loadMap() {
 			loginZeit = Date.now();
 			console.log("loginzeit: " + loginZeit);
 			loadCSRFToken();
+			loadRealmData();
 			loadArmies();
 			loadFieldData();
 			loadRiverData();
@@ -108,6 +109,12 @@ function loadFieldData() {
 		fields = json;
 		resizeCanvas();
 	});
+}
+
+function loadRealmData() {
+    $.getJSON(url + "/databaseLink/getrealms/", function(json){
+        realms = json;
+    });
 }
 
 function loadRiverData() {

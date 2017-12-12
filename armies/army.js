@@ -21,14 +21,8 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     this.LKPShotThisTurn = 0;
     this.SKPShotThisTurn = 0;
 
-    // returns the tag of the owner, not full operational
-    // TODO do it right
     this.ownerTag = function(){
-        switch(this.owner){
-            case 1: return "usa";
-            case 3: return "vvh";
-            case 2: return "eos";
-        }
+        return realms[this.owner - 1].tag;
     }
 
     this.isAlive = function(){
@@ -46,14 +40,12 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
         }
         return index;
     }
-    // nur zu Testzwecken 300
-    //TODO: make it the proper value once testing is done
+
     this.remainingMovePoints = 9;
     this.setRemainingMovePoints = function(points){
         this.remainingMovePoints = points;
     }
-    // nur zu Testzwecken 30
-    //TODO: make it the proper value once testing is done
+
     this.remainingHeightPoints = 2;
     this.setRemainingHeightPoints = function(points){
         this.remainingHeightPoints = points;
@@ -153,8 +145,8 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     }
     // remove an amount of basic soldiers an equal proportion of officers, transported mounts and catapults
     this.decimate = function(amount){
-        console.log("troops lost: "); 
-        console.log(amount);
+//        console.log("troops lost: ");
+//        console.log(amount);
         var factor = amount/ this.count;
         this.removeSoldiers(amount);
         this.removeLeaders(this.leaders*factor);
@@ -354,14 +346,8 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde, coordX, coordY, owner) {
     this.possibleMoves = [];
     this.multiArmyField = false;
 
-    // returns the tag of the owner, not full operational
-    // TODO do it right
     this.ownerTag = function(){
-        switch(this.owner){
-            case 1: return "usa";
-            case 3: return "vvh";
-            case 2: return "eos";
-        }
+        return realms[this.owner - 1].tag;
     }
 
     this.isAlive = function(){
@@ -369,14 +355,11 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde, coordX, coordY, owner) {
     	//TODO once characters are a thing, 0 officer armies with a character on the field should also be alive
     }
 
-    // nur zu Testzwecken 300
-    //TODO: make it the proper value once testing is done
     this.remainingMovePoints = 21;
     this.setRemainingMovePoints = function(points){
         this.remainingMovePoints = points;
     }
-    // nur zu Testzwecken 30
-    //TODO: make it the proper value once testing is done
+
     this.remainingHeightPoints = 2;
     this.setRemainingHeightPoints = function(points){
         this.remainingHeightPoints = points;
@@ -501,14 +484,8 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     this.LKPShotThisTurn = 0;
     this.SKPShotThisTurn = 0;
 
-    // returns the tag of the owner, not full operational
-    // TODO do it right
     this.ownerTag = function(){
-        switch(this.owner){
-            case 1: return "usa";
-            case 3: return "vvh";
-            case 2: return "eos";
-        }
+        return realms[this.owner - 1].tag;
     }
 
     this.isAlive = function(){
@@ -516,14 +493,11 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     	//TODO once characters are a thing, 0 officer armies with a character on the field should also be alive
     }
 
-    // nur zu Testzwecken 300
-    //TODO: make it the proper value once testing is done
     this.remainingMovePoints = 42;
     this.setRemainingMovePoints = function(points){
         this.remainingMovePoints = points;
     }
-    // nur zu Testzwecken 30
-    //TODO: make it the proper value once testing is done
+
     this.remainingHeightPoints = 2;
     this.setRemainingHeightPoints = function(points){
         this.remainingHeightPoints = points;
@@ -539,7 +513,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     }
     // berechnet von armeen belegten platz
     this.spaceLoaded = function(){
-        console.log(this.loadedArmies);
+//        console.log(this.loadedArmies);
         if(this.loadedArmies === undefined || this.loadedArmies === []){
             return 0;
         }
@@ -551,23 +525,23 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
                 }
             }
         }
-        console.log("loaded armies RP sum is: " + loaded);
+//        console.log("loaded armies RP sum is: " + loaded);
         return loaded;
     }
     // berechnet gerade freien platz
     this.currentCapacity = function(){
         var spaceLoaded = this.spaceLoaded();
         var maxCapacity = this.maxCapacity();
-        console.log("current Capacity is: " + (maxCapacity - spaceLoaded));
+//        console.log("current Capacity is: " + (maxCapacity - spaceLoaded));
         return(maxCapacity - spaceLoaded);
     }
     //lädt armee ein
     this.loadArmy = function(index){
-        console.log("loadArmy");
+//        console.log("loadArmy");
         if(listOfArmies[index].raumpunkte() <= this.currentCapacity()){
             this.loadedArmies.push(listOfArmies[index].armyId);
             listOfArmies[index].isLoadedIn = true;
-            console.log("Army " + listOfArmies[index].armyId +  " successfully loaded.");
+//            console.log("Army " + listOfArmies[index].armyId +  " successfully loaded.");
             this.currentCapacity();
             return "ok";
         } else {
@@ -590,9 +564,9 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     }
     //prüft ob die armee an Stelle index in der listOfArmies eingeladen werden kann
     this.isLoadable = function(index){
-        console.log(index);
+//        console.log(index);
         if(listOfArmies[index].raumpunkte() <= this.currentCapacity()){
-            console.log("Army " + listOfArmies[index].armyId +  " is loadable.");
+//            console.log("Army " + listOfArmies[index].armyId +  " is loadable.");
             this.currentCapacity();
             return "ok";
         } else {

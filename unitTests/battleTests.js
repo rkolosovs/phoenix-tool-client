@@ -41,6 +41,7 @@ var borders = [];
 var buildings = [];
 var fields = [];
 var rivers = [];
+var realms = [];
 
 
 module( "Battle" , function() {
@@ -88,7 +89,7 @@ module( "Battle" , function() {
 				new seeHeer(328, 100, 100, 0, 0, true, 0, 0, 2),//17
 				new heer(199, 1000, 10, 0, 0, 0, false, 0, 0, 2)//18
 			];
-			borders = [{'tag': 'usa', 'land': [[0, 0], [1, 1], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 8],
+			borders = [{'tag': 'r01', 'land': [[0, 0], [1, 1], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 8],
 			    [9, 9], [10, 10], [11, 11]]}];
 			rivers = [ [[8,8],[8,7]], [[8,8],[9,7]] ];
 			buildings = [{'realm': 1, 'name': "", 'type': 0, 'x': 3, 'y': 3, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
@@ -107,12 +108,18 @@ module( "Battle" , function() {
 			    {'x':9, 'y':8, 'type':5}, {'x':8, 'y':9, 'type':4}, {'x':9, 'y':9, 'type':3}, {'x':10, 'y':9, 'type':3},
 			    {'x':9, 'y':10, 'type':2}, {'x':10, 'y':10, 'type':8}, {'x':10, 'y':11, 'type':2}, {'x':11, 'y':11, 'type':7}];
 		},
+		beforeEach: function() {
+		    realms = [{active: true, color: '000,000,000', homeTurf: 9, name: "Realm 1", tag: 'r01'},
+                {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 2", tag: 'r02'},
+                {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 3", tag: 'r03'}];
+		},
 		after: function() {
 			defenderArmies = [];
 			attackerArmies = [];
 			borders = [];
 			buildings = [];
 			fields = [];
+			realms = [];
 		}}, function() {
 		module( "Land Battles", function() {
 			test( "Minimal armies, defenders win by dice roll.", function(t) {
@@ -148,16 +155,26 @@ module( "Battle" , function() {
 				t.resultEquals( battle.result(1, 10), {victor: 'tie', attackerLosses: [1205], defenderLosses: [995.85]} );
 			});
 			test( "Combat in attackers home terrain.", function(t) {
-			    //TODO: Write this test once a proper interface for handling realms is decided
-			    t.ok(false, "TODO: Write this test once a proper interface for handling realms is decided");
-//				var battle = new schlacht([attackerArmies[3]], [defenderArmies[3]], [], [], 0, 0);
-//				t.resultEquals( battle.result(1, 10), {victor: 'tie', attackerLosses: [1205], defenderLosses: [995.85]} );
+			    realms[1].homeTurf = 2;
+			    attackerArmies[18].x = 0;
+                attackerArmies[18].y = 0;
+                attackerArmies[18].oldX = -1;
+                attackerArmies[18].oldY = 0;
+                defenderArmies[18].x = 0;
+                defenderArmies[18].y = 0;
+				var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 0, 0);
+				t.resultEquals( battle.result(10, 10), {victor: 'attacker', attackerLosses: [720], defenderLosses: [1250]} );
 			});
 			test( "Combat in defenders home terrain.", function(t) {
-			    //TODO: Write this test once a proper interface for handling realms is decided
-			    t.ok(false, "TODO: Write this test once a proper interface for handling realms is decided");
-//				var battle = new schlacht([attackerArmies[3]], [defenderArmies[3]], [], [], 0, 0);
-//				t.resultEquals( battle.result(1, 10), {victor: 'tie', attackerLosses: [1205], defenderLosses: [995.85]} );
+			    realms[0].homeTurf = 2;
+			    attackerArmies[18].x = 0;
+                attackerArmies[18].y = 0;
+                attackerArmies[18].oldX = -1;
+                attackerArmies[18].oldY = 0;
+                defenderArmies[18].x = 0;
+                defenderArmies[18].y = 0;
+				var battle = new schlacht([attackerArmies[18]], [defenderArmies[18]], [], [], 0, 0);
+				t.resultEquals( battle.result(10, 10), {victor: 'defender', attackerLosses: [1250], defenderLosses: [720]} );
 			});
 		});
 		module( "Naval Battles", function() {
@@ -238,6 +255,9 @@ module( "Battle" , function() {
 		});
 		module( "Directional Terrain Bonuses", {
 		    beforeEach: function() {
+		        realms = [{active: true, color: '000,000,000', homeTurf: 9, name: "Realm 1", tag: 'r01'},
+                    {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 2", tag: 'r02'},
+                    {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 3", tag: 'r03'}];
                 defenderArmies[18].owner = 1;
 		    }
 		    },function() {
@@ -395,14 +415,17 @@ module( "Battle" , function() {
 		});
 		module( "Complex Battles", function() {
 			test( "Large land battle at the defenders castle.", function(t) {
+			    realms = [{active: true, color: '000,000,000', homeTurf: 9, name: "Realm 1", tag: 'r01'},
+                    {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 2", tag: 'r02'},
+                    {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 3", tag: 'r03'}];
 				var attackingArmies = [
 					new heer(121, 12000, 40, 0, 0, 0, true, 0, 0, 2),//army of attacker realm
 					new heer(122, 32000, 80, 0, 0, 0, false, 0, 0, 2),//army of attacker realm
 					new reiterHeer(221, 16000, 80, false, 0, 0, 2)//army of attacker realm
 				];
 				var defendingArmies = [
-					new heer(111, 29000, 80, 0, 0, 0, false, 0, 0, 1),//army of realm usa
-					new reiterHeer(211, 13500, 70, false, 0, 0, 1),//army of realm usa
+					new heer(111, 29000, 80, 0, 0, 0, false, 0, 0, 1),//army of realm r01
+					new reiterHeer(211, 13500, 70, false, 0, 0, 1),//army of realm r01
 					new heer(112, 8000, 50, 0, 0, 0, true, 0, 0, 3)//army of a third realm
 				];
 				var battle = new schlacht(attackingArmies, defendingArmies, [], [], 3, 3);
@@ -428,6 +451,9 @@ module( "Battle" , function() {
 	});
 	module( "Overrun", {
 		before: function() {
+		    realms = [{active: true, color: '000,000,000', homeTurf: 9, name: "Realm 1", tag: 'r01'},
+                {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 2", tag: 'r02'},
+                {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 3", tag: 'r03'}];
 			defenderArmies = [
 				new heer(111, 1500, 10, 0, 0, 0, false, 0, 0, 1),//0
 				new heer(112, 1000, 10, 0, 0, 0, false, 0, 0, 1),//1
