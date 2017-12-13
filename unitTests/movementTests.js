@@ -32,7 +32,7 @@ var login = "sl";
 
 module( "Movement" , {
     before: function () {
-        realms = [{active: true, color: "000,000,000", homeTurf: 9, name: "Realm 1", tag: 'r01'},
+        realms = [{active: true, color: "213,038,181", homeTurf: 9, name: "Pink Realm", tag: 'r01'},
                 {active: true, color: "000,000,000", homeTurf: 9, name: "Realm 2", tag: 'r02'},
                 {active: true, color: "000,000,000", homeTurf: 9, name: "Realm 3", tag: 'r03'}];
     },

@@ -517,7 +517,7 @@ function determineEventStatus() {
 						pendingEvents[i].status = 'impossible';
 					}
 				}
-				console.log(army.count - content.troops);
+				//console.log(army.count - content.troops);
 				if(((army.count - content.troops) >= (100/typefactor)) &&
 				 ((army.leaders - content.leaders) >= 1) &&
 				 ((army.mounts - content.mounts) >= 0) &&
@@ -541,10 +541,10 @@ function determineEventStatus() {
 					canShoot = false;
 				}
 
-				if (armyExistsAndIsLocated(realmIdToshort(content.realm), content.armyId, content.fromX, content.fromY) && canShoot) {
+				if (armyExistsAndIsLocated(shooter.ownerTag(), content.armyId, content.fromX, content.fromY) && canShoot) {
 					pendingEvents[i].status = 'available';
 				} else if (armyExists(content.realm, content.armyId) && 
-						possibleMoveOfArmyTo(realmIdToshort(content.realm), content.armyId, content.fromX, content.fromY)) {
+						possibleMoveOfArmyTo(shooter.ownerTag(), content.armyId, content.fromX, content.fromY)) {
 					pendingEvents[i].status = 'withheld';
 				} else {
 					pendingEvents[i].status = 'impossible';
@@ -720,8 +720,10 @@ function makeEventListItem(event, i) {
 	eli.classList.add("eventListItem");
 	eli.id = "eli" + i;
 	var cont = event.content;
+	let realm = realms[cont.realm - 1].tag;
+
 	if (event.type === "move") {
-		eli.innerHTML = "<div>Move " + cont.realm + " army " + cont.armyId + " from (" + cont.fromX + ", " + cont.fromY + ") to (" + cont.toX + ", " + cont.toY + ")</div>";
+		eli.innerHTML = "<div>Move " + realm + " army " + cont.armyId + " from (" + cont.fromX + ", " + cont.fromY + ") to (" + cont.toX + ", " + cont.toY + ")</div>";
 	} else if (event.type === "battle") {
 		var html = "<div>Battle at (" + cont.x + ", " + cont.y + ") involving";
 		var partips = cont.participants
@@ -730,10 +732,10 @@ function makeEventListItem(event, i) {
 		}
 		eli.innerHTML = html + "</div>";
 	} else if (event.type === "merge") {
-		eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " merges with army " + cont.toArmy + " in (" + cont.x + "," + cont.y + ").</div>";
+		eli.innerHTML = "<div>" + realm + "'s army " + cont.fromArmy + " merges with army " + cont.toArmy + " in (" + cont.x + "," + cont.y + ").</div>";
 	} else if (event.type === "split") {
 		// TODO: detailed explanation
-		var innerHTMLString = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " splits off army " + cont.newArmy + " with ";
+		var innerHTMLString = "<div>" + realm + "'s army " + cont.fromArmy + " splits off army " + cont.newArmy + " with ";
 		if (cont.troops != 0) {
 			innerHTMLString += cont.troops + " troops, ";
 		}
@@ -752,7 +754,7 @@ function makeEventListItem(event, i) {
 		innerHTMLString += "in (" + cont.x + "," + cont.y + ").</div>";
 		eli.innerHTML = innerHTMLString;
 	} else if (event.type === "transfer") {
-		var innerHTMLString = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " transfers ";
+		var innerHTMLString = "<div>" + realm + "'s army " + cont.fromArmy + " transfers ";
 		if (cont.troops != 0) {
 			innerHTMLString += cont.troops + " troops, ";
 		}
@@ -771,10 +773,10 @@ function makeEventListItem(event, i) {
 		innerHTMLString += "to " + cont.toArmy + " in (" + cont.x + "," + cont.y + ").</div>";
 		eli.innerHTML = innerHTMLString;
 	} else if (event.type === "mount") {
-		eli.innerHTML = "<div>" + realmIdToshort(cont.realm) + "'s army " + cont.fromArmy + " mounts " + cont.troops + " troops, and "
+		eli.innerHTML = "<div>" + realm + "'s army " + cont.fromArmy + " mounts " + cont.troops + " troops, and "
 			+ cont.leaders + " leaders to " + cont.newArmy + " in (" + cont.x + "," + cont.y + ").</div>";
 	}else if(event.type === "shoot"){
-		eli.innerHTML = "<div>"+ realmIdToshort(cont.realm) +"'s army "+cont.armyId+" shoots a Field ("+cont.toX+", "+cont.toY+") with "
+		eli.innerHTML = "<div>"+ realm +"'s army "+cont.armyId+" shoots a Field ("+cont.toX+", "+cont.toY+") with "
 		 +cont.LKPcount + " LKP and " + cont.SKPcount + " SKP.</div>";
 	}
 	var deleteButton = document.createElement("BUTTON");
@@ -1039,7 +1041,7 @@ function checkEvent(num) {
 			var shootBox = document.getElementById("shootBigBox");
 			show(shootBox);
 
-			document.getElementById("shooterTitleText").innerHTML = cont.armyId + ", " + realmIdToshort(cont.realm);
+			document.getElementById("shooterTitleText").innerHTML = cont.armyId + ", " + realms[cont.realm - 1].tag;;
 			document.getElementById("attackersLKPText").innerHTML = cont.LKPcount;
 			document.getElementById("attackersSKPText").innerHTML = cont.SKPcount;
 			document.getElementById("targetText").innerHTML = cont.target;
