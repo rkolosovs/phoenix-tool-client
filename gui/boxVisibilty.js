@@ -198,33 +198,41 @@ function hide(element) {
 		function updateInfoBox(){
 			if(selectedArmyIndex !== undefined){
 				// info Box
-				console.log(listOfArmies[selectedArmyIndex].armyId + " selected.");
-				console.log("This a guard army: " + listOfArmies[selectedArmyIndex].isGuard);
-				if(listOfArmies[selectedArmyIndex].isGuard){
+				let infoArmy = listOfArmies[selectedArmyIndex];
+				console.log(infoArmy.armyId + " selected.");
+				console.log("This a guard army: " + infoArmy.isGuard);
+				if(infoArmy.isGuard){
 					document.getElementById("guard").innerHTML = "Garde";
 				} else {
 					document.getElementById("guard").innerHTML = null;
 				}
-				if(listOfArmies[selectedArmyIndex].armyType() == 1 || listOfArmies[selectedArmyIndex].armyType() == 2)
+				if(infoArmy.armyType() === 1 || infoArmy.armyType() === 2)
 				{
-					document.getElementById("armyId").innerHTML = "Heer " + listOfArmies[selectedArmyIndex].armyId;
+					document.getElementById("armyId").innerHTML = "Heer " + infoArmy.armyId;
 				}
-				else if(listOfArmies[selectedArmyIndex].armyType() == 3)
+				else if(infoArmy.armyType() === 3)
 				{
-					document.getElementById("armyId").innerHTML = "Flotte " + listOfArmies[selectedArmyIndex].armyId;
+					document.getElementById("armyId").innerHTML = "Flotte " + infoArmy.armyId;
 				}
-				document.getElementById("count").innerHTML = "Truppen: " + listOfArmies[selectedArmyIndex].count;
-				document.getElementById("leaders").innerHTML = "Heerführer: " + listOfArmies[selectedArmyIndex].leaders;
-				document.getElementById("mounts").innerHTML = "mitgeführte Reittiere: " + listOfArmies[selectedArmyIndex].mounts;
-				document.getElementById("lkp").innerHTML = "leichte Katapulte: " + listOfArmies[selectedArmyIndex].lkp + " (" + (listOfArmies[selectedArmyIndex].lkp - listOfArmies[selectedArmyIndex].LKPShotThisTurn) + ")";
-				document.getElementById("skp").innerHTML = "schwere Katapulte: " + listOfArmies[selectedArmyIndex].skp + " (" + (listOfArmies[selectedArmyIndex].skp - listOfArmies[selectedArmyIndex].SKPShotThisTurn) + ")";
-				document.getElementById("movePoints").innerHTML = "Bewegungspunkte: " + listOfArmies[selectedArmyIndex].remainingMovePoints;
-				document.getElementById("heightPoints").innerHTML = "Höhenstufen: " + listOfArmies[selectedArmyIndex].remainingHeightPoints;
+				document.getElementById("count").innerHTML = "Truppen: " + infoArmy.count;
+				document.getElementById("leaders").innerHTML = "Heerführer: " + infoArmy.leaders;
+				document.getElementById("mounts").innerHTML = "mitgeführte Reittiere: " + infoArmy.mounts;
+				if(infoArmy.armyType() === 2){
+					document.getElementById("lkp").style.display = "none";
+					document.getElementById("skp").style.display = "none";
+				}else{
+					document.getElementById("lkp").style.display = "";
+					document.getElementById("skp").style.display = "";
+				}
+				document.getElementById("lkp").innerHTML = "leichte Katapulte: " + infoArmy.lkp + " (" + (infoArmy.lkp - infoArmy.LKPShotThisTurn) + ")";
+				document.getElementById("skp").innerHTML = "schwere Katapulte: " + infoArmy.skp + " (" + (infoArmy.skp - infoArmy.SKPShotThisTurn) + ")";
+				document.getElementById("movePoints").innerHTML = "Bewegungspunkte: " + infoArmy.remainingMovePoints;
+				document.getElementById("heightPoints").innerHTML = "Höhenstufen: " + infoArmy.remainingHeightPoints;
 				document.getElementById("splitBtn").style.display = "";
-				if(Math.floor(listOfArmies[selectedArmyIndex].armyId/100) == 1){
+				if(Math.floor(infoArmy.armyId/100) == 1){
 					document.getElementById("mount").style.display = "";
 					document.getElementById("unMount").style.display = "none";
-				} else if(Math.floor(listOfArmies[selectedArmyIndex].armyId/100) == 2){
+				} else if(Math.floor(infoArmy.armyId/100) == 2){
 					document.getElementById("unMount").style.display = "";
 					document.getElementById("mount").style.display = "none";
 				} else {
@@ -232,36 +240,36 @@ function hide(element) {
 					document.getElementById("unMount").style.display = "none";
 				}
 				//show shoot button
-				if(listOfArmies[selectedArmyIndex].lkp>0 || listOfArmies[selectedArmyIndex].skp > 0 || listOfArmies[selectedArmyIndex].isLoadedIn == false){
+				if(infoArmy.lkp>0 || infoArmy.skp > 0 || infoArmy.isLoadedIn == false){
 					document.getElementById("shoot").style.display = "";
 				}
 				else{
 					document.getElementById("shoot").style.display = "none";
 				}
 				// change Box (GodMode)
-				if(listOfArmies[selectedArmyIndex].isGuard){
+				if(infoArmy.isGuard){
 					document.getElementById("guardChangeInput").checked = true;
 				} else {
 					document.getElementById("guardChangeInput").checked = false;
 				}
 				document.getElementById("guardChangeInput").style.display = "";
-				document.getElementById("ownerChangeInput").value = listOfArmies[selectedArmyIndex].owner;
+				document.getElementById("ownerChangeInput").value = infoArmy.owner;
 				document.getElementById("ownerChange").style.display = "";
-				document.getElementById("armyIdChangeInput").value = listOfArmies[selectedArmyIndex].armyId;
+				document.getElementById("armyIdChangeInput").value = infoArmy.armyId;
 				document.getElementById("armyIdChange").style.display = "";
-				document.getElementById("countChangeInput").value = listOfArmies[selectedArmyIndex].count;
+				document.getElementById("countChangeInput").value = infoArmy.count;
 				document.getElementById("countChange").style.display = "";
-				document.getElementById("leadersChangeInput").value = listOfArmies[selectedArmyIndex].leaders;
+				document.getElementById("leadersChangeInput").value = infoArmy.leaders;
 				document.getElementById("leadersChange").style.display = "";
-				document.getElementById("mountsChangeInput").value = listOfArmies[selectedArmyIndex].mounts;
+				document.getElementById("mountsChangeInput").value = infoArmy.mounts;
 				document.getElementById("mountsChange").style.display = "";
-				document.getElementById("lkpChangeInput").value = listOfArmies[selectedArmyIndex].lkp;
+				document.getElementById("lkpChangeInput").value = infoArmy.lkp;
 				document.getElementById("lkpChange").style.display = "";
-				document.getElementById("skpChangeInput").value = listOfArmies[selectedArmyIndex].skp;
+				document.getElementById("skpChangeInput").value = infoArmy.skp;
 				document.getElementById("skpChange").style.display = "";
-				document.getElementById("movePointsChangeInput").value = listOfArmies[selectedArmyIndex].remainingMovePoints;
+				document.getElementById("movePointsChangeInput").value = infoArmy.remainingMovePoints;
 				document.getElementById("movePointsChange").style.display = "";
-				document.getElementById("heightPointsChangeInput").value = listOfArmies[selectedArmyIndex].remainingHeightPoints;
+				document.getElementById("heightPointsChangeInput").value = infoArmy.remainingHeightPoints;
 				document.getElementById("heightPointsChange").style.display = "";
 				document.getElementById("changeArmyInfo").style.display = "";
 			} else {
