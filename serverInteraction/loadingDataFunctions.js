@@ -90,7 +90,7 @@ function loadArmies() {
 			if(armiesToLoadIn.length > 0){
 				for(var i = 0; i < armiesToLoadIn.length; i++){
 					for(var j = 0; j < listOfArmies.length; j++){
-						if(listOfArmies[j].armyId == armiesToLoadIn[i][0] && listOfArmies[j].owner == armiesToLoadIn[i][1]){
+						if(listOfArmies[j].armyId == armiesToLoadIn[i][0] && listOfArmies[j].owner === armiesToLoadIn[i][1]){
 							listOfArmies[j].loadedArmies.push(armiesToLoadIn[i][2]);
 							console.log(armiesToLoadIn[i][2] + " is loaded in " + listOfArmies[j].armyId);
 						}

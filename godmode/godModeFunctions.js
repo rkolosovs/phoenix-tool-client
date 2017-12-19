@@ -1,7 +1,7 @@
 'use strict';
 // TODO: before pushing check added and deleted buildings if one is already inside the other, if it is then delete it.
 
-var factionToCreateBuildingsFor = 1;
+var factionToCreateBuildingsFor = realms[0].tag;
 function setFactionToCreateBuildingsFor(faction){
 	factionToCreateBuildingsFor = faction;
 	console.log("buildings for faction " + factionToCreateBuildingsFor);
@@ -287,7 +287,7 @@ function manipulateBorderBuilding(type, direction, add){
 
 // the function for the Gm posibility to make an army out of nothing
 function generateArmyBtn(){
-	ownerBuffer = Number(document.getElementById("ownerField").value);
+	ownerBuffer = document.getElementById("ownerField").value;
 	armyIdBuffer = Number(document.getElementById("armyNumberField").value);
 	countBuffer = Number(document.getElementById("countField").value);
 	leaderBuffer = Number(document.getElementById("leaderField").value);
@@ -302,7 +302,7 @@ function generateArmyBtn(){
 	}
 	// check for any other armies with the same armyId
 	for(var i=0; i < listOfArmies.length; i++){
-		if(listOfArmies[i].armyId == armyIdBuffer && listOfArmies[i].owner == ownerBuffer){
+		if(listOfArmies[i].armyId == armyIdBuffer && listOfArmies[i].owner === ownerBuffer){
 			window.alert("Ein Heer mit dieser Nummer existiert bereits in diesem Königreich.");
 			return false;
 		}
@@ -336,7 +336,7 @@ function godDeleteSelectedArmy(){
 // This is used by the infoChangeBox to manipulate an armies Stats.
 function changeArmyInfo(){
 	for(var i = 0; i<listOfArmies.length; i++){
-		if(i!=selectedArmyIndex && listOfArmies[i].owner == document.getElementById("ownerChangeInput").value &&
+		if(i!=selectedArmyIndex && listOfArmies[i].owner === document.getElementById("ownerChangeInput").value &&
 		listOfArmies[i].armyId == document.getElementById("armyIdChangeInput").value){
 			window.alert("Diese Armee-Id ist in diesem Reich bereits vergeben.");
 		} else {
@@ -345,7 +345,7 @@ function changeArmyInfo(){
 			} else {
 				listOfArmies[selectedArmyIndex].isGuard = false;
 			}
-			listOfArmies[selectedArmyIndex].owner = Number(document.getElementById("ownerChangeInput").value);
+			listOfArmies[selectedArmyIndex].owner = document.getElementById("ownerChangeInput").value;
 			listOfArmies[selectedArmyIndex].armyId = Number(document.getElementById("armyIdChangeInput").value);
 			listOfArmies[selectedArmyIndex].count = Number(document.getElementById("countChangeInput").value);
 			listOfArmies[selectedArmyIndex].leaders = Number(document.getElementById("leadersChangeInput").value);

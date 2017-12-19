@@ -942,11 +942,11 @@ function checkEvent(num) {
 			var armyToId = cont.toArmy;
 			var realm = cont.realm;
 			for (var i = 0; i < listOfArmies.length; i++) {
-				if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
+				if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner === realm) {
 					armyFromPlaceInList = i;
 					console.log("i1=" + i);
 				}
-				else if (listOfArmies[i].armyId == armyToId && listOfArmies[i].owner == realm) {
+				else if (listOfArmies[i].armyId == armyToId && listOfArmies[i].owner === realm) {
 					armyToPlaceInList = i;
 					console.log("i2=" + i);
 				}
@@ -975,10 +975,10 @@ function checkEvent(num) {
 			var lkpToSplit = cont.lkp;
 			var skpToSplit = cont.skp;
 			for (var i = 0; i < listOfArmies.length; i++) {
-				if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
+				if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner === realm) {
 					armyFromPlaceInList = i;
 				}
-				else if (listOfArmies[i].armyId == armyToId && listOfArmies[i].owner == realm) {
+				else if (listOfArmies[i].armyId == armyToId && listOfArmies[i].owner === realm) {
 					armyToPlaceInList = i;
 				}
 			}
@@ -1019,7 +1019,7 @@ function checkEvent(num) {
 			var toSplit = cont.troops;
 			var leadersToSplit = cont.leaders;
 			for (var i = 0; i < listOfArmies.length; i++) {
-				if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
+				if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner === realm) {
 					armyFromPlaceInList = i;
 				}
 			}

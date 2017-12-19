@@ -184,6 +184,12 @@ function hide(element) {
 			if(document.getElementById("godmodeBox").style.visibility == "hidden"){
 				restoreInfoBox();
 				document.getElementById("godmodeBox").style.visibility = "visible";
+				let factionsDropdown = document.getElementById("factionToCreateBuildingsFor");
+				let factionOptions = "";
+				realms.forEach(realm => {
+				    factionOptions += "<option value="+"'"+realm.tag+"'"+">"+realm.name+"</option>";
+				});
+				factionsDropdown.innerHTML = factionOptions;
 				document.getElementById("infoChangeBox").style.display = "";
 				document.getElementById("infoBox").style.display = "none";
 			} else if(document.getElementById("godmodeBox").style.visibility == "visible"){
