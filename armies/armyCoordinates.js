@@ -981,11 +981,11 @@ function checkCondition(army, x, y, skpShot) {
             }
             //if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
             var commonNeig = findCommonNeighbor(army.x, army.y, x, y);
-            var walls = findWallInWay(army.x, army.y, x, y);
+            var walls_1 = findWallInWay(army.x, army.y, x, y);
             for (var i = 0; i < commonNeig.length; i++) {
-                if (walls.length > 0) {
-                    for (var j = 0; j < walls.length; j++) {
-                        if (((height(commonNeig[i][0], commonNeig[i][1]) - height(army.x, army.y) === 1) && buildings[walls[j]].x === commonNeig[i][0] && buildings[walls[j]].y === commonNeig[i][1])) {
+                if (walls_1.length > 0) {
+                    for (var j = 0; j < walls_1.length; j++) {
+                        if (((height(commonNeig[i][0], commonNeig[i][1]) - height(army.x, army.y) === 1) && buildings[walls_1[j]].x === commonNeig[i][0] && buildings[walls_1[j]].y === commonNeig[i][1])) {
                             condition = 'impossible shot';
                         }
                     }

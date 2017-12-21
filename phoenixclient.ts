@@ -1,5 +1,15 @@
 
 'use strict';
+const OFFICER_RP: number = 100;
+const SHIP_RP: number = 100;
+const GUARD_RP_MULT: number = 3;
+const LIGHT_WS_RP: number = 1000;
+const HEAVY_WS_RP: number = 2000;
+const SHIP_TRANSPORT_CAPACITY: number = 100;
+const FOOTMAN_RP: number = 1;
+const RIDER_RP: number = 2;
+const LIGHT_CATA_RP: number = 1000;
+const HEAVY_CATA_RP: number = 2000;
 
 var selectedFields  = []; // list of fields to be highlighted
 var selectedArmyIndex; // index of the currently selected army in the listOfArmies

@@ -1,4 +1,14 @@
 'use strict';
+var OFFICER_RP = 100;
+var SHIP_RP = 100;
+var GUARD_RP_MULT = 3;
+var LIGHT_WS_RP = 1000;
+var HEAVY_WS_RP = 2000;
+var SHIP_TRANSPORT_CAPACITY = 100;
+var FOOTMAN_RP = 1;
+var RIDER_RP = 2;
+var LIGHT_CATA_RP = 1000;
+var HEAVY_CATA_RP = 2000;
 var selectedFields = []; // list of fields to be highlighted
 var selectedArmyIndex; // index of the currently selected army in the listOfArmies
 var listOfArmies = [];
