@@ -1,5 +1,5 @@
-var test = QUnit.test;
-var module = QUnit.module;
+const { test } = QUnit;
+const { module } = QUnit;
 QUnit.assert.resultEquals = function (actual, expected) {
     var actualProps = Object.getOwnPropertyNames(actual);
     var expectedProps = Object.getOwnPropertyNames(expected);
@@ -13,7 +13,7 @@ QUnit.assert.resultEquals = function (actual, expected) {
             return false;
         }
         else {
-            return actual.reduce(function (total, current, index) { return (total && Math.abs(current - expected[index]) <= 0.01); }, true);
+            return actual.reduce((total, current, index) => (total && Math.abs(current - expected[index]) <= 0.01), true);
         }
     };
     for (var i = 0; i < actualProps.length; i++) {

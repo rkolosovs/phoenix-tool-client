@@ -1,8 +1,6 @@
 QUnit.assert.movePossible = function (actual, expected) {
     var expectedProps = Object.getOwnPropertyNames(expected);
-    if (actual.some(function (possibleMove) { return (expectedProps.every(function (propName) {
-        return possibleMove[propName] === expected[propName];
-    })); })) {
+    if (actual.some((possibleMove) => (expectedProps.every((propName) => possibleMove[propName] === expected[propName])))) {
         this.pushResult({ result: true, actual: actual, expected: expected, message: "Success!" });
         return true;
     }
@@ -13,13 +11,10 @@ QUnit.assert.movePossible = function (actual, expected) {
     }
 };
 QUnit.assert.moveImpossible = function (actual, expected) {
-    var _this = this;
     var expectedProps = Object.getOwnPropertyNames(expected);
-    actual.forEach(function (possibleMove) {
-        if (expectedProps.every(function (propName) { return (expectedProps.every(function (propName) {
-            return possibleMove[propName] === expected[propName];
-        })); })) {
-            _this.pushResult({ result: false, actual: actual, expected: expected,
+    actual.forEach((possibleMove) => {
+        if (expectedProps.every((propName) => (expectedProps.every((propName) => possibleMove[propName] === expected[propName])))) {
+            this.pushResult({ result: false, actual: actual, expected: expected,
                 message: "Impossible move was marked as possible." });
             return false;
         }

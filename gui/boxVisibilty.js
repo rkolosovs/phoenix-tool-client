@@ -212,7 +212,7 @@ function toggleGodModeBar() {
 function updateInfoBox() {
     if (selectedArmyIndex !== undefined) {
         // info Box
-        var infoArmy = listOfArmies[selectedArmyIndex];
+        let infoArmy = listOfArmies[selectedArmyIndex];
         console.log(infoArmy.armyId + " selected.");
         console.log("This a guard army: " + infoArmy.isGuard);
         if (infoArmy.isGuard) {

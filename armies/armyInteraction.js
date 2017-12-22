@@ -152,7 +152,6 @@ function battleHandler(participants, x, y) {
         });
     };
     this.updateDisplay = function () {
-        var _this = this;
         if (this.attackSide.length === 0 || this.defenseSide.length === 0) {
             this.battleButton.disabled = true;
             this.battleButton.style.cursor = "not-allowed";
@@ -271,98 +270,98 @@ function battleHandler(participants, x, y) {
         this.attackTroopCount.innerHTML += "<p>Würfelwurf: " + this.attackDice.value + "</p>";
         this.defenseTroopCount.innerHTML += "<p>Würfelwurf: " + this.defenseDice.value + "</p>";
         //Instant result preview (remove if not desired)
-        this.battle = new schlacht(this.attackSide.map(function (val) { return (val); }), this.defenseSide.map(function (val) { return (val); }), [], [], this.x, this.y);
+        this.battle = new schlacht(this.attackSide.map((val) => (val)), this.defenseSide.map((val) => (val)), [], [], this.x, this.y);
         var result = this.battle.result(parseInt(this.attackDice.value), parseInt(this.defenseDice.value));
-        var attackFootLosses = result.attackerLosses.reduce(function (total, current, index) {
-            if (_this.attackSide[index].armyType() === 1 && !_this.attackSide[index].isGuard) {
+        var attackFootLosses = result.attackerLosses.reduce((total, current, index) => {
+            if (this.attackSide[index].armyType() === 1 && !this.attackSide[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
                 return total;
             }
         }, 0);
-        var attackCavLosses = result.attackerLosses.reduce(function (total, current, index) {
-            if (_this.attackSide[index].armyType() === 2 && !_this.attackSide[index].isGuard) {
+        var attackCavLosses = result.attackerLosses.reduce((total, current, index) => {
+            if (this.attackSide[index].armyType() === 2 && !this.attackSide[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
                 return total;
             }
         }, 0);
-        var attackFleetLosses = result.attackerLosses.reduce(function (total, current, index) {
-            if (_this.attackSide[index].armyType() === 3 && !_this.attackSide[index].isGuard) {
+        var attackFleetLosses = result.attackerLosses.reduce((total, current, index) => {
+            if (this.attackSide[index].armyType() === 3 && !this.attackSide[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
                 return total;
             }
         }, 0);
-        var attackGuardFootLosses = result.attackerLosses.reduce(function (total, current, index) {
-            if (_this.attackSide[index].armyType() === 1 && _this.attackSide[index].isGuard) {
+        var attackGuardFootLosses = result.attackerLosses.reduce((total, current, index) => {
+            if (this.attackSide[index].armyType() === 1 && this.attackSide[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
                 return total;
             }
         }, 0);
-        var attackGuardCavLosses = result.attackerLosses.reduce(function (total, current, index) {
-            if (_this.attackSide[index].armyType() === 2 && _this.attackSide[index].isGuard) {
+        var attackGuardCavLosses = result.attackerLosses.reduce((total, current, index) => {
+            if (this.attackSide[index].armyType() === 2 && this.attackSide[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
                 return total;
             }
         }, 0);
-        var attackGuardFleetLosses = result.attackerLosses.reduce(function (total, current, index) {
-            if (_this.attackSide[index].armyType() === 3 && _this.attackSide[index].isGuard) {
+        var attackGuardFleetLosses = result.attackerLosses.reduce((total, current, index) => {
+            if (this.attackSide[index].armyType() === 3 && this.attackSide[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
                 return total;
             }
         }, 0);
-        var defenseFootLosses = result.defenderLosses.reduce(function (total, current, index) {
-            if (_this.defenseSide[index].armyType() === 1 && !_this.defenseSide[index].isGuard) {
+        var defenseFootLosses = result.defenderLosses.reduce((total, current, index) => {
+            if (this.defenseSide[index].armyType() === 1 && !this.defenseSide[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
                 return total;
             }
         }, 0);
-        var defenseCavLosses = result.defenderLosses.reduce(function (total, current, index) {
-            if (_this.defenseSide[index].armyType() === 2 && !_this.defenseSide[index].isGuard) {
+        var defenseCavLosses = result.defenderLosses.reduce((total, current, index) => {
+            if (this.defenseSide[index].armyType() === 2 && !this.defenseSide[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
                 return total;
             }
         }, 0);
-        var defenseFleetLosses = result.defenderLosses.reduce(function (total, current, index) {
-            if (_this.defenseSide[index].armyType() === 3 && !_this.defenseSide[index].isGuard) {
+        var defenseFleetLosses = result.defenderLosses.reduce((total, current, index) => {
+            if (this.defenseSide[index].armyType() === 3 && !this.defenseSide[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
                 return total;
             }
         }, 0);
-        var defenseGuardFootLosses = result.defenderLosses.reduce(function (total, current, index) {
-            if (_this.defenseSide[index].armyType() === 1 && _this.defenseSide[index].isGuard) {
+        var defenseGuardFootLosses = result.defenderLosses.reduce((total, current, index) => {
+            if (this.defenseSide[index].armyType() === 1 && this.defenseSide[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
                 return total;
             }
         }, 0);
-        var defenseGuardCavLosses = result.defenderLosses.reduce(function (total, current, index) {
-            if (_this.defenseSide[index].armyType() === 2 && _this.defenseSide[index].isGuard) {
+        var defenseGuardCavLosses = result.defenderLosses.reduce((total, current, index) => {
+            if (this.defenseSide[index].armyType() === 2 && this.defenseSide[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
                 return total;
             }
         }, 0);
-        var defenseGuardFleetLosses = result.defenderLosses.reduce(function (total, current, index) {
-            if (_this.defenseSide[index].armyType() === 3 && _this.defenseSide[index].isGuard) {
+        var defenseGuardFleetLosses = result.defenderLosses.reduce((total, current, index) => {
+            if (this.defenseSide[index].armyType() === 3 && this.defenseSide[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -485,7 +484,7 @@ function battleHandler(participants, x, y) {
         }
     };
     this.resolve = function () {
-        this.battle = new schlacht(this.attackSide.map(function (val) { return (val); }), this.defenseSide.map(function (val) { return (val); }), [], [], this.x, this.y);
+        this.battle = new schlacht(this.attackSide.map((val) => (val)), this.defenseSide.map((val) => (val)), [], [], this.x, this.y);
         if (this.battle.overrunAttack()) {
             this.attackSide.forEach(function (item) {
                 item.remainingMovePoints -= 7;
@@ -544,21 +543,20 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
     this.fieldType = this.fieldType = fieldType(posX, posY);
     //        fields.find((field) => (field.x === posX && field.y === posY)).type;
     this.armyArrayCount = function (armyArray) {
-        var _this = this;
-        return armyArray.filter(function (val) { return ((val.armyType() === 3 && _this.fieldType <= 1) || (_this.fieldType >= 2 && val.armyType() <= 2)); }, this).
-            reduce(function (total, elem) { return (elem.count + total); }, 0);
+        return armyArray.filter((val) => ((val.armyType() === 3 && this.fieldType <= 1) || (this.fieldType >= 2 && val.armyType() <= 2)), this).
+            reduce((total, elem) => (elem.count + total), 0);
     };
     this.overrunAttack = function () {
         return this.armyArrayCount(armiesAttack) >= 10 * this.armyArrayCount(armiesDefense) &&
-            armiesDefense.filter(function (elem) { return (elem.isGuard); }).length === 0 && this.armyArrayCount(armiesAttack) > 0;
+            armiesDefense.filter((elem) => (elem.isGuard)).length === 0 && this.armyArrayCount(armiesAttack) > 0;
     };
     this.overrunDefense = function () {
         return 10 * this.armyArrayCount(armiesAttack) <= this.armyArrayCount(armiesDefense) &&
-            armiesAttack.filter(function (elem) { return (elem.isGuard); }).length === 0 && this.armyArrayCount(armiesDefense) > 0;
+            armiesAttack.filter((elem) => (elem.isGuard)).length === 0 && this.armyArrayCount(armiesDefense) > 0;
     };
     this.terrainGP = function (army, attacker) {
         var fieldType = this.fieldType;
-        var buildingsOnTheField = buildings.filter(function (current) { return (current.x === posX && current.y === posY && current.type <= 4); });
+        var buildingsOnTheField = buildings.filter((current) => (current.x === posX && current.y === posY && current.type <= 4));
         if (buildingsOnTheField.length > 0) {
             if (attacker) {
                 return 0;
@@ -592,7 +590,7 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
         return 0;
     };
     this.directionalTerrainGP = function (army, attacker, attackingArmies) {
-        var result = 0;
+        let result = 0;
         if (attacker) {
             if (height(army.oldX, army.oldY) > height(army.x, army.y)) {
                 result += 20;
@@ -608,40 +606,40 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
             } //attacking onto a street
         }
         else {
-            var adjacentWalls_1 = walls(army.x, army.y);
-            var adjacentRivers_1 = fluesse(army.x, army.y);
-            var adjacentBridges_1 = bridges(army.x, army.y);
-            var neighbor_1 = neighbors(army.x, army.y);
-            var downhillBonus_1 = false;
-            var wallBonus_1 = false;
-            var bridgeBonus_1 = false;
-            var riverBonus_1 = false;
-            attackingArmies.forEach(function (attackingArmy) {
+            let adjacentWalls = walls(army.x, army.y);
+            let adjacentRivers = fluesse(army.x, army.y);
+            let adjacentBridges = bridges(army.x, army.y);
+            let neighbor = neighbors(army.x, army.y);
+            let downhillBonus = false;
+            let wallBonus = false;
+            let bridgeBonus = false;
+            let riverBonus = false;
+            attackingArmies.forEach((attackingArmy) => {
                 if (height(attackingArmy.oldX, attackingArmy.oldY) < height(army.x, army.y)) {
-                    downhillBonus_1 = true;
+                    downhillBonus = true;
                 }
-                neighbor_1.forEach(function (neighbor, index) {
+                neighbor.forEach((neighbor, index) => {
                     if (neighbor[0] === attackingArmy.oldX && neighbor[1] === attackingArmy.oldY) {
-                        if (adjacentWalls_1[index] === 1) {
-                            wallBonus_1 = true;
+                        if (adjacentWalls[index] === 1) {
+                            wallBonus = true;
                         }
-                        if (adjacentRivers_1[index] === 1) {
-                            if (adjacentBridges_1[index] === 1) {
-                                bridgeBonus_1 = true;
+                        if (adjacentRivers[index] === 1) {
+                            if (adjacentBridges[index] === 1) {
+                                bridgeBonus = true;
                             }
                             else {
-                                riverBonus_1 = true;
+                                riverBonus = true;
                             }
                         }
                     }
                 });
             });
-            result = downhillBonus_1 ? 20 : 0 + wallBonus_1 ? 50 : 0 + riverBonus_1 ? 50 : 0 + bridgeBonus_1 ? 30 : 0;
+            result = downhillBonus ? 20 : 0 + wallBonus ? 50 : 0 + riverBonus ? 50 : 0 + bridgeBonus ? 30 : 0;
         }
         return result;
     };
     this.computeCombatRating = function (strengthArmy, totalArmyGP) {
-        return strengthArmy.map(function (elem, index) { return (elem * (1 + (totalArmyGP[index] / 200))); });
+        return strengthArmy.map((elem, index) => (elem * (1 + (totalArmyGP[index] / 200))));
     };
     this.computeLossFactor = function (ownForces, enemyForces, victorious) {
         var baseFactor = (ownForces / enemyForces) / 10;
@@ -666,9 +664,8 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
         return (lossesWithGP / totalStrength) * armyStrength;
     };
     this.result = function (attackRoll, defenseRoll) {
-        var _this = this;
-        var totalStrengthAttackerArmy = armiesAttack.map(function (elem) { return (elem.count); });
-        var totalStrengthDefenderArmy = armiesDefense.map(function (elem) {
+        var totalStrengthAttackerArmy = armiesAttack.map((elem) => (elem.count));
+        var totalStrengthDefenderArmy = armiesDefense.map((elem) => {
             if (elem.armyType() === 3) {
                 return elem.count + elem.lkp * 5 + elem.skp * 10;
             }
@@ -676,14 +673,14 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
                 return elem.count;
             }
         });
-        var totalAttackerArmyGP = armiesAttack.map(function (elem) { return (attackRoll + elem.leaderGp() + _this.terrainGP(elem, true) + _this.characterGP(elem) + _this.directionalTerrainGP(elem, true, null)); });
-        var totalDefenderArmyGP = armiesDefense.map(function (elem) { return (defenseRoll + elem.leaderGp() + _this.terrainGP(elem, false) + _this.characterGP(elem) + _this.directionalTerrainGP(elem, false, armiesAttack)); });
+        var totalAttackerArmyGP = armiesAttack.map((elem) => (attackRoll + elem.leaderGp() + this.terrainGP(elem, true) + this.characterGP(elem) + this.directionalTerrainGP(elem, true, null)));
+        var totalDefenderArmyGP = armiesDefense.map((elem) => (defenseRoll + elem.leaderGp() + this.terrainGP(elem, false) + this.characterGP(elem) + this.directionalTerrainGP(elem, false, armiesAttack)));
         var combatRatingAttackerArmy = this.computeCombatRating(totalStrengthAttackerArmy, totalAttackerArmyGP);
         var combatRatingDefenderArmy = this.computeCombatRating(totalStrengthDefenderArmy, totalDefenderArmyGP);
-        var totalAttackerStrength = totalStrengthAttackerArmy.reduce(function (total, elem) { return (total + elem); }, 0);
-        var totalDefenderStrength = totalStrengthDefenderArmy.reduce(function (total, elem) { return (total + elem); }, 0);
-        var attackerTotalCombatRating = combatRatingAttackerArmy.reduce(function (total, elem) { return (total + elem); }, 0);
-        var defenderTotalCombatRating = combatRatingDefenderArmy.reduce(function (total, elem) { return (total + elem); }, 0);
+        var totalAttackerStrength = totalStrengthAttackerArmy.reduce((total, elem) => (total + elem), 0);
+        var totalDefenderStrength = totalStrengthDefenderArmy.reduce((total, elem) => (total + elem), 0);
+        var attackerTotalCombatRating = combatRatingAttackerArmy.reduce((total, elem) => (total + elem), 0);
+        var defenderTotalCombatRating = combatRatingDefenderArmy.reduce((total, elem) => (total + elem), 0);
         var victor = '';
         if (this.overrunAttack() || attackerTotalCombatRating > defenderTotalCombatRating) {
             victor = 'attacker';
@@ -701,14 +698,14 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
         //multiplication and subsequent division by 100 done for reasons of numerical stability
         var attackerNewBaseLosses = Math.floor((attackerBaseLosses * (100 + (attackerLossFactor * 100))) / 100);
         var defenderNewBaseLosses = Math.floor((defenderBaseLosses * (100 + (defenderLossFactor * 100))) / 100);
-        var baseLossesAttackerArmy = totalStrengthAttackerArmy.map(function (elem) { return ((elem / totalAttackerStrength) * attackerNewBaseLosses); });
-        var baseLossesDefenderArmy = totalStrengthDefenderArmy.map(function (elem) { return ((elem / totalDefenderStrength) * defenderNewBaseLosses); });
+        var baseLossesAttackerArmy = totalStrengthAttackerArmy.map((elem) => ((elem / totalAttackerStrength) * attackerNewBaseLosses));
+        var baseLossesDefenderArmy = totalStrengthDefenderArmy.map((elem) => ((elem / totalDefenderStrength) * defenderNewBaseLosses));
         var attackerMeanGP = ((attackerTotalCombatRating / totalAttackerStrength) - 1) * 100;
         var defenderMeanGP = ((defenderTotalCombatRating / totalDefenderStrength) - 1) * 100;
-        var attackerGPDiffArmy = totalAttackerArmyGP.map(function (elem) { return ((elem / 200) - (defenderMeanGP / 100)); });
-        var defenderGPDiffArmy = totalDefenderArmyGP.map(function (elem) { return ((elem / 200) - (attackerMeanGP / 100)); });
-        var finalLossesAttackerArmy = baseLossesAttackerArmy.map(function (elem, index) { return (_this.computeFinalLosses(elem, attackerGPDiffArmy[index], totalStrengthAttackerArmy[index], totalStrengthAttackerArmy[index])); });
-        var finalLossesDefenderArmy = baseLossesDefenderArmy.map(function (elem, index) { return (_this.computeFinalLosses(elem, defenderGPDiffArmy[index], armiesDefense[index].count, totalStrengthDefenderArmy[index])); });
+        var attackerGPDiffArmy = totalAttackerArmyGP.map((elem) => ((elem / 200) - (defenderMeanGP / 100)));
+        var defenderGPDiffArmy = totalDefenderArmyGP.map((elem) => ((elem / 200) - (attackerMeanGP / 100)));
+        var finalLossesAttackerArmy = baseLossesAttackerArmy.map((elem, index) => (this.computeFinalLosses(elem, attackerGPDiffArmy[index], totalStrengthAttackerArmy[index], totalStrengthAttackerArmy[index])));
+        var finalLossesDefenderArmy = baseLossesDefenderArmy.map((elem, index) => (this.computeFinalLosses(elem, defenderGPDiffArmy[index], armiesDefense[index].count, totalStrengthDefenderArmy[index])));
         return { victor: victor, attackerLosses: finalLossesAttackerArmy, defenderLosses: finalLossesDefenderArmy };
     };
 }
@@ -722,26 +719,26 @@ function fernkampf(dicerollsL, dicerollsS, shooter, target, x, y, chars) {
             charGpSum += chars[i].gp;
         }
     }
-    var damage = shooter.fireLkp(dicerollsL, checkCondition(shooter, x, y, false)) + shooter.fireSkp(dicerollsS, checkCondition(shooter, x, y, true));
-    var allTargets = [];
-    var sumAllBP = 0;
+    let damage = shooter.fireLkp(dicerollsL, checkCondition(shooter, x, y, false)) + shooter.fireSkp(dicerollsS, checkCondition(shooter, x, y, true));
+    let allTargets = [];
+    let sumAllBP = 0;
     if (target === "On Field") {
-        for (var i_1 = 0; i_1 < buildings.length; i_1++) {
-            if (buildings[i_1].x === x && buildings[i_1].y === y && buildings[i_1].type < 5) {
+        for (let i = 0; i < buildings.length; i++) {
+            if (buildings[i].x === x && buildings[i].y === y && buildings[i].type < 5) {
                 //TODO building takes 2/3 damage
                 //building[i].takeFire(damage * (2/3));
                 damage = damage * (1 / 3);
             }
         }
-        for (var i_2 = 0; i_2 < listOfArmies.length; i_2++) {
-            if (listOfArmies[i_2].x === x && listOfArmies[i_2].y === y) {
-                allTargets.push(listOfArmies[i_2]);
-                sumAllBP += listOfArmies[i_2].sumBP();
+        for (let i = 0; i < listOfArmies.length; i++) {
+            if (listOfArmies[i].x === x && listOfArmies[i].y === y) {
+                allTargets.push(listOfArmies[i]);
+                sumAllBP += listOfArmies[i].sumBP();
             }
         }
-        for (var i_3 = 0; i_3 < allTargets.length; i_3++) {
+        for (let i = 0; i < allTargets.length; i++) {
             //target may be a building. buildings need to have this funktion
-            allTargets[i_3].takeFire(damage / (1 + (allTargets[i_3].leaderGp() + charGpSum) / 100) * (allTargets[i_3].sumBP() / sumAllBP));
+            allTargets[i].takeFire(damage / (1 + (allTargets[i].leaderGp() + charGpSum) / 100) * (allTargets[i].sumBP() / sumAllBP));
         }
     }
     //TODO Wall Damage
@@ -764,9 +761,9 @@ function shoot() {
         window.alert("Zuschauer haben keine Rechte.");
         return false;
     }
-    var LKPshooting = parseInt(document.getElementById("shootingLKPInput").value);
-    var SKPshooting = parseInt(document.getElementById("shootingSKPInput").value);
-    var shootingarmy = listOfArmies[selectedArmyIndex];
+    let LKPshooting = parseInt(document.getElementById("shootingLKPInput").value);
+    let SKPshooting = parseInt(document.getElementById("shootingSKPInput").value);
+    let shootingarmy = listOfArmies[selectedArmyIndex];
     if (isNaN(LKPshooting) || LKPshooting === undefined) {
         LKPshooting = 0;
     }
@@ -802,8 +799,8 @@ function shoot() {
         return false;
     }
     else {
-        var aimedTargetFound = false;
-        for (var i = 0; i < shootingarmy.targetList.length; i++) {
+        let aimedTargetFound = false;
+        for (let i = 0; i < shootingarmy.targetList.length; i++) {
             if (shootingarmy.targetList[i][0] === selectedFields[1][0] && shootingarmy.targetList[i][1] === selectedFields[1][1]) {
                 aimedTargetFound = true;
             }
@@ -813,10 +810,10 @@ function shoot() {
             return false;
         }
     } //TODO get target to shoot at
-    var target = "On Field";
+    let target = "On Field";
     //check for mixed shooting(reachable by both lkp and skp)
     if (LKPshooting < 0) {
-        var cond = checkCondition(shootingarmy, selectedFields[1][0], selectedFields[1][1], false);
+        let cond = checkCondition(shootingarmy, selectedFields[1][0], selectedFields[1][1], false);
         if (cond === 'impossible shot') {
             window.alert("Sie müssen auf ein gemeinsam erreichbares Feld schießen");
             return false;
@@ -1571,5 +1568,5 @@ function generateArmyId(type, owner) {
     }
 }
 function checkArmiesForLiveliness() {
-    listOfArmies = listOfArmies.filter(function (armyCoord) { return (armyCoord.isAlive()); });
+    listOfArmies = listOfArmies.filter((armyCoord) => (armyCoord.isAlive()));
 }

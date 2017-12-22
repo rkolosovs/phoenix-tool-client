@@ -1,70 +1,58 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var Army = /** @class */ (function (_super) {
-    __extends(Army, _super);
-    function Army(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
-        var _this = _super.call(this, id, owner, position, movePoints, heightPoints) || this;
-        _this.lightCatapultCount = 0;
-        _this.heavyCatapultCount = 0;
-        _this.isGuard = false;
-        _this.wasShotAt = false;
-        _this.setTroopCount(troopCount);
-        _this.setOfficerCount(officerCount);
+class Army extends MapEntity {
+    constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
+        super(id, owner, position, movePoints, heightPoints);
+        this.lightCatapultCount = 0;
+        this.heavyCatapultCount = 0;
+        this.isGuard = false;
+        this.wasShotAt = false;
+        this.setTroopCount(troopCount);
+        this.setOfficerCount(officerCount);
         if (isGuard != undefined) {
-            _this.isGuard = isGuard;
+            this.isGuard = isGuard;
         }
-        _this.setLightCatapultCount(lightCatapultCount);
-        _this.setHeavyCatapultCount(heavyCatapultCount);
-        return _this;
+        this.setLightCatapultCount(lightCatapultCount);
+        this.setHeavyCatapultCount(heavyCatapultCount);
     }
-    Army.prototype.getTroopCount = function () {
+    getTroopCount() {
         return this.troopCount;
-    };
-    Army.prototype.setTroopCount = function (value) {
+    }
+    setTroopCount(value) {
         this.troopCount = Math.max(0, value);
-    };
-    Army.prototype.getOfficerCount = function () {
+    }
+    getOfficerCount() {
         return this.officerCount;
-    };
-    Army.prototype.setOfficerCount = function (value) {
+    }
+    setOfficerCount(value) {
         this.officerCount = Math.max(0, value);
-    };
-    Army.prototype.getLightCatapultCount = function () {
+    }
+    getLightCatapultCount() {
         return this.lightCatapultCount;
-    };
-    Army.prototype.setLightCatapultCount = function (value) {
+    }
+    setLightCatapultCount(value) {
         if (this.canHaveCatapults()) {
             this.lightCatapultCount = Math.max(0, value);
         }
-    };
-    Army.prototype.getHeavyCatapultCount = function () {
+    }
+    getHeavyCatapultCount() {
         return this.heavyCatapultCount;
-    };
-    Army.prototype.setHeavyCatapultCount = function (value) {
+    }
+    setHeavyCatapultCount(value) {
         if (this.canHaveCatapults()) {
             this.heavyCatapultCount = Math.max(0, value);
         }
-    };
-    Army.prototype.takeDamage = function (losses) {
-        var factor = losses / this.troopCount;
+    }
+    takeDamage(losses) {
+        let factor = losses / this.troopCount;
         this.setTroopCount(this.troopCount - Math.floor(losses));
         this.setOfficerCount(this.officerCount - Math.floor(this.officerCount * factor));
         this.setLightCatapultCount(this.lightCatapultCount - Math.floor(this.lightCatapultCount * factor));
         this.setHeavyCatapultCount(this.heavyCatapultCount - Math.floor(this.heavyCatapultCount * factor));
-    };
-    Army.prototype.getRoomPoints = function () {
+    }
+    getRoomPoints() {
         return getRoomPointsSansOfficers() + this.officerCount * OFFICER_RP;
-    };
-    Army.prototype.leaderGp = function () {
-        var gp = 0;
+    }
+    leaderGp() {
+        let gp = 0;
         if (this.officerCount < 101) {
             gp += this.officerCount;
         }
@@ -78,10 +66,9 @@ var Army = /** @class */ (function (_super) {
             gp += 300;
         }
         return gp;
-    };
-    Army.prototype.isAlive = function () {
+    }
+    isAlive() {
         //TODO: Check for character leaders on the field once characters are implemented.
         return this.getRoomPointsSansOfficers() >= 100 && this.officerCount >= 1;
-    };
-    return Army;
-}(MapEntity));
+    }
+}

@@ -5,19 +5,13 @@
 var HexFunction;
 (function (HexFunction) {
     //just for compilation TODO delete
-    var rivers;
-    var buildings;
-    var fields;
-    var Building = /** @class */ (function () {
-        function Building() {
-        }
-        return Building;
-    }());
-    var Field = /** @class */ (function () {
-        function Field() {
-        }
-        return Field;
-    }());
+    let rivers;
+    let buildings;
+    let fields;
+    class Building {
+    }
+    class Field {
+    }
     //end TODO
     // returns the fields neighbors in the usual order
     function neighbors(x, y) {
@@ -87,19 +81,19 @@ var HexFunction;
     //returns the number value corresponting to the direction. if it has a .5 it is 
     function getDirectionToNeighbor(fromX, fromY, toX, toY) {
         if (distance(fromX, fromY, toX, toY) === 1) {
-            var possibleDir = neighbors(fromX, fromY);
-            for (var i = 0; i < possibleDir.length; i++) {
+            let possibleDir = neighbors(fromX, fromY);
+            for (let i = 0; i < possibleDir.length; i++) {
                 if (possibleDir[i][0] == toX && possibleDir[i][1] === toY)
                     return i;
             }
         }
         else if (distance(fromX, fromY, toX, toY) === 2) {
-            var targetNeighbors = neighbors(toX, toY);
-            var originNeighbors = neighbors(fromX, fromY);
-            var foundNeigh = false;
-            var direction = -1;
-            for (var j = 0; j < targetNeighbors.length; j++) {
-                for (var k = 0; k < originNeighbors.length; k++) {
+            let targetNeighbors = neighbors(toX, toY);
+            let originNeighbors = neighbors(fromX, fromY);
+            let foundNeigh = false;
+            let direction = -1;
+            for (let j = 0; j < targetNeighbors.length; j++) {
+                for (let k = 0; k < originNeighbors.length; k++) {
                     if (targetNeighbors[j][0] === originNeighbors[k][0] && targetNeighbors[j][1] === originNeighbors[k][1]) {
                         if (foundNeigh === false) {
                             foundNeigh = true;
@@ -121,21 +115,21 @@ var HexFunction;
     //https://www.redblobgames.com/grids/hexagons/
     function distance(originX, originY, toX, toY) {
         //this is the cube coordinates for the current Hex
-        var thisCubeX = originX - (originY + (originY & 1)) / 2;
-        var thisCubeZ = originY;
-        var thisCubeY = -thisCubeX - thisCubeZ;
+        let thisCubeX = originX - (originY + (originY & 1)) / 2;
+        let thisCubeZ = originY;
+        let thisCubeY = -thisCubeX - thisCubeZ;
         //this is the cube coordinates for the current Hex
-        var targetCubeX = toX - (toY + (toY & 1)) / 2; //bitwise & as an alternative to modulo that works without exceptions(negative numbers)
-        var targetCubeZ = toY;
-        var targetCubeY = -targetCubeX - targetCubeZ;
+        let targetCubeX = toX - (toY + (toY & 1)) / 2; //bitwise & as an alternative to modulo that works without exceptions(negative numbers)
+        let targetCubeZ = toY;
+        let targetCubeY = -targetCubeX - targetCubeZ;
         return Math.max(Math.abs(thisCubeX - targetCubeX), Math.abs(thisCubeY - targetCubeY), Math.abs(thisCubeZ - targetCubeZ));
     }
     HexFunction.distance = distance;
     function neighborInRange(x, y, range) {
-        var neighbors = [];
+        let neighbors = [];
         for (var i = x - range; i <= x + range; i++) {
             for (var j = y - range; j <= y + range; j++) {
-                var dist = distance(x, y, i, j);
+                let dist = distance(x, y, i, j);
                 if (i != x || j != y) {
                     if (dist <= range) {
                         neighbors.push([i, j]);
@@ -147,11 +141,11 @@ var HexFunction;
     }
     HexFunction.neighborInRange = neighborInRange;
     function findCommonNeighbor(fromX, fromY, toX, toY) {
-        var targetNeighbors = neighbors(toX, toY);
-        var originNeighbors = neighbors(fromX, fromY);
-        var foundCommon = [];
-        for (var j = 0; j < targetNeighbors.length; j++) {
-            for (var k = 0; k < originNeighbors.length; k++) {
+        let targetNeighbors = neighbors(toX, toY);
+        let originNeighbors = neighbors(fromX, fromY);
+        let foundCommon = [];
+        for (let j = 0; j < targetNeighbors.length; j++) {
+            for (let k = 0; k < originNeighbors.length; k++) {
                 if (targetNeighbors[j][0] == originNeighbors[k][0] && targetNeighbors[j][1] == originNeighbors[k][1]) {
                     foundCommon.push(targetNeighbors[j]);
                 }
@@ -162,15 +156,15 @@ var HexFunction;
     HexFunction.findCommonNeighbor = findCommonNeighbor;
     // does the field has a street on it in any direction
     function hasStreet(x, y) {
-        return buildings.some(function (elem) { return elem.type === 8 && ((elem.firstX === x && elem.firstY === y) ||
-            (elem.secondX === x && elem.secondY === y)); });
+        return buildings.some((elem) => elem.type === 8 && ((elem.firstX === x && elem.firstY === y) ||
+            (elem.secondX === x && elem.secondY === y)));
     }
     HexFunction.hasStreet = hasStreet;
     // in which directions does this field have walls (order as above, only walls build on this field)
     function walls(x, y) {
-        var result = [0, 0, 0, 0, 0, 0];
-        var walls = buildings.filter(function (elem) { return (elem.type === 5 && elem.x === x && elem.y === y); });
-        walls.forEach(function (wall) {
+        let result = [0, 0, 0, 0, 0, 0];
+        let walls = buildings.filter((elem) => (elem.type === 5 && elem.x === x && elem.y === y));
+        walls.forEach((wall) => {
             switch (wall.direction) {
                 case "nw":
                     result[0] = 1;
@@ -197,9 +191,9 @@ var HexFunction;
     HexFunction.walls = walls;
     // in which directions does this field have bridges (order as above)
     function bridges(x, y) {
-        var result = [0, 0, 0, 0, 0, 0];
-        var neighbor = neighbors(x, y);
-        var bridges = buildings.forEach(function (elem) {
+        let result = [0, 0, 0, 0, 0, 0];
+        let neighbor = neighbors(x, y);
+        let bridges = buildings.forEach((elem) => {
             if (elem.type === 7) {
                 if (elem.x === x && elem.y === y) {
                     switch (elem.direction) {
@@ -224,7 +218,7 @@ var HexFunction;
                     }
                 }
                 else {
-                    neighbor.forEach(function (val, index) {
+                    neighbor.forEach((val, index) => {
                         if (val[0] === elem.x && val[1] === elem.y) {
                             switch (index) {
                                 case 0:

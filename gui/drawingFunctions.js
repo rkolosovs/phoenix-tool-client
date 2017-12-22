@@ -552,7 +552,7 @@ function drawPossibleMoves(ctx, x, y, scale, selectedArmyIndex) {
 function drawFieldSelection(ctx, x, y, scale) {
     ctx.lineWidth = 5;
     ctx.strokeStyle = "blue";
-    for (var i = 0; i < selectedFields.length; i++) {
+    for (let i = 0; i < selectedFields.length; i++) {
         var pos = computePosition(x, y, selectedFields[i][0], selectedFields[i][1], scale);
         ctx.beginPath();
         ctx.arc(pos[0] + (0.5 * scale * SIN60), pos[1] + (scale * 0.5), scale / 2, 0, 2 * Math.PI, false);
@@ -571,15 +571,15 @@ function drawArmySelection(ctx, x, y, scale, armyIndex) {
 }
 function drawArmies(ctx, x, y, scale, armies) {
     //delete all multifields
-    for (var k = 0; k < listOfMultiArmyFields.length; k++) {
-        for (var l = 0; l < listOfMultiArmyFields[k].length; l++) {
+    for (let k = 0; k < listOfMultiArmyFields.length; k++) {
+        for (let l = 0; l < listOfMultiArmyFields[k].length; l++) {
             listOfMultiArmyFields[k][l].multiArmyField = false;
         }
     }
     listOfMultiArmyFields = [];
     //getting the multifield list ready
-    for (var i_1 = 0; i_1 < listOfArmies.length; i_1++) {
-        createMultifield(listOfArmies[i_1]);
+    for (let i = 0; i < listOfArmies.length; i++) {
+        createMultifield(listOfArmies[i]);
     }
     for (var i = 0; i < armies.length; i++) {
         var armyData = armies[i]; // get army coordinates
@@ -847,7 +847,7 @@ function drawShootingTargets(ctx, x, y, scale, selectedArmy) {
 }
 function writeFieldInfo() {
     var minimapBox = document.getElementById('minimapBox');
-    var index = 0;
+    let index = 0;
     if (shootingModeOn) {
         index = 1;
     }
@@ -889,9 +889,7 @@ function writeFieldInfo() {
                 localfieldType = 'Unbekannt';
                 break;
         }
-        var fieldOwner = borders.find(function (value) {
-            return (value.land.some(function (field) { return (field[0] === selectedFields[index][0] && field[1] === selectedFields[index][1]); }));
-        });
+        var fieldOwner = borders.find((value) => (value.land.some((field) => (field[0] === selectedFields[index][0] && field[1] === selectedFields[index][1]))));
         var fieldOwnerString = (fieldOwner === undefined) ? 'keiner' : fieldOwner.tag;
         minimapBox.innerHTML = '<p>Feld: (' + selectedFields[index][0] + ', ' + selectedFields[index][1] + ')' +
             '</p><p>Gelände: ' + localfieldType +

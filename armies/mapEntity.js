@@ -1,5 +1,5 @@
-var MapEntity = /** @class */ (function () {
-    function MapEntity(id, owner, position, movePoints, heightPoints) {
+class MapEntity {
+    constructor(id, owner, position, movePoints, heightPoints) {
         this.movePoints = MapEntity.MAX_MOVE_POINTS;
         this.heightPoints = MapEntity.MAX_HEIGHT_POINTS;
         this.position = position;
@@ -9,31 +9,30 @@ var MapEntity = /** @class */ (function () {
         this.setMovePoints(movePoints);
         this.setHeightPoints(heightPoints);
     }
-    MapEntity.prototype.getPosition = function () {
+    getPosition() {
         return this.position;
-    };
-    MapEntity.prototype.getOldPosition = function () {
+    }
+    getOldPosition() {
         return this.oldPosition;
-    };
-    MapEntity.prototype.getMovePoints = function () {
+    }
+    getMovePoints() {
         return this.movePoints;
-    };
-    MapEntity.prototype.setMovePoints = function (value) {
+    }
+    setMovePoints(value) {
         this.movePoints = Math.min(this.MAX_MOVE_POINTS, Math.max(0, value));
-    };
-    MapEntity.prototype.getHeightPoints = function () {
+    }
+    getHeightPoints() {
         return this.heightPoints;
-    };
-    MapEntity.prototype.setHeightPoints = function (value) {
+    }
+    setHeightPoints(value) {
         this.heightPoints = Math.min(this.MAX_HEIGHT_POINTS, Math.max(0, value));
-    };
-    MapEntity.prototype.getID = function () {
+    }
+    getID() {
         return this.id;
-    };
-    MapEntity.prototype.setID = function (value) {
+    }
+    setID(value) {
         this.id = value % 100;
-    };
-    MapEntity.MAX_MOVE_POINTS = 42;
-    MapEntity.MAX_HEIGHT_POINTS = 2;
-    return MapEntity;
-}());
+    }
+}
+MapEntity.MAX_MOVE_POINTS = 42;
+MapEntity.MAX_HEIGHT_POINTS = 2;

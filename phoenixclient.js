@@ -1,24 +1,24 @@
 'use strict';
-var OFFICER_RP = 100;
-var SHIP_RP = 100;
-var GUARD_RP_MULT = 3;
-var LIGHT_WS_RP = 1000;
-var HEAVY_WS_RP = 2000;
-var SHIP_TRANSPORT_CAPACITY = 100;
-var FOOTMAN_RP = 1;
-var RIDER_RP = 2;
-var LIGHT_CATA_RP = 1000;
-var HEAVY_CATA_RP = 2000;
-var MOUNT_RP = 1;
-var FOOTMAN_BP = 0.1;
-var MOUNT_BP = 0.1;
-var RIDER_BP = 0.2;
-var SHIP_BP = 10;
-var FOOTMAN_BP = 0.1;
-var LIGHT_CATA_BP = 200;
-var HEAVY_CATA_BP = 400;
-var LIGHT_WS_BP = 200;
-var HEAVY_WS_BP = 400;
+const OFFICER_RP = 100;
+const SHIP_RP = 100;
+const GUARD_RP_MULT = 3;
+const LIGHT_WS_RP = 1000;
+const HEAVY_WS_RP = 2000;
+const SHIP_TRANSPORT_CAPACITY = 100;
+const FOOTMAN_RP = 1;
+const RIDER_RP = 2;
+const LIGHT_CATA_RP = 1000;
+const HEAVY_CATA_RP = 2000;
+const MOUNT_RP = 1;
+const FOOTMAN_BP = 0.1;
+const MOUNT_BP = 0.1;
+const RIDER_BP = 0.2;
+const SHIP_BP = 10;
+const FOOTMAN_BP = 0.1;
+const LIGHT_CATA_BP = 200;
+const HEAVY_CATA_BP = 400;
+const LIGHT_WS_BP = 200;
+const HEAVY_WS_BP = 400;
 var selectedFields = []; // list of fields to be highlighted
 var selectedArmyIndex; // index of the currently selected army in the listOfArmies
 var listOfArmies = [];
@@ -204,7 +204,7 @@ function registerLeftClick() {
     }
     else {
         // Feldauswahl
-        var index = -1;
+        let index = -1;
         var sf = selectedFields[0];
         if (sf != undefined && (sf[0] === clickedField[0]) && (sf[1] === clickedField[1])) {
             selectedFields = [];
@@ -557,8 +557,8 @@ function determineEventStatus() {
                 }
             }
             else if (event.type === 'shoot') {
-                var shooter = listOfArmies[findArmyPlaceInList(content.armyId, content.realm)];
-                var canShoot = true;
+                let shooter = listOfArmies[findArmyPlaceInList(content.armyId, content.realm)];
+                let canShoot = true;
                 if (shooter.lkp - shooter.LKPShotThisTurn < content.LKPcount) {
                     canShoot = false;
                 }
@@ -694,9 +694,9 @@ function canMove(realm, id, fromX, fromY, toX, toY) {
     }, this);
     if (foundArmy !== undefined && foundArmy.x === fromX && foundArmy.y === fromY) {
         var adjacency = getAdjacency([fromX, fromY], [[toX, toY]]);
-        if (adjacency.reduce(function (total, current) { return (total || current); }, false)) {
+        if (adjacency.reduce((total, current) => (total || current), false)) {
             foundArmy.possibleMoves = [];
-            var direction = (adjacency.findIndex(function (dir) { return dir === 1; }) + 1) % 6;
+            var direction = (adjacency.findIndex((dir) => dir === 1) + 1) % 6;
             moveToList(foundArmy, direction);
             return foundArmy.possibleMoves.length > 0;
         }
@@ -1074,24 +1074,24 @@ function checkEvent(num) {
             document.getElementById("yTargetText").innerHTML = cont.toY;
             var shootButton = document.getElementById("rangedBattleButton");
             shootButton.onclick = function () {
-                var shooter;
-                var lkpRolls = [];
-                var skpRolls = [];
-                for (var i_1 = 0; i_1 < listOfArmies.length; i_1++) {
-                    if (listOfArmies[i_1].armyId === cont.armyId && listOfArmies[i_1].owner === cont.realm)
-                        shooter = listOfArmies[i_1];
+                let shooter;
+                let lkpRolls = [];
+                let skpRolls = [];
+                for (let i = 0; i < listOfArmies.length; i++) {
+                    if (listOfArmies[i].armyId === cont.armyId && listOfArmies[i].owner === cont.realm)
+                        shooter = listOfArmies[i];
                 }
-                for (var i_2 = 0; i_2 < 10; i_2++) {
-                    var currentRollLKP = parseInt(document.getElementById("LKP" + i_2 + "Input").value, 10);
-                    var currentRollSKP = parseInt(document.getElementById("SKP" + i_2 + "Input").value, 10);
+                for (let i = 0; i < 10; i++) {
+                    let currentRollLKP = parseInt(document.getElementById("LKP" + i + "Input").value, 10);
+                    let currentRollSKP = parseInt(document.getElementById("SKP" + i + "Input").value, 10);
                     if (!isNaN(currentRollLKP) && currentRollLKP !== 0) {
-                        for (var j = 0; j < currentRollLKP; j++) {
-                            lkpRolls.push(i_2);
+                        for (let j = 0; j < currentRollLKP; j++) {
+                            lkpRolls.push(i);
                         }
                     }
                     if (!isNaN(currentRollSKP) && currentRollSKP !== 0) {
-                        for (var j = 0; j < currentRollSKP; j++) {
-                            skpRolls.push(i_2);
+                        for (let j = 0; j < currentRollSKP; j++) {
+                            skpRolls.push(i);
                         }
                     }
                 }

@@ -28,20 +28,20 @@ function move(army, direction) {
                 //for moving off a ship
                 if (tempmove.unload !== undefined && tempmove.unload) {
                     //                    console.log("Armee war in " + army.isLoadedIn + " geladen.");
-                    for (var i_1 = 0; i_1 < listOfArmies.length; i_1++) {
-                        if ((listOfArmies[i_1].owner === army.owner) && listOfArmies[i_1].armyId === army.isLoadedIn) {
-                            var placeInList = -1;
-                            for (var j_1 = 0; j_1 < listOfArmies[i_1].loadedArmies.length; j_1++) {
-                                if (listOfArmies[i_1].loadedArmies[j_1] === army.armyId) {
-                                    placeInList = j_1;
+                    for (let i = 0; i < listOfArmies.length; i++) {
+                        if ((listOfArmies[i].owner === army.owner) && listOfArmies[i].armyId === army.isLoadedIn) {
+                            let placeInList = -1;
+                            for (let j = 0; j < listOfArmies[i].loadedArmies.length; j++) {
+                                if (listOfArmies[i].loadedArmies[j] === army.armyId) {
+                                    placeInList = j;
                                 }
                             }
-                            if (placeInList == (listOfArmies[i_1].loadedArmies.length - 1)) {
-                                listOfArmies[i_1].loadedArmies.pop();
+                            if (placeInList == (listOfArmies[i].loadedArmies.length - 1)) {
+                                listOfArmies[i].loadedArmies.pop();
                             }
                             else {
-                                listOfArmies[i_1].loadedArmies[j] = listOfArmies[i_1].loadedArmies[listOfArmies[i_1].loadedArmies.length - 1];
-                                listOfArmies[i_1].loadedArmies.pop();
+                                listOfArmies[i].loadedArmies[j] = listOfArmies[i].loadedArmies[listOfArmies[i].loadedArmies.length - 1];
+                                listOfArmies[i].loadedArmies.pop();
                             }
                             army.isLoadedIn = null;
                         }
@@ -158,8 +158,8 @@ function moveToList(army, direction) {
     var targetY = neighborCoords[direction][1];
     var directionString = '';
     var reverseDirection = '';
-    var neighborsOfNeighbors = neighbors(targetX, targetY).map(function (neighbor) { return neighbors(neighbor[0], neighbor[1]); }).
-        reduce(function (total, current) { return (total.concat(current)); }, []);
+    var neighborsOfNeighbors = neighbors(targetX, targetY).map((neighbor) => neighbors(neighbor[0], neighbor[1])).
+        reduce((total, current) => (total.concat(current)), []);
     switch (direction) {
         case 0:
             directionString = 'nw';
@@ -194,18 +194,12 @@ function moveToList(army, direction) {
     var thereIsAStreet = false;
     var thereIsABridge = false;
     var thereIsAHarbor = false;
-    var rightOfPassage = borders.some(function (realm) { return (realm.tag === army.ownerTag() && realm.land.some(function (field) {
-        return (targetX === field[0] && targetY === field[1]);
-    })); }); //effects of diplomacy go here
-    var coastalSailing = borders.some(function (realm) { return (realm.tag === army.ownerTag() && realm.land.some(function (field) {
-        return neighborsOfNeighbors.some(function (neighbor) { return (field[0] === neighbor[0] && field[1] === neighbor[1]); });
-    })); }); //effects of diplomacy go here
-    var thereIsARiver = rivers.some(function (river) {
-        return (river[0][0] === army.x && river[0][1] === army.y && river[1][0] === targetX && river[1][1] === targetY) ||
-            (river[0][0] === targetX && river[0][1] === targetY && river[1][0] === army.x && river[1][1] === army.y);
-    });
+    var rightOfPassage = borders.some((realm) => (realm.tag === army.ownerTag() && realm.land.some((field) => (targetX === field[0] && targetY === field[1])))); //effects of diplomacy go here
+    var coastalSailing = borders.some((realm) => (realm.tag === army.ownerTag() && realm.land.some((field) => neighborsOfNeighbors.some((neighbor) => (field[0] === neighbor[0] && field[1] === neighbor[1]))))); //effects of diplomacy go here
+    var thereIsARiver = rivers.some((river) => (river[0][0] === army.x && river[0][1] === army.y && river[1][0] === targetX && river[1][1] === targetY) ||
+        (river[0][0] === targetX && river[0][1] === targetY && river[1][0] === army.x && river[1][1] === army.y));
     // check if there is a steet, a harbor or a bridge on the route
-    buildings.forEach(function (building) {
+    buildings.forEach((building) => {
         if (building.type === 8 && (((building.firstX === army.x && building.firstY === army.y) &&
             (building.secondX === targetX && building.secondY === targetY)) || ((building.secondX === army.x &&
             building.secondY === army.y) && (building.firstX === targetX && building.firstY === targetY)))) {
@@ -855,14 +849,14 @@ function moveToList(army, direction) {
 }
 //checks the current field for other armies and adds it accordingly
 function createMultifield(army) {
-    for (var j = 0; j < listOfArmies.length; j++) {
+    for (let j = 0; j < listOfArmies.length; j++) {
         var someArmy = listOfArmies[j];
         if (someArmy.x === army.x && someArmy.y === army.y && someArmy !== army) {
             if (someArmy.multiArmyField === true || army.multiArmyField === true) {
                 addToMultifield(someArmy, army);
             }
             else {
-                var templist = [someArmy, army]; //creating a list of armies to add to the list of multifieldarmies
+                let templist = [someArmy, army]; //creating a list of armies to add to the list of multifieldarmies
                 listOfMultiArmyFields.push(templist);
                 someArmy.multiArmyField = true;
                 army.multiArmyField = true;
@@ -873,10 +867,10 @@ function createMultifield(army) {
 //Adds an army to an existing multifield
 function addToMultifield(armyOnMultifield, armyToAdd) {
     if (listOfMultiArmyFields !== undefined) {
-        var alreadyInList = false;
-        var placeToAdd = void 0;
-        for (var i = 0; i < listOfMultiArmyFields.length; i++) {
-            for (var j = 0; j < listOfMultiArmyFields[i].length; j++) {
+        let alreadyInList = false;
+        let placeToAdd;
+        for (let i = 0; i < listOfMultiArmyFields.length; i++) {
+            for (let j = 0; j < listOfMultiArmyFields[i].length; j++) {
                 if (listOfMultiArmyFields[i][j] === armyOnMultifield) {
                     placeToAdd = i;
                 }
@@ -941,13 +935,13 @@ function findShootingTargets(army) {
     army.targetList = checkAllConditions(army, army.targetList);
 }
 function checkAllConditions(army, targetList) {
-    var templist = targetList.slice();
-    var hasSKP = false;
+    let templist = targetList.slice();
+    let hasSKP = false;
     if (army.skp - army.SKPShotThisTurn > 0) {
         hasSKP = true;
     }
     //to find out the conditions and maybe kick out if not shootable
-    for (var i = templist.length - 1; i >= 0; i--) {
+    for (let i = templist.length - 1; i >= 0; i--) {
         if (checkCondition(army, templist[i][0], templist[i][1], hasSKP) === 'impossible shot') {
             targetList.splice(i, 1);
         }
@@ -955,8 +949,8 @@ function checkAllConditions(army, targetList) {
     return targetList;
 }
 function checkCondition(army, x, y, skpShot) {
-    var condition = 'impossible shot';
-    var range = distance(army.x, army.y, x, y);
+    let condition = 'impossible shot';
+    let range = distance(army.x, army.y, x, y);
     if (skpShot) {
         if (range == 1) {
             if (height(x, y) - height(army.x, army.y) <= 2) {
@@ -980,11 +974,11 @@ function checkCondition(army, x, y, skpShot) {
                 condition = 'farAndUp';
             }
             //if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
-            var commonNeig = findCommonNeighbor(army.x, army.y, x, y);
-            var walls = findWallInWay(army.x, army.y, x, y);
-            for (var i = 0; i < commonNeig.length; i++) {
+            let commonNeig = findCommonNeighbor(army.x, army.y, x, y);
+            let walls = findWallInWay(army.x, army.y, x, y);
+            for (let i = 0; i < commonNeig.length; i++) {
                 if (walls.length > 0) {
-                    for (var j = 0; j < walls.length; j++) {
+                    for (let j = 0; j < walls.length; j++) {
                         if (((height(commonNeig[i][0], commonNeig[i][1]) - height(army.x, army.y) === 1) && buildings[walls[j]].x === commonNeig[i][0] && buildings[walls[j]].y === commonNeig[i][1])) {
                             condition = 'impossible shot';
                         }
@@ -1004,11 +998,11 @@ function checkCondition(army, x, y, skpShot) {
     return condition;
 }
 function findWallInWay(fromX, fromY, toX, toY) {
-    var foundWallsIndeces = [];
-    var dir = getDirectionToNeighbor(fromX, fromY, toX, toY);
+    let foundWallsIndeces = [];
+    let dir = getDirectionToNeighbor(fromX, fromY, toX, toY);
     if (distance(fromX, fromY, toX, toY) === 1) {
         dir = (dir + 3) % 6;
-        var wallIndex = getWallIndexOnFieldInDirection(toX, toY, dir);
+        let wallIndex = getWallIndexOnFieldInDirection(toX, toY, dir);
         if (wallIndex != -1) {
             foundWallsIndeces.push(wallIndex);
             return foundWallsIndeces;
@@ -1016,7 +1010,7 @@ function findWallInWay(fromX, fromY, toX, toY) {
     }
     else if (distance(fromX, fromY, toX, toY) === 2) {
         if (dir % 1 === 0) {
-            var commonNeig = findCommonNeighbor(fromX, fromY, toX, toY);
+            let commonNeig = findCommonNeighbor(fromX, fromY, toX, toY);
             if (getWallIndexOnFieldInDirection(commonNeig[0][0], commonNeig[0][1], dir) !== -1) {
                 foundWallsIndeces.push(getWallIndexOnFieldInDirection(commonNeig[0][0], commonNeig[0][1], dir));
             }
@@ -1029,9 +1023,9 @@ function findWallInWay(fromX, fromY, toX, toY) {
             }
         }
         else {
-            var commonNeig = findCommonNeighbor(fromX, fromY, toX, toY);
+            let commonNeig = findCommonNeighbor(fromX, fromY, toX, toY);
             dir = Math.floor(dir);
-            var dirCommon1 = (dir + 3) % 6;
+            let dirCommon1 = (dir + 3) % 6;
             if (getWallIndexOnFieldInDirection(commonNeig[0][0], commonNeig[0][1], dirCommon1) !== -1) {
                 foundWallsIndeces.push(getWallIndexOnFieldInDirection(commonNeig[0][0], commonNeig[0][1], dirCommon1));
             }
@@ -1039,7 +1033,7 @@ function findWallInWay(fromX, fromY, toX, toY) {
             if (getWallIndexOnFieldInDirection(commonNeig[0][0], commonNeig[0][1], dirCommon1) !== -1) {
                 foundWallsIndeces.push(getWallIndexOnFieldInDirection(commonNeig[0][0], commonNeig[0][1], dirCommon1));
             }
-            var dirCommon2 = (dir + 4) % 6;
+            let dirCommon2 = (dir + 4) % 6;
             if (getWallIndexOnFieldInDirection(commonNeig[1][0], commonNeig[1][1], dirCommon2) !== -1) {
                 foundWallsIndeces.push(getWallIndexOnFieldInDirection(commonNeig[1][0], commonNeig[1][1], dirCommon2));
             }
@@ -1047,7 +1041,7 @@ function findWallInWay(fromX, fromY, toX, toY) {
             if (getWallIndexOnFieldInDirection(commonNeig[1][0], commonNeig[1][1], dirCommon2) !== -1) {
                 foundWallsIndeces.push(getWallIndexOnFieldInDirection(commonNeig[1][0], commonNeig[1][1], dirCommon2));
             }
-            var dirTarget = (dir + 3) % 6;
+            let dirTarget = (dir + 3) % 6;
             if (getWallIndexOnFieldInDirection(toX, toY, dirTarget) !== -1) {
                 foundWallsIndeces.push(getWallIndexOnFieldInDirection(toX, toY, dirTarget));
             }
@@ -1061,7 +1055,7 @@ function findWallInWay(fromX, fromY, toX, toY) {
 }
 //returns all walls on target field
 function getWallIndexOnFieldInDirection(x, y, direction) {
-    for (var i = 0; i < buildings.length; i++) {
+    for (let i = 0; i < buildings.length; i++) {
         if (buildings[i].type === 5 && buildings[i].x === x && buildings[i].y === y && buildings[i].direction === convertDirection(direction)) {
             return i;
         }

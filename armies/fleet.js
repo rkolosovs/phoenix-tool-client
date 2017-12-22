@@ -1,33 +1,20 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var Fleet = /** @class */ (function (_super) {
-    __extends(Fleet, _super);
-    function Fleet(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
-        var _this = this;
-        _this.transportedArmies = [];
+class Fleet extends Army {
+    constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
+        this.transportedArmies = [];
         if (isGuard != undefined) {
-            _this = _super.call(this, id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) || this;
+            super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard);
         }
         else {
-            _this = _super.call(this, id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints) || this;
+            super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints);
         }
-        return _this;
     }
-    Fleet.prototype.getErkenfaraID = function () {
+    getErkenfaraID() {
         return 300 + this.id;
-    };
-    Fleet.prototype.canHaveCatapults = function () {
+    }
+    canHaveCatapults() {
         return !this.isGuard;
-    };
-    Fleet.prototype.getRoomPointsSansOfficers = function () {
+    }
+    getRoomPointsSansOfficers() {
         if (isGuard) {
             return this.troopCount * SHIP_RP * GUARD_RP_MULT +
                 this.lightCatapultCount * LIGHT_WS_RP + this.heavyCatapultCount * HEAVY_WS_RP;
@@ -36,12 +23,12 @@ var Fleet = /** @class */ (function (_super) {
             return this.troopCount * SHIP_RP +
                 this.lightCatapultCount * LIGHT_WS_RP + this.heavyCatapultCount * HEAVY_WS_RP;
         }
-    };
-    Fleet.prototype.canConquer = function () {
+    }
+    canConquer() {
         return false;
-    };
-    Fleet.prototype.takeBPDamage = function (bpDamage) {
-        var totalBP = this.troopCount * SHIP_BP +
+    }
+    takeBPDamage(bpDamage) {
+        let totalBP = this.troopCount * SHIP_BP +
             this.lightCatapultCount * LIGHT_WS_BP + this.heavyCatapultCount * HEAVY_WS_BP;
         this.setOfficerCount(this.officerCount - this.troopCount * (bpDamage / totalBP));
         this.setTroopCount(this.troopCount - bpDamage * (this.troopCount * SHIP_BP / totalBP) / SHIP_BP);
@@ -51,12 +38,12 @@ var Fleet = /** @class */ (function (_super) {
             totalBP) / HEAVY_WS_BP);
         this.killTransportedTroops();
         this.wasShotAt = true;
-    };
-    Fleet.prototype.fireLightCatapults = function (dicerolls, badConditions) {
-        var rollLen = dicerolls.length;
-        var damageBP = 0;
+    }
+    fireLightCatapults(dicerolls, badConditions) {
+        let rollLen = dicerolls.length;
+        let damageBP = 0;
         if (badConditions === "lkp") {
-            for (var i = 0; i < rollLen; i++) {
+            for (let i = 0; i < rollLen; i++) {
                 switch (dicerolls[i]) {
                     case 9:
                         damageBP += 0;
@@ -92,12 +79,12 @@ var Fleet = /** @class */ (function (_super) {
             }
         }
         return damageBP;
-    };
-    Fleet.prototype.fireHeavyCatapults = function (dicerolls, badConditions) {
-        var rollLen = dicerolls.length;
-        var damageBP = 0;
+    }
+    fireHeavyCatapults(dicerolls, badConditions) {
+        let rollLen = dicerolls.length;
+        let damageBP = 0;
         if (badConditions === "short") {
-            for (var i = 0; i < rollLen; i++) {
+            for (let i = 0; i < rollLen; i++) {
                 switch (dicerolls[i]) {
                     case 9:
                         damageBP += 5;
@@ -133,7 +120,7 @@ var Fleet = /** @class */ (function (_super) {
             }
         }
         else if (badConditions === "high") {
-            for (var i = 0; i < rollLen; i++) {
+            for (let i = 0; i < rollLen; i++) {
                 switch (dicerolls[i]) {
                     case 9:
                         damageBP += 0;
@@ -169,7 +156,7 @@ var Fleet = /** @class */ (function (_super) {
             }
         }
         else if (badConditions === "farAndUp") {
-            for (var i = 0; i < rollLen; i++) {
+            for (let i = 0; i < rollLen; i++) {
                 switch (dicerolls[i]) {
                     case 9:
                         damageBP += 0;
@@ -205,7 +192,7 @@ var Fleet = /** @class */ (function (_super) {
             }
         }
         else if (badConditions === "far") {
-            for (var i = 0; i < rollLen; i++) {
+            for (let i = 0; i < rollLen; i++) {
                 switch (dicerolls[i]) {
                     case 9:
                         damageBP += 0;
@@ -241,26 +228,26 @@ var Fleet = /** @class */ (function (_super) {
             }
         }
         return damageBP;
-    };
-    Fleet.prototype.takeDamage = function (losses) {
-        _super.prototype.takeDamage.call(this, losses);
+    }
+    takeDamage(losses) {
+        super.takeDamage(losses);
         this.killTransportedTroops();
-    };
-    Fleet.prototype.usedTransportCapacity = function () {
-        var loaded = 0;
-        this.transportedArmies.forEach(function (transportedArmy) { return loaded += transportedArmy.getRoomPoints(); });
+    }
+    usedTransportCapacity() {
+        let loaded = 0;
+        this.transportedArmies.forEach(transportedArmy => loaded += transportedArmy.getRoomPoints());
         return loaded;
-    };
-    Fleet.prototype.maxTransportCapacity = function () {
+    }
+    maxTransportCapacity() {
         return this.troopCount * SHIP_TRANSPORT_CAPACITY;
-    };
-    Fleet.prototype.freeTransportCapacity = function () {
+    }
+    freeTransportCapacity() {
         return this.maxTransportCapacity() - this.usedTransportCapacity();
-    };
-    Fleet.prototype.canLoad = function (armyToLoad) {
+    }
+    canLoad(armyToLoad) {
         return this.freeTransportCapacity() >= armyToLoad.getRoomPoints();
-    };
-    Fleet.prototype.loadArmy = function (army) {
+    }
+    loadArmy(army) {
         if (listOfArmies[index].raumpunkte() <= this.currentCapacity()) {
             this.loadedArmies.push(army);
             army.isTransported = true;
@@ -269,22 +256,19 @@ var Fleet = /** @class */ (function (_super) {
         else {
             return "This army is too big for this fleet.";
         }
-    };
-    Fleet.prototype.unloadArmy = function (army) {
-        var armyIndex = this.transportedArmies.indexOf(army);
+    }
+    unloadArmy(army) {
+        let armyIndex = this.transportedArmies.indexOf(army);
         if (armyIndex >= 0) {
             this.transportedArmies.splice(armyIndex, 1);
         }
-    };
-    Fleet.prototype.killTransportedTroops = function () {
-        var usedCapacity = this.usedTransportCapacity();
-        var overload = usedCapacity - this.maxTransportCapacity();
+    }
+    killTransportedTroops() {
+        let usedCapacity = this.usedTransportCapacity();
+        let overload = usedCapacity - this.maxTransportCapacity();
         if (overload > 0) {
-            this.transportedArmies.forEach(function (transportedArmy) {
-                return transportedArmy.takeRPDamage(Math.ceil(overload * (transportedArmy.getRoomPoints() / usedCapacity)));
-            });
+            this.transportedArmies.forEach(transportedArmy => transportedArmy.takeRPDamage(Math.ceil(overload * (transportedArmy.getRoomPoints() / usedCapacity))));
         }
-    };
-    Fleet.MAX_HEIGHT_POINTS = 0;
-    return Fleet;
-}(Army));
+    }
+}
+Fleet.MAX_HEIGHT_POINTS = 0;

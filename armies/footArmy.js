@@ -1,49 +1,36 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var FootArmy = /** @class */ (function (_super) {
-    __extends(FootArmy, _super);
-    function FootArmy(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
-        var _this = this;
+class FootArmy extends LandArmy {
+    constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
         if (isGuard != undefined) {
-            _this = _super.call(this, id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) || this;
+            super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard);
         }
         else {
-            _this = _super.call(this, id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints) || this;
+            super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints);
         }
-        return _this;
     }
-    FootArmy.prototype.getMountCount = function () {
+    getMountCount() {
         return this.mountCount;
-    };
-    FootArmy.prototype.setMountCount = function (value) {
+    }
+    setMountCount(value) {
         this.mountCount = Math.max(0, value);
-    };
-    FootArmy.prototype.takeRPDamage = function (rpDamage) {
+    }
+    takeRPDamage(rpDamage) {
         this.takeDamage(Math.ceil(rpDamage / (FOOTMAN_RP +
             OFFICER_RP * (this.officerCount / this.troopCount) +
             this.mountCount / this.troopCount +
             LIGHT_CATA_RP * (this.lightCatapultCount / this.troopCount) +
             HEAVY_CATA_RP * (this.heavyCatapultCount / this.troopCount))));
-    };
-    FootArmy.prototype.canHaveCatapults = function () {
+    }
+    canHaveCatapults() {
         return !this.isGuard;
-    };
-    FootArmy.prototype.getRoomPointsSansOfficers = function () {
+    }
+    getRoomPointsSansOfficers() {
         return this.troopCount * FOOTMAN_RP +
             this.lightCatapultCount * LIGHT_CATA_RP +
             this.heavyCatapultCount * HEAVY_CATA_RP +
             this.mountCount * MOUNT_RP;
-    };
-    FootArmy.prototype.takeBPDamage = function (bpDamage) {
-        var totalBP = this.troopCount * FOOTMAN_BP + this.mountCount * MOUNT_BP +
+    }
+    takeBPDamage(bpDamage) {
+        let totalBP = this.troopCount * FOOTMAN_BP + this.mountCount * MOUNT_BP +
             this.lightCatapultCount * LIGHT_CATA_BP + this.heavyCatapultCount * HEAVY_CATA_BP;
         this.setOfficerCount(this.officerCount - this.troopCount * (bpDamage / totalBP));
         this.setTroopCount(this.troopCount - bpDamage * (this.troopCount * FOOTMAN_BP / totalBP) / FOOTMAN_BP);
@@ -53,12 +40,12 @@ var FootArmy = /** @class */ (function (_super) {
         this.setHeavyCatapultCount(this.heavyCatapultCount - bpDamage * (this.heavyCatapultCount * HEAVY_CATA_BP /
             totalBP) / HEAVY_CATA_BP);
         this.wasShotAt = true;
-    };
-    FootArmy.prototype.fireLightCatapults = function (dicerolls, badConditions) {
-        var rollLen = dicerolls.length;
-        var damageBP = 0;
+    }
+    fireLightCatapults(dicerolls, badConditions) {
+        let rollLen = dicerolls.length;
+        let damageBP = 0;
         if (badConditions === "lkp") {
-            for (var i = 0; i < rollLen; i++) {
+            for (let i = 0; i < rollLen; i++) {
                 switch (dicerolls[i]) {
                     case 9:
                         damageBP += 5;
@@ -94,12 +81,12 @@ var FootArmy = /** @class */ (function (_super) {
             }
         }
         return damageBP;
-    };
-    FootArmy.prototype.fireHeavyCatapults = function (dicerolls, badConditions) {
-        var rollLen = dicerolls.length;
-        var damageBP = 0;
+    }
+    fireHeavyCatapults(dicerolls, badConditions) {
+        let rollLen = dicerolls.length;
+        let damageBP = 0;
         if (badConditions === "short") {
-            for (var i = 0; i < rollLen; i++) {
+            for (let i = 0; i < rollLen; i++) {
                 switch (dicerolls[i]) {
                     case 9:
                         damageBP += 30;
@@ -135,7 +122,7 @@ var FootArmy = /** @class */ (function (_super) {
             }
         }
         else if (badConditions === "high") {
-            for (var i = 0; i < rollLen; i++) {
+            for (let i = 0; i < rollLen; i++) {
                 switch (dicerolls[i]) {
                     case 9:
                         damageBP += 0;
@@ -171,7 +158,7 @@ var FootArmy = /** @class */ (function (_super) {
             }
         }
         else if (badConditions === "farAndUp") {
-            for (var i = 0; i < rollLen; i++) {
+            for (let i = 0; i < rollLen; i++) {
                 switch (dicerolls[i]) {
                     case 9:
                         damageBP += 5;
@@ -207,7 +194,7 @@ var FootArmy = /** @class */ (function (_super) {
             }
         }
         else if (badConditions === "far") {
-            for (var i = 0; i < rollLen; i++) {
+            for (let i = 0; i < rollLen; i++) {
                 switch (dicerolls[i]) {
                     case 9:
                         damageBP += 0;
@@ -243,7 +230,6 @@ var FootArmy = /** @class */ (function (_super) {
             }
         }
         return damageBP;
-    };
-    FootArmy.MAX_MOVE_POINTS = 9;
-    return FootArmy;
-}(LandArmy));
+    }
+}
+FootArmy.MAX_MOVE_POINTS = 9;
