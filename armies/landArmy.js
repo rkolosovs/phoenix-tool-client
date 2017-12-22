@@ -10,10 +10,19 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var LandArmy = /** @class */ (function (_super) {
     __extends(LandArmy, _super);
-    function LandArmy(args) {
+    function LandArmy(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
         var _this = this;
+        _this.isTransported = false;
+        if (isGuard != undefined) {
+            _this = _super.call(this, id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) || this;
+        }
+        else {
+            _this = _super.call(this, id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints) || this;
+        }
         return _this;
-        //TODO
     }
+    LandArmy.prototype.canConquer = function () {
+        return;
+    };
     return LandArmy;
 }(Army));

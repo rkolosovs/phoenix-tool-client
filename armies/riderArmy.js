@@ -10,10 +10,15 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var RiderArmy = /** @class */ (function (_super) {
     __extends(RiderArmy, _super);
-    function RiderArmy(args) {
+    function RiderArmy(id, owner, troopCount, officerCount, position, movePoints, heightPoints, isGuard) {
         var _this = this;
+        if (isGuard != undefined) {
+            _this = _super.call(this, id, owner, troopCount, officerCount, 0, 0, position, movePoints, heightPoints, isGuard) || this;
+        }
+        else {
+            _this = _super.call(this, id, owner, troopCount, officerCount, 0, 0, position, movePoints, heightPoints) || this;
+        }
         return _this;
-        //TODO
     }
     RiderArmy.prototype.takeRPDamage = function (rpDamage) {
         this.takeDamage(Math.ceil(rpDamage / (RIDER_RP +
@@ -22,17 +27,20 @@ var RiderArmy = /** @class */ (function (_super) {
     RiderArmy.prototype.canHaveCatapults = function () {
         return false;
     };
-    RiderArmy.prototype.canConquer = function () {
-        //TODO
+    RiderArmy.prototype.getRoomPointsSansOfficers = function () {
+        return this.troopCount * RIDER_RP;
     };
     RiderArmy.prototype.takeBPDamage = function (bpDamage) {
-        //TODO
+        var totalBP = this.troopCount * RIDER_BP;
+        this.setOfficerCount(this.officerCount - this.troopCount * (bpDamage / totalBP));
+        this.setTroopCount(this.troopCount - bpDamage / RIDER_BP);
+        this.wasShotAt = true;
     };
-    RiderArmy.prototype.fireLightCatapults = function (args) {
-        //TODO
+    RiderArmy.prototype.fireLightCatapults = function (dicerolls, badConditions) {
+        return 0;
     };
-    RiderArmy.prototype.fireHeavyCatapults = function (args) {
-        //TODO
+    RiderArmy.prototype.fireHeavyCatapults = function (dicerolls, badConditions) {
+        return 0;
     };
     RiderArmy.MAX_MOVE_POINTS = 21;
     return RiderArmy;

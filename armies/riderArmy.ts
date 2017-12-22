@@ -1,8 +1,13 @@
 class RiderArmy extends LandArmy{
     static readonly MAX_MOVE_POINTS = 21;
 
-    constructor(args: any[]){
-        //TODO
+    constructor(id: number, owner: Realm, troopCount: number, officerCount: number, position: [number, number],
+                movePoints: number, heightPoints: number, isGuard?: boolean){
+        if(isGuard != undefined){
+            super(id, owner, troopCount, officerCount, 0, 0, position, movePoints, heightPoints, isGuard);
+        } else {
+            super(id, owner, troopCount, officerCount, 0, 0, position, movePoints, heightPoints);
+        }
     }
 
     takeRPDamage(rpDamage: number): void{
@@ -14,19 +19,22 @@ class RiderArmy extends LandArmy{
         return false;
     }
 
-    canConquer(): boolean{
-        //TODO
+    getRoomPointsSansOfficers(): number{
+        return this.troopCount * RIDER_RP;
     }
 
     takeBPDamage(bpDamage: number): void{
-        //TODO
+        let totalBP = this.troopCount * RIDER_BP;
+        this.setOfficerCount(this.officerCount - this.troopCount * (bpDamage / totalBP));
+        this.setTroopCount(this.troopCount - bpDamage / RIDER_BP);
+        this.wasShotAt = true;
     }
 
-    fireLightCatapults(args: any[]): void{
-        //TODO
+    fireLightCatapults(dicerolls: number[], badConditions: string): number{
+        return 0;
     }
 
-    fireHeavyCatapults(args: any[]): void{
-        //TODO
+    fireHeavyCatapults(dicerolls: number[], badConditions: string): number{
+        return 0;
     }
 }

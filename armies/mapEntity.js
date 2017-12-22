@@ -19,13 +19,13 @@ var MapEntity = /** @class */ (function () {
         return this.movePoints;
     };
     MapEntity.prototype.setMovePoints = function (value) {
-        this.movePoints = Math.min(this.class.MAX_MOVE_POINTS, Math.max(0, value));
+        this.movePoints = Math.min(this.MAX_MOVE_POINTS, Math.max(0, value));
     };
     MapEntity.prototype.getHeightPoints = function () {
         return this.heightPoints;
     };
     MapEntity.prototype.setHeightPoints = function (value) {
-        this.heightPoints = Math.min(this.class.MAX_HEIGHT_POINTS, Math.max(0, value));
+        this.heightPoints = Math.min(this.MAX_HEIGHT_POINTS, Math.max(0, value));
     };
     MapEntity.prototype.getID = function () {
         return this.id;

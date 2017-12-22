@@ -37,15 +37,105 @@ class Fleet extends Army{
     }
 
     takeBPDamage(bpDamage: number): void{
-        //TODO
+        let totalBP = this.troopCount * SHIP_BP +
+            this.lightCatapultCount * LIGHT_WS_BP + this.heavyCatapultCount * HEAVY_WS_BP;
+        this.setOfficerCount(this.officerCount - this.troopCount * (bpDamage / totalBP));
+        this.setTroopCount(this.troopCount - bpDamage * (this.troopCount * SHIP_BP / totalBP) / SHIP_BP);
+        this.setLightCatapultCount(this.lightCatapultCount - bpDamage * (this.lightCatapultCount * LIGHT_WS_BP /
+            totalBP) / LIGHT_WS_BP);
+        this.setHeavyCatapultCount(this.heavyCatapultCount - bpDamage * (this.heavyCatapultCount * HEAVY_WS_BP /
+            totalBP) / HEAVY_WS_BP);
+        this.killTransportedTroops();
+        this.wasShotAt = true;
     }
 
-    fireLightCatapults(args: any[]): void{
-        //TODO
+    fireLightCatapults(dicerolls: number[], badConditions: string): number{
+        let rollLen = dicerolls.length;
+        let damageBP = 0;
+        if(badConditions === "lkp"){
+            for (let i = 0; i < rollLen; i++){
+                switch(dicerolls[i]){
+                    case 9: damageBP += 0; break;
+                    case 8: damageBP += 5; break;
+                    case 7: damageBP += 10; break;
+                    case 6: damageBP += 25; break;
+                    case 5: damageBP += 50; break;
+                    case 4: damageBP += 75; break;
+                    case 3: damageBP += 100; break;
+                    case 2: damageBP += 125; break;
+                    case 1: damageBP += 150; break;
+                    case 0: damageBP += 175; break;
+                }
+            }
+        }
+        return damageBP;
     }
 
-    fireHeavyCatapults(args: any[]): void{
-        //TODO
+    fireHeavyCatapults(dicerolls: number[], badConditions: string): number{
+        let rollLen = dicerolls.length;
+        let damageBP = 0;
+        if(badConditions === "short"){
+            for (let i = 0; i < rollLen; i++){
+                switch(dicerolls[i]){
+                    case 9: damageBP += 5; break;
+                    case 8: damageBP += 10; break;
+                    case 7: damageBP += 40; break;
+                    case 6: damageBP += 70; break;
+                    case 5: damageBP += 100; break;
+                    case 4: damageBP += 130; break;
+                    case 3: damageBP += 160; break;
+                    case 2: damageBP += 190; break;
+                    case 1: damageBP += 220; break;
+                    case 0: damageBP += 250; break;
+                }
+            }
+        } else if(badConditions === "high"){
+            for (let i = 0; i < rollLen; i++){
+                switch(dicerolls[i]){
+                    case 9: damageBP += 0; break;
+                    case 8: damageBP += 0; break;
+                    case 7: damageBP += 5; break;
+                    case 6: damageBP += 10; break;
+                    case 5: damageBP += 30; break;
+                    case 4: damageBP += 40; break;
+                    case 3: damageBP += 50; break;
+                    case 2: damageBP += 65; break;
+                    case 1: damageBP += 80; break;
+                    case 0: damageBP += 100; break;
+                }
+            }
+        } else if(badConditions === "farAndUp"){
+            for (let i = 0; i < rollLen; i++){
+                switch(dicerolls[i]){
+                    case 9: damageBP += 0; break;
+                    case 8: damageBP += 5; break;
+                    case 7: damageBP += 10; break;
+                    case 6: damageBP += 30; break;
+                    case 5: damageBP += 40; break;
+                    case 4: damageBP += 50; break;
+                    case 3: damageBP += 65; break;
+                    case 2: damageBP += 80; break;
+                    case 1: damageBP += 100; break;
+                    case 0: damageBP += 120; break;
+                }
+            }
+        } else if(badConditions === "far"){
+            for (let i = 0; i < rollLen; i++){
+                switch(dicerolls[i]){
+                    case 9: damageBP += 0; break;
+                    case 8: damageBP += 0; break;
+                    case 7: damageBP += 0; break;
+                    case 6: damageBP += 5; break;
+                    case 5: damageBP += 10; break;
+                    case 4: damageBP += 20; break;
+                    case 3: damageBP += 40; break;
+                    case 2: damageBP += 60; break;
+                    case 1: damageBP += 80; break;
+                    case 0: damageBP += 100; break;
+                }
+            }
+        }
+        return damageBP;
     }
 
     takeDamage(losses: number): void{
@@ -54,23 +144,38 @@ class Fleet extends Army{
     }
 
     usedTransportCapacity(): number{
-        //TODO
+        let loaded = 0;
+        this.transportedArmies.forEach(transportedArmy => loaded += transportedArmy.getRoomPoints());
+        return loaded;
     }
 
     maxTransportCapacity(): number{
-        //TODO
+        return this.troopCount * SHIP_TRANSPORT_CAPACITY;
     }
 
     freeTransportCapacity(): number{
-        //TODO
+        return this.maxTransportCapacity() - this.usedTransportCapacity();
     }
 
     canLoad(armyToLoad: LandArmy): boolean{
-        //TODO
+        return this.freeTransportCapacity() >= armyToLoad.getRoomPoints();
     }
 
-    loadArmy(army: LandArmy): void{
-        //TODO
+    loadArmy(army: LandArmy): string{
+        if(listOfArmies[index].raumpunkte() <= this.currentCapacity()){
+            this.loadedArmies.push(army);
+            army.isTransported = true;
+            return "ok";
+        } else {
+            return "This army is too big for this fleet.";
+        }
+    }
+
+    unloadArmy(army: LandArmy): void{
+        let armyIndex: number = this.transportedArmies.indexOf(army);
+        if(armyIndex >= 0){
+            this.transportedArmies.splice(armyIndex, 1);
+        }
     }
 
     killTransportedTroops(): void{

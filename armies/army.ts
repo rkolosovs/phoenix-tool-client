@@ -4,6 +4,7 @@ class Army extends MapEntity{
     protected lightCatapultCount: number = 0;
     protected heavyCatapultCount: number = 0;
     isGuard: boolean = false;
+    wasShotAt: boolean = false;
 
     constructor(id: number, owner: Realm, troopCount: number, officerCount: number, lightCatapultCount: number,
                 heavyCatapultCount: number, position: [number, number], movePoints: number, heightPoints: number,
@@ -24,9 +25,9 @@ class Army extends MapEntity{
 
     takeBPDamage(bpDamage: number): void;
 
-    fireLightCatapults(args: any[]): void;
+    fireLightCatapults(dicerolls: number[], badConditions: string): number;
 
-    fireHeavyCatapults(args: any[]): void;
+    fireHeavyCatapults(dicerolls: number[], badConditions: string): number;
 
     getTroopCount(): number{
         return this.troopCount;
@@ -80,9 +81,9 @@ class Army extends MapEntity{
         let gp = 0;
 
         if(this.officerCount < 101) {
-            gp += this.leaders;
-        } else if(this.leaders < 201) {
-            gp += (100 + (this.leaders-100) / 2 );
+            gp += this.officerCount;
+        } else if(this.officerCount < 201) {
+            gp += (100 + (this.officerCount-100) / 2 );
         } else {
             gp += 200;
         }

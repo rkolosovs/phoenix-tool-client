@@ -10,6 +10,17 @@ const FOOTMAN_RP: number = 1;
 const RIDER_RP: number = 2;
 const LIGHT_CATA_RP: number = 1000;
 const HEAVY_CATA_RP: number = 2000;
+const MOUNT_RP: number = 1;
+const FOOTMAN_BP: number = 0.1;
+const MOUNT_BP: number = 0.1;
+const RIDER_BP: number = 0.2;
+const SHIP_BP: number = 10;
+const FOOTMAN_BP: number = 0.1;
+const LIGHT_CATA_BP: number = 200;
+const HEAVY_CATA_BP: number = 400;
+const LIGHT_WS_BP: number = 200;
+const HEAVY_WS_BP: number = 400;
+
 
 var selectedFields  = []; // list of fields to be highlighted
 var selectedArmyIndex; // index of the currently selected army in the listOfArmies

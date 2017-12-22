@@ -36,7 +36,7 @@ class MapEntity{
     }
 
     setMovePoints(value: number): void{ //TODO: Check if this works!
-        this.movePoints = Math.min(this.class.MAX_MOVE_POINTS, Math.max(0, value));
+        this.movePoints = Math.min(this.MAX_MOVE_POINTS, Math.max(0, value));
     }
 
     getHeightPoints(): number {
@@ -44,7 +44,7 @@ class MapEntity{
     }
 
     setHeightPoints(value: number): void{ //TODO: Check if this works!
-        this.heightPoints = Math.min(this.class.MAX_HEIGHT_POINTS, Math.max(0, value));
+        this.heightPoints = Math.min(this.MAX_HEIGHT_POINTS, Math.max(0, value));
     }
 
     getID(): number{

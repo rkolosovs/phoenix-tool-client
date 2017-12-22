@@ -9,6 +9,16 @@ var FOOTMAN_RP = 1;
 var RIDER_RP = 2;
 var LIGHT_CATA_RP = 1000;
 var HEAVY_CATA_RP = 2000;
+var MOUNT_RP = 1;
+var FOOTMAN_BP = 0.1;
+var MOUNT_BP = 0.1;
+var RIDER_BP = 0.2;
+var SHIP_BP = 10;
+var FOOTMAN_BP = 0.1;
+var LIGHT_CATA_BP = 200;
+var HEAVY_CATA_BP = 400;
+var LIGHT_WS_BP = 200;
+var HEAVY_WS_BP = 400;
 var selectedFields = []; // list of fields to be highlighted
 var selectedArmyIndex; // index of the currently selected army in the listOfArmies
 var listOfArmies = [];

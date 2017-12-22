@@ -15,6 +15,7 @@ var Army = /** @class */ (function (_super) {
         _this.lightCatapultCount = 0;
         _this.heavyCatapultCount = 0;
         _this.isGuard = false;
+        _this.wasShotAt = false;
         _this.setTroopCount(troopCount);
         _this.setOfficerCount(officerCount);
         if (isGuard != undefined) {
@@ -65,10 +66,10 @@ var Army = /** @class */ (function (_super) {
     Army.prototype.leaderGp = function () {
         var gp = 0;
         if (this.officerCount < 101) {
-            gp += this.leaders;
+            gp += this.officerCount;
         }
-        else if (this.leaders < 201) {
-            gp += (100 + (this.leaders - 100) / 2);
+        else if (this.officerCount < 201) {
+            gp += (100 + (this.officerCount - 100) / 2);
         }
         else {
             gp += 200;
