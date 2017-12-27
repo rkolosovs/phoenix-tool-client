@@ -1,6 +1,6 @@
 class Fleet extends Army{
     static readonly MAX_HEIGHT_POINTS = 0;
-    protected transportedArmies: LandArmy[] = [];
+    protected transportedArmies: LandArmy[];
 
     constructor(id: number, owner: Realm, troopCount: number, officerCount: number, lightCatapultCount: number,
                 heavyCatapultCount: number, position: [number, number], movePoints: number, heightPoints: number,
@@ -12,6 +12,7 @@ class Fleet extends Army{
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position,
                 movePoints, heightPoints);
         }
+        this.transportedArmies = [];
     }
 
     getErkenfaraID(): number{
@@ -20,6 +21,14 @@ class Fleet extends Army{
 
     canHaveCatapults(): boolean{
         return !this.isGuard;
+    }
+
+    getMaxMovePoints(): number{
+        return Fleet.MAX_MOVE_POINTS;
+    }
+
+    getMaxHeightPoints(): number{
+        return Fleet.MAX_HEIGHT_POINTS;
     }
 
     getRoomPointsSansOfficers(): number{

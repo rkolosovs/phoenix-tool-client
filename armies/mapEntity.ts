@@ -20,6 +20,7 @@ class MapEntity{
     getErkenfaraID(): number;
 
     move(destination: [number, number], moveCost: number, heightCost: number): void;
+    //TODO: Move the appropriate part of the movement logic here.
 
     getRoomPoints(): number;
 
@@ -35,16 +36,24 @@ class MapEntity{
         return this.movePoints;
     }
 
-    setMovePoints(value: number): void{ //TODO: Check if this works!
-        this.movePoints = Math.min(this.MAX_MOVE_POINTS, Math.max(0, value));
+    getMaxMovePoints(): number{
+        return MapEntity.MAX_MOVE_POINTS;
+    }
+
+    getMaxHeightPoints(): number{
+        return MapEntity.MAX_HEIGHT_POINTS;
+    }
+
+    setMovePoints(value: number): void{
+        this.movePoints = Math.min(this.getMaxMovePoints(), Math.max(0, value));
     }
 
     getHeightPoints(): number {
         return this.heightPoints;
     }
 
-    setHeightPoints(value: number): void{ //TODO: Check if this works!
-        this.heightPoints = Math.min(this.MAX_HEIGHT_POINTS, Math.max(0, value));
+    setHeightPoints(value: number): void{
+        this.heightPoints = Math.min(this.getMaxHeightPoints(), Math.max(0, value));
     }
 
     getID(): number{

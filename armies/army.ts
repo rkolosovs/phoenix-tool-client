@@ -33,6 +33,14 @@ class Army extends MapEntity{
         return this.troopCount;
     }
 
+    getMaxMovePoints(): number{
+        return Army.MAX_MOVE_POINTS;
+    }
+
+    getMaxHeightPoints(): number{
+        return Army.MAX_HEIGHT_POINTS;
+    }
+
     setTroopCount(value: number): void{
         this.troopCount = Math.max(0, value);
     }

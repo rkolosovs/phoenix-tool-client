@@ -7,6 +7,15 @@ class FootArmy extends LandArmy {
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints);
         }
     }
+    getErkenfaraID() {
+        return 100 + this.id;
+    }
+    getMaxMovePoints() {
+        return FootArmy.MAX_MOVE_POINTS;
+    }
+    getMaxHeightPoints() {
+        return FootArmy.MAX_HEIGHT_POINTS;
+    }
     getMountCount() {
         return this.mountCount;
     }

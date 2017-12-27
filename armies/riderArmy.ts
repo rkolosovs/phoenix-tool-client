@@ -10,6 +10,18 @@ class RiderArmy extends LandArmy{
         }
     }
 
+    getErkenfaraID(): number{
+        return 200 + this.id;
+    }
+
+    getMaxMovePoints(): number{
+        return RiderArmy.MAX_MOVE_POINTS;
+    }
+
+    getMaxHeightPoints(): number{
+        return RiderArmy.MAX_HEIGHT_POINTS;
+    }
+
     takeRPDamage(rpDamage: number): void{
         this.takeDamage(Math.ceil(rpDamage/(RIDER_RP+
             OFFICER_RP*(this.officerCount/this.troopCount))));

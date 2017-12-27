@@ -1,18 +1,24 @@
 class Fleet extends Army {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
-        this.transportedArmies = [];
         if (isGuard != undefined) {
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard);
         }
         else {
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints);
         }
+        this.transportedArmies = [];
     }
     getErkenfaraID() {
         return 300 + this.id;
     }
     canHaveCatapults() {
         return !this.isGuard;
+    }
+    getMaxMovePoints() {
+        return Fleet.MAX_MOVE_POINTS;
+    }
+    getMaxHeightPoints() {
+        return Fleet.MAX_HEIGHT_POINTS;
     }
     getRoomPointsSansOfficers() {
         if (isGuard) {

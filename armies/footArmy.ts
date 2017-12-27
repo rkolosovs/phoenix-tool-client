@@ -14,6 +14,18 @@ class FootArmy extends LandArmy{
         }
     }
 
+    getErkenfaraID(): number{
+        return 100 + this.id;
+    }
+
+    getMaxMovePoints(): number{
+        return FootArmy.MAX_MOVE_POINTS;
+    }
+
+    getMaxHeightPoints(): number{
+        return FootArmy.MAX_HEIGHT_POINTS;
+    }
+
     getMountCount(): number{
         return this.mountCount;
     }

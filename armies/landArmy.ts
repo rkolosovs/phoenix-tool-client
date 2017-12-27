@@ -1,5 +1,5 @@
 class LandArmy extends Army{
-    isTransported: boolean = false;
+    isTransported: boolean;
 
     constructor(id: number, owner: Realm, troopCount: number, officerCount: number, lightCatapultCount: number,
                 heavyCatapultCount: number, position: [number, number], movePoints: number, heightPoints: number,
@@ -11,9 +11,18 @@ class LandArmy extends Army{
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position,
                 movePoints, heightPoints);
         }
+        this.isTransported = false;
     }
 
     takeRPDamage(rpDamage: number): void;
+
+    getMaxMovePoints(): number{
+        return LandArmy.MAX_MOVE_POINTS;
+    }
+
+    getMaxHeightPoints(): number{
+        return LandArmy.MAX_HEIGHT_POINTS;
+    }
 
     canConquer(): boolean{
         return
