@@ -4,6 +4,7 @@ class GUI{
     private static context: CanvasRenderingContext2D;
     private static buttonsBox: HTMLDivElement;
     private static toggleGMBarButton: HTMLButtonElement;
+    private static topBar: HTMLDivElement;
 
     static getCanvas(): HTMLCanvasElement{
         if(GUI.canvas == undefined){
@@ -34,5 +35,12 @@ class GUI{
             UIMaker.makeButtonsBox();
         }
         return GUI.toggleGMBarButton;
+    }
+
+    static getTopbar(): HTMLDivElement{
+        if(GUI.topBar == undefined){
+            UIMaker.makeBox("topBar", "prettyBox", document.body);
+        }
+        return GUI.topBar;
     }
 }

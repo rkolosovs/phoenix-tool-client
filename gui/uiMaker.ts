@@ -15,7 +15,7 @@ namespace UIMaker{
         return button;
     }
 
-    function makeBox(id: string, styleClass: string, parent: HTMLElement): HTMLDivElement{
+    export function makeBox(id: string, styleClass: string, parent: HTMLElement): HTMLDivElement{
         let box: HTMLDivElement = makeElement(id, "div", parent);
         box.className = styleClass;
         return box;

@@ -26,4 +26,10 @@ class GUI {
         }
         return GUI.toggleGMBarButton;
     }
+    static getTopbar() {
+        if (GUI.topBar == undefined) {
+            UIMaker.makeBox("topBar", "prettyBox", document.body);
+        }
+        return GUI.topBar;
+    }
 }
