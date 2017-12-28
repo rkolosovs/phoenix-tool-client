@@ -1,31 +1,5 @@
 'use strict';
-//constants
-const SQRT3 = Math.sqrt(3); //about 1.732050808...
-const SIN60 = 0.5 * SQRT3; //about 0.8660254037...
 
-var terrain = {
-	shallows: 0, //"Wasser" in Erkenfara rules
-	deepsea: 1, //"Tiefsee" in Erkenfara rules
-	lowlands: 2, //"Tiefland" in Erkenfara rules
-	woods: 3, //"Wald" in Erkenfara rules
-	hills: 4, //"Hochland" in Erkenfara rules
-	highlands: 5, //"Bergland" in Erkenfara rules
-	mountains: 6, //"Gebirge" in Erkenfara rules
-	desert: 7, //"Wüste" in Erkenfara rules
-	swamp: 8 //"Sumpf" in Erkenfara rules
-};
-
-var buildingTypes = {
-	castle: 0, //"Burg" in Erkenfara rules
-	city: 1, //"Stadt" in Erkenfara rules
-	fortress: 2, //"Festung" in Erkenfara rules
-	capital: 3, //"Hauptstadt" in Erkenfara rules
-	capitalFort: 4, //"Festungshauptstadt" in Erkenfara rules
-	wall: 5, //"Wall" in Erkenfara rules
-	harbor: 6, //"Kaianlage" in Erkenfara rules
-	bridge: 7, //"Brücke" in Erkenfara rules
-	street: 8 //"Straße" in Erkenfara rules
-};
 
 //hex parts: values used to compute coordinates of a hexes corners 
 //when given upper left point of inscribing rectangle

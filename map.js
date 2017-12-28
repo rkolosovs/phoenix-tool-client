@@ -1,29 +1,4 @@
 'use strict';
-//constants
-const SQRT3 = Math.sqrt(3); //about 1.732050808...
-const SIN60 = 0.5 * SQRT3; //about 0.8660254037...
-var terrain = {
-    shallows: 0,
-    deepsea: 1,
-    lowlands: 2,
-    woods: 3,
-    hills: 4,
-    highlands: 5,
-    mountains: 6,
-    desert: 7,
-    swamp: 8 //"Sumpf" in Erkenfara rules
-};
-var buildingTypes = {
-    castle: 0,
-    city: 1,
-    fortress: 2,
-    capital: 3,
-    capitalFort: 4,
-    wall: 5,
-    harbor: 6,
-    bridge: 7,
-    street: 8 //"Straße" in Erkenfara rules
-};
 //hex parts: values used to compute coordinates of a hexes corners 
 //when given upper left point of inscribing rectangle
 var c;

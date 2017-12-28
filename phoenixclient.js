@@ -1,4 +1,7 @@
 'use strict';
+//constants
+const SQRT3 = Math.sqrt(3); //about 1.732050808...
+const SIN60 = 0.5 * SQRT3; //about 0.8660254037...
 const OFFICER_RP = 100;
 const SHIP_RP = 100;
 const GUARD_RP_MULT = 3;
