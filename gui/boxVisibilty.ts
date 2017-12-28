@@ -21,6 +21,10 @@ var lkpBuffer = 0;
 var skpBuffer = 0;
 var guardBuffer = false;
 
+function showInitial(){
+    //TODO: set UI elements to be visible at startup to visible (use getters from GUI class)
+}
+
 //TODO: Unify the handling of showing/hiding UI elements.
 function toggleVisibility(element){
 	var classes = element.classList;

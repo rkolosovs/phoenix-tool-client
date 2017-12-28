@@ -1170,6 +1170,7 @@ function untagHitArmys() {
 }
 function init() {
     getNewDataFromServer();
+    showInitial();
     loadTurnNumber();
     loadImages(tileset);
     setHexParts(scale);
