@@ -4,14 +4,14 @@ var listOfMultiArmyFields = [];
 
 // canvas resizing method
 function resizeCanvas() {
-   	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
+    GUI.canvas.width = window.innerWidth;
+    GUI.canvas.height = window.innerHeight;
    	drawStuff();
 }
 
 // all the stuff to be drawn goes in this method
 function drawStuff() {
-	ctx.clearRect(0, 0, canvas.width, canvas.height); // clear
+	ctx.clearRect(0, 0, GUI.canvas.width, GUI.canvas.height); // clear
 
 	// do all drawing/element selection in respect to these coordinates
 	var x = originX + moveX; // current x origin for drawing + x offset from
@@ -177,22 +177,22 @@ function drawBuildings(ctx, x, y, scale) {
 		}
 		var tileImg; //declare the tile image variable
 		switch(building.type){ //set the tileImg to match the building type
-			case buildingTypes.castle: tileImg = castleImg;
+			case BuildingType.CASTLE: tileImg = castleImg;
 			break;
 
-			case buildingTypes.city: tileImg = cityImg;
+			case BuildingType.CITY: tileImg = cityImg;
 			break;
 
-			case buildingTypes.fortress: tileImg = fortressImg;
+			case BuildingType.FORTRESS: tileImg = fortressImg;
 			break;
 
-			case buildingTypes.capital: tileImg = capitalImg;
+			case BuildingType.CAPITAL: tileImg = capitalImg;
 			break;
 
-			case buildingTypes.capitalFort: tileImg = capitalFortImg;
+			case BuildingType.CAPITAL_FORT: tileImg = capitalFortImg;
 			break;
 
-			case buildingTypes.wall: if (building.direction === 'w'){tileImg = wallWImg;}
+			case BuildingType.WALL: if (building.direction === 'w'){tileImg = wallWImg;}
 			else if (building.direction === 'e'){tileImg = wallEImg;}
 			else if (building.direction === 'nw'){tileImg = wallNWImg;}
 			else if (building.direction === 'sw'){tileImg = wallSWImg;}
@@ -200,7 +200,7 @@ function drawBuildings(ctx, x, y, scale) {
 			else if (building.direction === 'se'){tileImg = wallSEImg;}
 			break;
 
-			case buildingTypes.harbor: if (building.direction === 'w'){tileImg = harborWImg;}
+			case BuildingType.HARBOR: if (building.direction === 'w'){tileImg = harborWImg;}
 			else if (building.direction === 'e'){tileImg = harborEImg;}
 			else if (building.direction === 'nw'){tileImg = harborNWImg;}
 			else if (building.direction === 'sw'){tileImg = harborSWImg;}
@@ -208,7 +208,7 @@ function drawBuildings(ctx, x, y, scale) {
 			else if (building.direction === 'se'){tileImg = harborSEImg;}
 			break;
 
-			case buildingTypes.bridge: if (building.direction === 'w'){tileImg = bridgeWImg;}
+			case BuildingType.BRIDGE: if (building.direction === 'w'){tileImg = bridgeWImg;}
 			else if (building.direction === 'e'){tileImg = bridgeEImg;}
 			else if (building.direction === 'nw'){tileImg = bridgeNWImg;}
 			else if (building.direction === 'sw'){tileImg = bridgeSWImg;}
@@ -291,31 +291,31 @@ function drawFields(ctx, x, y, scale) { //draw the terrain fields
 		currentField = fields[i]; //get the current field to draw
         	
 		switch(currentField.type){ //set the tileImg to match the field type
-			case terrain.shallows: sortedFields[0].push(computePosition(x, y, currentField.x, currentField.y, scale));
+			case FieldType.SHALLOWS: sortedFields[0].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
-			case terrain.deepsea: sortedFields[1].push(computePosition(x, y, currentField.x, currentField.y, scale));
+			case FieldType.DEEPSEA: sortedFields[1].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
-			case terrain.lowlands: sortedFields[2].push(computePosition(x, y, currentField.x, currentField.y, scale));
+			case FieldType.LOWLANDS: sortedFields[2].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
-			case terrain.woods: sortedFields[3].push(computePosition(x, y, currentField.x, currentField.y, scale));
+			case FieldType.WOODS: sortedFields[3].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
-			case terrain.hills: sortedFields[4].push(computePosition(x, y, currentField.x, currentField.y, scale));
+			case FieldType.HILLS: sortedFields[4].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
-			case terrain.highlands: sortedFields[5].push(computePosition(x, y, currentField.x, currentField.y, scale));
+			case FieldType.HIGHLANDS: sortedFields[5].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
-			case terrain.mountains: sortedFields[6].push(computePosition(x, y, currentField.x, currentField.y, scale));
+			case FieldType.MOUNTAINS: sortedFields[6].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
-			case terrain.desert: sortedFields[7].push(computePosition(x, y, currentField.x, currentField.y, scale));
+			case FieldType.DESERT: sortedFields[7].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
-			case terrain.swamp: sortedFields[8].push(computePosition(x, y, currentField.x, currentField.y, scale));
+			case FieldType.SWAMP: sortedFields[8].push(computePosition(x, y, currentField.x, currentField.y, scale));
 			break;
 
 			default: sortedFields[9].push(computePosition(x, y, currentField.x, currentField.y, scale));

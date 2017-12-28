@@ -2,13 +2,13 @@
 var listOfMultiArmyFields = [];
 // canvas resizing method
 function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    GUI.canvas.width = window.innerWidth;
+    GUI.canvas.height = window.innerHeight;
     drawStuff();
 }
 // all the stuff to be drawn goes in this method
 function drawStuff() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // clear
+    ctx.clearRect(0, 0, GUI.canvas.width, GUI.canvas.height); // clear
     // do all drawing/element selection in respect to these coordinates
     var x = originX + moveX; // current x origin for drawing + x offset from
     // dragged mouse
@@ -258,22 +258,22 @@ function drawBuildings(ctx, x, y, scale) {
         }
         var tileImg; //declare the tile image variable
         switch (building.type) {
-            case buildingTypes.castle:
+            case BuildingType.CASTLE:
                 tileImg = castleImg;
                 break;
-            case buildingTypes.city:
+            case BuildingType.CITY:
                 tileImg = cityImg;
                 break;
-            case buildingTypes.fortress:
+            case BuildingType.FORTRESS:
                 tileImg = fortressImg;
                 break;
-            case buildingTypes.capital:
+            case BuildingType.CAPITAL:
                 tileImg = capitalImg;
                 break;
-            case buildingTypes.capitalFort:
+            case BuildingType.CAPITAL_FORT:
                 tileImg = capitalFortImg;
                 break;
-            case buildingTypes.wall:
+            case BuildingType.WALL:
                 if (building.direction === 'w') {
                     tileImg = wallWImg;
                 }
@@ -293,7 +293,7 @@ function drawBuildings(ctx, x, y, scale) {
                     tileImg = wallSEImg;
                 }
                 break;
-            case buildingTypes.harbor:
+            case BuildingType.HARBOR:
                 if (building.direction === 'w') {
                     tileImg = harborWImg;
                 }
@@ -313,7 +313,7 @@ function drawBuildings(ctx, x, y, scale) {
                     tileImg = harborSEImg;
                 }
                 break;
-            case buildingTypes.bridge:
+            case BuildingType.BRIDGE:
                 if (building.direction === 'w') {
                     tileImg = bridgeWImg;
                 }
@@ -411,31 +411,31 @@ function drawFields(ctx, x, y, scale) {
     for (var i = 0; i < fields.length; i++) {
         currentField = fields[i]; //get the current field to draw
         switch (currentField.type) {
-            case terrain.shallows:
+            case FieldType.SHALLOWS:
                 sortedFields[0].push(computePosition(x, y, currentField.x, currentField.y, scale));
                 break;
-            case terrain.deepsea:
+            case FieldType.DEEPSEA:
                 sortedFields[1].push(computePosition(x, y, currentField.x, currentField.y, scale));
                 break;
-            case terrain.lowlands:
+            case FieldType.LOWLANDS:
                 sortedFields[2].push(computePosition(x, y, currentField.x, currentField.y, scale));
                 break;
-            case terrain.woods:
+            case FieldType.WOODS:
                 sortedFields[3].push(computePosition(x, y, currentField.x, currentField.y, scale));
                 break;
-            case terrain.hills:
+            case FieldType.HILLS:
                 sortedFields[4].push(computePosition(x, y, currentField.x, currentField.y, scale));
                 break;
-            case terrain.highlands:
+            case FieldType.HIGHLANDS:
                 sortedFields[5].push(computePosition(x, y, currentField.x, currentField.y, scale));
                 break;
-            case terrain.mountains:
+            case FieldType.MOUNTAINS:
                 sortedFields[6].push(computePosition(x, y, currentField.x, currentField.y, scale));
                 break;
-            case terrain.desert:
+            case FieldType.DESERT:
                 sortedFields[7].push(computePosition(x, y, currentField.x, currentField.y, scale));
                 break;
-            case terrain.swamp:
+            case FieldType.SWAMP:
                 sortedFields[8].push(computePosition(x, y, currentField.x, currentField.y, scale));
                 break;
             default:

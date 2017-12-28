@@ -43,7 +43,7 @@ var pendingEvents = [];
 GUI.init();
 // var canvas: HTMLCanvasElement = document.getElementById('hexCanvas') as HTMLCanvasElement; // get the canvas element
 // from the HTML document
-var ctx = GUI.canvas.getContext('2d'); // get the context of the canvas
+var ctx: CanvasRenderingContext2D = GUI.context; // get the context of the canvas
 
 // settings; TODO: let the user change these in game
 var tileset = "mbits_painted"; // tileset name
@@ -74,7 +74,7 @@ var moveY = 0; // y distance the mouse was dragged
 // resize the canvas to fill browser window dynamically
 window.addEventListener('resize', resizeCanvas, false);
 
-canvas.addEventListener('mousedown', function (event: MouseEvent) {
+GUI.canvas.addEventListener('mousedown', function (event: MouseEvent) {
 	if (event.button === 0) {
 		leftMousePressed = true;
 		clickX = event.pageX; // record the x coordinate of the mouse when it
@@ -124,7 +124,7 @@ document.addEventListener('mouseup', function (event: MouseEvent) {
 	drawStuff();
 }, true );
 
-canvas.addEventListener('mousemove', function (event: MouseEvent) {
+GUI.canvas.addEventListener('mousemove', function (event: MouseEvent) {
 	if (leftMousePressed === true) {
 		isDragging = true; // for later click detection; no click if mouse was previously dragged
 		moveX = event.pageX - clickX; // compute the x offset from dragged mouse
@@ -133,7 +133,7 @@ canvas.addEventListener('mousemove', function (event: MouseEvent) {
 	}
 }, true );
 
-canvas.addEventListener('wheel', function (event: MouseWheelEvent) {
+GUI.canvas.addEventListener('wheel', function (event: MouseWheelEvent) {
 	var deltaY = event.deltaY; // get amount scrolled
 	var mouseX = event.pageX; // get current mouse position
 	var mouseY = event.pageY;
