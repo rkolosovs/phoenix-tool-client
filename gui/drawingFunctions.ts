@@ -4,14 +4,14 @@ var listOfMultiArmyFields = [];
 
 // canvas resizing method
 function resizeCanvas() {
-    GUI.canvas.width = window.innerWidth;
-    GUI.canvas.height = window.innerHeight;
+    GUI.getCanvas().width = window.innerWidth;
+    GUI.getCanvas().height = window.innerHeight;
    	drawStuff();
 }
 
 // all the stuff to be drawn goes in this method
 function drawStuff() {
-	ctx.clearRect(0, 0, GUI.canvas.width, GUI.canvas.height); // clear
+	GUI.getContext().clearRect(0, 0, GUI.getCanvas().width, GUI.getCanvas().height); // clear
 
 	// do all drawing/element selection in respect to these coordinates
 	var x = originX + moveX; // current x origin for drawing + x offset from
@@ -19,23 +19,23 @@ function drawStuff() {
 	var y = originY + moveY; // current y origin for drawing + y offset from
 								// dragged mouse
 
-	drawMap(ctx, x, y, scale);
-	drawFieldSelection(ctx, x, y, scale);
-	drawArmies(ctx, x, y, scale, listOfArmies);
-	drawArmySelection(ctx, x, y, scale, selectedArmyIndex);
-	drawPossibleMoves(ctx, x, y, scale, selectedArmyIndex);
-	drawShootingTargets(ctx, x, y, scale, selectedArmyIndex);
+	drawMap(x, y, scale);
+	drawFieldSelection(x, y, scale);
+	drawArmies(x, y, scale, listOfArmies);
+	drawArmySelection(x, y, scale, selectedArmyIndex);
+	drawPossibleMoves(x, y, scale, selectedArmyIndex);
+	drawShootingTargets(x, y, scale, selectedArmyIndex);
 	writeFieldInfo();
 }
 
-function drawMap(ctx, x, y, scale) {
-	drawFields(ctx, x, y, scale);
-	drawRivers(ctx, x, y, scale);
-	drawBorders(ctx, x, y, scale);
-	drawBuildings(ctx, x, y, scale);
+function drawMap(x, y, scale) {
+	drawFields(x, y, scale);
+	drawRivers(x, y, scale);
+	drawBorders(x, y, scale);
+	drawBuildings(x, y, scale);
 }
 
-function drawBorders(ctx, x, y, scale) {
+function drawBorders(x, y, scale) {
 	var offset = (scale/13); //set offset of a border from the actual border of two hexes
 	for (var i = 0; i < borders.length; i++) { //for each realm with borders
 		var tag = borders[i].tag;
@@ -48,10 +48,10 @@ function drawBorders(ctx, x, y, scale) {
 			}
 		}
 
-		ctx.lineWidth = (scale/14); //line thickness for borders
-		ctx.strokeStyle = 'rgb('+color+')'; //set line color
-		ctx.lineCap="round";
-		ctx.fillStyle='rgba('+color+', 0.3)'; //set fill color
+        GUI.getContext().lineWidth = (scale/14); //line thickness for borders
+        GUI.getContext().strokeStyle = 'rgb('+color+')'; //set line color
+        GUI.getContext().lineCap="round";
+        GUI.getContext().fillStyle='rgba('+color+', 0.3)'; //set fill color
 		for (var j = 0; j < land.length; j++) { //for each occupied hex
 			var hex = land[j];
 			var point = computePosition(x, y, hex[0], hex[1], scale);
@@ -66,108 +66,108 @@ function drawBorders(ctx, x, y, scale) {
 				else {start = [(point[0]+0.5*gW), (point[1]+offset)];}
 			}
 
-			ctx.beginPath(); //begin border drawing
-			ctx.moveTo(start[0], start[1]);
+            GUI.getContext().beginPath(); //begin border drawing
+            GUI.getContext().moveTo(start[0], start[1]);
 
 			if (neighbours[0]) { //go to upper right corner
-				if (neighbours[1]) {ctx.moveTo((point[0]+gW), (point[1]+c));} 
-				else {ctx.moveTo((point[0]+gW-SIN60*offset), (point[1]+c-0.5*offset));}
+				if (neighbours[1]) {GUI.getContext().moveTo((point[0]+gW), (point[1]+c));}
+				else {GUI.getContext().moveTo((point[0]+gW-SIN60*offset), (point[1]+c-0.5*offset));}
 			} else {
-				if (neighbours[1]) {ctx.lineTo((point[0]+gW), (point[1]+c+offset));} 
-				else {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+c+0.5*offset));}
+				if (neighbours[1]) {GUI.getContext().lineTo((point[0]+gW), (point[1]+c+offset));}
+				else {GUI.getContext().lineTo((point[0]+gW-SIN60*offset), (point[1]+c+0.5*offset));}
 			}
 
 			if (neighbours[1]) { //go to lower right corner
-				if (neighbours[2]) {ctx.moveTo((point[0]+gW), (point[1]+gH));} 
-				else {ctx.moveTo((point[0]+gW), (point[1]+gH-offset));}
+				if (neighbours[2]) {GUI.getContext().moveTo((point[0]+gW), (point[1]+gH));}
+				else {GUI.getContext().moveTo((point[0]+gW), (point[1]+gH-offset));}
 			} else {
-				if (neighbours[2]) {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+gH+0.5*offset));} 
-				else {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+gH-0.5*offset));}
+				if (neighbours[2]) {GUI.getContext().lineTo((point[0]+gW-SIN60*offset), (point[1]+gH+0.5*offset));}
+				else {GUI.getContext().lineTo((point[0]+gW-SIN60*offset), (point[1]+gH-0.5*offset));}
 			}
 
 			if (neighbours[2]) { //go to bottom corner
-				if (neighbours[3]) {ctx.moveTo((point[0]+0.5*gW), (point[1]+scale));} 
-				else {ctx.moveTo((point[0]+0.5*gW+SIN60*offset), (point[1]+scale-0.5*offset));}
+				if (neighbours[3]) {GUI.getContext().moveTo((point[0]+0.5*gW), (point[1]+scale));}
+				else {GUI.getContext().moveTo((point[0]+0.5*gW+SIN60*offset), (point[1]+scale-0.5*offset));}
 			} else {
-				if (neighbours[3]) {ctx.lineTo((point[0]+0.5*gW-SIN60*offset), (point[1]+scale-0.5*offset));} 
-				else {ctx.lineTo((point[0]+0.5*gW), (point[1]+scale-offset));}
+				if (neighbours[3]) {GUI.getContext().lineTo((point[0]+0.5*gW-SIN60*offset), (point[1]+scale-0.5*offset));}
+				else {GUI.getContext().lineTo((point[0]+0.5*gW), (point[1]+scale-offset));}
 			}
 
 			if (neighbours[3]) { //go to lower left corner
-				if (neighbours[4]) {ctx.moveTo(point[0], (point[1]+gH));} 
-				else {ctx.moveTo((point[0]+SIN60*offset), (point[1]+gH+0.5*offset));}
+				if (neighbours[4]) {GUI.getContext().moveTo(point[0], (point[1]+gH));}
+				else {GUI.getContext().moveTo((point[0]+SIN60*offset), (point[1]+gH+0.5*offset));}
 			} else {
-				if (neighbours[4]) {ctx.lineTo(point[0], (point[1]+gH-offset));} 
-				else {ctx.lineTo((point[0]+SIN60*offset), (point[1]+gH-0.5*offset));}
+				if (neighbours[4]) {GUI.getContext().lineTo(point[0], (point[1]+gH-offset));}
+				else {GUI.getContext().lineTo((point[0]+SIN60*offset), (point[1]+gH-0.5*offset));}
 			}
 
 			if (neighbours[4]) { //go to upper left corner
-				if (neighbours[5]) {ctx.moveTo(point[0], (point[1]+c));} 
-				else {ctx.moveTo(point[0], (point[1]+c+offset));}
+				if (neighbours[5]) {GUI.getContext().moveTo(point[0], (point[1]+c));}
+				else {GUI.getContext().moveTo(point[0], (point[1]+c+offset));}
 			} else {
-				if (neighbours[5]) {ctx.lineTo((point[0]+SIN60*offset), (point[1]+c-0.5*offset));} 
-				else {ctx.lineTo((point[0]+SIN60*offset), (point[1]+c+0.5*offset));}
+				if (neighbours[5]) {GUI.getContext().lineTo((point[0]+SIN60*offset), (point[1]+c-0.5*offset));}
+				else {GUI.getContext().lineTo((point[0]+SIN60*offset), (point[1]+c+0.5*offset));}
 			}
 
-			if (neighbours[5]) {ctx.moveTo(start[0], start[1]);} //back to top corner
-			else {ctx.lineTo(start[0], start[1]);}
-			ctx.stroke();
+			if (neighbours[5]) {GUI.getContext().moveTo(start[0], start[1]);} //back to top corner
+			else {GUI.getContext().lineTo(start[0], start[1]);}
+            GUI.getContext().stroke();
 
 
-			ctx.beginPath(); //begin area filling
-			ctx.moveTo(start[0], start[1]);
+            GUI.getContext().beginPath(); //begin area filling
+            GUI.getContext().moveTo(start[0], start[1]);
 
 			if (neighbours[0]) { //go to upper right corner
-				if (neighbours[1]) {ctx.lineTo((point[0]+gW), (point[1]+c));} 
-				else {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+c-0.5*offset));}
+				if (neighbours[1]) {GUI.getContext().lineTo((point[0]+gW), (point[1]+c));}
+				else {GUI.getContext().lineTo((point[0]+gW-SIN60*offset), (point[1]+c-0.5*offset));}
 			} else {
-				if (neighbours[1]) {ctx.lineTo((point[0]+gW), (point[1]+c+offset));} 
-				else {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+c+0.5*offset));}
+				if (neighbours[1]) {GUI.getContext().lineTo((point[0]+gW), (point[1]+c+offset));}
+				else {GUI.getContext().lineTo((point[0]+gW-SIN60*offset), (point[1]+c+0.5*offset));}
 			}
 
 			if (neighbours[1]) { //go to lower right corner
-				if (neighbours[2]) {ctx.lineTo((point[0]+gW), (point[1]+gH));} 
-				else {ctx.lineTo((point[0]+gW), (point[1]+gH-offset));}
+				if (neighbours[2]) {GUI.getContext().lineTo((point[0]+gW), (point[1]+gH));}
+				else {GUI.getContext().lineTo((point[0]+gW), (point[1]+gH-offset));}
 			} else {
-				if (neighbours[2]) {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+gH+0.5*offset));} 
-				else {ctx.lineTo((point[0]+gW-SIN60*offset), (point[1]+gH-0.5*offset));}
+				if (neighbours[2]) {GUI.getContext().lineTo((point[0]+gW-SIN60*offset), (point[1]+gH+0.5*offset));}
+				else {GUI.getContext().lineTo((point[0]+gW-SIN60*offset), (point[1]+gH-0.5*offset));}
 			}
 
 			if (neighbours[2]) { //go to bottom corner
-				if (neighbours[3]) {ctx.lineTo((point[0]+0.5*gW), (point[1]+scale));} 
-				else {ctx.lineTo((point[0]+0.5*gW+SIN60*offset), (point[1]+scale-0.5*offset));}
+				if (neighbours[3]) {GUI.getContext().lineTo((point[0]+0.5*gW), (point[1]+scale));}
+				else {GUI.getContext().lineTo((point[0]+0.5*gW+SIN60*offset), (point[1]+scale-0.5*offset));}
 			} else {
-				if (neighbours[3]) {ctx.lineTo((point[0]+0.5*gW-SIN60*offset), (point[1]+scale-0.5*offset));} 
-				else {ctx.lineTo((point[0]+0.5*gW), (point[1]+scale-offset));}
+				if (neighbours[3]) {GUI.getContext().lineTo((point[0]+0.5*gW-SIN60*offset), (point[1]+scale-0.5*offset));}
+				else {GUI.getContext().lineTo((point[0]+0.5*gW), (point[1]+scale-offset));}
 			}
 
 			if (neighbours[3]) { //go to lower left corner
-				if (neighbours[4]) {ctx.lineTo(point[0], (point[1]+gH));} 
-				else {ctx.lineTo((point[0]+SIN60*offset), (point[1]+gH+0.5*offset));}
+				if (neighbours[4]) {GUI.getContext().lineTo(point[0], (point[1]+gH));}
+				else {GUI.getContext().lineTo((point[0]+SIN60*offset), (point[1]+gH+0.5*offset));}
 			} else {
-				if (neighbours[4]) {ctx.lineTo(point[0], (point[1]+gH-offset));} 
-				else {ctx.lineTo((point[0]+SIN60*offset), (point[1]+gH-0.5*offset));}
+				if (neighbours[4]) {GUI.getContext().lineTo(point[0], (point[1]+gH-offset));}
+				else {GUI.getContext().lineTo((point[0]+SIN60*offset), (point[1]+gH-0.5*offset));}
 			}
 
 			if (neighbours[4]) { //go to upper left corner
-				if (neighbours[5]) {ctx.lineTo(point[0], (point[1]+c));} 
-				else {ctx.lineTo(point[0], (point[1]+c+offset));}
+				if (neighbours[5]) {GUI.getContext().lineTo(point[0], (point[1]+c));}
+				else {GUI.getContext().lineTo(point[0], (point[1]+c+offset));}
 			} else {
-				if (neighbours[5]) {ctx.lineTo((point[0]+SIN60*offset), (point[1]+c-0.5*offset));} 
-				else {ctx.lineTo((point[0]+SIN60*offset), (point[1]+c+0.5*offset));}
+				if (neighbours[5]) {GUI.getContext().lineTo((point[0]+SIN60*offset), (point[1]+c-0.5*offset));}
+				else {GUI.getContext().lineTo((point[0]+SIN60*offset), (point[1]+c+0.5*offset));}
 			}
 
-			if (neighbours[5]) {ctx.lineTo(start[0], start[1]);} //back to top corner
-			else {ctx.lineTo(start[0], start[1]);}
-			ctx.fill();
+			if (neighbours[5]) {GUI.getContext().lineTo(start[0], start[1]);} //back to top corner
+			else {GUI.getContext().lineTo(start[0], start[1]);}
+            GUI.getContext().fill();
 		}
 	}
 }
 
-function drawBuildings(ctx, x, y, scale) {
-	ctx.lineWidth = (scale/8); //line style for roads
-	ctx.strokeStyle="#C8AB37";
-	ctx.lineCap="round";
+function drawBuildings(x, y, scale) {
+    GUI.getContext().lineWidth = (scale/8); //line style for roads
+    GUI.getContext().strokeStyle="#C8AB37";
+    GUI.getContext().lineCap="round";
 
 	for (var i = 0; i < buildings.length; i++) {
 		var building = buildings[i];
@@ -222,28 +222,28 @@ function drawBuildings(ctx, x, y, scale) {
 			break;
 		}
 		if (building.type <= 4) { //regular one tile buildings excluding walls
-			ctx.drawImage(tileImg, pos[0], pos[1], scale*SIN60, scale); //draw the image
+            GUI.getContext().drawImage(tileImg, pos[0], pos[1], scale*SIN60, scale); //draw the image
 		}
 		else if (building.type === 5) { //walls - one tile buildings handled differently from cities
-			ctx.drawImage(tileImg, pos[0], pos[1], scale*SIN60, scale); //draw the image
+            GUI.getContext().drawImage(tileImg, pos[0], pos[1], scale*SIN60, scale); //draw the image
 		}
 		else if (building.type <= 7) { //harbors and bridges - "oversized" buildings
-			ctx.drawImage(tileImg, pos[0]-gW, pos[1]-(0.5*scale), 3*gW, 2*scale); //draw the image
+            GUI.getContext().drawImage(tileImg, pos[0]-gW, pos[1]-(0.5*scale), 3*gW, 2*scale); //draw the image
 		} else if (building.type === 8) { //streets - currently drawn as simple lines
 			var posFirst = computePosition(x, y, building.firstX, building.firstY, scale);
 			var posSecond = computePosition(x, y, building.secondX, building.secondY, scale);
-			ctx.beginPath();
-			ctx.moveTo((posFirst[0]+(0.5*gW)), (posFirst[1]+2*c));
-			ctx.lineTo((posSecond[0]+(0.5*gW)), (posSecond[1]+2*c));
-			ctx.stroke();
+            GUI.getContext().beginPath();
+            GUI.getContext().moveTo((posFirst[0]+(0.5*gW)), (posFirst[1]+2*c));
+            GUI.getContext().lineTo((posSecond[0]+(0.5*gW)), (posSecond[1]+2*c));
+            GUI.getContext().stroke();
 		}
 	}
 }
 
-function drawRivers(ctx, x, y, scale) {
-	ctx.lineWidth = (scale/8);
-	ctx.strokeStyle="#0099FF";
-	ctx.lineCap="round";
+function drawRivers(x, y, scale) {
+    GUI.getContext().lineWidth = (scale/8);
+    GUI.getContext().strokeStyle="#0099FF";
+    GUI.getContext().lineCap="round";
 
 	for (var i = 0; i < rivers.length; i++) {
 		var river = rivers[i];
@@ -271,14 +271,14 @@ function drawRivers(ctx, x, y, scale) {
 			}
 		}
 
-		ctx.beginPath();
-		ctx.moveTo((points[0][0]), (points[0][1]));
-		ctx.lineTo((points[1][0]), (points[1][1]));
-		ctx.stroke();
+        GUI.getContext().beginPath();
+        GUI.getContext().moveTo((points[0][0]), (points[0][1]));
+        GUI.getContext().lineTo((points[1][0]), (points[1][1]));
+        GUI.getContext().stroke();
 	}
 }
 
-function drawFields(ctx, x, y, scale) { //draw the terrain fields
+function drawFields(x, y, scale) { //draw the terrain fields
 	var drawingMode = 'image';
 	// var drawingMode = 'primitives';
 	if (scale < switchScale) {drawingMode = 'primitives';}
@@ -352,7 +352,7 @@ function drawFields(ctx, x, y, scale) { //draw the terrain fields
 
 			for (var j = 0; j < currFields.length; j++) {
 				currentField = currFields[j];
-				ctx.drawImage(tileImg, currentField[0], currentField[1], (scale*SIN60), scale); //draw the image
+                GUI.getContext().drawImage(tileImg, currentField[0], currentField[1], (scale*SIN60), scale); //draw the image
 			}
 		}
 	} else if (drawingMode === 'primitives') {
@@ -360,81 +360,81 @@ function drawFields(ctx, x, y, scale) { //draw the terrain fields
 		for (var i = 0; i < sortedFields.length; i++) {
 			currFields = sortedFields[i];
 			switch(i){
-				case 0: ctx.fillStyle = 'Aqua';
+				case 0: GUI.getContext().fillStyle = 'Aqua';
 				break;
-				case 1: ctx.fillStyle = 'DarkBlue';
+				case 1: GUI.getContext().fillStyle = 'DarkBlue';
 				break;
-				case 2: ctx.fillStyle = 'LawnGreen';
+				case 2: GUI.getContext().fillStyle = 'LawnGreen';
 				break;
-				case 3: ctx.fillStyle = 'ForestGreen';
+				case 3: GUI.getContext().fillStyle = 'ForestGreen';
 				break;
-				case 4: ctx.fillStyle = 'SandyBrown';
+				case 4: GUI.getContext().fillStyle = 'SandyBrown';
 				break;
-				case 5: ctx.fillStyle = 'SaddleBrown';
+				case 5: GUI.getContext().fillStyle = 'SaddleBrown';
 				break;
-				case 6: ctx.fillStyle = 'LightGray';
+				case 6: GUI.getContext().fillStyle = 'LightGray';
 				break;
-				case 7: ctx.fillStyle = 'Khaki';
+				case 7: GUI.getContext().fillStyle = 'Khaki';
 				break;
-				case 8: ctx.fillStyle = 'DarkViolet';
+				case 8: GUI.getContext().fillStyle = 'DarkViolet';
 				break;
-				default: ctx.fillStyle = 'Black';
+				default: GUI.getContext().fillStyle = 'Black';
 				break;
 			}
 
-			ctx.beginPath();
+            GUI.getContext().beginPath();
 			for (var j = 0; j < currFields.length; j++) {
 				currentField = currFields[j];
-				ctx.moveTo((currentField[0]+0.5*gW), currentField[1]);
-				ctx.lineTo((currentField[0]+gW), (currentField[1]+c));
-				ctx.lineTo((currentField[0]+gW), (currentField[1]+gH));
-				ctx.lineTo((currentField[0]+0.5*gW), (currentField[1]+scale));
-				ctx.lineTo(currentField[0], (currentField[1]+gH));
-				ctx.lineTo(currentField[0], (currentField[1]+c));
-				ctx.lineTo((currentField[0]+0.5*gW), currentField[1]);
+                GUI.getContext().moveTo((currentField[0]+0.5*gW), currentField[1]);
+                GUI.getContext().lineTo((currentField[0]+gW), (currentField[1]+c));
+                GUI.getContext().lineTo((currentField[0]+gW), (currentField[1]+gH));
+                GUI.getContext().lineTo((currentField[0]+0.5*gW), (currentField[1]+scale));
+                GUI.getContext().lineTo(currentField[0], (currentField[1]+gH));
+                GUI.getContext().lineTo(currentField[0], (currentField[1]+c));
+                GUI.getContext().lineTo((currentField[0]+0.5*gW), currentField[1]);
 			}
-			ctx.fill();
+            GUI.getContext().fill();
 		}
 	}
 }
 
-function drawPossibleMoves(ctx, x, y, scale, selectedArmyIndex){//drawing all possible moves to neighboring fields if army was selected
-    if(selectedArmyIndex !== undefined){
+function drawPossibleMoves(x, y, scale, selectedArmyIndex){//drawing all possible moves to neighboring fields if army was selected
+    if(selectedArmyIndex != undefined){
 		var moves = listOfArmies[selectedArmyIndex].possibleMoves;
 		for (var i = 0; i < moves.length; i++) {
-            ctx.lineWidth = scale/6;
-	        ctx.strokeStyle='#00FF00';
+            GUI.getContext().lineWidth = scale/6;
+            GUI.getContext().strokeStyle='#00FF00';
             var pos = computePosition(x, y, moves[i].x, moves[i].y, scale); //get fields position
-		    ctx.beginPath();
-      	    ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/12, 0, 2 * Math.PI, false);
-      	    ctx.stroke();
+            GUI.getContext().beginPath();
+            GUI.getContext().arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/12, 0, 2 * Math.PI, false);
+            GUI.getContext().stroke();
 		}
 	}
 }
 
-function drawFieldSelection(ctx, x, y, scale) {
-	ctx.lineWidth = 5;
-	ctx.strokeStyle="blue";
+function drawFieldSelection(x, y, scale) {
+    GUI.getContext().lineWidth = 5;
+    GUI.getContext().strokeStyle="blue";
 	for( let i = 0; i < selectedFields.length; i++){
         var pos = computePosition(x, y, selectedFields[i][0], selectedFields[i][1], scale);
-        ctx.beginPath();
-        ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/2, 0, 2 * Math.PI, false);
-        ctx.stroke();
+        GUI.getContext().beginPath();
+        GUI.getContext().arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/2, 0, 2 * Math.PI, false);
+        GUI.getContext().stroke();
 	}
 }
 
-function drawArmySelection(ctx, x, y, scale, armyIndex) {
-	ctx.lineWidth = 5;
-	ctx.strokeStyle="green";
+function drawArmySelection(x, y, scale, armyIndex) {
+    GUI.getContext().lineWidth = 5;
+    GUI.getContext().strokeStyle="green";
     if(armyIndex !== undefined){
         var pos = computePosition(x, y, listOfArmies[armyIndex].x, listOfArmies[armyIndex].y, scale);
-        ctx.beginPath();
-        ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/2.2, 0, 2 * Math.PI, false);
-        ctx.stroke();
+        GUI.getContext().beginPath();
+        GUI.getContext().arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/2.2, 0, 2 * Math.PI, false);
+        GUI.getContext().stroke();
     }
 }
 
-function drawArmies(ctx, x, y, scale, armies) {
+function drawArmies(x, y, scale, armies) {
 	
 	//delete all multifields
 	for(let k = 0; k < listOfMultiArmyFields.length; k++){
@@ -452,40 +452,40 @@ function drawArmies(ctx, x, y, scale, armies) {
 	for (var i = 0; i < armies.length; i++) {
 		var armyData = armies[i]; // get army coordinates
 		var pos = computePosition(x, y, armies[i].x, armies[i].y, scale);
-		ctx.fillStyle = 'black';
-		ctx.textAlign = 'center';
-    	ctx.textBaseline = 'middle';
-		//ctx.fillText(armyData.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
+        GUI.getContext().fillStyle = 'black';
+        GUI.getContext().textAlign = 'center';
+        GUI.getContext().textBaseline = 'middle';
+		//GUI.getContext().fillText(armyData.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
 
 		//check if its is on a multifield. if it is ignore
 		if(!armyData.multiArmyField){
 			// armies == 1, riders == 2, boats == 3
 			if(Math.floor(armyData.armyId/100) == 1){
-				ctx.drawImage(troopsImg, pos[0], pos[1], (scale*SIN60), scale); 
+                GUI.getContext().drawImage(troopsImg, pos[0], pos[1], (scale*SIN60), scale);
 			} else if(Math.floor(armyData.armyId/100) == 2) {
-				ctx.drawImage(mountsImg, pos[0], pos[1], (scale*SIN60), scale);
+                GUI.getContext().drawImage(mountsImg, pos[0], pos[1], (scale*SIN60), scale);
 			} else if(Math.floor(armyData.armyId/100) == 3) {
-				ctx.drawImage(boatsImg, pos[0], pos[1], (scale*SIN60), scale);
+                GUI.getContext().drawImage(boatsImg, pos[0], pos[1], (scale*SIN60), scale);
 			}
 		}
 		if (armies[i].ownerTag() === login || login === "sl"){
 			
 			if(armies[i].possibleMoves.length > 0){
-				drawRemainingMovement(ctx, pos, scale);
+				drawRemainingMovement(GUI.getContext(), pos, scale);
 			}
 			else if(Math.floor(armyData.armyId/100) == 1 && armies[i].remainingMovePoints == 9){
-				drawRemainingMovement(ctx, pos, scale);
+				drawRemainingMovement(GUI.getContext(), pos, scale);
 			}
 			else if(Math.floor(armyData.armyId/100) == 2 && armies[i].remainingMovePoints == 21){
-				drawRemainingMovement(ctx, pos, scale);
+				drawRemainingMovement(GUI.getContext(), pos, scale);
 			}
 			else if(Math.floor(armyData.armyId/100) == 3 && armies[i].remainingMovePoints >= 42){
-				drawRemainingMovement(ctx, pos, scale);
+				drawRemainingMovement(GUI.getContext(), pos, scale);
 			}
 
 			//draw if it took fire
 			if(armyData.wasShotAt === true){
-				drawTookFire(ctx, pos, scale);
+				drawTookFire(GUI.getContext(), pos, scale);
 			}
 		}
 		
@@ -511,11 +511,11 @@ function drawArmies(ctx, x, y, scale, armies) {
 
 		// armies == 1, riders == 2, boats == 3
 			if(Math.floor(armyData.armyId/100) == 1){
-				ctx.drawImage(troopsImg, xPosArmy, yPosArmy, circleScale, scale); 
+                GUI.getContext().drawImage(troopsImg, xPosArmy, yPosArmy, circleScale, scale);
 			} else if(Math.floor(armyData.armyId/100) == 2) {
-				ctx.drawImage(mountsImg, xPosArmy, yPosArmy, circleScale, scale);
+                GUI.getContext().drawImage(mountsImg, xPosArmy, yPosArmy, circleScale, scale);
 			} else if(Math.floor(armyData.armyId/100) == 3) {
-				ctx.drawImage(boatsImg, xPosArmy, yPosArmy, circleScale, scale);
+                GUI.getContext().drawImage(boatsImg, xPosArmy, yPosArmy, circleScale, scale);
 			}
 		}
 
@@ -692,32 +692,32 @@ function writeTurnNumber() {
 	topBar.appendChild(spec);
 }
 
-function drawRemainingMovement(ctx, pos, scale){
-    ctx.lineWidth = scale/8;
-	ctx.strokeStyle='#00FFFF';
-	ctx.beginPath();
-    ctx.arc(pos[0]+(0.5 * scale * SIN60)-c, pos[1]+(scale * 0.5)-c, scale/16, Math.PI*1.25, Math.PI*1.75, false);
-    ctx.stroke();
+function drawRemainingMovement(pos, scale){
+    GUI.getContext().lineWidth = scale/8;
+    GUI.getContext().strokeStyle='#00FFFF';
+    GUI.getContext().beginPath();
+    GUI.getContext().arc(pos[0]+(0.5 * scale * SIN60)-c, pos[1]+(scale * 0.5)-c, scale/16, Math.PI*1.25, Math.PI*1.75, false);
+    GUI.getContext().stroke();
 }
 
-function drawTookFire(ctx, pos, scale){
-	ctx.lineWidth = scale/8;
-	ctx.strokeStyle='#FF0000';
-	ctx.beginPath();
-    ctx.arc(pos[0]+(0.5 * scale * SIN60)+c, pos[1]+(scale * 0.5)+c, scale/16, Math.PI*1.25, Math.PI*1.75, false);
-    ctx.stroke();
+function drawTookFire(pos, scale){
+    GUI.getContext().lineWidth = scale/8;
+    GUI.getContext().strokeStyle='#FF0000';
+    GUI.getContext().beginPath();
+    GUI.getContext().arc(pos[0]+(0.5 * scale * SIN60)+c, pos[1]+(scale * 0.5)+c, scale/16, Math.PI*1.25, Math.PI*1.75, false);
+    GUI.getContext().stroke();
 }
 
-function drawShootingTargets(ctx, x, y, scale, selectedArmy){
+function drawShootingTargets(x, y, scale, selectedArmy){
 	if(selectedArmy !== undefined && listOfArmies[selectedArmyIndex].targetList !== undefined && shootingModeOn === true){
 		var targets = listOfArmies[selectedArmyIndex].targetList;
 		for (var i = 0; i < targets.length; i++) {
-			ctx.lineWidth = scale/10;
-			ctx.strokeStyle='#FF0000';
+            GUI.getContext().lineWidth = scale/10;
+            GUI.getContext().strokeStyle='#FF0000';
 			var pos = computePosition(x, y, targets[i][0], targets[i][1], scale); //get fields position
-			ctx.beginPath();
-			ctx.arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/20, 0, 2 * Math.PI, false);
-			ctx.stroke();
+            GUI.getContext().beginPath();
+            GUI.getContext().arc(pos[0]+(0.5 * scale * SIN60), pos[1]+(scale * 0.5), scale/20, 0, 2 * Math.PI, false);
+            GUI.getContext().stroke();
 		}
 	}
 }

@@ -1,12 +1,21 @@
 class GUI{
     //this holds all our UI elements
-    static canvas: HTMLCanvasElement;
-    static context: CanvasRenderingContext2D;
+    private static canvas: HTMLCanvasElement;
+    private static context: CanvasRenderingContext2D;
 
-    static init(): void {
-        GUI.canvas = document.createElement("canvas") as HTMLCanvasElement;
-        GUI.canvas.setAttribute("id", "hexCanvas");
-        document.body.appendChild(GUI.canvas);
-        GUI.context = GUI.canvas.getContext('2d');
+    static getCanvas(): HTMLCanvasElement{
+        if(GUI.canvas == undefined){
+            GUI.canvas = document.createElement("canvas") as HTMLCanvasElement;
+            GUI.canvas.setAttribute("id", "hexCanvas");
+            document.body.appendChild(GUI.canvas);
+        }
+        return GUI.canvas;
+    }
+
+    static getContext(): CanvasRenderingContext2D{
+        if(GUI.context == undefined){
+            GUI.context = GUI.canvas.getContext('2d');
+        }
+        return GUI.context;
     }
 }
