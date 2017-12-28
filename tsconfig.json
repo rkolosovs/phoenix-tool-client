@@ -56,7 +56,7 @@
   //   "libraries/hexFunctions.ts"
   // ],
   "exclude": [
-    "jquery-2.2.3.js",
+    "libraries/jquery-2.2.3.js",
     "deprecated/*",
     "libraries/Grid.js",
     "libraries/angular.js"

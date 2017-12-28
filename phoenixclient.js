@@ -17,7 +17,6 @@ const FOOTMAN_BP = 0.1;
 const MOUNT_BP = 0.1;
 const RIDER_BP = 0.2;
 const SHIP_BP = 10;
-const FOOTMAN_BP = 0.1;
 const LIGHT_CATA_BP = 200;
 const HEAVY_CATA_BP = 400;
 const LIGHT_WS_BP = 200;
@@ -37,9 +36,10 @@ var listOfArmies = [];
 var switchScale = 50;
 var login = 'guest'; // either realm tag, 'sl', or 'guest'
 var pendingEvents = [];
-var canvas = document.getElementById('hexCanvas'); // get the canvas element
+GUI.init();
+// var canvas: HTMLCanvasElement = document.getElementById('hexCanvas') as HTMLCanvasElement; // get the canvas element
 // from the HTML document
-var ctx = canvas.getContext('2d'); // get the context of the canvas
+var ctx = GUI.canvas.getContext('2d'); // get the context of the canvas
 // settings; TODO: let the user change these in game
 var tileset = "mbits_painted"; // tileset name
 var scrollSpeed = 0.2; // increment to scroll with each step
