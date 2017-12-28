@@ -21,6 +21,15 @@ const HEAVY_CATA_BP: number = 400;
 const LIGHT_WS_BP: number = 200;
 const HEAVY_WS_BP: number = 400;
 
+enum Direction{
+	NW, //North-west
+	NE, //North-east
+	E, //East
+	SE, //South-east
+	SW, //South-west
+	W //West
+}
+
 
 var selectedFields  = []; // list of fields to be highlighted
 var selectedArmyIndex; // index of the currently selected army in the listOfArmies

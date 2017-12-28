@@ -19,6 +19,15 @@ const LIGHT_CATA_BP = 200;
 const HEAVY_CATA_BP = 400;
 const LIGHT_WS_BP = 200;
 const HEAVY_WS_BP = 400;
+var Direction;
+(function (Direction) {
+    Direction[Direction["NW"] = 0] = "NW";
+    Direction[Direction["NE"] = 1] = "NE";
+    Direction[Direction["E"] = 2] = "E";
+    Direction[Direction["SE"] = 3] = "SE";
+    Direction[Direction["SW"] = 4] = "SW";
+    Direction[Direction["W"] = 5] = "W"; //West
+})(Direction || (Direction = {}));
 var selectedFields = []; // list of fields to be highlighted
 var selectedArmyIndex; // index of the currently selected army in the listOfArmies
 var listOfArmies = [];
