@@ -1,17 +1,14 @@
-class MapEntity{
+class MobileEntity extends MapEntity{
     static readonly MAX_MOVE_POINTS = 42;
     static readonly MAX_HEIGHT_POINTS = 2;
-    protected position: [number, number];
     protected oldPosition: [number, number];
     protected movePoints: number = MapEntity.MAX_MOVE_POINTS;
     protected heightPoints: number = MapEntity.MAX_HEIGHT_POINTS;
     protected id: number;
-    owner: Realm;
 
     constructor(id: number, owner: Realm, position: [number, number], movePoints: number, heightPoints: number){
-        this.position = position;
+        super(position, owner);
         this.oldPosition = position;
-        this.owner = owner;
         this.setID(id);
         this.setMovePoints(movePoints);
         this.setHeightPoints(heightPoints);
@@ -23,10 +20,6 @@ class MapEntity{
     //TODO: Move the appropriate part of the movement logic here.
 
     getRoomPoints(): number;
-
-    getPosition(): [number, number]{
-        return this.position;
-    }
 
     getOldPosition(): [number, number]{
         return this.oldPosition;

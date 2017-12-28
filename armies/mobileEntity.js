@@ -1,4 +1,4 @@
-class MapEntity {
+class MobileEntity {
     constructor(id, owner, position, movePoints, heightPoints) {
         this.movePoints = MapEntity.MAX_MOVE_POINTS;
         this.heightPoints = MapEntity.MAX_HEIGHT_POINTS;
@@ -40,5 +40,5 @@ class MapEntity {
         this.id = value % 100;
     }
 }
-MapEntity.MAX_MOVE_POINTS = 42;
-MapEntity.MAX_HEIGHT_POINTS = 2;
+MobileEntity.MAX_MOVE_POINTS = 42;
+MobileEntity.MAX_HEIGHT_POINTS = 2;

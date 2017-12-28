@@ -1,4 +1,4 @@
-class Army extends MapEntity{
+class Army extends MobileEntity{
     protected troopCount: number;
     protected officerCount: number;
     protected lightCatapultCount: number = 0;

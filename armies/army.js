@@ -1,4 +1,4 @@
-class Army extends MapEntity {
+class Army extends MobileEntity {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
         super(id, owner, position, movePoints, heightPoints);
         this.lightCatapultCount = 0;
