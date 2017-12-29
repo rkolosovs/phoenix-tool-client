@@ -8,10 +8,11 @@ namespace UIMaker{
         return result;
     }
 
-    export function makeButton(id: string, styleClass: string, parent: HTMLElement, onClick: (MouseEvent) => any): HTMLButtonElement{
+    export function makeButton(id: string, text: string, styleClass: string, parent: HTMLElement, onClick: (MouseEvent) => any): HTMLButtonElement{
         let button = makeElement(id, "button", parent);
         button.className = styleClass;
-        button.addEventListener("onclick", onClick);
+        button.innerText = text;
+        button.addEventListener("onclick", () => onClick());
         return button;
     }
 
@@ -23,7 +24,8 @@ namespace UIMaker{
 
     export function makeButtonsBox(): [HTMLDivElement, HTMLButtonElement]{
         let buttonsBox: HTMLDivElement = makeBox("buttonsBox", "prettyBox", document.body);
-        let toggleGMBarButton = makeButton("ToggleGodModeBar", "fixedPrettyButton", buttonBox, (event: MouseEvent) => toggleGodModeBar());
+        let toggleGMBarButton = makeButton("ToggleGodModeBar", "toggle God Mode Bar", "fixedPrettyButton",
+            buttonsBox, (event: MouseEvent) => toggleGodModeBar());
         return [buttonsBox, toggleGMBarButton];
     }
 }

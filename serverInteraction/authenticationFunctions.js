@@ -18,7 +18,7 @@ function loginToServer() {
             login = data.group;
             // if the user is a GM, godmode possibility is displayed
             if (login === 'sl') {
-                document.getElementById("ToggleGodModeBar").style.display = "";
+                GUI.getToggleGMBarButton().style.display = "";
                 if (currentTurn.status === 'fi') {
                     show(document.getElementById("eventTabsButton"));
                     loadPendingEvents();

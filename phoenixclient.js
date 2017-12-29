@@ -234,7 +234,7 @@ function registerLeftClick() {
             }
         }
         if (document.getElementById("btnSection") != null) {
-            var d = document.getElementById("buttonsBox");
+            var d = GUI.getButtonsBox();
             d.removeChild(document.getElementById("btnSection"));
         }
         if (possibleSelections.length != 0) {
@@ -264,7 +264,7 @@ function registerLeftClick() {
                 });
                 x.appendChild(btn);
             }
-            document.getElementById("buttonsBox").appendChild(x);
+            GUI.getButtonsBox().appendChild(x);
         }
         updateInfoBox();
         if (selectedArmyIndex !== undefined) {
