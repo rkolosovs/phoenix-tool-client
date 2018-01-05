@@ -27,7 +27,7 @@ function showInitial(){
 
 //TODO: Unify the handling of showing/hiding UI elements.
 function toggleVisibility(element){
-	var classes = element.classList;
+	let classes = element.classList;
 	if(classes.contains("invisible")){
 		classes.remove("invisible");
 	} else {
@@ -36,14 +36,14 @@ function toggleVisibility(element){
 }
 
 function show(element) {
-	var classes = element.classList;
+    let classes = element.classList;
 	if(classes.contains("invisible")){
 		classes.remove("invisible");
 	}
 }
 
 function hide(element) {
-	var classes = element.classList;
+    let classes = element.classList;
 	if(!classes.contains("invisible")){
 		classes.add("invisible");
 	}

@@ -6,30 +6,12 @@
 <meta charset="utf-8" />
 </head>
 <body oncontextmenu="return false;">
-	<script src="libraries/jquery-2.2.3.js"></script>
-    <script src="gui/uiMaker.js"></script>
-	<script src="gui/gui.js"></script>
-	<script src="map.js"></script>
-	<script src="gui/drawingFunctions.js"></script>
-    <script src="map/field.js"></script>
-    <script src="map/mapEntity.js"></script>
-    <script src="buildings/building.js"></script>
-	<script src="serverInteraction/loadingDataFunctions.js"></script>
-	<script src="phoenixclient.js"></script>
-	<script src="armies/armyInteraction.js"></script>
-	<script src="gameState/gameState.js"></script>
-	<script src="deprecated/army.js"></script>
-	<script src="armies/armyCoordinates.js"></script>
-	<script src="armies/armyInteraction.js"></script>
-	<script src="gui/boxVisibilty.js"></script>
-	<script src="godmode/godModeFunctions.js"></script>
-	<script src="serverInteraction/savingFunctions.js"></script>
-	<script src="serverInteraction/authenticationFunctions.js"></script>
-	<script src="libraries/hexFunctions.js"></script>
 
-	<!--<div id="buttonsBox" class="prettyBox">-->
-		<!--<button id="ToggleGodModeBar" class="fixedPrettyButton" onclick="toggleGodModeBar()">toggle GodMode Bar</button>-->
-	<!--</div>-->
+	<canvas id="hexCanvas"></canvas>
+
+	<div id="buttonsBox" class="prettyBox">
+		<button id="ToggleGodModeBar" class="fixedPrettyButton" onclick="toggleGodModeBar()">toggle GodMode Bar</button>
+	</div>
 
 	<div id="bigBox" class="prettyBox invisible">
 		<div class="tab">
@@ -54,7 +36,7 @@
 
 	<button id="mainButton" class="prettyBox" onclick="mainButton()"></button>
 
-	<!--<div id="topBar" class="prettyBox"></div>-->
+	<div id="topBar" class="prettyBox"></div>
 
 	<div id="battleBox" class="prettyBox invisible">
 		<button id="closeBattleButton" class="prettyButton">X</button>
@@ -670,12 +652,32 @@
 			buildings</button>
 	</div>
 
+	<script src="libraries/jquery-2.2.3.js"></script>
+	<script src="gui/gui.js"></script>
+	<script src="map.js"></script>
+	<script src="gui/drawingFunctions.js"></script>
+	<script src="map/field.js"></script>
+	<script src="map/mapEntity.js"></script>
+	<script src="buildings/building.js"></script>
+	<script src="serverInteraction/loadingDataFunctions.js"></script>
+    <script src="gui/boxVisibilty.js"></script>
+	<script src="phoenixclient.js"></script>
+	<script src="armies/armyInteraction.js"></script>
+	<script src="gameState/gameState.js"></script>
+	<script src="deprecated/army.js"></script>
+	<script src="armies/armyCoordinates.js"></script>
+	<script src="armies/armyInteraction.js"></script>
+	<script src="godmode/godModeFunctions.js"></script>
+	<script src="serverInteraction/savingFunctions.js"></script>
+	<script src="serverInteraction/authenticationFunctions.js"></script>
+	<script src="libraries/hexFunctions.js"></script>
+
 	<script>
 		// Box Sichtbarkeits Zeug, bisher hat es sich geweigert in eine andere Datei zu gehen.
 		// Die Sichtbarkeit kann bei Elementkreation in HTML gleich mit angegeben werden bzw. noch besser: im CSS!!!
 		// TODO: wirf das hier in boxVisibilty
 		
-		// document.getElementById("ToggleGodModeBar").style.display = "none";
+		document.getElementById("ToggleGodModeBar").style.display = "none";
 		document.getElementById("godmodeBox").style.visibility = "hidden";
 		document.getElementById("worldBenderBox").style.display = "none";
 		document.getElementById("riverBenderBox").style.display = "none";
