@@ -5,10 +5,16 @@ class GUI{
     private static buttonsBox: HTMLDivElement;
     private static toggleGMBarButton: HTMLButtonElement;
     private static topBar: HTMLDivElement;
+    private static bigBox: HTMLDivElement;
+    private static eventTabsButton: HTMLButtonElement;
+    private static eventsTab: HTMLDivElement;
+    private static mainButton: HTMLButtonElement;
+    private static battleBox: BattleBox;
+    private static shootingBigBox: ShootingBigBox;
+    private static infoBox: InfoBox;
 
     static getCanvas(): HTMLCanvasElement{
         if(GUI.canvas == undefined){
-            // GUI.canvas = UIMaker.makeElement("hexCanvas", "canvas", document.body);
             GUI.canvas = document.getElementById("hexCanvas") as HTMLCanvasElement;
         }
         return GUI.canvas;
@@ -23,7 +29,6 @@ class GUI{
 
     static getButtonsBox(): HTMLDivElement{
         if(GUI.buttonsBox == undefined){
-            // GUI.buttonsBox = UIMaker.makeButtonsBox();
             GUI.buttonsBox = document.getElementById("buttonsBox") as HTMLDivElement;
         }
         return GUI.buttonsBox;
@@ -31,7 +36,6 @@ class GUI{
 
     static getToggleGMBarButton(): HTMLButtonElement{
         if(GUI.toggleGMBarButton == undefined){
-            // GUI.toggleGMBarButton = UIMaker.makeButtonsBox();
             GUI.toggleGMBarButton = document.getElementById("ToggleGodModeBar") as HTMLButtonElement;
         }
         return GUI.toggleGMBarButton;
@@ -39,9 +43,15 @@ class GUI{
 
     static getTopBar(): HTMLDivElement{
         if(GUI.topBar == undefined){
-            // GUI.topBar = UIMaker.makeBox("topBar", "prettyBox", document.body);
             GUI.topBar = document.getElementById("topBar") as HTMLDivElement;
         }
         return GUI.topBar;
+    }
+
+    static getBigBox(): HTMLDivElement{
+        if(GUI.bigBox == undefined){
+            GUI.bigBox = document.getElementById("bigBox") as HTMLDivElement;
+        }
+        return GUI.bigBox;
     }
 }
