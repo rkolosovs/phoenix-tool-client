@@ -1,4 +1,5 @@
 class BattleBox extends HTMLDivElement{
+    private self: HTMLDivElement;
     private closeBattleButton: HTMLButtonElement;
     private attackersTitleText: HTMLDivElement;
     private defendersTitleText: HTMLDivElement;
@@ -10,6 +11,13 @@ class BattleBox extends HTMLDivElement{
     private defenseDiceRoll: HTMLSelectElement;
     private defenseBattleSide: HTMLDivElement;
     private battleButton: HTMLButtonElement;
+
+    getSelf(): HTMLDivElement{
+        if(this.self == undefined){
+            this.self = document.getElementById("battleBox") as HTMLDivElement;
+        }
+        return this.self;
+    }
 
     getCloseBattleButton(): HTMLButtonElement{
         if(this.closeBattleButton == undefined){

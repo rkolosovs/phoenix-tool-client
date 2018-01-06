@@ -1,4 +1,5 @@
 class InfoBox extends HTMLDivElement{
+    private self: HTMLDivElement;
     private armySelectBtns: HTMLDivElement;
     private armyId: HTMLHeadingElement;
     private guard: HTMLParagraphElement;
@@ -14,6 +15,13 @@ class InfoBox extends HTMLDivElement{
     private splitBtn: HTMLButtonElement;
     private shoot: HTMLButtonElement;
     private logoutBtn: HTMLButtonElement;
+
+    getSelf(): HTMLDivElement{
+        if(this.self == undefined){
+            this.self = document.getElementById("infoBox") as HTMLDivElement;
+        }
+        return this.self;
+    }
 
     getArmySelectButtons(): HTMLDivElement{
         if(this.armySelectBtns == undefined){

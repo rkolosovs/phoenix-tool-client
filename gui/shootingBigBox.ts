@@ -1,4 +1,5 @@
 class ShootingBigBox extends HTMLDivElement{
+    private self: HTMLDivElement;
     private closeRangedBattleButton: HTMLButtonElement;
     private shootingInfo: HTMLDivElement;
     private shooterTitleText: HTMLDivElement;
@@ -30,6 +31,13 @@ class ShootingBigBox extends HTMLDivElement{
     private skp8Input: HTMLInputElement;
     private skp9Input: HTMLInputElement;
     private rangedBattleButton: HTMLButtonElement;
+
+    getSelf(): HTMLDivElement{
+        if(this.self == undefined){
+            this.self = document.getElementById("shootingBigBox") as HTMLDivElement;
+        }
+        return this.self;
+    }
 
     getCloseRangedBattleButton(): HTMLButtonElement{
         if(this.closeRangedBattleButton == undefined){
