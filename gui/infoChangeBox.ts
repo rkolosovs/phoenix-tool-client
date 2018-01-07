@@ -90,16 +90,16 @@ class InfoChangeBox extends HTMLDivElement{
         return this.heightPointsChangeInput;
     }
 
-    getChangeArmyInfoButton(): HTMLDivElement{
+    getChangeArmyInfoButton(): HTMLButtonElement{
         if(this.changeArmyInfo == undefined){
-            this.changeArmyInfo = document.getElementById("changeArmyInfo") as HTMLDivElement;
+            this.changeArmyInfo = document.getElementById("changeArmyInfo") as HTMLButtonElement;
         }
         return this.changeArmyInfo;
     }
 
-    getLogoutButton(): HTMLDivElement{
+    getLogoutButton(): HTMLButtonElement{
         if(this.logoutBtnChange == undefined){
-            this.logoutBtnChange = document.getElementById("logoutBtnChange") as HTMLDivElement;
+            this.logoutBtnChange = document.getElementById("logoutBtnChange") as HTMLButtonElement;
         }
         return this.logoutBtnChange;
     }
