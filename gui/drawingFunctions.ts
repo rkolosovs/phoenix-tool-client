@@ -692,20 +692,20 @@ function writeTurnNumber() {
 	topBar.appendChild(spec);
 }
 
-function drawRemainingMovement(pos, scale){
-    GUI.getContext().lineWidth = scale/8;
-    GUI.getContext().strokeStyle='#00FFFF';
-    GUI.getContext().beginPath();
-    GUI.getContext().arc(pos[0]+(0.5 * scale * SIN60)-c, pos[1]+(scale * 0.5)-c, scale/16, Math.PI*1.25, Math.PI*1.75, false);
-    GUI.getContext().stroke();
+function drawRemainingMovement(context, pos, scale){
+    context.lineWidth = scale/8;
+    context.strokeStyle='#00FFFF';
+    context.beginPath();
+    context.arc(pos[0]+(0.5 * scale * SIN60)-c, pos[1]+(scale * 0.5)-c, scale/16, Math.PI*1.25, Math.PI*1.75, false);
+    context.stroke();
 }
 
-function drawTookFire(pos, scale){
-    GUI.getContext().lineWidth = scale/8;
-    GUI.getContext().strokeStyle='#FF0000';
-    GUI.getContext().beginPath();
-    GUI.getContext().arc(pos[0]+(0.5 * scale * SIN60)+c, pos[1]+(scale * 0.5)+c, scale/16, Math.PI*1.25, Math.PI*1.75, false);
-    GUI.getContext().stroke();
+function drawTookFire(context, pos, scale){
+    context.lineWidth = scale/8;
+    context.strokeStyle='#FF0000';
+    context.beginPath();
+    context.arc(pos[0]+(0.5 * scale * SIN60)+c, pos[1]+(scale * 0.5)+c, scale/16, Math.PI*1.25, Math.PI*1.75, false);
+    context.stroke();
 }
 
 function drawShootingTargets(x, y, scale, selectedArmy){
@@ -731,9 +731,9 @@ function writeFieldInfo(){
     if(selectedFields[index] === undefined){
         minimapBox.innerHTML = '';
 	}else {
-        var fieldPositionInList = positionInList(selectedFields[index][0], selectedFields[index][1]);
+        var fieldPositionInList = HexFunction.positionInList(selectedFields[index][0], selectedFields[index][1]);
         var localfieldType = '';
-        switch(fieldType(selectedFields[index][0], selectedFields[index][1])){
+        switch(HexFunction.fieldType(selectedFields[index][0], selectedFields[index][1])){
 			case 0: localfieldType = 'Wasser'; break;
 			case 1: localfieldType = 'Tiefsee'; break;
 			case 2: localfieldType = 'Tiefland'; break;
@@ -751,7 +751,7 @@ function writeFieldInfo(){
         var fieldOwnerString = (fieldOwner === undefined)?'keiner':fieldOwner.tag;
         minimapBox.innerHTML = '<p>Feld: ('+selectedFields[index][0]+', '+selectedFields[index][1]+')'+
             '</p><p>Gelände: '+localfieldType+
-            '</p><p>Höhe: '+height(selectedFields[index][0], selectedFields[index][1])+
+            '</p><p>Höhe: '+HexFunction.height(selectedFields[index][0], selectedFields[index][1])+
             '</p><p>Besitzer: '+fieldOwnerString+'</p>';
     }
 }
