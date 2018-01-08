@@ -1,14 +1,23 @@
 class InfoChangeBox{
     private self: HTMLDivElement;
     private guardChangeInput: HTMLInputElement;
+    private ownerChange: HTMLParagraphElement;
     private ownerChangeInput: HTMLInputElement;
+    private armyIdChange: HTMLParagraphElement;
     private armyIdChangeInput: HTMLInputElement;
+    private countChange: HTMLParagraphElement;
     private countChangeInput: HTMLInputElement;
+    private leadersChange: HTMLParagraphElement;
     private leadersChangeInput: HTMLInputElement;
+    private mountsChange: HTMLParagraphElement;
     private mountsChangeInput: HTMLInputElement;
+    private lkpChange: HTMLParagraphElement;
     private lkpChangeInput: HTMLInputElement;
+    private skpChange: HTMLParagraphElement;
     private skpChangeInput: HTMLInputElement;
+    private movePointsChange: HTMLParagraphElement;
     private movePointsChangeInput: HTMLInputElement;
+    private heightPointsChange: HTMLParagraphElement;
     private heightPointsChangeInput: HTMLInputElement;
     private changeArmyInfo: HTMLButtonElement;
     private logoutBtnChange: HTMLButtonElement;
@@ -18,6 +27,69 @@ class InfoChangeBox{
             this.self = document.getElementById("infoChangeBox") as HTMLDivElement;
         }
         return this.self;
+    }
+
+    getOwnerChange(): HTMLParagraphElement{
+        if(this.ownerChange == undefined){
+            this.ownerChange = document.getElementById("ownerChange") as HTMLParagraphElement;
+        }
+        return this.ownerChange;
+    }
+
+    getArmyIdChange(): HTMLParagraphElement{
+        if(this.armyIdChange == undefined){
+            this.armyIdChange = document.getElementById("armyIdChange") as HTMLParagraphElement;
+        }
+        return this.armyIdChange;
+    }
+
+    getCountChange(): HTMLParagraphElement{
+        if(this.countChange == undefined){
+            this.countChange = document.getElementById("countChange") as HTMLParagraphElement;
+        }
+        return this.countChange;
+    }
+
+    getLeadersChange(): HTMLParagraphElement{
+        if(this.leadersChange == undefined){
+            this.leadersChange = document.getElementById("leadersChange") as HTMLParagraphElement;
+        }
+        return this.leadersChange;
+    }
+
+    getMountsChange(): HTMLParagraphElement{
+        if(this.mountsChange == undefined){
+            this.mountsChange = document.getElementById("mountsChange") as HTMLParagraphElement;
+        }
+        return this.mountsChange;
+    }
+
+    getLKPChange(): HTMLParagraphElement{
+        if(this.lkpChange == undefined){
+            this.lkpChange = document.getElementById("lkpChange") as HTMLParagraphElement;
+        }
+        return this.lkpChange;
+    }
+
+    getSKPChange(): HTMLParagraphElement{
+        if(this.skpChange == undefined){
+            this.skpChange = document.getElementById("skpChange") as HTMLParagraphElement;
+        }
+        return this.skpChange;
+    }
+
+    getMovePointsChange(): HTMLParagraphElement{
+        if(this.movePointsChange == undefined){
+            this.movePointsChange = document.getElementById("movePointsChange") as HTMLParagraphElement;
+        }
+        return this.movePointsChange;
+    }
+
+    getHeightPointsChange(): HTMLParagraphElement{
+        if(this.heightPointsChange == undefined){
+            this.heightPointsChange = document.getElementById("heightPointsChange") as HTMLParagraphElement;
+        }
+        return this.heightPointsChange;
     }
 
     getGuardChangeInput(): HTMLInputElement{

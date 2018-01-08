@@ -5,6 +5,60 @@ class InfoChangeBox {
         }
         return this.self;
     }
+    getOwnerChange() {
+        if (this.ownerChange == undefined) {
+            this.ownerChange = document.getElementById("ownerChange");
+        }
+        return this.ownerChange;
+    }
+    getArmyIdChange() {
+        if (this.armyIdChange == undefined) {
+            this.armyIdChange = document.getElementById("armyIdChange");
+        }
+        return this.armyIdChange;
+    }
+    getCountChange() {
+        if (this.countChange == undefined) {
+            this.countChange = document.getElementById("countChange");
+        }
+        return this.countChange;
+    }
+    getLeadersChange() {
+        if (this.leadersChange == undefined) {
+            this.leadersChange = document.getElementById("leadersChange");
+        }
+        return this.leadersChange;
+    }
+    getMountsChange() {
+        if (this.mountsChange == undefined) {
+            this.mountsChange = document.getElementById("mountsChange");
+        }
+        return this.mountsChange;
+    }
+    getLKPChange() {
+        if (this.lkpChange == undefined) {
+            this.lkpChange = document.getElementById("lkpChange");
+        }
+        return this.lkpChange;
+    }
+    getSKPChange() {
+        if (this.skpChange == undefined) {
+            this.skpChange = document.getElementById("skpChange");
+        }
+        return this.skpChange;
+    }
+    getMovePointsChange() {
+        if (this.movePointsChange == undefined) {
+            this.movePointsChange = document.getElementById("movePointsChange");
+        }
+        return this.movePointsChange;
+    }
+    getHeightPointsChange() {
+        if (this.heightPointsChange == undefined) {
+            this.heightPointsChange = document.getElementById("heightPointsChange");
+        }
+        return this.heightPointsChange;
+    }
     getGuardChangeInput() {
         if (this.guardChangeInput == undefined) {
             this.guardChangeInput = document.getElementById("guardChangeInput");

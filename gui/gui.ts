@@ -13,6 +13,7 @@ class GUI{
     private static shootingBigBox: ShootingBigBox;
     private static infoBox: InfoBox;
     private static transmuteBox: HTMLDivElement;
+    private static transmuteArmyButtonsPartition: HTMLParagraphElement;
     private static backToSplitBox: HTMLButtonElement;
     private static restoreInfoBox: HTMLButtonElement;
     private static mergeBox: HTMLDivElement;
@@ -166,6 +167,13 @@ class GUI{
             GUI.transmuteBox = document.getElementById("transmuteBox") as HTMLDivElement;
         }
         return GUI.transmuteBox;
+    }
+
+    static getTransmuteArmyButtonsPartition(): HTMLParagraphElement{
+        if(GUI.transmuteArmyButtonsPartition == undefined){
+            GUI.transmuteArmyButtonsPartition = document.getElementById("transmuteArmyButtonsPartition") as HTMLParagraphElement;
+        }
+        return GUI.transmuteArmyButtonsPartition;
     }
 
     static getBackToSplitBox(): HTMLButtonElement{

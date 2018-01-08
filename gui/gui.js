@@ -89,6 +89,12 @@ class GUI {
         }
         return GUI.transmuteBox;
     }
+    static getTransmuteArmyButtonsPartition() {
+        if (GUI.transmuteArmyButtonsPartition == undefined) {
+            GUI.transmuteArmyButtonsPartition = document.getElementById("transmuteArmyButtonsPartition");
+        }
+        return GUI.transmuteArmyButtonsPartition;
+    }
     static getBackToSplitBox() {
         if (GUI.backToSplitBox == undefined) {
             GUI.backToSplitBox = document.getElementById("backToSplitBox");
