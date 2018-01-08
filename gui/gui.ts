@@ -258,4 +258,256 @@ class GUI{
         }
         return GUI.splitMountedBox;
     }
+
+    static getSplitMountedInput(): HTMLInputElement{
+        if(GUI.splitMountedInput == undefined){
+            GUI.splitMountedInput = document.getElementById("splitMountedInput") as HTMLInputElement;
+        }
+        return GUI.splitMountedInput;
+    }
+
+    static getSplitMountedLeadersInput(): HTMLInputElement{
+        if(GUI.splitMountedLeadersInput == undefined){
+            GUI.splitMountedLeadersInput = document.getElementById("splitMountedLeadersInput") as HTMLInputElement;
+        }
+        return GUI.splitMountedLeadersInput;
+    }
+
+    static getSplitFleetBox(): HTMLDivElement{
+        if(GUI.splitFleetBox == undefined){
+            GUI.splitFleetBox = document.getElementById("splitFleetBox") as HTMLDivElement;
+        }
+        return GUI.splitFleetBox;
+    }
+
+    static getSplitFleetInput(): HTMLInputElement{
+        if(GUI.splitFleetInput == undefined){
+            GUI.splitFleetInput = document.getElementById("splitFleetInput") as HTMLInputElement;
+        }
+        return GUI.splitFleetInput;
+    }
+
+    static getSplitFleetLeadersInput(): HTMLInputElement{
+        if(GUI.splitFleetLeadersInput == undefined){
+            GUI.splitFleetLeadersInput = document.getElementById("splitFleetLeadersInput") as HTMLInputElement;
+        }
+        return GUI.splitFleetLeadersInput;
+    }
+
+    static getSplitFleetLkpInput(): HTMLInputElement{
+        if(GUI.splitFleetLkpInput == undefined){
+            GUI.splitFleetLkpInput = document.getElementById("splitFleetLkpInput") as HTMLInputElement;
+        }
+        return GUI.splitFleetLkpInput;
+    }
+
+    static getSplitFleetSkpInput(): HTMLInputElement{
+        if(GUI.splitFleetSkpInput == undefined){
+            GUI.splitFleetSkpInput = document.getElementById("splitFleetSkpInput") as HTMLInputElement;
+        }
+        return GUI.splitFleetSkpInput;
+    }
+
+    static getMountBox(): HTMLDivElement{
+        if(GUI.mountBox == undefined){
+            GUI.mountBox = document.getElementById("mountBox") as HTMLDivElement;
+        }
+        return GUI.mountBox;
+    }
+
+    static getMountInput(): HTMLInputElement{
+        if(GUI.mountInput == undefined){
+            GUI.mountInput = document.getElementById("mountInput") as HTMLInputElement;
+        }
+        return GUI.mountInput;
+    }
+
+    static getMountLeaderInput(): HTMLInputElement{
+        if(GUI.mountLeaderInput == undefined){
+            GUI.mountLeaderInput = document.getElementById("mountLeaderInput") as HTMLInputElement;
+        }
+        return GUI.mountLeaderInput;
+    }
+
+    static getMountButton(): HTMLButtonElement{
+        if(GUI.mount == undefined){
+            GUI.mount = document.getElementById("mount") as HTMLButtonElement;
+        }
+        return GUI.mount;
+    }
+
+    static getAllMountButton(): HTMLButtonElement{
+        if(GUI.allMount == undefined){
+            GUI.allMount = document.getElementById("allMount") as HTMLButtonElement;
+        }
+        return GUI.allMount;
+    }
+
+    static getUnMountBox(): HTMLDivElement{
+        if(GUI.unMountBox == undefined){
+            GUI.unMountBox = document.getElementById("unMountBox") as HTMLDivElement;
+        }
+        return GUI.unMountBox;
+    }
+
+    static getUnMountInput(): HTMLInputElement{
+        if(GUI.unMountInput == undefined){
+            GUI.unMountInput = document.getElementById("unMountInput") as HTMLInputElement;
+        }
+        return GUI.unMountInput;
+    }
+
+    static getUnMountLeaderInput(): HTMLInputElement{
+        if(GUI.unMountLeaderInput == undefined){
+            GUI.unMountLeaderInput = document.getElementById("unMountLeaderInput") as HTMLInputElement;
+        }
+        return GUI.unMountLeaderInput;
+    }
+
+    static getUnMountButton(): HTMLButtonElement{
+        if(GUI.unMount == undefined){
+            GUI.unMount = document.getElementById("unMount") as HTMLButtonElement;
+        }
+        return GUI.unMount;
+    }
+
+    static getAllUnMountButton(): HTMLButtonElement{
+        if(GUI.allUnMount == undefined){
+            GUI.allUnMount = document.getElementById("allUnMount") as HTMLButtonElement;
+        }
+        return GUI.allUnMount;
+    }
+
+    static getShootBox(): HTMLDivElement{
+        if(GUI.shootBox == undefined){
+            GUI.shootBox = document.getElementById("shootBox") as HTMLDivElement;
+        }
+        return GUI.shootBox;
+    }
+
+    static getShootingLKPInput(): HTMLInputElement{
+        if(GUI.shootingLKPInput == undefined){
+            GUI.shootingLKPInput = document.getElementById("shootingLKPInput") as HTMLInputElement;
+        }
+        return GUI.shootingLKPInput;
+    }
+
+    static getShootingSKPInput(): HTMLInputElement{
+        if(GUI.shootingSKPInput == undefined){
+            GUI.shootingSKPInput = document.getElementById("shootingSKPInput") as HTMLInputElement;
+        }
+        return GUI.shootingSKPInput;
+    }
+
+    static getFireButton(): HTMLButtonElement{
+        if(GUI.fire == undefined){
+            GUI.fire = document.getElementById("fire") as HTMLButtonElement;
+        }
+        return GUI.fire;
+    }
+
+    static getInfoChangeBox(): InfoChangeBox{
+        if(GUI.infoChangeBox == undefined){
+            GUI.infoChangeBox = new InfoChangeBox();
+        }
+        return GUI.infoChangeBox;
+    }
+
+    static getLoginBox(): HTMLDivElement{
+        if(GUI.loginBox == undefined){
+            GUI.loginBox = document.getElementById("loginBox") as HTMLDivElement;
+        }
+        return GUI.loginBox;
+    }
+
+    static getLoginNameInput(): HTMLInputElement{
+        if(GUI.loginName == undefined){
+            GUI.loginName = document.getElementById("loginName") as HTMLInputElement;
+        }
+        return GUI.loginName;
+    }
+
+    static getLoginPasswordInput(): HTMLInputElement{
+        if(GUI.loginPassword == undefined){
+            GUI.loginPassword = document.getElementById("loginPassword") as HTMLInputElement;
+        }
+        return GUI.loginPassword;
+    }
+
+    static getLoginButton(): HTMLButtonElement{
+        if(GUI.loginBtn == undefined){
+            GUI.loginBtn = document.getElementById("loginBtn") as HTMLButtonElement;
+        }
+        return GUI.loginBtn;
+    }
+
+    static getMinimapBox(): HTMLDivElement{
+        if(GUI.minimapBox == undefined){
+            GUI.minimapBox = document.getElementById("minimapBox") as HTMLDivElement;
+        }
+        return GUI.minimapBox;
+    }
+
+    static getGodModeBox(): GodModeBox{
+        if(GUI.godmodeBox == undefined){
+            GUI.godmodeBox = new GodModeBox();
+        }
+        return GUI.godmodeBox;
+    }
+
+    static getArmyGeneratorBox(): ArmyGeneratorBox{
+        if(GUI.armyGeneratorBox == undefined){
+            GUI.armyGeneratorBox = new ArmyGeneratorBox();
+        }
+        return GUI.armyGeneratorBox;
+    }
+
+    static getWorldBenderBox(): WorldBenderBox{
+        if(GUI.worldBenderBox == undefined){
+            GUI.worldBenderBox = new WorldBenderBox();
+        }
+        return GUI.worldBenderBox;
+    }
+
+    static getRiverBenderBox(): RiverBenderBox{
+        if(GUI.riverBenderBox == undefined){
+            GUI.riverBenderBox = new RiverBenderBox();
+        }
+        return GUI.riverBenderBox;
+    }
+
+    static getBuildingCreationBox(): BuildingCreationBox{
+        if(GUI.buildingCreationBox == undefined){
+            GUI.buildingCreationBox = new BuildingCreationBox();
+        }
+        return GUI.buildingCreationBox;
+    }
+
+    static getWallCreationBox(): WallCreationBox{
+        if(GUI.wallCreationBox == undefined){
+            GUI.wallCreationBox = new WallCreationBox();
+        }
+        return GUI.wallCreationBox;
+    }
+
+    static getHarborCreationBox(): HarborCreationBox{
+        if(GUI.harborCreationBox == undefined){
+            GUI.harborCreationBox = new HarborCreationBox();
+        }
+        return GUI.harborCreationBox;
+    }
+
+    static getBridgeCreationBox(): BridgeCreationBox{
+        if(GUI.bridgeCreationBox == undefined){
+            GUI.bridgeCreationBox = new BridgeCreationBox();
+        }
+        return GUI.bridgeCreationBox;
+    }
+
+    static getStreetCreationBox(): StreetCreationBox{
+        if(GUI.streetCreationBox == undefined){
+            GUI.streetCreationBox = new StreetCreationBox();
+        }
+        return GUI.streetCreationBox;
+    }
 }

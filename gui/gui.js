@@ -167,4 +167,220 @@ class GUI {
         }
         return GUI.splitMountedBox;
     }
+    static getSplitMountedInput() {
+        if (GUI.splitMountedInput == undefined) {
+            GUI.splitMountedInput = document.getElementById("splitMountedInput");
+        }
+        return GUI.splitMountedInput;
+    }
+    static getSplitMountedLeadersInput() {
+        if (GUI.splitMountedLeadersInput == undefined) {
+            GUI.splitMountedLeadersInput = document.getElementById("splitMountedLeadersInput");
+        }
+        return GUI.splitMountedLeadersInput;
+    }
+    static getSplitFleetBox() {
+        if (GUI.splitFleetBox == undefined) {
+            GUI.splitFleetBox = document.getElementById("splitFleetBox");
+        }
+        return GUI.splitFleetBox;
+    }
+    static getSplitFleetInput() {
+        if (GUI.splitFleetInput == undefined) {
+            GUI.splitFleetInput = document.getElementById("splitFleetInput");
+        }
+        return GUI.splitFleetInput;
+    }
+    static getSplitFleetLeadersInput() {
+        if (GUI.splitFleetLeadersInput == undefined) {
+            GUI.splitFleetLeadersInput = document.getElementById("splitFleetLeadersInput");
+        }
+        return GUI.splitFleetLeadersInput;
+    }
+    static getSplitFleetLkpInput() {
+        if (GUI.splitFleetLkpInput == undefined) {
+            GUI.splitFleetLkpInput = document.getElementById("splitFleetLkpInput");
+        }
+        return GUI.splitFleetLkpInput;
+    }
+    static getSplitFleetSkpInput() {
+        if (GUI.splitFleetSkpInput == undefined) {
+            GUI.splitFleetSkpInput = document.getElementById("splitFleetSkpInput");
+        }
+        return GUI.splitFleetSkpInput;
+    }
+    static getMountBox() {
+        if (GUI.mountBox == undefined) {
+            GUI.mountBox = document.getElementById("mountBox");
+        }
+        return GUI.mountBox;
+    }
+    static getMountInput() {
+        if (GUI.mountInput == undefined) {
+            GUI.mountInput = document.getElementById("mountInput");
+        }
+        return GUI.mountInput;
+    }
+    static getMountLeaderInput() {
+        if (GUI.mountLeaderInput == undefined) {
+            GUI.mountLeaderInput = document.getElementById("mountLeaderInput");
+        }
+        return GUI.mountLeaderInput;
+    }
+    static getMountButton() {
+        if (GUI.mount == undefined) {
+            GUI.mount = document.getElementById("mount");
+        }
+        return GUI.mount;
+    }
+    static getAllMountButton() {
+        if (GUI.allMount == undefined) {
+            GUI.allMount = document.getElementById("allMount");
+        }
+        return GUI.allMount;
+    }
+    static getUnMountBox() {
+        if (GUI.unMountBox == undefined) {
+            GUI.unMountBox = document.getElementById("unMountBox");
+        }
+        return GUI.unMountBox;
+    }
+    static getUnMountInput() {
+        if (GUI.unMountInput == undefined) {
+            GUI.unMountInput = document.getElementById("unMountInput");
+        }
+        return GUI.unMountInput;
+    }
+    static getUnMountLeaderInput() {
+        if (GUI.unMountLeaderInput == undefined) {
+            GUI.unMountLeaderInput = document.getElementById("unMountLeaderInput");
+        }
+        return GUI.unMountLeaderInput;
+    }
+    static getUnMountButton() {
+        if (GUI.unMount == undefined) {
+            GUI.unMount = document.getElementById("unMount");
+        }
+        return GUI.unMount;
+    }
+    static getAllUnMountButton() {
+        if (GUI.allUnMount == undefined) {
+            GUI.allUnMount = document.getElementById("allUnMount");
+        }
+        return GUI.allUnMount;
+    }
+    static getShootBox() {
+        if (GUI.shootBox == undefined) {
+            GUI.shootBox = document.getElementById("shootBox");
+        }
+        return GUI.shootBox;
+    }
+    static getShootingLKPInput() {
+        if (GUI.shootingLKPInput == undefined) {
+            GUI.shootingLKPInput = document.getElementById("shootingLKPInput");
+        }
+        return GUI.shootingLKPInput;
+    }
+    static getShootingSKPInput() {
+        if (GUI.shootingSKPInput == undefined) {
+            GUI.shootingSKPInput = document.getElementById("shootingSKPInput");
+        }
+        return GUI.shootingSKPInput;
+    }
+    static getFireButton() {
+        if (GUI.fire == undefined) {
+            GUI.fire = document.getElementById("fire");
+        }
+        return GUI.fire;
+    }
+    static getInfoChangeBox() {
+        if (GUI.infoChangeBox == undefined) {
+            GUI.infoChangeBox = new InfoChangeBox();
+        }
+        return GUI.infoChangeBox;
+    }
+    static getLoginBox() {
+        if (GUI.loginBox == undefined) {
+            GUI.loginBox = document.getElementById("loginBox");
+        }
+        return GUI.loginBox;
+    }
+    static getLoginNameInput() {
+        if (GUI.loginName == undefined) {
+            GUI.loginName = document.getElementById("loginName");
+        }
+        return GUI.loginName;
+    }
+    static getLoginPasswordInput() {
+        if (GUI.loginPassword == undefined) {
+            GUI.loginPassword = document.getElementById("loginPassword");
+        }
+        return GUI.loginPassword;
+    }
+    static getLoginButton() {
+        if (GUI.loginBtn == undefined) {
+            GUI.loginBtn = document.getElementById("loginBtn");
+        }
+        return GUI.loginBtn;
+    }
+    static getMinimapBox() {
+        if (GUI.minimapBox == undefined) {
+            GUI.minimapBox = document.getElementById("minimapBox");
+        }
+        return GUI.minimapBox;
+    }
+    static getGodModeBox() {
+        if (GUI.godmodeBox == undefined) {
+            GUI.godmodeBox = new GodModeBox();
+        }
+        return GUI.godmodeBox;
+    }
+    static getArmyGeneratorBox() {
+        if (GUI.armyGeneratorBox == undefined) {
+            GUI.armyGeneratorBox = new ArmyGeneratorBox();
+        }
+        return GUI.armyGeneratorBox;
+    }
+    static getWorldBenderBox() {
+        if (GUI.worldBenderBox == undefined) {
+            GUI.worldBenderBox = new WorldBenderBox();
+        }
+        return GUI.worldBenderBox;
+    }
+    static getRiverBenderBox() {
+        if (GUI.riverBenderBox == undefined) {
+            GUI.riverBenderBox = new RiverBenderBox();
+        }
+        return GUI.riverBenderBox;
+    }
+    static getBuildingCreationBox() {
+        if (GUI.buildingCreationBox == undefined) {
+            GUI.buildingCreationBox = new BuildingCreationBox();
+        }
+        return GUI.buildingCreationBox;
+    }
+    static getWallCreationBox() {
+        if (GUI.wallCreationBox == undefined) {
+            GUI.wallCreationBox = new WallCreationBox();
+        }
+        return GUI.wallCreationBox;
+    }
+    static getHarborCreationBox() {
+        if (GUI.harborCreationBox == undefined) {
+            GUI.harborCreationBox = new HarborCreationBox();
+        }
+        return GUI.harborCreationBox;
+    }
+    static getBridgeCreationBox() {
+        if (GUI.bridgeCreationBox == undefined) {
+            GUI.bridgeCreationBox = new BridgeCreationBox();
+        }
+        return GUI.bridgeCreationBox;
+    }
+    static getStreetCreationBox() {
+        if (GUI.streetCreationBox == undefined) {
+            GUI.streetCreationBox = new StreetCreationBox();
+        }
+        return GUI.streetCreationBox;
+    }
 }
