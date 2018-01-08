@@ -10,7 +10,7 @@
 	<canvas id="hexCanvas"></canvas>
 
 	<div id="buttonsBox" class="prettyBox">
-		<button id="ToggleGodModeBar" class="fixedPrettyButton" onclick="toggleGodModeBar()">toggle GodMode Bar</button>
+		<button id="ToggleGodModeBar" class="fixedPrettyButton invisible" onclick="toggleGodModeBar()">toggle GodMode Bar</button>
 	</div>
 
 	<div id="bigBox" class="prettyBox invisible">
@@ -172,7 +172,7 @@
 		</button>
 	</div>
 
-	<div id="infoBox" class="prettyBox">
+	<div id="infoBox" class="prettyBox invisible">
 		<div id="armySelectBtns"></div>
 		<h3 id="armyId"></h3>
 		<p id="guard"></p>
@@ -190,21 +190,21 @@
 		<button id="logoutBtn" class="fixedPrettyButton" onclick="logoutFromServer()">Logout</button>
 	</div>
 
-	<div id="transmuteBox" class="prettyBox">
+	<div id="transmuteBox" class="prettyBox invisible">
 		<h>Zu welchem Heer verschieben?</h>
 		<p id ="transmuteArmyButtonsPartition"></p>
 		<button id="backToSplitBox" class="fixedPrettyButton" onclick="backToSplitBox()">Zurück</button>
 		<button id="restoreInfoBox" class="fixedPrettyButton" onclick="restoreInfoBox()">Abbrechen</button>
 	</div>
 
-	<div id="mergeBox" class="prettyBox">
+	<div id="mergeBox" class="prettyBox invisible">
 		<h>Mit welchem Heer vereinigen?</h>
 		<p id ="mergeArmyButtonsPartition"></p>
 		<button id="backToSplitBox" class="fixedPrettyButton" onclick="backToSplitBox()">Zurück</button>
 		<button id="restoreInfoBox" class="fixedPrettyButton" onclick="restoreInfoBox()">Abbrechen</button>
 	</div>
 
-	<div id="splitBox" class="prettyBox">
+	<div id="splitBox" class="prettyBox invisible">
 		<p id="splitInputPartition">
 			<label for="splitInput">Truppen:</label>
 			<input id="splitInput" value="0"></input>
@@ -231,7 +231,7 @@
 		<button id="restoreInfoBox" class="fixedPrettyButton" onclick="restoreInfoBox()">Abbrechen</button>
 	</div>
 
-	<div id="splitMountedBox" class="prettyBox">
+	<div id="splitMountedBox" class="prettyBox invisible">
 		<p id="splitMountedInputPartition">
 			<label for="splitMountedInput">Reiter:</label>
 			<input id="splitMountedInput" value="0"></input>
@@ -246,7 +246,7 @@
 		<button id="restoreInfoBox" class="fixedPrettyButton" onclick="restoreInfoBox()">Abbrechen</button>
 	</div>
 
-	<div id="splitFleetBox" class="prettyBox">
+	<div id="splitFleetBox" class="prettyBox invisible">
 		<p id="splitFleetInputPartition">
 			<label for="splitFleetInput">Schiffe:</label>
 			<input id="splitFleetInput" value="0"></input>
@@ -269,7 +269,7 @@
 		<button id="restoreInfoBox" class="fixedPrettyButton" onclick="restoreInfoBox()">Abbrechen</button>
 	</div>
 
-	<div id="mountBox" class="prettyBox">
+	<div id="mountBox" class="prettyBox invisible">
 		<p id="mountInputPartition">
 			<label for="mountInput">Wie viele Soldaten sollen aufsitzen:</label>
 			<input id="mountInput"></input>
@@ -283,7 +283,7 @@
 		<button id="restoreInfoBox" class="fixedPrettyButton" onclick="restoreInfoBox()">Abbrechen</button>
 	</div>
 
-	<div id="unMountBox" class="prettyBox">
+	<div id="unMountBox" class="prettyBox invisible">
 		<p id="unMountInputPartition">
 			<label for="unMountInput">Wie viele Soldaten sollen absitzen:</label>
 			<input id="unMountInput"></input>
@@ -297,7 +297,7 @@
 		<button id="restoreInfoBox" class="fixedPrettyButton" onclick="restoreInfoBox()">Abbrechen</button>
 	</div>
 
-	<div id="shootBox" class="prettyBox">
+	<div id="shootBox" class="prettyBox invisible">
 		<p id="shootLKPPartition">
 			<label for="shootingLKPInput">Wie viele LKP sollen schie&szlig;en:</label>
 			<input id="shootingLKPInput"></input>
@@ -310,7 +310,7 @@
 		<button id="restoreInfoBox" class="fixedPrettyButton" onclick="restoreInfoBox()">Abbrechen</button>
 	</div>
 
-	<div id="infoChangeBox" class="prettyBox">
+	<div id="infoChangeBox" class="prettyBox invisible">
 		<input type="checkbox" id="guardChangeInput" value=true>Garde?<br>
 		<p id="ownerChange">
 			<label for="ownerChangeInput">Besitzer:</label> <input
@@ -366,7 +366,7 @@
 		<p id="timeTest"></p>
 	</div>
 
-	<div id="godmodeBox" class="prettyBox">
+	<div id="godmodeBox" class="prettyBox invisible">
 		<h3 align="center">Godmode Box</h3>
 		<button id="ToggleWorldCreationMode" class="fixedPrettyButton" onclick="toggleWorldCreationMode()">modify fields</button>
 		<button id="ToggleRiverCreationMode" class="fixedPrettyButton" onclick="toggleRiverCreationMode()">modify rivers</button>
@@ -388,7 +388,7 @@
 		</label>
 	</div>
 
-	<div id="armyGeneratorBox" class="prettyBox">
+	<div id="armyGeneratorBox" class="prettyBox invisible">
 		<label for="ownerField">Reich:</label>
 		<input id="ownerField" value="0">
 		<label for="armyNumberField">Armee Nummer:</label>
@@ -407,8 +407,8 @@
 		<button id="GenerateArmyBtn" class="fixedPrettyButton" onclick="generateArmyBtn()">Armee Generieren</button>
 	</div>
 
-	<div id="worldBenderBox" class="prettyBox">
-		<h3 id="creationWarning" align="center">WARNING: WORLD CREATION
+	<div id="worldBenderBox" class="prettyBox invisible">
+		<h3 id="creationWarning" class="invisible" align="center">WARNING: WORLD CREATION
 			ON CLICK MODE IS ACTIVE !!!</h3>
 		<button id="ToggleOnClickWorldCreationMode" class="fixedPrettyButton"
 			onclick="toggleOnClickWorldCreationMode()">toggle on click World Creation Mode</button>
@@ -438,7 +438,7 @@
 		</section>
 	</div>
 
-	<div id="riverBenderBox" class="prettyBox">
+	<div id="riverBenderBox" class="prettyBox invisible">
 		<section id="buildRiverSection">
 			<button id="addRiverNW" class="fixedPrettyButton" onclick="addRiver(0)">Add a River at
 				the north west border</button>
@@ -470,7 +470,7 @@
 		<button id="SaveRivers" class="fixedPrettyButton" onclick="saveRivers()">save rivers</button>
 	</div>
 
-	<div id="buildingCreationBox" class="prettyBox">
+	<div id="buildingCreationBox" class="prettyBox invisible">
 		<button id="addCastle" class="fixedPrettyButton" onclick="addCastle()">Build a castle</button>
 		<button id="addCity" class="fixedPrettyButton" onclick="addCity()">Build a city</button>
 		<button id="addFortress" class="fixedPrettyButton" onclick="addFortress()">Build a fortress</button>
@@ -482,7 +482,7 @@
 		</section>
 	</div>
 
-	<div id="wallCreationBox" class="prettyBox">
+	<div id="wallCreationBox" class="prettyBox invisible">
 		<h3 align="center">Wall Builder</h3>
 		<section id="buildWall">
 			<button id="addWallNW" class="fixedPrettyButton"
@@ -528,7 +528,7 @@
 			buildings</button>
 	</div>
 
-	<div id="harborCreationBox" class="prettyBox">
+	<div id="harborCreationBox" class="prettyBox invisible">
 		<h3 align="center">Harbor Builder</h3>
 		<section id="buildHarbor">
 			<button id="addHarborNW" class="fixedPrettyButton"
@@ -574,7 +574,7 @@
 			buildings</button>
 	</div>
 	
-	<div id="bridgeCreationBox" class="prettyBox">
+	<div id="bridgeCreationBox" class="prettyBox invisible">
 		<h3 align="center">Bridge Builder</h3>
 		<section id="buildBridge">
 			<button id="addBridgeNW" class="fixedPrettyButton"
@@ -620,7 +620,7 @@
 			buildings</button>
 	</div>
 
-	<div id="streetCreationBox" class="prettyBox">
+	<div id="streetCreationBox" class="prettyBox invisible">
 		<h3 align="center">Street Builder</h3>
 		<section id="buildStreetSection">
 			<button id="addStreetNW" class="fixedPrettyButton" onclick="addStreet(0)">Build a
@@ -686,40 +686,5 @@
 	<script src="serverInteraction/savingFunctions.js"></script>
 	<script src="serverInteraction/authenticationFunctions.js"></script>
 	<script src="libraries/hexFunctions.js"></script>
-
-	<script>
-		// Box Sichtbarkeits Zeug, bisher hat es sich geweigert in eine andere Datei zu gehen.
-		// Die Sichtbarkeit kann bei Elementkreation in HTML gleich mit angegeben werden bzw. noch besser: im CSS!!!
-		// TODO: wirf das hier in boxVisibilty
-		
-		document.getElementById("ToggleGodModeBar").style.display = "none";
-		document.getElementById("godmodeBox").style.visibility = "hidden";
-		document.getElementById("worldBenderBox").style.display = "none";
-		document.getElementById("riverBenderBox").style.display = "none";
-		document.getElementById("creationWarning").style.display = "none";
-		document.getElementById("buildingCreationBox").style.display = "none";
-		document.getElementById("streetCreationBox").style.display = "none";
-		document.getElementById("harborCreationBox").style.display = "none";
-		document.getElementById("bridgeCreationBox").style.display = "none";
-		document.getElementById("wallCreationBox").style.display = "none";
-		document.getElementById("infoBox").style.display = "none";
-		document.getElementById("armyGeneratorBox").style.display = "none";
-		document.getElementById("infoChangeBox").style.display = "none";
-		document.getElementById("armyIdChange").style.display = "none";
-		document.getElementById("mount").style.display = "none";
-		document.getElementById("unMount").style.display = "none";
-		document.getElementById("shoot").style.display = "none";
-		document.getElementById("splitBtn").style.display = "none";
-		document.getElementById("mountBox").style.display = "none";
-		document.getElementById("unMountBox").style.display = "none";
-		document.getElementById("shootBox").style.display = "none";
-		document.getElementById("splitBox").style.display = "none";
-		document.getElementById("splitMountedBox").style.display = "none";
-		document.getElementById("splitFleetBox").style.display = "none";
-		document.getElementById("transmuteBox").style.display = "none";
-		document.getElementById("mergeBox").style.display = "none";
-
-	</script>
-
 </body>
 </html>
