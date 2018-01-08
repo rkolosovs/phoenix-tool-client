@@ -1,4 +1,4 @@
-class ShootingBigBox extends HTMLDivElement{
+class ShootingBigBox{
     private self: HTMLDivElement;
     private closeRangedBattleButton: HTMLButtonElement;
     private shootingInfo: HTMLDivElement;

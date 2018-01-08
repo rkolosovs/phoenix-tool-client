@@ -1,4 +1,4 @@
-class BattleBox extends HTMLDivElement{
+class BattleBox{
     private self: HTMLDivElement;
     private closeBattleButton: HTMLButtonElement;
     private attackersTitleText: HTMLDivElement;

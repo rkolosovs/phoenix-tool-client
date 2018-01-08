@@ -1,4 +1,4 @@
-class InfoChangeBox extends HTMLDivElement {
+class InfoChangeBox {
     getSelf() {
         if (this.self == undefined) {
             this.self = document.getElementById("infoChangeBox");

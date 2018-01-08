@@ -1,4 +1,4 @@
-class InfoBox extends HTMLDivElement {
+class InfoBox {
     getSelf() {
         if (this.self == undefined) {
             this.self = document.getElementById("infoBox");

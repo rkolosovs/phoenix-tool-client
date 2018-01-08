@@ -1,4 +1,4 @@
-class InfoBox extends HTMLDivElement{
+class InfoBox{
     private self: HTMLDivElement;
     private armySelectBtns: HTMLDivElement;
     private armyId: HTMLHeadingElement;

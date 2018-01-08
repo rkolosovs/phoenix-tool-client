@@ -1,4 +1,4 @@
-class InfoChangeBox extends HTMLDivElement{
+class InfoChangeBox{
     private self: HTMLDivElement;
     private guardChangeInput: HTMLInputElement;
     private ownerChangeInput: HTMLInputElement;

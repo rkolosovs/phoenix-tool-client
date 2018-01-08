@@ -1,4 +1,4 @@
-class ShootingBigBox extends HTMLDivElement {
+class ShootingBigBox {
     getSelf() {
         if (this.self == undefined) {
             this.self = document.getElementById("shootingBigBox");

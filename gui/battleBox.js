@@ -1,4 +1,4 @@
-class BattleBox extends HTMLDivElement {
+class BattleBox {
     getSelf() {
         if (this.self == undefined) {
             this.self = document.getElementById("battleBox");
