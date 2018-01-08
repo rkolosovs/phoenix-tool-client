@@ -857,7 +857,7 @@ function writeFieldInfo() {
     else {
         var fieldPositionInList = HexFunction.positionInList(selectedFields[index][0], selectedFields[index][1]);
         var localfieldType = '';
-        switch (fieldType(selectedFields[index][0], selectedFields[index][1])) {
+        switch (HexFunction.fieldType(selectedFields[index][0], selectedFields[index][1])) {
             case 0:
                 localfieldType = 'Wasser';
                 break;
@@ -893,7 +893,7 @@ function writeFieldInfo() {
         var fieldOwnerString = (fieldOwner === undefined) ? 'keiner' : fieldOwner.tag;
         minimapBox.innerHTML = '<p>Feld: (' + selectedFields[index][0] + ', ' + selectedFields[index][1] + ')' +
             '</p><p>Gelände: ' + localfieldType +
-            '</p><p>Höhe: ' + height(selectedFields[index][0], selectedFields[index][1]) +
+            '</p><p>Höhe: ' + HexFunction.height(selectedFields[index][0], selectedFields[index][1]) +
             '</p><p>Besitzer: ' + fieldOwnerString + '</p>';
     }
 }
