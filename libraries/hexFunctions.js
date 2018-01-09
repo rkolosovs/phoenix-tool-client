@@ -1,3 +1,4 @@
+"use strict";
 // contains helper functions to get information about a field out of the fields array with just its coordinates.
 // this.id = function(){
 //     //TODO: GroßhexKleinhex Zahl bestimmen.

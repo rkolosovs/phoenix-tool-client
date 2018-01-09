@@ -1,3 +1,4 @@
+"use strict";
 class River {
     constructor(leftBank, rightBank) {
         this.leftBank = leftBank;

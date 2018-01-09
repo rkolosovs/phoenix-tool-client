@@ -1,3 +1,4 @@
+"use strict";
 QUnit.assert.armyEquals = function (actual, expected) {
     var actualProps = Object.getOwnPropertyNames(actual);
     var expectedProps = Object.getOwnPropertyNames(expected);

@@ -1,3 +1,4 @@
+"use strict";
 //to actually move units with the new method
 function move(army, direction) {
     for (var i = 0; i < army.possibleMoves.length; i++) {

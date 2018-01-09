@@ -1,3 +1,4 @@
+"use strict";
 class DestructibleBuilding extends Building {
     //TODO: know own BP
     constructor(type, position, owner, buildPoints) {

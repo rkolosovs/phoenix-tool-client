@@ -1,3 +1,4 @@
+"use strict";
 var UIMaker;
 (function (UIMaker) {
     //this holds functions to make HTML UI elements

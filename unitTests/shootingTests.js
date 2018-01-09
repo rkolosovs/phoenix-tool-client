@@ -1,3 +1,4 @@
+"use strict";
 module("Shooting", function () {
     module("Results", {
         before: function () {

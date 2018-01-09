@@ -1,3 +1,4 @@
+"use strict";
 function battleHandler(participants, x, y) {
     //participating armies
     this.unsortedArmies = participants;

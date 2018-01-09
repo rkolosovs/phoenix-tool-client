@@ -1,3 +1,4 @@
+"use strict";
 var BuildingType;
 (function (BuildingType) {
     BuildingType[BuildingType["CASTLE"] = 0] = "CASTLE";

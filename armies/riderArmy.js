@@ -1,3 +1,4 @@
+"use strict";
 class RiderArmy extends LandArmy {
     constructor(id, owner, troopCount, officerCount, position, movePoints, heightPoints, isGuard) {
         if (isGuard != undefined) {

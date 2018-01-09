@@ -1,3 +1,4 @@
+"use strict";
 class MapEntity {
     constructor(position, owner) {
         this.position = position;

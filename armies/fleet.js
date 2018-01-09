@@ -1,3 +1,4 @@
+"use strict";
 class Fleet extends Army {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
         if (isGuard != undefined) {

@@ -1,3 +1,4 @@
+"use strict";
 class Wall extends DestructibleBuilding {
     //TODO: Know number of soldiers inside
     constructor(type, position, owner, buildPoints, facing, guardCount) {

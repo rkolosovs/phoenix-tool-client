@@ -165,19 +165,19 @@ function registerLeftClick() {
                 var army = new heer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, mountsBuffer, guardBuffer, clickedField[0], clickedField[1], ownerBuffer);
                 break;
         }
-        ownerBuffer = document.getElementById("ownerField").value;
+        ownerBuffer = GUI.getArmyGeneratorBox().getOwnerField().value;
         armyIdBuffer = 0;
-        document.getElementById("armyNumberField").value = '0';
+        GUI.getArmyGeneratorBox().getArmyNumberField().value = "0";
         countBuffer = 0;
-        document.getElementById("countField").value = '0';
+        GUI.getArmyGeneratorBox().getCountField().value = "0";
         leaderBuffer = 0;
-        document.getElementById("leaderField").value = '0';
+        GUI.getArmyGeneratorBox().getLeaderField().value = "0";
         mountsBuffer = 0;
-        document.getElementById("mountsField").value = '0';
+        GUI.getArmyGeneratorBox().getMountsField().value = "0";
         lkpBuffer = 0;
-        document.getElementById("lkpField").value = '0';
+        GUI.getArmyGeneratorBox().getLKPField().value = "0";
         skpBuffer = 0;
-        document.getElementById("skpField").value = '0';
+        GUI.getArmyGeneratorBox().getSKPField().value = "0";
         listOfArmies.push(army);
         switchBtnBoxTo("buttonsBox");
         switchModeTo("none");
@@ -409,7 +409,7 @@ function getClickedField() {
     return [column, row]; // return result
 }
 function mainButton() {
-    toggleVisibility(document.getElementById("bigBox"));
+    toggleVisibility(GUI.getBigBox());
 }
 function determineEventStatus() {
     //	console.log("determineEventStatus()");
@@ -732,10 +732,10 @@ function canMove(realm, id, fromX, fromY, toX, toY) {
 }
 //end of helper methods for event status determining
 function fillEventList() {
-    var eventList = document.getElementById("eventsTab");
+    let eventList = GUI.getEventsTab();
     eventList.innerHTML = "";
     determineEventStatus();
-    for (var i = 0; i < pendingEvents.length; i++) {
+    for (let i = 0; i < pendingEvents.length; i++) {
         eventList.appendChild(makeEventListItem(pendingEvents[i], i));
     }
 }
@@ -897,7 +897,7 @@ function checkEvent(num) {
             drawStuff();
         }
         else if (event.type === "battle") {
-            var battleBox = document.getElementById("battleBox");
+            var battleBox = GUI.getBattleBox().getSelf();
             show(battleBox);
             var partips = [];
             cont.participants.forEach(function (item) {
@@ -907,9 +907,9 @@ function checkEvent(num) {
                 partips.push(a);
             });
             var battle = new battleHandler(partips, cont.x, cont.y);
-            document.getElementById("attackDiceRoll").onchange = function () { battle.updateDisplay(); };
-            document.getElementById("defenseDiceRoll").onchange = function () { battle.updateDisplay(); };
-            var battleButton = document.getElementById("battleButton");
+            GUI.getBattleBox().getAttackDiceRoll().onchange = function () { battle.updateDisplay(); };
+            GUI.getBattleBox().getDefenseDiceRoll().onchange = function () { battle.updateDisplay(); };
+            var battleButton = GUI.getBattleBox().getBattleButton();
             battleButton.onclick = function () {
                 battle.resolve();
                 hide(battleBox);
@@ -919,7 +919,7 @@ function checkEvent(num) {
             };
             battleButton.disabled = true;
             battleButton.style.cursor = "not-allowed";
-            document.getElementById("closeBattleButton").onclick = function () {
+            GUI.getBattleBox().getCloseBattleButton().onclick = function () {
                 hide(battleBox);
             };
             battle.updateDisplay();
@@ -984,8 +984,6 @@ function checkEvent(num) {
                     console.log("i2=" + i);
                 }
             }
-            console.log("armyfromplace = " + armyFromPlaceInList);
-            console.log("armytoplace = " + armyToPlaceInList);
             if (armyFromPlaceInList >= 0 && armyToPlaceInList >= 0) {
                 selectedArmyIndex = armyFromPlaceInList;
                 mergeSelectedArmy(armyToPlaceInList);
@@ -1074,16 +1072,16 @@ function checkEvent(num) {
             drawStuff();
         }
         else if (event.type === "shoot") {
-            var shootBox = document.getElementById("shootBigBox");
-            show(shootBox);
-            document.getElementById("shooterTitleText").innerHTML = cont.armyId + ", " + realms[cont.realm - 1].tag;
+            var shootBox = GUI.getShootingBigBox();
+            show(shootBox.getSelf());
+            shootBox.getShooterTitleText().innerHTML = cont.armyId + ", " + realms[cont.realm - 1].tag;
             ;
-            document.getElementById("attackersLKPText").innerHTML = cont.LKPcount;
-            document.getElementById("attackersSKPText").innerHTML = cont.SKPcount;
-            document.getElementById("targetText").innerHTML = cont.target;
-            document.getElementById("xTargetText").innerHTML = cont.toX;
-            document.getElementById("yTargetText").innerHTML = cont.toY;
-            var shootButton = document.getElementById("rangedBattleButton");
+            shootBox.getAttackersLKPText().innerHTML = cont.LKPcount;
+            shootBox.getAttackersSKPText().innerHTML = cont.SKPcount;
+            shootBox.getTargetText().innerHTML = cont.target;
+            shootBox.getXTargetText().innerHTML = cont.toX;
+            shootBox.getYTargetText().innerHTML = cont.toY;
+            var shootButton = shootBox.getRangedBattleButton();
             shootButton.onclick = function () {
                 let shooter;
                 let lkpRolls = [];
@@ -1093,8 +1091,8 @@ function checkEvent(num) {
                         shooter = listOfArmies[i];
                 }
                 for (let i = 0; i < 10; i++) {
-                    let currentRollLKP = parseInt(document.getElementById("LKP" + i + "Input").value, 10);
-                    let currentRollSKP = parseInt(document.getElementById("SKP" + i + "Input").value, 10);
+                    let currentRollLKP = parseInt(shootBox.getLKPInputs()[i].value, 10);
+                    let currentRollSKP = parseInt(shootBox.getSKPInputs()[i].value, 10);
                     if (!isNaN(currentRollLKP) && currentRollLKP !== 0) {
                         for (let j = 0; j < currentRollLKP; j++) {
                             lkpRolls.push(i);
@@ -1131,7 +1129,7 @@ function checkEvent(num) {
                     drawStuff();
                 }
             };
-            document.getElementById("closeRangedBattleButton").onclick = function () {
+            shootBox.getCloseRangedBattleButton().onclick = function () {
                 hide(shootBox);
             };
             fillEventList();
@@ -1156,7 +1154,7 @@ function openTab(evt, tabName) {
     }
     // Show the current tab, and add an "active" class to the button that opened
     // the tab
-    if (evt !== undefined && tabName !== "") {
+    if (evt != undefined && tabName !== "") {
         document.getElementById(tabName).style.display = "block";
         evt.currentTarget.className += " active";
     }

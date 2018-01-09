@@ -1,3 +1,4 @@
+"use strict";
 QUnit.assert.movePossible = function (actual, expected) {
     var expectedProps = Object.getOwnPropertyNames(expected);
     if (actual.some((possibleMove) => (expectedProps.every((propName) => possibleMove[propName] === expected[propName])))) {

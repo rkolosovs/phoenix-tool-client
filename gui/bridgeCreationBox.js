@@ -1,3 +1,4 @@
+"use strict";
 class BridgeCreationBox {
     getSelf() {
         if (this.self == undefined) {

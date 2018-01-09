@@ -1,3 +1,4 @@
+"use strict";
 class ArmyGeneratorBox {
     getSelf() {
         if (this.self == undefined) {

@@ -1,3 +1,4 @@
+"use strict";
 class InfoChangeBox {
     getSelf() {
         if (this.self == undefined) {

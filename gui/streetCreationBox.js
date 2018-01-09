@@ -1,3 +1,4 @@
+"use strict";
 class StreetCreationBox {
     getSelf() {
         if (this.self == undefined) {

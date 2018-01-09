@@ -1,3 +1,4 @@
+"use strict";
 class GUI {
     static getCanvas() {
         if (GUI.canvas == undefined) {

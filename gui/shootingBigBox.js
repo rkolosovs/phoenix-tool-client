@@ -1,3 +1,4 @@
+"use strict";
 class ShootingBigBox {
     getSelf() {
         if (this.self == undefined) {
@@ -59,65 +60,20 @@ class ShootingBigBox {
         }
         return this.attackLKPBox;
     }
-    getLKP0Input() {
-        if (this.lkp0Input == undefined) {
-            this.lkp0Input = document.getElementById("LKP0Input");
+    getLKPInputs() {
+        if (this.lkpInputs == undefined || this.lkpInputs.length === 0) {
+            this.lkpInputs = [document.getElementById("LKP0Input"),
+                document.getElementById("LKP1Input"),
+                document.getElementById("LKP2Input"),
+                document.getElementById("LKP3Input"),
+                document.getElementById("LKP4Input"),
+                document.getElementById("LKP5Input"),
+                document.getElementById("LKP6Input"),
+                document.getElementById("LKP7Input"),
+                document.getElementById("LKP8Input"),
+                document.getElementById("LKP9Input")];
         }
-        return this.lkp0Input;
-    }
-    getLKP1Input() {
-        if (this.lkp1Input == undefined) {
-            this.lkp1Input = document.getElementById("LKP1Input");
-        }
-        return this.lkp1Input;
-    }
-    getLKP2Input() {
-        if (this.lkp2Input == undefined) {
-            this.lkp2Input = document.getElementById("LKP2Input");
-        }
-        return this.lkp2Input;
-    }
-    getLKP3Input() {
-        if (this.lkp3Input == undefined) {
-            this.lkp3Input = document.getElementById("LKP3Input");
-        }
-        return this.lkp3Input;
-    }
-    getLKP4Input() {
-        if (this.lkp4Input == undefined) {
-            this.lkp4Input = document.getElementById("LKP4Input");
-        }
-        return this.lkp4Input;
-    }
-    getLKP5Input() {
-        if (this.lkp5Input == undefined) {
-            this.lkp5Input = document.getElementById("LKP5Input");
-        }
-        return this.lkp5Input;
-    }
-    getLKP6Input() {
-        if (this.lkp6Input == undefined) {
-            this.lkp6Input = document.getElementById("LKP6Input");
-        }
-        return this.lkp6Input;
-    }
-    getLKP7Input() {
-        if (this.lkp7Input == undefined) {
-            this.lkp7Input = document.getElementById("LKP7Input");
-        }
-        return this.lkp7Input;
-    }
-    getLKP8Input() {
-        if (this.lkp8Input == undefined) {
-            this.lkp8Input = document.getElementById("LKP8Input");
-        }
-        return this.lkp8Input;
-    }
-    getLKP9Input() {
-        if (this.lkp9Input == undefined) {
-            this.lkp9Input = document.getElementById("LKP9Input");
-        }
-        return this.lkp9Input;
+        return this.lkpInputs;
     }
     getAttackSKPBox() {
         if (this.attackSKPBox == undefined) {
@@ -125,65 +81,20 @@ class ShootingBigBox {
         }
         return this.attackSKPBox;
     }
-    getSKP0Input() {
-        if (this.skp0Input == undefined) {
-            this.skp0Input = document.getElementById("SKP0Input");
+    getSKPInputs() {
+        if (this.skpInputs == undefined || this.skpInputs.length === 0) {
+            this.skpInputs = [document.getElementById("SKP0Input"),
+                document.getElementById("SKP1Input"),
+                document.getElementById("SKP2Input"),
+                document.getElementById("SKP3Input"),
+                document.getElementById("SKP4Input"),
+                document.getElementById("SKP5Input"),
+                document.getElementById("SKP6Input"),
+                document.getElementById("SKP7Input"),
+                document.getElementById("SKP8Input"),
+                document.getElementById("SKP9Input")];
         }
-        return this.skp0Input;
-    }
-    getSKP1Input() {
-        if (this.skp1Input == undefined) {
-            this.skp1Input = document.getElementById("SKP1Input");
-        }
-        return this.skp1Input;
-    }
-    getSKP2Input() {
-        if (this.skp2Input == undefined) {
-            this.skp2Input = document.getElementById("SKP2Input");
-        }
-        return this.skp2Input;
-    }
-    getSKP3Input() {
-        if (this.skp0Input == undefined) {
-            this.skp3Input = document.getElementById("SKP3Input");
-        }
-        return this.skp3Input;
-    }
-    getSKP4Input() {
-        if (this.skp4Input == undefined) {
-            this.skp4Input = document.getElementById("SKP4Input");
-        }
-        return this.skp4Input;
-    }
-    getSKP5Input() {
-        if (this.skp5Input == undefined) {
-            this.skp5Input = document.getElementById("SKP5Input");
-        }
-        return this.skp5Input;
-    }
-    getSKP6Input() {
-        if (this.skp6Input == undefined) {
-            this.skp6Input = document.getElementById("SKP6Input");
-        }
-        return this.skp6Input;
-    }
-    getSKP7Input() {
-        if (this.skp7Input == undefined) {
-            this.skp7Input = document.getElementById("SKP7Input");
-        }
-        return this.skp7Input;
-    }
-    getSKP8Input() {
-        if (this.skp8Input == undefined) {
-            this.skp8Input = document.getElementById("SKP8Input");
-        }
-        return this.skp8Input;
-    }
-    getSKP9Input() {
-        if (this.skp9Input == undefined) {
-            this.skp9Input = document.getElementById("SKP9Input");
-        }
-        return this.skp9Input;
+        return this.skpInputs;
     }
     getRangedBattleButton() {
         if (this.rangedBattleButton == undefined) {

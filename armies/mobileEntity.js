@@ -1,3 +1,4 @@
+"use strict";
 class MobileEntity extends MapEntity {
     constructor(id, owner, position, movePoints, heightPoints) {
         super(position, owner);

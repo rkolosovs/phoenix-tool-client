@@ -1,3 +1,4 @@
+"use strict";
 class Realm {
     constructor(name, tag, color, homeTurf) {
         this.name = "";

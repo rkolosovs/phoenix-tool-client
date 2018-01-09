@@ -1,3 +1,4 @@
+"use strict";
 class Army extends MobileEntity {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
         super(id, owner, position, movePoints, heightPoints);

@@ -1,3 +1,4 @@
+"use strict";
 class RiverBenderBox {
     getSelf() {
         if (this.self == undefined) {

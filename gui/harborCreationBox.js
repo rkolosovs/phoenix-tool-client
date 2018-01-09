@@ -1,3 +1,4 @@
+"use strict";
 class HarborCreationBox {
     getSelf() {
         if (this.self == undefined) {

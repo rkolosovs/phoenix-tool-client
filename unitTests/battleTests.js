@@ -1,3 +1,4 @@
+"use strict";
 const { test } = QUnit;
 const { module } = QUnit;
 QUnit.assert.resultEquals = function (actual, expected) {

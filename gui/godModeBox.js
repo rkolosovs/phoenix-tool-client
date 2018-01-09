@@ -1,3 +1,4 @@
+"use strict";
 class GodModeBox {
     getSelf() {
         if (this.self == undefined) {

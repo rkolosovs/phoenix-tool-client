@@ -1,3 +1,4 @@
+"use strict";
 class GameState {
 }
 GameState.realms = [];
