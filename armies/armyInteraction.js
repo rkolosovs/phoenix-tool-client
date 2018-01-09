@@ -9,16 +9,16 @@ function battleHandler(participants, x, y) {
     this.y = y;
     this.battle = null;
     //UI elements to display armies of both sides
-    this.attackList = document.getElementById("attackArmiesBox");
-    this.unsortedList = document.getElementById("unsortedArmiesBox");
-    this.defenseList = document.getElementById("defenseArmiesBox");
+    this.attackList = GUI.getBattleBox().getAttackArmiesBox();
+    this.unsortedList = GUI.getBattleBox().getUnsortedArmiesBox();
+    this.defenseList = GUI.getBattleBox().getDefenseArmiesBox();
     //both boxes under the lists of troops and the Fight! button
-    this.attackTroopCount = document.getElementById("attackBattleSide");
-    this.defenseTroopCount = document.getElementById("defenseBattleSide");
-    this.battleButton = document.getElementById("battleButton");
+    this.attackTroopCount = GUI.getBattleBox().getAttackBattleSide();
+    this.defenseTroopCount = GUI.getBattleBox().getDefenseBattleSide();
+    this.battleButton = GUI.getBattleBox().getBattleButton();
     //dice rolls
-    this.attackDice = document.getElementById("attackDiceRoll");
-    this.defenseDice = document.getElementById("defenseDiceRoll");
+    this.attackDice = GUI.getBattleBox().getAttackDiceRoll();
+    this.defenseDice = GUI.getBattleBox().getDefenseDiceRoll();
     this.attackSoldiers = 0;
     this.attackOfficers = 0;
     this.attackRiders = 0;
@@ -762,8 +762,8 @@ function shoot() {
         window.alert("Zuschauer haben keine Rechte.");
         return false;
     }
-    let LKPshooting = parseInt(document.getElementById("shootingLKPInput").value);
-    let SKPshooting = parseInt(document.getElementById("shootingSKPInput").value);
+    let LKPshooting = parseInt(GUI.getShootingLKPInput().value);
+    let SKPshooting = parseInt(GUI.getShootingSKPInput().value);
     let shootingarmy = listOfArmies[selectedArmyIndex];
     if (isNaN(LKPshooting) || LKPshooting === undefined) {
         LKPshooting = 0;
@@ -860,12 +860,12 @@ function splitSelectedArmy() {
     var lkpToSplit = 0;
     var skpToSplit = 0;
     // depending on army type different fields are needed
-    if (listOfArmies[selectedArmyIndex].armyType() == 1) {
-        toSplit = parseInt(document.getElementById("splitInput").value);
-        leadersToSplit = parseInt(document.getElementById("splitLeadersInput").value);
-        mountsToSplit = parseInt(document.getElementById("splitMountsInput").value);
-        lkpToSplit = parseInt(document.getElementById("splitLkpInput").value);
-        skpToSplit = parseInt(document.getElementById("splitSkpInput").value);
+    if (listOfArmies[selectedArmyIndex].armyType() === 1) {
+        toSplit = parseInt(GUI.getSplitInput().value);
+        leadersToSplit = parseInt(GUI.getSplitLeadersInput().value);
+        mountsToSplit = parseInt(GUI.getSplitMountsInput().value);
+        lkpToSplit = parseInt(GUI.getSplitLkpInput().value);
+        skpToSplit = parseInt(GUI.getSplitSkpInput().value);
         if (toSplit > (listOfArmies[selectedArmyIndex].count - 100)) {
             window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.");
             return false;
@@ -887,9 +887,9 @@ function splitSelectedArmy() {
             return false;
         }
     }
-    else if (listOfArmies[selectedArmyIndex].armyType() == 2) {
-        toSplit = parseInt(document.getElementById("splitMountedInput").value);
-        leadersToSplit = parseInt(document.getElementById("splitMountedLeadersInput").value);
+    else if (listOfArmies[selectedArmyIndex].armyType() === 2) {
+        toSplit = parseInt(GUI.getSplitMountedInput().value);
+        leadersToSplit = parseInt(GUI.getSplitMountedLeadersInput().value);
         if (toSplit > (listOfArmies[selectedArmyIndex].count - 50)) {
             window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.");
             return false;
@@ -899,11 +899,11 @@ function splitSelectedArmy() {
             return false;
         }
     }
-    else if (listOfArmies[selectedArmyIndex].armyType() == 3) {
-        toSplit = parseInt(document.getElementById("splitFleetInput").value);
-        leadersToSplit = parseInt(document.getElementById("splitFleetLeadersInput").value);
-        lkpToSplit = parseInt(document.getElementById("splitFleetLkpInput").value);
-        skpToSplit = parseInt(document.getElementById("splitFleetSkpInput").value);
+    else if (listOfArmies[selectedArmyIndex].armyType() === 3) {
+        toSplit = parseInt(GUI.getSplitFleetInput().value);
+        leadersToSplit = parseInt(GUI.getSplitFleetLeadersInput().value);
+        lkpToSplit = parseInt(GUI.getSplitFleetLkpInput().value);
+        skpToSplit = parseInt(GUI.getSplitFleetSkpInput().value);
         if (toSplit > (listOfArmies[selectedArmyIndex].count - 1)) {
             window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.");
             return false;
@@ -1006,8 +1006,8 @@ function splitSelectedArmy() {
 }
 // the mount function of the mount box
 function mountSelected() {
-    var toMount = document.getElementById("mountInput").value;
-    var leadersToMount = document.getElementById("mountLeaderInput").value;
+    var toMount = GUI.getMountInput().value;
+    var leadersToMount = GUI.getMountLeaderInput().value;
     mountWithParams(selectedArmyIndex, toMount, leadersToMount, null);
 }
 // mounting with parameters
@@ -1127,14 +1127,14 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 }
 // the unMount function of the unMount box
 function unMountSelected() {
-    var toUnMount = document.getElementById("unMountInput").value;
-    var leadersToUnMount = document.getElementById("unMountLeaderInput").value;
+    var toUnMount = GUI.getUnMountInput().value;
+    var leadersToUnMount = GUI.getUnMountLeaderInput().value;
     unMountWithParams(selectedArmyIndex, toUnMount, leadersToUnMount, null);
 }
 // the unMount function of the unMount box
 //TODO: If the mounted army has moved, set the new foot army's move points to the apropriate, non-max value.
 function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
-    if (toUnMount === "" || leadersToUnMount === "" || toUnMount === null || leadersToUnMount === null) {
+    if (toUnMount === "" || leadersToUnMount === "" || toUnMount == undefined || leadersToUnMount == undefined) {
         window.alert("Alle felder müssen ausgefüllt sein");
         return false;
     }
@@ -1258,11 +1258,11 @@ function transferTroopsFromSelectedArmy(mergeId) {
     var skpToSplit = 0;
     // depending on army type different fields are needed
     if (listOfArmies[selectedArmyIndex].armyType() === 1) {
-        toSplit = parseInt(document.getElementById("splitInput").value);
-        leadersToSplit = parseInt(document.getElementById("splitLeadersInput").value);
-        mountsToSplit = parseInt(document.getElementById("splitMountsInput").value);
-        lkpToSplit = parseInt(document.getElementById("splitLkpInput").value);
-        skpToSplit = parseInt(document.getElementById("splitSkpInput").value);
+        toSplit = parseInt(GUI.getSplitInput().value);
+        leadersToSplit = parseInt(GUI.getSplitLeadersInput().value);
+        mountsToSplit = parseInt(GUI.getSplitMountsInput().value);
+        lkpToSplit = parseInt(GUI.getSplitLkpInput().value);
+        skpToSplit = parseInt(GUI.getSplitSkpInput().value);
         if (toSplit >= 0 && leadersToSplit >= 0 && mountsToSplit >= 0 && lkpToSplit >= 0 && skpToSplit >= 0) {
             listOfArmies[selectedArmyIndex].count -= toSplit;
             listOfArmies[mergeId].count += toSplit;
@@ -1305,8 +1305,8 @@ function transferTroopsFromSelectedArmy(mergeId) {
         }
     }
     else if (listOfArmies[selectedArmyIndex].armyType() === 2) {
-        toSplit = parseInt(document.getElementById("splitMountedInput").value);
-        leadersToSplit = parseInt(document.getElementById("splitMountedLeadersInput").value);
+        toSplit = parseInt(GUI.getSplitMountedInput().value);
+        leadersToSplit = parseInt(GUI.getSplitMountedLeadersInput().value);
         if (toSplit >= 0 && leadersToSplit >= 0) {
             listOfArmies[selectedArmyIndex].count -= toSplit;
             listOfArmies[mergeId].count += toSplit;
@@ -1346,10 +1346,10 @@ function transferTroopsFromSelectedArmy(mergeId) {
         }
     }
     else if (listOfArmies[selectedArmyIndex].armyType() === 3) {
-        toSplit = parseInt(document.getElementById("splitFleetInput").value);
-        leadersToSplit = parseInt(document.getElementById("splitFleetLeadersInput").value);
-        lkpToSplit = parseInt(document.getElementById("splitFleetLkpInput").value);
-        skpToSplit = parseInt(document.getElementById("splitFleetSkpInput").value);
+        toSplit = parseInt(GUI.getSplitFleetInput().value);
+        leadersToSplit = parseInt(GUI.getSplitFleetLeadersInput().value);
+        lkpToSplit = parseInt(GUI.getSplitFleetLkpInput().value);
+        skpToSplit = parseInt(GUI.getSplitFleetSkpInput().value);
         if (toSplit >= 0 && leadersToSplit >= 0 && lkpToSplit >= 0 && skpToSplit >= 0) {
             listOfArmies[selectedArmyIndex].count -= toSplit;
             listOfArmies[mergeId].count += toSplit;

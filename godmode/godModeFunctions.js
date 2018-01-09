@@ -8,12 +8,12 @@ function setFactionToCreateBuildingsFor(faction) {
 function toggleOnClickWorldCreationMode() {
     if (worldCreationModeOnClick && (changeFieldToType == -1)) {
         worldCreationModeOnClick = false;
-        document.getElementById("creationWarning").style.display = "none";
+        hide(GUI.getWorldBenderBox().getCreationWarning());
     }
     else if (!worldCreationModeOnClick || (worldCreationModeOnClick && (changeFieldToType != -1))) {
         changeFieldToType = -1;
         worldCreationModeOnClick = true;
-        document.getElementById("creationWarning").style.display = "";
+        show(GUI.getWorldBenderBox().getCreationWarning());
     }
     resizeCanvas();
 }
@@ -21,12 +21,12 @@ function changeFieldClickedTo(number) {
     if (changeFieldToType != number) {
         switchModeTo("worldCreationModeOnClick");
         changeFieldToType = number;
-        document.getElementById("creationWarning").style.display = "";
+        show(GUI.getWorldBenderBox().getCreationWarning());
     }
     else {
         changeFieldToType = -1;
         switchModeTo("worldCreationModeOn");
-        document.getElementById("creationWarning").style.display = "none";
+        hide(GUI.getWorldBenderBox().getCreationWarning());
     }
     resizeCanvas();
 }
@@ -287,13 +287,14 @@ function manipulateBorderBuilding(type, direction, add) {
 }
 // the function for the Gm posibility to make an army out of nothing
 function generateArmyBtn() {
-    ownerBuffer = document.getElementById("ownerField").value;
-    armyIdBuffer = Number(document.getElementById("armyNumberField").value);
-    countBuffer = Number(document.getElementById("countField").value);
-    leaderBuffer = Number(document.getElementById("leaderField").value);
-    mountsBuffer = Number(document.getElementById("mountsField").value);
-    lkpBuffer = Number(document.getElementById("lkpField").value);
-    skpBuffer = Number(document.getElementById("skpField").value);
+    let armyMakerBox = GUI.getArmyGeneratorBox();
+    ownerBuffer = armyMakerBox.getOwnerField().value;
+    armyIdBuffer = Number(armyMakerBox.getArmyNumberField().value);
+    countBuffer = Number(armyMakerBox.getCountField().value);
+    leaderBuffer = Number(armyMakerBox.getLeaderField().value);
+    mountsBuffer = Number(armyMakerBox.getMountsField().value);
+    lkpBuffer = Number(armyMakerBox.getLKPField().value);
+    skpBuffer = Number(armyMakerBox.getSKPField().value);
     // TODO be able to generate guard armies
     guardBuffer = false;
     if (armyIdBuffer < 101 || armyIdBuffer > 399) {
@@ -336,26 +337,22 @@ function godDeleteSelectedArmy() {
 // This is used by the infoChangeBox to manipulate an armies Stats.
 function changeArmyInfo() {
     for (var i = 0; i < listOfArmies.length; i++) {
-        if (i != selectedArmyIndex && listOfArmies[i].owner == document.getElementById("ownerChangeInput").value &&
-            listOfArmies[i].armyId == document.getElementById("armyIdChangeInput").value) {
+        let infoChangeBox = GUI.getInfoChangeBox();
+        if (i != selectedArmyIndex && listOfArmies[i].owner === infoChangeBox.getOwnerChangeInput().value &&
+            listOfArmies[i].armyId === infoChangeBox.getArmyIdChangeInput().value) {
             window.alert("Diese Armee-Id ist in diesem Reich bereits vergeben.");
         }
         else {
-            if (document.getElementById("guardChangeInput").checked) {
-                listOfArmies[selectedArmyIndex].isGuard = true;
-            }
-            else {
-                listOfArmies[selectedArmyIndex].isGuard = false;
-            }
-            listOfArmies[selectedArmyIndex].owner = document.getElementById("ownerChangeInput").value;
-            listOfArmies[selectedArmyIndex].armyId = Number(document.getElementById("armyIdChangeInput").value);
-            listOfArmies[selectedArmyIndex].count = Number(document.getElementById("countChangeInput").value);
-            listOfArmies[selectedArmyIndex].leaders = Number(document.getElementById("leadersChangeInput").value);
-            listOfArmies[selectedArmyIndex].mounts = Number(document.getElementById("mountsChangeInput").value);
-            listOfArmies[selectedArmyIndex].lkp = Number(document.getElementById("lkpChangeInput").value);
-            listOfArmies[selectedArmyIndex].skp = Number(document.getElementById("skpChangeInput").value);
-            listOfArmies[selectedArmyIndex].remainingMovePoints = Number(document.getElementById("movePointsChangeInput").value);
-            listOfArmies[selectedArmyIndex].remainingHeightPoints = Number(document.getElementById("heightPointsChangeInput").value);
+            listOfArmies[selectedArmyIndex].isGuard = infoChangeBox.getGuardChangeInput().checked;
+            listOfArmies[selectedArmyIndex].owner = infoChangeBox.getOwnerChangeInput().value;
+            listOfArmies[selectedArmyIndex].armyId = Number(infoChangeBox.getArmyIdChangeInput().value);
+            listOfArmies[selectedArmyIndex].count = Number(infoChangeBox.getCountChangeInput().value);
+            listOfArmies[selectedArmyIndex].leaders = Number(infoChangeBox.getLeadersChangeInput().value);
+            listOfArmies[selectedArmyIndex].mounts = Number(infoChangeBox.getMountsChangeInput().value);
+            listOfArmies[selectedArmyIndex].lkp = Number(infoChangeBox.getLKPChangeInput().value);
+            listOfArmies[selectedArmyIndex].skp = Number(infoChangeBox.getSKPChangeInput().value);
+            listOfArmies[selectedArmyIndex].remainingMovePoints = Number(infoChangeBox.getMovePointsChangeInput().value);
+            listOfArmies[selectedArmyIndex].remainingHeightPoints = Number(infoChangeBox.getHeightPointsChangeInput().value);
         }
     }
     resizeCanvas();
