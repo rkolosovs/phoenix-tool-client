@@ -1,9 +1,9 @@
 "use strict";
 //to actually move units with the new method
 function move(army, direction) {
-    for (var i = 0; i < army.possibleMoves.length; i++) {
+    for (let i = 0; i < army.possibleMoves.length; i++) {
         if (army.possibleMoves[i].dir === direction) {
-            var tempmove = army.possibleMoves[i];
+            let tempmove = army.possibleMoves[i];
             //in case it is moving on land
             if (tempmove.load === undefined) {
                 army.setRemainingMovePoints(army.remainingMovePoints - tempmove.movepoints);
@@ -15,8 +15,8 @@ function move(army, direction) {
                 if (Math.floor(army.armyId / 100) === 3) {
                     // moves troops that are loaded in the fleet
                     if (army.loadedArmies !== undefined && army.loadedArmies !== []) {
-                        for (var i = 0; i < army.loadedArmies.length; i++) {
-                            for (var j = 0; j < listOfArmies.length; j++) {
+                        for (let i = 0; i < army.loadedArmies.length; i++) {
+                            for (let j = 0; j < listOfArmies.length; j++) {
                                 console.log(army.loadedArmies[i]);
                                 if (listOfArmies[j].owner === army.owner && listOfArmies[j].armyId === army.loadedArmies[i]) {
                                     listOfArmies[j].x = tempmove.x;
@@ -55,8 +55,8 @@ function move(army, direction) {
                 return "ok";
             }
             else if (tempmove.load !== undefined && tempmove.load) {
-                var fleetsOnDest = [];
-                for (var i = 0; i < listOfArmies.length; i++) {
+                let fleetsOnDest = [];
+                for (let i = 0; i < listOfArmies.length; i++) {
                     if ((listOfArmies[i].owner === army.owner) && (listOfArmies[i].x === tempmove.tar.x) && (listOfArmies[i].y === tempmove.tar.y) &&
                         (Math.floor(listOfArmies[i].armyId / 100) === 3)) {
                         fleetsOnDest.push(i);
@@ -69,7 +69,7 @@ function move(army, direction) {
                     // there is exactly one
                 }
                 else if (fleetsOnDest.length === 1) {
-                    var loadString = listOfArmies[fleetsOnDest[0]].loadArmy(army.indexInListOfArmies());
+                    let loadString = listOfArmies[fleetsOnDest[0]].loadArmy(army.indexInListOfArmies());
                     if (loadString === "ok") {
                         army.isLoadedIn = listOfArmies[fleetsOnDest[0]].armyId;
                         //                        console.log("army in now loaded in " + army.isLoadedIn);
@@ -85,17 +85,17 @@ function move(army, direction) {
                     }
                 }
                 else if (fleetsOnDest.length > 1) {
-                    var fleetstring = "";
-                    for (var i = 0; i < fleetsOnDest.length; i++) {
+                    let fleetstring = "";
+                    for (let i = 0; i < fleetsOnDest.length; i++) {
                         fleetstring = fleetstring + listOfArmies[fleetsOnDest[i]].armyId + " ";
                     }
-                    var chosenFleet = prompt("Mögliche Flotten sind: " + fleetstring);
+                    let chosenFleet = prompt("Mögliche Flotten sind: " + fleetstring);
                     if (chosenFleet === null) {
                         return "Embarkation canceled.";
                     }
                     else if (chosenFleet !== undefined && chosenFleet !== '') {
-                        var foundFleet = -1;
-                        for (var i = 0; i < listOfArmies.length; i++) {
+                        let foundFleet = -1;
+                        for (let i = 0; i < listOfArmies.length; i++) {
                             if (listOfArmies[i].armyId === parseInt(chosenFleet) && listOfArmies[i].owner === army.owner) {
                                 foundFleet = i;
                             }
@@ -106,14 +106,14 @@ function move(army, direction) {
                         //                        console.log(foundFleet);
                         //                        console.log("fleetsOnDest: ")
                         //                        console.log(fleetsOnDest);
-                        var found = false;
-                        for (var i = 0; i < fleetsOnDest.length; i++) {
+                        let found = false;
+                        for (let i = 0; i < fleetsOnDest.length; i++) {
                             if (fleetsOnDest[i] === foundFleet) {
                                 found = true;
                             }
                         }
                         if (found) {
-                            var loadString = listOfArmies[foundFleet].loadArmy(army.indexInListOfArmies());
+                            let loadString = listOfArmies[foundFleet].loadArmy(army.indexInListOfArmies());
                             if (loadString === "ok") {
                                 army.isLoadedIn = listOfArmies[foundFleet].armyId;
                                 //                                console.log("army in now loaded in " + army.isLoadedIn);
@@ -145,7 +145,7 @@ function clickedMoves(army) {
     if (army.ownerTag() === login || login === "sl") {
         army.possibleMoves = [];
         //goes through all neighbors to see if the army can move there
-        for (var i = 0; i < 6; i++) {
+        for (let i = 0; i < 6; i++) {
             moveToList(army, i);
         }
     }
@@ -154,12 +154,12 @@ function clickedMoves(army) {
 //tries to move a Unit in a direction and if possible saves the possible move
 function moveToList(army, direction) {
     //console.log("moveToListInitiated");
-    var neighborCoords = neighbors(army.x, army.y);
-    var targetX = neighborCoords[direction][0];
-    var targetY = neighborCoords[direction][1];
-    var directionString = '';
-    var reverseDirection = '';
-    var neighborsOfNeighbors = neighbors(targetX, targetY).map((neighbor) => neighbors(neighbor[0], neighbor[1])).
+    let neighborCoords = neighbors(army.x, army.y);
+    let targetX = neighborCoords[direction][0];
+    let targetY = neighborCoords[direction][1];
+    let directionString = '';
+    let reverseDirection = '';
+    let neighborsOfNeighbors = neighbors(targetX, targetY).map((neighbor) => neighbors(neighbor[0], neighbor[1])).
         reduce((total, current) => (total.concat(current)), []);
     switch (direction) {
         case 0:
@@ -191,13 +191,13 @@ function moveToList(army, direction) {
             reverseDirection = 'se';
             break;
     }
-    var changeInHeight = false;
-    var thereIsAStreet = false;
-    var thereIsABridge = false;
-    var thereIsAHarbor = false;
-    var rightOfPassage = borders.some((realm) => (realm.tag === army.ownerTag() && realm.land.some((field) => (targetX === field[0] && targetY === field[1])))); //effects of diplomacy go here
-    var coastalSailing = borders.some((realm) => (realm.tag === army.ownerTag() && realm.land.some((field) => neighborsOfNeighbors.some((neighbor) => (field[0] === neighbor[0] && field[1] === neighbor[1]))))); //effects of diplomacy go here
-    var thereIsARiver = rivers.some((river) => (river[0][0] === army.x && river[0][1] === army.y && river[1][0] === targetX && river[1][1] === targetY) ||
+    let changeInHeight = false;
+    let thereIsAStreet = false;
+    let thereIsABridge = false;
+    let thereIsAHarbor = false;
+    let rightOfPassage = borders.some((realm) => (realm.tag === army.ownerTag() && realm.land.some((field) => (targetX === field[0] && targetY === field[1])))); //effects of diplomacy go here
+    let coastalSailing = borders.some((realm) => (realm.tag === army.ownerTag() && realm.land.some((field) => neighborsOfNeighbors.some((neighbor) => (field[0] === neighbor[0] && field[1] === neighbor[1]))))); //effects of diplomacy go here
+    let thereIsARiver = rivers.some((river) => (river[0][0] === army.x && river[0][1] === army.y && river[1][0] === targetX && river[1][1] === targetY) ||
         (river[0][0] === targetX && river[0][1] === targetY && river[1][0] === army.x && river[1][1] === army.y));
     // check if there is a steet, a harbor or a bridge on the route
     buildings.forEach((building) => {
@@ -328,12 +328,12 @@ function moveToList(army, direction) {
         switch (fieldType(targetX, targetY)) {
             case 0:
             case 1://watter
-                var fleetsOnDest = [];
+                let fleetsOnDest = [];
                 // target field is sea, or deepsea
                 // to see if there is the exact heightchange(not too high or on the sea switching boats)
                 if (changeInHeight) {
                     // is there an allied fleet on the target field?
-                    for (var i = 0; i < listOfArmies.length; i++) {
+                    for (let i = 0; i < listOfArmies.length; i++) {
                         if ((listOfArmies[i].owner === army.owner) && (listOfArmies[i].x === targetX) && (listOfArmies[i].y === targetY) &&
                             (Math.floor(listOfArmies[i].armyId / 100) === 3)) {
                             if (listOfArmies[i].isLoadable(army.indexInListOfArmies()) == "ok") {
@@ -503,12 +503,12 @@ function moveToList(army, direction) {
         switch (fieldType(targetX, targetY)) {
             case 0:
             case 1://watter
-                var fleetsOnDest = [];
+                let fleetsOnDest = [];
                 // target field is sea, or deepsea
                 // to see if there is the exact heightchange(not too high or on the sea switching boats)
-                if (changeInHeight === true) {
+                if (changeInHeight) {
                     // is there an allied fleet on the target field?
-                    for (var i = 0; i < listOfArmies.length; i++) {
+                    for (let i = 0; i < listOfArmies.length; i++) {
                         if ((listOfArmies[i].owner === army.owner) && (listOfArmies[i].x === targetX) && (listOfArmies[i].y === targetY) &&
                             (Math.floor(listOfArmies[i].armyId / 100) === 3)) {
                             if (listOfArmies[i].isLoadable(army.indexInListOfArmies()) == "ok") {
@@ -851,7 +851,7 @@ function moveToList(army, direction) {
 //checks the current field for other armies and adds it accordingly
 function createMultifield(army) {
     for (let j = 0; j < listOfArmies.length; j++) {
-        var someArmy = listOfArmies[j];
+        let someArmy = listOfArmies[j];
         if (someArmy.x === army.x && someArmy.y === army.y && someArmy !== army) {
             if (someArmy.multiArmyField === true || army.multiArmyField === true) {
                 addToMultifield(someArmy, army);
@@ -889,13 +889,13 @@ function addToMultifield(armyOnMultifield, armyToAdd) {
 }
 function conquer(army) {
     if (fieldType(army.x, army.y) >= 2 && army.canConquer()) {
-        var found = false;
+        let found = false;
         //für i = 0 bis borders länge
-        for (var i = 0; i < borders.length; i++) {
+        for (let i = 0; i < borders.length; i++) {
             // sind das die Länder des Besitzers?
             if (borders[i].tag === army.ownerTag()) {
                 // ist das Zielland enthalten?
-                for (var j = 0; j < borders[i].land.length; j++) {
+                for (let j = 0; j < borders[i].land.length; j++) {
                     if (borders[i].land[j][0] === army.x && borders[i].land[j][1] === army.y) {
                         // wenn ja, found = true
                         found = true;
@@ -905,7 +905,7 @@ function conquer(army) {
             }
             else {
                 // ist das Zielland enthalten?
-                for (var j = 0; j < borders[i].land.length; j++) {
+                for (let j = 0; j < borders[i].land.length; j++) {
                     if (borders[i].land[j][0] === army.x && borders[i].land[j][1] === army.y) {
                         // wenn ja nimm es raus.
                         borders[i].land.splice(j, 1);
@@ -916,7 +916,7 @@ function conquer(army) {
         }
         // war nicht bereits Land des Besitzers.
         if (!found) {
-            for (var i = 0; i < borders.length; i++) {
+            for (let i = 0; i < borders.length; i++) {
                 if (borders[i].tag === army.ownerTag()) {
                     // tu es zu den Ländern des Besitzers.
                     borders[i].land.push([army.x, army.y]);

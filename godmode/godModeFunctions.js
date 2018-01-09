@@ -32,10 +32,10 @@ function changeFieldClickedTo(number) {
 }
 // add a castle in the selectedField
 function addCastle() {
-    var sf = selectedFields[0];
-    var found = false;
-    for (var i = 0; i < buildings.length; i++) {
-        var building = buildings[i];
+    let sf = selectedFields[0];
+    let found = false;
+    for (let i = 0; i < buildings.length; i++) {
+        let building = buildings[i];
         if (building.type < 5 && building.x == sf[0] && building.y == sf[1]) {
             buildings[i].type = 0;
             found = true;
@@ -55,10 +55,10 @@ function addCastle() {
 }
 // add a city in the selectedField
 function addCity() {
-    var sf = selectedFields[0];
-    var found = false;
-    for (var i = 0; i < buildings.length; i++) {
-        var building = buildings[i];
+    let sf = selectedFields[0];
+    let found = false;
+    for (let i = 0; i < buildings.length; i++) {
+        let building = buildings[i];
         if (building.type < 5 && building.x == sf[0] && building.y == sf[1]) {
             buildings[i].type = 1;
             found = true;
@@ -78,10 +78,10 @@ function addCity() {
 }
 // add a fortress in the selectedField
 function addFortress() {
-    var sf = selectedFields[0];
-    var found = false;
-    for (var i = 0; i < buildings.length; i++) {
-        var building = buildings[i];
+    let sf = selectedFields[0];
+    let found = false;
+    for (let i = 0; i < buildings.length; i++) {
+        let building = buildings[i];
         if (building.type < 5 && building.x == sf[0] && building.y == sf[1]) {
             buildings[i].type = 2;
             found = true;
@@ -101,10 +101,10 @@ function addFortress() {
 }
 // add a capital city in the selectedField
 function addCapital() {
-    var sf = selectedFields[0];
-    var found = false;
-    for (var i = 0; i < buildings.length; i++) {
-        var building = buildings[i];
+    let sf = selectedFields[0];
+    let found = false;
+    for (let i = 0; i < buildings.length; i++) {
+        let building = buildings[i];
         if (building.type < 5 && building.x == sf[0] && building.y == sf[1]) {
             buildings[i].type = 3;
             found = true;
@@ -124,10 +124,10 @@ function addCapital() {
 }
 // add a capital fortress in the selectedField
 function addCapitalFortress() {
-    var sf = selectedFields[0];
-    var found = false;
-    for (var i = 0; i < buildings.length; i++) {
-        var building = buildings[i];
+    let sf = selectedFields[0];
+    let found = false;
+    for (let i = 0; i < buildings.length; i++) {
+        let building = buildings[i];
         if (building.type < 5 && building.x == sf[0] && building.y == sf[1]) {
             buildings[i].type = 4;
             found = true;
@@ -147,9 +147,9 @@ function addCapitalFortress() {
 }
 // delete the building in the selectedField
 function deleteBuilding() {
-    var sf = selectedFields[0];
-    for (var i = 0; i < buildings.length; i++) {
-        var building = buildings[i];
+    let sf = selectedFields[0];
+    for (let i = 0; i < buildings.length; i++) {
+        let building = buildings[i];
         if (building.type < 5 && building.x == sf[0] && building.y == sf[1]) {
             changedBuildings.push([false, { "type": building.type, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]);
             if (i == buildings.length - 1) {
@@ -164,12 +164,12 @@ function deleteBuilding() {
 }
 // adds a street in the target direction
 function addStreet(direction) {
-    var sf = selectedFields[0];
-    var targets = neighbors(sf[0], sf[1]);
-    var target = targets[direction];
-    var found = false;
-    for (var i = 0; i < buildings.length; i++) {
-        var building = buildings[i];
+    let sf = selectedFields[0];
+    let targets = neighbors(sf[0], sf[1]);
+    let target = targets[direction];
+    let found = false;
+    for (let i = 0; i < buildings.length; i++) {
+        let building = buildings[i];
         if ((building.type == 8 && (building.firstX == sf[0] && building.firstY == sf[1] && building.secondX == target[0] && building.secondY == target[1])) ||
             (building.type == 8 && (building.firstX == target[0] && building.firstY == target[1] && building.secondX == sf[0] && building.secondY == sf[1]))) {
             found = true;
@@ -186,12 +186,12 @@ function addStreet(direction) {
 }
 // removes a street in the target direction
 function removeStreet(direction) {
-    var sf = selectedFields[0];
-    var targets = neighbors(sf[0], sf[1]);
-    var target = targets[direction];
-    var found = undefined;
-    for (var i = 0; i < buildings.length; i++) {
-        var building = buildings[i];
+    let sf = selectedFields[0];
+    let targets = neighbors(sf[0], sf[1]);
+    let target = targets[direction];
+    let found = undefined;
+    for (let i = 0; i < buildings.length; i++) {
+        let building = buildings[i];
         if (building.type == 8 && ((building.firstX == sf[0] && building.firstY == sf[1] && building.secondX == target[0] && building.secondY == target[1]) ||
             (building.firstX == target[0] && building.firstY == target[1] && building.secondX == sf[0] && building.secondY == sf[1]))) {
             found = i;
@@ -212,12 +212,12 @@ function removeStreet(direction) {
 }
 // adds a river in the target direction
 function addRiver(direction) {
-    var sf = selectedFields[0];
-    var targets = neighbors(sf[0], sf[1]);
-    var target = targets[direction];
-    var found = false;
-    for (var i = 0; i < rivers.length; i++) {
-        var river = rivers[i];
+    let sf = selectedFields[0];
+    let targets = neighbors(sf[0], sf[1]);
+    let target = targets[direction];
+    let found = false;
+    for (let i = 0; i < rivers.length; i++) {
+        let river = rivers[i];
         if ((river[0][0] == sf[0] && river[0][1] == sf[1] && river[1][0] == target[0] && river[1][1] == target[1]) ||
             (river[1][0] == sf[0] && river[1][1] == sf[1] && river[0][0] == target[0] && river[0][1] == target[1])) {
             found = true;
@@ -232,12 +232,12 @@ function addRiver(direction) {
 }
 // removes a river in the target direction
 function removeRiver(direction) {
-    var sf = selectedFields[0];
-    var targets = neighbors(sf[0], sf[1]);
-    var target = targets[direction];
-    var found = undefined;
-    for (var i = 0; i < rivers.length; i++) {
-        var river = rivers[i];
+    let sf = selectedFields[0];
+    let targets = neighbors(sf[0], sf[1]);
+    let target = targets[direction];
+    let found = undefined;
+    for (let i = 0; i < rivers.length; i++) {
+        let river = rivers[i];
         if ((river[0][0] == sf[0] && river[0][1] == sf[1] && river[1][0] == target[0] && river[1][1] == target[1]) ||
             (river[1][0] == sf[0] && river[1][1] == sf[1] && river[0][0] == target[0] && river[0][1] == target[1])) {
             found = i;
@@ -255,10 +255,10 @@ function removeRiver(direction) {
 }
 //add = true means add a building, else remove it.
 function manipulateBorderBuilding(type, direction, add) {
-    var sf = selectedFields[0];
-    var found = undefined;
-    for (var i = 0; i < buildings.length; i++) {
-        var building = buildings[i];
+    let sf = selectedFields[0];
+    let found = undefined;
+    for (let i = 0; i < buildings.length; i++) {
+        let building = buildings[i];
         if (building.type == type && (building.x == sf[0] && building.y == sf[1] && building.direction == direction)) {
             found = i;
         }
@@ -302,7 +302,7 @@ function generateArmyBtn() {
         return false;
     }
     // check for any other armies with the same armyId
-    for (var i = 0; i < listOfArmies.length; i++) {
+    for (let i = 0; i < listOfArmies.length; i++) {
         if (listOfArmies[i].armyId == armyIdBuffer && listOfArmies[i].owner == ownerBuffer) {
             window.alert("Ein Heer mit dieser Nummer existiert bereits in diesem Königreich.");
             return false;
@@ -336,7 +336,7 @@ function godDeleteSelectedArmy() {
 }
 // This is used by the infoChangeBox to manipulate an armies Stats.
 function changeArmyInfo() {
-    for (var i = 0; i < listOfArmies.length; i++) {
+    for (let i = 0; i < listOfArmies.length; i++) {
         let infoChangeBox = GUI.getInfoChangeBox();
         if (i != selectedArmyIndex && listOfArmies[i].owner === infoChangeBox.getOwnerChangeInput().value &&
             listOfArmies[i].armyId === infoChangeBox.getArmyIdChangeInput().value) {

@@ -61,15 +61,15 @@ var bridgeNEImg = new Image();
 
 
 function computePosition(xOrig, yOrig, xCurr, yCurr, scale) { //computes a fields position (upper left corner of inscribing rectangle)
-	var xpos = xOrig + (xCurr * scale * SIN60); //get the current field's x position
+	let xpos = xOrig + (xCurr * scale * SIN60); //get the current field's x position
 	return [ (((yCurr%2)!==0)?(xpos - (0.5*scale*SIN60)):(xpos)), yOrig+(yCurr * gH)]; //each odd row is offset half a hex to the left
 }
 
 function getAdjacency(field, land) { //returns adjacencies of the field amoung the hexes in land numbered from ne clockwise
-	var result = [0, 0, 0, 0, 0, 0];
+	let result = [0, 0, 0, 0, 0, 0];
 	if ((field[1]%2 === 0)) { //if the field is in an even row
-		for (var i = 0; i < land.length; i++) { //check each field of real land for adjacency
-			var candidate = land[i];
+		for (let i = 0; i < land.length; i++) { //check each field of real land for adjacency
+			let candidate = land[i];
 			if ((candidate[0] === (field[0]+1)) && (candidate[1] === (field[1]-1))) { //ne neighbour
 				result[0] = 1;
 			} else if ((candidate[0] === (field[0]+1)) && (candidate[1] === (field[1]))) { //e neighbour
@@ -85,8 +85,8 @@ function getAdjacency(field, land) { //returns adjacencies of the field amoung t
 			}
 		}
 	} else { //if the field is in an odd row
-		for (var i = 0; i < land.length; i++) { //check each field of real land for adjacency
-			var candidate = land[i];
+		for (let i = 0; i < land.length; i++) { //check each field of real land for adjacency
+			let candidate = land[i];
 			if ((candidate[0] === (field[0])) && (candidate[1] === (field[1]-1))) { //ne neighbour
 				result[0] = 1;
 			} else if ((candidate[0] === (field[0]+1)) && (candidate[1] === (field[1]))) { //e neighbour
@@ -106,9 +106,9 @@ function getAdjacency(field, land) { //returns adjacencies of the field amoung t
 }
 
 function contains(array, point) {
-	var result = false;
-	for (var i = 0; i < array.length; i++) {
-			var sf = array[i];
+	let result = false;
+	for (let i = 0; i < array.length; i++) {
+			let sf = array[i];
 			if ((sf[0] === point[0]) && (sf[1] === point[1])){
 				result = true;
 				break;

@@ -52,14 +52,14 @@ var bridgeNWImg = new Image();
 var bridgeSEImg = new Image();
 var bridgeNEImg = new Image();
 function computePosition(xOrig, yOrig, xCurr, yCurr, scale) {
-    var xpos = xOrig + (xCurr * scale * SIN60); //get the current field's x position
+    let xpos = xOrig + (xCurr * scale * SIN60); //get the current field's x position
     return [(((yCurr % 2) !== 0) ? (xpos - (0.5 * scale * SIN60)) : (xpos)), yOrig + (yCurr * gH)]; //each odd row is offset half a hex to the left
 }
 function getAdjacency(field, land) {
-    var result = [0, 0, 0, 0, 0, 0];
+    let result = [0, 0, 0, 0, 0, 0];
     if ((field[1] % 2 === 0)) {
-        for (var i = 0; i < land.length; i++) {
-            var candidate = land[i];
+        for (let i = 0; i < land.length; i++) {
+            let candidate = land[i];
             if ((candidate[0] === (field[0] + 1)) && (candidate[1] === (field[1] - 1))) {
                 result[0] = 1;
             }
@@ -81,8 +81,8 @@ function getAdjacency(field, land) {
         }
     }
     else {
-        for (var i = 0; i < land.length; i++) {
-            var candidate = land[i];
+        for (let i = 0; i < land.length; i++) {
+            let candidate = land[i];
             if ((candidate[0] === (field[0])) && (candidate[1] === (field[1] - 1))) {
                 result[0] = 1;
             }
@@ -106,9 +106,9 @@ function getAdjacency(field, land) {
     return result;
 }
 function contains(array, point) {
-    var result = false;
-    for (var i = 0; i < array.length; i++) {
-        var sf = array[i];
+    let result = false;
+    for (let i = 0; i < array.length; i++) {
+        let sf = array[i];
         if ((sf[0] === point[0]) && (sf[1] === point[1])) {
             result = true;
             break;
