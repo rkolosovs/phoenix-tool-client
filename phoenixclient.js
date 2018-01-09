@@ -153,16 +153,17 @@ function registerLeftClick() {
     console.log(clickedField);
     // If mount or unmount is activated, cancel it.
     if (armyWithNextClick) {
+        let army;
         switch (Math.floor(armyIdBuffer / 100)) {
             // TODO: man soll garde erstellen können
             case 3:
-                let army = new seeHeer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, guardBuffer, clickedField[0], clickedField[1], ownerBuffer);
+                army = new seeHeer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, guardBuffer, clickedField[0], clickedField[1], ownerBuffer);
                 break;
             case 2:
-                let army = new reiterHeer(armyIdBuffer, countBuffer, leaderBuffer, guardBuffer, clickedField[0], clickedField[1], ownerBuffer);
+                army = new reiterHeer(armyIdBuffer, countBuffer, leaderBuffer, guardBuffer, clickedField[0], clickedField[1], ownerBuffer);
                 break;
             case 1:
-                let army = new heer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, mountsBuffer, guardBuffer, clickedField[0], clickedField[1], ownerBuffer);
+                army = new heer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, mountsBuffer, guardBuffer, clickedField[0], clickedField[1], ownerBuffer);
                 break;
         }
         ownerBuffer = GUI.getArmyGeneratorBox().getOwnerField().value;
