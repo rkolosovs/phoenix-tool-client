@@ -84,6 +84,14 @@ class GUI{
         }
         return GUI.buttonsBox;
     }
+/** unnecessary duplicate?
+    static getButtonsBox(): HTMLDivElement{
+        if(GUI.buttonsBox == undefined){
+            GUI.buttonsBox = document.getElementById("buttonsBox") as HTMLDivElement;
+        }
+        return GUI.buttonsBox;
+    }
+*/
 
     static getToggleGMBarButton(): HTMLButtonElement{
         if(GUI.toggleGMBarButton == undefined){
@@ -112,21 +120,14 @@ class GUI{
         }
         return GUI.eventTabsButton;
     }
-
-    static getButtonsBox(): HTMLDivElement{
-        if(GUI.buttonsBox == undefined){
-            GUI.buttonsBox = document.getElementById("buttonsBox") as HTMLDivElement;
-        }
-        return GUI.buttonsBox;
-    }
-
+/**  unnecessary duplicate ?
     static getEventTabsButton(): HTMLButtonElement{
         if(GUI.eventTabsButton == undefined){
             GUI.eventTabsButton = document.getElementById("eventTabsButton") as HTMLButtonElement;
         }
         return GUI.eventTabsButton;
     }
-
+*/
     static getEventsTab(): HTMLDivElement{
         if(GUI.eventsTab == undefined){
             GUI.eventsTab = document.getElementById("eventsTab") as HTMLDivElement;

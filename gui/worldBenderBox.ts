@@ -57,7 +57,7 @@ class WorldBenderBox{
         return this.changeFieldClickedTo0;
     }
 
-    getChangeFieldClickedTo0(): HTMLButtonElement{
+    getChangeFieldClickedTo1(): HTMLButtonElement{
         if(this.changeFieldClickedTo1 == undefined){
             this.changeFieldClickedTo1 = document.getElementById("ChangeFieldClickedTo1") as HTMLButtonElement;
         }

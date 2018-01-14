@@ -47,16 +47,16 @@ function hide(element: HTMLElement): void{
 
 // switches bunttonBoxContent.style.visibility to "" and all others to "none"
 function switchBtnBoxTo(buttonBoxContent: HTMLElement): void{
-    hide(GUI.getWorldBenderBox());
-    hide(GUI.getRiverBenderBox());
+    hide(GUI.getWorldBenderBox().getSelf());
+    hide(GUI.getRiverBenderBox().getSelf());
     hide(GUI.getWorldBenderBox().getCreationWarning());
-    hide(GUI.getBuildingCreationBox());
-    hide(GUI.getStreetCreationBox());
-    hide(GUI.getHarborCreationBox());
-    hide(GUI.getBridgeCreationBox());
-    hide(GUI.getWallCreationBox());
+    hide(GUI.getBuildingCreationBox().getSelf());
+    hide(GUI.getStreetCreationBox().getSelf());
+    hide(GUI.getHarborCreationBox().getSelf());
+    hide(GUI.getBridgeCreationBox().getSelf());
+    hide(GUI.getWallCreationBox().getSelf());
     hide(GUI.getButtonsBox());
-    hide(GUI.getArmyGeneratorBox());
+    hide(GUI.getArmyGeneratorBox().getSelf());
 	show(buttonBoxContent);
 }
 
@@ -458,7 +458,7 @@ function activateTransmuteBox(): boolean{
                     listOfArmies[i].y == selectedY){
 					possibleTargets.push(i);
 				}
-			} else{
+			} else {
 			    if(listOfArmies[i].owner == targetOwner &&
                     listOfArmies[i].x == selectedX &&
                     listOfArmies[i].y == selectedY &&
@@ -489,14 +489,17 @@ function activateTransmuteBox(): boolean{
 				});
 				x.appendChild(btn);
 			}
-            GUI.getTransmuteArmyButtonsPartition().appendChild(x);
+			GUI.getTransmuteArmyButtonsPartition().appendChild(x);
+			return true;
 		}
+		return false;
 	} 
 	else {
 		if(document.getElementById("transmuteArmyButtonsSection") != undefined){
 			let d = GUI.getTransmuteArmyButtonsPartition();
 			d.removeChild(document.getElementById("transmuteArmyButtonsSection"));
 		}
+		return false;
 	}
 }
 
@@ -582,6 +585,6 @@ function restoreInfoBox(): void{
     hide(GUI.getMergeBox());
 	closeShootBox();
 	if(GUI.getGodModeBox().getSelf().classList.contains("invisible")){
-		show(GUI.getInfoBox());
+		show(GUI.getInfoBox().getSelf());
 	}
 }

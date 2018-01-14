@@ -36,7 +36,7 @@ class WorldBenderBox {
         }
         return this.changeFieldClickedTo0;
     }
-    getChangeFieldClickedTo0() {
+    getChangeFieldClickedTo1() {
         if (this.changeFieldClickedTo1 == undefined) {
             this.changeFieldClickedTo1 = document.getElementById("ChangeFieldClickedTo1");
         }

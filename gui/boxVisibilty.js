@@ -43,16 +43,16 @@ function hide(element) {
 }
 // switches bunttonBoxContent.style.visibility to "" and all others to "none"
 function switchBtnBoxTo(buttonBoxContent) {
-    hide(GUI.getWorldBenderBox());
-    hide(GUI.getRiverBenderBox());
+    hide(GUI.getWorldBenderBox().getSelf());
+    hide(GUI.getRiverBenderBox().getSelf());
     hide(GUI.getWorldBenderBox().getCreationWarning());
-    hide(GUI.getBuildingCreationBox());
-    hide(GUI.getStreetCreationBox());
-    hide(GUI.getHarborCreationBox());
-    hide(GUI.getBridgeCreationBox());
-    hide(GUI.getWallCreationBox());
+    hide(GUI.getBuildingCreationBox().getSelf());
+    hide(GUI.getStreetCreationBox().getSelf());
+    hide(GUI.getHarborCreationBox().getSelf());
+    hide(GUI.getBridgeCreationBox().getSelf());
+    hide(GUI.getWallCreationBox().getSelf());
     hide(GUI.getButtonsBox());
-    hide(GUI.getArmyGeneratorBox());
+    hide(GUI.getArmyGeneratorBox().getSelf());
     show(buttonBoxContent);
 }
 // switches activeMode to True and all others to false
@@ -489,13 +489,16 @@ function activateTransmuteBox() {
                 x.appendChild(btn);
             }
             GUI.getTransmuteArmyButtonsPartition().appendChild(x);
+            return true;
         }
+        return false;
     }
     else {
         if (document.getElementById("transmuteArmyButtonsSection") != undefined) {
             let d = GUI.getTransmuteArmyButtonsPartition();
             d.removeChild(document.getElementById("transmuteArmyButtonsSection"));
         }
+        return false;
     }
 }
 function activateMergeBox() {
@@ -577,6 +580,6 @@ function restoreInfoBox() {
     hide(GUI.getMergeBox());
     closeShootBox();
     if (GUI.getGodModeBox().getSelf().classList.contains("invisible")) {
-        show(GUI.getInfoBox());
+        show(GUI.getInfoBox().getSelf());
     }
 }

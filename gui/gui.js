@@ -18,6 +18,14 @@ class GUI {
         }
         return GUI.buttonsBox;
     }
+    /** unnecessary duplicate?
+        static getButtonsBox(): HTMLDivElement{
+            if(GUI.buttonsBox == undefined){
+                GUI.buttonsBox = document.getElementById("buttonsBox") as HTMLDivElement;
+            }
+            return GUI.buttonsBox;
+        }
+    */
     static getToggleGMBarButton() {
         if (GUI.toggleGMBarButton == undefined) {
             GUI.toggleGMBarButton = document.getElementById("ToggleGodModeBar");
@@ -42,18 +50,14 @@ class GUI {
         }
         return GUI.eventTabsButton;
     }
-    static getButtonsBox() {
-        if (GUI.buttonsBox == undefined) {
-            GUI.buttonsBox = document.getElementById("buttonsBox");
+    /**  unnecessary duplicate ?
+        static getEventTabsButton(): HTMLButtonElement{
+            if(GUI.eventTabsButton == undefined){
+                GUI.eventTabsButton = document.getElementById("eventTabsButton") as HTMLButtonElement;
+            }
+            return GUI.eventTabsButton;
         }
-        return GUI.buttonsBox;
-    }
-    static getEventTabsButton() {
-        if (GUI.eventTabsButton == undefined) {
-            GUI.eventTabsButton = document.getElementById("eventTabsButton");
-        }
-        return GUI.eventTabsButton;
-    }
+    */
     static getEventsTab() {
         if (GUI.eventsTab == undefined) {
             GUI.eventsTab = document.getElementById("eventsTab");
