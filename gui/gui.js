@@ -18,14 +18,6 @@ class GUI {
         }
         return GUI.buttonsBox;
     }
-    /** unnecessary duplicate?
-        static getButtonsBox(): HTMLDivElement{
-            if(GUI.buttonsBox == undefined){
-                GUI.buttonsBox = document.getElementById("buttonsBox") as HTMLDivElement;
-            }
-            return GUI.buttonsBox;
-        }
-    */
     static getToggleGMBarButton() {
         if (GUI.toggleGMBarButton == undefined) {
             GUI.toggleGMBarButton = document.getElementById("ToggleGodModeBar");
@@ -50,14 +42,6 @@ class GUI {
         }
         return GUI.eventTabsButton;
     }
-    /**  unnecessary duplicate ?
-        static getEventTabsButton(): HTMLButtonElement{
-            if(GUI.eventTabsButton == undefined){
-                GUI.eventTabsButton = document.getElementById("eventTabsButton") as HTMLButtonElement;
-            }
-            return GUI.eventTabsButton;
-        }
-    */
     static getEventsTab() {
         if (GUI.eventsTab == undefined) {
             GUI.eventsTab = document.getElementById("eventsTab");
