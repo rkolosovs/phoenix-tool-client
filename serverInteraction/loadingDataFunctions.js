@@ -100,24 +100,37 @@ function loadFieldData() {
 }
 function loadRealmData() {
     $.getJSON(url + "/databaseLink/getrealms/", function (json) {
-        json.forEach(realm => {
-            GameState.realms.concat(new Realm(realm.name, realm.tag, realm.color, Number(realm.homeTurf), realm.active));
-        });
-        realms = json;
+        GameState.realms = json.map(realm => new Realm(realm.name, realm.tag, realm.color, Number(realm.homeTurf), realm.active));
+        realms = json; //TODO: Remove once everything uses the GameState class.
     });
 }
 function loadRiverData() {
     $.getJSON(url + "/databaseLink/getriverdata/", function (json) {
-        var fluesse = json;
-        var collector = [];
-        fluesse.forEach(function (element) {
-            collector.push([[element.firstX, element.firstY], [element.secondX, element.secondY]]);
-        }, this);
-        rivers = collector; //rivers are the coordinates of two fields on either side of the river
+        GameState.rivers = json.map(river => new River([river.firstX, river.firstY], [river.secondX, river.secondY]));
+        rivers = []; //TODO: Remove once everything uses the GameState class.
+        json.forEach(function (element) {
+            rivers.push([[element.firstX, element.firstY], [element.secondX, element.secondY]]);
+        }, this); //rivers are the coordinates of two fields on either side of the river
     });
 }
 function loadBuildingData() {
     $.getJSON(url + "/databaseLink/buildingdata/", function (json) {
+        let realms = GameState.realms;
+        GameState.buildings = json.map(building => {
+            switch (building.type) {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4: return new ProductionBuilding(building.type, [building.x, building.y], realms.find(realm => realm.tag === building.realm), -1); //TODO: BuildPoints
+                case 5: return new Wall(building.type, [building.x, building.y], realms.find(realm => realm.tag === building.realm), -1, stringToDirection(building.direction), -1); //TODO: BuildPoints, Soldiers
+                case 6:
+                case 7: return new NonDestructibleBuilding(building.type, [building.x, building.y], HexFunction.neighbors(building.x, building.y)[stringToDirection(building.direction)], realms.find(realm => realm.tag === building.realm));
+                case 8: return new NonDestructibleBuilding(building.type, [building.firstX, building.firstY], [building.secondX, building.secondY], realms.find(realm => realm.tag === building.realm));
+                default: return undefined;
+            }
+        });
+        //TODO: Remove once everything uses the GameState class.
         buildings = json; //load the buildings from the buildings.json file
     });
 }

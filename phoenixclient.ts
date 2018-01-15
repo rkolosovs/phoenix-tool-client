@@ -162,6 +162,18 @@ GUI.getCanvas().addEventListener('wheel', function (event: MouseWheelEvent) {
 // window.addEventListener('keyup', function (event) {
 // });
 
+function stringToDirection(dir: string): Direction{
+    switch(dir){
+        case "nw": return Direction.NW;
+        case "ne": return Direction.NE;
+        case "e": return Direction.E;
+        case "se": return Direction.SE;
+        case "sw": return Direction.SW;
+        case "w": return Direction.W;
+        default: return undefined;
+    }
+}
+
 function registerLeftClick() {
 	let clickedField = getClickedField(); // get selected field
 	console.log(clickedField);
