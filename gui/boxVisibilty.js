@@ -197,6 +197,7 @@ function toggleShootingMode() {
 function toggleGodModeBar() {
     if (GUI.getGodModeBox().getSelf().classList.contains("invisible")) {
         restoreInfoBox();
+        writeRealmDropdown();
         show(GUI.getGodModeBox().getSelf());
         show(GUI.getInfoChangeBox().getSelf());
         hide(GUI.getInfoBox().getSelf());
@@ -207,6 +208,16 @@ function toggleGodModeBar() {
         show(GUI.getInfoBox().getSelf());
         updateInfoBox();
     }
+}
+function writeRealmDropdown() {
+    let factionsDropdown = GUI.getFactionToCreateBuildingsFor();
+    let factionOptions = "";
+    realms.forEach(realm => {
+        if (realm.active) {
+            factionOptions += "<option value=" + "'" + realm.tag + "'" + ">" + realm.name + "</option>";
+        }
+    });
+    factionsDropdown.innerHTML = factionOptions;
 }
 // this is used to update the infoBox and the infoChangeBox with the currently selected Army
 function updateInfoBox() {

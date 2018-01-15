@@ -1,10 +1,9 @@
 'use strict';
 // TODO: before pushing check added and deleted buildings if one is already inside the other, if it is then delete it.
 
-var factionToCreateBuildingsFor = 1;
+var factionToCreateBuildingsFor = GameState.realms[0];
 function setFactionToCreateBuildingsFor(faction){
 	factionToCreateBuildingsFor = faction;
-	console.log("buildings for faction " + factionToCreateBuildingsFor);
 }
 
 function toggleOnClickWorldCreationMode(){
@@ -45,12 +44,12 @@ function addCastle(){
 	}
 	if(found){
 		changedBuildings.push([true, {"type": 0, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);	//<----------------------------------------Realm
-		console.log({"type": 0, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
+		// console.log({"type": 0, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
 	} else {
 		changedBuildings.push([true, {"type": 0, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
 		buildings.push({"type": 0, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
-		console.log("this is a new:");
-		console.log(changedBuildings[changedBuildings.length-1]);
+		// console.log("this is a new:");
+		// console.log(changedBuildings[changedBuildings.length-1]);
 	}
 	resizeCanvas()
 }
@@ -68,12 +67,12 @@ function addCity(){
 	}
 	if(found){
 		changedBuildings.push([true, {"type": 1, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
-		console.log({"type": 1, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
+		// console.log({"type": 1, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
 	} else {
 		changedBuildings.push([true, {"type": 1, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
 		buildings.push({"type": 1, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
-		console.log("this is a new:");
-		console.log(changedBuildings[changedBuildings.length-1]);
+		// console.log("this is a new:");
+		// console.log(changedBuildings[changedBuildings.length-1]);
 	}
 	resizeCanvas()
 }
@@ -91,12 +90,12 @@ function addFortress(){
 	}
 	if(found){
 		changedBuildings.push([true, {"type": 2, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
-		console.log({"type": 2, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
+		// console.log({"type": 2, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
 	} else {
 		changedBuildings.push([true, {"type": 2, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
 		buildings.push({"type": 2, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
-		console.log("this is a new:");
-		console.log(changedBuildings[changedBuildings.length-1]);
+		// console.log("this is a new:");
+		// console.log(changedBuildings[changedBuildings.length-1]);
 	}
 	resizeCanvas()
 }
@@ -106,7 +105,7 @@ function addCapital(){
 	let sf = selectedFields[0];
 	let found = false;
 	for(let i = 0; i < buildings.length; i++){
-		let building = buildings[i]
+		let building = buildings[i];
 		if(building.type < 5 && building.x == sf[0] && building.y == sf[1]){
 			buildings[i].type = 3;
 			found = true;
@@ -114,14 +113,14 @@ function addCapital(){
 	}
 	if(found){
 		changedBuildings.push([true, {"type": 3, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
-		console.log({"type": 3, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
+		// console.log({"type": 3, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
 	} else {
 		changedBuildings.push([true, {"type": 3, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
 		buildings.push({"type": 3, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
-		console.log("this is a new:");
-		console.log(changedBuildings[changedBuildings.length-1]);
+		// console.log("this is a new:");
+		// console.log(changedBuildings[changedBuildings.length-1]);
 	}
-	resizeCanvas()
+	resizeCanvas();
 }
 
 // add a capital fortress in the selectedField
@@ -137,12 +136,12 @@ function addCapitalFortress(){
 	}
 	if(found){
 		changedBuildings.push([true, {"type": 4, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
-		console.log({"type": 4, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
+		// console.log({"type": 4, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
 	} else {
 		changedBuildings.push([true, {"type": 4, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
 		buildings.push({"type": 4, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
-		console.log("this is a new:");
-		console.log(changedBuildings[changedBuildings.length-1]);
+		// console.log("this is a new:");
+		// console.log(changedBuildings[changedBuildings.length-1]);
 	}
 	resizeCanvas()
 }
@@ -209,7 +208,7 @@ function removeStreet(direction){
 			selectedFields[0]=[target[0], target[1]];
 		}
 	}
-	resizeCanvas()
+	resizeCanvas();
 }
 
 // adds a river in the target direction
@@ -229,7 +228,7 @@ function addRiver(direction){
 	} else {
 		rivers.push([[sf[0],sf[1]],[target[0],target[1]]]);
 	}
-	resizeCanvas()
+	resizeCanvas();
 }
 
 // removes a river in the target direction
@@ -252,7 +251,7 @@ function removeRiver(direction){
 			rivers[found] = rivers.pop();
 		}
 	}
-	resizeCanvas()
+	resizeCanvas();
 }
 
 //add = true means add a building, else remove it.
@@ -282,7 +281,7 @@ function manipulateBorderBuilding(type, direction, add){
 			}
 		}
 	}
-	resizeCanvas()
+	resizeCanvas();
 }
 
 // the function for the Gm posibility to make an army out of nothing
