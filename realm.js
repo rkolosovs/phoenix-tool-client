@@ -1,6 +1,6 @@
 "use strict";
 class Realm {
-    constructor(name, tag, color, homeTurf) {
+    constructor(name, tag, color, homeTurf, active) {
         this.name = "";
         this.tag = "";
         this.color = "000,000,000";
@@ -10,5 +10,6 @@ class Realm {
         this.tag = tag;
         this.color = color;
         this.homeTurf = homeTurf;
+        this.active = active;
     }
 }

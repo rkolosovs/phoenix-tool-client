@@ -100,6 +100,9 @@ function loadFieldData() {
 }
 function loadRealmData() {
     $.getJSON(url + "/databaseLink/getrealms/", function (json) {
+        json.forEach(realm => {
+            GameState.realms.concat(new Realm(realm.name, realm.tag, realm.color, Number(realm.homeTurf), realm.active));
+        });
         realms = json;
     });
 }

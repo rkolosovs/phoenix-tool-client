@@ -112,7 +112,7 @@ class GUI{
         }
         return GUI.eventTabsButton;
     }
-    
+
     static getEventsTab(): HTMLDivElement{
         if(GUI.eventsTab == undefined){
             GUI.eventsTab = document.getElementById("eventsTab") as HTMLDivElement;
