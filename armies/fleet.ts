@@ -3,14 +3,13 @@ class Fleet extends Army{
     protected transportedArmies: LandArmy[];
 
     constructor(id: number, owner: Realm, troopCount: number, officerCount: number, lightCatapultCount: number,
-                heavyCatapultCount: number, position: [number, number], movePoints: number, heightPoints: number,
-                isGuard?: boolean){
+                heavyCatapultCount: number, position: [number, number], movePoints: number, isGuard?: boolean){
         if(isGuard != undefined){
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position,
-                movePoints, heightPoints, isGuard);
+                movePoints, 0, isGuard);
         } else{
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position,
-                movePoints, heightPoints);
+                movePoints, 0);
         }
         this.transportedArmies = [];
     }
