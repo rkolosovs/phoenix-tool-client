@@ -1,4 +1,4 @@
-class DestructibleBuilding extends Building{
+abstract class DestructibleBuilding extends Building{
     //TODO: know own BP
 
     constructor(type: BuildingType, position: [number, number], owner: Realm, buildPoints: number){

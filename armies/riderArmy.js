@@ -17,6 +17,9 @@ class RiderArmy extends LandArmy {
     getMaxHeightPoints() {
         return RiderArmy.MAX_HEIGHT_POINTS;
     }
+    move(destination, moveCost, heightCost) {
+        //TODO: Move appropriate functionality here
+    }
     takeRPDamage(rpDamage) {
         this.takeDamage(Math.ceil(rpDamage / (RIDER_RP +
             OFFICER_RP * (this.officerCount / this.troopCount))));

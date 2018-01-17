@@ -1,9 +1,9 @@
-class MobileEntity extends MapEntity{
-    static readonly MAX_MOVE_POINTS = 42;
-    static readonly MAX_HEIGHT_POINTS = 2;
+abstract class MobileEntity extends MapEntity{
+    static readonly MAX_MOVE_POINTS: number = 42;
+    static readonly MAX_HEIGHT_POINTS: number = 2;
     protected oldPosition: [number, number];
-    protected movePoints: number = MapEntity.MAX_MOVE_POINTS;
-    protected heightPoints: number = MapEntity.MAX_HEIGHT_POINTS;
+    protected movePoints: number = MobileEntity.MAX_MOVE_POINTS;
+    protected heightPoints: number = MobileEntity.MAX_HEIGHT_POINTS;
     protected id: number;
 
     constructor(id: number, owner: Realm, position: [number, number], movePoints: number, heightPoints: number){
@@ -14,12 +14,12 @@ class MobileEntity extends MapEntity{
         this.setHeightPoints(heightPoints);
     }
 
-    getErkenfaraID(): number;
+    abstract getErkenfaraID(): number;
 
-    move(destination: [number, number], moveCost: number, heightCost: number): void;
+    abstract move(destination: [number, number], moveCost: number, heightCost: number): void;
     //TODO: Move the appropriate part of the movement logic here.
 
-    getRoomPoints(): number;
+    abstract getRoomPoints(): number;
 
     getOldPosition(): [number, number]{
         return this.oldPosition;
@@ -30,11 +30,11 @@ class MobileEntity extends MapEntity{
     }
 
     getMaxMovePoints(): number{
-        return MapEntity.MAX_MOVE_POINTS;
+        return MobileEntity.MAX_MOVE_POINTS;
     }
 
     getMaxHeightPoints(): number{
-        return MapEntity.MAX_HEIGHT_POINTS;
+        return MobileEntity.MAX_HEIGHT_POINTS;
     }
 
     setMovePoints(value: number): void{

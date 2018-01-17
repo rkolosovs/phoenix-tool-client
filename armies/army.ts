@@ -1,4 +1,4 @@
-class Army extends MobileEntity{
+abstract class Army extends MobileEntity{
     protected troopCount: number;
     protected officerCount: number;
     protected lightCatapultCount: number = 0;
@@ -17,17 +17,17 @@ class Army extends MobileEntity{
         this.setHeavyCatapultCount(heavyCatapultCount);
     }
 
-    canHaveCatapults(): boolean;
+    abstract canHaveCatapults(): boolean;
 
-    getRoomPointsSansOfficers(): number;
+    abstract getRoomPointsSansOfficers(): number;
 
-    canConquer(): boolean;
+    abstract canConquer(): boolean;
 
-    takeBPDamage(bpDamage: number): void;
+    abstract takeBPDamage(bpDamage: number): void;
 
-    fireLightCatapults(dicerolls: number[], badConditions: string): number;
+    abstract fireLightCatapults(dicerolls: number[], badConditions: string): number;
 
-    fireHeavyCatapults(dicerolls: number[], badConditions: string): number;
+    abstract fireHeavyCatapults(dicerolls: number[], badConditions: string): number;
 
     getTroopCount(): number{
         return this.troopCount;
@@ -82,7 +82,7 @@ class Army extends MobileEntity{
     }
 
     getRoomPoints(): number{
-        return getRoomPointsSansOfficers() + this.officerCount * OFFICER_RP;
+        return this.getRoomPointsSansOfficers() + this.officerCount * OFFICER_RP;
     }
 
     leaderGp(): number {

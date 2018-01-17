@@ -10,7 +10,7 @@ enum BuildingType{
     STREET = 8 //"Straße"
 }
 
-class Building extends MapEntity{
+abstract class Building extends MapEntity{
     readonly type: BuildingType;
 
     constructor(type: BuildingType, position: [number, number], owner: Realm){

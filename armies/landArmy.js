@@ -16,6 +16,7 @@ class LandArmy extends Army {
         return LandArmy.MAX_HEIGHT_POINTS;
     }
     canConquer() {
-        return;
+        return this.getRoomPointsSansOfficers() >= 1000 && this.officerCount >= 1;
+        //TODO: Consider characters once those are a thing.
     }
 }

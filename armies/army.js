@@ -56,7 +56,7 @@ class Army extends MobileEntity {
         this.setHeavyCatapultCount(this.heavyCatapultCount - Math.floor(this.heavyCatapultCount * factor));
     }
     getRoomPoints() {
-        return getRoomPointsSansOfficers() + this.officerCount * OFFICER_RP;
+        return this.getRoomPointsSansOfficers() + this.officerCount * OFFICER_RP;
     }
     leaderGp() {
         let gp = 0;

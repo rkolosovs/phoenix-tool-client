@@ -1,4 +1,5 @@
 'use strict';
+import $ = require("jquery");
 
 // function to get the authenticationToken from the server and save a login time
 function loginToServer() {
@@ -56,7 +57,7 @@ function logoutFromServer() {
 	});
 	// turning off godmode Box, and changing infoBox to Login Box
 	login = 'guest';
-	switchBtnBoxTo("buttonsBox");
+	switchBtnBoxTo(GUI.getButtonsBox());
 	switchModeTo("none");
 	// Hide gm functionalities
 	document.getElementById("godmodeBox").style.visibility = "hidden";

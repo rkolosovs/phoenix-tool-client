@@ -156,7 +156,7 @@ function stringToDirection(dir) {
         case "se": return Direction.SE;
         case "sw": return Direction.SW;
         case "w": return Direction.W;
-        default: return undefined;
+        default: return -1;
     }
 }
 function registerLeftClick() {
@@ -191,11 +191,11 @@ function registerLeftClick() {
         skpBuffer = 0;
         GUI.getArmyGeneratorBox().getSKPField().value = "0";
         listOfArmies.push(army);
-        switchBtnBoxTo("buttonsBox");
+        switchBtnBoxTo(GUI.getButtonsBox());
         switchModeTo("none");
     }
     else if (worldCreationModeOnClick) {
-        let posi = positionInList(clickedField[0], clickedField[1]);
+        let posi = HexFunction.positionInList(clickedField[0], clickedField[1]);
         if (changeFieldToType == -1) {
             // checks if Field should be changed to a specific type, if not use
             // normal world creation mode on click
@@ -288,7 +288,7 @@ function registerRightClick() {
     let clickedField = getClickedField();
     console.log(clickedField);
     if (worldCreationModeOnClick) {
-        let posi = positionInList(clickedField[0], clickedField[1]);
+        let posi = HexFunction.positionInList(clickedField[0], clickedField[1]);
         if (changeFieldToType == -1) {
             // checks if Field should be changed to a specific type (then
             // rightclick is disabled)
@@ -320,7 +320,7 @@ function registerRightClick() {
         else {
             let clickedArmyX = listOfArmies[selectedArmyIndex].x;
             let clickedArmyY = listOfArmies[selectedArmyIndex].y;
-            let localNeighbors = neighbors(clickedArmyX, clickedArmyY);
+            let localNeighbors = HexFunction.neighbors(clickedArmyX, clickedArmyY);
             for (let i = 0; i < localNeighbors.length; i++) {
                 if (localNeighbors[i][0] === clickedField[0] && localNeighbors[i][1] === clickedField[1]) {
                     let out;
@@ -657,6 +657,7 @@ function findArmyPlaceInList(armyId, owner) {
             return i;
         }
     }
+    return -1;
 }
 function eachArmyExistsAndIsLocated(armies, x, y) {
     //	console.log("eachArmyExistsAndIsLocated("+armies+", "+x+", "+y+")");
@@ -723,6 +724,7 @@ function canMove(realm, id, fromX, fromY, toX, toY) {
             moveToList(foundArmy, direction);
             return foundArmy.possibleMoves.length > 0;
         }
+        return false;
         //		let origin = new showHex(fromX, fromY);
         //        let destination = new showHex(toX, toY);
         //		let streetPresent = buildings.some(function(building){
@@ -1135,14 +1137,15 @@ function checkEvent(num) {
                 }
                 else {
                     fernkampf(lkpRolls, skpRolls, shooter, cont.target, cont.toX, cont.toY, null); // TODO chars
-                    hide(shootBox);
+                    hide(shootBox.getSelf());
                     event.status = 'checked';
                     fillEventList();
                     drawStuff();
+                    return true;
                 }
             };
             shootBox.getCloseRangedBattleButton().onclick = function () {
-                hide(shootBox);
+                hide(shootBox.getSelf());
             };
             fillEventList();
             //sendCheckEvent(event.pk, event.type);

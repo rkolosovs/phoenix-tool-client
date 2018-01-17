@@ -1,5 +1,5 @@
 class Fleet extends Army{
-    static readonly MAX_HEIGHT_POINTS = 0;
+    static readonly MAX_HEIGHT_POINTS: number = 0;
     protected transportedArmies: LandArmy[];
 
     constructor(id: number, owner: Realm, troopCount: number, officerCount: number, lightCatapultCount: number,
@@ -31,13 +31,17 @@ class Fleet extends Army{
     }
 
     getRoomPointsSansOfficers(): number{
-        if(isGuard){
+        if(this.isGuard){
             return this.troopCount * SHIP_RP * GUARD_RP_MULT +
                 this.lightCatapultCount * LIGHT_WS_RP + this.heavyCatapultCount * HEAVY_WS_RP;
         } else{
             return this.troopCount * SHIP_RP +
                 this.lightCatapultCount * LIGHT_WS_RP + this.heavyCatapultCount * HEAVY_WS_RP;
         }
+    }
+
+    move(destination: [number, number], moveCost: number, heightCost: number): void {
+        //TODO: Move appropriate functionality here
     }
 
     canConquer(): boolean{
@@ -170,8 +174,8 @@ class Fleet extends Army{
     }
 
     loadArmy(army: LandArmy): string{
-        if(listOfArmies[index].raumpunkte() <= this.currentCapacity()){
-            this.loadedArmies.push(army);
+        if(army.getRoomPoints() <= this.freeTransportCapacity()){
+            this.transportedArmies.push(army);
             army.isTransported = true;
             return "ok";
         } else {

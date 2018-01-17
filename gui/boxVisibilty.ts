@@ -196,7 +196,7 @@ function toggleGodModeBar(): void{
 }
 
 function writeRealmDropdown(): void{
-    let factionsDropdown: HTMLSelectElement = GUI.getFactionToCreateBuildingsFor();
+    let factionsDropdown: HTMLSelectElement = GUI.getGodModeBox().getFactionToCreateBuildingsFor();
     let factionOptions: string = "";
     realms.forEach(realm => {
         if(realm.active){

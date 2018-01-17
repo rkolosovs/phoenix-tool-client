@@ -57,7 +57,7 @@ function loadArmies() {
                 let armyOwner = GameState.realms.find(realm => realm.tag === army.realm);
                 switch (Math.floor(army.armyId / 100)) {
                     case 1: return new FootArmy(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp, [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
-                    case 2: return new RiderArmy(armt.armyId, armyOwner, army.count, army.leaders, [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
+                    case 2: return new RiderArmy(army.armyId, armyOwner, army.count, army.leaders, [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
                     case 3: return new Fleet(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp, [army.x, army.y], army.movementPoints, army.isGuard);
                     default: return undefined;
                 }
@@ -136,7 +136,9 @@ function loadBuildingData() {
                 case 4: return new ProductionBuilding(building.type, [building.x, building.y], realms.find(realm => realm.tag === building.realm), -1); //TODO: BuildPoints
                 case 5: return new Wall(building.type, [building.x, building.y], realms.find(realm => realm.tag === building.realm), -1, stringToDirection(building.direction), -1); //TODO: BuildPoints, Soldiers
                 case 6:
-                case 7: return new NonDestructibleBuilding(building.type, [building.x, building.y], HexFunction.neighbors(building.x, building.y)[stringToDirection(building.direction)], realms.find(realm => realm.tag === building.realm));
+                case 7:
+                    let secondPos = HexFunction.neighbors(building.x, building.y)[stringToDirection(building.direction)];
+                    return new NonDestructibleBuilding(building.type, [building.x, building.y], [secondPos[0], secondPos[1]], realms.find(realm => realm.tag === building.realm));
                 case 8: return new NonDestructibleBuilding(building.type, [building.firstX, building.firstY], [building.secondX, building.secondY], realms.find(realm => realm.tag === building.realm));
                 default: return undefined;
             }

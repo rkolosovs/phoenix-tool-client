@@ -210,7 +210,7 @@ function toggleGodModeBar() {
     }
 }
 function writeRealmDropdown() {
-    let factionsDropdown = GUI.getFactionToCreateBuildingsFor();
+    let factionsDropdown = GUI.getGodModeBox().getFactionToCreateBuildingsFor();
     let factionOptions = "";
     realms.forEach(realm => {
         if (realm.active) {

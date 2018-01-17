@@ -1,4 +1,4 @@
-class LandArmy extends Army{
+abstract class LandArmy extends Army{
     isTransported: boolean;
 
     constructor(id: number, owner: Realm, troopCount: number, officerCount: number, lightCatapultCount: number,
@@ -14,7 +14,7 @@ class LandArmy extends Army{
         this.isTransported = false;
     }
 
-    takeRPDamage(rpDamage: number): void;
+    abstract takeRPDamage(rpDamage: number): void;
 
     getMaxMovePoints(): number{
         return LandArmy.MAX_MOVE_POINTS;
@@ -25,6 +25,7 @@ class LandArmy extends Army{
     }
 
     canConquer(): boolean{
-        return
+        return this.getRoomPointsSansOfficers() >= 1000 && this.officerCount >= 1;
+        //TODO: Consider characters once those are a thing.
     }
 }

@@ -68,7 +68,7 @@ function loadArmies() {
 		        switch(Math.floor(army.armyId / 100)){
                     case 1: return new FootArmy(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp,
                         [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
-                    case 2: return new RiderArmy(armt.armyId, armyOwner, army.count, army.leaders,
+                    case 2: return new RiderArmy(army.armyId, armyOwner, army.count, army.leaders,
                         [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
                     case 3: return new Fleet(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp,
                         [army.x, army.y], army.movementPoints, army.isGuard);
@@ -162,9 +162,9 @@ function loadBuildingData() {
                     realms.find(realm => realm.tag === building.realm), -1,
                     stringToDirection(building.direction), -1); //TODO: BuildPoints, Soldiers
                 case 6:
-                case 7: return new NonDestructibleBuilding(building.type, [building.x, building.y],
-                    HexFunction.neighbors(building.x, building.y)[stringToDirection(building.direction)],
-                    realms.find(realm => realm.tag === building.realm));
+                case 7: let secondPos: number[] = HexFunction.neighbors(building.x, building.y)[stringToDirection(building.direction)];
+                	return new NonDestructibleBuilding(building.type, [building.x, building.y],
+                    [secondPos[0], secondPos[1]], realms.find(realm => realm.tag === building.realm));
                 case 8: return new NonDestructibleBuilding(building.type, [building.firstX, building.firstY],
                     [building.secondX, building.secondY], realms.find(realm => realm.tag === building.realm));
                 default: return undefined;

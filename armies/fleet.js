@@ -22,7 +22,7 @@ class Fleet extends Army {
         return Fleet.MAX_HEIGHT_POINTS;
     }
     getRoomPointsSansOfficers() {
-        if (isGuard) {
+        if (this.isGuard) {
             return this.troopCount * SHIP_RP * GUARD_RP_MULT +
                 this.lightCatapultCount * LIGHT_WS_RP + this.heavyCatapultCount * HEAVY_WS_RP;
         }
@@ -30,6 +30,9 @@ class Fleet extends Army {
             return this.troopCount * SHIP_RP +
                 this.lightCatapultCount * LIGHT_WS_RP + this.heavyCatapultCount * HEAVY_WS_RP;
         }
+    }
+    move(destination, moveCost, heightCost) {
+        //TODO: Move appropriate functionality here
     }
     canConquer() {
         return false;
@@ -255,8 +258,8 @@ class Fleet extends Army {
         return this.freeTransportCapacity() >= armyToLoad.getRoomPoints();
     }
     loadArmy(army) {
-        if (listOfArmies[index].raumpunkte() <= this.currentCapacity()) {
-            this.loadedArmies.push(army);
+        if (army.getRoomPoints() <= this.freeTransportCapacity()) {
+            this.transportedArmies.push(army);
             army.isTransported = true;
             return "ok";
         }
