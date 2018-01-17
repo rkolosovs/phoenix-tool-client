@@ -1,6 +1,6 @@
 'use strict';
 // TODO: before pushing check added and deleted buildings if one is already inside the other, if it is then delete it.
-var factionToCreateBuildingsFor = GameState.realms[0].tag;
+var factionToCreateBuildingsFor = realms[0].tag;
 function setFactionToCreateBuildingsFor(faction) {
     factionToCreateBuildingsFor = faction;
 }

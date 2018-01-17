@@ -1,3 +1,4 @@
+"use strict";
 function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, coordX, coordY, owner) {
     this.armyId = id;
     this.count = truppen;
@@ -10,7 +11,7 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     this.y = coordY;
     this.oldX = coordX; //save the old position when moving the unit
     this.oldY = coordY; //use it to determine what terrain this unit moved from etc.
-    this.owner = owner; //currently owner pk in the DB
+    this.owner = owner;
     this.isLoadedIn = null;
     this.wasShotAt = false;
     this.startingMovepoints = 9;
@@ -20,7 +21,8 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     this.LKPShotThisTurn = 0;
     this.SKPShotThisTurn = 0;
     this.ownerTag = function () {
-        return realms[this.owner - 1].tag;
+        return this.owner;
+        // return realms[this.owner - 1].tag;
     };
     this.isAlive = function () {
         return (this.raumpunkte() >= 100 && this.leaders >= 1);
@@ -405,7 +407,8 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde, coordX, coordY, owner) {
     this.possibleMoves = [];
     this.multiArmyField = false;
     this.ownerTag = function () {
-        return realms[this.owner - 1].tag;
+        return this.owner;
+        // return realms[this.owner - 1].tag;
     };
     this.isAlive = function () {
         return (this.raumpunkte() >= 100 && this.leaders >= 1);
@@ -543,7 +546,8 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     this.LKPShotThisTurn = 0;
     this.SKPShotThisTurn = 0;
     this.ownerTag = function () {
-        return realms[this.owner - 1].tag;
+        return this.owner;
+        // return realms[this.owner - 1].tag;
     };
     this.isAlive = function () {
         return (this.raumpunkte() >= 100 && this.leaders >= 1);
@@ -723,16 +727,11 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
         this.killTransportedTroops();
     };
     this.killTransportedTroops = function () {
-        var _this = this;
         if (this.loadedArmies !== undefined && this.loadedArmies.length > 0) {
-            var loadedArmiesList = listOfArmies.filter(function (army) {
-                return army.owner === _this.owner && _this.loadedArmies.some(function (loadedArmy) { return loadedArmy === army.armyId; });
-            });
-            var overload_1 = this.spaceLoaded() - this.maxCapacity();
-            if (overload_1 > 0) {
-                loadedArmiesList.forEach(function (loadedArmy) {
-                    return loadedArmy.takeRPDamage(Math.ceil(overload_1 * (loadedArmy.raumpunkte() / _this.spaceLoaded())));
-                });
+            let loadedArmiesList = listOfArmies.filter((army) => army.owner === this.owner && this.loadedArmies.some((loadedArmy) => loadedArmy === army.armyId));
+            let overload = this.spaceLoaded() - this.maxCapacity();
+            if (overload > 0) {
+                loadedArmiesList.forEach((loadedArmy) => loadedArmy.takeRPDamage(Math.ceil(overload * (loadedArmy.raumpunkte() / this.spaceLoaded()))));
             }
         }
     };

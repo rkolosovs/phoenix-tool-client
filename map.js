@@ -1,4 +1,5 @@
 'use strict';
+// import $ = require("jquery");
 //hex parts: values used to compute coordinates of a hexes corners 
 //when given upper left point of inscribing rectangle
 var c;

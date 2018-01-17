@@ -1,5 +1,4 @@
 'use strict';
-import $ = require("jquery");
 
 // function to get the authenticationToken from the server and save a login time
 function loginToServer() {

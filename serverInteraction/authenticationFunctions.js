@@ -1,6 +1,4 @@
 'use strict';
-Object.defineProperty(exports, "__esModule", { value: true });
-const $ = require("jquery");
 // function to get the authenticationToken from the server and save a login time
 function loginToServer() {
     var username = document.getElementById("loginName").value;
