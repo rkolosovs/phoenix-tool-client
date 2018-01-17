@@ -22,10 +22,10 @@ function loadPendingEvents() {
     });
 }
 function loadMap() {
-    var timetest;
+    let timetest;
     $.getJSON(url + "/databaseLink/getlastsavedtimestamp/", function (json) {
         timetest = "";
-        for (var i = 0; i < json.length; i++) {
+        for (let i = 0; i < json.length; i++) {
             timetest += json[i];
         }
         if (loginZeit === undefined || loginZeit < Date.parse(timetest)) {
@@ -33,8 +33,8 @@ function loadMap() {
             console.log("loginzeit: " + loginZeit);
             loadCSRFToken();
             loadRealmData();
-            loadArmies();
             loadFieldData();
+            loadArmies();
             loadRiverData();
             loadBuildingData();
             loadBorderData();
@@ -53,11 +53,21 @@ function loadArmies() {
         url: url + "/databaseLink/armydata/",
         data: { authorization: authenticationToken },
         success: function (data) {
-            var armies = data;
-            var armiesToLoadIn = [];
+            GameState.armies = data.map(army => {
+                let armyOwner = GameState.realms.find(realm => realm.tag === army.realm);
+                switch (Math.floor(army.armyId / 100)) {
+                    case 1: return new FootArmy(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp, [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
+                    case 2: return new RiderArmy(armt.armyId, armyOwner, army.count, army.leaders, [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
+                    case 3: return new Fleet(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp, [army.x, army.y], army.movementPoints, army.isGuard);
+                    default: return undefined;
+                }
+            });
+            //TODO: Old army loading. Remove once everything uses the GameState class.
+            let armies = data;
+            let armiesToLoadIn = [];
             listOfArmies = [];
-            for (var i = 0; i < armies.length; i++) {
-                var army = null;
+            for (let i = 0; i < armies.length; i++) {
+                let army = null;
                 if (Math.floor(armies[i].armyId / 100) == 1) {
                     army = new heer(armies[i].armyId, armies[i].count, armies[i].leaders, armies[i].lkp, armies[i].skp, armies[i].mounts, armies[i].isGuard, armies[i].x, armies[i].y, armies[i].realm);
                 }
@@ -77,11 +87,11 @@ function loadArmies() {
             }
             // if needed, load Troops into ships
             if (armiesToLoadIn.length > 0) {
-                for (var i = 0; i < armiesToLoadIn.length; i++) {
-                    for (var j = 0; j < listOfArmies.length; j++) {
+                for (let i = 0; i < armiesToLoadIn.length; i++) {
+                    for (let j = 0; j < listOfArmies.length; j++) {
                         if (listOfArmies[j].armyId == armiesToLoadIn[i][0] && listOfArmies[j].owner == armiesToLoadIn[i][1]) {
                             listOfArmies[j].loadedArmies.push(armiesToLoadIn[i][2]);
-                            console.log(armiesToLoadIn[i][2] + " is loaded in " + listOfArmies[j].armyId);
+                            // console.log(armiesToLoadIn[i][2] + " is loaded in " + listOfArmies[j].armyId);
                         }
                     }
                 }
@@ -94,7 +104,8 @@ function loadArmies() {
 }
 function loadFieldData() {
     $.getJSON(url + "/databaseLink/fielddata/", function (json) {
-        fields = json;
+        GameState.fields = json.map(field => new Field([field.x, field.y], field.type));
+        fields = json; //TODO: Remove once everything uses the GameState class.
         resizeCanvas();
     });
 }
@@ -136,6 +147,13 @@ function loadBuildingData() {
 }
 function loadBorderData() {
     $.getJSON(url + "/databaseLink/getborderdata/", function (json) {
+        json.forEach(realm => {
+            let realmToFill = GameState.realms.find(candidate => candidate.tag === realm.tag);
+            if (realmToFill != undefined) {
+                realmToFill.territory = realm.land.map(land => GameState.fields.find(field => field.coordinates === land)).filter(field => field != undefined);
+            }
+        });
+        //TODO: Remove once everything uses the GameState class.
         borders = json; //load the borders from the borders.json file
     });
 }
