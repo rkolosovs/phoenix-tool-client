@@ -10,7 +10,7 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     this.y = coordY;
     this.oldX = coordX; //save the old position when moving the unit
     this.oldY = coordY; //use it to determine what terrain this unit moved from etc.
-    this.owner = owner; //currently owner pk in the DB
+    this.owner = owner;
     this.isLoadedIn = null;
     this.wasShotAt = false;
     this.startingMovepoints = 9;
@@ -22,7 +22,8 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     this.SKPShotThisTurn = 0;
 
     this.ownerTag = function(){
-        return realms[this.owner - 1].tag;
+        return this.owner;
+        // return realms[this.owner - 1].tag;
     }
 
     this.isAlive = function(){
@@ -347,7 +348,8 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde, coordX, coordY, owner) {
     this.multiArmyField = false;
 
     this.ownerTag = function(){
-        return realms[this.owner - 1].tag;
+        return this.owner;
+        // return realms[this.owner - 1].tag;
     }
 
     this.isAlive = function(){
@@ -485,7 +487,8 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     this.SKPShotThisTurn = 0;
 
     this.ownerTag = function(){
-        return realms[this.owner - 1].tag;
+        return this.owner;
+        // return realms[this.owner - 1].tag;
     }
 
     this.isAlive = function(){

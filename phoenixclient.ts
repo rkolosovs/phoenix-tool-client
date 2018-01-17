@@ -1025,10 +1025,10 @@ function checkEvent(num) {
 			let lkpToSplit = cont.lkp;
 			let skpToSplit = cont.skp;
 			for (let i = 0; i < listOfArmies.length; i++) {
-				if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
+				if (listOfArmies[i].armyId === armyFromId && listOfArmies[i].owner === realm) {
 					armyFromPlaceInList = i;
 				}
-				else if (listOfArmies[i].armyId == armyToId && listOfArmies[i].owner == realm) {
+				else if (listOfArmies[i].armyId === armyToId && listOfArmies[i].owner === realm) {
 					armyToPlaceInList = i;
 				}
 			}

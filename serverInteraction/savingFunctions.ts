@@ -183,7 +183,7 @@ function saveArmies() { // saves the current armies on the server
 			mounts: elem.mounts,
 			x: elem.x,
 			y: elem.y,
-			ownerPk: elem.owner,
+			owner: elem.owner,
 			movementPoints: elem.remainingMovePoints,
 			heightPoints: elem.remainingHeightPoints,
 			isLoadedIn: elem.isLoadedIn

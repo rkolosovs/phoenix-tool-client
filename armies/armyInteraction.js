@@ -575,7 +575,7 @@ function schlacht(armiesAttack, armiesDefense, charsAttack, charsDefense, posX, 
         }
         else {
             let terrainGPBonus = 0;
-            if (realms[army.owner - 1].homeTurf === fieldType) {
+            if (realms.find(realm => (realm.tag === army.owner)).homeTurf === fieldType) {
                 terrainGPBonus += 50;
             }
             if ((army.armyType() === 1 && (fieldType === 3 || fieldType === 8)) ||
@@ -1466,7 +1466,7 @@ function mergeSelectedArmy(mergeId) {
             for (let j = 0; j < listOfArmies[selectedArmyIndex].loadedArmies.length; j++) {
                 for (let i = 0; i < listOfArmies.length; i++) {
                     if (listOfArmies[selectedArmyIndex].loadedArmies[j] == listOfArmies[i].armyId &&
-                        listOfArmies[mergeId].owner == listOfArmies[i].owner) {
+                        listOfArmies[mergeId].owner === listOfArmies[i].owner) {
                         console.log(listOfArmies[i].armyId + " was loaded in " + listOfArmies[i].isLoadedIn + ",");
                         listOfArmies[i].isLoadedIn = listOfArmies[mergeId].armyId;
                         console.log("but is now loaded in " + listOfArmies[i].isLoadedIn + ".");
@@ -1477,7 +1477,7 @@ function mergeSelectedArmy(mergeId) {
         for (let j = 0; j < listOfArmies[mergeId].loadedArmies.length; j++) {
             for (let i = 0; i < listOfArmies.length; i++) {
                 if (listOfArmies[mergeId].loadedArmies[j] == listOfArmies[i].armyId &&
-                    listOfArmies[mergeId].owner == listOfArmies[i].owner) {
+                    listOfArmies[mergeId].owner === listOfArmies[i].owner) {
                     console.log(listOfArmies[i].armyId + " is loaded in " + listOfArmies[i].isLoadedIn + ".");
                 }
             }
@@ -1535,7 +1535,7 @@ function generateArmyId(type, owner) {
         while (j < 300) {
             let found = false;
             for (let i = 0; i < listOfArmies.length; i++) {
-                if (listOfArmies[i].armyId == j && listOfArmies[i].owner == owner) {
+                if (listOfArmies[i].armyId == j && listOfArmies[i].owner === owner) {
                     j++;
                     found = true;
                 }
@@ -1552,7 +1552,7 @@ function generateArmyId(type, owner) {
         while (j < 400) {
             let found = false;
             for (let i = 0; i < listOfArmies.length; i++) {
-                if (listOfArmies[i].armyId == j && listOfArmies[i].owner == owner) {
+                if (listOfArmies[i].armyId == j && listOfArmies[i].owner === owner) {
                     j++;
                     found = true;
                 }

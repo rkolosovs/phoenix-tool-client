@@ -1,7 +1,7 @@
 'use strict';
 // TODO: before pushing check added and deleted buildings if one is already inside the other, if it is then delete it.
 
-var factionToCreateBuildingsFor = GameState.realms[0];
+var factionToCreateBuildingsFor = GameState.realms[0].tag;
 function setFactionToCreateBuildingsFor(faction){
 	factionToCreateBuildingsFor = faction;
 }
@@ -302,7 +302,7 @@ function generateArmyBtn(){
 	}
 	// check for any other armies with the same armyId
 	for(let i=0; i < listOfArmies.length; i++){
-		if(listOfArmies[i].armyId == armyIdBuffer && listOfArmies[i].owner == ownerBuffer){
+		if(listOfArmies[i].armyId == armyIdBuffer && listOfArmies[i].owner === ownerBuffer){
 			window.alert("Ein Heer mit dieser Nummer existiert bereits in diesem Königreich.");
 			return false;
 		}
@@ -339,7 +339,7 @@ function changeArmyInfo(){
 	    let infoChangeBox: InfoChangeBox = GUI.getInfoChangeBox();
 		if(i!=selectedArmyIndex && listOfArmies[i].owner === infoChangeBox.getOwnerChangeInput().value &&
 		    listOfArmies[i].armyId === infoChangeBox.getArmyIdChangeInput().value){
-			window.alert("Diese Armee-Id ist in diesem Reich bereits vergeben.");
+				window.alert("Diese Armee-Id ist in diesem Reich bereits vergeben.");
 		} else {
 		    listOfArmies[selectedArmyIndex].isGuard = infoChangeBox.getGuardChangeInput().checked;
 			listOfArmies[selectedArmyIndex].owner = infoChangeBox.getOwnerChangeInput().value;
