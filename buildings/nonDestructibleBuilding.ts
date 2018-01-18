@@ -6,6 +6,10 @@ class NonDestructibleBuilding extends Building{
         this.secondPosition = secondPosition;
     }
 
+    getSecondPosition(): [number, number] {
+        return this.secondPosition;
+    }
+
     //TODO: useful helper functions e.g.:
     //      position, position -> position, direction converter
     //      factory methods for bridges, streets, harbors. possibly with db format as input

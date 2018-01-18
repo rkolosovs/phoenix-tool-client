@@ -4,4 +4,7 @@ class NonDestructibleBuilding extends Building {
         super(type, position, owner);
         this.secondPosition = secondPosition;
     }
+    getSecondPosition() {
+        return this.secondPosition;
+    }
 }

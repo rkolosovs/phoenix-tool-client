@@ -5,15 +5,6 @@
 // }
 var HexFunction;
 (function (HexFunction) {
-    //just for compilation TODO delete
-    let rivers;
-    let buildings;
-    let fields;
-    class Building {
-    }
-    class Field {
-    }
-    //end TODO
     // returns the fields neighbors in the usual order
     function neighbors(x, y) {
         //reihenfolge NW,NO,O,SO,SW,W
@@ -25,16 +16,17 @@ var HexFunction;
         }
     }
     HexFunction.neighbors = neighbors;
-    // reihenfolge NW,NO,O,SO,SW,W, 0 heißt kein fluss, 1 heißt fluss
+    // reihenfolge NW,NO,O,SO,SW,W,
     function fluesse(x, y) {
-        var flussAcc = [0, 0, 0, 0, 0, 0];
-        var surroundings = neighbors(x, y);
-        for (var i = 0; i < rivers.length; i++) {
-            var river = rivers[i];
-            if ((x === river[0][0] && y === river[0][1]) || (x === river[1][0] && y === river[1][1])) {
-                for (var j = 0; j < surroundings.length; j++) {
-                    if ((surroundings[j][0] === river[0][0] && surroundings[j][1] === river[0][1]) || (surroundings[j][0] === river[1][0] && surroundings[j][1] === river[1][1])) {
-                        flussAcc[j] = 1;
+        let flussAcc = [false, false, false, false, false, false];
+        let surroundings = neighbors(x, y);
+        for (let i = 0; i < GameState.rivers.length; i++) {
+            let river = rivers[i];
+            if ((x === river.leftBank[0] && y === river.leftBank[1]) || (x === river.rightBank[0] && y === river.rightBank[1])) {
+                for (let j = 0; j < surroundings.length; j++) {
+                    if ((surroundings[j][0] === river.leftBank[0] && surroundings[j][1] === river.leftBank[1]) ||
+                        (surroundings[j][0] === river.rightBank[0] && surroundings[j][1] === river.rightBank[1])) {
+                        flussAcc[j] = true;
                     }
                 }
             }
@@ -44,8 +36,8 @@ var HexFunction;
     HexFunction.fluesse = fluesse;
     // where in the field list is this field
     function positionInList(x, y) {
-        for (var i = 0; i < fields.length; i++) {
-            if ((fields[i].x === x) && (fields[i].y === y)) {
+        for (var i = 0; i < GameState.fields.length; i++) {
+            if ((GameState.fields[i].coordinates[0] === x) && (GameState.fields[i].coordinates[1] === y)) {
                 return i;
             }
         }
@@ -54,9 +46,9 @@ var HexFunction;
     HexFunction.positionInList = positionInList;
     // what type is this field
     function fieldType(x, y) {
-        for (var i = 0; i < fields.length; i++) {
-            if ((fields[i].x === x) && (fields[i].y === y)) {
-                return fields[i].type;
+        for (var i = 0; i < GameState.fields.length; i++) {
+            if ((GameState.fields[i].coordinates[0] === x) && (GameState.fields[i].coordinates[1] === y)) {
+                return GameState.fields[i].type;
             }
         }
         return -1;
@@ -64,16 +56,10 @@ var HexFunction;
     HexFunction.fieldType = fieldType;
     // what height is this field
     function height(x, y) {
-        switch (fieldType(x, y)) {
-            case 0:
-            case 1: return 0;
-            case 2:
-            case 7:
-            case 8:
-            case 3: return 1;
-            case 4: return 2;
-            case 5: return 3;
-            case 6: return 4;
+        for (var i = 0; i < GameState.fields.length; i++) {
+            if ((GameState.fields[i].coordinates[0] === x) && (GameState.fields[i].coordinates[1] === y)) {
+                return GameState.fields[i].getHeight();
+            }
         }
         return -1;
     }
@@ -163,27 +149,28 @@ var HexFunction;
     HexFunction.hasStreet = hasStreet;
     // in which directions does this field have walls (order as above, only walls build on this field)
     function walls(x, y) {
-        let result = [0, 0, 0, 0, 0, 0];
-        let walls = buildings.filter((elem) => (elem.type === 5 && elem.x === x && elem.y === y));
-        walls.forEach((wall) => {
-            switch (wall.direction) {
-                case "nw":
-                    result[0] = 1;
+        let result = [false, false, false, false, false, false];
+        let walls = GameState.buildings.filter(elem => (elem instanceof Wall &&
+            elem.getPosition()[0] === x && elem.getPosition()[1] === y));
+        walls.forEach(wall => {
+            switch (wall.facing) {
+                case Direction.NW:
+                    result[0] = true;
                     break;
-                case "ne":
-                    result[1] = 1;
+                case Direction.NE:
+                    result[1] = true;
                     break;
-                case "e":
-                    result[2] = 1;
+                case Direction.E:
+                    result[2] = true;
                     break;
-                case "se":
-                    result[3] = 1;
+                case Direction.SE:
+                    result[3] = true;
                     break;
-                case "se":
-                    result[4] = 1;
+                case Direction.SW:
+                    result[4] = true;
                     break;
-                case "w":
-                    result[5] = 1;
+                case Direction.W:
+                    result[5] = true;
                     break;
             }
         });
@@ -192,62 +179,20 @@ var HexFunction;
     HexFunction.walls = walls;
     // in which directions does this field have bridges (order as above)
     function bridges(x, y) {
-        let result = [0, 0, 0, 0, 0, 0];
+        let result = [false, false, false, false, false, false];
         let neighbor = neighbors(x, y);
-        let bridges = buildings.forEach((elem) => {
-            if (elem.type === 7) {
-                if (elem.x === x && elem.y === y) {
-                    switch (elem.direction) {
-                        case "nw":
-                            result[0] = 1;
-                            break;
-                        case "ne":
-                            result[1] = 1;
-                            break;
-                        case "e":
-                            result[2] = 1;
-                            break;
-                        case "se":
-                            result[3] = 1;
-                            break;
-                        case "se":
-                            result[4] = 1;
-                            break;
-                        case "w":
-                            result[5] = 1;
-                            break;
-                    }
+        buildings.forEach(elem => {
+            if (elem.type === BuildingType.BRIDGE) {
+                if (elem.getPosition()[0] === x && elem.getPosition()[1] === y) {
+                    result[neighbor.indexOf(elem.getSecondPosition())] = true;
                 }
-                else {
-                    neighbor.forEach((val, index) => {
-                        if (val[0] === elem.x && val[1] === elem.y) {
-                            switch (index) {
-                                case 0:
-                                    elem.direction === "se" ? result[0] = 1 : 0;
-                                    break;
-                                case 1:
-                                    elem.direction === "sw" ? result[1] = 1 : 0;
-                                    break;
-                                case 2:
-                                    elem.direction === "w" ? result[2] = 1 : 0;
-                                    break;
-                                case 3:
-                                    elem.direction === "nw" ? result[3] = 1 : 0;
-                                    break;
-                                case 4:
-                                    elem.direction === "ne" ? result[4] = 1 : 0;
-                                    break;
-                                case 5:
-                                    elem.direction === "e" ? result[5] = 1 : 0;
-                                    break;
-                            }
-                        }
-                    });
+                else if (elem.getSecondPosition()[0] === x &&
+                    elem.getSecondPosition()[1] === y) {
+                    result[neighbor.indexOf(elem.getPosition())] = true;
                 }
             }
         });
         return result;
     }
     HexFunction.bridges = bridges;
-    // does the field has a street on it in any direction
 })(HexFunction || (HexFunction = {}));
