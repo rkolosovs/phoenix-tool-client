@@ -923,12 +923,12 @@ function checkEvent(num) {
 			});
 
 			//TODO: New battle handler scheme to be used here
-			let battle = new battleHandler(partips, cont.x, cont.y);
-			GUI.getBattleBox().getAttackDiceRoll().onchange = function () { battle.updateDisplay() };
-            GUI.getBattleBox().getDefenseDiceRoll().onchange = function () { battle.updateDisplay() };
+			let battle = new BattleHandler(partips, [cont.x, cont.y]);
+			GUI.getBattleBox().getAttackDiceRoll().onchange = function () { GUI.getBattleBox().updateDisplay() };
+            GUI.getBattleBox().getDefenseDiceRoll().onchange = function () { GUI.getBattleBox().updateDisplay() };
 			let battleButton: HTMLButtonElement = GUI.getBattleBox().getBattleButton();
 			battleButton.onclick = function () {
-				battle.resolve();
+				battle.resolve(GUI.getBattleBox().getAttackDiceRoll(), GUI.getBattleBox().getDefenseDiceRoll());
 				hide(battleBox);
 				event.status = 'checked';
 				fillEventList();
@@ -939,7 +939,7 @@ function checkEvent(num) {
 			GUI.getBattleBox().getCloseBattleButton().onclick = function () {
 				hide(battleBox);
 			};
-			battle.updateDisplay();
+			GUI.getBattleBox().updateDisplay();
 		} else if (event.type === "split") {
 			console.log("this is a split event");
 			let armyFromPlaceInList = -1;

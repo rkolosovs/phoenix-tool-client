@@ -14,44 +14,44 @@ class BattleHandler {
             this.defenderArmies.map((val) => (val)), [], [], this.location, attackDie, defenceDie);
         if (battleResult.result === Result.ATTACKER_OVERRUN) {
             this.attackerArmies.forEach(function (item) {
-                item.remainingMovePoints -= 7;
+                item.setMovePoints(item.getMovePoints() -7);
                 item.conquer();//try to conquer the land
             });
             this.defenderArmies.forEach(function (item) {
-                item.decimate(item.count);
+                item.takeDamage(item.getTroopCount());
             });
         } else if (battleResult.result === Result.DEFENDER_OVERRUN) {
             this.attackerArmies.forEach(function (item) {
-                item.decimate(item.count);
+                item.takeDamage(item.getTroopCount());
             });
         } else {
             if (battleResult.result === Result.ATTACKER_VICTORY) {
                 //wipe the looser out
                 this.defenderArmies.forEach(function (item) {
-                    item.decimate(item.count);
+                    item.takeDamage(item.getTroopCount());
                 });
                 //null move points of the victor and inflict losses
                 this.attackerArmies.forEach(function (item, index) {
-                    item.remainingMovePoints = 0;
-                    item.decimate(battleResult.attackerLosses[index]);
+                    item.setMovePoints(0);
+                    item.takeDamage(battleResult.attackerLosses[index]);
                     item.conquer();//try to conquer the land
                 }, this);
             } else if (battleResult.result === Result.DEFENDER_VICTORY) {
                 //wipe the looser out
                 this.attackerArmies.forEach(function (item) {
-                    item.decimate(item.count);
+                    item.takeDamage(item.getTroopCount());
                 });
                 //null move points of the victor and inflict losses
                 this.defenderArmies.forEach(function (item, index) {
-                    item.decimate(battleResult.defenderLosses[index]);
+                    item.takeDamage(battleResult.defenderLosses[index]);
                 }, this);
             } else if (battleResult.result === Result.TIE) {
                 //wipe all combatants out
                 this.attackerArmies.forEach(function (item) {
-                    item.decimate(item.count);
+                    item.takeDamage(item.getTroopCount());
                 });
                 this.defenderArmies.forEach(function (item) {
-                    item.decimate(item.count);
+                    item.takeDamage(item.getTroopCount());
                 });
             } else {
                 console.log("Battle resolution error.");
@@ -63,15 +63,15 @@ class BattleHandler {
     private static armyArrayCount(armyArray: Army[], fieldType: FieldType) {
         return armyArray.filter((val) => (
             (val instanceof Fleet && fieldType <= 1) || (fieldType >= 2 && val instanceof LandArmy)), this).
-        reduce((total, elem) => (elem.count + total), 0);
+        reduce((total, elem) => (elem.getTroopCount() + total), 0);
     }
 
     private static terrainGP(army: Army, attacker: boolean, fieldType: FieldType, location: [number, number]): number {
         let buildingsOnTheField = GameState.buildings.filter(current =>
-            (current.x === location[0] && current.y === location[1] && current.type <= 4));
+            (current.getPosition()[0] === location[0] && current.getPosition()[1] === location[1] && current.type <= 4));
         if (buildingsOnTheField.length > 0) { //production buildings on field negate usual terrain bonus
             if (attacker) { return 0; }
-            if (buildingsOnTheField[0].realm !== army.owner) { return 50; }
+            if (buildingsOnTheField[0].owner !== army.owner) { return 50; }
             switch (buildingsOnTheField[0].type) {
                 case 0: return 100;
                 case 1: return 200;
@@ -82,7 +82,7 @@ class BattleHandler {
             }
         } else { //usual terrain bonus applies
             let terrainGPBonus = 0;
-            let homeTurf = GameState.realms.find(realm => (realm.tag === army.owner)).homeTurf;
+            let homeTurf = GameState.realms.find(realm => (realm === army.owner)).homeTurf;
             if(homeTurf === fieldType || (homeTurf === FieldType.HIGHLANDS && fieldType === FieldType.MOUNTAINS) ||
                 (homeTurf === FieldType.MOUNTAINS && fieldType === FieldType.HIGHLANDS)) { //home terrain bonus applies
                 terrainGPBonus += 50;
@@ -107,30 +107,30 @@ class BattleHandler {
         let armyPosition: [number, number] = army.getPosition();
         let oldArmyPosition: [number, number] = army.getOldPosition();
         if (attacker) {
-            if (HexFuntion.height(oldArmyPosition[0], oldArmyPosition[1]) >
-                HexFuntion.height(armyPosition[0], armyPosition[1])) { result += 20; }//fighting downhill
-            if (HexFuntion.fieldType(armyPosition[0], armyPosition[1]) === FieldType.DESERT ||
-                HexFuntion.fieldType(armyPosition[0], armyPosition[1]) === FieldType.SWAMP) { result += 20; }//attacking into swamp or desert
-            if (HexFuntion.fieldType(oldArmyPosition[0], oldArmyPosition[1]) === FieldType.WOODS) { result += 20; }//attacking out of a forest
-            if (HexFuntion.hasStreet(armyPosition[0], armyPosition[1])) { result += 20; }//attacking onto a street
+            if (HexFunction.height(oldArmyPosition[0], oldArmyPosition[1]) >
+                HexFunction.height(armyPosition[0], armyPosition[1])) { result += 20; }//fighting downhill
+            if (HexFunction.fieldType(armyPosition[0], armyPosition[1]) === FieldType.DESERT ||
+                HexFunction.fieldType(armyPosition[0], armyPosition[1]) === FieldType.SWAMP) { result += 20; }//attacking into swamp or desert
+            if (HexFunction.fieldType(oldArmyPosition[0], oldArmyPosition[1]) === FieldType.WOODS) { result += 20; }//attacking out of a forest
+            if (HexFunction.hasStreet(armyPosition[0], armyPosition[1])) { result += 20; }//attacking onto a street
         } else {
-            let adjacentWalls = HexFuntion.walls(armyPosition[0], armyPosition[1]);
-            let adjacentRivers = HexFuntion.fluesse(armyPosition[0], armyPosition[1]);
-            let adjacentBridges = HexFuntion.bridges(armyPosition[0], armyPosition[1]);
-            let neighbor = HexFuntion.neighbors(armyPosition[0], armyPosition[1]);
+            let adjacentWalls = HexFunction.walls(armyPosition[0], armyPosition[1]);
+            let adjacentRivers = HexFunction.fluesse(armyPosition[0], armyPosition[1]);
+            let adjacentBridges = HexFunction.bridges(armyPosition[0], armyPosition[1]);
+            let neighbor = HexFunction.neighbors(armyPosition[0], armyPosition[1]);
             let downhillBonus = false;
             let wallBonus = false;
             let bridgeBonus = false;
             let riverBonus = false;
             attackingArmies.forEach((attackingArmy) => {
-                if (HexFuntion.height(oldArmyPosition[0], oldArmyPosition[1]) < HexFuntion.height(armyPosition[0], armyPosition[1])) {
+                if (HexFunction.height(oldArmyPosition[0], oldArmyPosition[1]) < HexFunction.height(armyPosition[0], armyPosition[1])) {
                     downhillBonus = true;
                 }
                 neighbor.forEach((neighbor, index) => {
                     if (neighbor[0] === oldArmyPosition[0] && neighbor[1] === oldArmyPosition[1]) {
-                        if (adjacentWalls[index] === 1) { wallBonus = true; }
-                        if (adjacentRivers[index] === 1) {
-                            if (adjacentBridges[index] === 1) {
+                        if (adjacentWalls[index] === true) { wallBonus = true; }
+                        if (adjacentRivers[index] === true) {
+                            if (adjacentBridges[index] === true) {
                                 bridgeBonus = true;
                             } else {
                                 riverBonus = true;
@@ -183,12 +183,12 @@ class BattleHandler {
             armiesAttack.filter((elem) => (elem.isGuard)).length === 0 &&
             BattleHandler.armyArrayCount(armiesDefense, fieldType) > 0;
 
-        let totalStrengthAttackerArmy = armiesAttack.map((elem) => (elem.count));
+        let totalStrengthAttackerArmy = armiesAttack.map((elem) => (elem.getTroopCount()));
         let totalStrengthDefenderArmy = armiesDefense.map((elem) => {
-            if (elem.armyType() === 3) {
-                return elem.count + elem.lkp * 5 + elem.skp * 10;
+            if (elem instanceof Fleet) {
+                return elem.getTroopCount() + elem.getLightCatapultCount() * 5 + elem.getHeavyCatapultCount() * 10;
             } else {
-                return elem.count;
+                return elem.getTroopCount();
             }
         });
 
@@ -248,7 +248,7 @@ class BattleHandler {
             BattleHandler.computeFinalLosses(elem, attackerGPDiffArmy[index], totalStrengthAttackerArmy[index], totalStrengthAttackerArmy[index])
         ));
         let finalLossesDefenderArmy = baseLossesDefenderArmy.map((elem, index) => (
-            BattleHandler.computeFinalLosses(elem, defenderGPDiffArmy[index], armiesDefense[index].count, totalStrengthDefenderArmy[index])
+            BattleHandler.computeFinalLosses(elem, defenderGPDiffArmy[index], armiesDefense[index].getTroopCount(), totalStrengthDefenderArmy[index])
         ));
 
         return new BattleResult(result, finalLossesAttackerArmy, finalLossesDefenderArmy);
@@ -422,67 +422,67 @@ class BattleHandler {
     //         this.battleButton.disabled = false;
     //         this.battleButton.style.cursor = "initial";
     //     }
-    //
+    
     //     this.attackList.innerHTML = "";
     //     this.attackSide.forEach(function (item, index) {
     //         let listItem = document.createElement("DIV");
     //         this.attackList.appendChild(listItem);
     //         listItem.classList.add("armyListItem");
-    //
+    
     //         let div = document.createElement("DIV");
     //         div.classList.add("center");
     //         div.innerHTML = item.ownerTag() + " " + item.armyId;
     //         listItem.appendChild(div);
-    //
+    
     //         let moveBtn = document.createElement("BUTTON");
     //         moveBtn.classList.add("armyListButton");
     //         moveBtn.classList.add("moveRightButton");
     //         moveBtn.onclick = this.removeFromAttack(index);
     //         listItem.appendChild(moveBtn);
     //     }, this);
-    //
+    
     //     this.unsortedList.innerHTML = "";
     //     this.unsortedArmies.forEach(function (item, index) {
     //         let listItem = document.createElement("DIV");
     //         this.unsortedList.appendChild(listItem);
     //         listItem.classList.add("armyListItem");
-    //
+    
     //         let moveLeftBtn = document.createElement("BUTTON");
     //         moveLeftBtn.classList.add("armyListButton");
     //         moveLeftBtn.classList.add("moveLeftButton");
     //         moveLeftBtn.onclick = this.moveToAttack(index);
     //         listItem.appendChild(moveLeftBtn);
-    //
+    
     //         let div = document.createElement("DIV");
     //         div.classList.add("center");
     //         div.innerHTML = item.ownerTag() + " " + item.armyId;
     //         listItem.appendChild(div);
-    //
+    
     //         let moveRightBtn = document.createElement("BUTTON");
     //         moveRightBtn.classList.add("armyListButton");
     //         moveRightBtn.classList.add("moveRightButton");
     //         moveRightBtn.onclick = this.moveToDefense(index);
     //         listItem.appendChild(moveRightBtn);
     //     }, this);
-    //
+    
     //     this.defenseList.innerHTML = "";
     //     this.defenseSide.forEach(function (item, index) {
     //         let listItem = document.createElement("DIV");
     //         this.defenseList.appendChild(listItem);
     //         listItem.classList.add("armyListItem");
-    //
+    
     //         let moveBtn = document.createElement("BUTTON");
     //         moveBtn.classList.add("armyListButton");
     //         moveBtn.classList.add("moveLeftButton");
     //         moveBtn.onclick = this.removeFromDefense(index);
     //         listItem.appendChild(moveBtn);
-    //
+    
     //         let div = document.createElement("DIV");
     //         div.classList.add("center");
     //         div.innerHTML = item.ownerTag() + " " + item.armyId;
     //         listItem.appendChild(div);
     //     }, this);
-    //
+    
     //     this.attackTroopCount.innerHTML = "";
     //     this.defenseTroopCount.innerHTML = "";
     //     if (this.attackShips + this.attackLightWarships + this.attackHeavyWarships + this.attackGuardShips > 0 ||
@@ -490,7 +490,7 @@ class BattleHandler {
     //         //naval combat
     //         if (this.attackShips > 0) { this.attackTroopCount.innerHTML += "<p>Shiffe: " + this.attackShips + "</p>"; }
     //         if (this.attackGuardShips > 0) { this.attackTroopCount.innerHTML += "<p>Gardeschiffe: " + this.attackGuardShips + "</p>"; }
-    //
+    
     //         if (this.defenseShips > 0) { this.defenseTroopCount.innerHTML += "<p>Shiffe: " + this.defenseShips + "</p>"; }
     //         if (this.defenseGuardShips > 0) { this.defenseTroopCount.innerHTML += "<p>Gardeschiffe: " + this.defenseGuardShips + "</p>"; }
     //         if (this.defenseLightWarships > 0) { this.defenseTroopCount.innerHTML += "<p>Leichte Kreigsschiffe: " + this.defenseLightWarships + "</p>"; }
@@ -501,7 +501,7 @@ class BattleHandler {
     //         if (this.attackRiders > 0) { this.attackTroopCount.innerHTML += "<p>Reiter: " + this.attackRiders + "</p>"; }
     //         if (this.attackGuardSoldiers > 0) { this.attackTroopCount.innerHTML += "<p>Gardesoldaten: " + this.attackGuardSoldiers + "</p>"; }
     //         if (this.attackGuardRiders > 0) { this.attackTroopCount.innerHTML += "<p>Gardereiter: " + this.attackGuardRiders + "</p>"; }
-    //
+    
     //         if (this.defenseSoldiers > 0) { this.defenseTroopCount.innerHTML += "<p>Soldaten: " + this.defenseSoldiers + "</p>"; }
     //         if (this.defenseRiders > 0) { this.defenseTroopCount.innerHTML += "<p>Reiter: " + this.defenseRiders + "</p>"; }
     //         if (this.defenseGuardSoldiers > 0) { this.defenseTroopCount.innerHTML += "<p>Gardesoldaten: " + this.defenseGuardSoldiers + "</p>"; }
@@ -509,14 +509,14 @@ class BattleHandler {
     //     }
     //     if (this.attackOfficers > 0) { this.attackTroopCount.innerHTML += "<p>Heerführer: " + this.attackOfficers + "</p>"; }
     //     if (this.defenseOfficers > 0) { this.defenseTroopCount.innerHTML += "<p>Heerführer: " + this.defenseOfficers + "</p>"; }
-    //
+    
     //     this.attackTroopCount.innerHTML += "<p>Würfelwurf: " + this.attackDice.value + "</p>";
     //     this.defenseTroopCount.innerHTML += "<p>Würfelwurf: " + this.defenseDice.value + "</p>";
-    //
+    
     //     //Instant result preview (remove if not desired)
     //     this.battle = new schlacht(this.attackSide.map((val) => (val)), this.defenseSide.map((val) => (val)), [], [], this.x, this.y);
     //     let result = this.battle.result(parseInt(this.attackDice.value), parseInt(this.defenseDice.value));
-    //
+    
     //     let attackFootLosses = result.attackerLosses.reduce((total, current, index) => {
     //         if (this.attackSide[index].armyType() === 1 && !this.attackSide[index].isGuard) { return total + Math.round(current); }
     //         else { return total; }
@@ -541,7 +541,7 @@ class BattleHandler {
     //         if (this.attackSide[index].armyType() === 3 && this.attackSide[index].isGuard) { return total + Math.round(current); }
     //         else { return total; }
     //     }, 0);
-    //
+    
     //     let defenseFootLosses = result.defenderLosses.reduce((total, current, index) => {
     //         if (this.defenseSide[index].armyType() === 1 && !this.defenseSide[index].isGuard) { return total + Math.round(current); }
     //         else { return total; }
@@ -566,7 +566,7 @@ class BattleHandler {
     //         if (this.defenseSide[index].armyType() === 3 && this.defenseSide[index].isGuard) { return total + Math.round(current); }
     //         else { return total; }
     //     }, 0);
-    //
+    
     //     if (result.victor === 'attacker') {
     //         if (this.battle.overrunAttack()) {
     //             this.defenseTroopCount.innerHTML += "<p class=\"red\">Überrant!</p>";
