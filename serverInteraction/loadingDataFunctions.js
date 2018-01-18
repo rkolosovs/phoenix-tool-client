@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 //    var url = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
 var url = "http://localhost:8000"; //for local debug
 // help function to fetch current data from the server

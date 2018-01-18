@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 // function to get the authenticationToken from the server and save a login time
 function loginToServer() {
     var username = document.getElementById("loginName").value;

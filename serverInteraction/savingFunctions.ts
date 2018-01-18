@@ -1,5 +1,3 @@
-'use strict';
-
 function saveFields() { // saves the current fields on the server
 	$(function () {
 		$.ajaxSetup({
