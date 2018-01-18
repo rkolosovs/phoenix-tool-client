@@ -48,6 +48,18 @@ class Army extends MobileEntity {
             this.heavyCatapultCount = Math.max(0, value);
         }
     }
+    conquer() {
+        if (this.canConquer()) {
+            let field = GameState.fields[HexFunction.positionInList(this.position[0], this.position[1])];
+            GameState.realms.forEach(realm => {
+                let index = realm.territory.indexOf(field);
+                if (index !== -1) {
+                    realm.territory.splice(index, 1);
+                }
+            });
+            this.owner.territory.push(field); //add to owner's realm's territory
+        }
+    }
     takeDamage(losses) {
         let factor = losses / this.troopCount;
         this.setTroopCount(this.troopCount - Math.floor(losses));

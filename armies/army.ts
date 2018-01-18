@@ -73,6 +73,19 @@ abstract class Army extends MobileEntity{
         }
     }
 
+    conquer(): void {
+        if(this.canConquer()){
+            let field: Field = GameState.fields[HexFunction.positionInList(this.position[0], this.position[1])];
+            GameState.realms.forEach(realm => { //delete from other territories (if there)
+                let index = realm.territory.indexOf(field);
+                if(index !== -1){
+                    realm.territory.splice(index, 1);
+                }
+            });
+            this.owner.territory.push(field); //add to owner's realm's territory
+        }
+    }
+
     takeDamage(losses: number): void{
         let factor: number = losses / this.troopCount;
         this.setTroopCount(this.troopCount - Math.floor(losses));

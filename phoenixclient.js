@@ -920,6 +920,7 @@ function checkEvent(num) {
                 });
                 partips.push(a);
             });
+            //TODO: New battle handler scheme to be used here
             let battle = new battleHandler(partips, cont.x, cont.y);
             GUI.getBattleBox().getAttackDiceRoll().onchange = function () { battle.updateDisplay(); };
             GUI.getBattleBox().getDefenseDiceRoll().onchange = function () { battle.updateDisplay(); };
