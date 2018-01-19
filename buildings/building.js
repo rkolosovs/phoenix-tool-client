@@ -12,8 +12,14 @@ var BuildingType;
     BuildingType[BuildingType["STREET"] = 8] = "STREET"; //"Straße"
 })(BuildingType || (BuildingType = {}));
 class Building extends MapEntity {
-    constructor(type, position, owner) {
-        super(position, owner);
-        this.type = type;
+    constructor(_type, _position, _owner) {
+        super(_position, _owner);
+        this.type = _type;
+    }
+    set type(newType) {
+        this.type = newType;
+    }
+    get type() {
+        return this.type;
     }
 }
