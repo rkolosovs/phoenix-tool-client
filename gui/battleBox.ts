@@ -12,7 +12,7 @@ class BattleBox {
     private defenseBattleSide: HTMLDivElement;
     private battleButton: HTMLButtonElement;
 
-    private battleHandler: BattleHandler;
+    battleHandler: BattleHandler;
 
     private attackSoldiers = 0;
     private attackOfficers = 0;

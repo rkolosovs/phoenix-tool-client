@@ -911,8 +911,8 @@ function checkEvent(num) {
 			fillEventList();
 			drawStuff();
 		} else if (event.type === "battle") {
-			let battleBox = GUI.getBattleBox().getSelf();
-			show(battleBox);
+			let battleBox: BattleBox = GUI.getBattleBox();
+			show(battleBox.getSelf());
 
 			let partips = [];
 			cont.participants.forEach(function (item) {
@@ -922,14 +922,13 @@ function checkEvent(num) {
 				partips.push(a);
 			});
 
-			//TODO: New battle handler scheme to be used here
-			let battle = new BattleHandler(partips, [cont.x, cont.y]);
-			GUI.getBattleBox().getAttackDiceRoll().onchange = function () { GUI.getBattleBox().updateDisplay() };
-            GUI.getBattleBox().getDefenseDiceRoll().onchange = function () { GUI.getBattleBox().updateDisplay() };
+			battleBox.newBattle(partips, [cont.x, cont.y]);
+            battleBox.getAttackDiceRoll().onchange = function () { battleBox.updateDisplay() };
+            battleBox.getDefenseDiceRoll().onchange = function () { battleBox.updateDisplay() };
 			let battleButton: HTMLButtonElement = GUI.getBattleBox().getBattleButton();
 			battleButton.onclick = function () {
-				battle.resolve(GUI.getBattleBox().getAttackDiceRoll(), GUI.getBattleBox().getDefenseDiceRoll());
-				hide(battleBox);
+                battleBox.battleHandler.resolve(battleBox.getAttackDiceRoll(), battleBox.getDefenseDiceRoll());
+				hide(battleBox.getSelf());
 				event.status = 'checked';
 				fillEventList();
 				drawStuff();
@@ -937,9 +936,8 @@ function checkEvent(num) {
 			battleButton.disabled = true;
 			battleButton.style.cursor = "not-allowed";
 			GUI.getBattleBox().getCloseBattleButton().onclick = function () {
-				hide(battleBox);
+				hide(battleBox.getSelf());
 			};
-			GUI.getBattleBox().updateDisplay();
 		} else if (event.type === "split") {
 			console.log("this is a split event");
 			let armyFromPlaceInList = -1;
