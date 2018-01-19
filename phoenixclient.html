@@ -348,7 +348,7 @@
 			<label for="heightPointsChangeInput">Höhenpunkte:</label>
 			<input id="heightPointsChangeInput"/>
 		</p>
-		<button id="changeArmyInfo" class="fixedPrettyButton invisible" onclick="changeArmyInfo()">Apply changed Stats</button>
+		<button id="changeArmyInfo" class="fixedPrettyButton invisible" onclick="GodFunctions.changeArmyInfo()">Apply changed Stats</button>
 		<button id="logoutBtnChange" class="fixedPrettyButton" onclick="logoutFromServer()">Logout</button>
 	</div>
 
@@ -377,9 +377,9 @@
 		<button id="SaveArmies" class="fixedPrettyButton" onclick="saveArmies()">save armies</button>
 		<button id="SaveFactionsTerritories" class="fixedPrettyButton" onclick="saveFactionsTerritories()">save faction territories</button>
 		<button id="ToggleArmyCreationMode" class="fixedPrettyButton" onclick="toggleArmyCreationMode()">make an army</button>
-		<button id="GodDeleteSelectedArmy" class="fixedPrettyButton" onclick="godDeleteSelectedArmy()">delete selected army</button>
+		<button id="GodDeleteSelectedArmy" class="fixedPrettyButton" onclick="GodFunctions.godDeleteSelectedArmy()">delete selected army</button>
 		<label> Gebäude werden erzeugt für Fraktion:
-			<select id="factionToCreateBuildingsFor" onchange="setFactionToCreateBuildingsFor(this.value)">
+			<select id="factionToCreateBuildingsFor" onchange="GodFunctions.setFactionToCreateBuildingsFor(this.value)">
 				<!--<option value=1>usa</option>-->
 				<!--<option value=2>eos</option>-->
 				<!--<option value=3>vvh</option>-->
@@ -403,79 +403,79 @@
 		<label for="skpField">schwere Katapulte:</label>
 		<input id="skpField" value="0">
 		<input type="checkbox" id="guardField" value=true>Garde?<br>
-		<button id="GenerateArmyBtn" class="fixedPrettyButton" onclick="generateArmyBtn()">Armee Generieren</button>
+		<button id="GenerateArmyBtn" class="fixedPrettyButton" onclick="GodFunctions.generateArmyBtn()">Armee Generieren</button>
 	</div>
 
 	<div id="worldBenderBox" class="prettyBox invisible">
 		<h3 id="creationWarning" class="invisible" align="center">WARNING: WORLD CREATION
 			ON CLICK MODE IS ACTIVE !!!</h3>
 		<button id="ToggleOnClickWorldCreationMode" class="fixedPrettyButton"
-			onclick="toggleOnClickWorldCreationMode()">toggle on click World Creation Mode</button>
+			onclick="GodFunctions.toggleOnClickWorldCreationMode()">toggle on click World Creation Mode</button>
 		<button id="SaveFields" class="fixedPrettyButton" 
 			onclick="saveFields()">save fields</button>
 		<section id="changeFieldSection">
 			<button id="ChangeFieldClickedTo0" class="fixedPrettyButton" 
-				onclick="changeFieldClickedTo(0)">change field clicked to shallows</button>
+				onclick="GodFunctions.changeFieldClickedTo(0)">change field clicked to shallows</button>
 			<button id="ChangeFieldClickedTo1" class="fixedPrettyButton" 
-				onclick="changeFieldClickedTo(1)">change field clicked to deepsea</button>
+				onclick="GodFunctions.changeFieldClickedTo(1)">change field clicked to deepsea</button>
 			<button id="ChangeFieldClickedTo2" class="fixedPrettyButton" 
-				onclick="changeFieldClickedTo(2)">change field clicked to lowlands</button>
+				onclick="GodFunctions.changeFieldClickedTo(2)">change field clicked to lowlands</button>
 			<button id="ChangeFieldClickedTo3" class="fixedPrettyButton" 
-				onclick="changeFieldClickedTo(3)">change field clicked to woods</button>
+				onclick="GodFunctions.changeFieldClickedTo(3)">change field clicked to woods</button>
 			<button id="ChangeFieldClickedTo4" class="fixedPrettyButton" 
-				onclick="changeFieldClickedTo(4)">change field clicked to hills</button>
+				onclick="GodFunctions.changeFieldClickedTo(4)">change field clicked to hills</button>
 			<button id="ChangeFieldClickedTo5" class="fixedPrettyButton" 
-				onclick="changeFieldClickedTo(5)">change field clicked to highlands</button>
+				onclick="GodFunctions.changeFieldClickedTo(5)">change field clicked to highlands</button>
 			<button id="ChangeFieldClickedTo6" class="fixedPrettyButton" 
-				onclick="changeFieldClickedTo(6)">change field clicked to mountains</button>
+				onclick="GodFunctions.changeFieldClickedTo(6)">change field clicked to mountains</button>
 			<button id="ChangeFieldClickedTo7" class="fixedPrettyButton" 
-				onclick="changeFieldClickedTo(7)">change field clicked to desert</button>
-			<button id="ChangeFieldClickedTo8" class="fixedPrettyButton" onclick="changeFieldClickedTo(8)">
-				change field clicked to swamp</button>
-			<button id="ChangeFieldClickedTo9" class="fixedPrettyButton" onclick="changeFieldClickedTo(9)">
-				change field clicked to undefined</button>
+				onclick="GodFunctions.changeFieldClickedTo(7)">change field clicked to desert</button>
+			<button id="ChangeFieldClickedTo8" class="fixedPrettyButton" 
+				onclick="GodFunctions.changeFieldClickedTo(8)">change field clicked to swamp</button>
+			<button id="ChangeFieldClickedTo9" class="fixedPrettyButton" 
+				onclick="GodFunctions.changeFieldClickedTo(9)">change field clicked to undefined</button>
 		</section>
 	</div>
 
 	<div id="riverBenderBox" class="prettyBox invisible">
 		<section id="buildRiverSection">
-			<button id="addRiverNW" class="fixedPrettyButton" onclick="addRiver(0)">Add a River at
+			<button id="addRiverNW" class="fixedPrettyButton" onclick="GodFunctions.addRiver(0)">Add a River at
 				the north west border</button>
-			<button id="addRiverNE" class="fixedPrettyButton" onclick="addRiver(1)">Add a River at
+			<button id="addRiverNE" class="fixedPrettyButton" onclick="GodFunctions.addRiver(1)">Add a River at
 				the north east border</button>
-			<button id="addRiverE" class="fixedPrettyButton" onclick="addRiver(2)">Add a River at
+			<button id="addRiverE" class="fixedPrettyButton" onclick="GodFunctions.addRiver(2)">Add a River at
 				the east border</button>
-			<button id="addRiverSE" class="fixedPrettyButton" onclick="addRiver(3)">Add a River at
+			<button id="addRiverSE" class="fixedPrettyButton" onclick="GodFunctions.addRiver(3)">Add a River at
 				the south east border</button>
-			<button id="addRiverSW" class="fixedPrettyButton" onclick="addRiver(4)">Add a River at
+			<button id="addRiverSW" class="fixedPrettyButton" onclick="GodFunctions.addRiver(4)">Add a River at
 				the south west border</button>
-			<button id="addRiverW" class="fixedPrettyButton" onclick="addRiver(5)">Add a River at
+			<button id="addRiverW" class="fixedPrettyButton" onclick="GodFunctions.addRiver(5)">Add a River at
 				the west border</button>
 		</section>
 		<section id="removeRiverSection">
-			<button id="removeRiverNW" class="fixedPrettyButton" onclick="removeRiver(0)">Remove a
+			<button id="removeRiverNW" class="fixedPrettyButton" onclick="GodFunctions.removeRiver(0)">Remove a
 				River at the north west border</button>
-			<button id="removeRiverNE" class="fixedPrettyButton" onclick="removeRiver(1)">Remove a
+			<button id="removeRiverNE" class="fixedPrettyButton" onclick="GodFunctions.removeRiver(1)">Remove a
 				River at the north east border</button>
-			<button id="removeRiverE" class="fixedPrettyButton" onclick="removeRiver(2)">Remove a
+			<button id="removeRiverE" class="fixedPrettyButton" onclick="GodFunctions.removeRiver(2)">Remove a
 				River at the east border</button>
-			<button id="removeRiverSE" class="fixedPrettyButton" onclick="removeRiver(3)">Remove a
+			<button id="removeRiverSE" class="fixedPrettyButton" onclick="GodFunctions.removeRiver(3)">Remove a
 				River at the south east border</button>
-			<button id="removeRiverSW" class="fixedPrettyButton" onclick="removeRiver(4)">Remove a
+			<button id="removeRiverSW" class="fixedPrettyButton" onclick="GodFunctions.removeRiver(4)">Remove a
 				River at the south west border</button>
-			<button id="removeRiverW" class="fixedPrettyButton" onclick="removeRiver(5)">Remove a
+			<button id="removeRiverW" class="fixedPrettyButton" onclick="GodFunctions.removeRiver(5)">Remove a
 				River at the west border</button>
 		</section>
 		<button id="SaveRivers" class="fixedPrettyButton" onclick="saveRivers()">save rivers</button>
 	</div>
 
 	<div id="buildingCreationBox" class="prettyBox invisible">
-		<button id="addCastle" class="fixedPrettyButton" onclick="addCastle()">Build a castle</button>
-		<button id="addCity" class="fixedPrettyButton" onclick="addCity()">Build a city</button>
-		<button id="addFortress" class="fixedPrettyButton" onclick="addFortress()">Build a fortress</button>
-		<button id="addCapital" class="fixedPrettyButton" onclick="addCapital()">Build a capital</button>
-		<button id="addCapitalFortress" class="fixedPrettyButton" onclick="addCapitalFortress()">Build a capital fortress</button>
-		<button id="deleteBuilding" class="fixedPrettyButton" onclick="deleteBuilding()">Delete a building</button>
+		<button id="addCastle" class="fixedPrettyButton" onclick="GodFunctions.addCastle()">Build a castle</button>
+		<button id="addCity" class="fixedPrettyButton" onclick="GodFunctions.addCity()">Build a city</button>
+		<button id="addFortress" class="fixedPrettyButton" onclick="GodFunctions.addFortress()">Build a fortress</button>
+		<button id="addCapital" class="fixedPrettyButton" onclick="GodFunctions.addCapital()">Build a capital</button>
+		<button id="addCapitalFortress" class="fixedPrettyButton" onclick="GodFunctions.addCapitalFortress()">Build a capital fortress</button>
+		<button id="deleteBuilding" class="fixedPrettyButton" onclick="GodFunctions.deleteBuilding()">Delete a building</button>
 		<section>
 			<button id="SaveBuildings" class="fixedPrettyButton" onclick="saveBuildings()">save buildings</button>
 		</section>
@@ -485,42 +485,42 @@
 		<h3 align="center">Wall Builder</h3>
 		<section id="buildWall">
 			<button id="addWallNW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(5, 'nw', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(5, 'nw', true)">Build a
 				Wall in north west direction</button>
 			<button id="addWallNE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(5, 'ne', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(5, 'ne', true)">Build a
 				Wall in north east direction</button>
 			<button id="addWallE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(5, 'e', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(5, 'e', true)">Build a
 				Wall in east direction</button>
 			<button id="addWallSE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(5, 'se', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(5, 'se', true)">Build a
 				Wall in south east direction</button>
 			<button id="addWallSW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(5, 'sw', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(5, 'sw', true)">Build a
 				Wall in south west direction</button>
 			<button id="addWallW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(5, 'w', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(5, 'w', true)">Build a
 				Wall in west direction</button>
 		</section>
 		<section id="removeWall">
 			<button id="removeWallNW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(5, 'nw', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(5, 'nw', false)">Remove a
 				Wall in north west direction</button>
 			<button id="removeWallNE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(5, 'ne', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(5, 'ne', false)">Remove a
 				Wall in north east direction</button>
 			<button id="removeWallE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(5, 'e', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(5, 'e', false)">Remove a
 				Wall in east direction</button>
 			<button id="removeWallSE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(5, 'se', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(5, 'se', false)">Remove a
 				Wall in south east direction</button>
 			<button id="removeWallSW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(5, 'sw', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(5, 'sw', false)">Remove a
 				Wall in south west direction</button>
 			<button id="removeWallW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(5, 'w', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(5, 'w', false)">Remove a
 				Wall in west direction</button>
 		</section>
 		<button id="SaveBuildings" class="fixedPrettyButton" onclick="saveBuildings()">save
@@ -531,42 +531,42 @@
 		<h3 align="center">Harbor Builder</h3>
 		<section id="buildHarbor">
 			<button id="addHarborNW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(6, 'nw', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(6, 'nw', true)">Build a
 				Harbor in north west direction</button>
 			<button id="addHarborNE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(6, 'ne', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(6, 'ne', true)">Build a
 				Harbor in north east direction</button>
 			<button id="addHarborE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(6, 'e', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(6, 'e', true)">Build a
 				Harbor in east direction</button>
 			<button id="addHarborSE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(6, 'se', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(6, 'se', true)">Build a
 				Harbor in south east direction</button>
 			<button id="addHarborSW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(6, 'sw', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(6, 'sw', true)">Build a
 				Harbor in south west direction</button>
 			<button id="addHarborW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(6, 'w', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(6, 'w', true)">Build a
 				Harbor in west direction</button>
 		</section>
 		<section id="removeHarbor">
 			<button id="removeHarborNW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(6, 'nw', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(6, 'nw', false)">Remove a
 				Harbor in north west direction</button>
 			<button id="removeHarborNE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(6, 'ne', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(6, 'ne', false)">Remove a
 				Harbor in north east direction</button>
 			<button id="removeHarborE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(6, 'e', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(6, 'e', false)">Remove a
 				Harbor in east direction</button>
 			<button id="removeHarborSE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(6, 'se', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(6, 'se', false)">Remove a
 				Harbor in south east direction</button>
 			<button id="removeHarborSW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(6, 'sw', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(6, 'sw', false)">Remove a
 				Harbor in south west direction</button>
 			<button id="removeHarborW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(6, 'w', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(6, 'w', false)">Remove a
 				Harbor in west direction</button>
 		</section>
 		<button id="SaveBuildings" class="fixedPrettyButton" onclick="saveBuildings()">save
@@ -577,42 +577,42 @@
 		<h3 align="center">Bridge Builder</h3>
 		<section id="buildBridge">
 			<button id="addBridgeNW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(7, 'nw', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(7, 'nw', true)">Build a
 				Bridge in north west direction</button>
 			<button id="addBridgeNE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(7, 'ne', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(7, 'ne', true)">Build a
 				Bridge in north east direction</button>
 			<button id="addBridgeE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(7, 'e', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(7, 'e', true)">Build a
 				Bridge in east direction</button>
 			<button id="addBridgeSE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(7, 'se', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(7, 'se', true)">Build a
 				Bridge in south east direction</button>
 			<button id="addBridgeSW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(7, 'sw', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(7, 'sw', true)">Build a
 				Bridge in south west direction</button>
 			<button id="addBridgeW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(7, 'w', true)">Build a
+				onclick="GodFunctions.manipulateBorderBuilding(7, 'w', true)">Build a
 				Bridge in west direction</button>
 		</section>
 		<section id="removeBridge">
 			<button id="removeBridgeNW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(7, 'nw', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(7, 'nw', false)">Remove a
 				Bridge in north west direction</button>
 			<button id="removeBridgeNE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(7, 'ne', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(7, 'ne', false)">Remove a
 				Bridge in north east direction</button>
 			<button id="removeBridgeE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(7, 'e', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(7, 'e', false)">Remove a
 				Bridge in east direction</button>
 			<button id="removeBridgeSE" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(7, 'se', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(7, 'se', false)">Remove a
 				Bridge in south east direction</button>
 			<button id="removeBridgeSW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(7, 'sw', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(7, 'sw', false)">Remove a
 				Bridge in south west direction</button>
 			<button id="removeBridgeW" class="fixedPrettyButton"
-				onclick="manipulateBorderBuilding(7, 'w', false)">Remove a
+				onclick="GodFunctions.manipulateBorderBuilding(7, 'w', false)">Remove a
 				Bridge in west direction</button>
 		</section>
 		<button id="SaveBuildings" class="fixedPrettyButton" onclick="saveBuildings()">save
@@ -622,31 +622,31 @@
 	<div id="streetCreationBox" class="prettyBox invisible">
 		<h3 align="center">Street Builder</h3>
 		<section id="buildStreetSection">
-			<button id="addStreetNW" class="fixedPrettyButton" onclick="addStreet(0)">Build a
+			<button id="addStreetNW" class="fixedPrettyButton" onclick="GodFunctions.addStreet(0)">Build a
 				Street in north west direction</button>
-			<button id="addStreetNE" class="fixedPrettyButton" onclick="addStreet(1)">Build a
+			<button id="addStreetNE" class="fixedPrettyButton" onclick="GodFunctions.addStreet(1)">Build a
 				Street in north east direction</button>
-			<button id="addStreetE" class="fixedPrettyButton" onclick="addStreet(2)">Build a
+			<button id="addStreetE" class="fixedPrettyButton" onclick="GodFunctions.addStreet(2)">Build a
 				Street in east direction</button>
-			<button id="addStreetSE" class="fixedPrettyButton" onclick="addStreet(3)">Build a
+			<button id="addStreetSE" class="fixedPrettyButton" onclick="GodFunctions.addStreet(3)">Build a
 				Street in south east direction</button>
-			<button id="addStreetSW" class="fixedPrettyButton" onclick="addStreet(4)">Build a
+			<button id="addStreetSW" class="fixedPrettyButton" onclick="GodFunctions.addStreet(4)">Build a
 				Street in south west direction</button>
-			<button id="addStreetW" class="fixedPrettyButton" onclick="addStreet(5)">Build a
+			<button id="addStreetW" class="fixedPrettyButton" onclick="GodFunctions.addStreet(5)">Build a
 				Street in west direction</button>
 		</section>
 		<section id="removeStreetSection">
-			<button id="removeStreetNW" class="fixedPrettyButton" onclick="removeStreet(0)">Remove
+			<button id="removeStreetNW" class="fixedPrettyButton" onclick="GodFunctions.removeStreet(0)">Remove
 				a Street in north west direction</button>
-			<button id="removeStreetNE" class="fixedPrettyButton" onclick="removeStreet(1)">Remove
+			<button id="removeStreetNE" class="fixedPrettyButton" onclick="GodFunctions.removeStreet(1)">Remove
 				a Street in north east direction</button>
-			<button id="removeStreetE" class="fixedPrettyButton" onclick="removeStreet(2)">Remove
+			<button id="removeStreetE" class="fixedPrettyButton" onclick="GodFunctions.removeStreet(2)">Remove
 				a Street in east direction</button>
-			<button id="removeStreetSE" class="fixedPrettyButton" onclick="removeStreet(3)">Remove
+			<button id="removeStreetSE" class="fixedPrettyButton" onclick="GodFunctions.removeStreet(3)">Remove
 				a Street in south east direction</button>
-			<button id="removeStreetSW" class="fixedPrettyButton" onclick="removeStreet(4)">Remove
+			<button id="removeStreetSW" class="fixedPrettyButton" onclick="GodFunctions.removeStreet(4)">Remove
 				a Street in south west direction</button>
-			<button id="removeStreetW" class="fixedPrettyButton" onclick="removeStreet(5)">Remove
+			<button id="removeStreetW" class="fixedPrettyButton" onclick="GodFunctions.removeStreet(5)">Remove
 				a Street in west direction</button>
 		</section>
 		<button id="SaveBuildings" class="fixedPrettyButton" onclick="saveBuildings()">save
