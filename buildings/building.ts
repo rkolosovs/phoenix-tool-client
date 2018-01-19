@@ -12,16 +12,7 @@ enum BuildingType{
 
 abstract class Building extends MapEntity{
 
-    constructor(_type: BuildingType, _position: [number, number], _owner: Realm){
-        super(_position, _owner);
-        this.type = _type;
-    }
-
-    set type(newType: BuildingType){
-        this.type = newType;
-    }
-    
-    get type(){//TODO see if it is realy readonly(godmode makes changes) and change here accordingly
-        return this.type;
+    constructor(public type: BuildingType, position: [number, number], owner: Realm){
+        super(position, owner);
     }
 }
