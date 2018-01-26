@@ -777,7 +777,7 @@ function shoot(){
 	preparedEvents.push({
 		type: "shoot", content: {
 			shooterID: listOfArmies[selectedArmyIndex].armyId, 
-			realm: listOfArmies[selectedArmyIndex].ownerTag(),
+			realm: listOfArmies[selectedArmyIndex].owner,
 			LKPcount: LKPshooting,
 			SKPcount: SKPshooting,
 			toX: selectedFields[1][0],
@@ -903,7 +903,7 @@ function splitSelectedArmy() {
 		preparedEvents.push({
 			type: "split", content: {
 				fromArmyId: listOfArmies[selectedArmyIndex].armyId,
-				realm: listOfArmies[selectedArmyIndex].ownerTag(),
+				realm: listOfArmies[selectedArmyIndex].owner,
 				troops: toSplit,
 				leaders: leadersToSplit,
 				lkp: lkpToSplit,
@@ -925,7 +925,7 @@ function splitSelectedArmy() {
 		preparedEvents.push({
 			type: "split", content: {
 				fromArmyId: listOfArmies[selectedArmyIndex].armyId,
-				realm: listOfArmies[selectedArmyIndex].ownerTag(),
+				realm: listOfArmies[selectedArmyIndex].owner,
 				troops: toSplit,
 				leaders: leadersToSplit,
 				lkp: 0,
@@ -949,7 +949,7 @@ function splitSelectedArmy() {
 		preparedEvents.push({
 			type: "split", content: {
 				fromArmyId: listOfArmies[selectedArmyIndex].armyId,
-				realm: listOfArmies[selectedArmyIndex].ownerTag(),
+				realm: listOfArmies[selectedArmyIndex].owner,
 				troops: toSplit,
 				leaders: leadersToSplit,
 				lkp: lkpToSplit,
@@ -1034,7 +1034,7 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 		preparedEvents.push({
 			type: "mount", content: {
 				fromArmyId: listOfArmies[armyIndex].armyId,
-				realm: listOfArmies[armyIndex].ownerTag(),
+				realm: listOfArmies[armyIndex].owner,
 				troops: toMount,
 				leaders: leadersToMount,
 				x: listOfArmies[armyIndex].x,
@@ -1071,7 +1071,7 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 		preparedEvents.push({
 			type: "mount", content: {
 				fromArmyId: listOfArmies[armyIndex].armyId,
-				realm: listOfArmies[armyIndex].ownerTag(),
+				realm: listOfArmies[armyIndex].owner,
 				troops: toMount,
 				leaders: leadersToMount,
 				x: listOfArmies[armyIndex].x,
@@ -1149,7 +1149,7 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 		preparedEvents.push({
 			type: "mount", content: {
 				fromArmyId: listOfArmies[armyIndex].armyId,
-				realm: listOfArmies[armyIndex].ownerTag(),
+				realm: listOfArmies[armyIndex].owner,
 				troops: toUnMount,
 				leaders: leadersToUnMount,
 				x: listOfArmies[armyIndex].x,
@@ -1186,7 +1186,7 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 		preparedEvents.push({
 			type: "mount", content: {
 				fromArmyId: listOfArmies[armyIndex].armyId,
-				realm: listOfArmies[armyIndex].ownerTag(),
+				realm: listOfArmies[armyIndex].owner,
 				troops: toUnMount,
 				leaders: leadersToUnMount,
 				x: listOfArmies[armyIndex].x,
@@ -1249,7 +1249,7 @@ function transferTroopsFromSelectedArmy(mergeId) {
 				type: "transfer", content: {
 					fromArmyId: listOfArmies[selectedArmyIndex].armyId,
 					toArmyId: listOfArmies[mergeId].armyId,
-					realm: listOfArmies[selectedArmyIndex].ownerTag(),
+					realm: listOfArmies[selectedArmyIndex].owner,
 					troops: toSplit,
 					leaders: leadersToSplit,
 					lkp: lkpToSplit,
@@ -1289,7 +1289,7 @@ function transferTroopsFromSelectedArmy(mergeId) {
 				type: "transfer", content: {
 					fromArmyId: listOfArmies[selectedArmyIndex].armyId,
 					toArmyId: listOfArmies[mergeId].armyId,
-					realm: listOfArmies[selectedArmy].ownerTag(),
+					realm: listOfArmies[selectedArmy].owner,
 					troops: toSplit,
 					leaders: leadersToSplit,
 					lkp: 0,
@@ -1330,7 +1330,7 @@ function transferTroopsFromSelectedArmy(mergeId) {
 				type: "transfer", content: {
 					fromArmyId: listOfArmies[selectedArmyIndex].armyId,
 					toArmyId: listOfArmies[mergeId].armyId,
-					realm: listOfArmies[selectedArmyIndex].ownerTag(),
+					realm: listOfArmies[selectedArmyIndex].owner,
 					troops: toSplit,
 					leaders: leadersToSplit,
 					lkp: lkpToSplit,
@@ -1368,7 +1368,7 @@ function mergeSelectedArmy(mergeId) {
 			type: "merge", content: {
 				fromArmyId: listOfArmies[selectedArmyIndex].armyId,
 				toArmyId: listOfArmies[mergeId].armyId,
-				realm: listOfArmies[selectedArmyIndex].ownerTag(),
+				realm: listOfArmies[selectedArmyIndex].owner,
 				troops: listOfArmies[selectedArmyIndex].count,
 				leaders: listOfArmies[selectedArmyIndex].leaders,
 				lkp: listOfArmies[selectedArmyIndex].lkp,
@@ -1393,7 +1393,7 @@ function mergeSelectedArmy(mergeId) {
 			type: "merge", content: {
 				fromArmyId: listOfArmies[selectedArmyIndex].armyId,
 				toArmyId: listOfArmies[mergeId].armyId,
-				realm: listOfArmies[selectedArmyIndex].ownerTag(),
+				realm: listOfArmies[selectedArmyIndex].owner,
 				troops: listOfArmies[selectedArmyIndex].count,
 				leaders: listOfArmies[selectedArmyIndex].leaders,
 				lkp: 0,
@@ -1444,7 +1444,7 @@ function mergeSelectedArmy(mergeId) {
 			type: "merge", content: {
 				fromArmyId: listOfArmies[selectedArmyIndex].armyId,
 				toArmyId: listOfArmies[mergeId].armyId,
-				realm: listOfArmies[selectedArmyIndex].ownerTag(),
+				realm: listOfArmies[selectedArmyIndex].owner,
 				troops: listOfArmies[selectedArmyIndex].count,
 				leaders: listOfArmies[selectedArmyIndex].leaders,
 				lkp: 0,

@@ -17,7 +17,7 @@ var tileset = "mbits_painted"; // tileset name
 var scrollSpeed = 0.2; // increment to scroll with each step
 
 var url = "http://phoenixserver.h2610265.stratoserver.net"; //put the url (or the IP address) for the remote game server here
-//var url = "http://localhost:8000"; // for local debug
+// var url = "http://localhost:8000"; // for local debug
 
 var leftMousePressed = false; // was the left mouse button klicked but not yet released?
 var rightMousePressed = false; // was the right mouse button klicked but not yet released?
@@ -280,7 +280,7 @@ function registerRightClick() {
 			for (var i = 0; i < localNeighbors.length; i++){
 				if(localNeighbors[i][0] === clickedField[0] && localNeighbors[i][1] === clickedField[1]){
 					var out;
-					if (listOfArmies[selectedArmyIndex].ownerTag() === login || login === "sl") {
+					if (listOfArmies[selectedArmyIndex].owner === login || login === "sl") {
 						out = move(listOfArmies[selectedArmyIndex], i);
 						console.log(out);
 					} else {
@@ -290,7 +290,7 @@ function registerRightClick() {
 						preparedEvents.push({
 							type: "move", content: {
 								armyId: listOfArmies[selectedArmyIndex].armyId,
-								realm: listOfArmies[selectedArmyIndex].ownerTag(),
+								realm: listOfArmies[selectedArmyIndex].owner,
 								fromX: clickedArmyX, fromY: clickedArmyY, 
 								toX: listOfArmies[selectedArmyIndex].x, toY: listOfArmies[selectedArmyIndex].y
 							}
@@ -303,7 +303,7 @@ function registerRightClick() {
 							var someArmy = listOfArmies[j];
 							if (someArmy.x === listOfArmies[selectedArmyIndex].x && someArmy.y === listOfArmies[selectedArmyIndex].y
 								&& someArmy !== listOfArmies[selectedArmyIndex]) {
-								participants.push({ armyId: someArmy.armyId, realm: someArmy.ownerTag() });
+								participants.push({ armyId: someArmy.armyId, realm: someArmy.owner });
 								//in case they are enemies
 								if (someArmy.owner !== listOfArmies[selectedArmyIndex].owner) {
 									battlePossible = true;
@@ -322,7 +322,7 @@ function registerRightClick() {
 							var inserted = false;
 							participants.push({
 								armyId: listOfArmies[selectedArmyIndex].armyId,
-								realm: listOfArmies[selectedArmyIndex].ownerTag()
+								realm: listOfArmies[selectedArmyIndex].owner
 							});
 							for (var j = 0; j < preparedEvents.length; j++) {
 								if (preparedEvents[j].type === "battle" &&
@@ -729,10 +729,10 @@ function makeEventListItem(event, i) {
 		}
 		eli.innerHTML = html + "</div>";
 	} else if (event.type === "merge") {
-		eli.innerHTML = "<div>" + realms[cont.realm - 1].tag + "'s army " + cont.fromArmy + " merges with army " + cont.toArmy + " in (" + cont.x + "," + cont.y + ").</div>";
+		eli.innerHTML = "<div>" + cont.realm + "'s army " + cont.fromArmy + " merges with army " + cont.toArmy + " in (" + cont.x + "," + cont.y + ").</div>";
 	} else if (event.type === "split") {
 		// TODO: detailed explanation
-		var innerHTMLString = "<div>" + realms[cont.realm - 1].tag + "'s army " + cont.fromArmy + " splits off army " + cont.newArmy + " with ";
+		var innerHTMLString = "<div>" + cont.realm + "'s army " + cont.fromArmy + " splits off army " + cont.newArmy + " with ";
 		if (cont.troops != 0) {
 			innerHTMLString += cont.troops + " troops, ";
 		}
@@ -751,7 +751,7 @@ function makeEventListItem(event, i) {
 		innerHTMLString += "in (" + cont.x + "," + cont.y + ").</div>";
 		eli.innerHTML = innerHTMLString;
 	} else if (event.type === "transfer") {
-		var innerHTMLString = "<div>" + realms[cont.realm - 1].tag + "'s army " + cont.fromArmy + " transfers ";
+		var innerHTMLString = "<div>" + cont.realm + "'s army " + cont.fromArmy + " transfers ";
 		if (cont.troops != 0) {
 			innerHTMLString += cont.troops + " troops, ";
 		}
@@ -770,10 +770,10 @@ function makeEventListItem(event, i) {
 		innerHTMLString += "to " + cont.toArmy + " in (" + cont.x + "," + cont.y + ").</div>";
 		eli.innerHTML = innerHTMLString;
 	} else if (event.type === "mount") {
-		eli.innerHTML = "<div>" + realms[cont.realm - 1].tag + "'s army " + cont.fromArmy + " mounts " + cont.troops + " troops, and "
+		eli.innerHTML = "<div>" + cont.realm + "'s army " + cont.fromArmy + " mounts " + cont.troops + " troops, and "
 			+ cont.leaders + " leaders to " + cont.newArmy + " in (" + cont.x + "," + cont.y + ").</div>";
 	}else if(event.type === "shoot"){
-		eli.innerHTML = "<div>"+ realms[cont.realm - 1].tag +"'s army "+cont.armyId+" shoots a Field ("+cont.toX+", "+cont.toY+") with "
+		eli.innerHTML = "<div>"+ cont.realm +"'s army "+cont.armyId+" shoots a Field ("+cont.toX+", "+cont.toY+") with "
 		 +cont.LKPcount + " LKP and " + cont.SKPcount + " SKP.</div>";
 	}
 	var deleteButton = document.createElement("BUTTON");
@@ -829,7 +829,7 @@ function checkEvent(num) {
 			var army;
 			for (var i = 0; i < listOfArmies.length; i++) {
 				army = listOfArmies[i];
-				if (army.ownerTag() === cont.realm && cont.armyId === army.armyId) {
+				if (army.owner === cont.realm && cont.armyId === army.armyId) {
 					break;
 				}
 			}
@@ -853,7 +853,7 @@ function checkEvent(num) {
 				moveToList(army, 0);
 				move(army, 0);//move to nw
 			}
-			if (!unprocessedBattleAtContainingArmy(army.ownerTag(), army.armyId, army.x, army.y)) {
+			if (!unprocessedBattleAtContainingArmy(army.owner, army.armyId, army.x, army.y)) {
 				conquer(army);
 			}
 			event.status = 'checked';
@@ -866,7 +866,7 @@ function checkEvent(num) {
 			var partips = [];
 			cont.participants.forEach(function (item) {
 				var a = listOfArmies.find(function (candidate) {
-					return (item.realm === candidate.ownerTag()) && (item.armyId === candidate.armyId);
+					return (item.realm === candidate.owner) && (item.armyId === candidate.armyId);
 				});
 				partips.push(a);
 			});
@@ -1038,7 +1038,7 @@ function checkEvent(num) {
 			var shootBox = document.getElementById("shootBigBox");
 			show(shootBox);
 
-			document.getElementById("shooterTitleText").innerHTML = cont.armyId + ", " + realms[cont.realm - 1].tag;;
+			document.getElementById("shooterTitleText").innerHTML = cont.armyId + ", " + cont.realm;
 			document.getElementById("attackersLKPText").innerHTML = cont.LKPcount;
 			document.getElementById("attackersSKPText").innerHTML = cont.SKPcount;
 			document.getElementById("targetText").innerHTML = cont.target;

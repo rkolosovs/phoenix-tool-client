@@ -740,7 +740,7 @@ function conquer(army) {
         //für i = 0 bis borders länge
         for(var i = 0; i<borders.length; i++){
             // sind das die Länder des Besitzers?
-            if (borders[i].tag === army.ownerTag()){
+            if (borders[i].tag === army.owner){
                 // ist das Zielland enthalten?
                 for(var j = 0; j<borders[i].land.length; j++){
                     if(borders[i].land[j][0] === army.x && borders[i].land[j][1] === army.y){
@@ -763,7 +763,7 @@ function conquer(army) {
         // war nicht bereits Land des Besitzers.
         if (!found){
             for(var i = 0; i<borders.length; i++){
-                if (borders[i].tag === army.ownerTag()){
+                if (borders[i].tag === army.owner){
                     // tu es zu den Ländern des Besitzers.
                     borders[i].land.push([army.x, army.y]);
                 }
