@@ -556,19 +556,19 @@ function writeTurnNumber() {
 				if(login === 'sl' && currentTurn.status === 'fi') { //SL sends DB change requests
 					pendingEvents.forEach(function(event) {
 						if(event.status === 'checked'){
-							sendCheckEvent(event.pk, event.type);
+							Saving.sendCheckEvent(event.pk, event.type);
 						} else if(event.status === 'deleted') {
-							sendDeleteEvent(event.pk, event.type);
+							Saving.sendDeleteEvent(event.pk, event.type);
 						}
 					}, this);
-					saveBuildings();
-					saveFactionsTerritories();
-					saveArmies();
+					Saving.saveBuildings();
+					Saving.saveFactionsTerritories();
+					Saving.saveArmies();
 				} else { //Players and SL during player's turn send events
 					console.log(2);
 					sendEventlistInOrder();
 				}
-				sendNextTurn();
+				Saving.sendNextTurn();
 			}
 		});
 		date = document.createElement("P") as HTMLParagraphElement;
@@ -589,16 +589,16 @@ function writeTurnNumber() {
 						" Once saved the progress can't be reverted anymore.")){
 					pendingEvents.forEach(function(event) {
 						if(event.status === 'checked'){
-							sendCheckEvent(event.pk, event.type);
+							Saving.sendCheckEvent(event.pk, event.type);
 						} else if(event.status === 'deleted') {
-							sendDeleteEvent(event.pk, event.type);
+							Saving.sendDeleteEvent(event.pk, event.type);
 						}
 					}, this);
 					pendingEvents = [];
 					preparedEvents = [];
-					saveBuildings();
-					saveFactionsTerritories();
-					saveArmies();
+					Saving.saveBuildings();
+					Saving.saveFactionsTerritories();
+					Saving.saveArmies();
 				}
 			} else {
 				if (confirm("Do you want to save the events issued so far without ending the turn?" +
@@ -618,10 +618,10 @@ function writeTurnNumber() {
 			if (confirm("Do you want to revert the events handled so far?")){
 				pendingEvents = [];
 				preparedEvents = [];
-				loadArmies();
-				loadBuildingData();
-				loadBorderData();
-				loadPendingEvents();
+				Loading.loadArmies();
+				Loading.loadBuildingData();
+				Loading.loadBorderData();
+				Loading.loadPendingEvents();
 				writeTurnNumber();
 				drawStuff();
 			}
@@ -648,7 +648,7 @@ function writeTurnNumber() {
 	}
 	
 	if(login === 'sl' && currentTurn.status === 'fi') {
-		loadPendingEvents();
+		Loading.loadPendingEvents();
 		show(document.getElementById("eventTabsButton"));
 	} else {
 		hide(document.getElementById("eventTabsButton"));

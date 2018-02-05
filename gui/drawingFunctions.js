@@ -682,21 +682,21 @@ function writeTurnNumber() {
                 if (login === 'sl' && currentTurn.status === 'fi') {
                     pendingEvents.forEach(function (event) {
                         if (event.status === 'checked') {
-                            sendCheckEvent(event.pk, event.type);
+                            Saving.sendCheckEvent(event.pk, event.type);
                         }
                         else if (event.status === 'deleted') {
-                            sendDeleteEvent(event.pk, event.type);
+                            Saving.sendDeleteEvent(event.pk, event.type);
                         }
                     }, this);
-                    saveBuildings();
-                    saveFactionsTerritories();
-                    saveArmies();
+                    Saving.saveBuildings();
+                    Saving.saveFactionsTerritories();
+                    Saving.saveArmies();
                 }
                 else {
                     console.log(2);
                     sendEventlistInOrder();
                 }
-                sendNextTurn();
+                Saving.sendNextTurn();
             }
         });
         date = document.createElement("P");
@@ -716,17 +716,17 @@ function writeTurnNumber() {
                     " Once saved the progress can't be reverted anymore.")) {
                     pendingEvents.forEach(function (event) {
                         if (event.status === 'checked') {
-                            sendCheckEvent(event.pk, event.type);
+                            Saving.sendCheckEvent(event.pk, event.type);
                         }
                         else if (event.status === 'deleted') {
-                            sendDeleteEvent(event.pk, event.type);
+                            Saving.sendDeleteEvent(event.pk, event.type);
                         }
                     }, this);
                     pendingEvents = [];
                     preparedEvents = [];
-                    saveBuildings();
-                    saveFactionsTerritories();
-                    saveArmies();
+                    Saving.saveBuildings();
+                    Saving.saveFactionsTerritories();
+                    Saving.saveArmies();
                 }
             }
             else {
@@ -746,10 +746,10 @@ function writeTurnNumber() {
             if (confirm("Do you want to revert the events handled so far?")) {
                 pendingEvents = [];
                 preparedEvents = [];
-                loadArmies();
-                loadBuildingData();
-                loadBorderData();
-                loadPendingEvents();
+                Loading.loadArmies();
+                Loading.loadBuildingData();
+                Loading.loadBorderData();
+                Loading.loadPendingEvents();
                 writeTurnNumber();
                 drawStuff();
             }
@@ -775,7 +775,7 @@ function writeTurnNumber() {
         revertBtn.style.cursor = "initial";
     }
     if (login === 'sl' && currentTurn.status === 'fi') {
-        loadPendingEvents();
+        Loading.loadPendingEvents();
         show(document.getElementById("eventTabsButton"));
     }
     else {

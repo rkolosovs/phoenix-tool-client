@@ -187,7 +187,7 @@
 		<button id="unMount" class="fixedPrettyButton" onclick="activateUnMountBox()">Absitzen</button>
 		<button id="splitBtn" class="fixedPrettyButton" onclick="activateSplitbox()">Aufteilen</button>
 		<button id="shoot" class="fixedPrettyButton" onclick="toggleShootingMode()">Schie&szlig;en</button>
-		<button id="logoutBtn" class="fixedPrettyButton" onclick="logoutFromServer()">Logout</button>
+		<button id="logoutBtn" class="fixedPrettyButton" onclick="Authentication.logoutFromServer()">Logout</button>
 	</div>
 
 	<div id="transmuteBox" class="prettyBox invisible">
@@ -349,7 +349,7 @@
 			<input id="heightPointsChangeInput"/>
 		</p>
 		<button id="changeArmyInfo" class="fixedPrettyButton invisible" onclick="GodFunctions.changeArmyInfo()">Apply changed Stats</button>
-		<button id="logoutBtnChange" class="fixedPrettyButton" onclick="logoutFromServer()">Logout</button>
+		<button id="logoutBtnChange" class="fixedPrettyButton" onclick="Authentication.logoutFromServer()">Logout</button>
 	</div>
 
 	<div id="loginBox" class="prettyBox">
@@ -358,7 +358,7 @@
 		<label for="loginPassword">Passwort:</label> <input id="loginPassword"
 			type="password">
 		<p></p>
-		<button id="loginBtn" class="prettyButton" onclick="loginToServer()">Login</button>
+		<button id="loginBtn" class="prettyButton" onclick="Authentication.loginToServer()">Login</button>
 	</div>
 
 	<div id="minimapBox" class="prettyBox">
@@ -374,8 +374,8 @@
 		<button id="ToggleWallBuildingMode" class="fixedPrettyButton" onclick="toggleWallBuildingMode()">modify walls</button>
 		<button id="ToggleHarborBuildingMode" class="fixedPrettyButton" onclick="toggleHarborBuildingMode()">modify harbours</button>
 		<button id="ToggleBridgeBuildingMode" class="fixedPrettyButton" onclick="toggleBridgeBuildingMode()">modify bridges</button>
-		<button id="SaveArmies" class="fixedPrettyButton" onclick="saveArmies()">save armies</button>
-		<button id="SaveFactionsTerritories" class="fixedPrettyButton" onclick="saveFactionsTerritories()">save faction territories</button>
+		<button id="SaveArmies" class="fixedPrettyButton" onclick="Saving.saveArmies()">save armies</button>
+		<button id="SaveFactionsTerritories" class="fixedPrettyButton" onclick="Saving.saveFactionsTerritories()">save faction territories</button>
 		<button id="ToggleArmyCreationMode" class="fixedPrettyButton" onclick="toggleArmyCreationMode()">make an army</button>
 		<button id="GodDeleteSelectedArmy" class="fixedPrettyButton" onclick="GodFunctions.godDeleteSelectedArmy()">delete selected army</button>
 		<label> Gebäude werden erzeugt für Fraktion:
@@ -412,7 +412,7 @@
 		<button id="ToggleOnClickWorldCreationMode" class="fixedPrettyButton"
 			onclick="GodFunctions.toggleOnClickWorldCreationMode()">toggle on click World Creation Mode</button>
 		<button id="SaveFields" class="fixedPrettyButton" 
-			onclick="saveFields()">save fields</button>
+			onclick="Saving.saveFields()">save fields</button>
 		<section id="changeFieldSection">
 			<button id="ChangeFieldClickedTo0" class="fixedPrettyButton" 
 				onclick="GodFunctions.changeFieldClickedTo(0)">change field clicked to shallows</button>
@@ -466,7 +466,7 @@
 			<button id="removeRiverW" class="fixedPrettyButton" onclick="GodFunctions.removeRiver(5)">Remove a
 				River at the west border</button>
 		</section>
-		<button id="SaveRivers" class="fixedPrettyButton" onclick="saveRivers()">save rivers</button>
+		<button id="SaveRivers" class="fixedPrettyButton" onclick="Saving.saveRivers()">save rivers</button>
 	</div>
 
 	<div id="buildingCreationBox" class="prettyBox invisible">
@@ -477,7 +477,7 @@
 		<button id="addCapitalFortress" class="fixedPrettyButton" onclick="GodFunctions.addCapitalFortress()">Build a capital fortress</button>
 		<button id="deleteBuilding" class="fixedPrettyButton" onclick="GodFunctions.deleteBuilding()">Delete a building</button>
 		<section>
-			<button id="SaveBuildings" class="fixedPrettyButton" onclick="saveBuildings()">save buildings</button>
+			<button id="SaveBuildings" class="fixedPrettyButton" onclick="Saving.saveBuildings()">save buildings</button>
 		</section>
 	</div>
 
@@ -523,7 +523,7 @@
 				onclick="GodFunctions.manipulateBorderBuilding(5, 'w', false)">Remove a
 				Wall in west direction</button>
 		</section>
-		<button id="SaveBuildings" class="fixedPrettyButton" onclick="saveBuildings()">save
+		<button id="SaveBuildings" class="fixedPrettyButton" onclick="Saving.saveBuildings()">save
 			buildings</button>
 	</div>
 
@@ -569,7 +569,7 @@
 				onclick="GodFunctions.manipulateBorderBuilding(6, 'w', false)">Remove a
 				Harbor in west direction</button>
 		</section>
-		<button id="SaveBuildings" class="fixedPrettyButton" onclick="saveBuildings()">save
+		<button id="SaveBuildings" class="fixedPrettyButton" onclick="Saving.saveBuildings()">save
 			buildings</button>
 	</div>
 	
@@ -615,7 +615,7 @@
 				onclick="GodFunctions.manipulateBorderBuilding(7, 'w', false)">Remove a
 				Bridge in west direction</button>
 		</section>
-		<button id="SaveBuildings" class="fixedPrettyButton" onclick="saveBuildings()">save
+		<button id="SaveBuildings" class="fixedPrettyButton" onclick="Saving.saveBuildings()">save
 			buildings</button>
 	</div>
 
@@ -649,7 +649,7 @@
 			<button id="removeStreetW" class="fixedPrettyButton" onclick="GodFunctions.removeStreet(5)">Remove
 				a Street in west direction</button>
 		</section>
-		<button id="SaveBuildings" class="fixedPrettyButton" onclick="saveBuildings()">save
+		<button id="SaveBuildings" class="fixedPrettyButton" onclick="Saving.saveBuildings()">save
 			buildings</button>
 	</div>
 

@@ -1184,13 +1184,13 @@ function untagHitArmys(){
 }
 
 function init() {
-	getNewDataFromServer();
-	loadTurnNumber();
-	loadImages(tileset);
+	Loading.getNewDataFromServer();
+	Loading.loadTurnNumber();
+	Loading.loadImages(tileset);
 	setHexParts(scale);
 }
 
 init();
 setInterval(function () {
-	getNewDataFromServer();
+	Loading.getNewDataFromServer();
 }, 30000);
