@@ -274,7 +274,7 @@ namespace Saving{
 			data: { authorization: authenticationToken },
 			success: function (data) {
 				currentTurn = data;
-				writeTurnNumber();
+				Drawing.writeTurnNumber();
 			},
 			dataType: "json",
 			statusCode: {

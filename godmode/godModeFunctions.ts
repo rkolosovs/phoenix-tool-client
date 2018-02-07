@@ -3,7 +3,7 @@
 
 namespace GodFunctions{
 
-	var factionToCreateBuildingsFor = realms[0].tag;
+	let factionToCreateBuildingsFor = realms[0].tag;
 
 	export function setFactionToCreateBuildingsFor(faction): void{
 		factionToCreateBuildingsFor = faction;
@@ -18,7 +18,7 @@ namespace GodFunctions{
 			worldCreationModeOnClick = true;
 			show(GUI.getWorldBenderBox().getCreationWarning());
 		}
-		resizeCanvas()
+		Drawing.resizeCanvas()
 	}
 
 	export function changeFieldClickedTo(number): void{
@@ -31,7 +31,7 @@ namespace GodFunctions{
 			switchModeTo("worldCreationModeOn");
 			hide(GUI.getWorldBenderBox().getCreationWarning());
 		}
-		resizeCanvas()
+		Drawing.resizeCanvas()
 	}
 
 	// add a castle in the selectedField
@@ -54,7 +54,7 @@ namespace GodFunctions{
 			// console.log("this is a new:");
 			// console.log(changedBuildings[changedBuildings.length-1]);
 		}
-		resizeCanvas()
+		Drawing.resizeCanvas()
 	}
 
 	// add a city in the selectedField
@@ -77,7 +77,7 @@ namespace GodFunctions{
 			// console.log("this is a new:");
 			// console.log(changedBuildings[changedBuildings.length-1]);
 		}
-		resizeCanvas()
+		Drawing.resizeCanvas()
 	}
 
 	// add a fortress in the selectedField
@@ -101,7 +101,7 @@ namespace GodFunctions{
 			// console.log(changedBuildings[changedBuildings.length-1]);
 			
 		}
-		resizeCanvas()
+		Drawing.resizeCanvas()
 	}
 
 	// add a capital city in the selectedField
@@ -124,7 +124,7 @@ namespace GodFunctions{
 			// console.log("this is a new:");
 			// console.log(changedBuildings[changedBuildings.length-1]);
 		}
-		resizeCanvas();
+		Drawing.resizeCanvas();
 	}
 
 	// add a capital fortress in the selectedField
@@ -147,7 +147,7 @@ namespace GodFunctions{
 			// console.log("this is a new:");
 			// console.log(changedBuildings[changedBuildings.length-1]);
 		}
-		resizeCanvas()
+		Drawing.resizeCanvas()
 	}
 
 	// delete the building in the selectedField
@@ -164,7 +164,7 @@ namespace GodFunctions{
 				}
 			}
 		}
-		resizeCanvas()
+		Drawing.resizeCanvas()
 	}
 
 	// adds a street in the target direction
@@ -186,7 +186,7 @@ namespace GodFunctions{
 			buildings.push({"type": 8, "firstX":sf[0], "firstY":sf[1], "secondX": target[0], "secondY": target[1], "realm":factionToCreateBuildingsFor});
 			selectedFields[0]=[target[0], target[1]];
 		}
-		resizeCanvas()
+		Drawing.resizeCanvas()
 	}
 
 	// removes a street in the target direction
@@ -212,7 +212,7 @@ namespace GodFunctions{
 				selectedFields[0]=[target[0], target[1]];
 			}
 		}
-		resizeCanvas();
+		Drawing.resizeCanvas();
 	}
 
 	// adds a river in the target direction
@@ -232,7 +232,7 @@ namespace GodFunctions{
 		} else {
 			GameState.rivers.push(new River([sf[0],sf[1]],[target[0],target[1]]));
 		}
-		resizeCanvas();
+		Drawing.resizeCanvas();
 	}
 
 	// removes a river in the target direction
@@ -255,7 +255,7 @@ namespace GodFunctions{
 				GameState.rivers[found] = GameState.rivers.pop();
 			}
 		}
-		resizeCanvas();
+		Drawing.resizeCanvas();
 	}
 
 	//add = true means add a building, else remove it.
@@ -285,7 +285,7 @@ namespace GodFunctions{
 				}
 			}
 		}
-		resizeCanvas();
+		Drawing.resizeCanvas();
 	}
 
 	// the function for the Gm posibility to make an army out of nothing
@@ -335,7 +335,7 @@ namespace GodFunctions{
 		} else {
 			// Do nothing!
 		}
-		resizeCanvas();
+		Drawing.resizeCanvas();
 	}
 
 	// This is used by the infoChangeBox to manipulate an armies Stats.
@@ -358,6 +358,6 @@ namespace GodFunctions{
 				listOfArmies[selectedArmyIndex].remainingHeightPoints = Number(infoChangeBox.getHeightPointsChangeInput().value);
 			}
 		}
-		resizeCanvas();
+		Drawing.resizeCanvas();
 	}
 }

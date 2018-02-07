@@ -322,15 +322,16 @@ function activateUnMountBox(): void{
 function activateShootBox(): void{
     show(GUI.getShootBox());
 	findPossibleTargetFields();
-	drawStuff();
+	Drawing.drawStuff();
 }
 
 function closeShootBox(): void{
     hide(GUI.getShootBox());
 	switchModeTo("none");
-	if(selectedFields[1] !== undefined)
+	if(selectedFields[1] !== undefined){
 		selectedFields.pop();
-	drawStuff();
+	}
+	Drawing.drawStuff();
 }
 
 function activateSplitbox(): void{
