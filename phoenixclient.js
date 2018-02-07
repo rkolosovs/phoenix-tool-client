@@ -61,7 +61,7 @@ var clickY = 0; // y coordinate of the point where the mouse was clicked
 var moveX = 0; // x distance the mouse was dragged
 var moveY = 0; // y distance the mouse was dragged
 // resize the canvas to fill browser window dynamically
-window.addEventListener('resize', resizeCanvas, false);
+window.addEventListener('resize', Drawing.resizeCanvas, false);
 GUI.getCanvas().addEventListener('mousedown', function (event) {
     if (event.button === 0) {
         leftMousePressed = true;
@@ -77,7 +77,7 @@ GUI.getCanvas().addEventListener('mousedown', function (event) {
         clickY = event.pageY; // record the y coordinate of the mouse when it
         // was clicked
     }
-    drawStuff();
+    Drawing.drawStuff();
 }, true);
 document.addEventListener('mouseup', function (event) {
     if (leftMousePressed && event.button === 0) {
@@ -110,14 +110,14 @@ document.addEventListener('mouseup', function (event) {
         moveX = 0; // reset move registration
         moveY = 0;
     }
-    drawStuff();
+    Drawing.drawStuff();
 }, true);
 GUI.getCanvas().addEventListener('mousemove', function (event) {
     if (leftMousePressed === true) {
         isDragging = true; // for later click detection; no click if mouse was previously dragged
         moveX = event.pageX - clickX; // compute the x offset from dragged mouse
         moveY = event.pageY - clickY; // compute the y offset from dragged mouse
-        drawStuff();
+        Drawing.drawStuff();
     }
 }, true);
 GUI.getCanvas().addEventListener('wheel', function (event) {
@@ -141,7 +141,7 @@ GUI.getCanvas().addEventListener('wheel', function (event) {
     originX = mouseX - newPosX; // move origin so that the tile stays the same
     // with the new scaling
     originY = mouseY - newPosY;
-    drawStuff();
+    Drawing.drawStuff();
 }, true);
 // TODO: implement scrolling with keyboard (if desired)
 // window.addEventListener('keydown', function (event) {
@@ -272,7 +272,7 @@ function registerLeftClick() {
                     if (selectedArmyIndex !== undefined) {
                         clickedMoves(listOfArmies[selectedArmyIndex]);
                     }
-                    drawStuff();
+                    Drawing.drawStuff();
                 });
                 x.appendChild(btn);
             }
@@ -908,7 +908,7 @@ function checkEvent(num) {
             }
             event.status = 'checked';
             fillEventList();
-            drawStuff();
+            Drawing.drawStuff();
         }
         else if (event.type === "battle") {
             let battleBox = GUI.getBattleBox();
@@ -929,7 +929,7 @@ function checkEvent(num) {
                 hide(battleBox.getSelf());
                 event.status = 'checked';
                 fillEventList();
-                drawStuff();
+                Drawing.drawStuff();
             };
             battleButton.disabled = true;
             battleButton.style.cursor = "not-allowed";
@@ -979,7 +979,7 @@ function checkEvent(num) {
             }
             event.status = 'checked';
             fillEventList();
-            drawStuff();
+            Drawing.drawStuff();
         }
         else if (event.type === "merge") {
             let armyFromPlaceInList = -1;
@@ -1004,7 +1004,7 @@ function checkEvent(num) {
             }
             event.status = 'checked';
             fillEventList();
-            drawStuff();
+            Drawing.drawStuff();
             selectedArmyIndex = undefined;
         }
         else if (event.type === "transfer") {
@@ -1055,7 +1055,7 @@ function checkEvent(num) {
             }
             event.status = 'checked';
             fillEventList();
-            drawStuff();
+            Drawing.drawStuff();
         }
         else if (event.type === "mount") {
             console.log("this is a mount event");
@@ -1082,7 +1082,7 @@ function checkEvent(num) {
                 }
             }
             fillEventList();
-            drawStuff();
+            Drawing.drawStuff();
         }
         else if (event.type === "shoot") {
             let shootBox = GUI.getShootingBigBox();
@@ -1139,7 +1139,7 @@ function checkEvent(num) {
                     hide(shootBox.getSelf());
                     event.status = 'checked';
                     fillEventList();
-                    drawStuff();
+                    Drawing.drawStuff();
                     return true;
                 }
             };
@@ -1148,7 +1148,7 @@ function checkEvent(num) {
             };
             fillEventList();
             //sendCheckEvent(event.pk, event.type);
-            drawStuff();
+            Drawing.drawStuff();
         }
     }
     return check;

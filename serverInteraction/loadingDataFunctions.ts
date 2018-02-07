@@ -13,7 +13,7 @@ namespace Loading{
 	export function loadTurnNumber() {
 		$.getJSON(url + "/databaseLink/getturn/", function(json){
 			currentTurn = json;
-			writeTurnNumber();
+			Drawing.writeTurnNumber();
 		});
 	}
 
@@ -124,7 +124,7 @@ namespace Loading{
 			GameState.fields = json.map(field =>
 				new Field([field.x, field.y], field.type));
 			fields = json; //TODO: Remove once everything uses the GameState class.
-			resizeCanvas();
+			Drawing.resizeCanvas();
 		});
 	}
 

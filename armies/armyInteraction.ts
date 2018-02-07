@@ -387,7 +387,7 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 		});
 		deleteArmy(armyIndex);
 		restoreInfoBox();
-		drawStuff();
+		Drawing.drawStuff();
 		updateInfoBox();
 	}
 	else if (leadersToMount >= listOfArmies[armyIndex].leaders) {
@@ -424,7 +424,7 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 		});
 		// selectedArmyIndex zeigt auf neues Heer
 		selectedArmyIndex = listOfArmies.length - 1;
-		drawStuff();
+		Drawing.drawStuff();
 		restoreInfoBox();
 		updateInfoBox();
 	}
@@ -501,7 +501,7 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 			}
 		});
 		deleteArmy(armyIndex);
-		drawStuff();
+		Drawing.drawStuff();
 		restoreInfoBox();
 		updateInfoBox();
 		// genug Heerführer?
@@ -539,7 +539,7 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 		});
 		// armyIndex zeigt auf neues Heer
 		selectedArmyIndex = listOfArmies.length - 1;
-		drawStuff();
+		Drawing.drawStuff();
 		restoreInfoBox();
 		updateInfoBox();
 	}

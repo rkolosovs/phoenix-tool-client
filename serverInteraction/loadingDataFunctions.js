@@ -11,7 +11,7 @@ var Loading;
     function loadTurnNumber() {
         $.getJSON(Loading.url + "/databaseLink/getturn/", function (json) {
             currentTurn = json;
-            writeTurnNumber();
+            Drawing.writeTurnNumber();
         });
     }
     Loading.loadTurnNumber = loadTurnNumber;
@@ -114,7 +114,7 @@ var Loading;
         $.getJSON(Loading.url + "/databaseLink/fielddata/", function (json) {
             GameState.fields = json.map(field => new Field([field.x, field.y], field.type));
             fields = json; //TODO: Remove once everything uses the GameState class.
-            resizeCanvas();
+            Drawing.resizeCanvas();
         });
     }
     Loading.loadFieldData = loadFieldData;

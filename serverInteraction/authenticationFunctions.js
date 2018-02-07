@@ -32,7 +32,7 @@ var Authentication;
                 hide(document.getElementById("eventTabsButton"));
                 let eventList = document.getElementById("eventsTab");
                 eventList.innerHTML = "";
-                writeTurnNumber();
+                Drawing.writeTurnNumber();
             },
             error: function (data) {
                 // alert for a failed login
@@ -74,7 +74,7 @@ var Authentication;
         openTab(null, "");
         pendingEvents = [];
         preparedEvents = [];
-        writeTurnNumber();
+        Drawing.writeTurnNumber();
     }
     Authentication.logoutFromServer = logoutFromServer;
 })(Authentication || (Authentication = {}));

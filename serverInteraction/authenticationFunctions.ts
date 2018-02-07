@@ -33,7 +33,7 @@ namespace Authentication{
 				hide(document.getElementById("eventTabsButton"));
 				let eventList = document.getElementById("eventsTab");
 				eventList.innerHTML = "";
-				writeTurnNumber();
+				Drawing.writeTurnNumber();
 			},
 			error: function(data){
 				// alert for a failed login
@@ -76,6 +76,6 @@ namespace Authentication{
 		openTab(null, "");
 		pendingEvents = [];
 		preparedEvents = [];
-		writeTurnNumber();
+		Drawing.writeTurnNumber();
 	}
 }
