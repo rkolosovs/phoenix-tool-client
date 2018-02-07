@@ -20,9 +20,6 @@ class FootArmy extends LandArmy {
     getMountCount() {
         return this.mountCount;
     }
-    move(destination, moveCost, heightCost) {
-        //TODO: Move appropriate functionality here
-    }
     setMountCount(value) {
         this.mountCount = Math.max(0, value);
     }

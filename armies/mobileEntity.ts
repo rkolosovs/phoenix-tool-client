@@ -5,6 +5,7 @@ abstract class MobileEntity extends MapEntity{
     protected movePoints: number = MobileEntity.MAX_MOVE_POINTS;
     protected heightPoints: number = MobileEntity.MAX_HEIGHT_POINTS;
     protected id: number;
+    public possibleMoves: Move[] = [];
 
     constructor(id: number, owner: Realm, position: [number, number], movePoints: number, heightPoints: number){
         super(position, owner);
@@ -16,10 +17,15 @@ abstract class MobileEntity extends MapEntity{
 
     abstract getErkenfaraID(): number;
 
-    abstract move(destination: [number, number], moveCost: number, heightCost: number): void;
+    abstract move(direction: Direction): void;
     //TODO: Move the appropriate part of the movement logic here.
 
     abstract getRoomPoints(): number;
+
+    changePosition(newPos: [number, number]): void {
+        this.oldPosition = newPos;
+        this.position = newPos;
+    }
 
     getOldPosition(): [number, number]{
         return this.oldPosition;

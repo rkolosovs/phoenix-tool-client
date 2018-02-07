@@ -4,10 +4,15 @@ class MobileEntity extends MapEntity {
         super(position, owner);
         this.movePoints = MobileEntity.MAX_MOVE_POINTS;
         this.heightPoints = MobileEntity.MAX_HEIGHT_POINTS;
+        this.possibleMoves = [];
         this.oldPosition = position;
         this.setID(id);
         this.setMovePoints(movePoints);
         this.setHeightPoints(heightPoints);
+    }
+    changePosition(newPos) {
+        this.oldPosition = newPos;
+        this.position = newPos;
     }
     getOldPosition() {
         return this.oldPosition;

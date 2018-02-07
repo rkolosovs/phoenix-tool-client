@@ -31,8 +31,18 @@ class Fleet extends Army {
                 this.lightCatapultCount * LIGHT_WS_RP + this.heavyCatapultCount * HEAVY_WS_RP;
         }
     }
-    move(destination, moveCost, heightCost) {
-        //TODO: Move appropriate functionality here
+    move(direction) {
+        let move = this.possibleMoves.find(possMove => possMove.direction === direction);
+        if (move != undefined) {
+            this.oldPosition = this.position;
+            this.position = move.destination;
+            this.setMovePoints(this.getMovePoints() - move.movePoints);
+            this.transportedArmies.forEach(transportedArmy => transportedArmy.changePosition(move.destination));
+        }
+        // TODO: Throw errors. Compute new possible moves.
+        // //to see and return the error why you cant move
+        // clickedMoves(army);
+        // return moveToList(army, direction);
     }
     canConquer() {
         return false;
@@ -260,7 +270,7 @@ class Fleet extends Army {
     loadArmy(army) {
         if (army.getRoomPoints() <= this.freeTransportCapacity()) {
             this.transportedArmies.push(army);
-            army.isTransported = true;
+            army.transportingFleet = this;
             return "ok";
         }
         else {
@@ -272,6 +282,7 @@ class Fleet extends Army {
         if (armyIndex >= 0) {
             this.transportedArmies.splice(armyIndex, 1);
         }
+        army.transportingFleet = undefined;
     }
     killTransportedTroops() {
         let usedCapacity = this.usedTransportCapacity();
