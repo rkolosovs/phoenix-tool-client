@@ -567,7 +567,7 @@ function createMultifield(army){
 			}
 			else{
 				let templist = [someArmy, army];//creating a list of armies to add to the list of multifieldarmies
-				listOfMultiArmyFields.push(templist);
+				Drawing.listOfMultiArmyFields.push(templist);
 				someArmy.multiArmyField = true;
 				army.multiArmyField = true;
 			}
@@ -577,21 +577,21 @@ function createMultifield(army){
 
 //Adds an army to an existing multifield
 function addToMultifield(armyOnMultifield, armyToAdd){
-	if(listOfMultiArmyFields !== undefined){
+	if(Drawing.listOfMultiArmyFields !== undefined){
 		let alreadyInList = false;
 		let placeToAdd;
-		for(let i = 0; i < listOfMultiArmyFields.length; i++){
-			for(let j = 0; j < listOfMultiArmyFields[i].length; j++){
-				if(listOfMultiArmyFields[i][j] === armyOnMultifield){
+		for(let i = 0; i < Drawing.listOfMultiArmyFields.length; i++){
+			for(let j = 0; j < Drawing.listOfMultiArmyFields[i].length; j++){
+				if(Drawing.listOfMultiArmyFields[i][j] === armyOnMultifield){
 					placeToAdd = i;
 				}
-				else if(listOfMultiArmyFields[i][j] === armyToAdd){
+				else if(Drawing.listOfMultiArmyFields[i][j] === armyToAdd){
 					alreadyInList = true;
 				}
 			}
 		}
 		if(alreadyInList == false && placeToAdd !== undefined){
-			listOfMultiArmyFields[placeToAdd].push(armyToAdd);
+			Drawing.listOfMultiArmyFields[placeToAdd].push(armyToAdd);
 			console.log("added to multi");
 		}
 		armyToAdd.multiArmyField = true;
