@@ -54,7 +54,6 @@ class Fleet extends Army{
         // return moveToList(army, direction);
     }
 
-    // TODO: Throw errors to indicate, why a move is not possible.
     checkForPossibleMove(direction: Direction): void {
         let neighborCoords: [number, number][] = HexFunction.neighbors(this.position[0], this.position[1]);
         let target: [number, number] = neighborCoords[direction]
@@ -76,8 +75,7 @@ class Fleet extends Army{
                             new Move(7, 0, false, false, target, direction));
                         break;
                     } else {
-                        break;
-                        //return "You don't have enough movement Points.";
+                        throw new Error("You don't have enough movement Points.");
                     }
                 } else if(this.heavyCatapultCount > 0){ //shallow sea & heavy warships
                     if(coastalSailing && this.movePoints >= 7){//shallow sea, coast & heavy warships
@@ -89,8 +87,7 @@ class Fleet extends Army{
                             new Move(10, 0, false, false, target, direction));
                         break;
                     } else {
-                        break;
-                        //return "You don't have enough movement Points.";
+                        throw new Error("You don't have enough movement Points.");
                     }
                 } else if(this.lightCatapultCount > 0){//shallow sea & light warships
                     if(coastalSailing && this.movePoints >= 6){//shallow sea, coast & light warships
@@ -102,8 +99,7 @@ class Fleet extends Army{
                             new Move(8, 0, false, false, target, direction));
                         break;
                     } else {
-                        break;
-                        //return "You don't have enough movement Points.";
+                        throw new Error("You don't have enough movement Points.");
                     }
                 }
             case 1: //deep sea
@@ -117,8 +113,7 @@ class Fleet extends Army{
                             new Move(12, 0, false, false, target, direction));
                         break;
                     } else {
-                        break;
-                        //return "You don't have enough movement Points.";
+                        throw new Error("You don't have enough movement Points.");
                     }
                 } else if(this.heavyCatapultCount > 0){//deep sea & heavy warships
                     if(coastalSailing && this.movePoints >= 14){//deep sea, coast & heavy warships
@@ -130,8 +125,7 @@ class Fleet extends Army{
                             new Move(21, 0, false, false, target, direction));
                         break;
                     } else {
-                        break;
-                        //return "You don't have enough movement Points.";
+                        throw new Error("You don't have enough movement Points.");
                     }
                 } else if(this.lightCatapultCount > 0){//deep sea & light warships
                     if(coastalSailing && this.movePoints >= 14){//deep sea, coast & light warships
@@ -143,8 +137,7 @@ class Fleet extends Army{
                             new Move(21, 0, false, false, target, direction));
                         break;
                     } else {
-                        break;
-                        //return "You don't have enough movement Points.";
+                        throw new Error("You don't have enough movement Points.");
                     }
                 }
             case 2:
@@ -153,8 +146,8 @@ class Fleet extends Army{
             case 5:
             case 6:
             case 7:
-            case 8: //return "You can't drive your ships up land."
-            default: break; //return "Something went wrong."
+            case 8: throw new Error("You can't drive your ships up land.");
+            default: throw new Error("Unknown terrain type.");
         }
     }
 
@@ -287,13 +280,12 @@ class Fleet extends Army{
         return this.freeTransportCapacity() >= armyToLoad.getRoomPoints();
     }
 
-    loadArmy(army: LandArmy): string{ // TODO: this should return void but throw errors
+    loadArmy(army: LandArmy): void {
         if(army.getRoomPoints() <= this.freeTransportCapacity()){
             this.transportedArmies.push(army);
             army.transportingFleet = this;
-            return "ok";
         } else {
-            return "This army is too big for this fleet.";
+            throw new Error("This army is too big for this fleet.");
         }
     }
 
