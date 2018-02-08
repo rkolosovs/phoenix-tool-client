@@ -52,44 +52,6 @@ function addToMultifield(armyOnMultifield, armyToAdd){
 	}
 }
 
-function conquer(army) {
-    if(fieldType(army.x, army.y) >= 2 && army.canConquer()){
-        let found = false;
-        //für i = 0 bis borders länge
-        for(let i = 0; i<borders.length; i++){
-            // sind das die Länder des Besitzers?
-            if (borders[i].tag === army.ownerTag()){
-                // ist das Zielland enthalten?
-                for(let j = 0; j<borders[i].land.length; j++){
-                    if(borders[i].land[j][0] === army.x && borders[i].land[j][1] === army.y){
-                        // wenn ja, found = true
-                        found = true;
-                    }
-                }
-            // nicht die Länder des Besitzers
-            } else {
-                // ist das Zielland enthalten?
-                for(let j = 0; j<borders[i].land.length; j++){
-                    if(borders[i].land[j][0] === army.x && borders[i].land[j][1] === army.y){
-                        // wenn ja nimm es raus.
-                        borders[i].land.splice(j,1);
-                    }
-                }
-            }
-            //console.log(borders[i]);
-        }
-        // war nicht bereits Land des Besitzers.
-        if (!found){
-            for(let i = 0; i<borders.length; i++){
-                if (borders[i].tag === army.ownerTag()){
-                    // tu es zu den Ländern des Besitzers.
-                    borders[i].land.push([army.x, army.y]);
-                }
-            }
-        }
-    }
-}
-
 //to find all fields in a two tile proximity
 function findShootingTargets(army){
 
