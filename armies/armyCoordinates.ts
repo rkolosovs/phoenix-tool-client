@@ -56,10 +56,10 @@ function addToMultifield(armyOnMultifield, armyToAdd){
 function findShootingTargets(army){
 
     if(army.skp - army.SKPShotThisTurn > 0){//in a 2 tile range
-        army.targetList = neighborInRange(army.x, army.y,2);
+        army.targetList = HexFunction.neighborInRange(army.x, army.y,2);
     }
     else if(army.lkp - army.LKPShotThisTurn > 0){//one tile range
-        army.targetList = neighborInRange(army.x, army.y,1);
+        army.targetList = HexFunction.neighborInRange(army.x, army.y,1);
     }
     army.targetList = checkAllConditions(army, army.targetList);
 }
@@ -81,47 +81,47 @@ function checkAllConditions(army, targetList){
 }
 function checkCondition(army, x, y, skpShot){//TODO mixed shooting
     let condition = 'impossible shot';
-    let range = distance(army.x, army.y, x, y);
+    let range = HexFunction.distance(army.x, army.y, x, y);
     if(skpShot){//skp shooting
         if(range == 1){//for range of 1
-            if(height(x, y) - height(army.x, army.y) <= 2){
+            if(HexFunction.height(x, y) - HexFunction.height(army.x, army.y) <= 2){
                 condition = 'high';
             }
-            if(height(x, y) - height(army.x, army.y) <= 1){
+            if(HexFunction.height(x, y) - HexFunction.height(army.x, army.y) <= 1){
                 condition = 'short';
             }
-            if(height(x, y) - height(army.x, army.y) === 1 && findWallInWay(army.x, army.y, x, y).length > 0){
+            if(HexFunction.height(x, y) - HexFunction.height(army.x, army.y) === 1 && findWallInWay(army.x, army.y, x, y).length > 0){
                 condition = 'high';
             }
         }else if(range == 2){//for range of 2
-            if(height(x, y) - height(army.x, army.y) <= 1){
+            if(HexFunction.height(x, y) - HexFunction.height(army.x, army.y) <= 1){
                 condition = 'farAndUp';
             }
-            if(height(x, y) - height(army.x, army.y) < 1){
+            if(HexFunction.height(x, y) - HexFunction.height(army.x, army.y) < 1){
                 condition = 'far';
             }
-            if(height(x, y) - height(army.x, army.y) === 0 && findWallInWay(army.x, army.y, x, y).length > 0){
+            if(HexFunction.height(x, y) - HexFunction.height(army.x, army.y) === 0 && findWallInWay(army.x, army.y, x, y).length > 0){
                 condition = 'farAndUp';
             }
             //if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
-            let commonNeig = findCommonNeighbor(army.x, army.y, x, y);
+            let commonNeig = HexFunction.findCommonNeighbor(army.x, army.y, x, y);
             let walls = findWallInWay(army.x, army.y, x, y);
             for(let i = 0; i < commonNeig.length; i++){
                 if(walls.length > 0){
                     for(let j = 0; j < walls.length; j++){
-                        if(((height(commonNeig[i][0], commonNeig[i][1]) - height(army.x, army.y) === 1) && buildings[walls[j]].x === commonNeig[i][0] && buildings[walls[j]].y === commonNeig[i][1])){
+                        if(((HexFunction.height(commonNeig[i][0], commonNeig[i][1]) - HexFunction.height(army.x, army.y) === 1) && buildings[walls[j]].x === commonNeig[i][0] && buildings[walls[j]].y === commonNeig[i][1])){
                             condition = 'impossible shot';
                         }
                     }
                 }
-                if(height(commonNeig[i][0], commonNeig[i][1]) - height(army.x, army.y) > 1){
+                if(HexFunction.height(commonNeig[i][0], commonNeig[i][1]) - HexFunction.height(army.x, army.y) > 1){
                     condition = 'impossible shot';
                 }
             }
             
         }
     }else{//for lkp shooting
-        if(height(x, y) - height(army.x, army.y) <= 1){
+        if(HexFunction.height(x, y) - HexFunction.height(army.x, army.y) <= 1){
             condition = 'lkp';
         }
     }
@@ -130,17 +130,17 @@ function checkCondition(army, x, y, skpShot){//TODO mixed shooting
 
 function findWallInWay(fromX, fromY, toX, toY){
     let foundWallsIndeces = [];
-    let dir = getDirectionToNeighbor(fromX, fromY, toX, toY);
-    if(distance(fromX, fromY, toX, toY) === 1){
+    let dir = HexFunction.getDirectionToNeighbor(fromX, fromY, toX, toY);
+    if(HexFunction.distance(fromX, fromY, toX, toY) === 1){
         dir = (dir + 3) % 6;
         let wallIndex = getWallIndexOnFieldInDirection(toX, toY, dir);
         if(wallIndex != -1){
             foundWallsIndeces.push(wallIndex)
             return foundWallsIndeces;
         }
-    }else if(distance(fromX, fromY, toX, toY) === 2){
+    }else if(HexFunction.distance(fromX, fromY, toX, toY) === 2){
         if(dir % 1 === 0){
-            let commonNeig = findCommonNeighbor(fromX, fromY, toX, toY);
+            let commonNeig = HexFunction.findCommonNeighbor(fromX, fromY, toX, toY);
             if(getWallIndexOnFieldInDirection(commonNeig[0][0], commonNeig[0][1], dir) !== -1){//case back facing wall on common neighbor
                 foundWallsIndeces.push(getWallIndexOnFieldInDirection(commonNeig[0][0], commonNeig[0][1], dir));
             }
@@ -152,7 +152,7 @@ function findWallInWay(fromX, fromY, toX, toY){
                 foundWallsIndeces.push(getWallIndexOnFieldInDirection(toX, toY, dir));
             }
         }else{
-            let commonNeig = findCommonNeighbor(fromX, fromY, toX, toY);
+            let commonNeig = HexFunction.findCommonNeighbor(fromX, fromY, toX, toY);
             dir = Math.floor(dir);
             let dirCommon1 = (dir + 3) % 6;
             if(getWallIndexOnFieldInDirection(commonNeig[0][0], commonNeig[0][1], dirCommon1) !== -1){//case front facing wall on common neighbor 1
@@ -204,5 +204,6 @@ function convertDirection(dir){
         case 3: return "se";
         case 4: return "sw";
         case 5: return "w";
+        default: return "nw";
     }
 }
