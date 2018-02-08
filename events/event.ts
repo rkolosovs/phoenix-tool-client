@@ -4,20 +4,20 @@ abstract class PhoenixEvent{
 
     }
 
-    abstract checkEvent();
+    abstract checkEvent(): void;
 
     abstract determineEventStatus(): void;
 
-    abstract makeEventListItem(i: number): HTMLElement;
+    abstract makeEventListItem(): HTMLElement;
 
-    protected commonEventListItem(eli: HTMLElement, i: number): HTMLElement{
+    protected commonEventListItem(eli: HTMLElement, id: number): HTMLElement{
         let deleteButton: HTMLButtonElement = document.createElement("BUTTON") as HTMLButtonElement;
-        deleteButton.id = "delBtn" + i;
+        deleteButton.id = "delBtn" + id;
         deleteButton.classList.add("eventListButton");
         deleteButton.classList.add("eventListDeleteButton");
         deleteButton.addEventListener("click", (e:Event) => this.deleteEvent());
         let checkButton: HTMLButtonElement = document.createElement("BUTTON") as HTMLButtonElement;
-        checkButton.id = "checkBtn" + i;
+        checkButton.id = "checkBtn" + id;
         checkButton.classList.add("eventListButton");
         checkButton.classList.add("eventListCheckButton");
         checkButton.addEventListener("click", (e:Event) => this.checkEvent());

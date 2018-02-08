@@ -5,14 +5,14 @@ class PhoenixEvent {
         this.type = type;
         this.status = status;
     }
-    commonEventListItem(eli, i) {
+    commonEventListItem(eli, id) {
         let deleteButton = document.createElement("BUTTON");
-        deleteButton.id = "delBtn" + i;
+        deleteButton.id = "delBtn" + id;
         deleteButton.classList.add("eventListButton");
         deleteButton.classList.add("eventListDeleteButton");
         deleteButton.addEventListener("click", (e) => this.deleteEvent());
         let checkButton = document.createElement("BUTTON");
-        checkButton.id = "checkBtn" + i;
+        checkButton.id = "checkBtn" + id;
         checkButton.classList.add("eventListButton");
         checkButton.classList.add("eventListCheckButton");
         checkButton.addEventListener("click", (e) => this.checkEvent());
