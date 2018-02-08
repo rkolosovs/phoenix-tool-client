@@ -56,7 +56,7 @@ class Fleet extends Army{
 
     // TODO: Throw errors to indicate, why a move is not possible.
     checkForPossibleMove(direction: Direction): void {
-        let neighborCoords: [number, number][] = HexFunction.neighbors(army.x, army.y);
+        let neighborCoords: [number, number][] = HexFunction.neighbors(this.position[0], this.position[1]);
         let target: [number, number] = neighborCoords[direction]
         let neighborsOfNeighbors = HexFunction.neighbors(target[0], target[1]).
             map((neighbor) => HexFunction.neighbors(neighbor[0], neighbor[1])).

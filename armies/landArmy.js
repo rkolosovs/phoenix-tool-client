@@ -7,7 +7,6 @@ class LandArmy extends Army {
         else {
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints);
         }
-        this.isTransported = false;
     }
     getMaxMovePoints() {
         return LandArmy.MAX_MOVE_POINTS;
@@ -62,6 +61,56 @@ class LandArmy extends Army {
         // //to see and return the error why you cant move
         // clickedMoves(army);
         // return moveToList(army, direction);
+    }
+    checkForPossibleMove(direction) {
+        let neighborCoords = HexFunction.neighbors(this.position[0], this.position[1]);
+        let target = neighborCoords[direction];
+        let heightCost;
+        let thereIsAStreet = false;
+        let thereIsABridge = false;
+        let thereIsAHarbor = false;
+        // TODO: effects of diplomacy go here
+        let rightOfPassage = borders.some((realm) => (realm === this.owner && realm.land.some((field) => (target[0] === field[0] && target[1] === field[1]))));
+        let thereIsARiver = rivers.some((river) => (river[0][0] === this.position[0] && river[0][1] === this.position[1] && river[1][0] === target[0] && river[1][1] === target[1]) ||
+            (river[0][0] === target[0] && river[0][1] === target[1] && river[1][0] === this.position[0] && river[1][1] === this.position[1]));
+        // check if there is a steet, a harbor or a bridge on the route
+        GameState.buildings.forEach(building => {
+            if (building.type === BuildingType.STREET &&
+                ((building.getPosition() === this.position && building.getSecondPosition() === target) ||
+                    (building.getSecondPosition() === this.position && building.getPosition() === target))) {
+                thereIsAStreet = true;
+            }
+            if (building.type === BuildingType.HARBOR &&
+                ((building.getPosition() === this.position && building.getSecondPosition() === target) ||
+                    (building.getSecondPosition() === this.position && building.getPosition() === target))) {
+                thereIsAHarbor = true;
+            }
+            if (building.type === BuildingType.BRIDGE &&
+                ((building.getPosition() === this.position && building.getSecondPosition() === target) ||
+                    (building.getSecondPosition() === this.position && building.getPosition() === target))) {
+                thereIsABridge = true;
+            }
+            //TODO: Walls!
+        });
+        // check if there is a change in height on the route
+        if (HexFunction.height(this.position[0], this.position[1]) != HexFunction.height(target[0], target[1])) {
+            if (Math.abs(HexFunction.height(this.position[0], this.position[1]) - HexFunction.height(target[0], target[1])) >= 2) {
+                throw new Error("The height difference is too big.");
+            }
+            else if ((this.heightPoints < 2 && (!thereIsAStreet || !thereIsAHarbor)) || this.heightPoints < 1) {
+                throw new Error("Not enough height points left.");
+            }
+            else {
+                heightCost = (thereIsAStreet || thereIsABridge) ? 1 : 2;
+                if (thereIsARiver) {
+                    throw new Error("Can't traverse height difference with a river.");
+                }
+            }
+        }
+        let moveCost = this.computeMoveCost(thereIsAStreet, thereIsAHarbor, thereIsARiver, thereIsABridge, rightOfPassage, target);
+        this.possibleMoves.push(new Move(moveCost, heightCost, (HexFunction.fieldType(target[0], target[1]) === FieldType.SHALLOWS ||
+            HexFunction.fieldType(target[0], target[1]) === FieldType.DEEPSEA), (HexFunction.fieldType(this.position[0], this.position[1]) === FieldType.SHALLOWS ||
+            HexFunction.fieldType(this.position[0], this.position[1]) === FieldType.DEEPSEA), target, direction));
     }
     canConquer() {
         return this.getRoomPointsSansOfficers() >= 1000 && this.officerCount >= 1;
