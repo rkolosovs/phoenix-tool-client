@@ -195,7 +195,7 @@ function registerLeftClick() {
         switchModeTo("none");
     }
     else if (worldCreationModeOnClick) {
-        let posi = HexFunction.positionInList(clickedField[0], clickedField[1]);
+        let posi = HexFunction.positionInList(clickedField);
         if (changeFieldToType == -1) {
             // checks if Field should be changed to a specific type, if not use
             // normal world creation mode on click
@@ -288,7 +288,7 @@ function registerRightClick() {
     let clickedField = getClickedField();
     console.log(clickedField);
     if (worldCreationModeOnClick) {
-        let posi = HexFunction.positionInList(clickedField[0], clickedField[1]);
+        let posi = HexFunction.positionInList(clickedField);
         if (changeFieldToType == -1) {
             // checks if Field should be changed to a specific type (then
             // rightclick is disabled)
@@ -320,7 +320,7 @@ function registerRightClick() {
         else {
             let clickedArmyX = listOfArmies[selectedArmyIndex].x;
             let clickedArmyY = listOfArmies[selectedArmyIndex].y;
-            let localNeighbors = HexFunction.neighbors(clickedArmyX, clickedArmyY);
+            let localNeighbors = HexFunction.neighbors([clickedArmyX, clickedArmyY]);
             for (let i = 0; i < localNeighbors.length; i++) {
                 if (localNeighbors[i][0] === clickedField[0] && localNeighbors[i][1] === clickedField[1]) {
                     let out;
@@ -384,7 +384,7 @@ function registerRightClick() {
                             }
                         }
                         else {
-                            conquer(listOfArmies[selectedArmyIndex]);
+                            listOfArmies[selectedArmyIndex].conquer();
                         }
                     }
                     else {
@@ -904,7 +904,7 @@ function checkEvent(num) {
                 move(army, 0); //move to nw
             }
             if (!unprocessedBattleAtContainingArmy(army.ownerTag(), army.armyId, army.x, army.y)) {
-                conquer(army);
+                army.conquer();
             }
             event.status = 'checked';
             fillEventList();
@@ -1135,7 +1135,7 @@ function checkEvent(num) {
                     return false;
                 }
                 else {
-                    fernkampf(lkpRolls, skpRolls, shooter, cont.target, cont.toX, cont.toY, null); // TODO chars
+                    fernkampf(lkpRolls, skpRolls, shooter, cont.target, [cont.toX, cont.toY], null); // TODO chars
                     hide(shootBox.getSelf());
                     event.status = 'checked';
                     fillEventList();

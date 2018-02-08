@@ -162,7 +162,7 @@ namespace Loading{
 						realms.find(realm => realm.tag === building.realm), -1,
 						stringToDirection(building.direction), -1); //TODO: BuildPoints, Soldiers
 					case 6:
-					case 7: let secondPos: number[] = HexFunction.neighbors(building.x, building.y)[stringToDirection(building.direction)];
+					case 7: let secondPos: number[] = HexFunction.neighbors([building.x, building.y])[stringToDirection(building.direction)];
 						return new NonDestructibleBuilding(building.type, [building.x, building.y],
 						[secondPos[0], secondPos[1]], realms.find(realm => realm.tag === building.realm));
 					case 8: return new NonDestructibleBuilding(building.type, [building.firstX, building.firstY],

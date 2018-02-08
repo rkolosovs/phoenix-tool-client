@@ -148,7 +148,7 @@ var Loading;
                     case 5: return new Wall(building.type, [building.x, building.y], realms.find(realm => realm.tag === building.realm), -1, stringToDirection(building.direction), -1); //TODO: BuildPoints, Soldiers
                     case 6:
                     case 7:
-                        let secondPos = HexFunction.neighbors(building.x, building.y)[stringToDirection(building.direction)];
+                        let secondPos = HexFunction.neighbors([building.x, building.y])[stringToDirection(building.direction)];
                         return new NonDestructibleBuilding(building.type, [building.x, building.y], [secondPos[0], secondPos[1]], realms.find(realm => realm.tag === building.realm));
                     case 8: return new NonDestructibleBuilding(building.type, [building.firstX, building.firstY], [building.secondX, building.secondY], realms.find(realm => realm.tag === building.realm));
                     default: return undefined;

@@ -566,9 +566,9 @@ namespace Drawing{
 		if(selectedFields[index] === undefined){
 			minimapBox.innerHTML = '';
 		}else {
-			let fieldPositionInList = HexFunction.positionInList(selectedFields[index][0], selectedFields[index][1]);
+			let fieldPositionInList = HexFunction.positionInList(selectedFields[index]);
 			let localfieldType = '';
-			switch(HexFunction.fieldType(selectedFields[index][0], selectedFields[index][1])){
+			switch(HexFunction.fieldType(selectedFields[index])){
 				case 0: localfieldType = 'Wasser'; break;
 				case 1: localfieldType = 'Tiefsee'; break;
 				case 2: localfieldType = 'Tiefland'; break;
@@ -586,7 +586,7 @@ namespace Drawing{
 			let fieldOwnerString = (fieldOwner === undefined)?'keiner':fieldOwner.tag;
 			minimapBox.innerHTML = '<p>Feld: ('+selectedFields[index][0]+', '+selectedFields[index][1]+')'+
 				'</p><p>Gelände: '+localfieldType+
-				'</p><p>Höhe: '+HexFunction.height(selectedFields[index][0], selectedFields[index][1])+
+				'</p><p>Höhe: '+HexFunction.height(selectedFields[index])+
 				'</p><p>Besitzer: '+fieldOwnerString+'</p>';
 		}
 	}
