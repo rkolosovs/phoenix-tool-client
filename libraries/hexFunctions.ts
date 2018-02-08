@@ -6,70 +6,63 @@
 namespace HexFunction {
 
     // returns the fields neighbors in the usual order
-    export function neighbors(x: number, y: number): [number, number][] {
-        //reihenfolge NW,NO,O,SO,SW,W
-        if (y % 2 === 0) {
-            return [[x, y - 1], [x + 1, y - 1], [x + 1, y], [x + 1, y + 1], [x, y + 1], [x - 1, y]];
+    export function neighbors(hex: [number, number]): [number, number][] {
+        //usual order: NW,NO,O,SO,SW,W
+        if (hex[1] % 2 === 0) {
+            return [[hex[0], hex[1]-1], [hex[0]+1, hex[1]-1], [hex[0]+1, hex[1]], [hex[0]+1, hex[1]+1], [hex[0], hex[1]+1], [hex[0]-1, hex[1]]];
         } else {
-            return [[x - 1, y - 1], [x, y - 1], [x + 1, y], [x, y + 1], [x - 1, y + 1], [x - 1, y]];
+            return [[hex[0]-1, hex[1]-1], [hex[0], hex[1]-1], [hex[0]+1, hex[1]], [hex[0], hex[1]+1], [hex[0]-1, hex[1]+1], [hex[0]-1, hex[1]]];
         }
     }
 
-    // reihenfolge NW,NO,O,SO,SW,W,
-    export function fluesse(x: number, y: number): boolean[] {
-        let flussAcc = [false, false, false, false, false, false];
-        let surroundings = neighbors(x, y);
+    // order: NW,NO,O,SO,SW,W,
+    export function fluesse(hex: [number, number]): boolean[] {
+        let result = [false, false, false, false, false, false];
+        let surroundings = neighbors(hex);
         for (let i = 0; i < GameState.rivers.length; i++) {
             let river: River = rivers[i];
-            if ((x === river.leftBank[0] && y === river.leftBank[1]) || (x === river.rightBank[0] && y === river.rightBank[1])) {
+            if ((hex[0] === river.leftBank[0] && hex[1] === river.leftBank[1]) ||
+                (hex[0] === river.rightBank[0] && hex[1] === river.rightBank[1])) {
                 for (let j = 0; j < surroundings.length; j++) {
                     if ((surroundings[j][0] === river.leftBank[0] && surroundings[j][1] === river.leftBank[1]) ||
                         (surroundings[j][0] === river.rightBank[0] && surroundings[j][1] === river.rightBank[1])) {
-                        flussAcc[j] = true;
+                        result[j] = true;
                     }
                 }
             }
         }
-        return flussAcc;
-    }
-    // where in the field list is this field
-    export function positionInList(x: number, y: number): number {
-        for (var i = 0; i < GameState.fields.length; i++) {
-            if ((GameState.fields[i].coordinates[0] === x) && (GameState.fields[i].coordinates[1] === y)) { return i; }
-        }
-        return -1;
-    }
-    // what type is this field
-    export function fieldType(x: number, y: number): FieldType {
-        for (var i = 0; i < GameState.fields.length; i++) {
-            if ((GameState.fields[i].coordinates[0] === x) && (GameState.fields[i].coordinates[1] === y)) {
-                return GameState.fields[i].type;
-            }
-        }
-        return -1;
-    }
-    // what height is this field
-    export function height(x: number, y: number): number {
-        for (var i = 0; i < GameState.fields.length; i++) {
-            if ((GameState.fields[i].coordinates[0] === x) && (GameState.fields[i].coordinates[1] === y)) {
-                return GameState.fields[i].getHeight();
-            }
-        }
-        return -1;
+        return result;
     }
 
-    //reihenfolge NW,NO,O,SO,SW,W
+    // where in the field list is this field
+    export function positionInList(hex: [number, number]): number {
+        return GameState.fields.findIndex(field => field[0] === hex[0] && field[1] === hex[1]);
+    }
+
+    // what type is this field
+    export function fieldType(hex: [number, number]): FieldType {
+        let field: Field = GameState.fields.find(field => field[0] === hex[0] && field[1] === hex[1]);
+        return (field != undefined)?field.type:-1;
+    }
+
+    // what height is this field
+    export function height(hex: [number, number]): number {
+        let field: Field = GameState.fields.find(field => field[0] === hex[0] && field[1] === hex[1]);
+        return (field != undefined)?field.getHeight():-1;
+    }
+
+    //order: NW,NO,O,SO,SW,W
     //returns the number value corresponting to the direction. if it has a .5 it is 
-    export function getDirectionToNeighbor(fromX: number, fromY: number, toX: number, toY: number): number {
-        if (distance(fromX, fromY, toX, toY) === 1) {
-            let possibleDir = neighbors(fromX, fromY);
+    export function getDirectionToNeighbor(from: [number, number], to: [number, number]): number {
+        if (distance(from, to) === 1) {
+            let possibleDir = neighbors(from);
             for (let i = 0; i < possibleDir.length; i++) {
-                if (possibleDir[i][0] == toX && possibleDir[i][1] === toY)
+                if (possibleDir[i][0] == to[0] && possibleDir[i][1] === to[1])
                     return i;
             }
-        } else if (distance(fromX, fromY, toX, toY) === 2) {
-            let targetNeighbors = neighbors(toX, toY);
-            let originNeighbors = neighbors(fromX, fromY);
+        } else if (distance(from, to) === 2) {
+            let targetNeighbors = neighbors(to);
+            let originNeighbors = neighbors(from);
             let foundNeigh = false;
             let direction = -1;
             for (let j = 0; j < targetNeighbors.length; j++) {
@@ -93,26 +86,26 @@ namespace HexFunction {
     //returns the distance from here to target Hex
     //to properly do this we use a 3D/Cube coordinate system as described at
     //https://www.redblobgames.com/grids/hexagons/
-    export function distance(originX: number, originY: number, toX: number, toY: number): number {
+    export function distance(origin: [number, number], to: [number, number]): number {
         //this is the cube coordinates for the current Hex
         let thisCubeX = originX - (originY + (originY & 1)) / 2;
         let thisCubeZ = originY;
         let thisCubeY = - thisCubeX - thisCubeZ;
 
         //this is the cube coordinates for the current Hex
-        let targetCubeX = toX - (toY + (toY & 1)) / 2;//bitwise & as an alternative to modulo that works without exceptions(negative numbers)
-        let targetCubeZ = toY;
+        let targetCubeX = to[0] - (to[1] + (to[1] & 1)) / 2;//bitwise & as an alternative to modulo that works without exceptions(negative numbers)
+        let targetCubeZ = to[1];
         let targetCubeY = - targetCubeX - targetCubeZ;
 
         return Math.max(Math.abs(thisCubeX - targetCubeX), Math.abs(thisCubeY - targetCubeY), Math.abs(thisCubeZ - targetCubeZ));
     }
 
-    export function neighborInRange(x: number, y: number, range: number): [number, number][] {
+    export function neighborInRange(hex: [number, number], range: number): [number, number][] {
         let neighbors = [];
-        for (var i = x - range; i <= x + range; i++) {
-            for (var j = y - range; j <= y + range; j++) {
-                let dist = distance(x, y, i, j);
-                if (i != x || j != y) {
+        for (let i = hex[0] - range; i <= hex[0] + range; i++) {
+            for (let j = hex[1] - range; j <= hex[1] + range; j++) {
+                let dist = distance(hex, [i, j]);
+                if (i != hex[0] || j != hex[1]) {
                     if (dist <= range) {
                         neighbors.push([i, j]);
                     }
@@ -123,13 +116,13 @@ namespace HexFunction {
     }
 
 
-    export function findCommonNeighbor(fromX: number, fromY: number, toX: number, toY: number): [number, number][] {
-        let targetNeighbors = neighbors(toX, toY);
-        let originNeighbors = neighbors(fromX, fromY);
+    export function findCommonNeighbor(from: [number, number], to: [number, number]): [number, number][] {
+        let targetNeighbors = neighbors(to);
+        let originNeighbors = neighbors(from);
         let foundCommon = [];
         for (let j = 0; j < targetNeighbors.length; j++) {
             for (let k = 0; k < originNeighbors.length; k++) {
-                if (targetNeighbors[j][0] == originNeighbors[k][0] && targetNeighbors[j][1] == originNeighbors[k][1]) {
+                if (targetNeighbors[j][0] === originNeighbors[k][0] && targetNeighbors[j][1] === originNeighbors[k][1]) {
                     foundCommon.push(targetNeighbors[j]);
                 }
             }
@@ -138,16 +131,16 @@ namespace HexFunction {
     }
 
     // does the field has a street on it in any direction
-    export function hasStreet(x: number, y: number): boolean {
-        return buildings.some((elem) => elem.type === 8 && ((elem.firstX === x && elem.firstY === y) ||
-            (elem.secondX === x && elem.secondY === y)));
+    export function hasStreet(hex: [number, number]): boolean {
+        return buildings.some((elem) => elem.type === 8 && ((elem.firstX === hex[0] && elem.firstY === hex[1]) ||
+            (elem.secondX === hex[0] && elem.secondY === hex[1])));
     }
 
     // in which directions does this field have walls (order as above, only walls build on this field)
-    export function walls(x: number, y: number): boolean[] {
+    export function walls(hex: [number, number]): boolean[] {
         let result = [false, false, false, false, false, false];
         let walls = GameState.buildings.filter(elem => (elem instanceof Wall &&
-            elem.getPosition()[0] === x && elem.getPosition()[1] === y));
+            elem.getPosition()[0] === hex[0] && elem.getPosition()[1] === hex[1]));
         walls.forEach(wall => {
             switch ((wall as Wall).facing) {
                 case Direction.NW: result[0] = true; break;
@@ -160,16 +153,17 @@ namespace HexFunction {
         });
         return result;
     }
+
     // in which directions does this field have bridges (order as above)
-    export function bridges(x: number, y: number): boolean[] {
+    export function bridges(hex: [number, number]): boolean[] {
         let result = [false, false, false, false, false, false];
-        let neighbor = neighbors(x, y);
+        let neighbor = neighbors(hex);
         buildings.forEach(elem => {
             if (elem.type === BuildingType.BRIDGE) {//bridge type
-                if (elem.getPosition()[0] === x && elem.getPosition()[1] === y) {//bridge on this field
+                if (elem.getPosition()[0] === hex[0] && elem.getPosition()[1] === hex[1]) {//bridge on this field
                     result[neighbor.indexOf((elem as NonDestructibleBuilding).getSecondPosition())] = true;
-                } else if ((elem as NonDestructibleBuilding).getSecondPosition()[0] === x &&
-                    elem.getSecondPosition()[1] === y) {
+                } else if ((elem as NonDestructibleBuilding).getSecondPosition()[0] === hex[0] &&
+                    elem.getSecondPosition()[1] === hex[1]) {
                     result[neighbor.indexOf((elem as NonDestructibleBuilding).getPosition())] = true;
                 }
             }
