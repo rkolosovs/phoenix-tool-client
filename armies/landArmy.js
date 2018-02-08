@@ -24,7 +24,8 @@ class LandArmy extends Army {
                 this.transportingFleet.unloadArmy(this);
             }
             else if (move.loading && !this.isTransported()) {
-                let fleetsOnDestination = GameState.armies.filter(army => army instanceof Fleet && army.getPosition() === move.destination).map(army => army);
+                let fleetsOnDestination = GameState.armies.filter(army => army instanceof Fleet && army.getPosition()[0] === move.destination[0] &&
+                    army.getPosition()[1] === move.destination[1]).map(army => army);
                 if (fleetsOnDestination.length === 0) {
                     // TODO: throw error
                     // return "You can't walk on Water.";
@@ -63,7 +64,7 @@ class LandArmy extends Army {
         // return moveToList(army, direction);
     }
     checkForPossibleMove(direction) {
-        let neighborCoords = HexFunction.neighbors(this.position[0], this.position[1]);
+        let neighborCoords = HexFunction.neighbors(this.position);
         let target = neighborCoords[direction];
         let heightCost;
         let thereIsAStreet = false;
@@ -93,8 +94,8 @@ class LandArmy extends Army {
             //TODO: Walls!
         });
         // check if there is a change in height on the route
-        if (HexFunction.height(this.position[0], this.position[1]) != HexFunction.height(target[0], target[1])) {
-            if (Math.abs(HexFunction.height(this.position[0], this.position[1]) - HexFunction.height(target[0], target[1])) >= 2) {
+        if (HexFunction.height(this.position) != HexFunction.height(target)) {
+            if (Math.abs(HexFunction.height(this.position) - HexFunction.height(target)) >= 2) {
                 throw new Error("The height difference is too big.");
             }
             else if ((this.heightPoints < 2 && (!thereIsAStreet || !thereIsAHarbor)) || this.heightPoints < 1) {
@@ -108,9 +109,9 @@ class LandArmy extends Army {
             }
         }
         let moveCost = this.computeMoveCost(thereIsAStreet, thereIsAHarbor, thereIsARiver, thereIsABridge, rightOfPassage, target);
-        this.possibleMoves.push(new Move(moveCost, heightCost, (HexFunction.fieldType(target[0], target[1]) === FieldType.SHALLOWS ||
-            HexFunction.fieldType(target[0], target[1]) === FieldType.DEEPSEA), (HexFunction.fieldType(this.position[0], this.position[1]) === FieldType.SHALLOWS ||
-            HexFunction.fieldType(this.position[0], this.position[1]) === FieldType.DEEPSEA), target, direction));
+        this.possibleMoves.push(new Move(moveCost, heightCost, (HexFunction.fieldType(target) === FieldType.SHALLOWS ||
+            HexFunction.fieldType(target) === FieldType.DEEPSEA), (HexFunction.fieldType(this.position) === FieldType.SHALLOWS ||
+            HexFunction.fieldType(this.position) === FieldType.DEEPSEA), target, direction));
     }
     canConquer() {
         return this.getRoomPointsSansOfficers() >= 1000 && this.officerCount >= 1;

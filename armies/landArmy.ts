@@ -34,7 +34,8 @@ abstract class LandArmy extends Army{
                 this.transportingFleet.unloadArmy(this);
             } else if(move.loading && !this.isTransported()) {
                 let fleetsOnDestination: Fleet[] = GameState.armies.filter(
-                    army => army instanceof Fleet && army.getPosition() === move.destination).map(
+                    army => army instanceof Fleet && army.getPosition()[0] === move.destination[0] &&
+                        army.getPosition()[1] === move.destination[1]).map(
                     army => army as Fleet);
                 if(fleetsOnDestination.length === 0){
                     // TODO: throw error
@@ -73,7 +74,7 @@ abstract class LandArmy extends Army{
     }
 
     checkForPossibleMove(direction: Direction): void {
-        let neighborCoords: [number, number][] = HexFunction.neighbors(this.position[0], this.position[1]);
+        let neighborCoords: [number, number][] = HexFunction.neighbors(this.position);
         let target: [number, number] = neighborCoords[direction];
         let heightCost: number;
         let thereIsAStreet: boolean = false;
@@ -108,8 +109,8 @@ abstract class LandArmy extends Army{
 
 
         // check if there is a change in height on the route
-        if(HexFunction.height(this.position[0], this.position[1]) != HexFunction.height(target[0], target[1])){
-            if(Math.abs(HexFunction.height(this.position[0], this.position[1]) - HexFunction.height(target[0], target[1])) >= 2){
+        if(HexFunction.height(this.position) != HexFunction.height(target)){
+            if(Math.abs(HexFunction.height(this.position) - HexFunction.height(target)) >= 2){
                 throw new Error("The height difference is too big.");
             } else if((this.heightPoints < 2 && (!thereIsAStreet || !thereIsAHarbor)) || this.heightPoints < 1){
                 throw new Error("Not enough height points left.");
@@ -123,10 +124,10 @@ abstract class LandArmy extends Army{
             rightOfPassage, target);
 
         this.possibleMoves.push(new Move(moveCost, heightCost,
-            (HexFunction.fieldType(target[0], target[1]) === FieldType.SHALLOWS ||
-                HexFunction.fieldType(target[0], target[1]) === FieldType.DEEPSEA),
-            (HexFunction.fieldType(this.position[0], this.position[1]) === FieldType.SHALLOWS ||
-                HexFunction.fieldType(this.position[0], this.position[1]) === FieldType.DEEPSEA), target, direction));
+            (HexFunction.fieldType(target) === FieldType.SHALLOWS ||
+                HexFunction.fieldType(target) === FieldType.DEEPSEA),
+            (HexFunction.fieldType(this.position) === FieldType.SHALLOWS ||
+                HexFunction.fieldType(this.position) === FieldType.DEEPSEA), target, direction));
     }
 
     protected abstract computeMoveCost(thereIsAStreet: boolean, thereIsAHarbor: boolean, thereIsARiver: boolean,

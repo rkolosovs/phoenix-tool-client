@@ -55,15 +55,15 @@ class Fleet extends Army{
     }
 
     checkForPossibleMove(direction: Direction): void {
-        let neighborCoords: [number, number][] = HexFunction.neighbors(this.position[0], this.position[1]);
+        let neighborCoords: [number, number][] = HexFunction.neighbors(this.position);
         let target: [number, number] = neighborCoords[direction]
-        let neighborsOfNeighbors = HexFunction.neighbors(target[0], target[1]).
-            map((neighbor) => HexFunction.neighbors(neighbor[0], neighbor[1])).
+        let neighborsOfNeighbors = HexFunction.neighbors(target).
+            map((neighbor) => HexFunction.neighbors(neighbor)).
             reduce((total, current) => (total.concat(current)), []);
         // TODO: Effects of diplomacy go here.
         let coastalSailing = borders.some((realm) => (realm === this.owner && realm.land.some((field) =>
             neighborsOfNeighbors.some((neighbor) => (field[0] === neighbor[0] && field[1] === neighbor[1])))));
-        switch(HexFunction.fieldType(target[0], target[1])){
+        switch(HexFunction.fieldType(target)){
             case FieldType.SHALLOWS: //shallow sea
                 if(this.lightCatapultCount + this.heavyCatapultCount <= 0){ //shallow sea & no warships
                     if(coastalSailing && this.movePoints >= 5){//shallow sea, coast & no warships

@@ -50,7 +50,7 @@ class Army extends MobileEntity {
     }
     conquer() {
         if (this.canConquer()) {
-            let field = GameState.fields[HexFunction.positionInList(this.position[0], this.position[1])];
+            let field = GameState.fields[HexFunction.positionInList(this.position)];
             GameState.realms.forEach(realm => {
                 let index = realm.territory.indexOf(field);
                 if (index !== -1) {

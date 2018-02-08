@@ -1,6 +1,6 @@
 // array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null),
 // schießende Armee, ziel Armee, Charaktere und Zauberer auf dem Zielfeld
-function fernkampf(dicerollsL, dicerollsS, shooter, target, x, y, chars) {
+function fernkampf(dicerollsL, dicerollsS, shooter, target, targetField: [number, number], chars) {
     let charGpSum = 0;
     if(chars != undefined){
         let cLen = chars.length;
@@ -9,12 +9,13 @@ function fernkampf(dicerollsL, dicerollsS, shooter, target, x, y, chars) {
         }
 	}
 
-	let damage = shooter.fireLkp(dicerollsL, checkCondition(shooter, x, y, false)) + shooter.fireSkp(dicerollsS, checkCondition(shooter, x, y, true));
+	let damage = shooter.fireLkp(dicerollsL, checkCondition(shooter, targetField, false)) +
+		shooter.fireSkp(dicerollsS, checkCondition(shooter, targetField, true));
 	let allTargets = [];
 	let sumAllBP = 0;
 	if(target === "On Field"){
 		for(let i = 0; i < buildings.length; i++){
-			if(buildings[i].x === x && buildings[i].y === y && buildings[i].type < 5){
+			if(buildings[i].x === targetField[0] && buildings[i].y === targetField[1] && buildings[i].type < 5){
 				//TODO building takes 2/3 damage
 				//building[i].takeFire(damage * (2/3));
 				damage = damage * (1/3);
@@ -22,7 +23,7 @@ function fernkampf(dicerollsL, dicerollsS, shooter, target, x, y, chars) {
 		}
 
 		for(let i = 0; i < listOfArmies.length; i++){
-			if(listOfArmies[i].x === x && listOfArmies[i].y === y){
+			if(listOfArmies[i].x === targetField[0] && listOfArmies[i].y === targetField[1]){
 				allTargets.push(listOfArmies[i]);
 				sumAllBP += listOfArmies[i].sumBP();
 			}
@@ -110,7 +111,7 @@ function shoot(){
 
 	//check for mixed shooting(reachable by both lkp and skp)
 	if(LKPshooting < 0){
-		let cond = checkCondition(shootingarmy, selectedFields[1][0], selectedFields[1][1], false);
+		let cond = checkCondition(shootingarmy, selectedFields[1], false);
 		if(cond === 'impossible shot'){
 			window.alert("Sie müssen auf ein gemeinsam erreichbares Feld schießen");
 			return false;
@@ -746,7 +747,7 @@ function mergeSelectedArmy(mergeId) {
 				y: listOfArmies[selectedArmyIndex].y
 			}
 		});
-		deleteArmy(selectedArmyIndex)();
+		deleteArmy(selectedArmyIndex);
 	}
 	else if (listOfArmies[selectedArmyIndex].armyType() === 3) {
 		listOfArmies[mergeId].count += listOfArmies[selectedArmyIndex].count;
@@ -760,17 +761,12 @@ function mergeSelectedArmy(mergeId) {
 		if (listOfArmies[selectedArmyIndex].remainingHeightPoints < listOfArmies[mergeId].remainingHeightPoints) {
 			listOfArmies[mergeId].setRemainingHeightPoints(listOfArmies[selectedArmyIndex].remainingHeightPoints);
 		}
-		console.log("the loaded armies in the new fleet are:");
-		console.log(listOfArmies[mergeId].loadedArmies);
 		if (listOfArmies[selectedArmyIndex].loadedArmies.length > 0) {
-			console.log("id = " + listOfArmies[selectedArmyIndex].loadedArmies[i]);
 			for (let j = 0; j < listOfArmies[selectedArmyIndex].loadedArmies.length; j++) {
 				for (let i = 0; i < listOfArmies.length; i++) {
 					if (listOfArmies[selectedArmyIndex].loadedArmies[j] == listOfArmies[i].armyId &&
 						listOfArmies[mergeId].owner === listOfArmies[i].owner) {
-						console.log(listOfArmies[i].armyId + " was loaded in " + listOfArmies[i].isLoadedIn + ",");
 						listOfArmies[i].isLoadedIn = listOfArmies[mergeId].armyId;
-						console.log("but is now loaded in " + listOfArmies[i].isLoadedIn + ".");
 					}
 				}
 			}
@@ -779,7 +775,6 @@ function mergeSelectedArmy(mergeId) {
 			for (let i = 0; i < listOfArmies.length; i++) {
 				if (listOfArmies[mergeId].loadedArmies[j] == listOfArmies[i].armyId &&
 					listOfArmies[mergeId].owner === listOfArmies[i].owner) {
-					console.log(listOfArmies[i].armyId + " is loaded in " + listOfArmies[i].isLoadedIn + ".");
 				}
 			}
 		}
@@ -797,7 +792,7 @@ function mergeSelectedArmy(mergeId) {
 				y: listOfArmies[selectedArmyIndex].y
 			}
 		});
-		deleteArmy(selectedArmyIndex)();
+		deleteArmy(selectedArmyIndex);
 	}
 	if (mergeId = listOfArmies.length) {
 		mergeId -= 1;
@@ -816,12 +811,12 @@ function deleteArmy(index) {
 
 // returns the next armyId not yet assigned for the caller
 function generateArmyId(type, owner) {
-	if (type == 1) {
+	if (type === 1) {
 		let j = 101;
 		while (j < 200) {
 			let found = false;
 			for (let i = 0; i < listOfArmies.length; i++) {
-				if (listOfArmies[i].armyId == j && listOfArmies[i].owner == owner) {
+				if (listOfArmies[i].armyId === j && listOfArmies[i].owner === owner) {
 					j++;
 					found = true;
 				}
@@ -832,12 +827,12 @@ function generateArmyId(type, owner) {
 		}
 		window.alert("Du hast die maximale Anzahl an Fußheeren erreicht.")
 		return false;
-	} else if (type == 2) {
+	} else if (type === 2) {
 		let j = 201;
 		while (j < 300) {
 			let found = false;
 			for (let i = 0; i < listOfArmies.length; i++) {
-				if (listOfArmies[i].armyId == j && listOfArmies[i].owner === owner) {
+				if (listOfArmies[i].armyId === j && listOfArmies[i].owner === owner) {
 					j++;
 					found = true;
 				}
@@ -848,12 +843,12 @@ function generateArmyId(type, owner) {
 		}
 		window.alert("Du hast die maximale Anzahl an Reiterheeren erreicht.")
 		return false;
-	} else if (type == 3) {
+	} else if (type === 3) {
 		let j = 301;
 		while (j < 400) {
 			let found = false;
 			for (let i = 0; i < listOfArmies.length; i++) {
-				if (listOfArmies[i].armyId == j && listOfArmies[i].owner === owner) {
+				if (listOfArmies[i].armyId === j && listOfArmies[i].owner === owner) {
 					j++;
 					found = true;
 				}

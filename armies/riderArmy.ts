@@ -24,15 +24,15 @@ class RiderArmy extends LandArmy{
 
     computeMoveCost(thereIsAStreet: boolean, thereIsAHarbor: boolean, thereIsARiver: boolean, thereIsABridge: boolean,
                     rightOfPassage: boolean, target: [number, number]): number{
-        switch(HexFunction.fieldType(target[0], target[1])){
+        switch(HexFunction.fieldType(target)){
             case FieldType.SHALLOWS:
             case FieldType.DEEPSEA: //watter
                 //already embarked
                 if(this.transportingFleet != undefined){
                     throw new Error("You are already embarked on a Fleet.");
                 // there are no viable fleets on destination
-                } else if(GameState.armies.filter(army => army instanceof Fleet && army.getPosition() === target &&
-                        army.owner === this.owner && (army as Fleet).canLoad(this)).length === 0){
+                } else if(GameState.armies.filter(army => army instanceof Fleet && army.getPosition()[0] === target[0] &&
+                        army.getPosition()[1] === target[1] && army.owner === this.owner && (army as Fleet).canLoad(this)).length === 0){
                     throw new Error("You can't walk on Water.");
                 // at least one fleet on destination
                 } else {
@@ -110,8 +110,7 @@ class RiderArmy extends LandArmy{
     }
 
     takeRPDamage(rpDamage: number): void{
-        this.takeDamage(Math.ceil(rpDamage/(RIDER_RP+
-            OFFICER_RP*(this.officerCount/this.troopCount))));
+        this.takeDamage(Math.ceil(rpDamage/(RIDER_RP+OFFICER_RP*(this.officerCount/this.troopCount))));
     }
 
     canHaveCatapults(): boolean{

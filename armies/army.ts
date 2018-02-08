@@ -75,7 +75,7 @@ abstract class Army extends MobileEntity{
 
     conquer(): void {
         if(this.canConquer()){
-            let field: Field = GameState.fields[HexFunction.positionInList(this.position[0], this.position[1])];
+            let field: Field = GameState.fields[HexFunction.positionInList(this.position)];
             GameState.realms.forEach(realm => { //delete from other territories (if there)
                 let index = realm.territory.indexOf(field);
                 if(index !== -1){
