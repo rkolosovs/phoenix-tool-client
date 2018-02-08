@@ -18,7 +18,8 @@ abstract class MobileEntity extends MapEntity{
     abstract getErkenfaraID(): number;
 
     abstract move(direction: Direction): void;
-    //TODO: Move the appropriate part of the movement logic here.
+
+    abstract checkForPossibleMove(direction: Direction): void;
 
     abstract getRoomPoints(): number;
 
