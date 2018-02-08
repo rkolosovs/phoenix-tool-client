@@ -53,7 +53,7 @@ class Fleet extends Army {
         // TODO: Effects of diplomacy go here.
         let coastalSailing = borders.some((realm) => (realm === this.owner && realm.land.some((field) => neighborsOfNeighbors.some((neighbor) => (field[0] === neighbor[0] && field[1] === neighbor[1])))));
         switch (HexFunction.fieldType(target[0], target[1])) {
-            case 0://shallow sea
+            case FieldType.SHALLOWS://shallow sea
                 if (this.lightCatapultCount + this.heavyCatapultCount <= 0) {
                     if (coastalSailing && this.movePoints >= 5) {
                         this.possibleMoves.push(new Move(5, 0, false, false, target, direction));
@@ -93,7 +93,7 @@ class Fleet extends Army {
                         throw new Error("You don't have enough movement Points.");
                     }
                 }
-            case 1://deep sea
+            case FieldType.DEEPSEA://deep sea
                 if (this.lightCatapultCount + this.heavyCatapultCount <= 0) {
                     if (coastalSailing && this.movePoints >= 8) {
                         this.possibleMoves.push(new Move(8, 0, false, false, target, direction));
@@ -133,13 +133,13 @@ class Fleet extends Army {
                         throw new Error("You don't have enough movement Points.");
                     }
                 }
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8: throw new Error("You can't drive your ships up land.");
+            case FieldType.LOWLANDS:
+            case FieldType.WOODS:
+            case FieldType.HILLS:
+            case FieldType.HIGHLANDS:
+            case FieldType.MOUNTAINS:
+            case FieldType.DESERT:
+            case FieldType.SWAMP: throw new Error("You can't drive your ships up land.");
             default: throw new Error("Unknown terrain type.");
         }
     }

@@ -34,6 +34,176 @@ class FootArmy extends LandArmy{
         this.mountCount = Math.max(0, value);
     }
 
+    computeMoveCost(thereIsAStreet: boolean, thereIsAHarbor: boolean, thereIsARiver: boolean, thereIsABridge: boolean,
+                    rightOfPassage: boolean, target: [number, number]): number{
+        switch(HexFunction.fieldType(target[0], target[1])){
+            case FieldType.SHALLOWS:
+            case FieldType.DEEPSEA: //watter
+                //already embarked
+                if(this.transportingFleet != undefined){
+                    throw new Error("You are already embarked on a Fleet.");
+                    // there are no viable fleets on destination
+                } else if(GameState.armies.filter(army => army instanceof Fleet && army.getPosition() === target &&
+                        army.owner === this.owner && (army as Fleet).canLoad(this)).length === 0){
+                    throw new Error("You can't walk on Water.");
+                    // at least one fleet on destination
+                } else {
+                    return 0; //embarking doesn't cost move points
+                }
+            case FieldType.LOWLANDS:
+            case FieldType.HILLS:
+            case FieldType.DESERT: if(thereIsARiver && !thereIsABridge){ //plains, hills, desert
+                if(this.movePoints >= this.getMaxMovePoints()){
+                    return this.getMaxMovePoints();
+                } else {
+                    throw new Error("You need you full movement to cross a river.");
+                }
+            } else if(thereIsAStreet){//street
+                if(rightOfPassage){//right of passage
+                    if(this.heavyCatapultCount + this.lightCatapultCount > 0 && this.movePoints >= 4){ //catapults, street & right of passage
+                        return 4;
+                    } else if (this.movePoints >= 3){ //no catapults, street & right of passage
+                        return 3;
+                    } else {throw new Error("You don't have enough movement Points.");}
+                } else if(this.movePoints >= 4){//street & no right of passage
+                    return 4;
+                } else {
+                    throw new Error("You don't have enough movement Points.");
+                }
+            } else {//no street
+                if(rightOfPassage){//right of passage
+                    if(this.heavyCatapultCount + this.lightCatapultCount > 0 && this.movePoints >= 7){ //catapults, no street & right of passage
+                        return 7;
+                    } else if (this.movePoints >= 4){ //no catapults, no street & right of passage
+                        return 4;
+                    } else {throw new Error("You don't have enough movement Points.");}
+                } else if(this.movePoints >= 7){//no street & no right of passage
+                    return 7;
+                } else {
+                    throw new Error("You don't have enough movement Points.");
+                }
+            }
+            case FieldType.HIGHLANDS: if(thereIsARiver && !thereIsABridge){ //highlands
+                if(this.movePoints >= this.getMaxMovePoints()){
+                    return 9;
+                } else {
+                    throw new Error("You need you full movement to cross a river.");
+                }
+            } else if(thereIsAStreet){ //street
+                if(rightOfPassage){ //street & right of passage
+                    if(this.heavyCatapultCount > 0 && this.movePoints >= 7){//heavy catas, street & right of passage
+                        return 7;
+                    } else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 4){//light catas, street & right of passage
+                        return 4;
+                    } else if (this.lightCatapultCount + this.heavyCatapultCount <= 0 && this.movePoints >= 3){//no catas, street & right of passage
+                        return 3;
+                    } else {throw new Error("You don't have enough movement Points.");}
+                } else { //street & no right of passage
+                    if(this.heavyCatapultCount > 0){ //heavy catas, street & no right of passage
+                        if(this.movePoints >= 7){
+                            return 7;
+                        } else {throw new Error("You don't have enough movement Points.");}
+                    } else if(this.movePoints >= 4){//light or no catas, street & no right of passage
+                        return 4;
+                    } else {
+                        throw new Error("You don't have enough movement Points.");
+                    }
+                }
+            } else { //no street
+                if(rightOfPassage){ //no street & right of passage
+                    if(this.heavyCatapultCount > 0){//heavy catas, no street & right of passage
+                        throw new Error("You need a street to move into the highlands with heavy catapults.");
+                    } else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 7){//light catas, no street & right of passage
+                        return 7;
+                    } else if (this.heavyCatapultCount + this.lightCatapultCount <= 0 && this.movePoints >= 4){//no catas, no street & right of passage
+                        return 4;
+                    } else {throw new Error("You don't have enough movement Points.");}
+                } else { //no street & no right of passage
+                    if(this.heavyCatapultCount > 0){//heavy catas, no street & no right of passage
+                        throw new Error("You need a street to move into the highlands with heavy catapults.");
+                    } else if (this.heavyCatapultCount <= 0 && this.movePoints >= 7){//light or no catas, no street & no right of passage
+                        return 7;
+                    } else {throw new Error("You don't have enough movement Points.");}
+                }
+            }
+            case FieldType.MOUNTAINS: if(thereIsARiver && !thereIsABridge){ //mountains
+                if(this.movePoints >= this.getMaxMovePoints()){
+                    return 9;
+                } else {
+                    throw new Error("You need you full movement to cross a river.");
+                }
+            } else if(thereIsAStreet){ //street
+                if(rightOfPassage){ //street & right of passage
+                    if(this.heavyCatapultCount > 0){//heavy catas, street & right of passage
+                        throw new Error("You can't move into the mountains with heavy catapults.");
+                    } else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 4){//light catas, street & right of passage
+                        return 4;
+                    } else if (this.heavyCatapultCount + this.lightCatapultCount <= 0 && this.movePoints >= 3){//no catas, street & right of passage
+                        return 3;
+                    } else {throw new Error("You don't have enough movement Points.");}
+                } else { //street & no right of passage
+                    if(this.heavyCatapultCount > 0){//heavy catas, street & no right of passage
+                        throw new Error("You can't move into the mountains with heavy catapults.");
+                    } else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 7){//light catas, street & no right of passage
+                        return 7;
+                    } else if (this.heavyCatapultCount + this.lightCatapultCount <= 0 && this.movePoints >= 4){//no catas, street & no right of passage
+                        return 4;
+                    } else {throw new Error("You don't have enough movement Points.");}
+                }
+            } else { //no street
+                if(this.heavyCatapultCount + this.lightCatapultCount > 0){ //light or heavy catas, no street
+                    throw new Error("You need a street to move into the mountains with catapults.");
+                } else { //no catas, no street
+                    if(rightOfPassage && this.movePoints >= 4){ //no catas, no street & right of passage
+                        return 4;
+                    } else if(this.movePoints >= 7){ //no catas, no street & no right of passage
+                        return 7;
+                    } else {throw new Error("You don't have enough movement Points.");}
+                }
+            }
+            case FieldType.WOODS:
+            case FieldType.SWAMP: if(thereIsARiver && !thereIsABridge){ //forest, swamp
+                if(this.movePoints >= this.getMaxMovePoints()){
+                    return 9;
+                } else {
+                    throw new Error("You need you full movement to cross a river.");
+                }
+            } else if(thereIsAStreet){ //street
+                if(rightOfPassage){ //street & right of passage
+                    if(this.heavyCatapultCount > 0 && this.movePoints >= 7){//heavy catas, street & right of passage
+                        return 7;
+                    } else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 4){//light catas, street & right of passage
+                        return 4;
+                    } else if (this.heavyCatapultCount + this.lightCatapultCount <= 0 && this.movePoints >= 3){//no catas, street & right of passage
+                        return 3;
+                    } else {throw new Error("You don't have enough movement Points.");}
+                } else { //street & no right of passage
+                    if(this.heavyCatapultCount > 0 && this.movePoints >= 7){//heavy catas, street & no right of passage
+                        return 7;
+                    } else if (this.heavyCatapultCount <= 0 && this.movePoints >= 4){//light or no catas, street & no right of passage
+                        return 4;
+                    } else {throw new Error("You don't have enough movement Points.");}
+                }
+            } else { //no street
+                if(rightOfPassage){ //no street & right of passage
+                    if(this.heavyCatapultCount > 0){//heavy catas, no street & right of passage
+                        throw new Error("You need a street to move into forest or swamp with heavy catapults.");
+                    } else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 7){//light catas, no street & right of passage
+                        return 7;
+                    } else if (this.heavyCatapultCount + this.lightCatapultCount <= 0 && this.movePoints >= 4){//no catas, no street & right of passage
+                        return 4;
+                    } else {throw new Error("You don't have enough movement Points.");}
+                } else { //no street & no right of passage
+                    if(this.heavyCatapultCount > 0){//heavy catas, no street & no right of passage
+                        throw new Error("You need a street to move into forest or swamp with heavy catapults.");
+                    } else if (this.heavyCatapultCount <= 0 && this.movePoints >= 7){//light or no catas, no street & no right of passage
+                        return 7;
+                    } else {throw new Error("You don't have enough movement Points.");}
+                }
+            }
+        }
+    }
+
     takeRPDamage(rpDamage: number): void{
         this.takeDamage(Math.ceil(rpDamage/(FOOTMAN_RP+
             OFFICER_RP*(this.officerCount/this.troopCount)+

@@ -38,9 +38,9 @@ class RiderArmy extends LandArmy{
                 } else {
                     return 0; //embarking doesn't cost move points
                 }
-            case 2:
-            case 4:
-            case 7: if(thereIsARiver && !thereIsABridge){ //plains, hills, desert
+            case FieldType.LOWLANDS:
+            case FieldType.HILLS:
+            case FieldType.DESERT: if(thereIsARiver && !thereIsABridge){ //plains, hills, desert
                 if(this.movePoints >= this.getMaxMovePoints()){
                     return this.getMaxMovePoints();
                 } else {
@@ -61,7 +61,7 @@ class RiderArmy extends LandArmy{
             } else {
                 throw new Error("You don't have enough movement Points.");
             }
-            case 5: if(thereIsARiver && !thereIsABridge){ //highlands
+            case FieldType.HIGHLANDS: if(thereIsARiver && !thereIsABridge){ //highlands
                 if(this.movePoints >= this.getMaxMovePoints()){
                     return this.getMaxMovePoints();
                 } else {
@@ -82,9 +82,9 @@ class RiderArmy extends LandArmy{
             } else {
                 throw new Error("You don't have enough movement Points.");
             }
-            case 6: throw new Error("Cavalry can not move through the mountains."); //mountains
-            case 3:
-            case 8: if(thereIsARiver && !thereIsABridge){ //forest, swamp
+            case FieldType.MOUNTAINS: throw new Error("Cavalry can not move through the mountains."); //mountains
+            case FieldType.WOODS:
+            case FieldType.SWAMP: if(thereIsARiver && !thereIsABridge){ //forest, swamp
                 if(this.movePoints >= this.getMaxMovePoints()){
                     return this.getMaxMovePoints();
                 } else {
