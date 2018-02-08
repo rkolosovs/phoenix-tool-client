@@ -195,4 +195,16 @@ var HexFunction;
         return result;
     }
     HexFunction.bridges = bridges;
+    function reverseDirection(direction) {
+        switch (direction) {
+            case Direction.NW: return Direction.SE;
+            case Direction.NE: return Direction.SW;
+            case Direction.E: return Direction.W;
+            case Direction.SE: return Direction.NW;
+            case Direction.SW: return Direction.NE;
+            case Direction.W: return Direction.E;
+            default: return Direction.SE; //TODO: Shouldn't this throw an error?
+        }
+    }
+    HexFunction.reverseDirection = reverseDirection;
 })(HexFunction || (HexFunction = {}));
