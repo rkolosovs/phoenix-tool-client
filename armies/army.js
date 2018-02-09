@@ -4,6 +4,8 @@ class Army extends MobileEntity {
         super(id, owner, position, movePoints, heightPoints);
         this.lightCatapultCount = 0;
         this.heavyCatapultCount = 0;
+        this.lightCatapultShot = 0;
+        this.heavtCatapultShot = 0;
         this.isGuard = false;
         this.wasShotAt = false;
         this.setTroopCount(troopCount);
@@ -47,6 +49,12 @@ class Army extends MobileEntity {
         if (this.canHaveCatapults()) {
             this.heavyCatapultCount = Math.max(0, value);
         }
+    }
+    getHeavyCatapultsShot() {
+        return this.heavtCatapultShot;
+    }
+    getLightCatapultsShot() {
+        return this.lightCatapultShot;
     }
     conquer() {
         if (this.canConquer()) {

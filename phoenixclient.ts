@@ -32,8 +32,8 @@ enum Direction{
 
 
 var selectedFields  = []; // list of fields to be highlighted
-var selectedArmyIndex; // index of the currently selected army in the listOfArmies
-var listOfArmies: any[] = [];
+var selectedArmyIndex; // index of the currently selected army in the GameState.armies
+// var listOfArmies: any[] = [];
 var switchScale = 50;
 var login = 'guest'; // either realm tag, 'sl', or 'guest'
 var pendingEvents = [];
@@ -59,14 +59,18 @@ var leftMousePressed = false; // was the left mouse button klicked but not yet r
 var rightMousePressed = false; // was the right mouse button klicked but not yet released?
 var isDragging = false; // was the mouse moved while the button is down?
 var scale = 16; // the scale of the elements, specifically the width
-var originX = 900; // x coordinate of the origin in respect to which all
-// drawing is done
-var originY = 490; // y coodrinate of the origin in respect to which all
-// drawing is done
-var clickX = 0; // x coordinate of the point where the mouse was clicked
-var clickY = 0; // y coordinate of the point where the mouse was clicked
-var moveX = 0; // x distance the mouse was dragged
-var moveY = 0; // y distance the mouse was dragged
+//coordinate of the origin in respect to which all drawing is done
+var origin: [number, number] = [900, 490];
+// var originX = 900;
+// var originY = 490;
+//coordinate of the point where the mouse was clicked
+var click: [number, number] = [0, 0];
+// var clickX = 0; // x coordinate of the point where the mouse was clicked
+// var clickY = 0; // y coordinate of the point where the mouse was clicked
+//distance the mouse was dragged
+var move: [number, number] = [0, 0];
+// var moveX = 0; // x distance the mouse was dragged
+// var moveY = 0; // y distance the mouse was dragged
 
 // resize the canvas to fill browser window dynamically
 window.addEventListener('resize', Drawing.resizeCanvas, false);
@@ -74,15 +78,15 @@ window.addEventListener('resize', Drawing.resizeCanvas, false);
 GUI.getCanvas().addEventListener('mousedown', function (event: MouseEvent) {
 	if (event.button === 0) {
 		leftMousePressed = true;
-		clickX = event.pageX; // record the x coordinate of the mouse when it
+		click[0] = event.pageX; // record the x coordinate of the mouse when it
 		// was clicked
-		clickY = event.pageY; // record the y coordinate of the mouse when it
+		click[1] = event.pageY; // record the y coordinate of the mouse when it
 		// was clicked
 	} else if (event.button === 2) {
 		rightMousePressed = true;
-		clickX = event.pageX; // record the x coordinate of the mouse when it
+		click[0] = event.pageX; // record the x coordinate of the mouse when it
 		// was clicked
-		clickY = event.pageY; // record the y coordinate of the mouse when it
+		click[1] = event.pageY; // record the y coordinate of the mouse when it
 		// was clicked
 	}
 	Drawing.drawStuff();
@@ -91,10 +95,10 @@ GUI.getCanvas().addEventListener('mousedown', function (event: MouseEvent) {
 document.addEventListener('mouseup', function (event: MouseEvent) {
 	if (leftMousePressed && event.button === 0) {
 		if (isDragging) { // mouse was dragged; run panning finish routine
-			originX += moveX; // add the x offset from dragged mouse to the
-			// current x origin for drawing
-			originY += moveY; // add the y offset from dragged mouse to the
-			// current y origin for drawing
+            // add the x offset from dragged mouse to the current x origin for drawing
+			origin[0] += move[0];
+			// add the y offset from dragged mouse to the current y origin for drawing
+			origin[1] += move[1];
 		}
 		else {
 			registerLeftClick(); // do whatever has to be done on leftclick
@@ -102,10 +106,8 @@ document.addEventListener('mouseup', function (event: MouseEvent) {
 		// reset mouse click parameters
 		leftMousePressed = false; // mouse is no longer pressed
 		isDragging = false; // mouse is no longer being dragged
-		clickX = 0; // reset click registration
-		clickY = 0;
-		moveX = 0; // reset move registration
-		moveY = 0;
+		click = [0, 0]; // reset click registration
+		move = [0, 0]; // reset move registration
 	} else if (rightMousePressed && event.button === 2) {
 		if (!isDragging) {
 			registerRightClick();
@@ -113,10 +115,8 @@ document.addEventListener('mouseup', function (event: MouseEvent) {
 		// reset mouse click parameters
 		rightMousePressed = false; // mouse is no longer pressed
 		isDragging = false; // mouse is no longer being dragged
-		clickX = 0; // reset click registration
-		clickY = 0;
-		moveX = 0; // reset move registration
-		moveY = 0;
+        click = [0, 0]; // reset click registration
+        move = [0, 0]; // reset move registration
 	}
 	Drawing.drawStuff();
 }, true );
@@ -124,32 +124,26 @@ document.addEventListener('mouseup', function (event: MouseEvent) {
 GUI.getCanvas().addEventListener('mousemove', function (event: MouseEvent) {
 	if (leftMousePressed === true) {
 		isDragging = true; // for later click detection; no click if mouse was previously dragged
-		moveX = event.pageX - clickX; // compute the x offset from dragged mouse
-		moveY = event.pageY - clickY; // compute the y offset from dragged mouse
+		move[0] = event.pageX - click[0]; // compute the x offset from dragged mouse
+		move[1] = event.pageY - click[1]; // compute the y offset from dragged mouse
 		Drawing.drawStuff();
 	}
 }, true );
 
 GUI.getCanvas().addEventListener('wheel', function (event: MouseWheelEvent) {
-	let deltaY = event.deltaY; // get amount scrolled
-	let mouseX = event.pageX; // get current mouse position
-	let mouseY = event.pageY;
-	let posX = (mouseX - originX) / scale; // get the tile the mouse is
-	// currently in (and the position in
-	// the tile)
-	let posY = (mouseY - originY) / scale;
+	let deltaY: number = event.deltaY; // get amount scrolled
+	let mouse: [number, number] = [event.pageX, event.pageY]; // get current mouse position
+    // get the tile the mouse is currently in (and the position in the tile)
+	let pos: [number, number] = [(mouse[0] - origin[0]) / scale, (mouse[1] - origin[1]) / scale];
 	if (deltaY < 0) { // do the actuall scrolling
 		scale *= 1 + scrollSpeed;
 	} else {
 		scale *= 1 - scrollSpeed;
 	}
-	setHexParts(scale); // compute the scale dependant values used for map
-	// drawing
-	let newPosX = posX * scale; // compute the new distance of mouse from origin
-	let newPosY = posY * scale;
-	originX = mouseX - newPosX; // move origin so that the tile stays the same
-	// with the new scaling
-	originY = mouseY - newPosY;
+	setHexParts(scale); // compute the scale dependant values used for map drawing
+	let newPos: [number, number] = [pos[0] * scale, pos[1] * scale]; // compute the new distance of mouse from origin
+    // move origin so that the tile stays the same  with the new scaling
+	origin = [mouse[0] - newPos[0], mouse[1] - newPos[1]];
 	Drawing.drawStuff();
 }, true );
 
@@ -174,18 +168,26 @@ function stringToDirection(dir: string): Direction{
 
 function registerLeftClick() {
 	let clickedField: [number, number] = getClickedField(); // get selected field
-	console.log(clickedField);
 	// If mount or unmount is activated, cancel it.
 	if (armyWithNextClick) {
-		let army;
+		let army: Army;
 		switch (Math.floor(armyIdBuffer / 100)) {
 			// TODO: man soll garde erstellen können
-			case 3: army = new seeHeer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, guardBuffer,
-				clickedField[0], clickedField[1], ownerBuffer); break;
-			case 2: army = new reiterHeer(armyIdBuffer, countBuffer, leaderBuffer, guardBuffer, clickedField[0],
-				clickedField[1], ownerBuffer); break;
-			case 1: army = new heer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, mountsBuffer,
-				guardBuffer, clickedField[0], clickedField[1], ownerBuffer); break;
+			case 3: army = new Fleet(armyIdBuffer, GameState.realms.find(realm => realm.tag === ownerBuffer),
+                countBuffer, leaderBuffer, lkpBuffer, skpBuffer, clickedField, Fleet.MAX_MOVE_POINTS, guardBuffer);
+			    break;
+                // new seeHeer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, guardBuffer,
+				// clickedField[0], clickedField[1], ownerBuffer); break;
+			case 2: army = new RiderArmy(armyIdBuffer, GameState.realms.find(realm => realm.tag === ownerBuffer),
+                countBuffer, leaderBuffer, clickedField, RiderArmy.MAX_MOVE_POINTS, RiderArmy.MAX_HEIGHT_POINTS, guardBuffer);
+			    break;
+                // new reiterHeer(armyIdBuffer, countBuffer, leaderBuffer, guardBuffer, clickedField[0],
+				// clickedField[1], ownerBuffer); break;
+			case 1: army = new FootArmy(armyIdBuffer, GameState.realms.find(realm => realm.tag === ownerBuffer),
+                countBuffer, leaderBuffer, lkpBuffer, skpBuffer, clickedField, FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, guardBuffer);
+			    break;
+                // new heer(armyIdBuffer, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, mountsBuffer,
+				// guardBuffer, clickedField[0], clickedField[1], ownerBuffer); break;
 		}
 		ownerBuffer = GUI.getArmyGeneratorBox().getOwnerField().value;
 		armyIdBuffer = 0;
@@ -201,38 +203,38 @@ function registerLeftClick() {
 		skpBuffer = 0;
         GUI.getArmyGeneratorBox().getSKPField().value = "0";
 
-		listOfArmies.push(army);
+		GameState.armies.push(army);
 		switchBtnBoxTo(GUI.getButtonsBox());
 		switchModeTo("none");
 	} else if(worldCreationModeOnClick){
 		let posi = HexFunction.positionInList(clickedField);
-		if(changeFieldToType == -1){
+		if(changeFieldToType === -1){
 			// checks if Field should be changed to a specific type, if not use
 			// normal world creation mode on click
-			if (fields[posi].type == 8 || fields[posi].type == 9) {
-				fields[posi].type = 0;
+			if (GameState.fields[posi].type === 8 || GameState.fields[posi].type === 9) {
+                GameState.fields[posi].type = 0;
 			} else {
-				fields[posi].type++;
+                GameState.fields[posi].type++;
 			}
 		} else if ((changeFieldToType <= 9) && (changeFieldToType >= 0)) {
-			fields[posi].type = changeFieldToType
+            GameState.fields[posi].type = changeFieldToType;
 		}
 		let found = false;
 		for (let i = 0; i < changedFields.length; i++) {
-			if ((changedFields[i].x === fields[posi].x) && (changedFields[i].y === fields[posi].y)) {
-				changedFields[i].type = fields[posi].type;
+			if ((changedFields[i].x === GameState.fields[posi].coordinates[0]) &&
+                (changedFields[i].y === GameState.fields[posi].coordinates[1])) {
+				changedFields[i].type = GameState.fields[posi].type;
 				found = true;
 			}
 		}
 		if (!found) {
-			changedFields.push({ "type": fields[posi].type, "x": fields[posi].x, "y": fields[posi].y });
+			changedFields.push({ "type": GameState.fields[posi].type,
+                "x": GameState.fields[posi].coordinates[0],
+                "y": GameState.fields[posi].coordinates[1] });
 		}
-		console.log(changedFields);
 	} else if(shootingModeOn){
 		//for shooting the bastards
-		
 		selectedFields[1] = clickedField;
-		
 	}else {
 		// Feldauswahl
 		let index = -1;
@@ -246,12 +248,11 @@ function registerLeftClick() {
 		restoreInfoBox();
 		selectedArmyIndex = undefined;
 		let possibleSelections = [];
-		for (let i = 0; i < listOfArmies.length; i++) {
-			if (listOfArmies[i].x == clickedField[0] && listOfArmies[i].y == clickedField[1]) {
-				possibleSelections.push(i);
-				selectedArmyIndex = i;
-			}
-		}
+		GameState.armies.forEach((army, index) => {
+            if(army.getPosition()[0] === clickedField[0] && army.getPosition()[1] === clickedField[1]){
+                possibleSelections.push(index);
+                selectedArmyIndex = index;
+            }});
 		if (document.getElementById("btnSection") != undefined) {
 			let d = GUI.getButtonsBox();
 			d.removeChild(document.getElementById("btnSection"));
@@ -262,22 +263,23 @@ function registerLeftClick() {
 			for (let i = 0; i < possibleSelections.length; i++) {
 				let btn: HTMLButtonElement = document.createElement("BUTTON") as HTMLButtonElement;
 				btn.setAttribute("class", "fixedPrettyButton");
-				btn.name = listOfArmies[possibleSelections[i]].armyId + " " + listOfArmies[possibleSelections[i]].owner;
-				let t = document.createTextNode(listOfArmies[possibleSelections[i]].armyId);
+				btn.name = GameState.armies[possibleSelections[i]].getErkenfaraID() + " " +
+                    GameState.armies[possibleSelections[i]].owner.tag;
+				let t = document.createTextNode(""+ GameState.armies[possibleSelections[i]].getErkenfaraID());
 				btn.appendChild(t);
 				btn.addEventListener('click', function (event) {
 					let idToSearchFor = this.name.split(" ")[0];
 					let ownerToSearchFor = this.name.split(" ")[1];
-					for (let j = 0; j < listOfArmies.length; j++) {
-						if (listOfArmies[j].armyId == idToSearchFor && listOfArmies[j].owner == ownerToSearchFor) {
+					for (let j = 0; j < GameState.armies.length; j++) {
+						if (GameState.armies[j].getErkenfaraID() === parseInt(idToSearchFor) && 
+                            GameState.armies[j].owner.tag === ownerToSearchFor) {
 							selectedArmyIndex = j;
 						}
 					}
 					updateInfoBox();
 					restoreInfoBox();
-					console.log(selectedArmyIndex);
 					if (selectedArmyIndex !== undefined) {
-						clickedMoves(listOfArmies[selectedArmyIndex]);
+						clickedMoves(GameState.armies[selectedArmyIndex]);
 					}
 					Drawing.drawStuff();
 				});
@@ -287,35 +289,36 @@ function registerLeftClick() {
 		}
 		updateInfoBox();
 		if (selectedArmyIndex !== undefined) {
-			clickedMoves(listOfArmies[selectedArmyIndex]);
+			clickedMoves(GameState.armies[selectedArmyIndex]);
 		}
 	}
 }
 
 function registerRightClick() {
 	let clickedField = getClickedField();
-	console.log(clickedField);
 	if(worldCreationModeOnClick){
 		let posi = HexFunction.positionInList(clickedField);
 		if(changeFieldToType == -1){
 			// checks if Field should be changed to a specific type (then
 			// rightclick is disabled)
-			if (fields[posi].type === 0 || fields[posi].type === 9) {
-				fields[posi].type = 8;
+			if (GameState.fields[posi].type === 0 || GameState.fields[posi].type === 9) {
+                GameState.fields[posi].type = 8;
 			} else {
-				fields[posi].type--;
+                GameState.fields[posi].type--;
 			}
 			let found = false;
 			for (let i = 0; i < changedFields.length; i++) {
-				if ((changedFields[i].x == fields[posi].x) && (changedFields[i].y == fields[posi].y)) {
-					changedFields[i].type = fields[posi].type;
+				if ((changedFields[i].x == GameState.fields[posi].coordinates[0]) && 
+                    (changedFields[i].y == GameState.fields[posi].coordinates[1])) {
+					changedFields[i].type = GameState.fields[posi].type;
 					found = true;
 				}
 			}
 			if (!found) {
-				changedFields.push({ "type": fields[posi].type, "x": fields[posi].x, "y": fields[posi].y });
+				changedFields.push({ "type": GameState.fields[posi].type, 
+                    "x": GameState.fields[posi].coordinates[0], 
+                    "y": GameState.fields[posi].coordinates[1] });
 			}
-			console.log(changedFields);
 		}
 	} else if(shootingModeOn){
 		
@@ -323,38 +326,44 @@ function registerRightClick() {
 		if(selectedArmyIndex === undefined){
 			console.log("Can't move with no army selected");
 		} else {
-			let clickedArmyX = listOfArmies[selectedArmyIndex].x;
-			let clickedArmyY = listOfArmies[selectedArmyIndex].y;
-			let localNeighbors = HexFunction.neighbors([clickedArmyX, clickedArmyY]);
+			let clickedArmy: [number, number] = [GameState.armies[selectedArmyIndex].getPosition()[0], 
+                GameState.armies[selectedArmyIndex].getPosition()[1]];
+			let localNeighbors = HexFunction.neighbors(clickedArmy);
 			for (let i = 0; i < localNeighbors.length; i++){
 				if(localNeighbors[i][0] === clickedField[0] && localNeighbors[i][1] === clickedField[1]){
-					let out;
-					if (listOfArmies[selectedArmyIndex].ownerTag() === login || login === "sl") {
-						out = move(listOfArmies[selectedArmyIndex], i);
-						console.log(out);
+				    let moveSuccessfull: boolean = true;
+					if (GameState.armies[selectedArmyIndex].owner.tag === login || login === "sl") {
+						try{
+						    GameState.armies[selectedArmyIndex].move(i);
+						} catch (e){
+						    console.log(e);
+						    moveSuccessfull = false;
+                        }
 					} else {
-						out = "Can only move your own armies."
+						console.log("Can only move your own armies.");
 					}
-					if (out === "ok") {
+					if (moveSuccessfull) {
 						preparedEvents.push({
 							type: "move", content: {
-								armyId: listOfArmies[selectedArmyIndex].armyId,
-								realm: listOfArmies[selectedArmyIndex].ownerTag(),
-								fromX: clickedArmyX, fromY: clickedArmyY, 
-								toX: listOfArmies[selectedArmyIndex].x, toY: listOfArmies[selectedArmyIndex].y
+								armyId: GameState.armies[selectedArmyIndex].getErkenfaraID(),
+								realm: GameState.armies[selectedArmyIndex].owner.tag,
+								fromX: clickedArmy[0], fromY: clickedArmy[1], 
+								toX: GameState.armies[selectedArmyIndex].getPosition()[0], 
+                                toY: GameState.armies[selectedArmyIndex].getPosition()[1]
 							}
 						});
 
 						let battlePossible = false;
 						let participants = [];
 
-						for (let j = 0; j < listOfArmies.length; j++) {
-							let someArmy = listOfArmies[j];
-							if (someArmy.x === listOfArmies[selectedArmyIndex].x && someArmy.y === listOfArmies[selectedArmyIndex].y
-								&& someArmy !== listOfArmies[selectedArmyIndex]) {
-								participants.push({ armyId: someArmy.armyId, realm: someArmy.ownerTag() });
+						for (let j = 0; j < GameState.armies.length; j++) {
+							let someArmy = GameState.armies[j];
+							if (someArmy.getPosition()[0] === GameState.armies[selectedArmyIndex].getPosition()[0] && 
+                                someArmy.getPosition()[1] === GameState.armies[selectedArmyIndex].getPosition()[1]
+								&& someArmy !== GameState.armies[selectedArmyIndex]) {
+								participants.push({ armyId: someArmy.getErkenfaraID(), realm: someArmy.owner.tag });
 								//in case they are enemies
-								if (someArmy.owner !== listOfArmies[selectedArmyIndex].owner) {
+								if (someArmy.owner !== GameState.armies[selectedArmyIndex].owner) {
 									battlePossible = true;
 								}
 								//MultipleArmies - even if not friendly
@@ -370,13 +379,13 @@ function registerRightClick() {
 						if (battlePossible) {
 							let inserted = false;
 							participants.push({
-								armyId: listOfArmies[selectedArmyIndex].armyId,
-								realm: listOfArmies[selectedArmyIndex].ownerTag()
+								armyId: GameState.armies[selectedArmyIndex].getErkenfaraID(),
+								realm: GameState.armies[selectedArmyIndex].owner.tag
 							});
 							for (let j = 0; j < preparedEvents.length; j++) {
 								if (preparedEvents[j].type === "battle" &&
-									preparedEvents[j].content.x === listOfArmies[selectedArmyIndex].x &&
-									preparedEvents[j].content.y === listOfArmies[selectedArmyIndex].y) {
+									preparedEvents[j].content.x === GameState.armies[selectedArmyIndex].getPosition()[0] &&
+									preparedEvents[j].content.y === GameState.armies[selectedArmyIndex].getPosition()[1]) {
 									preparedEvents[j].content.participants = participants;
 									inserted = true;
 								}
@@ -385,16 +394,14 @@ function registerRightClick() {
 								preparedEvents.push({
 									type: "battle", content: {
 										participants: participants,
-										x: listOfArmies[selectedArmyIndex].x, y: listOfArmies[selectedArmyIndex].y
+										x: GameState.armies[selectedArmyIndex].getPosition()[0],
+                                        y: GameState.armies[selectedArmyIndex].getPosition()[1]
 									}
 								});
 							}
-						} else { //no battle -> conquer land (diplomacy goes here)
-                            listOfArmies[selectedArmyIndex].conquer();
+						} else { //no battle -> conquer land (TODO: diplomacy goes here)
+                            GameState.armies[selectedArmyIndex].conquer();
 						}
-
-					} else {
-						alert(out);
 					}
 				}
 			}
@@ -404,8 +411,8 @@ function registerRightClick() {
 }
 
 function getClickedField(): [number, number] {
-	let x = clickX - originX; // reverse our x/y origin offset
-	let y = clickY - originY;
+	let x = click[0] - origin[0]; // reverse our x/y origin offset
+	let y = click[1] - origin[1];
 	let m = c / (gW * 0.5); // the inclination of the hexes upper triangle side
 
 	let row = Math.floor(y / gH); // get the rectangle clicked in
@@ -468,21 +475,22 @@ function determineEventStatus() {
 				}
 			}
 			else if (event.type === 'merge') {
-				let army1 = listOfArmies[findArmyPlaceInList(content.fromArmy, content.realm)];
-				let army2 = listOfArmies[findArmyPlaceInList(content.toArmy, content.realm)];
+				let army1 = GameState.armies[findArmyPlaceInList(content.fromArmy, content.realm)];
+				let army2 = GameState.armies[findArmyPlaceInList(content.toArmy, content.realm)];
 				if (army1 == undefined || army2 == undefined) {
 					pendingEvents[i].status = 'withheld';
 				}
-				else if (army1.x !== content.x || army1.y !== content.y || army2.x !== content.x || army2.y !== content.y) {
+				else if (army1.getPosition()[0] !== content.x || army1.getPosition()[1] !== content.y ||
+                    army2.getPosition()[0] !== content.x || army2.getPosition()[1] !== content.y) {
 					pendingEvents[i].status = 'withheld';
-				} else if (army1.armyType() === army2.armyType() &&
-					army1.x === army2.x && army1.y === army2.y) {
+				} else if (army1.constructor === army2.constructor &&
+					army1.getPosition()[0] === army2.getPosition()[0] && army1.getPosition()[1] === army2.getPosition()[1]) {
 					pendingEvents[i].status = 'available';
 				}
-				else if ((army1.armyType() !== army2.armyType()) ||
-					((((army1.armyType() === 1 || army1.armyType() === 2) && army1.remainingMovePoints < 3) ||
-						army1.armyType() === 3 && army1.remainingMovePoints < 5) && (((army2.armyType() === 1 || army2.armyType() === 2) &&
-							army2.remainingMovePoints < 3) || army2.armyType() === 3 && army2.remainingMovePoints < 5))) {
+				else if ((army1.constructor !== army2.constructor) ||
+					((((army1 instanceof FootArmy || army1 instanceof RiderArmy) && army1.getMovePoints() < 3) ||
+						army1 instanceof Fleet && army1.getMovePoints() < 5) && (((army2 instanceof FootArmy || army2 instanceof RiderArmy) &&
+							army2.getMovePoints() < 3) || army2 instanceof Fleet && army2.getMovePoints() < 5))) {
 					pendingEvents[i].status = 'impossible';
 				}
 				else {
@@ -490,20 +498,22 @@ function determineEventStatus() {
 				}
 			}
 			else if (event.type === 'transfer') {
-				let army1 = listOfArmies[findArmyPlaceInList(content.fromArmy, content.realm)];
-				let army2 = listOfArmies[findArmyPlaceInList(content.toArmy, content.realm)];
+				let army1 = GameState.armies[findArmyPlaceInList(content.fromArmy, content.realm)];
+				let army2 = GameState.armies[findArmyPlaceInList(content.toArmy, content.realm)];
 				if (army1 == undefined || army2 == undefined) {
 					pendingEvents[i].status = 'withheld';
 				}
-				else if (army1.x !== content.x || army1.y !== content.y || army2.x !== content.x || army2.y !== content.y) {
+				else if (army1.getPosition()[0] !== content.x || army1.getPosition()[1] !== content.y || 
+                    army2.getPosition()[0] !== content.x || army2.getPosition()[1] !== content.y) {
 					pendingEvents[i].status = 'withheld';
-				} else if ((army1.armyType() == army2.armyType() || (content.troops === 0 && content.mounts === 0 && content.lkp === 0 && content.skp === 0))
-					&& army1.x === army2.x && army1.y === army2.y) {
+				} else if ((army1.constructor === army2.constructor || (content.troops === 0 && content.mounts === 0 && 
+                        content.lkp === 0 && content.skp === 0)) && army1.getPosition()[0] === army2.getPosition()[0] && 
+                        army1.getPosition()[1] === army2.getPosition()[1]) {
 					pendingEvents[i].status = 'available';
 				}
-				else if (((((army1.armyType() == 1 || army1.armyType() == 2) && army1.remainingMovePoints < 3) || army1.armyType() == 3 &&
-					army1.remainingMovePoints < 5) && (((army2.armyType() == 1 || army2.armyType() == 2) &&
-						army2.remainingMovePoints < 3) || army2.armyType() == 3 && army2.remainingMovePoints < 5))) {
+				else if (((((army1 instanceof FootArmy || army1 instanceof RiderArmy) && army1.getMovePoints() < 3) || 
+                        army1 instanceof Fleet && army1.getMovePoints() < 5) && (((army2 instanceof FootArmy || 
+                        army2 instanceof RiderArmy) && army2.getMovePoints() < 3) || army2 instanceof Fleet && army2.getMovePoints() < 5))) {
 					pendingEvents[i].status = 'impossible';
 				}
 				else {
@@ -513,25 +523,32 @@ function determineEventStatus() {
 			else if (event.type === 'split') {
 				let typefactor = 1;
 
-				let army = listOfArmies[findArmyPlaceInList(content.fromArmy, content.realm)];
+				let army = GameState.armies[findArmyPlaceInList(content.fromArmy, content.realm)];
 				if (army == undefined) {
 					pendingEvents[i].status = 'withheld';
 				} else {
-
-					if (army.armyType() === 2) {
+				    let mountCount: number = 0;
+				    let lkpCount: number = 0;
+				    let skpCount: number = 0;
+					if (army instanceof RiderArmy) {
 						typefactor = 2;
 					}
-					else if (army.armyType() === 3) {
+					else if (army instanceof Fleet) {
 						typefactor = 100;
-					}
-					console.log(army.count - content.troops);
-					if (army.x != content.x || army.y != content.y) {
+                        lkpCount = (army as Fleet).getLightCatapultCount();
+                        skpCount = (army as Fleet).getHeavyCatapultCount();
+					} else if (army instanceof FootArmy) {
+                        mountCount = (army as FootArmy).getMountCount();
+                        lkpCount = (army as FootArmy).getLightCatapultCount();
+                        skpCount = (army as FootArmy).getHeavyCatapultCount();
+                    }
+					if (army.getPosition()[0] != content.x || army.getPosition()[1] != content.y) {
 						pendingEvents[i].status = 'withheld';
-					} else if (((army.count - content.troops) >= (100 / typefactor)) &&
-						((army.leaders - content.leaders) >= 1) &&
-						((army.mounts - content.mounts) >= 0) &&
-						((army.lkp - content.lkp) >= 0) &&
-						((army.skp - content.skp) >= 0)) {
+					} else if (((army.getTroopCount() - content.troops) >= (100 / typefactor)) &&
+						((army.getOfficerCount() - content.leaders) >= 1) &&
+						((mountCount - content.mounts) >= 0) &&
+						((lkpCount - content.lkp) >= 0) &&
+						((skpCount - content.skp) >= 0)) {
 						pendingEvents[i].status = 'available';
 					}
 					else {
@@ -542,57 +559,65 @@ function determineEventStatus() {
 			else if (event.type === 'mount') {
 				let typefactor = 1;
 
-				let army = listOfArmies[findArmyPlaceInList(content.fromArmy, content.realm)];
+				let army = GameState.armies[findArmyPlaceInList(content.fromArmy, content.realm)];
 				if (army == undefined) {
 					pendingEvents[i].status = 'withheld';
 				} else {
-					if (army.armyType() === 2) {
+					if (army instanceof RiderArmy) {
 						typefactor = 2;
 					}
-					else if (army.armyType() === 3) {
+					else if (army instanceof Fleet) {
 						typefactor = 100;
 					}
-					console.log(army.count + " - " + content.troops);
-					if (army.x != content.x || army.y != content.y) {
+					if (army.getPosition()[0] != content.x || army.getPosition()[1] != content.y) {
 						pendingEvents[i].status = 'withheld';
-					} else if ((army.armyType() === 1 && (((army.count - content.troops) >= 0) &&
-						((army.leaders - content.leaders) >= 0) && ((army.mounts - content.troops) >= 0))) ||
-						(army.armyType() === 2 && (((army.count - content.troops) >= 0) &&
-							((army.leaders - content.leaders) >= 0)))) {
-						console.log("Status should be available!");
+					} else if ((army instanceof FootArmy && (((army.getTroopCount() - content.troops) >= 0) &&
+						((army.getOfficerCount() - content.leaders) >= 0) && (((army as FootArmy).getMountCount() - content.troops) >= 0))) ||
+						(army instanceof RiderArmy && (((army.getTroopCount() - content.troops) >= 0) &&
+							((army.getOfficerCount() - content.leaders) >= 0)))) {
 						pendingEvents[i].status = 'available';
 					} else {
 						pendingEvents[i].status = 'impossible';
 					}
 				}
-				//console.log(army.count - content.troops);
-				if(((army.count - content.troops) >= (100/typefactor)) &&
-				 ((army.leaders - content.leaders) >= 1) &&
-				 ((army.mounts - content.mounts) >= 0) &&
-				 ((army.lkp - content.lkp) >= 0) &&
-				 ((army.skp - content.skp) >= 0))
-				 {
+                let mountCount: number = 0;
+                let lkpCount: number = 0;
+                let skpCount: number = 0;
+                if (army instanceof RiderArmy) {
+                    typefactor = 2;
+                }
+                else if (army instanceof Fleet) {
+                    typefactor = 100;
+                    lkpCount = (army as Fleet).getLightCatapultCount();
+                    skpCount = (army as Fleet).getHeavyCatapultCount();
+                } else if (army instanceof FootArmy) {
+                    mountCount = (army as FootArmy).getMountCount();
+                    lkpCount = (army as FootArmy).getLightCatapultCount();
+                    skpCount = (army as FootArmy).getHeavyCatapultCount();
+                }
+				if(((army.getTroopCount() - content.troops) >= (100/typefactor)) &&
+				 ((army.getOfficerCount() - content.leaders) >= 1) &&
+				 ((mountCount - content.mounts) >= 0) &&
+				 ((lkpCount - content.lkp) >= 0) &&
+				 ((skpCount - content.skp) >= 0)){
 					 pendingEvents[i].status = 'available';
 				 } 
-				 else
-				 {
+				 else{
 					 pendingEvents[i].status = 'impossible';
 				 }
 			}else if(event.type === 'shoot'){
-				let shooter = listOfArmies[findArmyPlaceInList(content.armyId, content.realm)];
-				let canShoot = true;
+				let shooter = GameState.armies[findArmyPlaceInList(content.armyId, content.realm)];
+				let canShoot = false;
 
-				if(shooter.lkp - shooter.LKPShotThisTurn < content.LKPcount){//check if remaining Lkp that have not shot yet
-					canShoot = false;
-				}
-				if(shooter.skp - shooter.SKPShotThisTurn < content.SKPcount){//check if remaining Lkp that have not shot yet
-					canShoot = false;
-				}
+                if(shooter instanceof FootArmy || shooter instanceof Fleet){
+                    canShoot = shooter.getLightCatapultCount() - shooter.getLightCatapultsShot() >= content.LKPcount &&
+                        shooter.getHeavyCatapultCount() - shooter.getLightCatapultsShot() >= content.SKPcount;
+                }
 
-				if (armyExistsAndIsLocated(shooter.ownerTag(), content.armyId, content.fromX, content.fromY) && canShoot) {
+				if (armyExistsAndIsLocated(shooter.owner.tag, content.armyId, content.fromX, content.fromY) && canShoot) {
 					pendingEvents[i].status = 'available';
 				} else if (armyExists(content.realm, content.armyId) && 
-						possibleMoveOfArmyTo(shooter.ownerTag(), content.armyId, content.fromX, content.fromY)) {
+						possibleMoveOfArmyTo(shooter.owner.tag, content.armyId, content.fromX, content.fromY)) {
 					pendingEvents[i].status = 'withheld';
 				} else {
 					pendingEvents[i].status = 'impossible';
@@ -633,7 +658,8 @@ function noPendingMountEvents(realm, armyId, fromX, fromY) {
 	if (Math.floor(armyId / 100) != 3) {
 		for (let i = 0; i < pendingEvents.length; i++) {
 			let event = pendingEvents[i];
-			if ((event.status === 'withheld' || event.status === 'available' || event.status === 'undetermined') && event.type === 'mount' && Math.floor(event.content.fromArmy) === armyId &&
+			if ((event.status === 'withheld' || event.status === 'available' || event.status === 'undetermined') &&
+                event.type === 'mount' && Math.floor(event.content.fromArmy) === armyId &&
 				(event.content.x === fromX && event.content.y === fromY)) {
 				return false;
 			}
@@ -645,7 +671,6 @@ function noPendingMountEvents(realm, armyId, fromX, fromY) {
 }
 
 function eachArmyExists(armies) {
-	//	console.log("eachArmyExits("+armies+")");
 	return (armies.length > 0) && (armies.map(function (army: any) {
 		return armyExists(army.realm, army.armyId);
 	}).reduce(function (total, current) {
@@ -654,8 +679,8 @@ function eachArmyExists(armies) {
 }
 
 function findArmyPlaceInList(armyId, owner) {
-	for (let i = 0; i < listOfArmies.length; i++) {
-		if (listOfArmies[i].armyId === armyId && listOfArmies[i].owner === owner) {
+	for (let i = 0; i < GameState.armies.length; i++) {
+		if (GameState.armies[i].getErkenfaraID() === armyId && GameState.armies[i].owner === owner) {
 			return i;
 		}
 	}
@@ -663,7 +688,6 @@ function findArmyPlaceInList(armyId, owner) {
 }
 
 function eachArmyExistsAndIsLocated(armies, x, y) {
-	//	console.log("eachArmyExistsAndIsLocated("+armies+", "+x+", "+y+")");
 	return (armies.length > 0) && (armies.map(function (army: any) {
 		return armyExistsAndIsLocated(army.realm, army.armyId, x, y);
 	}, this).reduce(function (total, current) {
@@ -672,7 +696,6 @@ function eachArmyExistsAndIsLocated(armies, x, y) {
 }
 
 function possibleMoveOfEachArmyTo(armies, x, y) {
-	//	console.log("possibleMoveOfEachArmyTo("+armies+", "+x+", "+y+")");
 	return (armies.length > 0) && (armies.map(function (army: any) {
 		return armyExistsAndIsLocated(army.realm, army.armyId, x, y) ||
 			possibleMoveOfArmyTo(army.realm, army.armyId, x, y);
@@ -682,23 +705,20 @@ function possibleMoveOfEachArmyTo(armies, x, y) {
 }
 
 function armyExists(realm, id) {
-	//	console.log("armyExists("+realm+", "+id+")");
-	return listOfArmies.some(function (val) {
-		return (val.ownerTag() === realm) && (val.armyId === id);
+	return GameState.armies.some(function (val) {
+		return (val.owner.tag === realm) && (val.getErkenfaraID() === id);
 	}, this);
 }
 
 function armyExistsAndIsLocated(realm, id, x, y) {
-	//	console.log("armyExistsAndIsLocated("+realm+", "+id+", "+x+", "+y+")");
-	return listOfArmies.some(function (val) {
-		return (val.ownerTag() === realm) &&
-			(val.armyId === id) &&
-			(val.x === x) && (val.y === y);
+	return GameState.armies.some(function (val) {
+		return (val.owner.tag === realm) &&
+			(val.getErkenfaraID() === id) &&
+			(val.getPosition()[0] === x) && (val.getPosition()[1] === y);
 	}, this);
 }
 
 function possibleMoveOfArmyTo(realm, id, x, y) {
-	//	console.log("possibleMoveOfArmyTo("+realm+", "+id+", "+x+", "+y+")");
 	return pendingEvents.some(function (pEv) {
 		return (pEv.type === 'move') && (pEv.content.realm === realm) &&
 			(pEv.content.armyId === id) && (pEv.status !== 'deleted' || pEv.status !== 'checked') &&
@@ -708,7 +728,6 @@ function possibleMoveOfArmyTo(realm, id, x, y) {
 }
 
 function unprocessedBattleAtContainingArmy(realm, id, x, y) {
-	//	console.log("unprocessedBattleAtContainingArmy("+realm+", "+id+", "+x+", "+y+")");
 	return pendingEvents.some(function (pEv) {
 		return (pEv.type === 'battle') &&
 			(pEv.status !== 'deleted') &&
@@ -722,33 +741,19 @@ function unprocessedBattleAtContainingArmy(realm, id, x, y) {
 }
 
 function canMove(realm, id, fromX, fromY, toX, toY) {
-	let foundArmy = listOfArmies.find(function (army) {
-		return (army.armyId === id) && (army.ownerTag() === realm);
+	let foundArmy = GameState.armies.find(function (army) {
+		return (army.getErkenfaraID() === id) && (army.owner.tag === realm);
 	}, this);
-	if (foundArmy != undefined && foundArmy.x === fromX && foundArmy.y === fromY) {
+	if (foundArmy != undefined && foundArmy.getPosition()[0] === fromX && foundArmy.getPosition()[1] === fromY) {
 		let adjacency: any[] = getAdjacency([fromX, fromY], [[toX, toY]]);
 
 		if (adjacency.reduce((total, current) => (total || current), false)) {
 			foundArmy.possibleMoves = [];
 			let direction = (adjacency.findIndex((dir) => dir === 1) + 1) % 6;
-			moveToList(foundArmy, direction);
+            foundArmy.checkForPossibleMove(direction);
 			return foundArmy.possibleMoves.length > 0;
 		}
 		return false;
-		//		let origin = new showHex(fromX, fromY);
-		//        let destination = new showHex(toX, toY);
-		//		let streetPresent = buildings.some(function(building){
-		//			return (building.type === 8) &&
-		//				(((building.firstX == fromX && building.firstY == fromY) && (building.secondX == toX && building.secondY == toY)) ||
-		//					((building.secondX == toX && building.secondY == toY) && (building.firstX == fromX && building.firstY == fromY)));
-		//		});
-		//		let heightDifference = Math.abs((origin.height() - destination.height()));
-		//		//TODO: This is missing harbors
-		//		let enoughHeightPoints =  (foundArmy.remainingHeightPoints >= 1) &&
-		//			((heightDifference <= 2 && streetPresent) || (heightDifference <= 1));
-		//		//TODO: This is missing basically everything. Now the movement points are set serverside and no longer to high so this should work or not be here.
-		//		let enoughMovePoints = (foundArmy.remainingMovePoints >= 7);
-		//		return enoughHeightPoints && enoughMovePoints;
 	} else {
 		return false;
 	}
@@ -877,34 +882,34 @@ function checkEvent(num) {
 		let event = pendingEvents[num];
 		let cont = event.content;
 		if (event.type === "move") {
-			let army;
-			for (let i = 0; i < listOfArmies.length; i++) {
-				army = listOfArmies[i];
-				if (army.ownerTag() === cont.realm && cont.armyId === army.armyId) {
+			let army: Army;
+			for (let i = 0; i < GameState.armies.length; i++) {
+				army = GameState.armies[i];
+				if (army.owner.tag === cont.realm && cont.armyId === army.getErkenfaraID()) {
 					break;
 				}
 			}
-			let adjacency = getAdjacency([army.x, army.y], [[cont.toX, cont.toY]]);
+			let adjacency = getAdjacency([army.getPosition()[0], army.getPosition()[1]], [[cont.toX, cont.toY]]);
 			if (adjacency[0] === 1) {
-				moveToList(army, 1);
-				move(army, 1);//move to ne
+				army.checkForPossibleMove(1);
+				army.move(1);//move to ne
 			} else if (adjacency[1] === 1) {
-				moveToList(army, 2);
-				move(army, 2);//move to e
+                army.checkForPossibleMove(2);
+                army.move(2);//move to e
 			} else if (adjacency[2] === 1) {
-				moveToList(army, 3);
-				move(army, 3);//move to se
+				army.checkForPossibleMove(3);
+				army.move(3);//move to se
 			} else if (adjacency[3] === 1) {
-				moveToList(army, 4);
-				move(army, 4);//move to sw
+                army.checkForPossibleMove(4);
+                army.move(4);//move to sw
 			} else if (adjacency[4] === 1) {
-				moveToList(army, 5);
-				move(army, 5);//move to w
+                army.checkForPossibleMove(5);
+                army.move(5);//move to w
 			} else if (adjacency[5] === 1) {
-				moveToList(army, 0);
-				move(army, 0);//move to nw
+                army.checkForPossibleMove(0);
+                army.move(0);//move to nw
 			}
-			if (!unprocessedBattleAtContainingArmy(army.ownerTag(), army.armyId, army.x, army.y)) {
+			if (!unprocessedBattleAtContainingArmy(army.owner.tag, army.getErkenfaraID(), army.getPosition()[0], army.getPosition()[1])) {
 				army.conquer();
 			}
 			event.status = 'checked';
@@ -916,8 +921,8 @@ function checkEvent(num) {
 
 			let partips = [];
 			cont.participants.forEach(function (item) {
-				let a = listOfArmies.find(function (candidate) {
-					return (item.realm === candidate.ownerTag()) && (item.armyId === candidate.armyId);
+				let a = GameState.armies.find(function (candidate) {
+					return (item.realm === candidate.owner.tag) && (item.armyId === candidate.getErkenfaraID());
 				});
 				partips.push(a);
 			});
@@ -939,7 +944,6 @@ function checkEvent(num) {
 				hide(battleBox.getSelf());
 			};
 		} else if (event.type === "split") {
-			console.log("this is a split event");
 			let armyFromPlaceInList = -1;
 			let armyFromId = cont.fromArmy;
 			let newArmyId = cont.newArmy;
@@ -949,37 +953,42 @@ function checkEvent(num) {
 			let mountsToSplit = cont.mounts;
 			let lkpToSplit = cont.lkp;
 			let skpToSplit = cont.skp;
-			for (let i = 0; i < listOfArmies.length; i++) {
-				if (listOfArmies[i].armyId === armyFromId && listOfArmies[i].owner === realm) {
+			for (let i = 0; i < GameState.armies.length; i++) {
+				if (GameState.armies[i].getErkenfaraID() === armyFromId && GameState.armies[i].owner === realm) {
 					armyFromPlaceInList = i;
 				}
 			}
 			if (armyFromPlaceInList >= 0) {
-				listOfArmies[armyFromPlaceInList].count -= toSplit;
-				listOfArmies[armyFromPlaceInList].leaders -= leadersToSplit;
-				if (listOfArmies[armyFromPlaceInList].armyType == 1) {
-					listOfArmies[armyFromPlaceInList].mounts -= mountsToSplit;
+			    let armyToSplitFrom: Army = GameState.armies[armyFromPlaceInList];
+                armyToSplitFrom.setTroopCount(armyToSplitFrom.getTroopCount() - toSplit);
+                armyToSplitFrom.setOfficerCount(armyToSplitFrom.getOfficerCount() - leadersToSplit);
+				if (armyToSplitFrom instanceof FootArmy) {
+                    armyToSplitFrom.setMountCount(armyToSplitFrom.getMountCount() - mountsToSplit);
 				}
-				if (listOfArmies[armyFromPlaceInList].armyType == 1 || listOfArmies[armyFromPlaceInList].armyType == 3) {
-					listOfArmies[armyFromPlaceInList].lkp -= lkpToSplit;
-					listOfArmies[armyFromPlaceInList].skp -= skpToSplit;
+				if (armyToSplitFrom instanceof FootArmy || armyToSplitFrom instanceof Fleet) {
+                    armyToSplitFrom.setLightCatapultCount(armyToSplitFrom.getLightCatapultCount() - lkpToSplit);
+                    armyToSplitFrom.setHeavyCatapultCount(armyToSplitFrom.getHeavyCatapultCount() - skpToSplit);
 				}
-				let army = null;
-				if (Math.floor(newArmyId / 100) == 1) {
-					army = new heer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, false,
-						listOfArmies[armyFromPlaceInList].x, listOfArmies[armyFromPlaceInList].y, realm);
+				let army;
+				if (Math.floor(newArmyId / 100) === 1) {
+					army = new FootArmy(newArmyId, realm, toSplit, leadersToSplit, lkpToSplit, skpToSplit,
+                        armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints(), armyToSplitFrom.getHeightPoints());
+                        // new heer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, false,
+						// GameState.armies[armyFromPlaceInList].x, GameState.armies[armyFromPlaceInList].y, realm);
 				}
-				else if (Math.floor(newArmyId / 100) == 2) {
-					army = new reiterHeer(newArmyId, toSplit, leadersToSplit, false, listOfArmies[armyFromPlaceInList].x,
-						listOfArmies[armyFromPlaceInList].y, realm);
+				else if (Math.floor(newArmyId / 100) === 2) {
+					army = new RiderArmy(newArmyId, realm, toSplit, leadersToSplit, armyToSplitFrom.getPosition(),
+                        armyToSplitFrom.getMovePoints(), armyToSplitFrom.getHeightPoints());
+                        // new reiterHeer(newArmyId, toSplit, leadersToSplit, false, GameState.armies[armyFromPlaceInList].x,
+						// GameState.armies[armyFromPlaceInList].y, realm);
 				}
-				else if (Math.floor(newArmyId / 100) == 3) {
-					army = new seeHeer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, false,
-						listOfArmies[armyFromPlaceInList].x, listOfArmies[armyFromPlaceInList].y, realm);
+				else if (Math.floor(newArmyId / 100) === 3) {
+					army = new Fleet(newArmyId, realm, toSplit, leadersToSplit, lkpToSplit, skpToSplit,
+                        armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints());
+                        // new seeHeer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, false,
+						// GameState.armies[armyFromPlaceInList].x, GameState.armies[armyFromPlaceInList].y, realm);
 				}
-				army.setRemainingMovePoints(listOfArmies[armyFromPlaceInList].remainingMovePoints);
-				army.setRemainingHeightPoints(listOfArmies[armyFromPlaceInList].remainingHeightPoints);
-				listOfArmies.push(army);
+				GameState.armies.push(army);
 			}
 			event.status = 'checked';
 			fillEventList();
@@ -990,14 +999,12 @@ function checkEvent(num) {
 			let armyFromId = cont.fromArmy;
 			let armyToId = cont.toArmy;
 			let realm = cont.realm;
-			for (let i = 0; i < listOfArmies.length; i++) {
-				if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
+			for (let i = 0; i < GameState.armies.length; i++) {
+				if (GameState.armies[i].getErkenfaraID() == armyFromId && GameState.armies[i].owner.tag == realm) {
 					armyFromPlaceInList = i;
-					console.log("i1=" + i);
 				}
-				else if (listOfArmies[i].armyId == armyToId && listOfArmies[i].owner == realm) {
+				else if (GameState.armies[i].getErkenfaraID() == armyToId && GameState.armies[i].owner.tag == realm) {
 					armyToPlaceInList = i;
-					console.log("i2=" + i);
 				}
 			}
 			if (armyFromPlaceInList >= 0 && armyToPlaceInList >= 0) {
@@ -1010,7 +1017,6 @@ function checkEvent(num) {
 			Drawing.drawStuff();
 			selectedArmyIndex = undefined;
 		} else if (event.type === "transfer") {
-			console.log("this is a transfer event");
 			let armyFromPlaceInList = -1;
 			let armyToPlaceInList = -1;
 			let armyFromId = cont.fromArmy;
@@ -1021,37 +1027,39 @@ function checkEvent(num) {
 			let mountsToSplit = cont.mounts;
 			let lkpToSplit = cont.lkp;
 			let skpToSplit = cont.skp;
-			for (let i = 0; i < listOfArmies.length; i++) {
-				if (listOfArmies[i].armyId === armyFromId && listOfArmies[i].owner === realm) {
+			for (let i = 0; i < GameState.armies.length; i++) {
+				if (GameState.armies[i].getErkenfaraID() === armyFromId && GameState.armies[i].owner.tag === realm) {
 					armyFromPlaceInList = i;
 				}
-				else if (listOfArmies[i].armyId === armyToId && listOfArmies[i].owner === realm) {
+				else if (GameState.armies[i].getErkenfaraID() === armyToId && GameState.armies[i].owner.tag === realm) {
 					armyToPlaceInList = i;
 				}
 			}
 			if (armyFromPlaceInList >= 0 && armyToPlaceInList >= 0) {
-				listOfArmies[armyFromPlaceInList].count -= toSplit;
-				listOfArmies[armyToPlaceInList].count += toSplit;
-				listOfArmies[armyFromPlaceInList].leaders -= leadersToSplit;
-				listOfArmies[armyToPlaceInList].leaders += leadersToSplit;
-				if (listOfArmies[armyFromPlaceInList].armyType == 1) {
-					listOfArmies[armyFromPlaceInList].mounts -= mountsToSplit;
-					listOfArmies[armyToPlaceInList].mounts += mountsToSplit;
+			    let armyToTransferFrom: Army = GameState.armies[armyFromPlaceInList];
+                let armyToTransferTo: Army = GameState.armies[armyToPlaceInList];
+                armyToTransferFrom.setTroopCount(armyToTransferFrom.getTroopCount() - toSplit);
+                armyToTransferTo.setTroopCount(armyToTransferTo.getTroopCount() + toSplit);
+                armyToTransferFrom.setOfficerCount(armyToTransferFrom.getOfficerCount() - leadersToSplit);
+                armyToTransferTo.setOfficerCount(armyToTransferTo.getOfficerCount() + leadersToSplit);
+				if (armyToTransferFrom instanceof FootArmy) {
+                    (armyToTransferFrom as FootArmy).setMountCount((armyToTransferFrom as FootArmy).getMountCount() - mountsToSplit);
+                    (armyToTransferTo as FootArmy).setMountCount((armyToTransferTo as FootArmy).getMountCount() + mountsToSplit);
 				}
-				if (listOfArmies[armyFromPlaceInList].armyType == 1 || listOfArmies[armyFromPlaceInList].armyType == 3) {
-					listOfArmies[armyFromPlaceInList].lkp -= lkpToSplit;
-					listOfArmies[armyToPlaceInList].lkp += lkpToSplit;
-					listOfArmies[armyFromPlaceInList].skp -= skpToSplit;
-					listOfArmies[armyToPlaceInList].skp += skpToSplit;
+				if (armyToTransferFrom instanceof FootArmy || armyToTransferFrom instanceof Fleet) {
+                    armyToTransferFrom.setLightCatapultCount(armyToTransferFrom.getLightCatapultCount() - lkpToSplit);
+                    armyToTransferTo.setLightCatapultCount(armyToTransferTo.getLightCatapultCount() + lkpToSplit);
+                    armyToTransferFrom.setHeavyCatapultCount(armyToTransferFrom.getHeavyCatapultCount() - skpToSplit);
+                    armyToTransferTo.setHeavyCatapultCount(armyToTransferTo.getHeavyCatapultCount() + skpToSplit);
 				}
 				if (leadersToSplit > 0 &&
-					listOfArmies[armyFromPlaceInList].remainingMovePoints < listOfArmies[armyFromPlaceInList].startingMovepoints) {
-					listOfArmies[armyToPlaceInList].setRemainingMovePoints(0);
-				} else if (listOfArmies[armyFromPlaceInList].remainingMovePoints < listOfArmies[armyToPlaceInList].remainingMovePoints) {
-					listOfArmies[armyToPlaceInList].setRemainingMovePoints(listOfArmies[armyFromPlaceInList].remainingMovePoints);
+					GameState.armies[armyFromPlaceInList].getMovePoints() < GameState.armies[armyFromPlaceInList].getMaxMovePoints()) {
+					GameState.armies[armyToPlaceInList].setMovePoints(0);
+				} else if (GameState.armies[armyFromPlaceInList].getMovePoints() < GameState.armies[armyToPlaceInList].getMovePoints()) {
+					GameState.armies[armyToPlaceInList].setMovePoints(GameState.armies[armyFromPlaceInList].getMovePoints());
 				}
-				if (listOfArmies[armyFromPlaceInList].remainingHeightPoints < listOfArmies[armyToPlaceInList].remainingHeightPoints) {
-					listOfArmies[armyToPlaceInList].setRemainingHeightPoints(listOfArmies[armyFromPlaceInList].remainingHeightPoints);
+				if (GameState.armies[armyFromPlaceInList].getHeightPoints() < GameState.armies[armyToPlaceInList].getHeightPoints()) {
+					GameState.armies[armyToPlaceInList].setHeightPoints(GameState.armies[armyFromPlaceInList].getHeightPoints());
 				}
 			}
 			event.status = 'checked';
@@ -1065,17 +1073,17 @@ function checkEvent(num) {
 			let realm = cont.realm;
 			let toSplit = cont.troops;
 			let leadersToSplit = cont.leaders;
-			for (let i = 0; i < listOfArmies.length; i++) {
-				if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
+			for (let i = 0; i < GameState.armies.length; i++) {
+				if (GameState.armies[i].getErkenfaraID() == armyFromId && GameState.armies[i].owner == realm) {
 					armyFromPlaceInList = i;
 				}
 			}
 			console.log("place: " + armyFromPlaceInList);
 			if (armyFromPlaceInList >= 0) {
-				if (listOfArmies[armyFromPlaceInList].armyType() == 1) {
+				if (GameState.armies[armyFromPlaceInList] instanceof FootArmy) {
 					mountWithParams(armyFromPlaceInList, toSplit, leadersToSplit, newArmyId);
 					event.status = 'checked';
-				} else if (listOfArmies[armyFromPlaceInList].armyType() == 2) {
+				} else if (GameState.armies[armyFromPlaceInList] instanceof RiderArmy) {
 					unMountWithParams(armyFromPlaceInList, toSplit, leadersToSplit, newArmyId);
 					event.status = 'checked';
 				}
@@ -1098,9 +1106,9 @@ function checkEvent(num) {
 				let shooter;
 				let lkpRolls = [];
 				let skpRolls = [];
-				for(let i = 0; i < listOfArmies.length; i++){
-					if(listOfArmies[i].armyId === cont.armyId && listOfArmies[i].owner === cont.realm)
-					shooter = listOfArmies[i];
+				for(let i = 0; i < GameState.armies.length; i++){
+					if(GameState.armies[i].getErkenfaraID() === cont.armyId && GameState.armies[i].owner === cont.realm)
+					shooter = GameState.armies[i];
 				}
 				for(let i = 0; i < 10; i++){//creating the dice roll array
 					let currentRollLKP = parseInt(shootBox.getLKPInputs()[i].value, 10);
@@ -1176,9 +1184,9 @@ function openTab(evt, tabName) {
 }
 
 function untagHitArmys(){
-	for(let i = 0; i < listOfArmies.length; i++){
-		if (listOfArmies[i].ownerTag() === login || login === "sl"){
-			listOfArmies[i].wasShotAt = false;
+	for(let i = 0; i < GameState.armies.length; i++){
+		if (GameState.armies[i].owner.tag === login || login === "sl"){
+			GameState.armies[i].wasShotAt = false;
 		}
 	}
 }

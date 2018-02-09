@@ -1,7 +1,7 @@
 abstract class MobileEntity extends MapEntity{
     static readonly MAX_MOVE_POINTS: number = 42;
     static readonly MAX_HEIGHT_POINTS: number = 2;
-    protected oldPosition: [number, number];
+    protected oldPosition: [number, number] = [0, 0];
     protected movePoints: number = MobileEntity.MAX_MOVE_POINTS;
     protected heightPoints: number = MobileEntity.MAX_HEIGHT_POINTS;
     protected id: number;
@@ -9,7 +9,9 @@ abstract class MobileEntity extends MapEntity{
 
     constructor(id: number, owner: Realm, position: [number, number], movePoints: number, heightPoints: number){
         super(position, owner);
-        this.oldPosition = position;
+        // copy the position so that this object doesn't share a reference with anything else
+        this.oldPosition[0] = position[0];
+        this.oldPosition[1] = position[1];
         this.setID(id);
         this.setMovePoints(movePoints);
         this.setHeightPoints(heightPoints);
@@ -24,12 +26,14 @@ abstract class MobileEntity extends MapEntity{
     abstract getRoomPoints(): number;
 
     changePosition(newPos: [number, number]): void {
-        this.oldPosition = newPos;
-        this.position = newPos;
+        this.oldPosition[0] = newPos[0];
+        this.oldPosition[1] = newPos[1];
+        this.position[0] = newPos[0];
+        this.position[1] = newPos[1];
     }
 
     getOldPosition(): [number, number]{
-        return this.oldPosition;
+        return [this.oldPosition[0], this.oldPosition[1]];
     }
 
     getMovePoints(): number {

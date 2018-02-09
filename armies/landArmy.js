@@ -53,8 +53,10 @@ class LandArmy extends Army {
                     }
                 }
             }
-            this.oldPosition = this.position;
-            this.position = move.destination;
+            this.oldPosition[0] = this.position[0];
+            this.oldPosition[1] = this.position[1];
+            this.position[0] = move.destination[0];
+            this.position[1] = move.destination[1];
             this.setMovePoints(this.getMovePoints() - move.movePoints);
             this.setHeightPoints(this.getHeightPoints() - move.heightPoints);
         }

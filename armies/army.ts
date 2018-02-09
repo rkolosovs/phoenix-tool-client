@@ -3,6 +3,8 @@ abstract class Army extends MobileEntity{
     protected officerCount: number;
     protected lightCatapultCount: number = 0;
     protected heavyCatapultCount: number = 0;
+    protected lightCatapultShot: number = 0;
+    protected heavtCatapultShot: number = 0;
     isGuard: boolean = false;
     wasShotAt: boolean = false;
 
@@ -71,6 +73,14 @@ abstract class Army extends MobileEntity{
         if(this.canHaveCatapults()) {
             this.heavyCatapultCount = Math.max(0, value);
         }
+    }
+
+    getHeavyCatapultsShot(): number{
+        return this.heavtCatapultShot;
+    }
+
+    getLightCatapultsShot(): number{
+        return this.lightCatapultShot;
     }
 
     conquer(): void {

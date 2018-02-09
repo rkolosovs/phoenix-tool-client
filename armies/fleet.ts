@@ -43,8 +43,10 @@ class Fleet extends Army{
     move(direction: Direction): void {
         let move = this.possibleMoves.find(possMove => possMove.direction === direction);
         if(move != undefined){
-            this.oldPosition = this.position;
-            this.position = move.destination;
+            this.oldPosition[0] = this.position[0];
+            this.oldPosition[1] = this.position[1];
+            this.position[0] = move.destination[0];
+            this.position[1] = move.destination[1];
             this.setMovePoints(this.getMovePoints() - move.movePoints);
             this.transportedArmies.forEach(transportedArmy => transportedArmy.changePosition(move.destination));
         }
