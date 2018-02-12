@@ -27,34 +27,39 @@ class SplitEvent extends PhoenixEvent {
         let mountsToSplit = this.mounts;
         let lkpToSplit = this.lkp;
         let skpToSplit = this.skp;
-        for (let i = 0; i < listOfArmies.length; i++) {
-            if (listOfArmies[i].armyId === armyFromId && listOfArmies[i].owner === realm) {
+        for (let i = 0; i < GameState.armies.length; i++) {
+            if (GameState.armies[i].getErkenfaraID() === armyFromId && GameState.armies[i].owner === realm) {
                 armyFromPlaceInList = i;
             }
         }
         if (armyFromPlaceInList >= 0) {
-            listOfArmies[armyFromPlaceInList].count -= toSplit;
-            listOfArmies[armyFromPlaceInList].leaders -= leadersToSplit;
-            if (listOfArmies[armyFromPlaceInList].armyType == 1) {
-                listOfArmies[armyFromPlaceInList].mounts -= mountsToSplit;
+            let armyToSplitFrom = GameState.armies[armyFromPlaceInList];
+            armyToSplitFrom.setTroopCount(armyToSplitFrom.getTroopCount() - toSplit);
+            armyToSplitFrom.setOfficerCount(armyToSplitFrom.getOfficerCount() - leadersToSplit);
+            if (armyToSplitFrom instanceof FootArmy) {
+                armyToSplitFrom.setMountCount(armyToSplitFrom.getMountCount() - mountsToSplit);
             }
-            if (listOfArmies[armyFromPlaceInList].armyType == 1 || listOfArmies[armyFromPlaceInList].armyType == 3) {
-                listOfArmies[armyFromPlaceInList].lkp -= lkpToSplit;
-                listOfArmies[armyFromPlaceInList].skp -= skpToSplit;
+            if (armyToSplitFrom instanceof FootArmy || armyToSplitFrom instanceof Fleet) {
+                armyToSplitFrom.setLightCatapultCount(armyToSplitFrom.getLightCatapultCount() - lkpToSplit);
+                armyToSplitFrom.setHeavyCatapultCount(armyToSplitFrom.getHeavyCatapultCount() - skpToSplit);
             }
-            let army = null;
-            if (Math.floor(newArmyId / 100) == 1) {
-                army = new FootArmy(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, false, listOfArmies[armyFromPlaceInList].x, listOfArmies[armyFromPlaceInList].y, realm);
+            let army;
+            if (Math.floor(newArmyId / 100) === 1) {
+                army = new FootArmy(newArmyId, realm, toSplit, leadersToSplit, lkpToSplit, skpToSplit, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints(), armyToSplitFrom.getHeightPoints());
+                // new heer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, false,
+                // GameState.armies[armyFromPlaceInList].x, GameState.armies[armyFromPlaceInList].y, realm);
             }
-            else if (Math.floor(newArmyId / 100) == 2) {
-                army = new RiderArmy(newArmyId, toSplit, leadersToSplit, false, listOfArmies[armyFromPlaceInList].x, listOfArmies[armyFromPlaceInList].y, realm);
+            else if (Math.floor(newArmyId / 100) === 2) {
+                army = new RiderArmy(newArmyId, realm, toSplit, leadersToSplit, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints(), armyToSplitFrom.getHeightPoints());
+                // new reiterHeer(newArmyId, toSplit, leadersToSplit, false, GameState.armies[armyFromPlaceInList].x,
+                // GameState.armies[armyFromPlaceInList].y, realm);
             }
-            else if (Math.floor(newArmyId / 100) == 3) {
-                army = new Fleet(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, false, listOfArmies[armyFromPlaceInList].x, listOfArmies[armyFromPlaceInList].y, realm);
+            else if (Math.floor(newArmyId / 100) === 3) {
+                army = new Fleet(newArmyId, realm, toSplit, leadersToSplit, lkpToSplit, skpToSplit, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints());
+                // new seeHeer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, false,
+                // GameState.armies[armyFromPlaceInList].x, GameState.armies[armyFromPlaceInList].y, realm);
             }
-            army.setRemainingMovePoints(listOfArmies[armyFromPlaceInList].remainingMovePoints);
-            army.setRemainingHeightPoints(listOfArmies[armyFromPlaceInList].remainingHeightPoints);
-            listOfArmies.push(army);
+            GameState.armies.push(army);
         }
         this.status = 'checked';
         fillEventList();
@@ -62,26 +67,35 @@ class SplitEvent extends PhoenixEvent {
     }
     determineEventStatus() {
         let typefactor = 1;
-        let army = listOfArmies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
+        let army = GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
         if (army == undefined) {
             this.status = 'withheld';
         }
         else {
-            if (army.armyType() === 2) {
+            let mountCount = 0;
+            let lkpCount = 0;
+            let skpCount = 0;
+            if (army instanceof RiderArmy) {
                 typefactor = 2;
             }
-            else if (army.armyType() === 3) {
+            else if (army instanceof Fleet) {
                 typefactor = 100;
+                lkpCount = army.getLightCatapultCount();
+                skpCount = army.getHeavyCatapultCount();
             }
-            console.log(army.count - this.troops);
-            if (army.x != this.x || army.y != this.y) {
+            else if (army instanceof FootArmy) {
+                mountCount = army.getMountCount();
+                lkpCount = army.getLightCatapultCount();
+                skpCount = army.getHeavyCatapultCount();
+            }
+            if (army.getPosition()[0] != this.x || army.getPosition()[1] != this.y) {
                 this.status = 'withheld';
             }
-            else if (((army.count - this.troops) >= (100 / typefactor)) &&
-                ((army.leaders - this.leaders) >= 1) &&
-                ((army.mounts - this.mounts) >= 0) &&
-                ((army.lkp - this.lkp) >= 0) &&
-                ((army.skp - this.skp) >= 0)) {
+            else if (((army.getTroopCount() - this.troops) >= (100 / typefactor)) &&
+                ((army.getOfficerCount() - this.leaders) >= 1) &&
+                ((mountCount - this.mounts) >= 0) &&
+                ((lkpCount - this.lkp) >= 0) &&
+                ((skpCount - this.skp) >= 0)) {
                 this.status = 'available';
             }
             else {

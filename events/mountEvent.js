@@ -1,6 +1,6 @@
 "use strict";
 class MountEvent extends PhoenixEvent {
-    constructor(id, type, status, fromArmy, newArmy, realm, troops, leaders, x, y) {
+    constructor(id, type, status, fromArmy, newArmy, realm, troops, leaders, mounts, lkp, skp, x, y) {
         super(id, type, status);
         this.id = id;
         this.type = type;
@@ -10,6 +10,9 @@ class MountEvent extends PhoenixEvent {
         this.realm = realm;
         this.troops = troops;
         this.leaders = leaders;
+        this.mounts = mounts;
+        this.lkp = lkp;
+        this.skp = skp;
         this.x = x;
         this.y = y;
     }
@@ -21,20 +24,20 @@ class MountEvent extends PhoenixEvent {
         let realm = this.realm;
         let toSplit = this.troops;
         let leadersToSplit = this.leaders;
-        for (let i = 0; i < listOfArmies.length; i++) {
-            if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
+        for (let i = 0; i < GameState.armies.length; i++) {
+            if (GameState.armies[i].getErkenfaraID() == armyFromId && GameState.armies[i].owner == realm) {
                 armyFromPlaceInList = i;
             }
         }
         console.log("place: " + armyFromPlaceInList);
         if (armyFromPlaceInList >= 0) {
-            if (listOfArmies[armyFromPlaceInList].armyType() == 1) {
+            if (GameState.armies[armyFromPlaceInList] instanceof FootArmy) {
                 mountWithParams(armyFromPlaceInList, toSplit, leadersToSplit, newArmyId);
                 this.status = 'checked';
-            }
-            else if (listOfArmies[armyFromPlaceInList].armyType() == 2) {
-                unMountWithParams(armyFromPlaceInList, toSplit, leadersToSplit, newArmyId);
-                this.status = 'checked';
+                if (GameState.armies[armyFromPlaceInList] instanceof RiderArmy) {
+                    unMountWithParams(armyFromPlaceInList, toSplit, leadersToSplit, newArmyId);
+                    this.status = 'checked';
+                }
             }
         }
         fillEventList();
@@ -42,38 +45,51 @@ class MountEvent extends PhoenixEvent {
     }
     determineEventStatus() {
         let typefactor = 1;
-        let army = listOfArmies[findArmyPlaceInList(this.fromArmy, this.realm)];
+        let army = GameState.armies[findArmyPlaceInList(this.fromArmy, this.realm)];
         if (army == undefined) {
             this.status = 'withheld';
         }
         else {
-            if (army.armyType() === 2) {
+            if (army instanceof RiderArmy) {
                 typefactor = 2;
             }
-            else if (army.armyType() === 3) {
+            else if (army instanceof Fleet) {
                 typefactor = 100;
             }
-            console.log(army.count + " - " + this.troops);
-            if (army.x != this.x || army.y != this.y) {
+            if (army.getPosition()[0] != this.x || army.getPosition()[1] != this.y) {
                 this.status = 'withheld';
             }
-            else if ((army.armyType() === 1 && (((army.count - this.troops) >= 0) &&
-                ((army.leaders - this.leaders) >= 0) && ((army.mounts - this.troops) >= 0))) ||
-                (army.armyType() === 2 && (((army.count - this.troops) >= 0) &&
-                    ((army.leaders - this.leaders) >= 0)))) {
-                console.log("Status should be available!");
+            else if ((army instanceof FootArmy && (((army.getTroopCount() - this.troops) >= 0) &&
+                ((army.getOfficerCount() - this.leaders) >= 0) && ((army.getMountCount() - this.troops) >= 0))) ||
+                (army instanceof RiderArmy && (((army.getTroopCount() - this.troops) >= 0) &&
+                    ((army.getOfficerCount() - this.leaders) >= 0)))) {
                 this.status = 'available';
             }
             else {
                 this.status = 'impossible';
             }
         }
-        //console.log(army.count - this.troops);
-        if (((army.count - this.troops) >= (100 / typefactor)) &&
-            ((army.leaders - this.leaders) >= 1) &&
-            ((army.mounts - this.mounts) >= 0) &&
-            ((army.lkp - this.lkp) >= 0) && //TODO find out why these would be needed
-            ((army.skp - this.skp) >= 0)) {
+        let mountCount = 0;
+        let lkpCount = 0;
+        let skpCount = 0;
+        if (army instanceof RiderArmy) {
+            typefactor = 2;
+        }
+        else if (army instanceof Fleet) {
+            typefactor = 100;
+            lkpCount = army.getLightCatapultCount();
+            skpCount = army.getHeavyCatapultCount();
+        }
+        else if (army instanceof FootArmy) {
+            mountCount = army.getMountCount();
+            lkpCount = army.getLightCatapultCount();
+            skpCount = army.getHeavyCatapultCount();
+        }
+        if (((army.getTroopCount() - this.troops) >= (100 / typefactor)) &&
+            ((army.getOfficerCount() - this.leaders) >= 1) &&
+            ((mountCount - this.mounts) >= 0) &&
+            ((lkpCount - this.lkp) >= 0) &&
+            ((skpCount - this.skp) >= 0)) {
             this.status = 'available';
         }
         else {

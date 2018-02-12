@@ -77,7 +77,8 @@ class PhoenixEvent {
         if (Math.floor(armyId / 100) != 3) {
             for (let i = 0; i < pendingEvents.length; i++) {
                 let event = pendingEvents[i];
-                if ((event.status === 'withheld' || event.status === 'available' || event.status === 'undetermined') && event.type === 'mount' && Math.floor(event.content.fromArmy) === armyId &&
+                if ((event.status === 'withheld' || event.status === 'available' || event.status === 'undetermined') &&
+                    event.type === 'mount' && Math.floor(event.content.fromArmy) === armyId &&
                     (event.content.x === fromX && event.content.y === fromY)) {
                     return false;
                 }
@@ -89,7 +90,6 @@ class PhoenixEvent {
         }
     }
     eachArmyExists(armies) {
-        //	console.log("eachArmyExits("+armies+")");
         return (armies.length > 0) && (armies.map(function (army) {
             return armyExists(army.realm, army.armyId);
         }).reduce(function (total, current) {
@@ -97,15 +97,14 @@ class PhoenixEvent {
         }, true));
     }
     findArmyPlaceInList(armyId, owner) {
-        for (let i = 0; i < listOfArmies.length; i++) {
-            if (listOfArmies[i].armyId === armyId && listOfArmies[i].owner === owner) {
+        for (let i = 0; i < GameState.armies.length; i++) {
+            if (GameState.armies[i].getErkenfaraID() === armyId && GameState.armies[i].owner === owner) {
                 return i;
             }
         }
         return -1;
     }
     eachArmyExistsAndIsLocated(armies, x, y) {
-        //	console.log("eachArmyExistsAndIsLocated("+armies+", "+x+", "+y+")");
         return (armies.length > 0) && (armies.map(function (army) {
             return armyExistsAndIsLocated(army.realm, army.armyId, x, y);
         }, this).reduce(function (total, current) {
@@ -113,7 +112,6 @@ class PhoenixEvent {
         }, true));
     }
     possibleMoveOfEachArmyTo(armies, x, y) {
-        //	console.log("possibleMoveOfEachArmyTo("+armies+", "+x+", "+y+")");
         return (armies.length > 0) && (armies.map(function (army) {
             return armyExistsAndIsLocated(army.realm, army.armyId, x, y) ||
                 possibleMoveOfArmyTo(army.realm, army.armyId, x, y);
@@ -122,21 +120,18 @@ class PhoenixEvent {
         }, true));
     }
     armyExists(realm, id) {
-        //	console.log("armyExists("+realm+", "+id+")");
-        return listOfArmies.some(function (val) {
-            return (val.ownerTag() === realm) && (val.armyId === id);
+        return GameState.armies.some(function (val) {
+            return (val.owner.tag === realm) && (val.getErkenfaraID() === id);
         }, this);
     }
     armyExistsAndIsLocated(realm, id, x, y) {
-        //	console.log("armyExistsAndIsLocated("+realm+", "+id+", "+x+", "+y+")");
-        return listOfArmies.some(function (val) {
-            return (val.ownerTag() === realm) &&
-                (val.armyId === id) &&
-                (val.x === x) && (val.y === y);
+        return GameState.armies.some(function (val) {
+            return (val.owner.tag === realm) &&
+                (val.getErkenfaraID() === id) &&
+                (val.getPosition()[0] === x) && (val.getPosition()[1] === y);
         }, this);
     }
     possibleMoveOfArmyTo(realm, id, x, y) {
-        //	console.log("possibleMoveOfArmyTo("+realm+", "+id+", "+x+", "+y+")");
         return pendingEvents.some(function (pEv) {
             return (pEv.type === 'move') && (pEv.content.realm === realm) &&
                 (pEv.content.armyId === id) && (pEv.status !== 'deleted' || pEv.status !== 'checked') &&
@@ -145,7 +140,6 @@ class PhoenixEvent {
         }, this);
     }
     unprocessedBattleAtContainingArmy(realm, id, x, y) {
-        //	console.log("unprocessedBattleAtContainingArmy("+realm+", "+id+", "+x+", "+y+")");
         return pendingEvents.some(function (pEv) {
             return (pEv.type === 'battle') &&
                 (pEv.status !== 'deleted') &&
@@ -158,32 +152,18 @@ class PhoenixEvent {
         }, this);
     }
     canMove(realm, id, fromX, fromY, toX, toY) {
-        let foundArmy = listOfArmies.find(function (army) {
-            return (army.armyId === id) && (army.ownerTag() === realm);
+        let foundArmy = GameState.armies.find(function (army) {
+            return (army.getErkenfaraID() === id) && (army.owner.tag === realm);
         }, this);
-        if (foundArmy != undefined && foundArmy.x === fromX && foundArmy.y === fromY) {
+        if (foundArmy != undefined && foundArmy.getPosition()[0] === fromX && foundArmy.getPosition()[1] === fromY) {
             let adjacency = getAdjacency([fromX, fromY], [[toX, toY]]);
             if (adjacency.reduce((total, current) => (total || current), false)) {
                 foundArmy.possibleMoves = [];
                 let direction = (adjacency.findIndex((dir) => dir === 1) + 1) % 6;
-                moveToList(foundArmy, direction);
+                foundArmy.checkForPossibleMove(direction);
                 return foundArmy.possibleMoves.length > 0;
             }
             return false;
-            //		let origin = new showHex(fromX, fromY);
-            //        let destination = new showHex(toX, toY);
-            //		let streetPresent = buildings.some(function(building){
-            //			return (building.type === 8) &&
-            //				(((building.firstX == fromX && building.firstY == fromY) && (building.secondX == toX && building.secondY == toY)) ||
-            //					((building.secondX == toX && building.secondY == toY) && (building.firstX == fromX && building.firstY == fromY)));
-            //		});
-            //		let heightDifference = Math.abs((origin.height() - destination.height()));
-            //		//TODO: This is missing harbors
-            //		let enoughHeightPoints =  (foundArmy.remainingHeightPoints >= 1) &&
-            //			((heightDifference <= 2 && streetPresent) || (heightDifference <= 1));
-            //		//TODO: This is missing basically everything. Now the movement points are set serverside and no longer to high so this should work or not be here.
-            //		let enoughMovePoints = (foundArmy.remainingMovePoints >= 7);
-            //		return enoughHeightPoints && enoughMovePoints;
         }
         else {
             return false;

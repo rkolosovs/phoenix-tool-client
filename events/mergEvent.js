@@ -17,12 +17,12 @@ class MergeEvent extends PhoenixEvent {
         let armyFromId = this.fromArmy;
         let armyToId = this.toArmy;
         let realm = this.realm;
-        for (let i = 0; i < listOfArmies.length; i++) {
-            if (listOfArmies[i].armyId == armyFromId && listOfArmies[i].owner == realm) {
+        for (let i = 0; i < GameState.armies.length; i++) {
+            if (GameState.armies[i].getErkenfaraID() == armyFromId && GameState.armies[i].owner == realm) {
                 armyFromPlaceInList = i;
                 console.log("i1=" + i);
             }
-            else if (listOfArmies[i].armyId == armyToId && listOfArmies[i].owner == realm) {
+            else if (GameState.armies[i].getErkenfaraID() == armyToId && GameState.armies[i].owner == realm) {
                 armyToPlaceInList = i;
                 console.log("i2=" + i);
             }
@@ -38,22 +38,23 @@ class MergeEvent extends PhoenixEvent {
         selectedArmyIndex = undefined;
     }
     determineEventStatus() {
-        let army1 = listOfArmies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
-        let army2 = listOfArmies[this.findArmyPlaceInList(this.toArmy, this.realm)];
+        let army1 = GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
+        let army2 = GameState.armies[this.findArmyPlaceInList(this.toArmy, this.realm)];
         if (army1 == undefined || army2 == undefined) {
             this.status = 'withheld';
         }
-        else if (army1.x !== this.x || army1.y !== this.y || army2.x !== this.x || army2.y !== this.y) {
+        else if (army1.getPosition()[0] !== this.x || army1.getPosition()[1] !== this.y ||
+            army2.getPosition()[0] !== this.x || army2.getPosition()[1] !== this.y) {
             this.status = 'withheld';
         }
-        else if (army1.armyType() === army2.armyType() &&
-            army1.x === army2.x && army1.y === army2.y) {
+        else if (army1.constructor === army2.constructor &&
+            army1.getPosition()[0] === army2.getPosition()[0] && army1.getPosition()[1] === army2.getPosition()[1]) {
             this.status = 'available';
         }
-        else if ((army1.armyType() !== army2.armyType()) ||
-            ((((army1.armyType() === 1 || army1.armyType() === 2) && army1.remainingMovePoints < 3) ||
-                army1.armyType() === 3 && army1.remainingMovePoints < 5) && (((army2.armyType() === 1 || army2.armyType() === 2) &&
-                army2.remainingMovePoints < 3) || army2.armyType() === 3 && army2.remainingMovePoints < 5))) {
+        else if ((army1.constructor !== army2.constructor) ||
+            ((((army1 instanceof FootArmy || army1 instanceof RiderArmy) && army1.getMovePoints() < 3) ||
+                army1 instanceof Fleet && army1.getMovePoints() < 5) && (((army2 instanceof FootArmy || army2 instanceof RiderArmy) &&
+                army2.getMovePoints() < 3) || army2 instanceof Fleet && army2.getMovePoints() < 5))) {
             this.status = 'impossible';
         }
         else {
