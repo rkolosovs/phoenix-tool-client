@@ -15,8 +15,8 @@ class BattleEvent extends PhoenixEvent {
         show(battleBox.getSelf());
         let partips = [];
         this.participants.forEach(function (item) {
-            let a = listOfArmies.find(function (candidate) {
-                return (item.owner.tag === candidate.ownerTag()) && (item.getErkenfaraID() === candidate.armyId);
+            let a = GameState.armies.find(function (candidate) {
+                return (item.owner.tag === candidate.owner.tag && (item.getErkenfaraID() === candidate.getErkenfaraID()));
             });
             partips.push(a);
         });

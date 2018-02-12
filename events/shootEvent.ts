@@ -33,20 +33,20 @@ class ShootEvent extends PhoenixEvent{
         if (this.status === 'undetermined' || this.status === 'available' ||
         this.status === 'withheld' || this.status === 'impossible') {
 
-            let shooter = listOfArmies[this.findArmyPlaceInList(this.armyId, this.realm)];
+            let shooter = GameState.armies[this.findArmyPlaceInList(this.armyId, this.realm)];
             let canShoot = true;
 
-            if(shooter.lkp - shooter.LKPShotThisTurn < this.lkpCount){//check if remaining Lkp that have not shot yet
+            if(shooter.getLightCatapultCount() - shooter.getLightCatapultsShot() < this.lkpCount){//check if remaining Lkp that have not shot yet
                 canShoot = false;
             }
-            if(shooter.skp - shooter.SKPShotThisTurn < this.skpCount){//check if remaining Lkp that have not shot yet
+            if(shooter.getHeavyCatapultCount() - shooter.getHeavyCatapultsShot() < this.skpCount){//check if remaining Lkp that have not shot yet
                 canShoot = false;
             }
 
-            if (this.armyExistsAndIsLocated(shooter.ownerTag(), this.armyId, this.fromX, this.fromY) && canShoot) {
+            if (this.armyExistsAndIsLocated(shooter.owner.tag, this.armyId, this.fromX, this.fromY) && canShoot) {
                 this.status = 'available';
             } else if (armyExists(this.realm, this.armyId) && 
-            this.possibleMoveOfArmyTo(shooter.ownerTag(), this.armyId, this.fromX, this.fromY)) {
+            this.possibleMoveOfArmyTo(shooter.owner.tag, this.armyId, this.fromX, this.fromY)) {
                 this.status = 'withheld';
             } else {
                 this.status = 'impossible';
@@ -69,9 +69,9 @@ class ShootEvent extends PhoenixEvent{
         let shooter;
         let lkpRolls = [];
         let skpRolls = [];
-        for(let i = 0; i < listOfArmies.length; i++){//TODO use array functions
-            if(listOfArmies[i].armyId === this.armyId && listOfArmies[i].owner === this.realm)
-            shooter = listOfArmies[i];
+        for(let i = 0; i < GameState.armies.length; i++){//TODO use array functions
+            if(GameState.armies[i].getErkenfaraID() === this.armyId && GameState.armies[i].owner === this.realm)
+            shooter = GameState.armies[i];
         }
         for(let i = 0; i < 10; i++){//creating the dice roll array
             let currentRollLKP = parseInt(shootBox.getLKPInputs()[i].value, 10);
@@ -102,7 +102,7 @@ class ShootEvent extends PhoenixEvent{
             window.alert("Sie haben zu viele Würfe für schwere Katapulte/Kriegsschiffe eingetragenen");
             return false;
         }else{
-            fernkampf(lkpRolls, skpRolls, shooter, this.target, this.toX, this.toY, null);// TODO chars
+            fernkampf(lkpRolls, skpRolls, shooter, this.target, [this.toX, this.toY], null);// TODO chars
             hide(shootBox.getSelf());
             this.status = 'checked';
             fillEventList();

@@ -37,19 +37,19 @@ class ShootEvent extends PhoenixEvent {
     determineEventStatus() {
         if (this.status === 'undetermined' || this.status === 'available' ||
             this.status === 'withheld' || this.status === 'impossible') {
-            let shooter = listOfArmies[this.findArmyPlaceInList(this.armyId, this.realm)];
+            let shooter = GameState.armies[this.findArmyPlaceInList(this.armyId, this.realm)];
             let canShoot = true;
-            if (shooter.lkp - shooter.LKPShotThisTurn < this.lkpCount) {
+            if (shooter.getLightCatapultCount() - shooter.getLightCatapultsShot() < this.lkpCount) {
                 canShoot = false;
             }
-            if (shooter.skp - shooter.SKPShotThisTurn < this.skpCount) {
+            if (shooter.getHeavyCatapultCount() - shooter.getHeavyCatapultsShot() < this.skpCount) {
                 canShoot = false;
             }
-            if (this.armyExistsAndIsLocated(shooter.ownerTag(), this.armyId, this.fromX, this.fromY) && canShoot) {
+            if (this.armyExistsAndIsLocated(shooter.owner.tag, this.armyId, this.fromX, this.fromY) && canShoot) {
                 this.status = 'available';
             }
             else if (armyExists(this.realm, this.armyId) &&
-                this.possibleMoveOfArmyTo(shooter.ownerTag(), this.armyId, this.fromX, this.fromY)) {
+                this.possibleMoveOfArmyTo(shooter.owner.tag, this.armyId, this.fromX, this.fromY)) {
                 this.status = 'withheld';
             }
             else {
@@ -69,9 +69,9 @@ class ShootEvent extends PhoenixEvent {
         let shooter;
         let lkpRolls = [];
         let skpRolls = [];
-        for (let i = 0; i < listOfArmies.length; i++) {
-            if (listOfArmies[i].armyId === this.armyId && listOfArmies[i].owner === this.realm)
-                shooter = listOfArmies[i];
+        for (let i = 0; i < GameState.armies.length; i++) {
+            if (GameState.armies[i].getErkenfaraID() === this.armyId && GameState.armies[i].owner === this.realm)
+                shooter = GameState.armies[i];
         }
         for (let i = 0; i < 10; i++) {
             let currentRollLKP = parseInt(shootBox.getLKPInputs()[i].value, 10);
@@ -105,7 +105,7 @@ class ShootEvent extends PhoenixEvent {
             return false;
         }
         else {
-            fernkampf(lkpRolls, skpRolls, shooter, this.target, this.toX, this.toY, null); // TODO chars
+            fernkampf(lkpRolls, skpRolls, shooter, this.target, [this.toX, this.toY], null); // TODO chars
             hide(shootBox.getSelf());
             this.status = 'checked';
             fillEventList();

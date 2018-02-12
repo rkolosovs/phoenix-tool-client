@@ -28,38 +28,40 @@ class TransferEvent extends PhoenixEvent {
         let mountsToSplit = this.mounts;
         let lkpToSplit = this.lkp;
         let skpToSplit = this.skp;
-        for (let i = 0; i < listOfArmies.length; i++) {
-            if (listOfArmies[i].armyId === armyFromId && listOfArmies[i].owner === realm) {
+        for (let i = 0; i < GameState.armies.length; i++) {
+            if (GameState.armies[i].getErkenfaraID() === armyFromId && GameState.armies[i].owner === realm) {
                 armyFromPlaceInList = i;
             }
-            else if (listOfArmies[i].armyId === armyToId && listOfArmies[i].owner === realm) {
+            else if (GameState.armies[i].getErkenfaraID() === armyToId && GameState.armies[i].owner === realm) {
                 armyToPlaceInList = i;
             }
         }
         if (armyFromPlaceInList >= 0 && armyToPlaceInList >= 0) {
-            listOfArmies[armyFromPlaceInList].count -= toSplit;
-            listOfArmies[armyToPlaceInList].count += toSplit;
-            listOfArmies[armyFromPlaceInList].leaders -= leadersToSplit;
-            listOfArmies[armyToPlaceInList].leaders += leadersToSplit;
-            if (listOfArmies[armyFromPlaceInList].armyType == 1) {
-                listOfArmies[armyFromPlaceInList].mounts -= mountsToSplit;
-                listOfArmies[armyToPlaceInList].mounts += mountsToSplit;
+            let armyToTransferFrom = GameState.armies[armyFromPlaceInList];
+            let armyToTransferTo = GameState.armies[armyToPlaceInList];
+            armyToTransferFrom.setTroopCount(armyToTransferFrom.getTroopCount() - toSplit);
+            armyToTransferTo.setTroopCount(armyToTransferTo.getTroopCount() + toSplit);
+            armyToTransferFrom.setOfficerCount(armyToTransferFrom.getOfficerCount() - leadersToSplit);
+            armyToTransferTo.setOfficerCount(armyToTransferTo.getOfficerCount() + leadersToSplit);
+            if (armyToTransferFrom instanceof FootArmy) {
+                armyToTransferFrom.setMountCount(armyToTransferFrom.getMountCount() - mountsToSplit);
+                armyToTransferTo.setMountCount(armyToTransferTo.getMountCount() + mountsToSplit);
             }
-            if (listOfArmies[armyFromPlaceInList].armyType == 1 || listOfArmies[armyFromPlaceInList].armyType == 3) {
-                listOfArmies[armyFromPlaceInList].lkp -= lkpToSplit;
-                listOfArmies[armyToPlaceInList].lkp += lkpToSplit;
-                listOfArmies[armyFromPlaceInList].skp -= skpToSplit;
-                listOfArmies[armyToPlaceInList].skp += skpToSplit;
+            if (armyToTransferFrom instanceof FootArmy || armyToTransferFrom instanceof Fleet) {
+                armyToTransferFrom.setLightCatapultCount(armyToTransferFrom.getLightCatapultCount() - lkpToSplit);
+                armyToTransferTo.setLightCatapultCount(armyToTransferTo.getLightCatapultCount() + lkpToSplit);
+                armyToTransferFrom.setHeavyCatapultCount(armyToTransferFrom.getHeavyCatapultCount() - skpToSplit);
+                armyToTransferTo.setHeavyCatapultCount(armyToTransferTo.getHeavyCatapultCount() + skpToSplit);
             }
             if (leadersToSplit > 0 &&
-                listOfArmies[armyFromPlaceInList].remainingMovePoints < listOfArmies[armyFromPlaceInList].startingMovepoints) {
-                listOfArmies[armyToPlaceInList].setRemainingMovePoints(0);
+                GameState.armies[armyFromPlaceInList].getMovePoints() < GameState.armies[armyFromPlaceInList].getMaxMovePoints()) {
+                GameState.armies[armyToPlaceInList].setMovePoints(0);
             }
-            else if (listOfArmies[armyFromPlaceInList].remainingMovePoints < listOfArmies[armyToPlaceInList].remainingMovePoints) {
-                listOfArmies[armyToPlaceInList].setRemainingMovePoints(listOfArmies[armyFromPlaceInList].remainingMovePoints);
+            else if (GameState.armies[armyFromPlaceInList].getMovePoints() < GameState.armies[armyToPlaceInList].getMovePoints()) {
+                GameState.armies[armyToPlaceInList].setMovePoints(GameState.armies[armyFromPlaceInList].getMovePoints());
             }
-            if (listOfArmies[armyFromPlaceInList].remainingHeightPoints < listOfArmies[armyToPlaceInList].remainingHeightPoints) {
-                listOfArmies[armyToPlaceInList].setRemainingHeightPoints(listOfArmies[armyFromPlaceInList].remainingHeightPoints);
+            if (GameState.armies[armyFromPlaceInList].getHeightPoints() < GameState.armies[armyToPlaceInList].getHeightPoints()) {
+                GameState.armies[armyToPlaceInList].setHeightPoints(GameState.armies[armyFromPlaceInList].getHeightPoints());
             }
         }
         this.status = 'checked';
@@ -67,21 +69,23 @@ class TransferEvent extends PhoenixEvent {
         Drawing.drawStuff();
     }
     determineEventStatus() {
-        let army1 = listOfArmies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
-        let army2 = listOfArmies[this.findArmyPlaceInList(this.toArmy, this.realm)];
+        let army1 = GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
+        let army2 = GameState.armies[this.findArmyPlaceInList(this.toArmy, this.realm)];
         if (army1 == undefined || army2 == undefined) {
             this.status = 'withheld';
         }
-        else if (army1.x !== this.x || army1.y !== this.y || army2.x !== this.x || army2.y !== this.y) {
+        else if (army1.getPosition()[0] !== this.x || army1.getPosition()[1] !== this.y ||
+            army2.getPosition()[0] !== this.x || army2.getPosition()[1] !== this.y) {
             this.status = 'withheld';
         }
-        else if ((army1.armyType() == army2.armyType() || (this.troops === 0 && this.mounts === 0 && this.lkp === 0 && this.skp === 0))
-            && army1.x === army2.x && army1.y === army2.y) {
+        else if ((army1.constructor === army2.constructor || (this.troops === 0 && this.mounts === 0 &&
+            this.lkp === 0 && this.skp === 0)) && army1.getPosition()[0] === army2.getPosition()[0] &&
+            army1.getPosition()[1] === army2.getPosition()[1]) {
             this.status = 'available';
         }
-        else if (((((army1.armyType() == 1 || army1.armyType() == 2) && army1.remainingMovePoints < 3) || army1.armyType() == 3 &&
-            army1.remainingMovePoints < 5) && (((army2.armyType() == 1 || army2.armyType() == 2) &&
-            army2.remainingMovePoints < 3) || army2.armyType() == 3 && army2.remainingMovePoints < 5))) {
+        else if (((((army1 instanceof FootArmy || army1 instanceof RiderArmy) && army1.getMovePoints() < 3) ||
+            army1 instanceof Fleet && army1.getMovePoints() < 5) && (((army2 instanceof FootArmy ||
+            army2 instanceof RiderArmy) && army2.getMovePoints() < 3) || army2 instanceof Fleet && army2.getMovePoints() < 5))) {
             this.status = 'impossible';
         }
         else {

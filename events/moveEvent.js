@@ -14,39 +14,39 @@ class MoveEvent extends PhoenixEvent {
     }
     checkEvent() {
         let army;
-        for (let i = 0; i < listOfArmies.length; i++) {
-            army = listOfArmies[i];
+        for (let i = 0; i < GameState.armies.length; i++) {
+            army = GameState.armies[i];
             if (army.ownerTag() === this.realm && this.armyId === army.armyId) {
                 break;
             }
         }
         let adjacency = getAdjacency([army.x, army.y], [[this.toX, this.toY]]); //TODO use the new movement
-        if (adjacency[0] === 1) {
-            moveToList(army, 1);
-            move(army, 1); //move to ne
+        if (adjacency[0] === true) {
+            army.moveToList(1);
+            army.move(1); //move to ne
         }
-        else if (adjacency[1] === 1) {
-            moveToList(army, 2);
-            move(army, 2); //move to e
+        else if (adjacency[1] === true) {
+            army.moveToList(2);
+            army.move(2); //move to e
         }
-        else if (adjacency[2] === 1) {
-            moveToList(army, 3);
-            move(army, 3); //move to se
+        else if (adjacency[2] === true) {
+            army.moveToList(3);
+            army.move(3); //move to se
         }
-        else if (adjacency[3] === 1) {
-            moveToList(army, 4);
-            move(army, 4); //move to sw
+        else if (adjacency[3] === true) {
+            army.moveToList(4);
+            army.move(4); //move to sw
         }
-        else if (adjacency[4] === 1) {
-            moveToList(army, 5);
-            move(army, 5); //move to w
+        else if (adjacency[4] === true) {
+            army.moveToList(5);
+            army.move(5); //move to w
         }
-        else if (adjacency[5] === 1) {
-            moveToList(army, 0);
-            move(army, 0); //move to nw
+        else if (adjacency[5] === true) {
+            army.moveToList(0);
+            army.move(0); //move to nw
         }
         if (!this.unprocessedBattleAtContainingArmy(army.ownerTag(), army.armyId, army.x, army.y)) {
-            conquer(army);
+            army.conquer();
         }
         this.status = 'checked';
         fillEventList();
