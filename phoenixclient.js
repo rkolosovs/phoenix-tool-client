@@ -888,30 +888,12 @@ function checkEvent(num) {
                 }
             }
             let adjacency = getAdjacency([army.getPosition()[0], army.getPosition()[1]], [[cont.toX, cont.toY]]);
-            if (adjacency[0] === 1) {
-                army.checkForPossibleMove(1);
-                army.move(1); //move to ne
-            }
-            else if (adjacency[1] === 1) {
-                army.checkForPossibleMove(2);
-                army.move(2); //move to e
-            }
-            else if (adjacency[2] === 1) {
-                army.checkForPossibleMove(3);
-                army.move(3); //move to se
-            }
-            else if (adjacency[3] === 1) {
-                army.checkForPossibleMove(4);
-                army.move(4); //move to sw
-            }
-            else if (adjacency[4] === 1) {
-                army.checkForPossibleMove(5);
-                army.move(5); //move to w
-            }
-            else if (adjacency[5] === 1) {
-                army.checkForPossibleMove(0);
-                army.move(0); //move to nw
-            }
+            adjacency.forEach((adjacent, index) => {
+                if (adjacent) {
+                    army.checkForPossibleMove(index);
+                    army.move(index);
+                }
+            });
             if (!unprocessedBattleAtContainingArmy(army.owner.tag, army.getErkenfaraID(), army.getPosition()[0], army.getPosition()[1])) {
                 army.conquer();
             }
