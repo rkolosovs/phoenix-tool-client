@@ -6,6 +6,7 @@ class MobileEntity extends MapEntity {
         this.movePoints = MobileEntity.MAX_MOVE_POINTS;
         this.heightPoints = MobileEntity.MAX_HEIGHT_POINTS;
         this.possibleMoves = [];
+        this.onMultifield = false;
         // copy the position so that this object doesn't share a reference with anything else
         this.oldPosition[0] = position[0];
         this.oldPosition[1] = position[1];

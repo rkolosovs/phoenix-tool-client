@@ -8,6 +8,7 @@ class Army extends MobileEntity {
         this.heavtCatapultShot = 0;
         this.isGuard = false;
         this.wasShotAt = false;
+        this.possibleTargets = [];
         this.setTroopCount(troopCount);
         this.setOfficerCount(officerCount);
         if (isGuard != undefined) {

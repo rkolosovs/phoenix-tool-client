@@ -9,10 +9,12 @@ var HexFunction;
     function neighbors(hex) {
         //usual order: NW,NO,O,SO,SW,W
         if (hex[1] % 2 === 0) {
-            return [[hex[0], hex[1] - 1], [hex[0] + 1, hex[1] - 1], [hex[0] + 1, hex[1]], [hex[0] + 1, hex[1] + 1], [hex[0], hex[1] + 1], [hex[0] - 1, hex[1]]];
+            return [[hex[0], hex[1] - 1], [hex[0] + 1, hex[1] - 1], [hex[0] + 1, hex[1]],
+                [hex[0] + 1, hex[1] + 1], [hex[0], hex[1] + 1], [hex[0] - 1, hex[1]]];
         }
         else {
-            return [[hex[0] - 1, hex[1] - 1], [hex[0], hex[1] - 1], [hex[0] + 1, hex[1]], [hex[0], hex[1] + 1], [hex[0] - 1, hex[1] + 1], [hex[0] - 1, hex[1]]];
+            return [[hex[0] - 1, hex[1] - 1], [hex[0], hex[1] - 1], [hex[0] + 1, hex[1]],
+                [hex[0], hex[1] + 1], [hex[0] - 1, hex[1] + 1], [hex[0] - 1, hex[1]]];
         }
     }
     HexFunction.neighbors = neighbors;
@@ -90,8 +92,8 @@ var HexFunction;
     //https://www.redblobgames.com/grids/hexagons/
     function distance(origin, to) {
         //this is the cube coordinates for the current Hex
-        let thisCubeX = originX - (originY + (originY & 1)) / 2;
-        let thisCubeZ = originY;
+        let thisCubeX = origin[0] - (origin[1] + (origin[1] & 1)) / 2;
+        let thisCubeZ = origin[1];
         let thisCubeY = -thisCubeX - thisCubeZ;
         //this is the cube coordinates for the current Hex
         let targetCubeX = to[0] - (to[1] + (to[1] & 1)) / 2; //bitwise & as an alternative to modulo that works without exceptions(negative numbers)

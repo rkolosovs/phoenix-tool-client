@@ -6,6 +6,7 @@ abstract class MobileEntity extends MapEntity{
     protected heightPoints: number = MobileEntity.MAX_HEIGHT_POINTS;
     protected id: number;
     public possibleMoves: Move[] = [];
+    public onMultifield: boolean = false;
 
     constructor(id: number, owner: Realm, position: [number, number], movePoints: number, heightPoints: number){
         super(position, owner);

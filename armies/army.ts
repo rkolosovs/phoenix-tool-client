@@ -7,6 +7,7 @@ abstract class Army extends MobileEntity{
     protected heavtCatapultShot: number = 0;
     isGuard: boolean = false;
     wasShotAt: boolean = false;
+    possibleTargets: Field[] = [];
 
     constructor(id: number, owner: Realm, troopCount: number, officerCount: number, lightCatapultCount: number,
                 heavyCatapultCount: number, position: [number, number], movePoints: number, heightPoints: number,
