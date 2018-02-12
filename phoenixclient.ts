@@ -146,7 +146,7 @@ GUI.getCanvas().addEventListener('wheel', function (event: MouseWheelEvent) {
 	} else {
 		scale *= 1 - scrollSpeed;
 	}
-	setHexParts(scale); // compute the scale dependant values used for map drawing
+	Drawing.setHexParts(scale); // compute the scale dependant values used for map drawing
 	let newPos: [number, number] = [pos[0] * scale, pos[1] * scale]; // compute the new distance of mouse from origin
     // move origin so that the tile stays the same  with the new scaling
 	origin = [mouse[0] - newPos[0], mouse[1] - newPos[1]];
@@ -419,20 +419,20 @@ function registerRightClick() {
 function getClickedField(): [number, number] {
 	let x = click[0] - origin[0]; // reverse our x/y origin offset
 	let y = click[1] - origin[1];
-	let m = c / (gW * 0.5); // the inclination of the hexes upper triangle side
+	let m = Drawing.c / (Drawing.gW * 0.5); // the inclination of the hexes upper triangle side
 
-	let row = Math.floor(y / gH); // get the rectangle clicked in
+	let row = Math.floor(y / Drawing.gH); // get the rectangle clicked in
 	let rowIsOdd = (row % 2 !== 0);
-	let column = Math.floor((rowIsOdd ? ((x + 0.5 * gW) / gW) : (x / gW)));
+	let column = Math.floor((rowIsOdd ? ((x + 0.5 * Drawing.gW) / Drawing.gW) : (x / Drawing.gW)));
 
-	let relY = y - (row * gH); // compute relative position of the click in
+	let relY = y - (row * Drawing.gH); // compute relative position of the click in
 	// respect to the rectangle
-	let relX = rowIsOdd ? ((x + 0.5 * gW) - (column * gW)) : (x - (column * gW));
+	let relX = rowIsOdd ? ((x + 0.5 * Drawing.gW) - (column * Drawing.gW)) : (x - (column * Drawing.gW));
 
-	if (relY < (-m) * relX + c) { // click is in upper left corner
+	if (relY < (-m) * relX + Drawing.c) { // click is in upper left corner
 		row--;
 		if (rowIsOdd) { column--; }
-	} else if (relY < m * relX - c) { // click is in upper right corner
+	} else if (relY < m * relX - Drawing.c) { // click is in upper right corner
 		row--;
 		if (!rowIsOdd) { column++; }
 	}
@@ -751,7 +751,7 @@ function canMove(realm, id, fromX, fromY, toX, toY) {
 		return (army.getErkenfaraID() === id) && (army.owner.tag === realm);
 	}, this);
 	if (foundArmy != undefined && foundArmy.getPosition()[0] === fromX && foundArmy.getPosition()[1] === fromY) {
-		let adjacency: any[] = getAdjacency([fromX, fromY], [[toX, toY]]);
+		let adjacency: any[] = HexFunction.getAdjacency([fromX, fromY], [[toX, toY]]);
 
 		if (adjacency.reduce((total, current) => (total || current), false)) {
 			foundArmy.possibleMoves = [];
@@ -895,7 +895,7 @@ function checkEvent(num) {
 					break;
 				}
 			}
-			let adjacency: boolean[] = getAdjacency([army.getPosition()[0], army.getPosition()[1]], [[cont.toX, cont.toY]]);
+			let adjacency: boolean[] = HexFunction.getAdjacency([army.getPosition()[0], army.getPosition()[1]], [[cont.toX, cont.toY]]);
 			adjacency.forEach((adjacent, index) => {
 			    if(adjacent){
                     army.checkForPossibleMove(index);
@@ -1189,7 +1189,7 @@ function init() {
 	Loading.getNewDataFromServer();
 	Loading.loadTurnNumber();
 	Loading.loadImages(tileset);
-	HexFunction.setHexParts(scale);
+	Drawing.setHexParts(scale);
 }
 
 init();

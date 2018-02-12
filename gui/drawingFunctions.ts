@@ -1,7 +1,7 @@
 namespace Drawing{
-    let c = 1;
-    let gH = 1;
-    let gW = 1;
+    export let c = 1;
+    export let gH = 1;
+    export let gW = 1;
 
 	export let listOfMultiArmyFields = [];
 
