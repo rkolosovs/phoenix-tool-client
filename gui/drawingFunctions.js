@@ -602,7 +602,6 @@ var Drawing;
             //GUI.getContext().fillText(armyData.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
             //check if its is on a multifield. if it is ignore
             if (!armyData.onMultifield) {
-                // armies == 1, riders == 2, boats == 3
                 if (armyData instanceof FootArmy) {
                     GUI.getContext().drawImage(troopsImg, pos[0], pos[1], (scale * SIN60), scale);
                 }
@@ -645,7 +644,6 @@ var Drawing;
                 let angle = (Math.PI * 2.0) / Drawing.listOfMultiArmyFields[j].length; //Total armies on field
                 let xPosArmy = (Math.cos(angle * i) * scale / 4) + pos[0] + scale / 4;
                 let yPosArmy = (Math.sin(angle * i) * scale / 4) + pos[1];
-                // armies == 1, riders == 2, boats == 3
                 if (armyData instanceof FootArmy) {
                     GUI.getContext().drawImage(troopsImg, xPosArmy, yPosArmy, circleScale, scale);
                 }
@@ -729,8 +727,8 @@ var Drawing;
                     localfieldType = 'Unbekannt';
                     break;
             }
-            let fieldOwner = borders.find((value) => (value.land.some((field) => (field[0] === selectedFields[index][0] && field[1] === selectedFields[index][1]))));
-            let fieldOwnerString = (fieldOwner === undefined) ? 'keiner' : fieldOwner.tag;
+            let fieldOwner = GameState.realms.find(realm => (realm.territory.some(field => (field[0] === selectedFields[index][0] && field[1] === selectedFields[index][1]))));
+            let fieldOwnerString = (fieldOwner == undefined) ? 'keiner' : fieldOwner.tag;
             minimapBox.innerHTML = '<p>Feld: (' + selectedFields[index][0] + ', ' + selectedFields[index][1] + ')' +
                 '</p><p>Gelände: ' + localfieldType +
                 '</p><p>Höhe: ' + HexFunction.height(selectedFields[index]) +
