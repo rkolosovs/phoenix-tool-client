@@ -50,6 +50,12 @@ var scrollSpeed = 0.2; // increment to scroll with each step
 // the IP address) for the remote game server here
 var url = "http://localhost:8000"; // for local debug
 
+var currentCSRFToken;
+var currentTurn; //status \in {st, fi}
+var months = ['Agul', 'Hawar', 'Rim', 'Naliv', 'Larn', 'Hel', 'Jawan', 'Lud'];
+var preparedEvents = [];
+
+var loginZeit;
 
 var changedFields = []; // Fields that were changes with World Builder
 var changedBuildings = []; // [true if added false if removed, buildings that were added deleted or changed]
@@ -1183,7 +1189,7 @@ function init() {
 	Loading.getNewDataFromServer();
 	Loading.loadTurnNumber();
 	Loading.loadImages(tileset);
-	setHexParts(scale);
+	HexFunction.setHexParts(scale);
 }
 
 init();

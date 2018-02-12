@@ -1,7 +1,16 @@
 "use strict";
 var Drawing;
 (function (Drawing) {
+    let c = 1;
+    let gH = 1;
+    let gW = 1;
     Drawing.listOfMultiArmyFields = [];
+    function setHexParts(scale) {
+        c = 0.25 * scale;
+        gH = 0.75 * scale;
+        gW = SIN60 * scale;
+    }
+    Drawing.setHexParts = setHexParts;
     // canvas resizing method
     function resizeCanvas() {
         GUI.getCanvas().width = window.innerWidth;
@@ -40,8 +49,8 @@ var Drawing;
             GUI.getContext().fillStyle = 'rgba(' + color + ', 0.3)'; //set fill color
             let land = realm.territory;
             land.forEach(hex => {
-                let point = computePosition(pos, hex.coordinates, scale);
-                let neighbours = getAdjacency(hex.coordinates, land.map(field => field.coordinates));
+                let point = HexFunction.computePosition(pos, hex.coordinates, scale);
+                let neighbours = HexFunction.getAdjacency(hex.coordinates, land.map(field => field.coordinates));
                 let start;
                 if (neighbours[0]) {
                     if (neighbours[1]) {
@@ -248,47 +257,47 @@ var Drawing;
             let building = GameState.buildings[i];
             let buildingPos;
             if (building.type !== BuildingType.STREET) {
-                buildingPos = computePosition(screenPos, building.getPosition(), scale);
+                buildingPos = HexFunction.computePosition(screenPos, building.getPosition(), scale);
             }
             let tileImg; //declare the tile image variable
             switch (building.type) {
                 case BuildingType.CASTLE:
-                    tileImg = castleImg;
+                    tileImg = Images.castle;
                     break;
                 case BuildingType.CITY:
-                    tileImg = cityImg;
+                    tileImg = Images.city;
                     break;
                 case BuildingType.FORTRESS:
-                    tileImg = fortressImg;
+                    tileImg = Images.fortress;
                     break;
                 case BuildingType.CAPITAL:
-                    tileImg = capitalImg;
+                    tileImg = Images.capital;
                     break;
                 case BuildingType.CAPITAL_FORT:
-                    tileImg = capitalFortImg;
+                    tileImg = Images.capitalFort;
                     break;
                 case BuildingType.WALL:
                     switch (building.facing) {
                         case Direction.NW:
-                            tileImg = wallNWImg;
+                            tileImg = Images.wallNW;
                             break;
                         case Direction.NE:
-                            tileImg = wallNEImg;
+                            tileImg = Images.wallNE;
                             break;
                         case Direction.E:
-                            tileImg = wallEImg;
+                            tileImg = Images.wallE;
                             break;
                         case Direction.SE:
-                            tileImg = wallSEImg;
+                            tileImg = Images.wallSE;
                             break;
                         case Direction.SW:
-                            tileImg = wallSWImg;
+                            tileImg = Images.wallSW;
                             break;
                         case Direction.W:
-                            tileImg = wallWImg;
+                            tileImg = Images.wallW;
                             break;
                         default:
-                            tileImg = wallNWImg;
+                            tileImg = Images.wallNW;
                             break;
                     }
                     break;
@@ -296,25 +305,25 @@ var Drawing;
                     let harborDir = HexFunction.getDirectionToNeighbor(building.getPosition(), building.getSecondPosition());
                     switch (harborDir) {
                         case Direction.NW:
-                            tileImg = harborNWImg;
+                            tileImg = Images.harborNW;
                             break;
                         case Direction.NE:
-                            tileImg = harborNEImg;
+                            tileImg = Images.harborNE;
                             break;
                         case Direction.E:
-                            tileImg = harborEImg;
+                            tileImg = Images.harborE;
                             break;
                         case Direction.SE:
-                            tileImg = harborSEImg;
+                            tileImg = Images.harborSE;
                             break;
                         case Direction.SW:
-                            tileImg = harborSWImg;
+                            tileImg = Images.harborSW;
                             break;
                         case Direction.W:
-                            tileImg = harborWImg;
+                            tileImg = Images.harborW;
                             break;
                         default:
-                            tileImg = harborNWImg;
+                            tileImg = Images.harborNW;
                             break;
                     }
                     break;
@@ -322,30 +331,30 @@ var Drawing;
                     let bridgeDir = HexFunction.getDirectionToNeighbor(building.getPosition(), building.getSecondPosition());
                     switch (bridgeDir) {
                         case Direction.NW:
-                            tileImg = bridgeNWImg;
+                            tileImg = Images.bridgeNW;
                             break;
                         case Direction.NE:
-                            tileImg = bridgeNEImg;
+                            tileImg = Images.bridgeNE;
                             break;
                         case Direction.E:
-                            tileImg = bridgeEImg;
+                            tileImg = Images.bridgeE;
                             break;
                         case Direction.SE:
-                            tileImg = bridgeSEImg;
+                            tileImg = Images.bridgeSE;
                             break;
                         case Direction.SW:
-                            tileImg = bridgeSWImg;
+                            tileImg = Images.bridgeSW;
                             break;
                         case Direction.W:
-                            tileImg = bridgeWImg;
+                            tileImg = Images.bridgeW;
                             break;
                         default:
-                            tileImg = bridgeNWImg;
+                            tileImg = Images.bridgeNW;
                             break;
                     }
                     break;
                 default:
-                    tileImg = defaultImg;
+                    tileImg = Images.default;
                     break;
             }
             if (building.type <= 4) {
@@ -358,8 +367,8 @@ var Drawing;
                 GUI.getContext().drawImage(tileImg, buildingPos[0] - gW, buildingPos[1] - (0.5 * scale), 3 * gW, 2 * scale); //draw the image
             }
             else if (building.type === 8) {
-                let posFirst = computePosition(screenPos, building.getPosition(), scale);
-                let posSecond = computePosition(screenPos, building.getPosition(), scale);
+                let posFirst = HexFunction.computePosition(screenPos, building.getPosition(), scale);
+                let posSecond = HexFunction.computePosition(screenPos, building.getPosition(), scale);
                 GUI.getContext().beginPath();
                 GUI.getContext().moveTo((posFirst[0] + (0.5 * gW)), (posFirst[1] + 2 * c));
                 GUI.getContext().lineTo((posSecond[0] + (0.5 * gW)), (posSecond[1] + 2 * c));
@@ -372,7 +381,7 @@ var Drawing;
         GUI.getContext().strokeStyle = "#0099FF";
         GUI.getContext().lineCap = "round";
         GameState.rivers.forEach(river => {
-            let pos = computePosition(screenPos, river.leftBank, scale);
+            let pos = HexFunction.computePosition(screenPos, river.leftBank, scale);
             let points = [pos, pos];
             let rowOdd = (((river.leftBank[1]) % 2) !== 0);
             if ((river.leftBank[1]) === (river.rightBank[1])) {
@@ -422,34 +431,34 @@ var Drawing;
         GameState.fields.forEach(field => {
             switch (field.type) {
                 case FieldType.SHALLOWS:
-                    sortedFields[0].push(computePosition(screenPos, field.coordinates, scale));
+                    sortedFields[0].push(HexFunction.computePosition(screenPos, field.coordinates, scale));
                     break;
                 case FieldType.DEEPSEA:
-                    sortedFields[1].push(computePosition(screenPos, field.coordinates, scale));
+                    sortedFields[1].push(HexFunction.computePosition(screenPos, field.coordinates, scale));
                     break;
                 case FieldType.LOWLANDS:
-                    sortedFields[2].push(computePosition(screenPos, field.coordinates, scale));
+                    sortedFields[2].push(HexFunction.computePosition(screenPos, field.coordinates, scale));
                     break;
                 case FieldType.WOODS:
-                    sortedFields[3].push(computePosition(screenPos, field.coordinates, scale));
+                    sortedFields[3].push(HexFunction.computePosition(screenPos, field.coordinates, scale));
                     break;
                 case FieldType.HILLS:
-                    sortedFields[4].push(computePosition(screenPos, field.coordinates, scale));
+                    sortedFields[4].push(HexFunction.computePosition(screenPos, field.coordinates, scale));
                     break;
                 case FieldType.HIGHLANDS:
-                    sortedFields[5].push(computePosition(screenPos, field.coordinates, scale));
+                    sortedFields[5].push(HexFunction.computePosition(screenPos, field.coordinates, scale));
                     break;
                 case FieldType.MOUNTAINS:
-                    sortedFields[6].push(computePosition(screenPos, field.coordinates, scale));
+                    sortedFields[6].push(HexFunction.computePosition(screenPos, field.coordinates, scale));
                     break;
                 case FieldType.DESERT:
-                    sortedFields[7].push(computePosition(screenPos, field.coordinates, scale));
+                    sortedFields[7].push(HexFunction.computePosition(screenPos, field.coordinates, scale));
                     break;
                 case FieldType.SWAMP:
-                    sortedFields[8].push(computePosition(screenPos, field.coordinates, scale));
+                    sortedFields[8].push(HexFunction.computePosition(screenPos, field.coordinates, scale));
                     break;
                 default:
-                    sortedFields[9].push(computePosition(screenPos, field.coordinates, scale));
+                    sortedFields[9].push(HexFunction.computePosition(screenPos, field.coordinates, scale));
                     break;
             }
         });
@@ -459,34 +468,34 @@ var Drawing;
                 currFields = sortedFields[i];
                 switch (i) {
                     case 0:
-                        tileImg = shallowsImg;
+                        tileImg = Images.shallows;
                         break;
                     case 1:
-                        tileImg = deepseaImg;
+                        tileImg = Images.deepsea;
                         break;
                     case 2:
-                        tileImg = lowlandsImg;
+                        tileImg = Images.lowlands;
                         break;
                     case 3:
-                        tileImg = woodsImg;
+                        tileImg = Images.woods;
                         break;
                     case 4:
-                        tileImg = hillsImg;
+                        tileImg = Images.hills;
                         break;
                     case 5:
-                        tileImg = highlandsImg;
+                        tileImg = Images.highlands;
                         break;
                     case 6:
-                        tileImg = mountainsImg;
+                        tileImg = Images.mountains;
                         break;
                     case 7:
-                        tileImg = desertImg;
+                        tileImg = Images.desert;
                         break;
                     case 8:
-                        tileImg = swampImg;
+                        tileImg = Images.swamp;
                         break;
                     default:
-                        tileImg = defaultImg;
+                        tileImg = Images.default;
                         break;
                 }
                 for (let j = 0; j < currFields.length; j++) {
@@ -554,7 +563,7 @@ var Drawing;
             for (let i = 0; i < moves.length; i++) {
                 GUI.getContext().lineWidth = scale / 6;
                 GUI.getContext().strokeStyle = '#00FF00';
-                let pos = computePosition(screenPos, moves[i].destination, scale); //get fields position
+                let pos = HexFunction.computePosition(screenPos, moves[i].destination, scale); //get fields position
                 GUI.getContext().beginPath();
                 GUI.getContext().arc(pos[0] + (0.5 * scale * SIN60), pos[1] + (scale * 0.5), scale / 12, 0, 2 * Math.PI, false);
                 GUI.getContext().stroke();
@@ -565,7 +574,7 @@ var Drawing;
         GUI.getContext().lineWidth = 5;
         GUI.getContext().strokeStyle = "blue";
         for (let i = 0; i < selectedFields.length; i++) {
-            let pos = computePosition(screenPos, selectedFields[i], scale);
+            let pos = HexFunction.computePosition(screenPos, selectedFields[i], scale);
             GUI.getContext().beginPath();
             GUI.getContext().arc(pos[0] + (0.5 * scale * SIN60), pos[1] + (scale * 0.5), scale / 2, 0, 2 * Math.PI, false);
             GUI.getContext().stroke();
@@ -575,7 +584,7 @@ var Drawing;
         GUI.getContext().lineWidth = 5;
         GUI.getContext().strokeStyle = "green";
         if (armyIndex !== undefined) {
-            let pos = computePosition(screenPos, GameState.armies[armyIndex].getPosition(), scale);
+            let pos = HexFunction.computePosition(screenPos, GameState.armies[armyIndex].getPosition(), scale);
             GUI.getContext().beginPath();
             GUI.getContext().arc(pos[0] + (0.5 * scale * SIN60), pos[1] + (scale * 0.5), scale / 2.2, 0, 2 * Math.PI, false);
             GUI.getContext().stroke();
@@ -595,7 +604,7 @@ var Drawing;
         }
         for (let i = 0; i < GameState.armies.length; i++) {
             let armyData = GameState.armies[i]; // get army coordinates
-            let pos = computePosition(screenPos, armyData.getPosition(), scale);
+            let pos = HexFunction.computePosition(screenPos, armyData.getPosition(), scale);
             GUI.getContext().fillStyle = 'black';
             GUI.getContext().textAlign = 'center';
             GUI.getContext().textBaseline = 'middle';
@@ -603,13 +612,13 @@ var Drawing;
             //check if its is on a multifield. if it is ignore
             if (!armyData.onMultifield) {
                 if (armyData instanceof FootArmy) {
-                    GUI.getContext().drawImage(troopsImg, pos[0], pos[1], (scale * SIN60), scale);
+                    GUI.getContext().drawImage(Images.troops, pos[0], pos[1], (scale * SIN60), scale);
                 }
                 else if (armyData instanceof RiderArmy) {
-                    GUI.getContext().drawImage(mountsImg, pos[0], pos[1], (scale * SIN60), scale);
+                    GUI.getContext().drawImage(Images.mounts, pos[0], pos[1], (scale * SIN60), scale);
                 }
                 else if (armyData instanceof Fleet) {
-                    GUI.getContext().drawImage(boatsImg, pos[0], pos[1], (scale * SIN60), scale);
+                    GUI.getContext().drawImage(Images.boats, pos[0], pos[1], (scale * SIN60), scale);
                 }
             }
             if (armyData.owner.tag === login || login === "sl") {
@@ -635,7 +644,7 @@ var Drawing;
         for (let j = 0; j < Drawing.listOfMultiArmyFields.length; j++) {
             for (let i = 0; i < Drawing.listOfMultiArmyFields[j].length; i++) {
                 let armyData = Drawing.listOfMultiArmyFields[j][i]; // get army coordinates
-                let pos = computePosition(screenPos, Drawing.listOfMultiArmyFields[j][i], scale);
+                let pos = HexFunction.computePosition(screenPos, Drawing.listOfMultiArmyFields[j][i], scale);
                 let circleScale = (scale * SIN60) / Drawing.listOfMultiArmyFields[j].length;
                 //const double Angle = (M_PI * 2.0) / n;
                 //Für jedes i-te Objekt dann die Position des Mittelpunktes:
@@ -645,13 +654,13 @@ var Drawing;
                 let xPosArmy = (Math.cos(angle * i) * scale / 4) + pos[0] + scale / 4;
                 let yPosArmy = (Math.sin(angle * i) * scale / 4) + pos[1];
                 if (armyData instanceof FootArmy) {
-                    GUI.getContext().drawImage(troopsImg, xPosArmy, yPosArmy, circleScale, scale);
+                    GUI.getContext().drawImage(Images.troops, xPosArmy, yPosArmy, circleScale, scale);
                 }
                 else if (armyData instanceof RiderArmy) {
-                    GUI.getContext().drawImage(mountsImg, xPosArmy, yPosArmy, circleScale, scale);
+                    GUI.getContext().drawImage(Images.mounts, xPosArmy, yPosArmy, circleScale, scale);
                 }
                 else if (armyData instanceof Fleet) {
-                    GUI.getContext().drawImage(boatsImg, xPosArmy, yPosArmy, circleScale, scale);
+                    GUI.getContext().drawImage(Images.boats, xPosArmy, yPosArmy, circleScale, scale);
                 }
             }
         }
@@ -676,7 +685,7 @@ var Drawing;
             for (let i = 0; i < targets.length; i++) {
                 GUI.getContext().lineWidth = scale / 10;
                 GUI.getContext().strokeStyle = '#FF0000';
-                let pos = computePosition(screenPos, targets[i].coordinates, scale); //get fields position
+                let pos = HexFunction.computePosition(screenPos, targets[i].coordinates, scale); //get fields position
                 GUI.getContext().beginPath();
                 GUI.getContext().arc(pos[0] + (0.5 * scale * SIN60), pos[1] + (scale * 0.5), scale / 20, 0, 2 * Math.PI, false);
                 GUI.getContext().stroke();

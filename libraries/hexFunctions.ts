@@ -184,4 +184,23 @@ namespace HexFunction {
             default: return Direction.SE; //TODO: Shouldn't this throw an error?
         }
     }
+
+    //computes a fields position (upper left corner of inscribing rectangle)
+    export function computePosition(orig: [number, number], curr: [number, number], scale): [number,  number] {
+        //get the current field's x position
+        let xpos = orig[0] + (curr[0] * scale * SIN60);
+        //each odd row is offset half a hex to the left
+        return [ (((curr[1]%2)!==0)?(xpos - (0.5*scale*SIN60)):(xpos)), orig[1]+(curr[1] * gH)];
+    }
+
+    //for all directions in the usual order (nw, ne, e, se, sw, w)
+    //returns true if candidates contains the neighbor of field in the respective direction
+    export function getAdjacency(field: [number, number], candidates: [number, number][]): boolean[] {
+        let result: boolean[] = [false, false, false, false, false, false];
+        let neighbors: [number, number][] = HexFunction.neighbors(field);
+        neighbors.forEach((neighbor, neighborIndex) =>
+            result[neighborIndex] = candidates.some(
+                candidate => candidate[0] === neighbor[0] && candidate[1] === neighbor[1]));
+        return result;
+    }
 }
