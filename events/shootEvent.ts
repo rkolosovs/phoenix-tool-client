@@ -1,10 +1,10 @@
 class ShootEvent extends PhoenixEvent{
     
-    constructor(protected id: number, protected type: string, protected status: string, protected realm: Realm, 
+    constructor(protected id: number, protected status: string, protected realm: Realm, 
         protected armyId: number, protected toX: number, protected toY: number, protected fromX: number, 
-        protected fromY: number, protected lkpCount: number, protected skpCount: number, protected target){
-
-        super(id, type, status);
+        protected fromY: number, protected lkpCount: number, protected skpCount: number, protected target: string, protected pk: number){
+            
+            super(id, status, pk);
     }
 
     checkEvent(): void{
@@ -45,7 +45,7 @@ class ShootEvent extends PhoenixEvent{
 
             if (this.armyExistsAndIsLocated(shooter.owner.tag, this.armyId, this.fromX, this.fromY) && canShoot) {
                 this.status = 'available';
-            } else if (armyExists(this.realm, this.armyId) && 
+            } else if (this.armyExists(this.realm, this.armyId) && 
             this.possibleMoveOfArmyTo(shooter.owner.tag, this.armyId, this.fromX, this.fromY)) {
                 this.status = 'withheld';
             } else {
@@ -55,14 +55,18 @@ class ShootEvent extends PhoenixEvent{
     }
     
     makeEventListItem(): HTMLElement{
-    let eli = document.createElement("DIV");
-    eli.classList.add("eventListItem");
-    eli.id = "eli" + this.id;
-    
-    eli.innerHTML = "<div>"+ this.realm.tag +"'s army "+this.armyId+" shoots a Field ("+this.toX+", "+
-    this.toY+") with "+this.lkpCount + " LKP and " + this.skpCount + " SKP.</div>";
+        let eli = document.createElement("DIV");
+        eli.classList.add("eventListItem");
+        eli.id = "eli" + this.id;
+        
+        eli.innerHTML = "<div>"+ this.realm.tag +"'s army "+this.armyId+" shoots a Field ("+this.toX+", "+
+        this.toY+") with "+this.lkpCount + " LKP and " + this.skpCount + " SKP.</div>";
 
-    return this.commonEventListItem(eli, this.id);
+        return this.commonEventListItem(eli, this.id);
+    }
+
+    getType(): string{
+        return "shoot";
     }
 
     private shootButtonLogic(shootBox: ShootingBigBox): boolean{

@@ -1,11 +1,11 @@
 class MoveEvent extends PhoenixEvent{
     
-    constructor(protected id: number, protected type: string, protected status: string, protected realm: Realm, 
+    constructor(protected id: number, protected status: string, protected realm: Realm, 
         protected armyId: number, protected fromX: number, protected fromY: number,protected toX: number, 
-        protected toY: number){
-
-        super(id, type, status);
-    }
+        protected toY: number, protected pk: number){
+            
+            super(id, status, pk);
+            }
 
     checkEvent(){
         let army;
@@ -15,7 +15,7 @@ class MoveEvent extends PhoenixEvent{
                 break;
             }
         }
-        let adjacency = getAdjacency([army.x, army.y], [[this.toX, this.toY]]);//TODO use the new movement
+        let adjacency = HexFunction.getAdjacency([army.x, army.y], [[this.toX, this.toY]]);//TODO use the new movement
         if (adjacency[0] === true) {
             army.moveToList(1);
             army.move(1);//move to ne
@@ -50,28 +50,32 @@ class MoveEvent extends PhoenixEvent{
         this.noPendingLoadEvents(this.realm, this.armyId, this.fromX, this.fromY) &&
         this.noPendingMountEvents(this.realm, this.armyId, this.fromX, this.fromY)) {
         this.status = 'available';
-    } else if ((this.stillSplitEventsInFaction(this.realm) || this.armyExistsAndIsLocated(this.realm, this.armyId, this.fromX, this.fromY)) &&
-        !this.unprocessedBattleAtContainingArmy(this.realm, this.armyId, this.fromX, this.fromY) &&
-        this.canMove(this.realm, this.armyId, this.fromX, this.fromY, this.toX, this.toY) &&
-        (!this.noPendingLoadEvents(this.realm, this.armyId, this.fromX, this.fromY) ||
-            !this.noPendingMountEvents(this.realm, this.armyId, this.fromX, this.fromY))) {
-        this.status = 'withheld';
-    } else if (this.stillSplitEventsInFaction(this.realm) || (this.armyExists(this.realm, this.armyId) &&
-        this.possibleMoveOfArmyTo(this.realm, this.armyId, this.fromX, this.fromY))) {
-        this.status = 'withheld';
-    } else {
-        this.status = 'impossible';
-    }
+        } else if ((this.stillSplitEventsInFaction(this.realm) || this.armyExistsAndIsLocated(this.realm, this.armyId, this.fromX, this.fromY)) &&
+            !this.unprocessedBattleAtContainingArmy(this.realm, this.armyId, this.fromX, this.fromY) &&
+            this.canMove(this.realm, this.armyId, this.fromX, this.fromY, this.toX, this.toY) &&
+            (!this.noPendingLoadEvents(this.realm, this.armyId, this.fromX, this.fromY) ||
+                !this.noPendingMountEvents(this.realm, this.armyId, this.fromX, this.fromY))) {
+            this.status = 'withheld';
+        } else if (this.stillSplitEventsInFaction(this.realm) || (this.armyExists(this.realm, this.armyId) &&
+            this.possibleMoveOfArmyTo(this.realm, this.armyId, this.fromX, this.fromY))) {
+            this.status = 'withheld';
+        } else {
+            this.status = 'impossible';
+        }
     }
     
     makeEventListItem(): HTMLElement{
-    let eli = document.createElement("DIV");
-    eli.classList.add("eventListItem");
-    eli.id = "eli" + this.id;
-    
-    eli.innerHTML = "<div>Move " + this.realm + " army " + this.armyId + " from (" + this.fromX + ", " + this.fromY + 
-    ") to (" + this.toX + ", " + this.toY + ")</div>";
+        let eli = document.createElement("DIV");
+        eli.classList.add("eventListItem");
+        eli.id = "eli" + this.id;
+        
+        eli.innerHTML = "<div>Move " + this.realm + " army " + this.armyId + " from (" + this.fromX + ", " + this.fromY + 
+        ") to (" + this.toX + ", " + this.toY + ")</div>";
 
-    return this.commonEventListItem(eli, this.id);
+        return this.commonEventListItem(eli, this.id);
+    }
+
+    getType(): string{
+        return "move";
     }
 }

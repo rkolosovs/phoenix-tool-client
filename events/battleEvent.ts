@@ -1,9 +1,9 @@
 class BattleEvent extends PhoenixEvent{
     
-    constructor(protected id: number, protected type: string, protected status: string, protected participants: Army[],
-        protected realm: Realm, protected x: number, protected y: number){
+    constructor(protected id: number, protected status: string, protected participants: Army[],
+        protected realm: Realm, protected x: number, protected y: number, protected pk: number){
 
-        super(id, type, status);
+        super(id, status, pk);
     }
 
     checkEvent(): void{
@@ -31,10 +31,10 @@ class BattleEvent extends PhoenixEvent{
     }
     
     determineEventStatus(): void{
-        if (eachArmyExistsAndIsLocated(this.participants, this.x, this.y)) {
+        if (this.eachArmyExistsAndIsLocated(this.participants, this.x, this.y)) {
             this.status = 'available';
-        } else if (stillSplitEventsInFaction(this.realm) || (eachArmyExists(this.participants) &&
-            possibleMoveOfEachArmyTo(this.participants, this.x, this.y))) {
+        } else if (this.stillSplitEventsInFaction(this.realm) || (this.eachArmyExists(this.participants) &&
+            this.possibleMoveOfEachArmyTo(this.participants, this.x, this.y))) {
                 this.status = 'withheld';
         } else {
             this.status = 'impossible';
@@ -42,18 +42,23 @@ class BattleEvent extends PhoenixEvent{
     }
     
     makeEventListItem(): HTMLElement{
-    let eli = document.createElement("DIV");
-    eli.classList.add("eventListItem");
-    eli.id = "eli" + this.id;
-    
-    let html = "<div>Battle at (" + this.x + ", " + this.y + ") involving";
-    let partips = this.participants
-    for (let j = 0; j < partips.length; j++) {
-        html += " [" + partips[j].owner.tag + " " + partips[j].getErkenfaraID() + "]";
-    }
-    eli.innerHTML = html + "</div>";
 
-    return this.commonEventListItem(eli, this.id);
+        let eli = document.createElement("DIV");
+        eli.classList.add("eventListItem");
+        eli.id = "eli" + this.id;
+        
+        let html = "<div>Battle at (" + this.x + ", " + this.y + ") involving";
+        let partips = this.participants
+        for (let j = 0; j < partips.length; j++) {
+            html += " [" + partips[j].owner.tag + " " + partips[j].getErkenfaraID() + "]";
+        }
+        eli.innerHTML = html + "</div>";
+
+        return this.commonEventListItem(eli, this.id);
+    }
+
+    getType(): string{
+        return "battle";
     }
 
     private battleButtonLogic(battleBox: BattleBox): void {

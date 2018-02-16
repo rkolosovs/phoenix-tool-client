@@ -1,10 +1,10 @@
 class SplitEvent extends PhoenixEvent{
     
-    constructor(protected id: number, protected type: string, protected status: string, protected fromArmy: number,
+    constructor(protected id: number, protected status: string, protected fromArmy: number,
         protected newArmy: number, protected realm: Realm, protected troops: number, protected leaders: number,
-        protected mounts: number, protected lkp: number, protected skp: number, protected x: number, protected y: number){
-
-        super(id, type, status);
+        protected mounts: number, protected lkp: number, protected skp: number, protected x: number, protected y: number, protected pk: number){
+            
+                    super(id, status, pk);
     }
 
     checkEvent(): void{
@@ -122,5 +122,9 @@ class SplitEvent extends PhoenixEvent{
         eli.innerHTML = innerHTMLString;
 
         return this.commonEventListItem(eli, this.id);
+    }
+
+    getType(): string{
+        return "split";
     }
 }

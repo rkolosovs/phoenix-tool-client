@@ -1,10 +1,11 @@
 class MountEvent extends PhoenixEvent{
     
-    constructor(protected id: number, protected type: string, protected status: string, protected fromArmy: number,
+    constructor(protected id: number, protected status: string, protected fromArmy: number,
         protected newArmy: number, protected realm: Realm, protected troops: number, protected leaders: number, 
-        protected mounts: number, protected lkp: number, protected skp: number, protected x: number, protected y: number){
+         protected x: number, protected y: number, protected pk: number){//protected mounts: number, protected lkp: number, protected skp: number,
+            
+        super(id, status, pk);
 
-        super(id, type, status);
     }
 
     checkEvent(): void{
@@ -38,7 +39,7 @@ class MountEvent extends PhoenixEvent{
     determineEventStatus(): void{
         let typefactor = 1;
         
-        let army = GameState.armies[findArmyPlaceInList(this.fromArmy, this.realm)];
+        let army = GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
         if (army == undefined) {
             this.status = 'withheld';
         } else {
@@ -76,7 +77,7 @@ class MountEvent extends PhoenixEvent{
         }
         if(((army.getTroopCount() - this.troops) >= (100/typefactor)) &&
          ((army.getOfficerCount() - this.leaders) >= 1) &&
-         ((mountCount - this.mounts) >= 0) &&
+         ((mountCount - this.mounts) >= 0) &&//TODO probably needs to go and change the fields in the contrudtor accordingly
          ((lkpCount - this.lkp) >= 0) &&
          ((skpCount - this.skp) >= 0)){
             this.status = 'available';
@@ -88,13 +89,17 @@ class MountEvent extends PhoenixEvent{
     }
     
     makeEventListItem(): HTMLElement{
-    let eli = document.createElement("DIV");
-    eli.classList.add("eventListItem");
-    eli.id = "eli" + this.id;
-    
-    eli.innerHTML = "<div>" + this.realm.tag + "'s army " + this.fromArmy + " mounts " + this.troops + " troops, and "
-    + this.leaders + " leaders to " + this.newArmy + " in (" + this.x + "," + this.y + ").</div>";
+        let eli = document.createElement("DIV");
+        eli.classList.add("eventListItem");
+        eli.id = "eli" + this.id;
+        
+        eli.innerHTML = "<div>" + this.realm.tag + "'s army " + this.fromArmy + " mounts " + this.troops + " troops, and "
+        + this.leaders + " leaders to " + this.newArmy + " in (" + this.x + "," + this.y + ").</div>";
 
-    return this.commonEventListItem(eli, this.id);
+        return this.commonEventListItem(eli, this.id);
+    }
+
+    getType(): string{
+        return "mount";
     }
 }

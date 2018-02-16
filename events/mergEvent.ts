@@ -1,9 +1,9 @@
 class MergeEvent extends PhoenixEvent{
 
-    constructor(protected id: number, protected type: string, protected status: string, protected fromArmy: number,
-        protected toArmy: number, protected realm: Realm, protected x: number, protected y: number){
-
-        super(id, type, status);
+    constructor(protected id: number, protected status: string, protected fromArmy: number,
+        protected toArmy: number, protected realm: Realm, protected x: number, protected y: number, protected pk: number){
+            
+            super(id, status, pk);
     }
 
     checkEvent(): void{
@@ -58,13 +58,17 @@ class MergeEvent extends PhoenixEvent{
     }
     
     makeEventListItem(): HTMLElement{
-    let eli = document.createElement("DIV");
-    eli.classList.add("eventListItem");
-    eli.id = "eli" + this.id;
-    
-    eli.innerHTML = "<div>" + this.realm.tag + "'s army " + this.fromArmy + " merges with army " + this.toArmy + 
-    " in (" + this.x + "," + this.y + ").</div>";
+        let eli = document.createElement("DIV");
+        eli.classList.add("eventListItem");
+        eli.id = "eli" + this.id;
+        
+        eli.innerHTML = "<div>" + this.realm.tag + "'s army " + this.fromArmy + " merges with army " + this.toArmy + 
+        " in (" + this.x + "," + this.y + ").</div>";
 
-    return this.commonEventListItem(eli, this.id);
+        return this.commonEventListItem(eli, this.id);
+    }
+
+    getType(): string{
+        return "merge";
     }
 }

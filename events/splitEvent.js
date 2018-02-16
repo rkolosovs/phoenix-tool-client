@@ -1,9 +1,8 @@
 "use strict";
 class SplitEvent extends PhoenixEvent {
-    constructor(id, type, status, fromArmy, newArmy, realm, troops, leaders, mounts, lkp, skp, x, y) {
-        super(id, type, status);
+    constructor(id, status, fromArmy, newArmy, realm, troops, leaders, mounts, lkp, skp, x, y, pk) {
+        super(id, status, pk);
         this.id = id;
-        this.type = type;
         this.status = status;
         this.fromArmy = fromArmy;
         this.newArmy = newArmy;
@@ -15,6 +14,7 @@ class SplitEvent extends PhoenixEvent {
         this.skp = skp;
         this.x = x;
         this.y = y;
+        this.pk = pk;
     }
     checkEvent() {
         console.log("this is a split event");
@@ -127,5 +127,8 @@ class SplitEvent extends PhoenixEvent {
         innerHTMLString += "in (" + this.x + "," + this.y + ").</div>";
         eli.innerHTML = innerHTMLString;
         return this.commonEventListItem(eli, this.id);
+    }
+    getType() {
+        return "split";
     }
 }

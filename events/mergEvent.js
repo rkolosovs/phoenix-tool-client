@@ -1,15 +1,15 @@
 "use strict";
 class MergeEvent extends PhoenixEvent {
-    constructor(id, type, status, fromArmy, toArmy, realm, x, y) {
-        super(id, type, status);
+    constructor(id, status, fromArmy, toArmy, realm, x, y, pk) {
+        super(id, status, pk);
         this.id = id;
-        this.type = type;
         this.status = status;
         this.fromArmy = fromArmy;
         this.toArmy = toArmy;
         this.realm = realm;
         this.x = x;
         this.y = y;
+        this.pk = pk;
     }
     checkEvent() {
         let armyFromPlaceInList = -1;
@@ -68,5 +68,8 @@ class MergeEvent extends PhoenixEvent {
         eli.innerHTML = "<div>" + this.realm.tag + "'s army " + this.fromArmy + " merges with army " + this.toArmy +
             " in (" + this.x + "," + this.y + ").</div>";
         return this.commonEventListItem(eli, this.id);
+    }
+    getType() {
+        return "merge";
     }
 }

@@ -253,7 +253,7 @@ var Drawing;
         GUI.getContext().lineWidth = (scale / 8); //line style for roads
         GUI.getContext().strokeStyle = "#C8AB37";
         GUI.getContext().lineCap = "round";
-        for (let i = 0; i < buildings.length; i++) {
+        for (let i = 0; i < GameState.buildings.length; i++) {
             let building = GameState.buildings[i];
             let buildingPos;
             if (building.type !== BuildingType.STREET) {
@@ -761,9 +761,9 @@ var Drawing;
                     message = "Do you want to end the pre-turn phase?";
                 }
                 else if (currentTurn.status === 'fi') {
-                    let unprocessedEvents = pendingEvents.some(function (event) {
-                        return (event.status === 'available' || event.status === 'withheld' ||
-                            event.status === 'impossible');
+                    let unprocessedEvents = GameState.pendingNewEvents.some(function (event) {
+                        return (event.getStatus() === 'available' || event.getStatus() === 'withheld' ||
+                            event.getStatus() === 'impossible');
                     });
                     if (unprocessedEvents) {
                         message = "Some events are unprocessed.";
@@ -778,12 +778,12 @@ var Drawing;
                 }
                 if (confirm(message)) {
                     if (login === 'sl' && currentTurn.status === 'fi') {
-                        pendingEvents.forEach(function (event) {
-                            if (event.status === 'checked') {
-                                Saving.sendCheckEvent(event.pk, event.type);
+                        GameState.pendingNewEvents.forEach(function (event) {
+                            if (event.getStatus() === 'checked') {
+                                Saving.sendCheckEvent(event.getPK(), event.getType());
                             }
-                            else if (event.status === 'deleted') {
-                                Saving.sendDeleteEvent(event.pk, event.type);
+                            else if (event.getStatus() === 'deleted') {
+                                Saving.sendDeleteEvent(event.getPK(), event.getType());
                             }
                         }, this);
                         Saving.saveBuildings();
@@ -812,15 +812,15 @@ var Drawing;
                 if (login === 'sl') {
                     if (confirm("Do you want to save the events handled so far without ending the turn?" +
                         " Once saved the progress can't be reverted anymore.")) {
-                        pendingEvents.forEach(function (event) {
-                            if (event.status === 'checked') {
-                                Saving.sendCheckEvent(event.pk, event.type);
+                        GameState.pendingNewEvents.forEach(function (event) {
+                            if (event.getStatus() === 'checked') {
+                                Saving.sendCheckEvent(event.getPK(), event.getType());
                             }
-                            else if (event.status === 'deleted') {
-                                Saving.sendDeleteEvent(event.pk, event.type);
+                            else if (event.getStatus() === 'deleted') {
+                                Saving.sendDeleteEvent(event.getPK(), event.getType());
                             }
                         }, this);
-                        pendingEvents = [];
+                        GameState.pendingNewEvents = [];
                         preparedEvents = [];
                         Saving.saveBuildings();
                         Saving.saveFactionsTerritories();
@@ -842,7 +842,7 @@ var Drawing;
             revertBtn.style.backgroundImage = "url(images/revert_button.svg)";
             revertBtn.addEventListener('click', function () {
                 if (confirm("Do you want to revert the events handled so far?")) {
-                    pendingEvents = [];
+                    GameState.pendingNewEvents = [];
                     preparedEvents = [];
                     Loading.loadArmies();
                     Loading.loadBuildingData();

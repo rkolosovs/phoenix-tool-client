@@ -1,9 +1,8 @@
 "use strict";
 class TransferEvent extends PhoenixEvent {
-    constructor(id, type, status, fromArmy, toArmy, realm, troops, leaders, mounts, lkp, skp, x, y) {
-        super(id, type, status);
+    constructor(id, status, fromArmy, toArmy, realm, troops, leaders, mounts, lkp, skp, x, y, pk) {
+        super(id, status, pk);
         this.id = id;
-        this.type = type;
         this.status = status;
         this.fromArmy = fromArmy;
         this.toArmy = toArmy;
@@ -15,6 +14,7 @@ class TransferEvent extends PhoenixEvent {
         this.skp = skp;
         this.x = x;
         this.y = y;
+        this.pk = pk;
     }
     checkEvent() {
         console.log("this is a transfer event");
@@ -115,5 +115,8 @@ class TransferEvent extends PhoenixEvent {
         innerHTMLString += "to " + this.toArmy + " in (" + this.x + "," + this.y + ").</div>";
         eli.innerHTML = innerHTMLString;
         return this.commonEventListItem(eli, this.id);
+    }
+    getType() {
+        return "transfer";
     }
 }

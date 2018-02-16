@@ -1,9 +1,8 @@
 "use strict";
 class MoveEvent extends PhoenixEvent {
-    constructor(id, type, status, realm, armyId, fromX, fromY, toX, toY) {
-        super(id, type, status);
+    constructor(id, status, realm, armyId, fromX, fromY, toX, toY, pk) {
+        super(id, status, pk);
         this.id = id;
-        this.type = type;
         this.status = status;
         this.realm = realm;
         this.armyId = armyId;
@@ -11,6 +10,7 @@ class MoveEvent extends PhoenixEvent {
         this.fromY = fromY;
         this.toX = toX;
         this.toY = toY;
+        this.pk = pk;
     }
     checkEvent() {
         let army;
@@ -20,7 +20,7 @@ class MoveEvent extends PhoenixEvent {
                 break;
             }
         }
-        let adjacency = getAdjacency([army.x, army.y], [[this.toX, this.toY]]); //TODO use the new movement
+        let adjacency = HexFunction.getAdjacency([army.x, army.y], [[this.toX, this.toY]]); //TODO use the new movement
         if (adjacency[0] === true) {
             army.moveToList(1);
             army.move(1); //move to ne
@@ -82,5 +82,8 @@ class MoveEvent extends PhoenixEvent {
         eli.innerHTML = "<div>Move " + this.realm + " army " + this.armyId + " from (" + this.fromX + ", " + this.fromY +
             ") to (" + this.toX + ", " + this.toY + ")</div>";
         return this.commonEventListItem(eli, this.id);
+    }
+    getType() {
+        return "move";
     }
 }

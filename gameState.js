@@ -11,3 +11,4 @@ GameState.fields = [];
 GameState.rivers = [];
 GameState.armies = [];
 GameState.buildings = [];
+GameState.pendingNewEvents = [];

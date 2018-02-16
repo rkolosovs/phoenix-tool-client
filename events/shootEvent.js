@@ -1,9 +1,8 @@
 "use strict";
 class ShootEvent extends PhoenixEvent {
-    constructor(id, type, status, realm, armyId, toX, toY, fromX, fromY, lkpCount, skpCount, target) {
-        super(id, type, status);
+    constructor(id, status, realm, armyId, toX, toY, fromX, fromY, lkpCount, skpCount, target, pk) {
+        super(id, status, pk);
         this.id = id;
-        this.type = type;
         this.status = status;
         this.realm = realm;
         this.armyId = armyId;
@@ -14,6 +13,7 @@ class ShootEvent extends PhoenixEvent {
         this.lkpCount = lkpCount;
         this.skpCount = skpCount;
         this.target = target;
+        this.pk = pk;
     }
     checkEvent() {
         let shootBox = GUI.getShootingBigBox();
@@ -48,7 +48,7 @@ class ShootEvent extends PhoenixEvent {
             if (this.armyExistsAndIsLocated(shooter.owner.tag, this.armyId, this.fromX, this.fromY) && canShoot) {
                 this.status = 'available';
             }
-            else if (armyExists(this.realm, this.armyId) &&
+            else if (this.armyExists(this.realm, this.armyId) &&
                 this.possibleMoveOfArmyTo(shooter.owner.tag, this.armyId, this.fromX, this.fromY)) {
                 this.status = 'withheld';
             }
@@ -64,6 +64,9 @@ class ShootEvent extends PhoenixEvent {
         eli.innerHTML = "<div>" + this.realm.tag + "'s army " + this.armyId + " shoots a Field (" + this.toX + ", " +
             this.toY + ") with " + this.lkpCount + " LKP and " + this.skpCount + " SKP.</div>";
         return this.commonEventListItem(eli, this.id);
+    }
+    getType() {
+        return "shoot";
     }
     shootButtonLogic(shootBox) {
         let shooter;

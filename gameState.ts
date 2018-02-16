@@ -4,6 +4,7 @@ class GameState{
     static rivers: River[] = [];
     static armies: Army[] = [];
     static buildings: Building[] = [];
+    static pendingNewEvents: PhoenixEvent[] = [];
     //TODO: containers for characters, mages, etc.
 
     static purgeDeadArmies(){

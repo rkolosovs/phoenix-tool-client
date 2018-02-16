@@ -72,7 +72,7 @@ var Authentication;
         let eventList = document.getElementById("eventsTab");
         eventList.innerHTML = "";
         openTab(null, "");
-        pendingEvents = [];
+        GameState.pendingNewEvents = [];
         preparedEvents = [];
         Drawing.writeTurnNumber();
     }

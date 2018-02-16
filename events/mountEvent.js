@@ -1,20 +1,17 @@
 "use strict";
 class MountEvent extends PhoenixEvent {
-    constructor(id, type, status, fromArmy, newArmy, realm, troops, leaders, mounts, lkp, skp, x, y) {
-        super(id, type, status);
+    constructor(id, status, fromArmy, newArmy, realm, troops, leaders, x, y, pk) {
+        super(id, status, pk);
         this.id = id;
-        this.type = type;
         this.status = status;
         this.fromArmy = fromArmy;
         this.newArmy = newArmy;
         this.realm = realm;
         this.troops = troops;
         this.leaders = leaders;
-        this.mounts = mounts;
-        this.lkp = lkp;
-        this.skp = skp;
         this.x = x;
         this.y = y;
+        this.pk = pk;
     }
     checkEvent() {
         console.log("this is a mount event");
@@ -45,7 +42,7 @@ class MountEvent extends PhoenixEvent {
     }
     determineEventStatus() {
         let typefactor = 1;
-        let army = GameState.armies[findArmyPlaceInList(this.fromArmy, this.realm)];
+        let army = GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
         if (army == undefined) {
             this.status = 'withheld';
         }
@@ -87,7 +84,7 @@ class MountEvent extends PhoenixEvent {
         }
         if (((army.getTroopCount() - this.troops) >= (100 / typefactor)) &&
             ((army.getOfficerCount() - this.leaders) >= 1) &&
-            ((mountCount - this.mounts) >= 0) &&
+            ((mountCount - this.mounts) >= 0) && //TODO probably needs to go and change the fields in the contrudtor accordingly
             ((lkpCount - this.lkp) >= 0) &&
             ((skpCount - this.skp) >= 0)) {
             this.status = 'available';
@@ -103,5 +100,8 @@ class MountEvent extends PhoenixEvent {
         eli.innerHTML = "<div>" + this.realm.tag + "'s army " + this.fromArmy + " mounts " + this.troops + " troops, and "
             + this.leaders + " leaders to " + this.newArmy + " in (" + this.x + "," + this.y + ").</div>";
         return this.commonEventListItem(eli, this.id);
+    }
+    getType() {
+        return "mount";
     }
 }

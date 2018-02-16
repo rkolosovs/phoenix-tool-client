@@ -18,9 +18,33 @@ var Loading;
     function loadPendingEvents() {
         //	console.log("loadPendingEvents()");
         $.getJSON(Loading.url + "/databaseLink/getevents/", function (json) {
-            pendingEvents = json;
-            pendingEvents.forEach(function (item) {
-                item.status = 'undetermined';
+            let pendingEvents = json;
+            GameState.pendingNewEvents = [];
+            pendingEvents.forEach(function (item, index) {
+                let content = pendingEvents[index].content;
+                switch (item.type) {
+                    case "move":
+                        GameState.pendingNewEvents.push(new MoveEvent(index, "undetermined", GameState.realms.find(realm => (realm === content.realm)), content.armyId, content.fromX, content.fromY, content.toX, content.toY, item.pk));
+                        break;
+                    case "battle":
+                        GameState.pendingNewEvents.push(new BattleEvent(index, "undetermined", content.participants, GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, item.pk));
+                        break;
+                    case "shoot":
+                        GameState.pendingNewEvents.push(new ShootEvent(index, "undetermined", GameState.realms.find(realm => (realm === content.realm)), content.armyId, content.toX, content.toY, content.fromX, content.fromY, content.LKPcount, content.SKPcount, content.target, item.pk));
+                        break;
+                    case "split":
+                        GameState.pendingNewEvents.push(new SplitEvent(index, "undetermined", content.fromArmy, content.newArmy, GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.mounts, content.lkp, content.skp, content.x, content.y, item.pk));
+                        break;
+                    case "merge":
+                        GameState.pendingNewEvents.push(new MergeEvent(index, "undetermined", content.fromArmy, content.toArmy, GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, item.pk));
+                        break;
+                    case "mount":
+                        GameState.pendingNewEvents.push(new MountEvent(index, "undetermined", content.fromArmy, content.newArmy, GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.x, content.y, item.pk));
+                        break;
+                    case "transfer":
+                        GameState.pendingNewEvents.push(new TransferEvent(index, "undetermined", content.fromArmy, content.toArmy, GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.mounts, content.lkp, content.skp, content.x, content.y, item.pk));
+                        break;
+                }
             });
             fillEventList();
         });

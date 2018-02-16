@@ -1,10 +1,10 @@
 class TransferEvent extends PhoenixEvent{
     
-    constructor(protected id: number, protected type: string, protected status: string, protected fromArmy: number,
+    constructor(protected id: number, protected status: string, protected fromArmy: number,
         protected toArmy: number, protected realm: Realm, protected troops: number, protected leaders: number,
-        protected mounts: number, protected lkp: number, protected skp: number, protected x: number, protected y: number){
-
-        super(id, type, status);
+        protected mounts: number, protected lkp: number, protected skp: number, protected x: number, protected y: number, protected pk: number){
+            
+        super(id, status, pk);
     }
 
     checkEvent(): void{
@@ -68,12 +68,12 @@ class TransferEvent extends PhoenixEvent{
         else if (army1.getPosition()[0] !== this.x || army1.getPosition()[1] !== this.y || 
         army2.getPosition()[0] !== this.x || army2.getPosition()[1] !== this.y) {
             this.status = 'withheld';
-    } else if ((army1.constructor === army2.constructor || (this.troops === 0 && this.mounts === 0 && 
-        this.lkp === 0 && this.skp === 0)) && army1.getPosition()[0] === army2.getPosition()[0] && 
-            army1.getPosition()[1] === army2.getPosition()[1]) {
-                this.status = 'available';
-    }
-    else if (((((army1 instanceof FootArmy || army1 instanceof RiderArmy) && army1.getMovePoints() < 3) || 
+        } else if ((army1.constructor === army2.constructor || (this.troops === 0 && this.mounts === 0 && 
+            this.lkp === 0 && this.skp === 0)) && army1.getPosition()[0] === army2.getPosition()[0] && 
+                army1.getPosition()[1] === army2.getPosition()[1]) {
+                    this.status = 'available';
+        }
+        else if (((((army1 instanceof FootArmy || army1 instanceof RiderArmy) && army1.getMovePoints() < 3) || 
             army1 instanceof Fleet && army1.getMovePoints() < 5) && (((army2 instanceof FootArmy || 
             army2 instanceof RiderArmy) && army2.getMovePoints() < 3) || army2 instanceof Fleet && army2.getMovePoints() < 5))) {
             this.status = 'impossible';
@@ -108,5 +108,9 @@ class TransferEvent extends PhoenixEvent{
         eli.innerHTML = innerHTMLString;
 
         return this.commonEventListItem(eli, this.id);
+    }
+
+    getType(): string{
+        return "transfer";
     }
 }
