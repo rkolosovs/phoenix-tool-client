@@ -21,35 +21,37 @@ namespace HexFunction {
     export function fluesse(hex: [number, number]): boolean[] {
         let result = [false, false, false, false, false, false];
         let surroundings = neighbors(hex);
-        for (let i = 0; i < GameState.rivers.length; i++) {
-            let river: River = rivers[i];
+        GameState.rivers.forEach(river => {
             if ((hex[0] === river.leftBank[0] && hex[1] === river.leftBank[1]) ||
                 (hex[0] === river.rightBank[0] && hex[1] === river.rightBank[1])) {
-                for (let j = 0; j < surroundings.length; j++) {
-                    if ((surroundings[j][0] === river.leftBank[0] && surroundings[j][1] === river.leftBank[1]) ||
-                        (surroundings[j][0] === river.rightBank[0] && surroundings[j][1] === river.rightBank[1])) {
-                        result[j] = true;
+                surroundings.forEach((surrounding, index) => {
+                    if ((surrounding[0] === river.leftBank[0] && surrounding[1] === river.leftBank[1]) ||
+                        (surrounding[0] === river.rightBank[0] && surrounding[1] === river.rightBank[1])) {
+                        result[index] = true;
                     }
-                }
+                });
             }
-        }
+        });
         return result;
     }
 
     // where in the field list is this field
     export function positionInList(hex: [number, number]): number {
-        return GameState.fields.findIndex(field => field[0] === hex[0] && field[1] === hex[1]);
+        return GameState.fields.findIndex(field =>
+            field.coordinates[0] === hex[0] && field.coordinates[1] === hex[1]);
     }
 
     // what type is this field
     export function fieldType(hex: [number, number]): FieldType {
-        let field: Field = GameState.fields.find(field => field[0] === hex[0] && field[1] === hex[1]);
-        return (field != undefined)?field.type:-1;
+        let foundField: Field|undefined = GameState.fields.find(field => field.coordinates[0] === hex[0] &&
+            field.coordinates[1] === hex[1]);
+        return (foundField != undefined)?foundField.type:-1;
     }
 
     // what height is this field
     export function height(hex: [number, number]): number {
-        let field: Field = GameState.fields.find(field => field[0] === hex[0] && field[1] === hex[1]);
+        let field: Field|undefined = GameState.fields.find(field =>
+            field.coordinates[0] === hex[0] && field.coordinates[1] === hex[1]);
         return (field != undefined)?field.getHeight():-1;
     }
 
@@ -67,19 +69,19 @@ namespace HexFunction {
             let originNeighbors = neighbors(from);
             let foundNeigh = false;
             let direction = -1;
-            for (let j = 0; j < targetNeighbors.length; j++) {
-                for (let k = 0; k < originNeighbors.length; k++) {
-                    if (targetNeighbors[j][0] === originNeighbors[k][0] && targetNeighbors[j][1] === originNeighbors[k][1]) {
+            targetNeighbors.forEach(targetNeighbor => {
+                originNeighbors.forEach((originNeighbor, index) => {
+                    if (targetNeighbor[0] === originNeighbor[0] && targetNeighbor[1] === originNeighbor[1]) {
                         if (foundNeigh === false) {
                             foundNeigh = true;
-                            direction = k;
+                            direction = index;
                         }
                         else {
                             direction -= 0.5;
                         }
                     }
-                }
-            }
+                });
+            });
             return direction;
         }
         return -1;//in case the to field is not a neighbor
@@ -95,15 +97,17 @@ namespace HexFunction {
         let thisCubeY = - thisCubeX - thisCubeZ;
 
         //this is the cube coordinates for the current Hex
-        let targetCubeX = to[0] - (to[1] + (to[1] & 1)) / 2;//bitwise & as an alternative to modulo that works without exceptions(negative numbers)
+        //bitwise & as an alternative to modulo that works without exceptions(negative numbers)
+        let targetCubeX = to[0] - (to[1] + (to[1] & 1)) / 2;
         let targetCubeZ = to[1];
         let targetCubeY = - targetCubeX - targetCubeZ;
 
-        return Math.max(Math.abs(thisCubeX - targetCubeX), Math.abs(thisCubeY - targetCubeY), Math.abs(thisCubeZ - targetCubeZ));
+        return Math.max(Math.abs(thisCubeX - targetCubeX), Math.abs(thisCubeY - targetCubeY),
+            Math.abs(thisCubeZ - targetCubeZ));
     }
 
     export function neighborInRange(hex: [number, number], range: number): [number, number][] {
-        let neighbors = [];
+        let neighbors: [number, number][] = [];
         for (let i = hex[0] - range; i <= hex[0] + range; i++) {
             for (let j = hex[1] - range; j <= hex[1] + range; j++) {
                 let dist = distance(hex, [i, j]);
@@ -121,21 +125,23 @@ namespace HexFunction {
     export function findCommonNeighbor(from: [number, number], to: [number, number]): [number, number][] {
         let targetNeighbors = neighbors(to);
         let originNeighbors = neighbors(from);
-        let foundCommon = [];
-        for (let j = 0; j < targetNeighbors.length; j++) {
-            for (let k = 0; k < originNeighbors.length; k++) {
-                if (targetNeighbors[j][0] === originNeighbors[k][0] && targetNeighbors[j][1] === originNeighbors[k][1]) {
-                    foundCommon.push(targetNeighbors[j]);
+        let foundCommon: [number, number][] = [];
+        targetNeighbors.forEach(targetNeighbor => {
+            originNeighbors.forEach(originNeighbor => {
+                if (targetNeighbor[0] === originNeighbor[0] && targetNeighbor[1] === originNeighbor[1]) {
+                    foundCommon.push(targetNeighbor);
                 }
-            }
-        }
+            });
+        });
         return foundCommon;
     }
 
     // does the field has a street on it in any direction
     export function hasStreet(hex: [number, number]): boolean {
-        return buildings.some((elem) => elem.type === 8 && ((elem.firstX === hex[0] && elem.firstY === hex[1]) ||
-            (elem.secondX === hex[0] && elem.secondY === hex[1])));
+        return GameState.buildings.some((elem) => elem.type === BuildingType.STREET &&
+            ((elem.getPosition()[0] === hex[0] && elem.getPosition()[1] === hex[1]) ||
+                ((elem as NonDestructibleBuilding).getSecondPosition()[0] === hex[0] &&
+                    (elem as NonDestructibleBuilding).getSecondPosition()[1] === hex[1])));
     }
 
     // in which directions does this field have walls (order as above, only walls build on this field)
@@ -160,12 +166,12 @@ namespace HexFunction {
     export function bridges(hex: [number, number]): boolean[] {
         let result = [false, false, false, false, false, false];
         let neighbor = neighbors(hex);
-        buildings.forEach(elem => {
+        GameState.buildings.forEach(elem => {
             if (elem.type === BuildingType.BRIDGE) {//bridge type
                 if (elem.getPosition()[0] === hex[0] && elem.getPosition()[1] === hex[1]) {//bridge on this field
                     result[neighbor.indexOf((elem as NonDestructibleBuilding).getSecondPosition())] = true;
                 } else if ((elem as NonDestructibleBuilding).getSecondPosition()[0] === hex[0] &&
-                    elem.getSecondPosition()[1] === hex[1]) {
+                    (elem as NonDestructibleBuilding).getSecondPosition()[1] === hex[1]) {
                     result[neighbor.indexOf((elem as NonDestructibleBuilding).getPosition())] = true;
                 }
             }
@@ -186,11 +192,11 @@ namespace HexFunction {
     }
 
     //computes a fields position (upper left corner of inscribing rectangle)
-    export function computePosition(orig: [number, number], curr: [number, number], scale): [number,  number] {
+    export function computePosition(orig: [number, number], curr: [number, number], scale: number): [number,  number] {
         //get the current field's x position
         let xpos = orig[0] + (curr[0] * scale * SIN60);
         //each odd row is offset half a hex to the left
-        return [ (((curr[1]%2)!==0)?(xpos - (0.5*scale*SIN60)):(xpos)), orig[1]+(curr[1] * gH)];
+        return [ (((curr[1]%2)!==0)?(xpos - (0.5*scale*SIN60)):(xpos)), orig[1]+(curr[1] * Drawing.gH)];
     }
 
     //for all directions in the usual order (nw, ne, e, se, sw, w)

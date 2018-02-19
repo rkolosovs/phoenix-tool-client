@@ -22,35 +22,35 @@ var HexFunction;
     function fluesse(hex) {
         let result = [false, false, false, false, false, false];
         let surroundings = neighbors(hex);
-        for (let i = 0; i < GameState.rivers.length; i++) {
-            let river = rivers[i];
+        GameState.rivers.forEach(river => {
             if ((hex[0] === river.leftBank[0] && hex[1] === river.leftBank[1]) ||
                 (hex[0] === river.rightBank[0] && hex[1] === river.rightBank[1])) {
-                for (let j = 0; j < surroundings.length; j++) {
-                    if ((surroundings[j][0] === river.leftBank[0] && surroundings[j][1] === river.leftBank[1]) ||
-                        (surroundings[j][0] === river.rightBank[0] && surroundings[j][1] === river.rightBank[1])) {
-                        result[j] = true;
+                surroundings.forEach((surrounding, index) => {
+                    if ((surrounding[0] === river.leftBank[0] && surrounding[1] === river.leftBank[1]) ||
+                        (surrounding[0] === river.rightBank[0] && surrounding[1] === river.rightBank[1])) {
+                        result[index] = true;
                     }
-                }
+                });
             }
-        }
+        });
         return result;
     }
     HexFunction.fluesse = fluesse;
     // where in the field list is this field
     function positionInList(hex) {
-        return GameState.fields.findIndex(field => field[0] === hex[0] && field[1] === hex[1]);
+        return GameState.fields.findIndex(field => field.coordinates[0] === hex[0] && field.coordinates[1] === hex[1]);
     }
     HexFunction.positionInList = positionInList;
     // what type is this field
     function fieldType(hex) {
-        let field = GameState.fields.find(field => field[0] === hex[0] && field[1] === hex[1]);
-        return (field != undefined) ? field.type : -1;
+        let foundField = GameState.fields.find(field => field.coordinates[0] === hex[0] &&
+            field.coordinates[1] === hex[1]);
+        return (foundField != undefined) ? foundField.type : -1;
     }
     HexFunction.fieldType = fieldType;
     // what height is this field
     function height(hex) {
-        let field = GameState.fields.find(field => field[0] === hex[0] && field[1] === hex[1]);
+        let field = GameState.fields.find(field => field.coordinates[0] === hex[0] && field.coordinates[1] === hex[1]);
         return (field != undefined) ? field.getHeight() : -1;
     }
     HexFunction.height = height;
@@ -69,19 +69,19 @@ var HexFunction;
             let originNeighbors = neighbors(from);
             let foundNeigh = false;
             let direction = -1;
-            for (let j = 0; j < targetNeighbors.length; j++) {
-                for (let k = 0; k < originNeighbors.length; k++) {
-                    if (targetNeighbors[j][0] === originNeighbors[k][0] && targetNeighbors[j][1] === originNeighbors[k][1]) {
+            targetNeighbors.forEach(targetNeighbor => {
+                originNeighbors.forEach((originNeighbor, index) => {
+                    if (targetNeighbor[0] === originNeighbor[0] && targetNeighbor[1] === originNeighbor[1]) {
                         if (foundNeigh === false) {
                             foundNeigh = true;
-                            direction = k;
+                            direction = index;
                         }
                         else {
                             direction -= 0.5;
                         }
                     }
-                }
-            }
+                });
+            });
             return direction;
         }
         return -1; //in case the to field is not a neighbor
@@ -96,7 +96,8 @@ var HexFunction;
         let thisCubeZ = origin[1];
         let thisCubeY = -thisCubeX - thisCubeZ;
         //this is the cube coordinates for the current Hex
-        let targetCubeX = to[0] - (to[1] + (to[1] & 1)) / 2; //bitwise & as an alternative to modulo that works without exceptions(negative numbers)
+        //bitwise & as an alternative to modulo that works without exceptions(negative numbers)
+        let targetCubeX = to[0] - (to[1] + (to[1] & 1)) / 2;
         let targetCubeZ = to[1];
         let targetCubeY = -targetCubeX - targetCubeZ;
         return Math.max(Math.abs(thisCubeX - targetCubeX), Math.abs(thisCubeY - targetCubeY), Math.abs(thisCubeZ - targetCubeZ));
@@ -121,20 +122,22 @@ var HexFunction;
         let targetNeighbors = neighbors(to);
         let originNeighbors = neighbors(from);
         let foundCommon = [];
-        for (let j = 0; j < targetNeighbors.length; j++) {
-            for (let k = 0; k < originNeighbors.length; k++) {
-                if (targetNeighbors[j][0] === originNeighbors[k][0] && targetNeighbors[j][1] === originNeighbors[k][1]) {
-                    foundCommon.push(targetNeighbors[j]);
+        targetNeighbors.forEach(targetNeighbor => {
+            originNeighbors.forEach(originNeighbor => {
+                if (targetNeighbor[0] === originNeighbor[0] && targetNeighbor[1] === originNeighbor[1]) {
+                    foundCommon.push(targetNeighbor);
                 }
-            }
-        }
+            });
+        });
         return foundCommon;
     }
     HexFunction.findCommonNeighbor = findCommonNeighbor;
     // does the field has a street on it in any direction
     function hasStreet(hex) {
-        return buildings.some((elem) => elem.type === 8 && ((elem.firstX === hex[0] && elem.firstY === hex[1]) ||
-            (elem.secondX === hex[0] && elem.secondY === hex[1])));
+        return GameState.buildings.some((elem) => elem.type === BuildingType.STREET &&
+            ((elem.getPosition()[0] === hex[0] && elem.getPosition()[1] === hex[1]) ||
+                (elem.getSecondPosition()[0] === hex[0] &&
+                    elem.getSecondPosition()[1] === hex[1])));
     }
     HexFunction.hasStreet = hasStreet;
     // in which directions does this field have walls (order as above, only walls build on this field)
@@ -171,7 +174,7 @@ var HexFunction;
     function bridges(hex) {
         let result = [false, false, false, false, false, false];
         let neighbor = neighbors(hex);
-        buildings.forEach(elem => {
+        GameState.buildings.forEach(elem => {
             if (elem.type === BuildingType.BRIDGE) {
                 if (elem.getPosition()[0] === hex[0] && elem.getPosition()[1] === hex[1]) {
                     result[neighbor.indexOf(elem.getSecondPosition())] = true;
@@ -202,7 +205,7 @@ var HexFunction;
         //get the current field's x position
         let xpos = orig[0] + (curr[0] * scale * SIN60);
         //each odd row is offset half a hex to the left
-        return [(((curr[1] % 2) !== 0) ? (xpos - (0.5 * scale * SIN60)) : (xpos)), orig[1] + (curr[1] * gH)];
+        return [(((curr[1] % 2) !== 0) ? (xpos - (0.5 * scale * SIN60)) : (xpos)), orig[1] + (curr[1] * Drawing.gH)];
     }
     HexFunction.computePosition = computePosition;
     //for all directions in the usual order (nw, ne, e, se, sw, w)
