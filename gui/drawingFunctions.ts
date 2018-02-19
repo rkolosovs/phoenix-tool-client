@@ -306,15 +306,15 @@ namespace Drawing{
 			for (let i = 0; i < sortedFields.length; i++) {
 				currFields = sortedFields[i];
 				switch(i){
-					case 0: tileImg = Images.shallows; break;
-					case 1: tileImg = Images.deepsea; break;
-					case 2: tileImg = Images.lowlands; break;
-					case 3: tileImg = Images.woods; break;
-					case 4: tileImg = Images.hills; break;
-					case 5: tileImg = Images.highlands; break;
-					case 6: tileImg = Images.mountains; break;
-					case 7: tileImg = Images.desert; break;
-					case 8: tileImg = Images.swamp; break;
+					case FieldType.SHALLOWS: tileImg = Images.shallows; break;
+					case FieldType.DEEPSEA: tileImg = Images.deepsea; break;
+					case FieldType.LOWLANDS: tileImg = Images.lowlands; break;
+					case FieldType.WOODS: tileImg = Images.woods; break;
+					case FieldType.HILLS: tileImg = Images.hills; break;
+					case FieldType.HIGHLANDS: tileImg = Images.highlands; break;
+					case FieldType.MOUNTAINS: tileImg = Images.mountains; break;
+					case FieldType.DESERT: tileImg = Images.desert; break;
+					case FieldType.SWAMP: tileImg = Images.swamp; break;
 					default: tileImg = Images.default; break;
 				}
 
@@ -329,15 +329,15 @@ namespace Drawing{
 			for (let i = 0; i < sortedFields.length; i++) {
 				currFields = sortedFields[i];
 				switch(i){
-					case 0: GUI.getContext().fillStyle = 'Aqua'; break;
-					case 1: GUI.getContext().fillStyle = 'DarkBlue'; break;
-					case 2: GUI.getContext().fillStyle = 'LawnGreen'; break;
-					case 3: GUI.getContext().fillStyle = 'ForestGreen'; break;
-					case 4: GUI.getContext().fillStyle = 'SandyBrown'; break;
-					case 5: GUI.getContext().fillStyle = 'SaddleBrown'; break;
-					case 6: GUI.getContext().fillStyle = 'LightGray'; break;
-					case 7: GUI.getContext().fillStyle = 'Khaki'; break;
-					case 8: GUI.getContext().fillStyle = 'DarkViolet'; break;
+					case FieldType.SHALLOWS: GUI.getContext().fillStyle = '#7dbada'; break;
+					case FieldType.DEEPSEA: GUI.getContext().fillStyle = '#35668b'; break;
+					case FieldType.LOWLANDS: GUI.getContext().fillStyle = '#82d33d'; break;
+					case FieldType.WOODS: GUI.getContext().fillStyle = '#266d16'; break;
+					case FieldType.HILLS: GUI.getContext().fillStyle = '#c19663'; break;
+					case FieldType.HIGHLANDS: GUI.getContext().fillStyle = '#854f36'; break;
+					case FieldType.MOUNTAINS: GUI.getContext().fillStyle = '#d3d0d0'; break;
+					case FieldType.DESERT: GUI.getContext().fillStyle = '#e3a72a'; break;
+					case FieldType.SWAMP: GUI.getContext().fillStyle = '#7f40aa'; break;
 					default: GUI.getContext().fillStyle = 'Black'; break;
 				}
 
