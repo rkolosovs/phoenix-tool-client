@@ -1,7 +1,9 @@
 import {GUI} from "../gui/gui";
+import {BoxVisibility} from "../gui/boxVisibilty";
 
 export namespace ButtonFunctions{
+
     export function mainButton() {
-        toggleVisibility(GUI.getBigBox().getSelf());
+        BoxVisibility.toggleVisibility(GUI.getBigBox().getSelf());
     }
 }
