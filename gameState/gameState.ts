@@ -1,5 +1,7 @@
 'use strict';
 
+import {GameState} from "../gameState";
+
 function nextTurn() {
 	var message = "";
 	if (currentTurn.realm === null) {
@@ -229,4 +231,12 @@ function sendEventlistInOrderRecursion(index) {
 		preparedEvents = [];
 	}
 }
+}
+
+function untagHitArmys(){
+    for(let i = 0; i < GameState.armies.length; i++){
+        if (GameState.armies[i].owner.tag === login || login === "sl"){
+            GameState.armies[i].wasShotAt = false;
+        }
+    }
 }

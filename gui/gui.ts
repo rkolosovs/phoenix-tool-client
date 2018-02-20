@@ -1,13 +1,13 @@
-class GUI{
+import {MainBox} from "./mainBox";
+
+export class GUI{
     //this holds all our UI elements and getter (with on-demand generation) for them
     private static canvas: HTMLCanvasElement;
     private static context: CanvasRenderingContext2D;
     private static buttonsBox: HTMLDivElement;
     private static toggleGMBarButton: HTMLButtonElement;
     private static topBar: HTMLDivElement;
-    private static bigBox: HTMLDivElement;
-    private static eventTabsButton: HTMLButtonElement;
-    private static eventsTab: HTMLDivElement;
+    private static bigBox: MainBox;
     private static mainButton: HTMLButtonElement;
     private static battleBox: BattleBox;
     private static shootingBigBox: ShootingBigBox;
@@ -73,7 +73,7 @@ class GUI{
 
     static getContext(): CanvasRenderingContext2D{
         if(GUI.context == undefined){
-            GUI.context = GUI.getCanvas().getContext('2d');
+            GUI.context = GUI.getCanvas().getContext('2d') as CanvasRenderingContext2D;
         }
         return GUI.context;
     }
@@ -99,25 +99,11 @@ class GUI{
         return GUI.topBar;
     }
 
-    static getBigBox(): HTMLDivElement{
+    static getBigBox(): MainBox{
         if(GUI.bigBox == undefined){
-            GUI.bigBox = document.getElementById("bigBox") as HTMLDivElement;
+            GUI.bigBox = new MainBox();
         }
         return GUI.bigBox;
-    }
-
-    static getEventTabsButton(): HTMLButtonElement{
-        if(GUI.eventTabsButton == undefined){
-            GUI.eventTabsButton = document.getElementById("eventTabsButton") as HTMLButtonElement;
-        }
-        return GUI.eventTabsButton;
-    }
-
-    static getEventsTab(): HTMLDivElement{
-        if(GUI.eventsTab == undefined){
-            GUI.eventsTab = document.getElementById("eventsTab") as HTMLDivElement;
-        }
-        return GUI.eventsTab;
     }
 
     static getMainButton(): HTMLButtonElement{

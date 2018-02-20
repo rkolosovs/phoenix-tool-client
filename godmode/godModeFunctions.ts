@@ -1,11 +1,12 @@
-'use strict';
 // TODO: before pushing check added and deleted buildings if one is already inside the other, if it is then delete it.
+
+import {GameState} from "../gameState";
 
 namespace GodFunctions{
 
-	let factionToCreateBuildingsFor = realms[0].tag;
+	let factionToCreateBuildingsFor: Realm = GameState.realms[0];
 
-	export function setFactionToCreateBuildingsFor(faction): void{
+	export function setFactionToCreateBuildingsFor(faction: Realm): void{
 		factionToCreateBuildingsFor = faction;
 	}
 
@@ -21,7 +22,7 @@ namespace GodFunctions{
 		Drawing.resizeCanvas()
 	}
 
-	export function changeFieldClickedTo(number): void{
+	export function changeFieldClickedTo(number: number): void{
 		if(changeFieldToType != number){
 			switchModeTo("worldCreationModeOnClick");
 			changeFieldToType = number;

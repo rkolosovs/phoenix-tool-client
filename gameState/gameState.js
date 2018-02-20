@@ -1,4 +1,6 @@
 'use strict';
+Object.defineProperty(exports, "__esModule", { value: true });
+const gameState_1 = require("../gameState");
 function nextTurn() {
     var message = "";
     if (currentTurn.realm === null) {
@@ -232,6 +234,13 @@ function sendEventlistInOrderRecursion(index) {
             console.log("Now deleting stuff!");
             pendingEvents = [];
             preparedEvents = [];
+        }
+    }
+}
+function untagHitArmys() {
+    for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
+        if (gameState_1.GameState.armies[i].owner.tag === login || login === "sl") {
+            gameState_1.GameState.armies[i].wasShotAt = false;
         }
     }
 }

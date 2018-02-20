@@ -1,35 +1,44 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const constants_1 = require("../constants");
+const gui_1 = require("./gui");
 var Drawing;
 (function (Drawing) {
     Drawing.c = 1;
     Drawing.gH = 1;
     Drawing.gW = 1;
+    Drawing.switchScale = 50;
+    // the scale of the elements, specifically the width
+    Drawing.scale = 16;
+    // tileset name. available tilesets: "erkenfara_altestool", "erkenfara_folienzug", "mbits_painted", "simple"
+    Drawing.tileset = "mbits_painted";
     Drawing.listOfMultiArmyFields = [];
+    Drawing.months = ['Agul', 'Hawar', 'Rim', 'Naliv', 'Larn', 'Hel', 'Jawan', 'Lud'];
     function setHexParts(scale) {
         Drawing.c = 0.25 * scale;
         Drawing.gH = 0.75 * scale;
-        Drawing.gW = SIN60 * scale;
+        Drawing.gW = constants_1.Constants.SIN60 * scale;
     }
     Drawing.setHexParts = setHexParts;
     // canvas resizing method
     function resizeCanvas() {
-        GUI.getCanvas().width = window.innerWidth;
-        GUI.getCanvas().height = window.innerHeight;
+        gui_1.GUI.getCanvas().width = window.innerWidth;
+        gui_1.GUI.getCanvas().height = window.innerHeight;
         drawStuff();
     }
     Drawing.resizeCanvas = resizeCanvas;
     // all the stuff to be drawn goes in this method
     function drawStuff() {
-        GUI.getContext().clearRect(0, 0, GUI.getCanvas().width, GUI.getCanvas().height); // clear
+        gui_1.GUI.getContext().clearRect(0, 0, gui_1.GUI.getCanvas().width, gui_1.GUI.getCanvas().height); // clear
         // do all drawing/element selection in respect to these coordinates
         // current origin for drawing + offset from dragged mouse
         let pos = [origin[0] + move[0], origin[1] + move[1]];
-        drawMap(pos, scale);
-        drawFieldSelection(pos, scale);
-        drawArmies(pos, scale);
-        drawArmySelection(pos, scale, selectedArmyIndex);
-        drawPossibleMoves(pos, scale, selectedArmyIndex);
-        drawShootingTargets(pos, scale, selectedArmyIndex);
+        drawMap(pos, Drawing.scale);
+        drawFieldSelection(pos, Drawing.scale);
+        drawArmies(pos, Drawing.scale);
+        drawArmySelection(pos, Drawing.scale, selectedArmyIndex);
+        drawPossibleMoves(pos, Drawing.scale, selectedArmyIndex);
+        drawShootingTargets(pos, Drawing.scale, selectedArmyIndex);
         writeFieldInfo();
     }
     Drawing.drawStuff = drawStuff;
@@ -43,10 +52,10 @@ var Drawing;
         let offset = (scale / 13); //set offset of a border from the actual border of two hexes
         GameState.realms.forEach(realm => {
             let color = realm.color;
-            GUI.getContext().lineWidth = (scale / 14); //line thickness for borders
-            GUI.getContext().strokeStyle = 'rgb(' + color + ')'; //set line color
-            GUI.getContext().lineCap = "round";
-            GUI.getContext().fillStyle = 'rgba(' + color + ', 0.3)'; //set fill color
+            gui_1.GUI.getContext().lineWidth = (scale / 14); //line thickness for borders
+            gui_1.GUI.getContext().strokeStyle = 'rgb(' + color + ')'; //set line color
+            gui_1.GUI.getContext().lineCap = "round";
+            gui_1.GUI.getContext().fillStyle = 'rgba(' + color + ', 0.3)'; //set fill color
             let land = realm.territory;
             land.forEach(hex => {
                 let point = HexFunction.computePosition(pos, hex.coordinates, scale);
@@ -68,191 +77,191 @@ var Drawing;
                         start = [(point[0] + 0.5 * Drawing.gW), (point[1] + offset)];
                     }
                 }
-                GUI.getContext().beginPath(); //begin border drawing
-                GUI.getContext().moveTo(start[0], start[1]);
+                gui_1.GUI.getContext().beginPath(); //begin border drawing
+                gui_1.GUI.getContext().moveTo(start[0], start[1]);
                 if (neighbours[1]) {
                     if (neighbours[2]) {
-                        GUI.getContext().moveTo((point[0] + Drawing.gW), (point[1] + Drawing.c));
+                        gui_1.GUI.getContext().moveTo((point[0] + Drawing.gW), (point[1] + Drawing.c));
                     }
                     else {
-                        GUI.getContext().moveTo((point[0] + Drawing.gW - SIN60 * offset), (point[1] + Drawing.c - 0.5 * offset));
+                        gui_1.GUI.getContext().moveTo((point[0] + Drawing.gW - SIN60 * offset), (point[1] + Drawing.c - 0.5 * offset));
                     }
                 }
                 else {
                     if (neighbours[2]) {
-                        GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.c + offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.c + offset));
                     }
                     else {
-                        GUI.getContext().lineTo((point[0] + Drawing.gW - SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
                     }
                 }
                 if (neighbours[2]) {
                     if (neighbours[3]) {
-                        GUI.getContext().moveTo((point[0] + Drawing.gW), (point[1] + Drawing.gH));
+                        gui_1.GUI.getContext().moveTo((point[0] + Drawing.gW), (point[1] + Drawing.gH));
                     }
                     else {
-                        GUI.getContext().moveTo((point[0] + Drawing.gW), (point[1] + Drawing.gH - offset));
+                        gui_1.GUI.getContext().moveTo((point[0] + Drawing.gW), (point[1] + Drawing.gH - offset));
                     }
                 }
                 else {
                     if (neighbours[3]) {
-                        GUI.getContext().lineTo((point[0] + Drawing.gW - SIN60 * offset), (point[1] + Drawing.gH + 0.5 * offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - SIN60 * offset), (point[1] + Drawing.gH + 0.5 * offset));
                     }
                     else {
-                        GUI.getContext().lineTo((point[0] + Drawing.gW - SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
                     }
                 }
                 if (neighbours[3]) {
                     if (neighbours[4]) {
-                        GUI.getContext().moveTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale));
+                        gui_1.GUI.getContext().moveTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale));
                     }
                     else {
-                        GUI.getContext().moveTo((point[0] + 0.5 * Drawing.gW + SIN60 * offset), (point[1] + scale - 0.5 * offset));
+                        gui_1.GUI.getContext().moveTo((point[0] + 0.5 * Drawing.gW + SIN60 * offset), (point[1] + scale - 0.5 * offset));
                     }
                 }
                 else {
                     if (neighbours[4]) {
-                        GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW - SIN60 * offset), (point[1] + scale - 0.5 * offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW - SIN60 * offset), (point[1] + scale - 0.5 * offset));
                     }
                     else {
-                        GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale - offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale - offset));
                     }
                 }
                 if (neighbours[4]) {
                     if (neighbours[5]) {
-                        GUI.getContext().moveTo(point[0], (point[1] + Drawing.gH));
+                        gui_1.GUI.getContext().moveTo(point[0], (point[1] + Drawing.gH));
                     }
                     else {
-                        GUI.getContext().moveTo((point[0] + SIN60 * offset), (point[1] + Drawing.gH + 0.5 * offset));
+                        gui_1.GUI.getContext().moveTo((point[0] + SIN60 * offset), (point[1] + Drawing.gH + 0.5 * offset));
                     }
                 }
                 else {
                     if (neighbours[5]) {
-                        GUI.getContext().lineTo(point[0], (point[1] + Drawing.gH - offset));
+                        gui_1.GUI.getContext().lineTo(point[0], (point[1] + Drawing.gH - offset));
                     }
                     else {
-                        GUI.getContext().lineTo((point[0] + SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
                     }
                 }
                 if (neighbours[5]) {
                     if (neighbours[0]) {
-                        GUI.getContext().moveTo(point[0], (point[1] + Drawing.c));
+                        gui_1.GUI.getContext().moveTo(point[0], (point[1] + Drawing.c));
                     }
                     else {
-                        GUI.getContext().moveTo(point[0], (point[1] + Drawing.c + offset));
+                        gui_1.GUI.getContext().moveTo(point[0], (point[1] + Drawing.c + offset));
                     }
                 }
                 else {
                     if (neighbours[0]) {
-                        GUI.getContext().lineTo((point[0] + SIN60 * offset), (point[1] + Drawing.c - 0.5 * offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + SIN60 * offset), (point[1] + Drawing.c - 0.5 * offset));
                     }
                     else {
-                        GUI.getContext().lineTo((point[0] + SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
                     }
                 }
                 if (neighbours[0]) {
-                    GUI.getContext().moveTo(start[0], start[1]);
+                    gui_1.GUI.getContext().moveTo(start[0], start[1]);
                 } //back to top corner
                 else {
-                    GUI.getContext().lineTo(start[0], start[1]);
+                    gui_1.GUI.getContext().lineTo(start[0], start[1]);
                 }
-                GUI.getContext().stroke();
-                GUI.getContext().beginPath(); //begin area filling
-                GUI.getContext().moveTo(start[0], start[1]);
+                gui_1.GUI.getContext().stroke();
+                gui_1.GUI.getContext().beginPath(); //begin area filling
+                gui_1.GUI.getContext().moveTo(start[0], start[1]);
                 if (neighbours[1]) {
                     if (neighbours[2]) {
-                        GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.c));
+                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.c));
                     }
                     else {
-                        GUI.getContext().lineTo((point[0] + Drawing.gW - SIN60 * offset), (point[1] + Drawing.c - 0.5 * offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - SIN60 * offset), (point[1] + Drawing.c - 0.5 * offset));
                     }
                 }
                 else {
                     if (neighbours[2]) {
-                        GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.c + offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.c + offset));
                     }
                     else {
-                        GUI.getContext().lineTo((point[0] + Drawing.gW - SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
                     }
                 }
                 if (neighbours[2]) {
                     if (neighbours[3]) {
-                        GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.gH));
+                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.gH));
                     }
                     else {
-                        GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.gH - offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.gH - offset));
                     }
                 }
                 else {
                     if (neighbours[3]) {
-                        GUI.getContext().lineTo((point[0] + Drawing.gW - SIN60 * offset), (point[1] + Drawing.gH + 0.5 * offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - SIN60 * offset), (point[1] + Drawing.gH + 0.5 * offset));
                     }
                     else {
-                        GUI.getContext().lineTo((point[0] + Drawing.gW - SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
                     }
                 }
                 if (neighbours[3]) {
                     if (neighbours[4]) {
-                        GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale));
+                        gui_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale));
                     }
                     else {
-                        GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW + SIN60 * offset), (point[1] + scale - 0.5 * offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW + SIN60 * offset), (point[1] + scale - 0.5 * offset));
                     }
                 }
                 else {
                     if (neighbours[4]) {
-                        GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW - SIN60 * offset), (point[1] + scale - 0.5 * offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW - SIN60 * offset), (point[1] + scale - 0.5 * offset));
                     }
                     else {
-                        GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale - offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale - offset));
                     }
                 }
                 if (neighbours[4]) {
                     if (neighbours[5]) {
-                        GUI.getContext().lineTo(point[0], (point[1] + Drawing.gH));
+                        gui_1.GUI.getContext().lineTo(point[0], (point[1] + Drawing.gH));
                     }
                     else {
-                        GUI.getContext().lineTo((point[0] + SIN60 * offset), (point[1] + Drawing.gH + 0.5 * offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + SIN60 * offset), (point[1] + Drawing.gH + 0.5 * offset));
                     }
                 }
                 else {
                     if (neighbours[5]) {
-                        GUI.getContext().lineTo(point[0], (point[1] + Drawing.gH - offset));
+                        gui_1.GUI.getContext().lineTo(point[0], (point[1] + Drawing.gH - offset));
                     }
                     else {
-                        GUI.getContext().lineTo((point[0] + SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
                     }
                 }
                 if (neighbours[5]) {
                     if (neighbours[0]) {
-                        GUI.getContext().lineTo(point[0], (point[1] + Drawing.c));
+                        gui_1.GUI.getContext().lineTo(point[0], (point[1] + Drawing.c));
                     }
                     else {
-                        GUI.getContext().lineTo(point[0], (point[1] + Drawing.c + offset));
+                        gui_1.GUI.getContext().lineTo(point[0], (point[1] + Drawing.c + offset));
                     }
                 }
                 else {
                     if (neighbours[0]) {
-                        GUI.getContext().lineTo((point[0] + SIN60 * offset), (point[1] + Drawing.c - 0.5 * offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + SIN60 * offset), (point[1] + Drawing.c - 0.5 * offset));
                     }
                     else {
-                        GUI.getContext().lineTo((point[0] + SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
+                        gui_1.GUI.getContext().lineTo((point[0] + SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
                     }
                 }
                 if (neighbours[0]) {
-                    GUI.getContext().lineTo(start[0], start[1]);
+                    gui_1.GUI.getContext().lineTo(start[0], start[1]);
                 } //back to top corner
                 else {
-                    GUI.getContext().lineTo(start[0], start[1]);
+                    gui_1.GUI.getContext().lineTo(start[0], start[1]);
                 }
-                GUI.getContext().fill();
+                gui_1.GUI.getContext().fill();
             });
         });
     }
     function drawBuildings(screenPos, scale) {
-        GUI.getContext().lineWidth = (scale / 8); //line style for roads
-        GUI.getContext().strokeStyle = "#C8AB37";
-        GUI.getContext().lineCap = "round";
+        gui_1.GUI.getContext().lineWidth = (scale / 8); //line style for roads
+        gui_1.GUI.getContext().strokeStyle = "#C8AB37";
+        gui_1.GUI.getContext().lineCap = "round";
         for (let i = 0; i < GameState.buildings.length; i++) {
             let building = GameState.buildings[i];
             let buildingPos;
@@ -358,28 +367,28 @@ var Drawing;
                     break;
             }
             if (building.type <= 4) {
-                GUI.getContext().drawImage(tileImg, buildingPos[0], buildingPos[1], scale * SIN60, scale); //draw the image
+                gui_1.GUI.getContext().drawImage(tileImg, buildingPos[0], buildingPos[1], scale * SIN60, scale); //draw the image
             }
             else if (building.type === 5) {
-                GUI.getContext().drawImage(tileImg, buildingPos[0], buildingPos[1], scale * SIN60, scale); //draw the image
+                gui_1.GUI.getContext().drawImage(tileImg, buildingPos[0], buildingPos[1], scale * SIN60, scale); //draw the image
             }
             else if (building.type <= 7) {
-                GUI.getContext().drawImage(tileImg, buildingPos[0] - Drawing.gW, buildingPos[1] - (0.5 * scale), 3 * Drawing.gW, 2 * scale); //draw the image
+                gui_1.GUI.getContext().drawImage(tileImg, buildingPos[0] - Drawing.gW, buildingPos[1] - (0.5 * scale), 3 * Drawing.gW, 2 * scale); //draw the image
             }
             else if (building.type === 8) {
                 let posFirst = HexFunction.computePosition(screenPos, building.getPosition(), scale);
                 let posSecond = HexFunction.computePosition(screenPos, building.getPosition(), scale);
-                GUI.getContext().beginPath();
-                GUI.getContext().moveTo((posFirst[0] + (0.5 * Drawing.gW)), (posFirst[1] + 2 * Drawing.c));
-                GUI.getContext().lineTo((posSecond[0] + (0.5 * Drawing.gW)), (posSecond[1] + 2 * Drawing.c));
-                GUI.getContext().stroke();
+                gui_1.GUI.getContext().beginPath();
+                gui_1.GUI.getContext().moveTo((posFirst[0] + (0.5 * Drawing.gW)), (posFirst[1] + 2 * Drawing.c));
+                gui_1.GUI.getContext().lineTo((posSecond[0] + (0.5 * Drawing.gW)), (posSecond[1] + 2 * Drawing.c));
+                gui_1.GUI.getContext().stroke();
             }
         }
     }
     function drawRivers(screenPos, scale) {
-        GUI.getContext().lineWidth = (scale / 8);
-        GUI.getContext().strokeStyle = "#0099FF";
-        GUI.getContext().lineCap = "round";
+        gui_1.GUI.getContext().lineWidth = (scale / 8);
+        gui_1.GUI.getContext().strokeStyle = "#0099FF";
+        gui_1.GUI.getContext().lineCap = "round";
         GameState.rivers.forEach(river => {
             let pos = HexFunction.computePosition(screenPos, river.leftBank, scale);
             let points = [pos, pos];
@@ -410,16 +419,16 @@ var Drawing;
                     points = [[(pos[0]), (pos[1] + Drawing.gH)], [(pos[0] + 0.5 * Drawing.gW), (pos[1] + scale)]];
                 }
             }
-            GUI.getContext().beginPath();
-            GUI.getContext().moveTo((points[0][0]), (points[0][1]));
-            GUI.getContext().lineTo((points[1][0]), (points[1][1]));
-            GUI.getContext().stroke();
+            gui_1.GUI.getContext().beginPath();
+            gui_1.GUI.getContext().moveTo((points[0][0]), (points[0][1]));
+            gui_1.GUI.getContext().lineTo((points[1][0]), (points[1][1]));
+            gui_1.GUI.getContext().stroke();
         });
     }
     function drawFields(screenPos, scale) {
         let drawingMode = 'image';
         // let drawingMode = 'primitives';
-        if (scale < switchScale) {
+        if (scale < Drawing.switchScale) {
             drawingMode = 'primitives';
         }
         else {
@@ -501,7 +510,7 @@ var Drawing;
                 for (let j = 0; j < currFields.length; j++) {
                     currentField = currFields[j];
                     //draw the image
-                    GUI.getContext().drawImage(tileImg, currentField[0], currentField[1], (scale * SIN60), scale);
+                    gui_1.GUI.getContext().drawImage(tileImg, currentField[0], currentField[1], (scale * SIN60), scale);
                 }
             }
         }
@@ -511,48 +520,48 @@ var Drawing;
                 currFields = sortedFields[i];
                 switch (i) {
                     case FieldType.SHALLOWS:
-                        GUI.getContext().fillStyle = '#7dbada';
+                        gui_1.GUI.getContext().fillStyle = '#7dbada';
                         break;
                     case FieldType.DEEPSEA:
-                        GUI.getContext().fillStyle = '#35668b';
+                        gui_1.GUI.getContext().fillStyle = '#35668b';
                         break;
                     case FieldType.LOWLANDS:
-                        GUI.getContext().fillStyle = '#82d33d';
+                        gui_1.GUI.getContext().fillStyle = '#82d33d';
                         break;
                     case FieldType.WOODS:
-                        GUI.getContext().fillStyle = '#266d16';
+                        gui_1.GUI.getContext().fillStyle = '#266d16';
                         break;
                     case FieldType.HILLS:
-                        GUI.getContext().fillStyle = '#c19663';
+                        gui_1.GUI.getContext().fillStyle = '#c19663';
                         break;
                     case FieldType.HIGHLANDS:
-                        GUI.getContext().fillStyle = '#854f36';
+                        gui_1.GUI.getContext().fillStyle = '#854f36';
                         break;
                     case FieldType.MOUNTAINS:
-                        GUI.getContext().fillStyle = '#d3d0d0';
+                        gui_1.GUI.getContext().fillStyle = '#d3d0d0';
                         break;
                     case FieldType.DESERT:
-                        GUI.getContext().fillStyle = '#e3a72a';
+                        gui_1.GUI.getContext().fillStyle = '#e3a72a';
                         break;
                     case FieldType.SWAMP:
-                        GUI.getContext().fillStyle = '#7f40aa';
+                        gui_1.GUI.getContext().fillStyle = '#7f40aa';
                         break;
                     default:
-                        GUI.getContext().fillStyle = 'Black';
+                        gui_1.GUI.getContext().fillStyle = 'Black';
                         break;
                 }
-                GUI.getContext().beginPath();
+                gui_1.GUI.getContext().beginPath();
                 for (let j = 0; j < currFields.length; j++) {
                     currentField = currFields[j];
-                    GUI.getContext().moveTo((currentField[0] + 0.5 * Drawing.gW), currentField[1]);
-                    GUI.getContext().lineTo((currentField[0] + Drawing.gW), (currentField[1] + Drawing.c));
-                    GUI.getContext().lineTo((currentField[0] + Drawing.gW), (currentField[1] + Drawing.gH));
-                    GUI.getContext().lineTo((currentField[0] + 0.5 * Drawing.gW), (currentField[1] + scale));
-                    GUI.getContext().lineTo(currentField[0], (currentField[1] + Drawing.gH));
-                    GUI.getContext().lineTo(currentField[0], (currentField[1] + Drawing.c));
-                    GUI.getContext().lineTo((currentField[0] + 0.5 * Drawing.gW), currentField[1]);
+                    gui_1.GUI.getContext().moveTo((currentField[0] + 0.5 * Drawing.gW), currentField[1]);
+                    gui_1.GUI.getContext().lineTo((currentField[0] + Drawing.gW), (currentField[1] + Drawing.c));
+                    gui_1.GUI.getContext().lineTo((currentField[0] + Drawing.gW), (currentField[1] + Drawing.gH));
+                    gui_1.GUI.getContext().lineTo((currentField[0] + 0.5 * Drawing.gW), (currentField[1] + scale));
+                    gui_1.GUI.getContext().lineTo(currentField[0], (currentField[1] + Drawing.gH));
+                    gui_1.GUI.getContext().lineTo(currentField[0], (currentField[1] + Drawing.c));
+                    gui_1.GUI.getContext().lineTo((currentField[0] + 0.5 * Drawing.gW), currentField[1]);
                 }
-                GUI.getContext().fill();
+                gui_1.GUI.getContext().fill();
             }
         }
     }
@@ -561,33 +570,33 @@ var Drawing;
         if (selectedArmyIndex != undefined) {
             let moves = GameState.armies[selectedArmyIndex].possibleMoves;
             for (let i = 0; i < moves.length; i++) {
-                GUI.getContext().lineWidth = scale / 6;
-                GUI.getContext().strokeStyle = '#00FF00';
+                gui_1.GUI.getContext().lineWidth = scale / 6;
+                gui_1.GUI.getContext().strokeStyle = '#00FF00';
                 let pos = HexFunction.computePosition(screenPos, moves[i].destination, scale); //get fields position
-                GUI.getContext().beginPath();
-                GUI.getContext().arc(pos[0] + (0.5 * scale * SIN60), pos[1] + (scale * 0.5), scale / 12, 0, 2 * Math.PI, false);
-                GUI.getContext().stroke();
+                gui_1.GUI.getContext().beginPath();
+                gui_1.GUI.getContext().arc(pos[0] + (0.5 * scale * SIN60), pos[1] + (scale * 0.5), scale / 12, 0, 2 * Math.PI, false);
+                gui_1.GUI.getContext().stroke();
             }
         }
     }
     function drawFieldSelection(screenPos, scale) {
-        GUI.getContext().lineWidth = 5;
-        GUI.getContext().strokeStyle = "blue";
+        gui_1.GUI.getContext().lineWidth = 5;
+        gui_1.GUI.getContext().strokeStyle = "blue";
         for (let i = 0; i < selectedFields.length; i++) {
             let pos = HexFunction.computePosition(screenPos, selectedFields[i], scale);
-            GUI.getContext().beginPath();
-            GUI.getContext().arc(pos[0] + (0.5 * scale * SIN60), pos[1] + (scale * 0.5), scale / 2, 0, 2 * Math.PI, false);
-            GUI.getContext().stroke();
+            gui_1.GUI.getContext().beginPath();
+            gui_1.GUI.getContext().arc(pos[0] + (0.5 * scale * SIN60), pos[1] + (scale * 0.5), scale / 2, 0, 2 * Math.PI, false);
+            gui_1.GUI.getContext().stroke();
         }
     }
     function drawArmySelection(screenPos, scale, armyIndex) {
-        GUI.getContext().lineWidth = 5;
-        GUI.getContext().strokeStyle = "green";
+        gui_1.GUI.getContext().lineWidth = 5;
+        gui_1.GUI.getContext().strokeStyle = "green";
         if (armyIndex !== undefined) {
             let pos = HexFunction.computePosition(screenPos, GameState.armies[armyIndex].getPosition(), scale);
-            GUI.getContext().beginPath();
-            GUI.getContext().arc(pos[0] + (0.5 * scale * SIN60), pos[1] + (scale * 0.5), scale / 2.2, 0, 2 * Math.PI, false);
-            GUI.getContext().stroke();
+            gui_1.GUI.getContext().beginPath();
+            gui_1.GUI.getContext().arc(pos[0] + (0.5 * scale * SIN60), pos[1] + (scale * 0.5), scale / 2.2, 0, 2 * Math.PI, false);
+            gui_1.GUI.getContext().stroke();
         }
     }
     function drawArmies(screenPos, scale) {
@@ -605,20 +614,20 @@ var Drawing;
         for (let i = 0; i < GameState.armies.length; i++) {
             let armyData = GameState.armies[i]; // get army coordinates
             let pos = HexFunction.computePosition(screenPos, armyData.getPosition(), scale);
-            GUI.getContext().fillStyle = 'black';
-            GUI.getContext().textAlign = 'center';
-            GUI.getContext().textBaseline = 'middle';
+            gui_1.GUI.getContext().fillStyle = 'black';
+            gui_1.GUI.getContext().textAlign = 'center';
+            gui_1.GUI.getContext().textBaseline = 'middle';
             //GUI.getContext().fillText(armyData.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
             //check if its is on a multifield. if it is ignore
             if (!armyData.onMultifield) {
                 if (armyData instanceof FootArmy) {
-                    GUI.getContext().drawImage(Images.troops, pos[0], pos[1], (scale * SIN60), scale);
+                    gui_1.GUI.getContext().drawImage(Images.troops, pos[0], pos[1], (scale * SIN60), scale);
                 }
                 else if (armyData instanceof RiderArmy) {
-                    GUI.getContext().drawImage(Images.mounts, pos[0], pos[1], (scale * SIN60), scale);
+                    gui_1.GUI.getContext().drawImage(Images.mounts, pos[0], pos[1], (scale * SIN60), scale);
                 }
                 else if (armyData instanceof Fleet) {
-                    GUI.getContext().drawImage(Images.boats, pos[0], pos[1], (scale * SIN60), scale);
+                    gui_1.GUI.getContext().drawImage(Images.boats, pos[0], pos[1], (scale * SIN60), scale);
                 }
             }
             if (armyData.owner.tag === login || login === "sl") {
@@ -654,41 +663,41 @@ var Drawing;
                 let xPosArmy = (Math.cos(angle * i) * scale / 4) + pos[0] + scale / 4;
                 let yPosArmy = (Math.sin(angle * i) * scale / 4) + pos[1];
                 if (armyData instanceof FootArmy) {
-                    GUI.getContext().drawImage(Images.troops, xPosArmy, yPosArmy, circleScale, scale);
+                    gui_1.GUI.getContext().drawImage(Images.troops, xPosArmy, yPosArmy, circleScale, scale);
                 }
                 else if (armyData instanceof RiderArmy) {
-                    GUI.getContext().drawImage(Images.mounts, xPosArmy, yPosArmy, circleScale, scale);
+                    gui_1.GUI.getContext().drawImage(Images.mounts, xPosArmy, yPosArmy, circleScale, scale);
                 }
                 else if (armyData instanceof Fleet) {
-                    GUI.getContext().drawImage(Images.boats, xPosArmy, yPosArmy, circleScale, scale);
+                    gui_1.GUI.getContext().drawImage(Images.boats, xPosArmy, yPosArmy, circleScale, scale);
                 }
             }
         }
     }
     function drawRemainingMovement(screenPos, scale) {
-        GUI.getContext().lineWidth = scale / 8;
-        GUI.getContext().strokeStyle = '#00FFFF';
-        GUI.getContext().beginPath();
-        GUI.getContext().arc(screenPos[0] + (0.5 * scale * SIN60) - Drawing.c, screenPos[1] + (scale * 0.5) - Drawing.c, scale / 16, Math.PI * 1.25, Math.PI * 1.75, false);
-        GUI.getContext().stroke();
+        gui_1.GUI.getContext().lineWidth = scale / 8;
+        gui_1.GUI.getContext().strokeStyle = '#00FFFF';
+        gui_1.GUI.getContext().beginPath();
+        gui_1.GUI.getContext().arc(screenPos[0] + (0.5 * scale * SIN60) - Drawing.c, screenPos[1] + (scale * 0.5) - Drawing.c, scale / 16, Math.PI * 1.25, Math.PI * 1.75, false);
+        gui_1.GUI.getContext().stroke();
     }
     function drawTookFire(screenPos, scale) {
-        GUI.getContext().lineWidth = scale / 8;
-        GUI.getContext().strokeStyle = '#FF0000';
-        GUI.getContext().beginPath();
-        GUI.getContext().arc(screenPos[0] + (0.5 * scale * SIN60) + Drawing.c, screenPos[1] + (scale * 0.5) + Drawing.c, scale / 16, Math.PI * 1.25, Math.PI * 1.75, false);
-        GUI.getContext().stroke();
+        gui_1.GUI.getContext().lineWidth = scale / 8;
+        gui_1.GUI.getContext().strokeStyle = '#FF0000';
+        gui_1.GUI.getContext().beginPath();
+        gui_1.GUI.getContext().arc(screenPos[0] + (0.5 * scale * SIN60) + Drawing.c, screenPos[1] + (scale * 0.5) + Drawing.c, scale / 16, Math.PI * 1.25, Math.PI * 1.75, false);
+        gui_1.GUI.getContext().stroke();
     }
     function drawShootingTargets(screenPos, scale, selectedArmy) {
         if (selectedArmy !== undefined && GameState.armies[selectedArmyIndex].possibleTargets.length > 0 && shootingModeOn) {
             let targets = GameState.armies[selectedArmyIndex].possibleTargets;
             for (let i = 0; i < targets.length; i++) {
-                GUI.getContext().lineWidth = scale / 10;
-                GUI.getContext().strokeStyle = '#FF0000';
+                gui_1.GUI.getContext().lineWidth = scale / 10;
+                gui_1.GUI.getContext().strokeStyle = '#FF0000';
                 let pos = HexFunction.computePosition(screenPos, targets[i].coordinates, scale); //get fields position
-                GUI.getContext().beginPath();
-                GUI.getContext().arc(pos[0] + (0.5 * scale * SIN60), pos[1] + (scale * 0.5), scale / 20, 0, 2 * Math.PI, false);
-                GUI.getContext().stroke();
+                gui_1.GUI.getContext().beginPath();
+                gui_1.GUI.getContext().arc(pos[0] + (0.5 * scale * SIN60), pos[1] + (scale * 0.5), scale / 20, 0, 2 * Math.PI, false);
+                gui_1.GUI.getContext().stroke();
             }
         }
     }
@@ -883,7 +892,7 @@ var Drawing;
             revertBtn.disabled = true;
             revertBtn.style.cursor = "not-allowed";
         }
-        date.innerHTML = "Monat " + months[currentTurn.turn % 8] + " des Jahres " + Math.ceil(currentTurn.turn / 8) + " (Zug " + currentTurn.turn + ", ";
+        date.innerHTML = "Monat " + Drawing.months[currentTurn.turn % 8] + " des Jahres " + Math.ceil(currentTurn.turn / 8) + " (Zug " + currentTurn.turn + ", ";
         if (currentTurn.realm == undefined || currentTurn.status === 'fi') {
             // GM's turn
             date.innerHTML += "SL) ";
@@ -917,4 +926,4 @@ var Drawing;
         topBar.appendChild(spec);
     }
     Drawing.writeTurnNumber = writeTurnNumber;
-})(Drawing || (Drawing = {}));
+})(Drawing = exports.Drawing || (exports.Drawing = {}));

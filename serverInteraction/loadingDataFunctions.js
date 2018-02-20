@@ -1,15 +1,13 @@
 "use strict";
 var Loading;
 (function (Loading) {
-    //    var url = "http://phoenixserver.h2610265.stratoserver.net"; //the address of the remote server goes here
-    Loading.url = "http://localhost:8000"; //for local debug
     // help function to fetch current data from the server
     function getNewDataFromServer() {
         loadMap();
     }
     Loading.getNewDataFromServer = getNewDataFromServer;
     function loadTurnNumber() {
-        $.getJSON(Loading.url + "/databaseLink/getturn/", function (json) {
+        $.getJSON(url + "/databaseLink/getturn/", function (json) {
             currentTurn = json;
             Drawing.writeTurnNumber();
         });
@@ -17,7 +15,7 @@ var Loading;
     Loading.loadTurnNumber = loadTurnNumber;
     function loadPendingEvents() {
         //	console.log("loadPendingEvents()");
-        $.getJSON(Loading.url + "/databaseLink/getevents/", function (json) {
+        $.getJSON(url + "/databaseLink/getevents/", function (json) {
             let pendingEvents = json;
             GameState.pendingNewEvents = [];
             pendingEvents.forEach(function (item, index) {
@@ -52,7 +50,7 @@ var Loading;
     Loading.loadPendingEvents = loadPendingEvents;
     function loadMap() {
         let timetest;
-        $.getJSON(Loading.url + "/databaseLink/getlastsavedtimestamp/", function (json) {
+        $.getJSON(url + "/databaseLink/getlastsavedtimestamp/", function (json) {
             timetest = "";
             for (let i = 0; i < json.length; i++) {
                 timetest += json[i];
@@ -72,7 +70,7 @@ var Loading;
     }
     Loading.loadMap = loadMap;
     function loadCSRFToken() {
-        $.getJSON(Loading.url + "/databaseLink/gettoken/", function (json) {
+        $.getJSON(url + "/databaseLink/gettoken/", function (json) {
             currentCSRFToken = json;
         });
     }
@@ -81,7 +79,7 @@ var Loading;
     //Data the client is not supposed to have based on his login status is set to -1.
     function loadArmies() {
         $.post({
-            url: Loading.url + "/databaseLink/armydata/",
+            url: url + "/databaseLink/armydata/",
             data: { authorization: authenticationToken },
             success: function (data) {
                 GameState.armies = data.map(army => {
@@ -110,7 +108,7 @@ var Loading;
     }
     Loading.loadArmies = loadArmies;
     function loadFieldData() {
-        $.getJSON(Loading.url + "/databaseLink/fielddata/", function (json) {
+        $.getJSON(url + "/databaseLink/fielddata/", function (json) {
             GameState.fields = json.map(field => new Field([field.x, field.y], field.type));
             fields = json; //TODO: Remove once everything uses the GameState class.
             Drawing.resizeCanvas();
@@ -118,14 +116,14 @@ var Loading;
     }
     Loading.loadFieldData = loadFieldData;
     function loadRealmData() {
-        $.getJSON(Loading.url + "/databaseLink/getrealms/", function (json) {
+        $.getJSON(url + "/databaseLink/getrealms/", function (json) {
             GameState.realms = json.map(realm => new Realm(realm.name, realm.tag, realm.color, Number(realm.homeTurf), realm.active));
             realms = json; //TODO: Remove once everything uses the GameState class.
         });
     }
     Loading.loadRealmData = loadRealmData;
     function loadRiverData() {
-        $.getJSON(Loading.url + "/databaseLink/getriverdata/", function (json) {
+        $.getJSON(url + "/databaseLink/getriverdata/", function (json) {
             GameState.rivers = json.map(river => new River([river.firstX, river.firstY], [river.secondX, river.secondY]));
             rivers = []; //TODO: Remove once everything uses the GameState class.
             json.forEach(function (element) {
@@ -135,7 +133,7 @@ var Loading;
     }
     Loading.loadRiverData = loadRiverData;
     function loadBuildingData() {
-        $.getJSON(Loading.url + "/databaseLink/buildingdata/", function (json) {
+        $.getJSON(url + "/databaseLink/buildingdata/", function (json) {
             let realms = GameState.realms;
             GameState.buildings = json.map(building => {
                 switch (building.type) {
@@ -159,7 +157,7 @@ var Loading;
     }
     Loading.loadBuildingData = loadBuildingData;
     function loadBorderData() {
-        $.getJSON(Loading.url + "/databaseLink/getborderdata/", function (json) {
+        $.getJSON(url + "/databaseLink/getborderdata/", function (json) {
             json.forEach(realm => {
                 let realmToFill = GameState.realms.find(candidate => candidate.tag === realm.tag);
                 if (realmToFill != undefined) {

@@ -1,8 +1,10 @@
-'use strict';
+"use strict";
 // TODO: before pushing check added and deleted buildings if one is already inside the other, if it is then delete it.
+Object.defineProperty(exports, "__esModule", { value: true });
+const gameState_1 = require("../gameState");
 var GodFunctions;
 (function (GodFunctions) {
-    let factionToCreateBuildingsFor = realms[0].tag;
+    let factionToCreateBuildingsFor = gameState_1.GameState.realms[0];
     function setFactionToCreateBuildingsFor(faction) {
         factionToCreateBuildingsFor = faction;
     }
@@ -38,10 +40,10 @@ var GodFunctions;
     function addCastle() {
         let sf = selectedFields[0];
         let found = false;
-        for (let i = 0; i < GameState.buildings.length; i++) {
-            let building = GameState.buildings[i];
+        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
+            let building = gameState_1.GameState.buildings[i];
             if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] == sf[1]) {
-                GameState.buildings[i].type = 0;
+                gameState_1.GameState.buildings[i].type = 0;
                 found = true;
             }
         }
@@ -51,7 +53,7 @@ var GodFunctions;
         }
         else {
             changedBuildings.push([true, { "type": 0, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]);
-            GameState.buildings.push(new ProductionBuilding(0, [sf[0], sf[1]], factionToCreateBuildingsFor, 500)); //TODO correct BP
+            gameState_1.GameState.buildings.push(new ProductionBuilding(0, [sf[0], sf[1]], factionToCreateBuildingsFor, 500)); //TODO correct BP
             // console.log("this is a new:");
             // console.log(changedBuildings[changedBuildings.length-1]);
         }
@@ -62,10 +64,10 @@ var GodFunctions;
     function addCity() {
         let sf = selectedFields[0];
         let found = false;
-        for (let i = 0; i < GameState.buildings.length; i++) {
-            let building = GameState.buildings[i];
+        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
+            let building = gameState_1.GameState.buildings[i];
             if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] === sf[1]) {
-                GameState.buildings[i].type = 1;
+                gameState_1.GameState.buildings[i].type = 1;
                 found = true;
             }
         }
@@ -75,7 +77,7 @@ var GodFunctions;
         }
         else {
             changedBuildings.push([true, { "type": 1, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]);
-            GameState.buildings.push(new ProductionBuilding(1, [sf[0], sf[1]], factionToCreateBuildingsFor, 500)); //TODO correct BP
+            gameState_1.GameState.buildings.push(new ProductionBuilding(1, [sf[0], sf[1]], factionToCreateBuildingsFor, 500)); //TODO correct BP
             // console.log("this is a new:");
             // console.log(changedBuildings[changedBuildings.length-1]);
         }
@@ -86,10 +88,10 @@ var GodFunctions;
     function addFortress() {
         let sf = selectedFields[0];
         let found = false;
-        for (let i = 0; i < GameState.buildings.length; i++) {
-            let building = GameState.buildings[i];
+        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
+            let building = gameState_1.GameState.buildings[i];
             if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] === sf[1]) {
-                GameState.buildings[i].type = 2;
+                gameState_1.GameState.buildings[i].type = 2;
                 found = true;
             }
         }
@@ -99,7 +101,7 @@ var GodFunctions;
         }
         else {
             changedBuildings.push([true, { "type": 2, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]);
-            GameState.buildings.push(new ProductionBuilding(2, [sf[0], sf[1]], factionToCreateBuildingsFor, 500)); //TODO correct BP
+            gameState_1.GameState.buildings.push(new ProductionBuilding(2, [sf[0], sf[1]], factionToCreateBuildingsFor, 500)); //TODO correct BP
             // console.log("this is a new:");
             // console.log(changedBuildings[changedBuildings.length-1]);
         }
@@ -110,10 +112,10 @@ var GodFunctions;
     function addCapital() {
         let sf = selectedFields[0];
         let found = false;
-        for (let i = 0; i < GameState.buildings.length; i++) {
-            let building = GameState.buildings[i];
+        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
+            let building = gameState_1.GameState.buildings[i];
             if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] === sf[1]) {
-                GameState.buildings[i].type = 3;
+                gameState_1.GameState.buildings[i].type = 3;
                 found = true;
             }
         }
@@ -123,7 +125,7 @@ var GodFunctions;
         }
         else {
             changedBuildings.push([true, { "type": 3, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]);
-            GameState.buildings.push(new ProductionBuilding(3, [sf[0], sf[1]], factionToCreateBuildingsFor, 500)); //TODO correct BP
+            gameState_1.GameState.buildings.push(new ProductionBuilding(3, [sf[0], sf[1]], factionToCreateBuildingsFor, 500)); //TODO correct BP
             // console.log("this is a new:");
             // console.log(changedBuildings[changedBuildings.length-1]);
         }
@@ -134,10 +136,10 @@ var GodFunctions;
     function addCapitalFortress() {
         let sf = selectedFields[0];
         let found = false;
-        for (let i = 0; i < GameState.buildings.length; i++) {
-            let building = GameState.buildings[i];
+        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
+            let building = gameState_1.GameState.buildings[i];
             if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] === sf[1]) {
-                GameState.buildings[i].type = 4;
+                gameState_1.GameState.buildings[i].type = 4;
                 found = true;
             }
         }
@@ -147,7 +149,7 @@ var GodFunctions;
         }
         else {
             changedBuildings.push([true, { "type": 4, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]);
-            GameState.buildings.push(new ProductionBuilding(4, [sf[0], sf[1]], factionToCreateBuildingsFor, 500)); //TODO correct BP
+            gameState_1.GameState.buildings.push(new ProductionBuilding(4, [sf[0], sf[1]], factionToCreateBuildingsFor, 500)); //TODO correct BP
             // console.log("this is a new:");
             // console.log(changedBuildings[changedBuildings.length-1]);
         }
@@ -157,15 +159,15 @@ var GodFunctions;
     // delete the building in the selectedField
     function deleteBuilding() {
         let sf = selectedFields[0];
-        for (let i = 0; i < GameState.buildings.length; i++) {
-            let building = GameState.buildings[i];
+        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
+            let building = gameState_1.GameState.buildings[i];
             if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] === sf[1]) {
                 changedBuildings.push([false, { "type": building.type, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]);
-                if (i === GameState.buildings.length - 1) {
-                    GameState.buildings.pop();
+                if (i === gameState_1.GameState.buildings.length - 1) {
+                    gameState_1.GameState.buildings.pop();
                 }
                 else {
-                    GameState.buildings[i] = GameState.buildings.pop();
+                    gameState_1.GameState.buildings[i] = gameState_1.GameState.buildings.pop();
                 }
             }
         }
@@ -228,8 +230,8 @@ var GodFunctions;
         let targets = HexFunction.neighbors(sf[0], sf[1]);
         let target = targets[direction];
         let found = false;
-        for (let i = 0; i < GameState.rivers.length; i++) {
-            let river = GameState.rivers[i];
+        for (let i = 0; i < gameState_1.GameState.rivers.length; i++) {
+            let river = gameState_1.GameState.rivers[i];
             if ((river.rightBank[0] === sf[0] && river.rightBank[1] === sf[1] && river.leftBank[0] === target[0] && river.leftBank[1] === target[1]) ||
                 (river.leftBank[0] === sf[0] && river.leftBank[1] === sf[1] && river.rightBank[0] === target[0] && river.rightBank[1] === target[1])) {
                 found = true;
@@ -238,7 +240,7 @@ var GodFunctions;
         if (found) {
         }
         else {
-            GameState.rivers.push(new River([sf[0], sf[1]], [target[0], target[1]]));
+            gameState_1.GameState.rivers.push(new River([sf[0], sf[1]], [target[0], target[1]]));
         }
         Drawing.resizeCanvas();
     }
@@ -249,19 +251,19 @@ var GodFunctions;
         let targets = HexFunction.neighbors(sf[0], sf[1]);
         let target = targets[direction];
         let found = undefined;
-        for (let i = 0; i < GameState.rivers.length; i++) {
-            let river = GameState.rivers[i];
+        for (let i = 0; i < gameState_1.GameState.rivers.length; i++) {
+            let river = gameState_1.GameState.rivers[i];
             if ((river.rightBank[0] == sf[0] && river.rightBank[1] == sf[1] && river.leftBank[0] == target[0] && river.leftBank[1] == target[1]) ||
                 (river.leftBank[0] == sf[0] && river.leftBank[1] == sf[1] && river.rightBank[0] == target[0] && river.rightBank[1] == target[1])) {
                 found = i;
             }
         }
         if (found != undefined) {
-            if (found == GameState.rivers.length - 1) {
-                GameState.rivers.pop();
+            if (found == gameState_1.GameState.rivers.length - 1) {
+                gameState_1.GameState.rivers.pop();
             }
             else {
-                GameState.rivers[found] = GameState.rivers.pop();
+                gameState_1.GameState.rivers[found] = gameState_1.GameState.rivers.pop();
             }
         }
         Drawing.resizeCanvas();

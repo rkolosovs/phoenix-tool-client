@@ -1,14 +1,24 @@
-namespace Drawing{
-    export let c = 1;
-    export let gH = 1;
-    export let gW = 1;
+import {Constants} from "../constants";
+import {GUI} from "./gui";
+
+export namespace Drawing{
+    export let c: number = 1;
+    export let gH: number = 1;
+    export let gW: number = 1;
+
+    export let switchScale: number = 50;
+    // the scale of the elements, specifically the width
+    export let scale: number = 16;
+    // tileset name. available tilesets: "erkenfara_altestool", "erkenfara_folienzug", "mbits_painted", "simple"
+    export let tileset = "mbits_painted";
 
 	export let listOfMultiArmyFields = [];
+    export let months: string[] = ['Agul', 'Hawar', 'Rim', 'Naliv', 'Larn', 'Hel', 'Jawan', 'Lud'];
 
-    export function setHexParts(scale) {
+    export function setHexParts(scale: number) {
         c = 0.25 * scale;
         gH = 0.75 * scale;
-        gW = SIN60 * scale;
+        gW = Constants.SIN60 * scale;
     }
 
 	// canvas resizing method

@@ -1,5 +1,11 @@
-
 namespace Authentication{
+	//put the url/IP for the remote game server here
+	// export let url = "http://phoenixserver.h2610265.stratoserver.net"; // online server
+    export let url: string = "http://localhost:8000"; // for local debug
+
+    export let authenticationToken: number = 0; // the session Token, default = 0.
+    export let currentCSRFToken: any; //TODO
+
 	export let logintime: number;
 
 	// function to get the authenticationToken from the server and save a login time

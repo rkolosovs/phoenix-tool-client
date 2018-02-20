@@ -1,6 +1,10 @@
 "use strict";
 var Authentication;
 (function (Authentication) {
+    //put the url/IP for the remote game server here
+    // export let url = "http://phoenixserver.h2610265.stratoserver.net"; // online server
+    Authentication.url = "http://localhost:8000"; // for local debug
+    Authentication.authenticationToken = 0; // the session Token, default = 0.
     // function to get the authenticationToken from the server and save a login time
     function loginToServer() {
         let username = document.getElementById("loginName").value;
@@ -9,14 +13,14 @@ var Authentication;
         // TODO: make safe
         Authentication.logintime = undefined;
         $.post({
-            url: url + "/databaseLink/login/",
+            url: Authentication.url + "/databaseLink/login/",
             data: {
                 username: username,
                 password: password
             },
             success: function (data) {
                 // saving the authenticationToken
-                authenticationToken = data.token;
+                Authentication.authenticationToken = data.token;
                 login = data.group;
                 // if the user is a GM, godmode possibility is displayed
                 if (login === 'sl') {
@@ -50,7 +54,7 @@ var Authentication;
     function logoutFromServer() {
         //loging out from server
         $.post({
-            url: url + "/databaseLink/logout/"
+            url: Authentication.url + "/databaseLink/logout/"
         });
         // turning off godmode Box, and changing infoBox to Login Box
         login = 'guest';
@@ -64,7 +68,7 @@ var Authentication;
         //change the info change box, back to the normal info Box
         document.getElementById("infoChangeBox").style.display = "none";
         // forget old authenticationToken
-        authenticationToken = 0;
+        Authentication.authenticationToken = 0;
         // overwrite previously known data
         Loading.getNewDataFromServer();
         Authentication.logintime = undefined;

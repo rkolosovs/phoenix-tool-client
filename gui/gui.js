@@ -1,4 +1,6 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mainBox_1 = require("./mainBox");
 class GUI {
     static getCanvas() {
         if (GUI.canvas == undefined) {
@@ -32,21 +34,9 @@ class GUI {
     }
     static getBigBox() {
         if (GUI.bigBox == undefined) {
-            GUI.bigBox = document.getElementById("bigBox");
+            GUI.bigBox = new mainBox_1.MainBox();
         }
         return GUI.bigBox;
-    }
-    static getEventTabsButton() {
-        if (GUI.eventTabsButton == undefined) {
-            GUI.eventTabsButton = document.getElementById("eventTabsButton");
-        }
-        return GUI.eventTabsButton;
-    }
-    static getEventsTab() {
-        if (GUI.eventsTab == undefined) {
-            GUI.eventsTab = document.getElementById("eventsTab");
-        }
-        return GUI.eventsTab;
     }
     static getMainButton() {
         if (GUI.mainButton == undefined) {
@@ -379,3 +369,4 @@ class GUI {
         return GUI.streetCreationBox;
     }
 }
+exports.GUI = GUI;

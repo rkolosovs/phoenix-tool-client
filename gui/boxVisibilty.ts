@@ -1,5 +1,3 @@
-'use strict';
-
 let worldCreationModeOn = false;
 let worldCreationModeOnClick = false;
 let riverCreationModeOn = false;

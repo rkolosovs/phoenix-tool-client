@@ -1,4 +1,3 @@
-
 namespace Saving{
 
 	export function saveFields() { // saves the current fields on the server
