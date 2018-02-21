@@ -339,7 +339,7 @@ var Saving;
     }
     Saving.saveBuildings = saveBuildings;
     function saveArmies() {
-        let sensibleArmyList = gameState_1.GameState.armies.map(function (elem) {
+        let sensibleArmyList = gameState_1.GameState.armies.map(elem => {
             return {
                 armyId: elem.getErkenfaraID(),
                 count: elem.getTroopCount(),
@@ -347,12 +347,12 @@ var Saving;
                 lkp: elem.getLightCatapultCount(),
                 skp: elem.getHeavyCatapultCount(),
                 mounts: (elem instanceof FootArmy) ? elem.getMountCount() : 0,
-                x: elem.getPo,
-                y: elem.y,
-                owner: elem.owner,
-                movementPoints: elem.remainingMovePoints,
-                heightPoints: elem.remainingHeightPoints,
-                isLoadedIn: elem.isLoadedIn
+                x: elem.getPosition()[0],
+                y: elem.getPosition()[1],
+                owner: elem.owner.tag,
+                movementPoints: elem.getMovePoints(),
+                heightPoints: elem.getHeightPoints(),
+                isLoadedIn: (elem instanceof LandArmy) ? elem.isTransported() : false
             };
         });
         $.post({

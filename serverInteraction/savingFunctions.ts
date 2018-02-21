@@ -332,7 +332,7 @@ export namespace Saving{
 	}
 
 	export function saveArmies() { // saves the current armies on the server
-		let sensibleArmyList = GameState.armies.map(function(elem){
+		let sensibleArmyList = GameState.armies.map(elem => {
 			return {
 				armyId: elem.getErkenfaraID(),
 				count: elem.getTroopCount(),
@@ -340,12 +340,12 @@ export namespace Saving{
 				lkp: elem.getLightCatapultCount(),
 				skp: elem.getHeavyCatapultCount(),
 				mounts: (elem instanceof FootArmy)?(elem as FootArmy).getMountCount():0,
-				x: elem.x,
-				y: elem.y,
-				owner: elem.owner,
-				movementPoints: elem.remainingMovePoints,
-				heightPoints: elem.remainingHeightPoints,
-				isLoadedIn: elem.isLoadedIn
+				x: elem.getPosition()[0],
+				y: elem.getPosition()[1],
+				owner: elem.owner.tag,
+				movementPoints: elem.getMovePoints(),
+				heightPoints: elem.getHeightPoints(),
+				isLoadedIn: (elem instanceof LandArmy)?(elem as LandArmy).isTransported():false
 			};
 		});
 		$.post({
