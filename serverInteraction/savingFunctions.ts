@@ -1,55 +1,35 @@
 import {GameState} from "../gameState";
+import {Drawing} from "../gui/drawingFunctions";
+import {Controls} from "../controls/controlVariables";
 
 export namespace Saving{
 
-    export function sendNextTurn() {
+    export function sendEvents() {
         sendEventlistInOrder(0);
-        pendingEvents.forEach(event => {
-            if (event.status === 'checked') {
-                sendCheckEvent(event.pk, event.type);
-            } else if (event.status === 'deleted') {
-                sendDeleteEvent(event.pk, event.type);
+        GameState.pendingNewEvents.forEach(event => {
+            if (event.getStatus() === 'checked') {
+                sendCheckEvent(event.getPK(), event.getType());
+            } else if (event.getStatus() === 'deleted') {
+                sendDeleteEvent(event.getPK(), event.getType());
             }
         });
-        $.post({
-            url: url + "/databaseLink/nextturn/",
-            data: { authorization: authenticationToken },
-            success: function (data) {
-                currentTurn = data;
-                Drawing.writeTurnNumber();
-            },
-            dataType: "json",
-            statusCode: {
-                401: function () {
-                    alert('Authorisation failure. Please log in.');
-                },
-                403: function () {
-                    alert('Access denied. You can only end your own turn.');
-                },
-                520: function () { // custom status code
-                    alert('Turn Order ran out. Tell SL to fill it!');
-                },
-                521: function () { // custom status code
-                    alert('Turn Order ran out. You should fill it!');
-                }
-            }
-        });
+        sendNextTurn();
     }
 
     export function sendEventlistInOrder(index: number) {
-        console.log("The index is " + index + " out of " + preparedEvents.length + ",");
-        if (index != preparedEvents.length) {
-            var cPE = preparedEvents[index];
+        console.log("The index is " + index + " out of " + GameState.pendingNewEvents.length + ",");
+        if (index !== GameState.pendingNewEvents.length) {
+            var cPE = GameState.pendingNewEvents[index];
             var cPEContent = JSON.stringify(cPE.content);
-            if (cPE.type === "move") {
-                console.log(preparedEvents);
+            if (cPE.getType() === "move") {
+                console.log(GameState.pendingNewEvents);
                 $.post({
-                    url: url + "/databaseLink/moveevent/",
+                    url: Authentication.url + "/databaseLink/moveevent/",
                     data: {
-                        authorization: authenticationToken,
+                        authorization: Authentication.authenticationToken,
                         content: cPEContent
                     },
-                    success: function () { console.log(preparedEvents); sendEventlistInOrderRecursion(index + 1) },
+                    success: function () { sendEventlistInOrder(index + 1); },
                     statusCode: {
                         200: function () {
                             console.log("success");
@@ -65,14 +45,14 @@ export namespace Saving{
                         }
                     }
                 });
-            } else if (cPE.type === "battle") {
+            } else if (cPE.getType() === "battle") {
                 $.post({
-                    url: url + "/databaseLink/battleevent/",
+                    url: Authentication.url + "/databaseLink/battleevent/",
                     data: {
-                        authorization: authenticationToken,
+                        authorization: Authentication.authenticationToken,
                         content: cPEContent
                     },
-                    success: function () { sendEventlistInOrderRecursion(index + 1) },
+                    success: function () { sendEventlistInOrder(index + 1); },
                     statusCode: {
                         200: function () {
                             console.log("success");
@@ -88,14 +68,14 @@ export namespace Saving{
                         }
                     }
                 });
-            } else if (cPE.type === "merge") {
+            } else if (cPE.getType() === "merge") {
                 $.post({
-                    url: url + "/databaseLink/mergeevent/",
+                    url: Authentication.url + "/databaseLink/mergeevent/",
                     data: {
-                        authorization: authenticationToken,
+                        authorization: Authentication.authenticationToken,
                         content: cPEContent
                     },
-                    success: function () { sendEventlistInOrderRecursion(index + 1) },
+                    success: function () { sendEventlistInOrder(index + 1); },
                     statusCode: {
                         200: function () {
                             console.log("success");
@@ -111,14 +91,14 @@ export namespace Saving{
                         }
                     }
                 });
-            } else if (cPE.type === "transfer") {
+            } else if (cPE.getType() === "transfer") {
                 $.post({
-                    url: url + "/databaseLink/transferevent/",
+                    url: Authentication.url + "/databaseLink/transferevent/",
                     data: {
-                        authorization: authenticationToken,
+                        authorization: Authentication.authenticationToken,
                         content: cPEContent
                     },
-                    success: function () { sendEventlistInOrderRecursion(index + 1) },
+                    success: function () { sendEventlistInOrder(index + 1); },
                     statusCode: {
                         200: function () {
                             console.log("success");
@@ -134,14 +114,14 @@ export namespace Saving{
                         }
                     }
                 });
-            } else if (cPE.type === "split") {
+            } else if (cPE.getType() === "split") {
                 $.post({
-                    url: url + "/databaseLink/splitevent/",
+                    url: Authentication.url + "/databaseLink/splitevent/",
                     data: {
-                        authorization: authenticationToken,
+                        authorization: Authentication.authenticationToken,
                         content: cPEContent
                     },
-                    success: function () { sendEventlistInOrderRecursion(index + 1) },
+                    success: function () { sendEventlistInOrder(index + 1); },
                     statusCode: {
                         200: function () {
                             console.log("success");
@@ -157,14 +137,14 @@ export namespace Saving{
                         }
                     }
                 });
-            } else if (cPE.type === "mount") {
+            } else if (cPE.getType() === "mount") {
                 $.post({
-                    url: url + "/databaseLink/mountevent/",
+                    url: Authentication.url + "/databaseLink/mountevent/",
                     data: {
-                        authorization: authenticationToken,
+                        authorization: Authentication.authenticationToken,
                         content: cPEContent
                     },
-                    success: function () { sendEventlistInOrderRecursion(index + 1) },
+                    success: function () { sendEventlistInOrder(index + 1); },
                     statusCode: {
                         200: function () {
                             console.log("success");
@@ -180,14 +160,14 @@ export namespace Saving{
                         }
                     }
                 });
-            }else if (cPE.type === "shoot") {
+            }else if (cPE.getType() === "shoot") {
                 $.post({
-                    url: url + "/databaseLink/shootevent/",
+                    url: Authentication.url + "/databaseLink/shootevent/",
                     data: {
-                        authorization: authenticationToken,
+                        authorization: Authentication.authenticationToken,
                         content: cPEContent
                     },
-                    success: function () { sendEventlistInOrderRecursion(index + 1) },
+                    success: function () { sendEventlistInOrder(index + 1); },
                     statusCode: {
                         200: function() {
                             console.log("success");
@@ -205,9 +185,7 @@ export namespace Saving{
                 });
             }
             else {
-                console.log("Now deleting stuff!");
-                pendingEvents = [];
-                preparedEvents = [];
+                GameState.pendingNewEvents = [];
             }
         }
     }
@@ -215,25 +193,25 @@ export namespace Saving{
 	export function saveFields() { // saves the current fields on the server
 		$(function () {
 			$.ajaxSetup({
-				headers: { "X-CSRFToken": currentCSRFToken } // getCookie("csrftoken")
+				headers: { "X-CSRFToken": Authentication.currentCSRFToken } // getCookie("csrftoken")
 			});
 		});
 		let dataToServerString = "";
-		for (let i = 0; i < changedFields.length; i++) {
-			if (i != changedFields.length - 1) {
-				dataToServerString = dataToServerString + changedFields[i].type + ","
-				dataToServerString = dataToServerString + changedFields[i].x + ","
-				dataToServerString = dataToServerString + changedFields[i].y + ";"
+		for (let i = 0; i < Controls.changedFields.length; i++) {
+			if (i != Controls.changedFields.length - 1) {
+				dataToServerString = dataToServerString + Controls.changedFields[i].type + ","
+				dataToServerString = dataToServerString + Controls.changedFields[i].x + ","
+				dataToServerString = dataToServerString + Controls.changedFields[i].y + ";"
 			} else {
-				dataToServerString = dataToServerString + changedFields[i].type + ","
-				dataToServerString = dataToServerString + changedFields[i].x + ","
-				dataToServerString = dataToServerString + changedFields[i].y
+				dataToServerString = dataToServerString + Controls.changedFields[i].type + ","
+				dataToServerString = dataToServerString + Controls.changedFields[i].x + ","
+				dataToServerString = dataToServerString + Controls.changedFields[i].y
 			}
 		}
 		$.post({
-			url: url + "/databaseLink/savefielddata/",
+			url: Authentication.url + "/databaseLink/savefielddata/",
 			data: {
-				authorization: authenticationToken,
+				authorization: Authentication.authenticationToken,
 				map: dataToServerString
 			},
 			statusCode: {
@@ -252,10 +230,10 @@ export namespace Saving{
 
 	// probably deprecated
 	export function sendAllPreparedEvents(){
-		for (let i = 0; i < preparedEvents.length; i++) {
-			let cPE = preparedEvents[i];
+		for (let i = 0; i < GameState.pendingNewEvents.length; i++) {
+			let cPE = GameState.pendingNewEvents[i];
 			let cPEContent = JSON.stringify(cPE.content);
-			sendNewEvent(cPE.type, cPEContent);
+			sendNewEvent(cPE.getType(), cPEContent);
 		}
 	}
 
@@ -275,10 +253,10 @@ export namespace Saving{
 			}
 		}
 		$.post({
-			url: url + "/databaseLink/saveriverdata/",
+			url: Authentication.url + "/databaseLink/saveriverdata/",
 			data: {
 				river: dataToServerString,
-				authorization: authenticationToken
+				authorization: Authentication.authenticationToken
 			},
 			statusCode: {
 				200: function () {
@@ -296,48 +274,48 @@ export namespace Saving{
 
 	export function saveBuildings() { // saves the current buildings on the server
 		let dataToServerString = "";
-		for (let i = 0; i < changedBuildings.length; i++) {
-			switch (changedBuildings[i][1].type) {
+		for (let i = 0; i < Controls.changedBuildings.length; i++) {
+			switch (Controls.changedBuildings[i][1].type) {
 				case 0:
 				case 1:
 				case 2:
 				case 3:
 				case 4:
-					dataToServerString = dataToServerString + changedBuildings[i][1].type + ","
-					dataToServerString = dataToServerString + changedBuildings[i][1].realm + ","
-					dataToServerString = dataToServerString + changedBuildings[i][1].x + ","
-					dataToServerString = dataToServerString + changedBuildings[i][1].y + ","
-					dataToServerString = dataToServerString + changedBuildings[i][0]
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].type + ","
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].realm + ","
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].x + ","
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].y + ","
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][0]
 					break
 				case 5:
 				case 6:
 				case 7:
-					dataToServerString = dataToServerString + changedBuildings[i][1].type + ","
-					dataToServerString = dataToServerString + changedBuildings[i][1].realm + ","
-					dataToServerString = dataToServerString + changedBuildings[i][1].x + ","
-					dataToServerString = dataToServerString + changedBuildings[i][1].y + ","
-					dataToServerString = dataToServerString + changedBuildings[i][1].direction + ","
-					dataToServerString = dataToServerString + changedBuildings[i][0]
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].type + ","
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].realm + ","
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].x + ","
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].y + ","
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].direction + ","
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][0]
 					break
 				case 8:
-					dataToServerString = dataToServerString + changedBuildings[i][1].type + ","
-					dataToServerString = dataToServerString + changedBuildings[i][1].realm + ","
-					dataToServerString = dataToServerString + changedBuildings[i][1].firstX + ","
-					dataToServerString = dataToServerString + changedBuildings[i][1].firstY + ","
-					dataToServerString = dataToServerString + changedBuildings[i][1].secondX + ","
-					dataToServerString = dataToServerString + changedBuildings[i][1].secondY + ","
-					dataToServerString = dataToServerString + changedBuildings[i][0]
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].type + ","
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].realm + ","
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].firstX + ","
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].firstY + ","
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].secondX + ","
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].secondY + ","
+					dataToServerString = dataToServerString + Controls.changedBuildings[i][0]
 			}
-			if (i != changedBuildings.length - 1) {
+			if (i != Controls.changedBuildings.length - 1) {
 				//console.log("i " + i + " type " + changedBuildings[i][1].type)
 				dataToServerString = dataToServerString + ";"
 			} 
 		}
 		$.post({
-			url: url + "/databaseLink/savebuildingdata/",
+			url: Authentication.url + "/databaseLink/savebuildingdata/",
 			data: {
 				buildings: dataToServerString,
-				authorization: authenticationToken
+				authorization: Authentication.authenticationToken
 			},
 			statusCode: {
 				200: function () {
@@ -371,10 +349,10 @@ export namespace Saving{
 			};
 		});
 		$.post({
-			url: url + "/databaseLink/savearmydata/",
+			url: Authentication.url + "/databaseLink/savearmydata/",
 			data: {
 				armies: JSON.stringify(sensibleArmyList),
-				authorization: authenticationToken
+				authorization: Authentication.authenticationToken
 			},
 			statusCode: {
 				200: function () {
@@ -392,9 +370,9 @@ export namespace Saving{
 
 	export function saveFactionsTerritories(){ // saves the faction territories on the server
 		$.post({
-			url: url + "/databaseLink/saveborderdata/",
+			url: Authentication.url + "/databaseLink/saveborderdata/",
 			data: {borders: JSON.stringify(borders),
-				authorization: authenticationToken},
+				authorization: Authentication.authenticationToken},
 			statusCode: {
 				200: function() {
 					console.log("Successfully saved borders.");
@@ -411,9 +389,9 @@ export namespace Saving{
 
 	export function sendDeleteEvent(eventId: number, eventType: string) {
 		$.post({
-			url: url + "/databaseLink/deleteevent/",
+			url: Authentication.url + "/databaseLink/deleteevent/",
 			data: {
-				authorization: authenticationToken,
+				authorization: Authentication.authenticationToken,
 				eventId: eventId,
 				eventType: eventType
 			},
@@ -430,9 +408,9 @@ export namespace Saving{
 
 	export function sendCheckEvent(eventId: number, eventType: string) {
 		$.post({
-			url: url + "/databaseLink/checkevent/",
+			url: Authentication.url + "/databaseLink/checkevent/",
 			data: {
-				authorization: authenticationToken,
+				authorization: Authentication.authenticationToken,
 				eventId: eventId,
 				eventType: eventType
 			},
@@ -449,9 +427,9 @@ export namespace Saving{
 
 	export function sendNewEvent(type: string, content: string) {
 		$.post({
-			url: url + "/databaseLink/" + type + "event/",
+			url: Authentication.url + "/databaseLink/" + type + "event/",
 			data: {
-				authorization: authenticationToken,
+				authorization: Authentication.authenticationToken,
 				content: content
 			},
 			statusCode: {
@@ -480,29 +458,21 @@ export namespace Saving{
 	}
 
 	export function sendNextTurn() {
-		$.post({
-			url: url + "/databaseLink/nextturn/",
-			data: { authorization: authenticationToken },
-			success: function (data) {
-				currentTurn = data;
-				Drawing.writeTurnNumber();
-			},
-			dataType: "json",
-			statusCode: {
-				401: function () {
-					alert('Authorisation failure. Please log in.');
-				},
-				403: function () {
-					alert('Access denied. You can only end your own turn.');
-				},
-				520: function () { // custom status code
-					alert('Turn Order ran out. Tell SL to fill it!');
-				},
-				521: function () { // custom status code
-					alert('Turn Order ran out. You should fill it!');
-				}
-			}
-		});
+        $.post({
+            url: Authentication.url + "/databaseLink/nextturn/",
+            data: { authorization: Authentication.authenticationToken },
+            success: (data: {'turn': number, 'realm': string, 'status': string}) => {
+                GameState.currentTurn = data;
+                Drawing.writeTurnNumber();
+            },
+            dataType: "json",
+            statusCode: {
+                401: () => {alert('Authorisation failure. Please log in.');},
+                403: () => {alert('Access denied. You can only end your own turn.');},
+                520: () => {alert('Turn Order ran out. Tell SL to fill it!');}, // custom status code
+                521: () => {alert('Turn Order ran out. You should fill it!'); } // custom status code
+            }
+        });
 	}
 
 	// TODO: If we have multiple "clean-up functions" like this, they should have their own file/folder.

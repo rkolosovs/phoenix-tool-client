@@ -1,57 +1,37 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const gameState_1 = require("../gameState");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const controlVariables_1 = require("../controls/controlVariables");
 var Saving;
 (function (Saving) {
-    function sendNextTurn() {
+    function sendEvents() {
         sendEventlistInOrder(0);
-        pendingEvents.forEach(event => {
-            if (event.status === 'checked') {
-                sendCheckEvent(event.pk, event.type);
+        gameState_1.GameState.pendingNewEvents.forEach(event => {
+            if (event.getStatus() === 'checked') {
+                sendCheckEvent(event.getPK(), event.getType());
             }
-            else if (event.status === 'deleted') {
-                sendDeleteEvent(event.pk, event.type);
-            }
-        });
-        $.post({
-            url: url + "/databaseLink/nextturn/",
-            data: { authorization: authenticationToken },
-            success: function (data) {
-                currentTurn = data;
-                Drawing.writeTurnNumber();
-            },
-            dataType: "json",
-            statusCode: {
-                401: function () {
-                    alert('Authorisation failure. Please log in.');
-                },
-                403: function () {
-                    alert('Access denied. You can only end your own turn.');
-                },
-                520: function () {
-                    alert('Turn Order ran out. Tell SL to fill it!');
-                },
-                521: function () {
-                    alert('Turn Order ran out. You should fill it!');
-                }
+            else if (event.getStatus() === 'deleted') {
+                sendDeleteEvent(event.getPK(), event.getType());
             }
         });
+        sendNextTurn();
     }
-    Saving.sendNextTurn = sendNextTurn;
+    Saving.sendEvents = sendEvents;
     function sendEventlistInOrder(index) {
-        console.log("The index is " + index + " out of " + preparedEvents.length + ",");
-        if (index != preparedEvents.length) {
-            var cPE = preparedEvents[index];
+        console.log("The index is " + index + " out of " + gameState_1.GameState.pendingNewEvents.length + ",");
+        if (index !== gameState_1.GameState.pendingNewEvents.length) {
+            var cPE = gameState_1.GameState.pendingNewEvents[index];
             var cPEContent = JSON.stringify(cPE.content);
-            if (cPE.type === "move") {
-                console.log(preparedEvents);
+            if (cPE.getType() === "move") {
+                console.log(gameState_1.GameState.pendingNewEvents);
                 $.post({
-                    url: url + "/databaseLink/moveevent/",
+                    url: Authentication.url + "/databaseLink/moveevent/",
                     data: {
-                        authorization: authenticationToken,
+                        authorization: Authentication.authenticationToken,
                         content: cPEContent
                     },
-                    success: function () { console.log(preparedEvents); sendEventlistInOrderRecursion(index + 1); },
+                    success: function () { sendEventlistInOrder(index + 1); },
                     statusCode: {
                         200: function () {
                             console.log("success");
@@ -68,14 +48,14 @@ var Saving;
                     }
                 });
             }
-            else if (cPE.type === "battle") {
+            else if (cPE.getType() === "battle") {
                 $.post({
-                    url: url + "/databaseLink/battleevent/",
+                    url: Authentication.url + "/databaseLink/battleevent/",
                     data: {
-                        authorization: authenticationToken,
+                        authorization: Authentication.authenticationToken,
                         content: cPEContent
                     },
-                    success: function () { sendEventlistInOrderRecursion(index + 1); },
+                    success: function () { sendEventlistInOrder(index + 1); },
                     statusCode: {
                         200: function () {
                             console.log("success");
@@ -92,14 +72,14 @@ var Saving;
                     }
                 });
             }
-            else if (cPE.type === "merge") {
+            else if (cPE.getType() === "merge") {
                 $.post({
-                    url: url + "/databaseLink/mergeevent/",
+                    url: Authentication.url + "/databaseLink/mergeevent/",
                     data: {
-                        authorization: authenticationToken,
+                        authorization: Authentication.authenticationToken,
                         content: cPEContent
                     },
-                    success: function () { sendEventlistInOrderRecursion(index + 1); },
+                    success: function () { sendEventlistInOrder(index + 1); },
                     statusCode: {
                         200: function () {
                             console.log("success");
@@ -116,14 +96,14 @@ var Saving;
                     }
                 });
             }
-            else if (cPE.type === "transfer") {
+            else if (cPE.getType() === "transfer") {
                 $.post({
-                    url: url + "/databaseLink/transferevent/",
+                    url: Authentication.url + "/databaseLink/transferevent/",
                     data: {
-                        authorization: authenticationToken,
+                        authorization: Authentication.authenticationToken,
                         content: cPEContent
                     },
-                    success: function () { sendEventlistInOrderRecursion(index + 1); },
+                    success: function () { sendEventlistInOrder(index + 1); },
                     statusCode: {
                         200: function () {
                             console.log("success");
@@ -140,14 +120,14 @@ var Saving;
                     }
                 });
             }
-            else if (cPE.type === "split") {
+            else if (cPE.getType() === "split") {
                 $.post({
-                    url: url + "/databaseLink/splitevent/",
+                    url: Authentication.url + "/databaseLink/splitevent/",
                     data: {
-                        authorization: authenticationToken,
+                        authorization: Authentication.authenticationToken,
                         content: cPEContent
                     },
-                    success: function () { sendEventlistInOrderRecursion(index + 1); },
+                    success: function () { sendEventlistInOrder(index + 1); },
                     statusCode: {
                         200: function () {
                             console.log("success");
@@ -164,14 +144,14 @@ var Saving;
                     }
                 });
             }
-            else if (cPE.type === "mount") {
+            else if (cPE.getType() === "mount") {
                 $.post({
-                    url: url + "/databaseLink/mountevent/",
+                    url: Authentication.url + "/databaseLink/mountevent/",
                     data: {
-                        authorization: authenticationToken,
+                        authorization: Authentication.authenticationToken,
                         content: cPEContent
                     },
-                    success: function () { sendEventlistInOrderRecursion(index + 1); },
+                    success: function () { sendEventlistInOrder(index + 1); },
                     statusCode: {
                         200: function () {
                             console.log("success");
@@ -188,14 +168,14 @@ var Saving;
                     }
                 });
             }
-            else if (cPE.type === "shoot") {
+            else if (cPE.getType() === "shoot") {
                 $.post({
-                    url: url + "/databaseLink/shootevent/",
+                    url: Authentication.url + "/databaseLink/shootevent/",
                     data: {
-                        authorization: authenticationToken,
+                        authorization: Authentication.authenticationToken,
                         content: cPEContent
                     },
-                    success: function () { sendEventlistInOrderRecursion(index + 1); },
+                    success: function () { sendEventlistInOrder(index + 1); },
                     statusCode: {
                         200: function () {
                             console.log("success");
@@ -213,9 +193,7 @@ var Saving;
                 });
             }
             else {
-                console.log("Now deleting stuff!");
-                pendingEvents = [];
-                preparedEvents = [];
+                gameState_1.GameState.pendingNewEvents = [];
             }
         }
     }
@@ -223,26 +201,26 @@ var Saving;
     function saveFields() {
         $(function () {
             $.ajaxSetup({
-                headers: { "X-CSRFToken": currentCSRFToken } // getCookie("csrftoken")
+                headers: { "X-CSRFToken": Authentication.currentCSRFToken } // getCookie("csrftoken")
             });
         });
         let dataToServerString = "";
-        for (let i = 0; i < changedFields.length; i++) {
-            if (i != changedFields.length - 1) {
-                dataToServerString = dataToServerString + changedFields[i].type + ",";
-                dataToServerString = dataToServerString + changedFields[i].x + ",";
-                dataToServerString = dataToServerString + changedFields[i].y + ";";
+        for (let i = 0; i < controlVariables_1.Controls.changedFields.length; i++) {
+            if (i != controlVariables_1.Controls.changedFields.length - 1) {
+                dataToServerString = dataToServerString + controlVariables_1.Controls.changedFields[i].type + ",";
+                dataToServerString = dataToServerString + controlVariables_1.Controls.changedFields[i].x + ",";
+                dataToServerString = dataToServerString + controlVariables_1.Controls.changedFields[i].y + ";";
             }
             else {
-                dataToServerString = dataToServerString + changedFields[i].type + ",";
-                dataToServerString = dataToServerString + changedFields[i].x + ",";
-                dataToServerString = dataToServerString + changedFields[i].y;
+                dataToServerString = dataToServerString + controlVariables_1.Controls.changedFields[i].type + ",";
+                dataToServerString = dataToServerString + controlVariables_1.Controls.changedFields[i].x + ",";
+                dataToServerString = dataToServerString + controlVariables_1.Controls.changedFields[i].y;
             }
         }
         $.post({
-            url: url + "/databaseLink/savefielddata/",
+            url: Authentication.url + "/databaseLink/savefielddata/",
             data: {
-                authorization: authenticationToken,
+                authorization: Authentication.authenticationToken,
                 map: dataToServerString
             },
             statusCode: {
@@ -261,10 +239,10 @@ var Saving;
     Saving.saveFields = saveFields;
     // probably deprecated
     function sendAllPreparedEvents() {
-        for (let i = 0; i < preparedEvents.length; i++) {
-            let cPE = preparedEvents[i];
+        for (let i = 0; i < gameState_1.GameState.pendingNewEvents.length; i++) {
+            let cPE = gameState_1.GameState.pendingNewEvents[i];
             let cPEContent = JSON.stringify(cPE.content);
-            sendNewEvent(cPE.type, cPEContent);
+            sendNewEvent(cPE.getType(), cPEContent);
         }
     }
     Saving.sendAllPreparedEvents = sendAllPreparedEvents;
@@ -282,10 +260,10 @@ var Saving;
             }
         }
         $.post({
-            url: url + "/databaseLink/saveriverdata/",
+            url: Authentication.url + "/databaseLink/saveriverdata/",
             data: {
                 river: dataToServerString,
-                authorization: authenticationToken
+                authorization: Authentication.authenticationToken
             },
             statusCode: {
                 200: function () {
@@ -303,48 +281,48 @@ var Saving;
     Saving.saveRivers = saveRivers;
     function saveBuildings() {
         let dataToServerString = "";
-        for (let i = 0; i < changedBuildings.length; i++) {
-            switch (changedBuildings[i][1].type) {
+        for (let i = 0; i < controlVariables_1.Controls.changedBuildings.length; i++) {
+            switch (controlVariables_1.Controls.changedBuildings[i][1].type) {
                 case 0:
                 case 1:
                 case 2:
                 case 3:
                 case 4:
-                    dataToServerString = dataToServerString + changedBuildings[i][1].type + ",";
-                    dataToServerString = dataToServerString + changedBuildings[i][1].realm + ",";
-                    dataToServerString = dataToServerString + changedBuildings[i][1].x + ",";
-                    dataToServerString = dataToServerString + changedBuildings[i][1].y + ",";
-                    dataToServerString = dataToServerString + changedBuildings[i][0];
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].type + ",";
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].realm + ",";
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].x + ",";
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].y + ",";
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][0];
                     break;
                 case 5:
                 case 6:
                 case 7:
-                    dataToServerString = dataToServerString + changedBuildings[i][1].type + ",";
-                    dataToServerString = dataToServerString + changedBuildings[i][1].realm + ",";
-                    dataToServerString = dataToServerString + changedBuildings[i][1].x + ",";
-                    dataToServerString = dataToServerString + changedBuildings[i][1].y + ",";
-                    dataToServerString = dataToServerString + changedBuildings[i][1].direction + ",";
-                    dataToServerString = dataToServerString + changedBuildings[i][0];
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].type + ",";
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].realm + ",";
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].x + ",";
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].y + ",";
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].direction + ",";
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][0];
                     break;
                 case 8:
-                    dataToServerString = dataToServerString + changedBuildings[i][1].type + ",";
-                    dataToServerString = dataToServerString + changedBuildings[i][1].realm + ",";
-                    dataToServerString = dataToServerString + changedBuildings[i][1].firstX + ",";
-                    dataToServerString = dataToServerString + changedBuildings[i][1].firstY + ",";
-                    dataToServerString = dataToServerString + changedBuildings[i][1].secondX + ",";
-                    dataToServerString = dataToServerString + changedBuildings[i][1].secondY + ",";
-                    dataToServerString = dataToServerString + changedBuildings[i][0];
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].type + ",";
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].realm + ",";
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].firstX + ",";
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].firstY + ",";
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].secondX + ",";
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].secondY + ",";
+                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][0];
             }
-            if (i != changedBuildings.length - 1) {
+            if (i != controlVariables_1.Controls.changedBuildings.length - 1) {
                 //console.log("i " + i + " type " + changedBuildings[i][1].type)
                 dataToServerString = dataToServerString + ";";
             }
         }
         $.post({
-            url: url + "/databaseLink/savebuildingdata/",
+            url: Authentication.url + "/databaseLink/savebuildingdata/",
             data: {
                 buildings: dataToServerString,
-                authorization: authenticationToken
+                authorization: Authentication.authenticationToken
             },
             statusCode: {
                 200: function () {
@@ -361,14 +339,14 @@ var Saving;
     }
     Saving.saveBuildings = saveBuildings;
     function saveArmies() {
-        let sensibleArmyList = listOfArmies.map(function (elem) {
+        let sensibleArmyList = gameState_1.GameState.armies.map(function (elem) {
             return {
-                armyId: elem.armyId,
-                count: elem.count,
-                leaders: elem.leaders,
-                lkp: elem.lkp,
-                skp: elem.skp,
-                mounts: elem.mounts,
+                armyId: elem.getErkenfaraID(),
+                count: elem.getTroopCount(),
+                leaders: elem.getOfficerCount(),
+                lkp: elem.getLightCatapultCount(),
+                skp: elem.getHeavyCatapultCount(),
+                mounts: (elem instanceof FootArmy) ? elem.mounts : 0,
                 x: elem.x,
                 y: elem.y,
                 owner: elem.owner,
@@ -378,10 +356,10 @@ var Saving;
             };
         });
         $.post({
-            url: url + "/databaseLink/savearmydata/",
+            url: Authentication.url + "/databaseLink/savearmydata/",
             data: {
                 armies: JSON.stringify(sensibleArmyList),
-                authorization: authenticationToken
+                authorization: Authentication.authenticationToken
             },
             statusCode: {
                 200: function () {
@@ -399,9 +377,9 @@ var Saving;
     Saving.saveArmies = saveArmies;
     function saveFactionsTerritories() {
         $.post({
-            url: url + "/databaseLink/saveborderdata/",
+            url: Authentication.url + "/databaseLink/saveborderdata/",
             data: { borders: JSON.stringify(borders),
-                authorization: authenticationToken },
+                authorization: Authentication.authenticationToken },
             statusCode: {
                 200: function () {
                     console.log("Successfully saved borders.");
@@ -418,9 +396,9 @@ var Saving;
     Saving.saveFactionsTerritories = saveFactionsTerritories;
     function sendDeleteEvent(eventId, eventType) {
         $.post({
-            url: url + "/databaseLink/deleteevent/",
+            url: Authentication.url + "/databaseLink/deleteevent/",
             data: {
-                authorization: authenticationToken,
+                authorization: Authentication.authenticationToken,
                 eventId: eventId,
                 eventType: eventType
             },
@@ -437,9 +415,9 @@ var Saving;
     Saving.sendDeleteEvent = sendDeleteEvent;
     function sendCheckEvent(eventId, eventType) {
         $.post({
-            url: url + "/databaseLink/checkevent/",
+            url: Authentication.url + "/databaseLink/checkevent/",
             data: {
-                authorization: authenticationToken,
+                authorization: Authentication.authenticationToken,
                 eventId: eventId,
                 eventType: eventType
             },
@@ -456,9 +434,9 @@ var Saving;
     Saving.sendCheckEvent = sendCheckEvent;
     function sendNewEvent(type, content) {
         $.post({
-            url: url + "/databaseLink/" + type + "event/",
+            url: Authentication.url + "/databaseLink/" + type + "event/",
             data: {
-                authorization: authenticationToken,
+                authorization: Authentication.authenticationToken,
                 content: content
             },
             statusCode: {
@@ -490,26 +468,18 @@ var Saving;
     Saving.sendNewEvent = sendNewEvent;
     function sendNextTurn() {
         $.post({
-            url: url + "/databaseLink/nextturn/",
-            data: { authorization: authenticationToken },
-            success: function (data) {
-                currentTurn = data;
-                Drawing.writeTurnNumber();
+            url: Authentication.url + "/databaseLink/nextturn/",
+            data: { authorization: Authentication.authenticationToken },
+            success: (data) => {
+                gameState_1.GameState.currentTurn = data;
+                drawingFunctions_1.Drawing.writeTurnNumber();
             },
             dataType: "json",
             statusCode: {
-                401: function () {
-                    alert('Authorisation failure. Please log in.');
-                },
-                403: function () {
-                    alert('Access denied. You can only end your own turn.');
-                },
-                520: function () {
-                    alert('Turn Order ran out. Tell SL to fill it!');
-                },
-                521: function () {
-                    alert('Turn Order ran out. You should fill it!');
-                }
+                401: () => { alert('Authorisation failure. Please log in.'); },
+                403: () => { alert('Access denied. You can only end your own turn.'); },
+                520: () => { alert('Turn Order ran out. Tell SL to fill it!'); },
+                521: () => { alert('Turn Order ran out. You should fill it!'); } // custom status code
             }
         });
     }

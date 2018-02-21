@@ -25,7 +25,7 @@ var ButtonFunctions;
             message = "Do you want to end your turn?";
         }
         if (confirm(message)) {
-            savingFunctions_1.Saving.sendNextTurn();
+            savingFunctions_1.Saving.sendEvents();
         }
     }
     ButtonFunctions.nextTurn = nextTurn;

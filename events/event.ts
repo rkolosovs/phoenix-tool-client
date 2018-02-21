@@ -1,8 +1,6 @@
 abstract class PhoenixEvent{
 
-    constructor(protected id: number, protected status: string, protected pk: number){
-
-    }
+    constructor(protected id: number, protected status: string, protected pk: number){}
 
     abstract checkEvent(): void;
 

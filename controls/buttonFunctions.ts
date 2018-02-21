@@ -22,7 +22,7 @@ export namespace ButtonFunctions{
         }
 
         if (confirm(message)) {
-            Saving.sendNextTurn();
+            Saving.sendEvents();
         }
     }
 }
