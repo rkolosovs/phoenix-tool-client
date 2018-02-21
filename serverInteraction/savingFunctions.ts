@@ -332,14 +332,14 @@ export namespace Saving{
 	}
 
 	export function saveArmies() { // saves the current armies on the server
-		let sensibleArmyList = listOfArmies.map(function(elem){
+		let sensibleArmyList = GameState.armies.map(function(elem){
 			return {
-				armyId: elem.armyId,
-				count: elem.count,
-				leaders: elem.leaders,
-				lkp: elem.lkp,
-				skp: elem.skp,
-				mounts: elem.mounts,
+				armyId: elem.getErkenfaraID(),
+				count: elem.getTroopCount(),
+				leaders: elem.getOfficerCount(),
+				lkp: elem.getLightCatapultCount(),
+				skp: elem.getHeavyCatapultCount(),
+				mounts: (elem instanceof FootArmy)?(elem as FootArmy).getMountCount():0,
 				x: elem.x,
 				y: elem.y,
 				owner: elem.owner,
