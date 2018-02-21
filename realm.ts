@@ -13,4 +13,8 @@ class Realm {
         this.homeTurf = homeTurf;
         this.active = active;
     }
+
+    getTerritoryCoordinates(): [number, number][]{
+        return this.territory.map(field => field.coordinates);
+    }
 }

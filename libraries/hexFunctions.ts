@@ -3,7 +3,9 @@
 // this.id = function(){
 //     //TODO: GroßhexKleinhex Zahl bestimmen.
 // }
-namespace HexFunction {
+import {Direction} from "../map/direction";
+
+export namespace HexFunction {
 
     // returns the fields neighbors in the usual order
     export function neighbors(hex: [number, number]): [number, number][] {

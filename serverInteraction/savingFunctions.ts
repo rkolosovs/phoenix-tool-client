@@ -1,6 +1,8 @@
 import {GameState} from "../gameState";
 import {Drawing} from "../gui/drawingFunctions";
 import {Controls} from "../controls/controlVariables";
+import {directionToString} from "../map/direction";
+import {HexFunction} from "../libraries/hexFunctions";
 
 export namespace Saving{
 
@@ -20,7 +22,7 @@ export namespace Saving{
         console.log("The index is " + index + " out of " + GameState.pendingNewEvents.length + ",");
         if (index !== GameState.pendingNewEvents.length) {
             var cPE = GameState.pendingNewEvents[index];
-            var cPEContent = JSON.stringify(cPE.content);
+            var cPEContent = JSON.stringify(cPE.getContent());
             if (cPE.getType() === "move") {
                 console.log(GameState.pendingNewEvents);
                 $.post({
@@ -200,12 +202,12 @@ export namespace Saving{
 		for (let i = 0; i < Controls.changedFields.length; i++) {
 			if (i != Controls.changedFields.length - 1) {
 				dataToServerString = dataToServerString + Controls.changedFields[i].type + ","
-				dataToServerString = dataToServerString + Controls.changedFields[i].x + ","
-				dataToServerString = dataToServerString + Controls.changedFields[i].y + ";"
+				dataToServerString = dataToServerString + Controls.changedFields[i].coordinates[0] + ","
+				dataToServerString = dataToServerString + Controls.changedFields[i].coordinates[1] + ";"
 			} else {
 				dataToServerString = dataToServerString + Controls.changedFields[i].type + ","
-				dataToServerString = dataToServerString + Controls.changedFields[i].x + ","
-				dataToServerString = dataToServerString + Controls.changedFields[i].y
+				dataToServerString = dataToServerString + Controls.changedFields[i].coordinates[0] + ","
+				dataToServerString = dataToServerString + Controls.changedFields[i].coordinates[1]
 			}
 		}
 		$.post({
@@ -232,7 +234,7 @@ export namespace Saving{
 	export function sendAllPreparedEvents(){
 		for (let i = 0; i < GameState.pendingNewEvents.length; i++) {
 			let cPE = GameState.pendingNewEvents[i];
-			let cPEContent = JSON.stringify(cPE.content);
+			let cPEContent = JSON.stringify(cPE.getContent());
 			sendNewEvent(cPE.getType(), cPEContent);
 		}
 	}
@@ -272,6 +274,7 @@ export namespace Saving{
 		});
 	}
 
+	// TODO: This is horrible and should be changed ASAP
 	export function saveBuildings() { // saves the current buildings on the server
 		let dataToServerString = "";
 		for (let i = 0; i < Controls.changedBuildings.length; i++) {
@@ -281,34 +284,28 @@ export namespace Saving{
 				case 2:
 				case 3:
 				case 4:
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].type + ","
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].realm + ","
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].x + ","
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].y + ","
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][0]
-					break
+					dataToServerString += Controls.changedBuildings[i][1].type + ",";
+					dataToServerString += Controls.changedBuildings[i][1].owner.tag + ",";
+					dataToServerString += Controls.changedBuildings[i][1].getPosition()[0] + ",";
+					dataToServerString += Controls.changedBuildings[i][1].getPosition()[1] + ",";
+					dataToServerString += Controls.changedBuildings[i][0];
+					break;
 				case 5:
 				case 6:
 				case 7:
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].type + ","
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].realm + ","
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].x + ","
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].y + ","
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].direction + ","
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][0]
-					break
 				case 8:
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].type + ","
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].realm + ","
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].firstX + ","
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].firstY + ","
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].secondX + ","
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][1].secondY + ","
-					dataToServerString = dataToServerString + Controls.changedBuildings[i][0]
+                    dataToServerString += Controls.changedBuildings[i][1].type + ",";
+                    dataToServerString += Controls.changedBuildings[i][1].owner.tag + ",";
+                    dataToServerString += Controls.changedBuildings[i][1].getPosition()[0] + ",";
+                    dataToServerString += Controls.changedBuildings[i][1].getPosition()[1] + ",";
+                    dataToServerString += directionToString(HexFunction.getDirectionToNeighbor(
+                        Controls.changedBuildings[i][1].getPosition(),
+                        (Controls.changedBuildings[i][1] as NonDestructibleBuilding).getSecondPosition())) + ",";
+                    dataToServerString += Controls.changedBuildings[i][0];
+                    break;
 			}
 			if (i != Controls.changedBuildings.length - 1) {
-				//console.log("i " + i + " type " + changedBuildings[i][1].type)
-				dataToServerString = dataToServerString + ";"
+				dataToServerString = dataToServerString + ";";
 			} 
 		}
 		$.post({
@@ -371,7 +368,8 @@ export namespace Saving{
 	export function saveFactionsTerritories(){ // saves the faction territories on the server
 		$.post({
 			url: Authentication.url + "/databaseLink/saveborderdata/",
-			data: {borders: JSON.stringify(borders),
+			data: {borders: JSON.stringify(GameState.realms.map(realm =>
+                    {return {'tag': realm.tag, 'land': realm.getTerritoryCoordinates()}})),
 				authorization: Authentication.authenticationToken},
 			statusCode: {
 				200: function() {

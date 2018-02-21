@@ -1,8 +1,6 @@
 "use strict";
 // contains helper functions to get information about a field out of the fields array with just its coordinates.
-// this.id = function(){
-//     //TODO: GroßhexKleinhex Zahl bestimmen.
-// }
+Object.defineProperty(exports, "__esModule", { value: true });
 var HexFunction;
 (function (HexFunction) {
     // returns the fields neighbors in the usual order
@@ -147,22 +145,22 @@ var HexFunction;
             elem.getPosition()[0] === hex[0] && elem.getPosition()[1] === hex[1]));
         walls.forEach(wall => {
             switch (wall.facing) {
-                case Direction.NW:
+                case 0 /* NW */:
                     result[0] = true;
                     break;
-                case Direction.NE:
+                case 1 /* NE */:
                     result[1] = true;
                     break;
-                case Direction.E:
+                case 2 /* E */:
                     result[2] = true;
                     break;
-                case Direction.SE:
+                case 3 /* SE */:
                     result[3] = true;
                     break;
-                case Direction.SW:
+                case 4 /* SW */:
                     result[4] = true;
                     break;
-                case Direction.W:
+                case 5 /* W */:
                     result[5] = true;
                     break;
             }
@@ -190,13 +188,13 @@ var HexFunction;
     HexFunction.bridges = bridges;
     function reverseDirection(direction) {
         switch (direction) {
-            case Direction.NW: return Direction.SE;
-            case Direction.NE: return Direction.SW;
-            case Direction.E: return Direction.W;
-            case Direction.SE: return Direction.NW;
-            case Direction.SW: return Direction.NE;
-            case Direction.W: return Direction.E;
-            default: return Direction.SE; //TODO: Shouldn't this throw an error?
+            case 0 /* NW */: return 3 /* SE */;
+            case 1 /* NE */: return 4 /* SW */;
+            case 2 /* E */: return 5 /* W */;
+            case 3 /* SE */: return 0 /* NW */;
+            case 4 /* SW */: return 1 /* NE */;
+            case 5 /* W */: return 2 /* E */;
+            default: return 3 /* SE */; //TODO: Shouldn't this throw an error?
         }
     }
     HexFunction.reverseDirection = reverseDirection;
@@ -217,4 +215,4 @@ var HexFunction;
         return result;
     }
     HexFunction.getAdjacency = getAdjacency;
-})(HexFunction || (HexFunction = {}));
+})(HexFunction = exports.HexFunction || (exports.HexFunction = {}));

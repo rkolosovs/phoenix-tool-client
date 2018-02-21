@@ -6,7 +6,7 @@ Controls.selectedFields = []; // list of fields to be highlighted
 Controls.selectedArmyIndex = -1; // index of the currently selected army in the GameState.armies
 Controls.scrollSpeed = 0.2; // increment to scroll with each step
 Controls.changedFields = []; // Fields that were changes with World Builder
-// true if added false if removed, buildings that were added deleted or changed
+// boolean is true if added or changed, false if removed
 Controls.changedBuildings = [];
 Controls.leftMousePressed = false; // was the left mouse button clicked but not yet released?
 Controls.rightMousePressed = false; // was the right mouse button clicked but not yet released?

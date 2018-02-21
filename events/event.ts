@@ -10,6 +10,8 @@ abstract class PhoenixEvent{
 	
 	abstract getType(): string;
 
+	abstract getContent(): JSON;
+
     protected commonEventListItem(eli: HTMLElement, id: number): HTMLElement{
         let deleteButton: HTMLButtonElement = document.createElement("BUTTON") as HTMLButtonElement;
         deleteButton.id = "delBtn" + id;

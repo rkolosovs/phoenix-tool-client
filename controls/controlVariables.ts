@@ -3,8 +3,8 @@ export class Controls{
     static selectedArmyIndex: number = -1; // index of the currently selected army in the GameState.armies
     static scrollSpeed: number = 0.2; // increment to scroll with each step
     static changedFields: Field[] = []; // Fields that were changes with World Builder
-    // true if added false if removed, buildings that were added deleted or changed
-    static changedBuildings: boolean[] = [];
+    // boolean is true if added or changed, false if removed
+    static changedBuildings: [boolean, Building][] = [];
     static leftMousePressed: boolean = false; // was the left mouse button clicked but not yet released?
     static rightMousePressed: boolean = false; // was the right mouse button clicked but not yet released?
     static isDragging: boolean = false; // was the mouse moved while the button is down?

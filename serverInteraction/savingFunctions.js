@@ -3,6 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const gameState_1 = require("../gameState");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
 const controlVariables_1 = require("../controls/controlVariables");
+const direction_1 = require("../map/direction");
+const hexFunctions_1 = require("../libraries/hexFunctions");
 var Saving;
 (function (Saving) {
     function sendEvents() {
@@ -22,7 +24,7 @@ var Saving;
         console.log("The index is " + index + " out of " + gameState_1.GameState.pendingNewEvents.length + ",");
         if (index !== gameState_1.GameState.pendingNewEvents.length) {
             var cPE = gameState_1.GameState.pendingNewEvents[index];
-            var cPEContent = JSON.stringify(cPE.content);
+            var cPEContent = JSON.stringify(cPE.getContent());
             if (cPE.getType() === "move") {
                 console.log(gameState_1.GameState.pendingNewEvents);
                 $.post({
@@ -208,13 +210,13 @@ var Saving;
         for (let i = 0; i < controlVariables_1.Controls.changedFields.length; i++) {
             if (i != controlVariables_1.Controls.changedFields.length - 1) {
                 dataToServerString = dataToServerString + controlVariables_1.Controls.changedFields[i].type + ",";
-                dataToServerString = dataToServerString + controlVariables_1.Controls.changedFields[i].x + ",";
-                dataToServerString = dataToServerString + controlVariables_1.Controls.changedFields[i].y + ";";
+                dataToServerString = dataToServerString + controlVariables_1.Controls.changedFields[i].coordinates[0] + ",";
+                dataToServerString = dataToServerString + controlVariables_1.Controls.changedFields[i].coordinates[1] + ";";
             }
             else {
                 dataToServerString = dataToServerString + controlVariables_1.Controls.changedFields[i].type + ",";
-                dataToServerString = dataToServerString + controlVariables_1.Controls.changedFields[i].x + ",";
-                dataToServerString = dataToServerString + controlVariables_1.Controls.changedFields[i].y;
+                dataToServerString = dataToServerString + controlVariables_1.Controls.changedFields[i].coordinates[0] + ",";
+                dataToServerString = dataToServerString + controlVariables_1.Controls.changedFields[i].coordinates[1];
             }
         }
         $.post({
@@ -241,7 +243,7 @@ var Saving;
     function sendAllPreparedEvents() {
         for (let i = 0; i < gameState_1.GameState.pendingNewEvents.length; i++) {
             let cPE = gameState_1.GameState.pendingNewEvents[i];
-            let cPEContent = JSON.stringify(cPE.content);
+            let cPEContent = JSON.stringify(cPE.getContent());
             sendNewEvent(cPE.getType(), cPEContent);
         }
     }
@@ -279,6 +281,7 @@ var Saving;
         });
     }
     Saving.saveRivers = saveRivers;
+    // TODO: This is horrible and should be changed ASAP
     function saveBuildings() {
         let dataToServerString = "";
         for (let i = 0; i < controlVariables_1.Controls.changedBuildings.length; i++) {
@@ -288,33 +291,25 @@ var Saving;
                 case 2:
                 case 3:
                 case 4:
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].type + ",";
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].realm + ",";
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].x + ",";
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].y + ",";
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][0];
+                    dataToServerString += controlVariables_1.Controls.changedBuildings[i][1].type + ",";
+                    dataToServerString += controlVariables_1.Controls.changedBuildings[i][1].owner.tag + ",";
+                    dataToServerString += controlVariables_1.Controls.changedBuildings[i][1].getPosition()[0] + ",";
+                    dataToServerString += controlVariables_1.Controls.changedBuildings[i][1].getPosition()[1] + ",";
+                    dataToServerString += controlVariables_1.Controls.changedBuildings[i][0];
                     break;
                 case 5:
                 case 6:
                 case 7:
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].type + ",";
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].realm + ",";
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].x + ",";
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].y + ",";
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].direction + ",";
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][0];
-                    break;
                 case 8:
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].type + ",";
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].realm + ",";
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].firstX + ",";
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].firstY + ",";
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].secondX + ",";
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][1].secondY + ",";
-                    dataToServerString = dataToServerString + controlVariables_1.Controls.changedBuildings[i][0];
+                    dataToServerString += controlVariables_1.Controls.changedBuildings[i][1].type + ",";
+                    dataToServerString += controlVariables_1.Controls.changedBuildings[i][1].owner.tag + ",";
+                    dataToServerString += controlVariables_1.Controls.changedBuildings[i][1].getPosition()[0] + ",";
+                    dataToServerString += controlVariables_1.Controls.changedBuildings[i][1].getPosition()[1] + ",";
+                    dataToServerString += direction_1.directionToString(hexFunctions_1.HexFunction.getDirectionToNeighbor(controlVariables_1.Controls.changedBuildings[i][1].getPosition(), controlVariables_1.Controls.changedBuildings[i][1].getSecondPosition())) + ",";
+                    dataToServerString += controlVariables_1.Controls.changedBuildings[i][0];
+                    break;
             }
             if (i != controlVariables_1.Controls.changedBuildings.length - 1) {
-                //console.log("i " + i + " type " + changedBuildings[i][1].type)
                 dataToServerString = dataToServerString + ";";
             }
         }
@@ -378,7 +373,7 @@ var Saving;
     function saveFactionsTerritories() {
         $.post({
             url: Authentication.url + "/databaseLink/saveborderdata/",
-            data: { borders: JSON.stringify(borders),
+            data: { borders: JSON.stringify(gameState_1.GameState.realms.map(realm => { return { 'tag': realm.tag, 'land': realm.getTerritoryCoordinates() }; })),
                 authorization: Authentication.authenticationToken },
             statusCode: {
                 200: function () {
