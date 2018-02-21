@@ -1,6 +1,225 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const gameState_1 = require("../gameState");
 var Saving;
 (function (Saving) {
+    function sendNextTurn() {
+        sendEventlistInOrder(0);
+        pendingEvents.forEach(event => {
+            if (event.status === 'checked') {
+                sendCheckEvent(event.pk, event.type);
+            }
+            else if (event.status === 'deleted') {
+                sendDeleteEvent(event.pk, event.type);
+            }
+        });
+        $.post({
+            url: url + "/databaseLink/nextturn/",
+            data: { authorization: authenticationToken },
+            success: function (data) {
+                currentTurn = data;
+                Drawing.writeTurnNumber();
+            },
+            dataType: "json",
+            statusCode: {
+                401: function () {
+                    alert('Authorisation failure. Please log in.');
+                },
+                403: function () {
+                    alert('Access denied. You can only end your own turn.');
+                },
+                520: function () {
+                    alert('Turn Order ran out. Tell SL to fill it!');
+                },
+                521: function () {
+                    alert('Turn Order ran out. You should fill it!');
+                }
+            }
+        });
+    }
+    Saving.sendNextTurn = sendNextTurn;
+    function sendEventlistInOrder(index) {
+        console.log("The index is " + index + " out of " + preparedEvents.length + ",");
+        if (index != preparedEvents.length) {
+            var cPE = preparedEvents[index];
+            var cPEContent = JSON.stringify(cPE.content);
+            if (cPE.type === "move") {
+                console.log(preparedEvents);
+                $.post({
+                    url: url + "/databaseLink/moveevent/",
+                    data: {
+                        authorization: authenticationToken,
+                        content: cPEContent
+                    },
+                    success: function () { console.log(preparedEvents); sendEventlistInOrderRecursion(index + 1); },
+                    statusCode: {
+                        200: function () {
+                            console.log("success");
+                        },
+                        400: function () {
+                            alert('Invalid input. Moved troop does not exist.');
+                        },
+                        401: function () {
+                            alert('Authorisation failure. Please log in.');
+                        },
+                        403: function () {
+                            alert('Access denied. You can only send move events for your troops.');
+                        }
+                    }
+                });
+            }
+            else if (cPE.type === "battle") {
+                $.post({
+                    url: url + "/databaseLink/battleevent/",
+                    data: {
+                        authorization: authenticationToken,
+                        content: cPEContent
+                    },
+                    success: function () { sendEventlistInOrderRecursion(index + 1); },
+                    statusCode: {
+                        200: function () {
+                            console.log("success");
+                        },
+                        400: function () {
+                            alert("Invalid input. Not all troops participating in a battle exist.");
+                        },
+                        401: function () {
+                            alert('Authorisation failure. Please log in.');
+                        },
+                        403: function () {
+                            alert('Access denied. You can only send battle events involving your troops.');
+                        }
+                    }
+                });
+            }
+            else if (cPE.type === "merge") {
+                $.post({
+                    url: url + "/databaseLink/mergeevent/",
+                    data: {
+                        authorization: authenticationToken,
+                        content: cPEContent
+                    },
+                    success: function () { sendEventlistInOrderRecursion(index + 1); },
+                    statusCode: {
+                        200: function () {
+                            console.log("success");
+                        },
+                        400: function () {
+                            alert("Invalid input. Something went wrong with the merging of troops.");
+                        },
+                        401: function () {
+                            alert('Authorisation failure. Please log in.');
+                        },
+                        403: function () {
+                            alert('Access denied. You can only send merge events involving your troops.');
+                        }
+                    }
+                });
+            }
+            else if (cPE.type === "transfer") {
+                $.post({
+                    url: url + "/databaseLink/transferevent/",
+                    data: {
+                        authorization: authenticationToken,
+                        content: cPEContent
+                    },
+                    success: function () { sendEventlistInOrderRecursion(index + 1); },
+                    statusCode: {
+                        200: function () {
+                            console.log("success");
+                        },
+                        400: function () {
+                            alert("Invalid input. Something went wrong with the transfer of troops.");
+                        },
+                        401: function () {
+                            alert('Authorisation failure. Please log in.');
+                        },
+                        403: function () {
+                            alert('Access denied. You can only send transfer events involving your troops.');
+                        }
+                    }
+                });
+            }
+            else if (cPE.type === "split") {
+                $.post({
+                    url: url + "/databaseLink/splitevent/",
+                    data: {
+                        authorization: authenticationToken,
+                        content: cPEContent
+                    },
+                    success: function () { sendEventlistInOrderRecursion(index + 1); },
+                    statusCode: {
+                        200: function () {
+                            console.log("success");
+                        },
+                        400: function () {
+                            alert("Invalid input. Something went wrong with the splitting of armies.");
+                        },
+                        401: function () {
+                            alert('Authorisation failure. Please log in.');
+                        },
+                        403: function () {
+                            alert('Access denied. You can only send split events involving your troops.');
+                        }
+                    }
+                });
+            }
+            else if (cPE.type === "mount") {
+                $.post({
+                    url: url + "/databaseLink/mountevent/",
+                    data: {
+                        authorization: authenticationToken,
+                        content: cPEContent
+                    },
+                    success: function () { sendEventlistInOrderRecursion(index + 1); },
+                    statusCode: {
+                        200: function () {
+                            console.log("success");
+                        },
+                        400: function () {
+                            alert("Invalid input. Something went wrong with mounting or unmounting.");
+                        },
+                        401: function () {
+                            alert('Authorisation failure. Please log in.');
+                        },
+                        403: function () {
+                            alert('Access denied. You can only send split events involving your troops.');
+                        }
+                    }
+                });
+            }
+            else if (cPE.type === "shoot") {
+                $.post({
+                    url: url + "/databaseLink/shootevent/",
+                    data: {
+                        authorization: authenticationToken,
+                        content: cPEContent
+                    },
+                    success: function () { sendEventlistInOrderRecursion(index + 1); },
+                    statusCode: {
+                        200: function () {
+                            console.log("success");
+                        },
+                        400: function () {
+                            alert("Invalid input. Something went wrong with the shooting of armies.");
+                        },
+                        401: function () {
+                            alert('Authorisation failure. Please log in.');
+                        },
+                        403: function () {
+                            alert('Access denied. You can only send shooting events involving your troops.');
+                        }
+                    }
+                });
+            }
+            else {
+                console.log("Now deleting stuff!");
+                pendingEvents = [];
+                preparedEvents = [];
+            }
+        }
+    }
+    Saving.sendEventlistInOrder = sendEventlistInOrder;
     function saveFields() {
         $(function () {
             $.ajaxSetup({
@@ -51,14 +270,14 @@ var Saving;
     Saving.sendAllPreparedEvents = sendAllPreparedEvents;
     function saveRivers() {
         let dataToServerString = "";
-        for (let i = 0; i < GameState.rivers.length; i++) {
-            let river = GameState.rivers[i];
+        for (let i = 0; i < gameState_1.GameState.rivers.length; i++) {
+            let river = gameState_1.GameState.rivers[i];
             //TODO: check if left and rightbank are interchangeable
             dataToServerString = dataToServerString + river.leftBank[0] + ",";
             dataToServerString = dataToServerString + river.leftBank[1] + ",";
             dataToServerString = dataToServerString + river.rightBank[0] + ",";
             dataToServerString = dataToServerString + river.rightBank[1];
-            if (i != GameState.rivers.length - 1) {
+            if (i != gameState_1.GameState.rivers.length - 1) {
                 dataToServerString = dataToServerString + ";";
             }
         }
@@ -83,8 +302,8 @@ var Saving;
     }
     Saving.saveRivers = saveRivers;
     function saveBuildings() {
-        var dataToServerString = "";
-        for (var i = 0; i < changedBuildings.length; i++) {
+        let dataToServerString = "";
+        for (let i = 0; i < changedBuildings.length; i++) {
             switch (changedBuildings[i][1].type) {
                 case 0:
                 case 1:
@@ -295,4 +514,13 @@ var Saving;
         });
     }
     Saving.sendNextTurn = sendNextTurn;
-})(Saving || (Saving = {}));
+    // TODO: If we have multiple "clean-up functions" like this, they should have their own file/folder.
+    function untagHitArmys() {
+        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
+            if (gameState_1.GameState.armies[i].owner.tag === login || login === "sl") {
+                gameState_1.GameState.armies[i].wasShotAt = false;
+            }
+        }
+    }
+    Saving.untagHitArmys = untagHitArmys;
+})(Saving = exports.Saving || (exports.Saving = {}));
