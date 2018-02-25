@@ -1,5 +1,8 @@
 import {GameState} from "../gameState";
 import {HexFunction} from "../libraries/hexFunctions";
+import {Drawing} from "../gui/drawingFunctions";
+import {Army} from "./army";
+import {Direction} from "../map/direction";
 //when unit is clicked generates a list of neighbors that can be moved to
 function clickedMoves(army: MobileEntity): void{
     if(army.owner.tag === login || login === "sl"){
@@ -14,10 +17,10 @@ function clickedMoves(army: MobileEntity): void{
 }
 
 //checks the current field for other armies and adds it accordingly
-function createMultifield(army){
+function createMultifield(army: Army){
 	for (let j = 0; j < GameState.armies.length; j++) {
 		let someArmy = GameState.armies[j];
-		if (someArmy.x === army.x && someArmy.y === army.y && someArmy !== army) {
+		if (someArmy.x === army.getPosition()[0] && someArmy.y === army.getPosition()[1] && someArmy !== army) {
 			if(someArmy.multiArmyField === true || army.multiArmyField === true){
 				addToMultifield(someArmy, army);
 			}
@@ -32,7 +35,7 @@ function createMultifield(army){
 }
 
 //Adds an army to an existing multifield
-function addToMultifield(armyOnMultifield, armyToAdd){
+function addToMultifield(armyOnMultifield: Army, armyToAdd: Army){
 	if(Drawing.listOfMultiArmyFields !== undefined){
 		let alreadyInList = false;
 		let placeToAdd;
@@ -55,76 +58,81 @@ function addToMultifield(armyOnMultifield, armyToAdd){
 }
 
 //to find all fields in a two tile proximity
-function findShootingTargets(army){
-
-    if(army.skp - army.SKPShotThisTurn > 0){//in a 2 tile range
-        army.targetList = HexFunction.neighborInRange([army.x, army.y],2);
+function findShootingTargets(army: Army){
+    let tilesInRange:[number, number][] = []
+    if(army.getHeavyCatapultCount() - army.getHeavyCatapultsShot() > 0){//in a 2 tile range
+        tilesInRange = HexFunction.neighborInRange([army.getPosition()[0], army.getPosition()[0]],2);
     }
-    else if(army.lkp - army.LKPShotThisTurn > 0){//one tile range
-        army.targetList = HexFunction.neighborInRange([army.x, army.y],1);
+    else if(army.getLightCatapultCount() - army.getLightCatapultsShot() > 0){//one tile range
+        tilesInRange = HexFunction.neighborInRange([army.getPosition()[0], army.getPosition()[0]],1);
     }
-    army.targetList = checkAllConditions(army, army.targetList);
+    army.targetList = checkAllConditions(army, tilesInRange);
 }
 
-function checkAllConditions(army, targetList){
-    let templist = targetList.slice();
+function checkAllConditions(army: Army, targetTileList:[number,number][]){
+    let templist = targetTileList.slice();
     let hasSKP = false;
-    if(army.skp - army.SKPShotThisTurn > 0){
+    if(army.getHeavyCatapultCount() - army.getHeavyCatapultsShot() > 0){
         hasSKP = true;
     }
     //to find out the conditions and maybe kick out if not shootable
     for(let i = templist.length -1; i >= 0; i--){
         if(checkCondition(army, templist[i], hasSKP) === 'impossible shot'){
-            targetList.splice(i,1);
+            targetTileList.splice(i,1);
         }
     }
 
-    return targetList;
+    return targetTileList;
 }
-function checkCondition(army, target: [number, number], skpShot){//TODO mixed shooting
+function checkCondition(army: Army, target: [number, number], skpShot: boolean){//TODO mixed shooting
     let condition = 'impossible shot';
-    let range = HexFunction.distance([army.x, army.y], target);
+    let range = HexFunction.distance([army.getPosition()[0], army.getPosition()[1]], target);
     if(skpShot){//skp shooting
         if(range == 1){//for range of 1
-            if(HexFunction.height(target) - HexFunction.height([army.x, army.y]) <= 2){
+            if(HexFunction.height(target) - HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) <= 2){
                 condition = 'high';
             }
-            if(HexFunction.height(target) - HexFunction.height([army.x, army.y]) <= 1){
+            if(HexFunction.height(target) - HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) <= 1){
                 condition = 'short';
             }
-            if(HexFunction.height(target) - HexFunction.height([army.x, army.y]) === 1 && findWallInWay([army.x, army.y], target).length > 0){
+            if(HexFunction.height(target) - HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) === 1 &&
+             findWallInWay([army.getPosition()[0], army.getPosition()[1]], target).length > 0){
                 condition = 'high';
             }
         }else if(range == 2){//for range of 2
-            if(HexFunction.height(target) - HexFunction.height([army.x, army.y]) <= 1){
+            if(HexFunction.height(target) - HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) <= 1){
                 condition = 'farAndUp';
             }
-            if(HexFunction.height(target) - HexFunction.height([army.x, army.y]) < 1){
+            if(HexFunction.height(target) - HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) < 1){
                 condition = 'far';
             }
-            if(HexFunction.height(target) - HexFunction.height([army.x, army.y]) === 0 && findWallInWay([army.x, army.y], target).length > 0){
+            if(HexFunction.height(target) - HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) === 0 &&
+             findWallInWay([army.getPosition()[0], army.getPosition()[1]], target).length > 0){
                 condition = 'farAndUp';
             }
             //if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
-            let commonNeig = HexFunction.findCommonNeighbor([army.x, army.y], target);
-            let walls = findWallInWay([army.x, army.y], target);
+            let commonNeig = HexFunction.findCommonNeighbor([army.getPosition()[0], army.getPosition()[1]], target);
+            let walls = findWallInWay([army.getPosition()[0], army.getPosition()[1]], target);
             for(let i = 0; i < commonNeig.length; i++){
                 if(walls.length > 0){
                     for(let j = 0; j < walls.length; j++){
-                        if(((HexFunction.height([commonNeig[i][0], commonNeig[i][1]]) - HexFunction.height([army.x, army.y]) === 1)
-                                && GameState.buildings[walls[j]].x === commonNeig[i][0] && GameState.buildings[walls[j]].y === commonNeig[i][1])){
+                        if(((HexFunction.height([commonNeig[i][0], commonNeig[i][1]]) - 
+                        HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) === 1)
+                                && GameState.buildings[walls[j]].getPosition()[0] === commonNeig[i][0] &&
+                                 GameState.buildings[walls[j]].getPosition()[1] === commonNeig[i][1])){
                             condition = 'impossible shot';
                         }
                     }
                 }
-                if(HexFunction.height([commonNeig[i][0], commonNeig[i][1]]) - HexFunction.height([army.x, army.y]) > 1){
+                if(HexFunction.height([commonNeig[i][0], commonNeig[i][1]]) - 
+                HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) > 1){
                     condition = 'impossible shot';
                 }
             }
             
         }
     }else{//for lkp shooting
-        if(HexFunction.height(target) - HexFunction.height([army.x, army.y]) <= 1){
+        if(HexFunction.height(target) - HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) <= 1){
             condition = 'lkp';
         }
     }
@@ -189,17 +197,21 @@ function findWallInWay(from: [number, number], to: [number, number]){
 }
 
 //returns all walls on target field
-function getWallIndexOnFieldInDirection(hex: [number,number], direction: Direction){
+function getWallIndexOnFieldInDirection(hex: [number,number], direction: number){
     for(let i = 0; i < GameState.buildings.length; i++){
-        if(GameState.buildings[i].type === 5 && GameState.buildings[i].getPosition()[0] === hex[0] && GameState.buildings[i].getPosition()[1] === hex[1] && GameState.buildings[i].direction === convertDirection(direction)){
-           return i;
+        if(GameState.buildings[i] instanceof Wall){
+            let thisIsAWall = GameState.buildings[i] as Wall;
+            if(thisIsAWall.getPosition()[0] === hex[0] && 
+            thisIsAWall.getPosition()[1] === hex[1] && thisIsAWall.facing === convertDirection(direction)){
+                return i;
+             }
         }
     }
     return -1;
 }
 
 
-function convertDirection(dir){
+function convertDirection(dir: number){
     switch(dir){
         case 0: return "nw";
         case 1: return "ne";

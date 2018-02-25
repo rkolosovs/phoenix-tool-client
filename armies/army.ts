@@ -8,7 +8,8 @@ export abstract class Army extends MobileEntity{
     protected lightCatapultCount: number = 0;
     protected heavyCatapultCount: number = 0;
     protected lightCatapultShot: number = 0;
-    protected heavtCatapultShot: number = 0;
+    protected heavyCatapultShot: number = 0;
+    targetList: [number, number][] = []; //TODO: this needs to be reviewed, together with findShottingTargets ect.
     isGuard: boolean = false;
     wasShotAt: boolean = false;
     possibleTargets: Field[] = [];
@@ -81,7 +82,7 @@ export abstract class Army extends MobileEntity{
     }
 
     getHeavyCatapultsShot(): number{
-        return this.heavtCatapultShot;
+        return this.heavyCatapultShot;
     }
 
     getLightCatapultsShot(): number{

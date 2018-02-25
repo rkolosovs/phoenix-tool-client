@@ -3,10 +3,12 @@ import {GameState} from "../gameState";
 import {GUI} from "../gui/gui";
 import {BoxVisibility} from "../gui/boxVisibilty";
 import {Drawing} from "../gui/drawingFunctions";
+import {Army} from "./army";
 
 // array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null),
 // schießende Armee, ziel Armee, Charaktere und Zauberer auf dem Zielfeld
-function fernkampf(dicerollsL, dicerollsS, shooter, target, targetField: [number, number], chars) {
+// TODO define chars
+function fernkampf(dicerollsL: number[], dicerollsS: number[], shooter: Army, target: Army, targetField: [number, number], chars: any) {
     let charGpSum = 0;
     if(chars != undefined){
         let cLen = chars.length;
