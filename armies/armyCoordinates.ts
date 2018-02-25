@@ -1,4 +1,5 @@
 import {GameState} from "../gameState";
+import {HexFunction} from "../libraries/hexFunctions";
 //when unit is clicked generates a list of neighbors that can be moved to
 function clickedMoves(army: MobileEntity): void{
     if(army.owner.tag === login || login === "sl"){
@@ -190,7 +191,7 @@ function findWallInWay(from: [number, number], to: [number, number]){
 //returns all walls on target field
 function getWallIndexOnFieldInDirection(hex: [number,number], direction: Direction){
     for(let i = 0; i < GameState.buildings.length; i++){
-        if(GameState.buildings[i].type === 5 && GameState.buildings[i].x === hex[0] && GameState.buildings[i].y === hex[1] && GameState.buildings[i].direction === convertDirection(direction)){
+        if(GameState.buildings[i].type === 5 && GameState.buildings[i].getPosition()[0] === hex[0] && GameState.buildings[i].getPosition()[1] === hex[1] && GameState.buildings[i].direction === convertDirection(direction)){
            return i;
         }
     }

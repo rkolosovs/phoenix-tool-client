@@ -1,3 +1,5 @@
+import {GameState} from "../gameState";
+import {HexFunction} from "../libraries/hexFunctions";
 abstract class Army extends MobileEntity{
     protected troopCount: number;
     protected officerCount: number;

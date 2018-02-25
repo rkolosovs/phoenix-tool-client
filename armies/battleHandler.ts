@@ -1,3 +1,5 @@
+import {GameState} from "../gameState";
+import {HexFunction} from "../libraries/hexFunctions";
 class BattleHandler {
     unsortedArmies: Army[];
     attackerArmies: Army[] = [];
