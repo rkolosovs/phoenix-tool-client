@@ -85,7 +85,7 @@ abstract class LandArmy extends Army{
         // TODO: effects of diplomacy go here
         let rightOfPassage = borders.some((realm) => (realm === this.owner && realm.land.some((field) =>
             (target[0] === field[0] && target[1] === field[1]))));
-        let thereIsARiver = rivers.some((river) =>
+        let thereIsARiver = GameState.rivers.some((river) =>
             (river[0][0] === this.position[0] && river[0][1] === this.position[1] && river[1][0] === target[0] && river[1][1] === target[1]) ||
             (river[0][0] === target[0] && river[0][1] === target[1] && river[1][0] === this.position[0] && river[1][1] === this.position[1])
         );
