@@ -1,3 +1,4 @@
+import {GUI} from "../gui/gui";
 namespace Authentication{
 	//put the url/IP for the remote game server here
 	// export let url = "http://phoenixserver.h2610265.stratoserver.net"; // online server

@@ -1,3 +1,4 @@
+import {GUI} from "../gui/gui";
 class BattleEvent extends PhoenixEvent{
     
     constructor(protected id: number, protected status: string, protected participants: Army[],

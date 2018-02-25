@@ -1,3 +1,4 @@
+import {GUI} from "../gui/gui";
 class ShootEvent extends PhoenixEvent{
     
     constructor(protected id: number, protected status: string, protected realm: Realm, 

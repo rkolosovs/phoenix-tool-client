@@ -1,5 +1,7 @@
 import {Controls} from "../Controls/controlVariables";
 import {GameState} from "../gameState";
+import {GUI} from "../gui/gui";
+
 // array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null),
 // schießende Armee, ziel Armee, Charaktere und Zauberer auf dem Zielfeld
 function fernkampf(dicerollsL, dicerollsS, shooter, target, targetField: [number, number], chars) {

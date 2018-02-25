@@ -1,6 +1,7 @@
 // TODO: before pushing check added and deleted buildings if one is already inside the other, if it is then delete it.
 import {Controls} from "../Controls/controlVariables";
 import {GameState} from "../gameState";
+import {GUI} from "../gui/gui";
 
 namespace GodFunctions{
 
