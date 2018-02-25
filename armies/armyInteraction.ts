@@ -1,4 +1,5 @@
-import GameState;
+import {Controls} from "../Controls/controlVariables";
+import {GameState} from "../gameState";
 // array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null),
 // schießende Armee, ziel Armee, Charaktere und Zauberer auf dem Zielfeld
 function fernkampf(dicerollsL, dicerollsS, shooter, target, targetField: [number, number], chars) {
@@ -99,7 +100,7 @@ function shoot(){
 	}else{
 		let aimedTargetFound = false;
 		for(let i = 0; i < shootingarmy.targetList.length; i++){
-			if(shootingarmy.targetList[i][0] === selectedFields[1][0] && shootingarmy.targetList[i][1] === selectedFields[1][1]){
+			if(shootingarmy.targetList[i][0] === Controls.selectedFields[1][0] && shootingarmy.targetList[i][1] === selectedFields[1][1]){
 				aimedTargetFound = true;
 			}
 		}
