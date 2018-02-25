@@ -402,8 +402,8 @@ export namespace Drawing{
 	function drawFieldSelection(screenPos: [number, number], scale: number): void {
 		GUI.getContext().lineWidth = 5;
 		GUI.getContext().strokeStyle = "blue";
-		for( let i = 0; i < selectedFields.length; i++){
-			let pos = HexFunction.computePosition(screenPos, selectedFields[i], scale);
+		for( let i = 0; i < Controls.selectedFields.length; i++){
+			let pos = HexFunction.computePosition(screenPos, Controls.selectedFields[i], scale);
 			GUI.getContext().beginPath();
 			GUI.getContext().arc(pos[0]+(0.5 * scale * Constants.SIN60), pos[1]+(scale * 0.5),
                 scale/2, 0, 2 * Math.PI, false);
@@ -548,12 +548,12 @@ export namespace Drawing{
 		if(BoxVisibility.shootingModeOn){
 			index = 1;
 		}
-		if(selectedFields[index] == undefined){
+		if(Controls.selectedFields[index] == undefined){
 			minimapBox.innerHTML = '';
 		}else {
-			let fieldPositionInList = HexFunction.positionInList(selectedFields[index]);
+			let fieldPositionInList = HexFunction.positionInList(Controls.selectedFields[index]);
 			let localfieldType = '';
-			switch(HexFunction.fieldType(selectedFields[index])){
+			switch(HexFunction.fieldType(Controls.selectedFields[index])){
 				case 0: localfieldType = 'Wasser'; break;
 				case 1: localfieldType = 'Tiefsee'; break;
 				case 2: localfieldType = 'Tiefland'; break;
@@ -566,13 +566,13 @@ export namespace Drawing{
 				default: localfieldType = 'Unbekannt'; break;
 			}
 			let fieldOwner = GameState.realms.find(realm =>
-				(realm.territory.some(field => (field.coordinates[0] === selectedFields[index][0] &&
-                    field.coordinates[1] === selectedFields[index][1])))
+				(realm.territory.some(field => (field.coordinates[0] === Controls.selectedFields[index][0] &&
+                    field.coordinates[1] === Controls.selectedFields[index][1])))
 			);
 			let fieldOwnerString = (fieldOwner == undefined)?'keiner':fieldOwner.tag;
-			minimapBox.innerHTML = '<p>Feld: ('+selectedFields[index][0]+', '+selectedFields[index][1]+')'+
+			minimapBox.innerHTML = '<p>Feld: ('+Controls.selectedFields[index][0]+', '+Controls.selectedFields[index][1]+')'+
 				'</p><p>Gelände: '+localfieldType+
-				'</p><p>Höhe: '+HexFunction.height(selectedFields[index])+
+				'</p><p>Höhe: '+HexFunction.height(Controls.selectedFields[index])+
 				'</p><p>Besitzer: '+fieldOwnerString+'</p>';
 		}
 	}

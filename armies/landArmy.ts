@@ -1,3 +1,4 @@
+import {GameState} from "../gameState";
 abstract class LandArmy extends Army{
     transportingFleet: Fleet;
 

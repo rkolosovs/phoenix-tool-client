@@ -1,5 +1,5 @@
 // TODO: before pushing check added and deleted buildings if one is already inside the other, if it is then delete it.
-
+import {Controls} from "../Controls/controlVariables";
 import {GameState} from "../gameState";
 
 namespace GodFunctions{
@@ -37,7 +37,7 @@ namespace GodFunctions{
 
 	// add a castle in the selectedField
 	export function addCastle(): void{
-		let sf = selectedFields[0];
+		let sf = Controls.selectedFields[0];
 		let found = false;
 		for(let i = 0; i < GameState.buildings.length; i++){
 			let building = GameState.buildings[i]
@@ -60,7 +60,7 @@ namespace GodFunctions{
 
 	// add a city in the selectedField
 	export function addCity(): void{
-		let sf = selectedFields[0];
+		let sf = Controls.selectedFields[0];
 		let found = false;
 		for(let i = 0; i < GameState.buildings.length; i++){
 			let building = GameState.buildings[i]
@@ -83,7 +83,7 @@ namespace GodFunctions{
 
 	// add a fortress in the selectedField
 	export function addFortress(): void{
-		let sf = selectedFields[0];
+		let sf = Controls.selectedFields[0];
 		let found = false;
 		for(let i = 0; i < GameState.buildings.length; i++){
 			let building = GameState.buildings[i]
@@ -107,7 +107,7 @@ namespace GodFunctions{
 
 	// add a capital city in the selectedField
 	export function addCapital(): void{
-		let sf = selectedFields[0];
+		let sf = Controls.selectedFields[0];
 		let found = false;
 		for(let i = 0; i < GameState.buildings.length; i++){
 			let building = GameState.buildings[i];
@@ -130,7 +130,7 @@ namespace GodFunctions{
 
 	// add a capital fortress in the selectedField
 	export function addCapitalFortress(): void{
-		let sf = selectedFields[0];
+		let sf = Controls.selectedFields[0];
 		let found = false;
 		for(let i = 0; i < GameState.buildings.length; i++){
 			let building = GameState.buildings[i]
@@ -153,7 +153,7 @@ namespace GodFunctions{
 
 	// delete the building in the selectedField
 	export function deleteBuilding(): void{
-		let sf = selectedFields[0];
+		let sf = Controls.selectedFields[0];
 		for(let i = 0; i < GameState.buildings.length; i++){
 			let building = GameState.buildings[i];
 			if(building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] === sf[1]){
@@ -170,7 +170,7 @@ namespace GodFunctions{
 
 	// adds a street in the target direction
 	export function addStreet(direction): void{
-		let sf = selectedFields[0];
+		let sf = Controls.selectedFields[0];
 		let targets = HexFunction.neighbors(sf[0], sf[1]);
 		let target = targets[direction];
 		let found = false;
@@ -185,14 +185,14 @@ namespace GodFunctions{
 		} else {
 			changedBuildings.push([true, {"type": 8, "firstX":sf[0], "firstY":sf[1], "secondX": target[0], "secondY": target[1], "realm":factionToCreateBuildingsFor}]);
 			buildings.push({"type": 8, "firstX":sf[0], "firstY":sf[1], "secondX": target[0], "secondY": target[1], "realm":factionToCreateBuildingsFor});
-			selectedFields[0]=[target[0], target[1]];
+			Controls.selectedFields[0]=[target[0], target[1]];
 		}
 		Drawing.resizeCanvas()
 	}
 
 	// removes a street in the target direction
 	export function removeStreet(direction): void{
-		let sf = selectedFields[0];
+		let sf = Controls.selectedFields[0];
 		let targets = HexFunction.neighbors(sf[0], sf[1]);
 		let target = targets[direction];
 		let found = undefined;
@@ -207,10 +207,10 @@ namespace GodFunctions{
 			changedBuildings.push([false, {"type": 8, "firstX":sf[0], "firstY":sf[1], "secondX": target[0], "secondY": target[1], "realm":factionToCreateBuildingsFor}]);
 			if(found == buildings.length-1){
 				buildings.pop();
-				selectedFields[0]=[target[0], target[1]];
+				Controls.selectedFields[0]=[target[0], target[1]];
 			} else {
 				buildings[found] = buildings.pop();
-				selectedFields[0]=[target[0], target[1]];
+				Controls.selectedFields[0]=[target[0], target[1]];
 			}
 		}
 		Drawing.resizeCanvas();
@@ -218,7 +218,7 @@ namespace GodFunctions{
 
 	// adds a river in the target direction
 	export function addRiver(direction): void{
-		let sf = selectedFields[0];
+		let sf = Controls.selectedFields[0];
 		let targets = HexFunction.neighbors(sf[0], sf[1]);
 		let target = targets[direction];
 		let found = false;
@@ -238,7 +238,7 @@ namespace GodFunctions{
 
 	// removes a river in the target direction
 	export function removeRiver(direction): void{
-		let sf = selectedFields[0];
+		let sf = Controls.selectedFields[0];
 		let targets = HexFunction.neighbors(sf[0], sf[1]);
 		let target = targets[direction];
 		let found = undefined;
@@ -261,7 +261,7 @@ namespace GodFunctions{
 
 	//add = true means add a building, else remove it.
 	export function manipulateBorderBuilding(type, direction, add): void{
-		let sf = selectedFields[0];
+		let sf = Controls.selectedFields[0];
 		let found = undefined;
 		for(let i = 0; i < buildings.length; i++){
 			let building = buildings[i];

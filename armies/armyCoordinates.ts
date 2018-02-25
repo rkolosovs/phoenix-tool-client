@@ -1,3 +1,4 @@
+import {GameState} from "../gameState";
 //when unit is clicked generates a list of neighbors that can be moved to
 function clickedMoves(army: MobileEntity): void{
     if(army.owner.tag === login || login === "sl"){

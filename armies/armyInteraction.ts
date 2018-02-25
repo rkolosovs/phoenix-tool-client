@@ -90,7 +90,7 @@ function shoot(){
 		window.alert("Sie müssen eine Anzahl Katapulte eintragen");
 		return false;
 	}
-	if(selectedFields[1] === undefined){
+	if(Controls.selectedFields[1] === undefined){
 		window.alert("Wählen Sie ein Feld auf das Sie schießen wollen");
 		return false;
 	}
@@ -100,7 +100,7 @@ function shoot(){
 	}else{
 		let aimedTargetFound = false;
 		for(let i = 0; i < shootingarmy.targetList.length; i++){
-			if(shootingarmy.targetList[i][0] === Controls.selectedFields[1][0] && shootingarmy.targetList[i][1] === selectedFields[1][1]){
+			if(shootingarmy.targetList[i][0] === Controls.selectedFields[1][0] && shootingarmy.targetList[i][1] === Controls.selectedFields[1][1]){
 				aimedTargetFound = true;
 			}
 		}
@@ -113,7 +113,7 @@ function shoot(){
 
 	//check for mixed shooting(reachable by both lkp and skp)
 	if(LKPshooting < 0){
-		let cond = checkCondition(shootingarmy, selectedFields[1], false);
+		let cond = checkCondition(shootingarmy, Controls.selectedFields[1], false);
 		if(cond === 'impossible shot'){
 			window.alert("Sie müssen auf ein gemeinsam erreichbares Feld schießen");
 			return false;
@@ -126,8 +126,8 @@ function shoot(){
 			realm: GameState.armies[selectedArmyIndex].ownerTag(),
 			LKPcount: LKPshooting,
 			SKPcount: SKPshooting,
-			toX: selectedFields[1][0],
-			toY: selectedFields[1][1],
+			toX: Controls.selectedFields[1][0],
+			toY: Controls.selectedFields[1][1],
 			target: target,
 			fromX: GameState.armies[selectedArmyIndex].x,
 			fromY: GameState.armies[selectedArmyIndex].y
