@@ -1,6 +1,8 @@
 import {GameState} from "../gameState";
 import {HexFunction} from "../libraries/hexFunctions";
-abstract class Army extends MobileEntity{
+import {Constants} from "../constants";
+
+export abstract class Army extends MobileEntity{
     protected troopCount: number;
     protected officerCount: number;
     protected lightCatapultCount: number = 0;
@@ -108,7 +110,7 @@ abstract class Army extends MobileEntity{
     }
 
     getRoomPoints(): number{
-        return this.getRoomPointsSansOfficers() + this.officerCount * OFFICER_RP;
+        return this.getRoomPointsSansOfficers() + this.officerCount * Constants.OFFICER_RP;
     }
 
     leaderGp(): number {

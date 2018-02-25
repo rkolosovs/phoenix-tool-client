@@ -1,4 +1,8 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const gameState_1 = require("../gameState");
+const hexFunctions_1 = require("../libraries/hexFunctions");
+const constants_1 = require("../constants");
 class Army extends MobileEntity {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
         super(id, owner, position, movePoints, heightPoints);
@@ -59,8 +63,8 @@ class Army extends MobileEntity {
     }
     conquer() {
         if (this.canConquer()) {
-            let field = GameState.fields[HexFunction.positionInList(this.position)];
-            GameState.realms.forEach(realm => {
+            let field = gameState_1.GameState.fields[hexFunctions_1.HexFunction.positionInList(this.position)];
+            gameState_1.GameState.realms.forEach(realm => {
                 let index = realm.territory.indexOf(field);
                 if (index !== -1) {
                     realm.territory.splice(index, 1);
@@ -77,7 +81,7 @@ class Army extends MobileEntity {
         this.setHeavyCatapultCount(this.heavyCatapultCount - Math.floor(this.heavyCatapultCount * factor));
     }
     getRoomPoints() {
-        return this.getRoomPointsSansOfficers() + this.officerCount * OFFICER_RP;
+        return this.getRoomPointsSansOfficers() + this.officerCount * constants_1.Constants.OFFICER_RP;
     }
     leaderGp() {
         let gp = 0;
@@ -100,3 +104,4 @@ class Army extends MobileEntity {
         return this.getRoomPointsSansOfficers() >= 100 && this.officerCount >= 1;
     }
 }
+exports.Army = Army;
