@@ -31,11 +31,11 @@ function heer(id, truppen, heerfuehrer, leichte, schwere, reittiere, istGarde, c
     	//TODO once characters are a thing, 0 officer armies with a character on the field should also be alive
     }
 
-    // returns the index of the army in listOfArmies
+    // returns the index of the army in GameState.armies
     this.indexInListOfArmies = function(){
         var index = -1;
-        for(var i = 0; i < listOfArmies.length; i++){
-            if(listOfArmies[i].owner === this.owner && listOfArmies[i].armyId === this.armyId){
+        for(var i = 0; i < GameState.armies.length; i++){
+            if(GameState.armies[i].owner === this.owner && GameState.armies[i].armyId === this.armyId){
                 index = i;
             }
         }
@@ -367,11 +367,11 @@ function reiterHeer(id, truppen, heerfuehrer, istGarde, coordX, coordY, owner) {
         this.remainingHeightPoints = points;
     }
 
-    // returns the index of the army in listOfArmies
+    // returns the index of the army in GameState.armies
     this.indexInListOfArmies = function(){
         var index = -1;
-        for(var i = 0; i < listOfArmies.length; i++){
-            if(listOfArmies[i].owner === this.owner && listOfArmies[i].armyId === this.armyId){
+        for(var i = 0; i < GameState.armies.length; i++){
+            if(GameState.armies[i].owner === this.owner && GameState.armies[i].armyId === this.armyId){
                 index = i;
             }
         }
@@ -522,9 +522,9 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
         }
         var loaded = 0;
         for(var i = 0; i < this.loadedArmies.length; i++){
-            for(var j = 0; j < listOfArmies.length; j++){
-                if((listOfArmies[j].owner === this.owner) && listOfArmies[j].armyId === this.loadedArmies[i]){
-                    loaded += listOfArmies[j].raumpunkte();
+            for(var j = 0; j < GameState.armies.length; j++){
+                if((GameState.armies[j].owner === this.owner) && GameState.armies[j].armyId === this.loadedArmies[i]){
+                    loaded += GameState.armies[j].raumpunkte();
                 }
             }
         }
@@ -541,21 +541,21 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     //lädt armee ein
     this.loadArmy = function(index){
 //        console.log("loadArmy");
-        if(listOfArmies[index].raumpunkte() <= this.currentCapacity()){
-            this.loadedArmies.push(listOfArmies[index].armyId);
-            listOfArmies[index].isLoadedIn = true;
-//            console.log("Army " + listOfArmies[index].armyId +  " successfully loaded.");
+        if(GameState.armies[index].raumpunkte() <= this.currentCapacity()){
+            this.loadedArmies.push(GameState.armies[index].armyId);
+            GameState.armies[index].isLoadedIn = true;
+//            console.log("Army " + GameState.armies[index].armyId +  " successfully loaded.");
             this.currentCapacity();
             return "ok";
         } else {
             return "This army is too big for this fleet.";
         }
     }
-    // returns the index of the army in listOfArmies
+    // returns the index of the army in GameState.armies
     this.indexInListOfArmies = function(){
         var index = -1;
-        for(var i = 0; i < listOfArmies.length; i++){
-            if(listOfArmies[i].owner === this.owner && listOfArmies[i].armyId === this.armyId){
+        for(var i = 0; i < GameState.armies.length; i++){
+            if(GameState.armies[i].owner === this.owner && GameState.armies[i].armyId === this.armyId){
                 index = i;
             }
         }
@@ -565,11 +565,11 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
     this.selectedIsLoadable = function(){
         return this.isLoadable(selectedArmyIndex);
     }
-    //prüft ob die armee an Stelle index in der listOfArmies eingeladen werden kann
+    //prüft ob die armee an Stelle index in der GameState.armies eingeladen werden kann
     this.isLoadable = function(index){
 //        console.log(index);
-        if(listOfArmies[index].raumpunkte() <= this.currentCapacity()){
-//            console.log("Army " + listOfArmies[index].armyId +  " is loadable.");
+        if(GameState.armies[index].raumpunkte() <= this.currentCapacity()){
+//            console.log("Army " + GameState.armies[index].armyId +  " is loadable.");
             this.currentCapacity();
             return "ok";
         } else {
@@ -661,7 +661,7 @@ function seeHeer(id, truppen, heerfuehrer, leichte, schwere, istGarde, coordX, c
 
     this.killTransportedTroops = function() {
         if(this.loadedArmies !== undefined && this.loadedArmies.length > 0){
-            let loadedArmiesList = listOfArmies.filter((army) =>
+            let loadedArmiesList = GameState.armies.filter((army) =>
                 army.owner === this.owner && this.loadedArmies.some((loadedArmy) => loadedArmy === army.armyId)
             );
             let overload = this.spaceLoaded() - this.maxCapacity();

@@ -13,8 +13,8 @@ function clickedMoves(army: MobileEntity): void{
 
 //checks the current field for other armies and adds it accordingly
 function createMultifield(army){
-	for (let j = 0; j < listOfArmies.length; j++) {
-		let someArmy = listOfArmies[j];
+	for (let j = 0; j < GameState.armies.length; j++) {
+		let someArmy = GameState.armies[j];
 		if (someArmy.x === army.x && someArmy.y === army.y && someArmy !== army) {
 			if(someArmy.multiArmyField === true || army.multiArmyField === true){
 				addToMultifield(someArmy, army);

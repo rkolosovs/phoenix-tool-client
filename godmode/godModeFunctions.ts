@@ -306,8 +306,8 @@ namespace GodFunctions{
 			return false;
 		}
 		// check for any other armies with the same armyId
-		for(let i=0; i < listOfArmies.length; i++){
-			if(listOfArmies[i].armyId == armyIdBuffer && listOfArmies[i].owner === ownerBuffer){
+		for(let i=0; i < GameState.armies.length; i++){
+			if(GameState.armies[i].armyId == armyIdBuffer && GameState.armies[i].owner === ownerBuffer){
 				window.alert("Ein Heer mit dieser Nummer existiert bereits in diesem Königreich.");
 				return false;
 			}
@@ -331,8 +331,8 @@ namespace GodFunctions{
 	// used to delete the selected army
 	export function godDeleteSelectedArmy(): void{
 		if (confirm('Are you sure you want to delete your currenty selected army?')) {
-			listOfArmies[selectedArmyIndex] = listOfArmies[listOfArmies.length-1];
-			listOfArmies.pop()
+			GameState.armies[selectedArmyIndex] = GameState.armies[GameState.armies.length-1];
+			GameState.armies.pop()
 		} else {
 			// Do nothing!
 		}
@@ -341,22 +341,22 @@ namespace GodFunctions{
 
 	// This is used by the infoChangeBox to manipulate an armies Stats.
 	export function changeArmyInfo(): void{
-		for(let i = 0; i<listOfArmies.length; i++){
+		for(let i = 0; i<GameState.armies.length; i++){
 			let infoChangeBox: InfoChangeBox = GUI.getInfoChangeBox();
-			if(i!=selectedArmyIndex && listOfArmies[i].owner === infoChangeBox.getOwnerChangeInput().value &&
-				listOfArmies[i].armyId === infoChangeBox.getArmyIdChangeInput().value){
+			if(i!=selectedArmyIndex && GameState.armies[i].owner === infoChangeBox.getOwnerChangeInput().value &&
+				GameState.armies[i].armyId === infoChangeBox.getArmyIdChangeInput().value){
 					window.alert("Diese Armee-Id ist in diesem Reich bereits vergeben.");
 			} else {
-				listOfArmies[selectedArmyIndex].isGuard = infoChangeBox.getGuardChangeInput().checked;
-				listOfArmies[selectedArmyIndex].owner = infoChangeBox.getOwnerChangeInput().value;
-				listOfArmies[selectedArmyIndex].armyId = Number(infoChangeBox.getArmyIdChangeInput().value);
-				listOfArmies[selectedArmyIndex].count = Number(infoChangeBox.getCountChangeInput().value);
-				listOfArmies[selectedArmyIndex].leaders = Number(infoChangeBox.getLeadersChangeInput().value);
-				listOfArmies[selectedArmyIndex].mounts = Number(infoChangeBox.getMountsChangeInput().value);
-				listOfArmies[selectedArmyIndex].lkp = Number(infoChangeBox.getLKPChangeInput().value);
-				listOfArmies[selectedArmyIndex].skp = Number(infoChangeBox.getSKPChangeInput().value);
-				listOfArmies[selectedArmyIndex].remainingMovePoints = Number(infoChangeBox.getMovePointsChangeInput().value);
-				listOfArmies[selectedArmyIndex].remainingHeightPoints = Number(infoChangeBox.getHeightPointsChangeInput().value);
+				GameState.armies[selectedArmyIndex].isGuard = infoChangeBox.getGuardChangeInput().checked;
+				GameState.armies[selectedArmyIndex].owner = infoChangeBox.getOwnerChangeInput().value;
+				GameState.armies[selectedArmyIndex].armyId = Number(infoChangeBox.getArmyIdChangeInput().value);
+				GameState.armies[selectedArmyIndex].count = Number(infoChangeBox.getCountChangeInput().value);
+				GameState.armies[selectedArmyIndex].leaders = Number(infoChangeBox.getLeadersChangeInput().value);
+				GameState.armies[selectedArmyIndex].mounts = Number(infoChangeBox.getMountsChangeInput().value);
+				GameState.armies[selectedArmyIndex].lkp = Number(infoChangeBox.getLKPChangeInput().value);
+				GameState.armies[selectedArmyIndex].skp = Number(infoChangeBox.getSKPChangeInput().value);
+				GameState.armies[selectedArmyIndex].remainingMovePoints = Number(infoChangeBox.getMovePointsChangeInput().value);
+				GameState.armies[selectedArmyIndex].remainingHeightPoints = Number(infoChangeBox.getHeightPointsChangeInput().value);
 			}
 		}
 		Drawing.resizeCanvas();
