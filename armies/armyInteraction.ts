@@ -15,8 +15,8 @@ function fernkampf(dicerollsL, dicerollsS, shooter, target, targetField: [number
 	let allTargets = [];
 	let sumAllBP = 0;
 	if(target === "On Field"){
-		for(let i = 0; i < buildings.length; i++){
-			if(buildings[i].x === targetField[0] && buildings[i].y === targetField[1] && buildings[i].type < 5){
+		for(let i = 0; i < GameState.buildings.length; i++){
+			if(GameState.buildings[i].x === targetField[0] && GameState.buildings[i].y === targetField[1] && GameState.buildings[i].type < 5){
 				//TODO building takes 2/3 damage
 				//building[i].takeFire(damage * (2/3));
 				damage = damage * (1/3);
@@ -30,7 +30,7 @@ function fernkampf(dicerollsL, dicerollsS, shooter, target, targetField: [number
 			}
 		}
 		for(let i = 0; i < allTargets.length; i++){
-			//target may be a building. buildings need to have this funktion
+			//target may be a building. GameState.buildings need to have this funktion
 			allTargets[i].takeFire(damage/(1+(allTargets[i].leaderGp()+charGpSum)/100) * (allTargets[i].sumBP() / sumAllBP));
 		}
 	}

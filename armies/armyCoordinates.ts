@@ -110,7 +110,7 @@ function checkCondition(army, target: [number, number], skpShot){//TODO mixed sh
                 if(walls.length > 0){
                     for(let j = 0; j < walls.length; j++){
                         if(((HexFunction.height([commonNeig[i][0], commonNeig[i][1]]) - HexFunction.height([army.x, army.y]) === 1)
-                                && buildings[walls[j]].x === commonNeig[i][0] && buildings[walls[j]].y === commonNeig[i][1])){
+                                && GameState.buildings[walls[j]].x === commonNeig[i][0] && GameState.buildings[walls[j]].y === commonNeig[i][1])){
                             condition = 'impossible shot';
                         }
                     }
@@ -188,8 +188,8 @@ function findWallInWay(from: [number, number], to: [number, number]){
 
 //returns all walls on target field
 function getWallIndexOnFieldInDirection(hex: [number,number], direction: Direction){
-    for(let i = 0; i < buildings.length; i++){
-        if(buildings[i].type === 5 && buildings[i].x === hex[0] && buildings[i].y === hex[1] && buildings[i].direction === convertDirection(direction)){
+    for(let i = 0; i < GameState.buildings.length; i++){
+        if(GameState.buildings[i].type === 5 && GameState.buildings[i].x === hex[0] && GameState.buildings[i].y === hex[1] && GameState.buildings[i].direction === convertDirection(direction)){
            return i;
         }
     }
