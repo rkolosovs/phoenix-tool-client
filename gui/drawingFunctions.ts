@@ -16,7 +16,7 @@ export namespace Drawing{
     // tileset name. available tilesets: "erkenfara_altestool", "erkenfara_folienzug", "mbits_painted", "simple"
     export let tileset = "mbits_painted";
 
-	export let listOfMultiArmyFields = [];
+	export let listOfMultiArmyFields: Army[][] = [];
     export let months: string[] = ['Agul', 'Hawar', 'Rim', 'Naliv', 'Larn', 'Hel', 'Jawan', 'Lud'];
 
     export function setHexParts(scale: number) {
