@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class ShootingBigBox {
     getSelf() {
         if (this.self == undefined) {
@@ -103,3 +104,4 @@ class ShootingBigBox {
         return this.rangedBattleButton;
     }
 }
+exports.ShootingBigBox = ShootingBigBox;

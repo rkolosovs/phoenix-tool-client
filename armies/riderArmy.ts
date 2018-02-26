@@ -1,4 +1,15 @@
-class RiderArmy extends LandArmy{
+import {HexFunction} from "../libraries/hexFunctions";
+import {FieldType} from "../map/field";
+import {Realm} from "../realm";
+import {LandArmy} from "./landArmy";
+import {GameState} from "../gameState";
+import {Fleet} from "./fleet";
+import {Constants} from "../constants";
+import RIDER_RP = Constants.RIDER_RP;
+import OFFICER_RP = Constants.OFFICER_RP;
+import RIDER_BP = Constants.RIDER_BP;
+
+export class RiderArmy extends LandArmy{
     static readonly MAX_MOVE_POINTS = 21;
 
     constructor(id: number, owner: Realm, troopCount: number, officerCount: number, position: [number, number],

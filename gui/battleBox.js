@@ -1,4 +1,9 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const battleHandler_1 = require("../armies/battleHandler");
+const footArmy_1 = require("../armies/footArmy");
+const riderArmy_1 = require("../armies/riderArmy");
+const fleet_1 = require("../armies/fleet");
 class BattleBox {
     constructor() {
         this.attackSoldiers = 0;
@@ -21,7 +26,7 @@ class BattleBox {
         this.defenseGuardShips = 0;
     }
     newBattle(participants, location) {
-        this.battleHandler = new BattleHandler(participants, location);
+        this.battleHandler = new battleHandler_1.BattleHandler(participants, location);
         this.updateTroopCounts();
         this.updateDisplay();
     }
@@ -82,7 +87,7 @@ class BattleBox {
         this.defenseGuardShips = 0;
         let ctx = this;
         this.battleHandler.attackerArmies.forEach(function (item) {
-            if (item instanceof FootArmy) {
+            if (item instanceof footArmy_1.FootArmy) {
                 if (item.isGuard) {
                     ctx.attackGuardSoldiers += item.getTroopCount();
                 }
@@ -90,7 +95,7 @@ class BattleBox {
                     ctx.attackSoldiers += item.getTroopCount();
                 }
             }
-            else if (item instanceof RiderArmy) {
+            else if (item instanceof riderArmy_1.RiderArmy) {
                 if (item.isGuard) {
                     ctx.attackGuardRiders += item.getTroopCount();
                 }
@@ -98,7 +103,7 @@ class BattleBox {
                     ctx.attackRiders += item.getTroopCount();
                 }
             }
-            else if (item instanceof Fleet) {
+            else if (item instanceof fleet_1.Fleet) {
                 if (item.isGuard) {
                     ctx.attackGuardShips += item.getTroopCount();
                 }
@@ -111,7 +116,7 @@ class BattleBox {
             ctx.attackOfficers += item.getOfficerCount();
         });
         this.battleHandler.defenderArmies.forEach(function (item) {
-            if (item instanceof FootArmy) {
+            if (item instanceof footArmy_1.FootArmy) {
                 if (item.isGuard) {
                     ctx.defenseGuardSoldiers += item.getTroopCount();
                 }
@@ -119,7 +124,7 @@ class BattleBox {
                     ctx.defenseSoldiers += item.getTroopCount();
                 }
             }
-            else if (item instanceof RiderArmy) {
+            else if (item instanceof riderArmy_1.RiderArmy) {
                 if (item.isGuard) {
                     ctx.defenseGuardRiders += item.getTroopCount();
                 }
@@ -127,7 +132,7 @@ class BattleBox {
                     ctx.defenseRiders += item.getTroopCount();
                 }
             }
-            else if (item instanceof Fleet) {
+            else if (item instanceof fleet_1.Fleet) {
                 if (item.isGuard) {
                     ctx.defenseGuardShips += item.getTroopCount();
                 }
@@ -273,7 +278,7 @@ class BattleBox {
         //Instant result preview (remove if not desired)
         let battleResult = this.battleHandler.calculateResult(this.battleHandler.attackerArmies.map((val) => (val)), this.battleHandler.defenderArmies.map((val) => (val)), [], [], this.battleHandler.location, parseInt(this.getAttackDiceRoll().value), parseInt(this.getDefenseDiceRoll().value));
         let attackFootLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof FootArmy && !this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler.attackerArmies[index] instanceof footArmy_1.FootArmy && !this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -281,7 +286,7 @@ class BattleBox {
             }
         }, 0);
         let attackCavLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof RiderArmy && !this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler.attackerArmies[index] instanceof riderArmy_1.RiderArmy && !this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -289,7 +294,7 @@ class BattleBox {
             }
         }, 0);
         let attackFleetLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof Fleet && !this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler.attackerArmies[index] instanceof fleet_1.Fleet && !this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -297,7 +302,7 @@ class BattleBox {
             }
         }, 0);
         let attackGuardFootLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof FootArmy && this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler.attackerArmies[index] instanceof footArmy_1.FootArmy && this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -305,7 +310,7 @@ class BattleBox {
             }
         }, 0);
         let attackGuardCavLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof RiderArmy && this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler.attackerArmies[index] instanceof riderArmy_1.RiderArmy && this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -313,7 +318,7 @@ class BattleBox {
             }
         }, 0);
         let attackGuardFleetLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof Fleet && this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler.attackerArmies[index] instanceof fleet_1.Fleet && this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -321,7 +326,7 @@ class BattleBox {
             }
         }, 0);
         let defenseFootLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof FootArmy && !this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler.defenderArmies[index] instanceof footArmy_1.FootArmy && !this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -329,7 +334,7 @@ class BattleBox {
             }
         }, 0);
         let defenseCavLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof RiderArmy && !this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler.defenderArmies[index] instanceof riderArmy_1.RiderArmy && !this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -337,7 +342,7 @@ class BattleBox {
             }
         }, 0);
         let defenseFleetLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof Fleet && !this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler.defenderArmies[index] instanceof fleet_1.Fleet && !this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -345,7 +350,7 @@ class BattleBox {
             }
         }, 0);
         let defenseGuardFootLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof FootArmy && this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler.defenderArmies[index] instanceof footArmy_1.FootArmy && this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -353,7 +358,7 @@ class BattleBox {
             }
         }, 0);
         let defenseGuardCavLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof RiderArmy && this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler.defenderArmies[index] instanceof riderArmy_1.RiderArmy && this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -361,15 +366,15 @@ class BattleBox {
             }
         }, 0);
         let defenseGuardFleetLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof Fleet && this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler.defenderArmies[index] instanceof fleet_1.Fleet && this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
                 return total;
             }
         }, 0);
-        if (battleResult.result === Result.ATTACKER_OVERRUN || battleResult.result === Result.ATTACKER_VICTORY) {
-            if (battleResult.result === Result.ATTACKER_OVERRUN) {
+        if (battleResult.result === 1 /* ATTACKER_OVERRUN */ || battleResult.result === 0 /* ATTACKER_VICTORY */) {
+            if (battleResult.result === 1 /* ATTACKER_OVERRUN */) {
                 this.getDefenseBattleSide().innerHTML += "<p class=\"red\">Überrant!</p>";
             }
             else {
@@ -420,8 +425,8 @@ class BattleBox {
                 }
             }
         }
-        else if (battleResult.result === Result.DEFENDER_OVERRUN || battleResult.result === Result.DEFENDER_VICTORY) {
-            if (battleResult.result === Result.DEFENDER_OVERRUN) {
+        else if (battleResult.result === 3 /* DEFENDER_OVERRUN */ || battleResult.result === 2 /* DEFENDER_VICTORY */) {
+            if (battleResult.result === 3 /* DEFENDER_OVERRUN */) {
                 this.getAttackBattleSide().innerHTML += "<p class=\"red\">Überrant!</p>";
             }
             else {
@@ -556,3 +561,4 @@ class BattleBox {
         return this.battleButton;
     }
 }
+exports.BattleBox = BattleBox;

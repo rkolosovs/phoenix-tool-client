@@ -1,4 +1,12 @@
-class MergeEvent extends PhoenixEvent{
+import {PhoenixEvent} from "./event";
+import {Drawing} from "../gui/drawingFunctions";
+import {Realm} from "../realm";
+import {GameState} from "../gameState";
+import {RiderArmy} from "../armies/riderArmy";
+import {Fleet} from "../armies/fleet";
+import {FootArmy} from "../armies/footArmy";
+
+export class MergeEvent extends PhoenixEvent{
 
     constructor(protected id: number, protected status: string, protected fromArmy: number,
         protected toArmy: number, protected realm: Realm, protected x: number, protected y: number, protected pk: number){

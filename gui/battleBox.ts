@@ -1,4 +1,11 @@
-class BattleBox {
+import {Army} from "../armies/army";
+import {BattleHandler} from "../armies/battleHandler";
+import {FootArmy} from "../armies/footArmy";
+import {RiderArmy} from "../armies/riderArmy";
+import {Fleet} from "../armies/fleet";
+import {BattleResult, Result} from "../armies/battleResult";
+
+export class BattleBox {
     private self: HTMLDivElement;
     private closeBattleButton: HTMLButtonElement;
     private attackersTitleText: HTMLDivElement;

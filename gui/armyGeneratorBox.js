@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class ArmyGeneratorBox {
     getSelf() {
         if (this.self == undefined) {
@@ -61,3 +62,4 @@ class ArmyGeneratorBox {
         return this.generateArmyBtn;
     }
 }
+exports.ArmyGeneratorBox = ArmyGeneratorBox;

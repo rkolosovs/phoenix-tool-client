@@ -1,4 +1,4 @@
-class Images {
+export class Images {
     public static shallows: HTMLImageElement = new Image();
     public static deepsea: HTMLImageElement = new Image();
     public static lowlands: HTMLImageElement = new Image();

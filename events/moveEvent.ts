@@ -1,4 +1,9 @@
-class MoveEvent extends PhoenixEvent{
+import {HexFunction} from "../libraries/hexFunctions";
+import {PhoenixEvent} from "./event";
+import {Drawing} from "../gui/drawingFunctions";
+import {GameState} from "../gameState";
+
+export class MoveEvent extends PhoenixEvent{
     
     constructor(protected id: number, protected status: string, protected realm: Realm, 
         protected armyId: number, protected fromX: number, protected fromY: number,protected toX: number, 

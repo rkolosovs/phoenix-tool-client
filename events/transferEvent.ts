@@ -1,4 +1,12 @@
-class TransferEvent extends PhoenixEvent{
+import {Army} from "../armies/army";
+import {PhoenixEvent} from "./event";
+import {Realm} from "../realm";
+import {GameState} from "../gameState";
+import {FootArmy} from "../armies/footArmy";
+import {Drawing} from "../gui/drawingFunctions";
+import {RiderArmy} from "../armies/riderArmy";
+
+export class TransferEvent extends PhoenixEvent{
     
     constructor(protected id: number, protected status: string, protected fromArmy: number,
         protected toArmy: number, protected realm: Realm, protected troops: number, protected leaders: number,

@@ -1,4 +1,4 @@
-class WorldBenderBox{
+export class WorldBenderBox{
     private self: HTMLDivElement;
     private creationWarning: HTMLHeadingElement;
     private toggleOnClickWorldCreationMode: HTMLButtonElement;

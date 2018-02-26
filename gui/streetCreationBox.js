@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class StreetCreationBox {
     getSelf() {
         if (this.self == undefined) {
@@ -97,3 +98,4 @@ class StreetCreationBox {
         return this.saveBuildings;
     }
 }
+exports.StreetCreationBox = StreetCreationBox;

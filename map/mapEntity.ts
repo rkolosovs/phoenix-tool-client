@@ -1,4 +1,6 @@
-class MapEntity{
+import {Realm} from "../realm";
+
+export class MapEntity{
     protected position: [number, number] = [0, 0];
     owner: Realm;
 

@@ -1,5 +1,10 @@
 "use strict";
-class MoveEvent extends PhoenixEvent {
+Object.defineProperty(exports, "__esModule", { value: true });
+const hexFunctions_1 = require("../libraries/hexFunctions");
+const event_1 = require("./event");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const gameState_1 = require("../gameState");
+class MoveEvent extends event_1.PhoenixEvent {
     constructor(id, status, realm, armyId, fromX, fromY, toX, toY, pk) {
         super(id, status, pk);
         this.id = id;
@@ -14,13 +19,13 @@ class MoveEvent extends PhoenixEvent {
     }
     checkEvent() {
         let army;
-        for (let i = 0; i < GameState.armies.length; i++) {
-            army = GameState.armies[i];
+        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
+            army = gameState_1.GameState.armies[i];
             if (army.ownerTag() === this.realm && this.armyId === army.armyId) {
                 break;
             }
         }
-        let adjacency = HexFunction.getAdjacency([army.x, army.y], [[this.toX, this.toY]]); //TODO use the new movement
+        let adjacency = hexFunctions_1.HexFunction.getAdjacency([army.x, army.y], [[this.toX, this.toY]]); //TODO use the new movement
         if (adjacency[0] === true) {
             army.moveToList(1);
             army.move(1); //move to ne
@@ -50,7 +55,7 @@ class MoveEvent extends PhoenixEvent {
         }
         this.status = 'checked';
         fillEventList();
-        Drawing.drawStuff();
+        drawingFunctions_1.Drawing.drawStuff();
     }
     determineEventStatus() {
         if (this.armyExistsAndIsLocated(this.realm, this.armyId, this.fromX, this.fromY) &&
@@ -87,3 +92,4 @@ class MoveEvent extends PhoenixEvent {
         return "move";
     }
 }
+exports.MoveEvent = MoveEvent;

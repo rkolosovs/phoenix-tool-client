@@ -2,8 +2,31 @@ import {Controls} from "./controlVariables";
 import {GameState} from "../gameState";
 import {Drawing} from "../gui/drawingFunctions";
 import {GUI} from "../gui/gui";
+import {BoxVisibility} from "../gui/boxVisibilty";
+import {RiderArmy} from "../armies/riderArmy";
+import {HexFunction} from "../libraries/hexFunctions";
+import {FootArmy} from "../armies/footArmy";
+import {Realm} from "../realm";
+import {Fleet} from "../armies/fleet";
 
 export namespace MouseFunctions{
+    import skpBuffer = BoxVisibility.skpBuffer;
+    import leaderBuffer = BoxVisibility.leaderBuffer;
+    import countBuffer = BoxVisibility.countBuffer;
+    import armyIdBuffer = BoxVisibility.armyIdBuffer;
+    import guardBuffer = BoxVisibility.guardBuffer;
+    import lkpBuffer = BoxVisibility.lkpBuffer;
+    import ownerBuffer = BoxVisibility.ownerBuffer;
+    import armyWithNextClick = BoxVisibility.armyWithNextClick;
+    import mountsBuffer = BoxVisibility.mountsBuffer;
+    import switchBtnBoxTo = BoxVisibility.switchBtnBoxTo;
+    import switchModeTo = BoxVisibility.switchModeTo;
+    import worldCreationModeOnClick = BoxVisibility.worldCreationModeOnClick;
+    import changeFieldToType = BoxVisibility.changeFieldToType;
+    import shootingModeOn = BoxVisibility.shootingModeOn;
+    import restoreInfoBox = BoxVisibility.restoreInfoBox;
+    import updateInfoBox = BoxVisibility.updateInfoBox;
+
     export function mouseDown(event: MouseEvent){
         if (event.button === 0) {
             Controls.leftMousePressed = true;

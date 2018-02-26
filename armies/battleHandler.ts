@@ -1,6 +1,15 @@
 import {GameState} from "../gameState";
 import {HexFunction} from "../libraries/hexFunctions";
-class BattleHandler {
+import {Army} from "./army";
+import {Result, BattleResult} from "./battleResult";
+import {FieldType} from "../map/field";
+import {LandArmy} from "./landArmy";
+import {Fleet} from "./fleet";
+import {RiderArmy} from "./riderArmy";
+import {FootArmy} from "./footArmy";
+import {MobileEntity} from "./mobileEntity";
+
+export class BattleHandler {
     unsortedArmies: Army[];
     attackerArmies: Army[] = [];
     defenderArmies: Army[] = [];
@@ -11,7 +20,7 @@ class BattleHandler {
         this.location = location;
     }
 
-    resolve(attackDie, defenceDie): void{
+    resolve(attackDie: number, defenceDie: number): void{
         let battleResult: BattleResult = this.calculateResult(this.attackerArmies.map((val) => (val)),
             this.defenderArmies.map((val) => (val)), [], [], this.location, attackDie, defenceDie);
         if (battleResult.result === Result.ATTACKER_OVERRUN) {
@@ -196,7 +205,7 @@ class BattleHandler {
 
         let totalAttackerArmyGP = armiesAttack.map((elem) => (
             attackDieRoll + elem.leaderGp() + BattleHandler.terrainGP(elem, true, fieldType, location) +
-            BattleHandler.characterGP(elem, charsAttack) + BattleHandler.directionalTerrainGP(elem, true, null)
+            BattleHandler.characterGP(elem, charsAttack) + BattleHandler.directionalTerrainGP(elem, true, [])
         ));
         let totalDefenderArmyGP = armiesDefense.map((elem) => (
             defenseDieRoll + elem.leaderGp() + BattleHandler.terrainGP(elem, false, fieldType, location) +

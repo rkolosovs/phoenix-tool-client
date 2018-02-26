@@ -1,4 +1,7 @@
-abstract class DestructibleBuilding extends Building{
+import {BuildingType, Building} from "./building";
+import {Realm} from "../realm";
+
+export abstract class DestructibleBuilding extends Building{
     //TODO: know own BP
 
     constructor(type: BuildingType, position: [number, number], owner: Realm, buildPoints: number){

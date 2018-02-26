@@ -1,4 +1,7 @@
-abstract class PhoenixEvent{
+import {GameState} from "../gameState";
+import {HexFunction} from "../libraries/hexFunctions";
+
+export abstract class PhoenixEvent{
 
     constructor(protected id: number, protected status: string, protected pk: number){}
 

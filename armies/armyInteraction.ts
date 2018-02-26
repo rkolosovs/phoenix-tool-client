@@ -5,6 +5,9 @@ import { BoxVisibility } from "../gui/boxVisibilty";
 import { Drawing } from "../gui/drawingFunctions";
 import { Army } from "./army";
 import { HexFunction } from "../libraries/hexFunctions";
+import {Wall} from "../buildings/wall";
+import {FootArmy} from "./footArmy";
+import {RiderArmy} from "./riderArmy";
 // array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null),
 // schießende Armee, ziel Armee, Charaktere und Zauberer auf dem Zielfeld
 // TODO define chars

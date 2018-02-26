@@ -1,5 +1,12 @@
 "use strict";
-class MergeEvent extends PhoenixEvent {
+Object.defineProperty(exports, "__esModule", { value: true });
+const event_1 = require("./event");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const gameState_1 = require("../gameState");
+const riderArmy_1 = require("../armies/riderArmy");
+const fleet_1 = require("../armies/fleet");
+const footArmy_1 = require("../armies/footArmy");
+class MergeEvent extends event_1.PhoenixEvent {
     constructor(id, status, fromArmy, toArmy, realm, x, y, pk) {
         super(id, status, pk);
         this.id = id;
@@ -17,12 +24,12 @@ class MergeEvent extends PhoenixEvent {
         let armyFromId = this.fromArmy;
         let armyToId = this.toArmy;
         let realm = this.realm;
-        for (let i = 0; i < GameState.armies.length; i++) {
-            if (GameState.armies[i].getErkenfaraID() == armyFromId && GameState.armies[i].owner == realm) {
+        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
+            if (gameState_1.GameState.armies[i].getErkenfaraID() == armyFromId && gameState_1.GameState.armies[i].owner == realm) {
                 armyFromPlaceInList = i;
                 console.log("i1=" + i);
             }
-            else if (GameState.armies[i].getErkenfaraID() == armyToId && GameState.armies[i].owner == realm) {
+            else if (gameState_1.GameState.armies[i].getErkenfaraID() == armyToId && gameState_1.GameState.armies[i].owner == realm) {
                 armyToPlaceInList = i;
                 console.log("i2=" + i);
             }
@@ -34,12 +41,12 @@ class MergeEvent extends PhoenixEvent {
         }
         this.status = 'checked';
         fillEventList();
-        Drawing.drawStuff();
+        drawingFunctions_1.Drawing.drawStuff();
         selectedArmyIndex = undefined;
     }
     determineEventStatus() {
-        let army1 = GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
-        let army2 = GameState.armies[this.findArmyPlaceInList(this.toArmy, this.realm)];
+        let army1 = gameState_1.GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
+        let army2 = gameState_1.GameState.armies[this.findArmyPlaceInList(this.toArmy, this.realm)];
         if (army1 == undefined || army2 == undefined) {
             this.status = 'withheld';
         }
@@ -52,9 +59,9 @@ class MergeEvent extends PhoenixEvent {
             this.status = 'available';
         }
         else if ((army1.constructor !== army2.constructor) ||
-            ((((army1 instanceof FootArmy || army1 instanceof RiderArmy) && army1.getMovePoints() < 3) ||
-                army1 instanceof Fleet && army1.getMovePoints() < 5) && (((army2 instanceof FootArmy || army2 instanceof RiderArmy) &&
-                army2.getMovePoints() < 3) || army2 instanceof Fleet && army2.getMovePoints() < 5))) {
+            ((((army1 instanceof footArmy_1.FootArmy || army1 instanceof riderArmy_1.RiderArmy) && army1.getMovePoints() < 3) ||
+                army1 instanceof fleet_1.Fleet && army1.getMovePoints() < 5) && (((army2 instanceof footArmy_1.FootArmy || army2 instanceof riderArmy_1.RiderArmy) &&
+                army2.getMovePoints() < 3) || army2 instanceof fleet_1.Fleet && army2.getMovePoints() < 5))) {
             this.status = 'impossible';
         }
         else {
@@ -73,3 +80,4 @@ class MergeEvent extends PhoenixEvent {
         return "merge";
     }
 }
+exports.MergeEvent = MergeEvent;

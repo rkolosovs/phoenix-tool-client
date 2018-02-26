@@ -1,10 +1,11 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class Realm {
     constructor(name, tag, color, homeTurf, active) {
         this.name = "";
         this.tag = "";
         this.color = "000,000,000";
-        this.homeTurf = FieldType.SHALLOWS;
+        this.homeTurf = 0 /* SHALLOWS */;
         this.territory = [];
         this.name = name;
         this.tag = tag;
@@ -16,3 +17,4 @@ class Realm {
         return this.territory.map(field => field.coordinates);
     }
 }
+exports.Realm = Realm;

@@ -1,4 +1,13 @@
-class SplitEvent extends PhoenixEvent{
+import {Army} from "../armies/army";
+import {PhoenixEvent} from "./event";
+import {Realm} from "../realm";
+import {GameState} from "../gameState";
+import {FootArmy} from "../armies/footArmy";
+import {RiderArmy} from "../armies/riderArmy";
+import {Fleet} from "../armies/fleet";
+import {Drawing} from "../gui/drawingFunctions";
+
+export class SplitEvent extends PhoenixEvent{
     
     constructor(protected id: number, protected status: string, protected fromArmy: number,
         protected newArmy: number, protected realm: Realm, protected troops: number, protected leaders: number,

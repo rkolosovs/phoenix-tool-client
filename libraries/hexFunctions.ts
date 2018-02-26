@@ -1,11 +1,20 @@
 // contains helper functions to get information about a field out of the fields array with just its coordinates.
 
-// this.id = function(){
-//     //TODO: GroßhexKleinhex Zahl bestimmen.
-// }
 import {Direction} from "../map/direction";
+import {FieldType, Field} from "../map/field";
+import {GameState} from "../gameState";
+import {BuildingType} from "../buildings/building";
+import {NonDestructibleBuilding} from "../buildings/nonDestructibleBuilding";
+import {Wall} from "../buildings/wall";
+import {Constants} from "../constants";
+import {Drawing} from "../gui/drawingFunctions";
 
 export namespace HexFunction {
+    import SIN60 = Constants.SIN60;
+
+    // this.id = function(){
+    //     //TODO: GroßhexKleinhex Zahl bestimmen.
+    // }
 
     // returns the fields neighbors in the usual order
     export function neighbors(hex: [number, number]): [number, number][] {

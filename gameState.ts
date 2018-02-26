@@ -1,3 +1,10 @@
+import {Army} from "./armies/army";
+import {Field} from "./map/field";
+import {Realm} from "./realm";
+import {River} from "./map/river";
+import {Building} from "./buildings/building";
+import {PhoenixEvent} from "./events/event";
+
 export class GameState{
     static realms: Realm[] = [];
     static fields: Field[] = [];

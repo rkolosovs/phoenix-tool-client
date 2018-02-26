@@ -1,5 +1,14 @@
 "use strict";
-class RiderArmy extends LandArmy {
+Object.defineProperty(exports, "__esModule", { value: true });
+const hexFunctions_1 = require("../libraries/hexFunctions");
+const landArmy_1 = require("./landArmy");
+const gameState_1 = require("../gameState");
+const fleet_1 = require("./fleet");
+const constants_1 = require("../constants");
+var RIDER_RP = constants_1.Constants.RIDER_RP;
+var OFFICER_RP = constants_1.Constants.OFFICER_RP;
+var RIDER_BP = constants_1.Constants.RIDER_BP;
+class RiderArmy extends landArmy_1.LandArmy {
     constructor(id, owner, troopCount, officerCount, position, movePoints, heightPoints, isGuard) {
         if (isGuard != undefined) {
             super(id, owner, troopCount, officerCount, 0, 0, position, movePoints, heightPoints, isGuard);
@@ -18,15 +27,15 @@ class RiderArmy extends LandArmy {
         return RiderArmy.MAX_HEIGHT_POINTS;
     }
     computeMoveCost(thereIsAStreet, thereIsAHarbor, thereIsARiver, thereIsABridge, rightOfPassage, target) {
-        switch (HexFunction.fieldType(target)) {
-            case FieldType.SHALLOWS:
-            case FieldType.DEEPSEA://watter
+        switch (hexFunctions_1.HexFunction.fieldType(target)) {
+            case 0 /* SHALLOWS */:
+            case 1 /* DEEPSEA */://watter
                 //already embarked
                 if (this.transportingFleet != undefined) {
                     throw new Error("You are already embarked on a Fleet.");
                     // there are no viable fleets on destination
                 }
-                else if (GameState.armies.filter(army => army instanceof Fleet && army.getPosition()[0] === target[0] &&
+                else if (gameState_1.GameState.armies.filter(army => army instanceof fleet_1.Fleet && army.getPosition()[0] === target[0] &&
                     army.getPosition()[1] === target[1] && army.owner === this.owner && army.canLoad(this)).length === 0) {
                     throw new Error("You can't walk on Water.");
                     // at least one fleet on destination
@@ -34,9 +43,9 @@ class RiderArmy extends LandArmy {
                 else {
                     return 0; //embarking doesn't cost move points
                 }
-            case FieldType.LOWLANDS:
-            case FieldType.HILLS:
-            case FieldType.DESERT: if (thereIsARiver && !thereIsABridge) {
+            case 2 /* LOWLANDS */:
+            case 4 /* HILLS */:
+            case 7 /* DESERT */: if (thereIsARiver && !thereIsABridge) {
                 if (this.movePoints >= this.getMaxMovePoints()) {
                     return this.getMaxMovePoints();
                 }
@@ -64,7 +73,7 @@ class RiderArmy extends LandArmy {
             else {
                 throw new Error("You don't have enough movement Points.");
             }
-            case FieldType.HIGHLANDS: if (thereIsARiver && !thereIsABridge) {
+            case 5 /* HIGHLANDS */: if (thereIsARiver && !thereIsABridge) {
                 if (this.movePoints >= this.getMaxMovePoints()) {
                     return this.getMaxMovePoints();
                 }
@@ -92,9 +101,9 @@ class RiderArmy extends LandArmy {
             else {
                 throw new Error("You don't have enough movement Points.");
             }
-            case FieldType.MOUNTAINS: throw new Error("Cavalry can not move through the mountains."); //mountains
-            case FieldType.WOODS:
-            case FieldType.SWAMP: if (thereIsARiver && !thereIsABridge) {
+            case 6 /* MOUNTAINS */: throw new Error("Cavalry can not move through the mountains."); //mountains
+            case 3 /* WOODS */:
+            case 8 /* SWAMP */: if (thereIsARiver && !thereIsABridge) {
                 if (this.movePoints >= this.getMaxMovePoints()) {
                     return this.getMaxMovePoints();
                 }
@@ -131,6 +140,9 @@ class RiderArmy extends LandArmy {
     canHaveCatapults() {
         return false;
     }
+    canHaveMounts() {
+        return false;
+    }
     getRoomPointsSansOfficers() {
         return this.troopCount * RIDER_RP;
     }
@@ -148,3 +160,4 @@ class RiderArmy extends LandArmy {
     }
 }
 RiderArmy.MAX_MOVE_POINTS = 21;
+exports.RiderArmy = RiderArmy;

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const gameState_1 = require("../gameState");
+const boxVisibilty_1 = require("./boxVisibilty");
 class MainBox {
     getSelf() {
         if (this.self == undefined) {
@@ -26,7 +27,7 @@ class MainBox {
         // Get all elements with class="tabcontent" and hide them
         tabcontent = document.getElementsByClassName("tabcontent");
         for (i = 0; i < tabcontent.length; i++) {
-            hide(tabcontent[i]);
+            boxVisibilty_1.BoxVisibility.hide(tabcontent[i]);
         }
         // Get all elements with class="tablinks" and remove the class "active"
         tablinks = document.getElementsByClassName("tablinks");
@@ -35,7 +36,7 @@ class MainBox {
         }
         // Show the current tab, and add an "active" class to the button that opened the tab
         if (event != undefined && tab != undefined) {
-            show(tab);
+            boxVisibilty_1.BoxVisibility.show(tab);
             event.currentTarget.className += " active";
         }
     }

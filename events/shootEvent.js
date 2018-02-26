@@ -1,5 +1,11 @@
 "use strict";
-class ShootEvent extends PhoenixEvent {
+Object.defineProperty(exports, "__esModule", { value: true });
+const gui_1 = require("../gui/gui");
+const boxVisibilty_1 = require("../gui/boxVisibilty");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const gameState_1 = require("../gameState");
+const event_1 = require("./event");
+class ShootEvent extends event_1.PhoenixEvent {
     constructor(id, status, realm, armyId, toX, toY, fromX, fromY, lkpCount, skpCount, target, pk) {
         super(id, status, pk);
         this.id = id;
@@ -16,8 +22,8 @@ class ShootEvent extends PhoenixEvent {
         this.pk = pk;
     }
     checkEvent() {
-        let shootBox = GUI.getShootingBigBox();
-        show(shootBox.getSelf());
+        let shootBox = gui_1.GUI.getShootingBigBox();
+        boxVisibilty_1.BoxVisibility.show(shootBox.getSelf());
         shootBox.getShooterTitleText().innerHTML = this.armyId + ", " + this.realm.tag;
         ;
         shootBox.getAttackersLKPText().innerHTML = this.lkpCount.toString();
@@ -28,16 +34,16 @@ class ShootEvent extends PhoenixEvent {
         let shootButton = shootBox.getRangedBattleButton();
         shootButton.addEventListener("click", (e) => this.shootButtonLogic(shootBox));
         shootBox.getCloseRangedBattleButton().onclick = function () {
-            hide(shootBox.getSelf());
+            boxVisibilty_1.BoxVisibility.hide(shootBox.getSelf());
         };
         fillEventList();
         //sendCheckEvent(event.pk, event.type);
-        Drawing.drawStuff();
+        drawingFunctions_1.Drawing.drawStuff();
     }
     determineEventStatus() {
         if (this.status === 'undetermined' || this.status === 'available' ||
             this.status === 'withheld' || this.status === 'impossible') {
-            let shooter = GameState.armies[this.findArmyPlaceInList(this.armyId, this.realm)];
+            let shooter = gameState_1.GameState.armies[this.findArmyPlaceInList(this.armyId, this.realm)];
             let canShoot = true;
             if (shooter.getLightCatapultCount() - shooter.getLightCatapultsShot() < this.lkpCount) {
                 canShoot = false;
@@ -72,9 +78,9 @@ class ShootEvent extends PhoenixEvent {
         let shooter;
         let lkpRolls = [];
         let skpRolls = [];
-        for (let i = 0; i < GameState.armies.length; i++) {
-            if (GameState.armies[i].getErkenfaraID() === this.armyId && GameState.armies[i].owner === this.realm)
-                shooter = GameState.armies[i];
+        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
+            if (gameState_1.GameState.armies[i].getErkenfaraID() === this.armyId && gameState_1.GameState.armies[i].owner === this.realm)
+                shooter = gameState_1.GameState.armies[i];
         }
         for (let i = 0; i < 10; i++) {
             let currentRollLKP = parseInt(shootBox.getLKPInputs()[i].value, 10);
@@ -109,11 +115,12 @@ class ShootEvent extends PhoenixEvent {
         }
         else {
             fernkampf(lkpRolls, skpRolls, shooter, this.target, [this.toX, this.toY], null); // TODO chars
-            hide(shootBox.getSelf());
+            boxVisibilty_1.BoxVisibility.hide(shootBox.getSelf());
             this.status = 'checked';
             fillEventList();
-            Drawing.drawStuff();
+            drawingFunctions_1.Drawing.drawStuff();
             return true;
         }
     }
 }
+exports.ShootEvent = ShootEvent;

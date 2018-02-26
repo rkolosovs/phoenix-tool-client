@@ -1,5 +1,7 @@
 "use strict";
-class MobileEntity extends MapEntity {
+Object.defineProperty(exports, "__esModule", { value: true });
+const mapEntity_1 = require("../map/mapEntity");
+class MobileEntity extends mapEntity_1.MapEntity {
     constructor(id, owner, position, movePoints, heightPoints) {
         super(position, owner);
         this.oldPosition = [0, 0];
@@ -50,3 +52,4 @@ class MobileEntity extends MapEntity {
 }
 MobileEntity.MAX_MOVE_POINTS = 42;
 MobileEntity.MAX_HEIGHT_POINTS = 2;
+exports.MobileEntity = MobileEntity;

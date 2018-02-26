@@ -5,6 +5,9 @@ const drawingFunctions_1 = require("../gui/drawingFunctions");
 const controlVariables_1 = require("../controls/controlVariables");
 const direction_1 = require("../map/direction");
 const hexFunctions_1 = require("../libraries/hexFunctions");
+const authenticationFunctions_1 = require("./authenticationFunctions");
+const footArmy_1 = require("../armies/footArmy");
+const landArmy_1 = require("../armies/landArmy");
 var Saving;
 (function (Saving) {
     function sendEvents() {
@@ -28,9 +31,9 @@ var Saving;
             if (cPE.getType() === "move") {
                 console.log(gameState_1.GameState.pendingNewEvents);
                 $.post({
-                    url: Authentication.url + "/databaseLink/moveevent/",
+                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/moveevent/",
                     data: {
-                        authorization: Authentication.authenticationToken,
+                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -52,9 +55,9 @@ var Saving;
             }
             else if (cPE.getType() === "battle") {
                 $.post({
-                    url: Authentication.url + "/databaseLink/battleevent/",
+                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/battleevent/",
                     data: {
-                        authorization: Authentication.authenticationToken,
+                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -76,9 +79,9 @@ var Saving;
             }
             else if (cPE.getType() === "merge") {
                 $.post({
-                    url: Authentication.url + "/databaseLink/mergeevent/",
+                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/mergeevent/",
                     data: {
-                        authorization: Authentication.authenticationToken,
+                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -100,9 +103,9 @@ var Saving;
             }
             else if (cPE.getType() === "transfer") {
                 $.post({
-                    url: Authentication.url + "/databaseLink/transferevent/",
+                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/transferevent/",
                     data: {
-                        authorization: Authentication.authenticationToken,
+                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -124,9 +127,9 @@ var Saving;
             }
             else if (cPE.getType() === "split") {
                 $.post({
-                    url: Authentication.url + "/databaseLink/splitevent/",
+                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/splitevent/",
                     data: {
-                        authorization: Authentication.authenticationToken,
+                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -148,9 +151,9 @@ var Saving;
             }
             else if (cPE.getType() === "mount") {
                 $.post({
-                    url: Authentication.url + "/databaseLink/mountevent/",
+                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/mountevent/",
                     data: {
-                        authorization: Authentication.authenticationToken,
+                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -172,9 +175,9 @@ var Saving;
             }
             else if (cPE.getType() === "shoot") {
                 $.post({
-                    url: Authentication.url + "/databaseLink/shootevent/",
+                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/shootevent/",
                     data: {
-                        authorization: Authentication.authenticationToken,
+                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -203,7 +206,7 @@ var Saving;
     function saveFields() {
         $(function () {
             $.ajaxSetup({
-                headers: { "X-CSRFToken": Authentication.currentCSRFToken } // getCookie("csrftoken")
+                headers: { "X-CSRFToken": authenticationFunctions_1.Authentication.currentCSRFToken } // getCookie("csrftoken")
             });
         });
         let dataToServerString = "";
@@ -220,9 +223,9 @@ var Saving;
             }
         }
         $.post({
-            url: Authentication.url + "/databaseLink/savefielddata/",
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/savefielddata/",
             data: {
-                authorization: Authentication.authenticationToken,
+                authorization: authenticationFunctions_1.Authentication.authenticationToken,
                 map: dataToServerString
             },
             statusCode: {
@@ -262,10 +265,10 @@ var Saving;
             }
         }
         $.post({
-            url: Authentication.url + "/databaseLink/saveriverdata/",
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/saveriverdata/",
             data: {
                 river: dataToServerString,
-                authorization: Authentication.authenticationToken
+                authorization: authenticationFunctions_1.Authentication.authenticationToken
             },
             statusCode: {
                 200: function () {
@@ -314,10 +317,10 @@ var Saving;
             }
         }
         $.post({
-            url: Authentication.url + "/databaseLink/savebuildingdata/",
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/savebuildingdata/",
             data: {
                 buildings: dataToServerString,
-                authorization: Authentication.authenticationToken
+                authorization: authenticationFunctions_1.Authentication.authenticationToken
             },
             statusCode: {
                 200: function () {
@@ -341,20 +344,20 @@ var Saving;
                 leaders: elem.getOfficerCount(),
                 lkp: elem.getLightCatapultCount(),
                 skp: elem.getHeavyCatapultCount(),
-                mounts: (elem instanceof FootArmy) ? elem.getMountCount() : 0,
+                mounts: (elem instanceof footArmy_1.FootArmy) ? elem.getMountCount() : 0,
                 x: elem.getPosition()[0],
                 y: elem.getPosition()[1],
                 owner: elem.owner.tag,
                 movementPoints: elem.getMovePoints(),
                 heightPoints: elem.getHeightPoints(),
-                isLoadedIn: (elem instanceof LandArmy) ? elem.isTransported() : false
+                isLoadedIn: (elem instanceof landArmy_1.LandArmy) ? elem.isTransported() : false
             };
         });
         $.post({
-            url: Authentication.url + "/databaseLink/savearmydata/",
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/savearmydata/",
             data: {
                 armies: JSON.stringify(sensibleArmyList),
-                authorization: Authentication.authenticationToken
+                authorization: authenticationFunctions_1.Authentication.authenticationToken
             },
             statusCode: {
                 200: function () {
@@ -372,9 +375,9 @@ var Saving;
     Saving.saveArmies = saveArmies;
     function saveFactionsTerritories() {
         $.post({
-            url: Authentication.url + "/databaseLink/saveborderdata/",
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/saveborderdata/",
             data: { borders: JSON.stringify(gameState_1.GameState.realms.map(realm => { return { 'tag': realm.tag, 'land': realm.getTerritoryCoordinates() }; })),
-                authorization: Authentication.authenticationToken },
+                authorization: authenticationFunctions_1.Authentication.authenticationToken },
             statusCode: {
                 200: function () {
                     console.log("Successfully saved borders.");
@@ -391,9 +394,9 @@ var Saving;
     Saving.saveFactionsTerritories = saveFactionsTerritories;
     function sendDeleteEvent(eventId, eventType) {
         $.post({
-            url: Authentication.url + "/databaseLink/deleteevent/",
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/deleteevent/",
             data: {
-                authorization: Authentication.authenticationToken,
+                authorization: authenticationFunctions_1.Authentication.authenticationToken,
                 eventId: eventId,
                 eventType: eventType
             },
@@ -410,9 +413,9 @@ var Saving;
     Saving.sendDeleteEvent = sendDeleteEvent;
     function sendCheckEvent(eventId, eventType) {
         $.post({
-            url: Authentication.url + "/databaseLink/checkevent/",
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/checkevent/",
             data: {
-                authorization: Authentication.authenticationToken,
+                authorization: authenticationFunctions_1.Authentication.authenticationToken,
                 eventId: eventId,
                 eventType: eventType
             },
@@ -429,9 +432,9 @@ var Saving;
     Saving.sendCheckEvent = sendCheckEvent;
     function sendNewEvent(type, content) {
         $.post({
-            url: Authentication.url + "/databaseLink/" + type + "event/",
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/" + type + "event/",
             data: {
-                authorization: Authentication.authenticationToken,
+                authorization: authenticationFunctions_1.Authentication.authenticationToken,
                 content: content
             },
             statusCode: {
@@ -463,8 +466,8 @@ var Saving;
     Saving.sendNewEvent = sendNewEvent;
     function sendNextTurn() {
         $.post({
-            url: Authentication.url + "/databaseLink/nextturn/",
-            data: { authorization: Authentication.authenticationToken },
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/nextturn/",
+            data: { authorization: authenticationFunctions_1.Authentication.authenticationToken },
             success: (data) => {
                 gameState_1.GameState.currentTurn = data;
                 drawingFunctions_1.Drawing.writeTurnNumber();

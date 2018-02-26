@@ -1,16 +1,5 @@
 "use strict";
-var FieldType;
-(function (FieldType) {
-    FieldType[FieldType["SHALLOWS"] = 0] = "SHALLOWS";
-    FieldType[FieldType["DEEPSEA"] = 1] = "DEEPSEA";
-    FieldType[FieldType["LOWLANDS"] = 2] = "LOWLANDS";
-    FieldType[FieldType["WOODS"] = 3] = "WOODS";
-    FieldType[FieldType["HILLS"] = 4] = "HILLS";
-    FieldType[FieldType["HIGHLANDS"] = 5] = "HIGHLANDS";
-    FieldType[FieldType["MOUNTAINS"] = 6] = "MOUNTAINS";
-    FieldType[FieldType["DESERT"] = 7] = "DESERT";
-    FieldType[FieldType["SWAMP"] = 8] = "SWAMP"; //"Sumpf"
-})(FieldType || (FieldType = {}));
+Object.defineProperty(exports, "__esModule", { value: true });
 class Field {
     constructor(coordinates, type) {
         this.coordinates = coordinates;
@@ -18,16 +7,17 @@ class Field {
     }
     getHeight() {
         switch (this.type) {
-            case FieldType.SHALLOWS:
-            case FieldType.DEEPSEA: return 0;
-            case FieldType.LOWLANDS:
-            case FieldType.WOODS:
-            case FieldType.DESERT:
-            case FieldType.SWAMP: return 1;
-            case FieldType.HILLS: return 2;
-            case FieldType.HIGHLANDS: return 3;
-            case FieldType.MOUNTAINS: return 4;
+            case 0 /* SHALLOWS */:
+            case 1 /* DEEPSEA */: return 0;
+            case 2 /* LOWLANDS */:
+            case 3 /* WOODS */:
+            case 7 /* DESERT */:
+            case 8 /* SWAMP */: return 1;
+            case 4 /* HILLS */: return 2;
+            case 5 /* HIGHLANDS */: return 3;
+            case 6 /* MOUNTAINS */: return 4;
             default: return -1;
         }
     }
 }
+exports.Field = Field;

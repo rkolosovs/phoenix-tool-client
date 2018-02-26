@@ -1,4 +1,4 @@
-class HarborCreationBox{
+export class HarborCreationBox{
     private self: HTMLDivElement;
     private buildHarbor: HTMLTableSectionElement;
     private addHarborNW: HTMLButtonElement;

@@ -1,4 +1,7 @@
-enum BuildingType{
+import {MapEntity} from "../map/mapEntity";
+import {Realm} from "../realm";
+
+export const enum BuildingType{
     CASTLE = 0, //"Burg" in Erkenfara rules
     CITY = 1, //"Stadt"
     FORTRESS = 2, //"Festung"
@@ -10,7 +13,7 @@ enum BuildingType{
     STREET = 8 //"Straße"
 }
 
-abstract class Building extends MapEntity{
+export abstract class Building extends MapEntity{
 
     constructor(public type: BuildingType, position: [number, number], owner: Realm){
         super(position, owner);

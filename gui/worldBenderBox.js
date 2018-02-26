@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class WorldBenderBox {
     getSelf() {
         if (this.self == undefined) {
@@ -91,3 +92,4 @@ class WorldBenderBox {
         return this.changeFieldClickedTo9;
     }
 }
+exports.WorldBenderBox = WorldBenderBox;

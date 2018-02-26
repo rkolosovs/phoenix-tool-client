@@ -1,4 +1,9 @@
-abstract class MobileEntity extends MapEntity{
+import {Move} from "./move";
+import {Direction} from "../map/direction";
+import {Realm} from "../realm";
+import {MapEntity} from "../map/mapEntity";
+
+export abstract class MobileEntity extends MapEntity{
     static readonly MAX_MOVE_POINTS: number = 42;
     static readonly MAX_HEIGHT_POINTS: number = 2;
     protected oldPosition: [number, number] = [0, 0];

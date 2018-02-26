@@ -1,4 +1,4 @@
-enum Result{
+export const enum Result{
     ATTACKER_VICTORY,
     ATTACKER_OVERRUN,
     DEFENDER_VICTORY,
@@ -6,7 +6,7 @@ enum Result{
     TIE
 }
 
-class BattleResult {
+export class BattleResult {
     result: Result;
     attackerLosses: number[];
     defenderLosses: number[];

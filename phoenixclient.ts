@@ -1,6 +1,7 @@
 import {MouseFunctions} from "./controls/mouseFunctions";
 import {Drawing} from "./gui/drawingFunctions";
 import {GUI} from "./gui/gui";
+import {Loading} from "./serverInteraction/loadingDataFunctions";
 
 // attach handlers to mouse events and canvas resizing
 window.addEventListener('resize', Drawing.resizeCanvas, false);

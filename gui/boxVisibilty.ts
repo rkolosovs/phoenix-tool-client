@@ -2,6 +2,13 @@ import {GUI} from "./gui";
 import {GameState} from "../gameState";
 import {Drawing} from "./drawingFunctions";
 import {Controls} from "../controls/controlVariables";
+import {InfoBox} from "./infoBox";
+import {InfoChangeBox} from "./infoChangeBox";
+import {FootArmy} from "../armies/footArmy";
+import {RiderArmy} from "../armies/riderArmy";
+import {Fleet} from "../armies/fleet";
+import {LandArmy} from "../armies/landArmy";
+import {Army} from "../armies/army";
 
 export namespace BoxVisibility {
     export let worldCreationModeOn = false;

@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class InfoChangeBox {
     getSelf() {
         if (this.self == undefined) {
@@ -133,3 +134,4 @@ class InfoChangeBox {
         return this.logoutBtnChange;
     }
 }
+exports.InfoChangeBox = InfoChangeBox;

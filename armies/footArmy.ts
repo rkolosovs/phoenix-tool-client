@@ -1,4 +1,21 @@
-class FootArmy extends LandArmy{
+import {HexFunction} from "../libraries/hexFunctions";
+import {FieldType} from "../map/field";
+import {Realm} from "../realm";
+import {LandArmy} from "./landArmy";
+import {GameState} from "../gameState";
+import {Fleet} from "./fleet";
+import {Constants} from "../constants";
+import FOOTMAN_RP = Constants.FOOTMAN_RP;
+import LIGHT_CATA_RP = Constants.LIGHT_CATA_RP;
+import HEAVY_CATA_RP = Constants.HEAVY_CATA_RP;
+import MOUNT_RP = Constants.MOUNT_RP;
+import FOOTMAN_BP = Constants.FOOTMAN_BP;
+import MOUNT_BP = Constants.MOUNT_BP;
+import LIGHT_CATA_BP = Constants.LIGHT_CATA_BP;
+import HEAVY_CATA_BP = Constants.HEAVY_CATA_BP;
+import OFFICER_RP = Constants.OFFICER_RP;
+
+export class FootArmy extends LandArmy{
     static readonly MAX_MOVE_POINTS = 9;
     protected mountCount: number;
     

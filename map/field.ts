@@ -1,4 +1,4 @@
-enum FieldType{
+export const enum FieldType{
     SHALLOWS = 0, //"Wasser" in Erkenfara rules
     DEEPSEA = 1, //"Tiefsee"
     LOWLANDS = 2, //"Tiefland"
@@ -10,7 +10,7 @@ enum FieldType{
     SWAMP = 8 //"Sumpf"
 }
 
-class Field{
+export class Field{
     readonly coordinates: [number, number];
     type: FieldType;
 

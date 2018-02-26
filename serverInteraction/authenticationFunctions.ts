@@ -1,5 +1,13 @@
 import {GUI} from "../gui/gui";
-namespace Authentication{
+import {BoxVisibility} from "../gui/boxVisibilty";
+import {Loading} from "./loadingDataFunctions";
+import {Drawing} from "../gui/drawingFunctions";
+import {GameState} from "../gameState";
+
+export namespace Authentication{
+    import show = BoxVisibility.show;
+    import hide = BoxVisibility.hide;
+
 	//put the url/IP for the remote game server here
 	// export let url = "http://phoenixserver.h2610265.stratoserver.net"; // online server
     export let url: string = "http://localhost:8000"; // for local debug
@@ -63,8 +71,8 @@ namespace Authentication{
 		});
 		// turning off godmode Box, and changing infoBox to Login Box
 		login = 'guest';
-		switchBtnBoxTo(GUI.getButtonsBox());
-		switchModeTo("none");
+        BoxVisibility.switchBtnBoxTo(GUI.getButtonsBox());
+        BoxVisibility.switchModeTo("none");
 		// Hide gm functionalities
 		document.getElementById("godmodeBox").style.visibility = "hidden";
 		document.getElementById("ToggleGodModeBar").style.display = "none";

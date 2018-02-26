@@ -1,5 +1,15 @@
 import {GameState} from "../gameState";
-abstract class LandArmy extends Army{
+import {Army} from "./army";
+import {Direction} from "../map/direction";
+import {Move} from "./move";
+import {Fleet} from "./fleet";
+import {Realm} from "../realm";
+import {HexFunction} from "../libraries/hexFunctions";
+import {BuildingType} from "../buildings/building";
+import {NonDestructibleBuilding} from "../buildings/nonDestructibleBuilding";
+import {FieldType} from "../map/field";
+
+export abstract class LandArmy extends Army{
     transportingFleet: Fleet;
 
     constructor(id: number, owner: Realm, troopCount: number, officerCount: number, lightCatapultCount: number,

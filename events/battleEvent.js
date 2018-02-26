@@ -1,5 +1,11 @@
 "use strict";
-class BattleEvent extends PhoenixEvent {
+Object.defineProperty(exports, "__esModule", { value: true });
+const gui_1 = require("../gui/gui");
+const boxVisibilty_1 = require("../gui/boxVisibilty");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const gameState_1 = require("../gameState");
+const event_1 = require("./event");
+class BattleEvent extends event_1.PhoenixEvent {
     constructor(id, status, participants, realm, x, y, pk) {
         super(id, status, pk);
         this.id = id;
@@ -11,11 +17,11 @@ class BattleEvent extends PhoenixEvent {
         this.pk = pk;
     }
     checkEvent() {
-        let battleBox = GUI.getBattleBox();
-        show(battleBox.getSelf());
+        let battleBox = gui_1.GUI.getBattleBox();
+        boxVisibilty_1.BoxVisibility.show(battleBox.getSelf());
         let partips = [];
         this.participants.forEach(function (item) {
-            let a = GameState.armies.find(function (candidate) {
+            let a = gameState_1.GameState.armies.find(function (candidate) {
                 return (item.owner.tag === candidate.owner.tag && (item.getErkenfaraID() === candidate.getErkenfaraID()));
             });
             partips.push(a);
@@ -23,12 +29,12 @@ class BattleEvent extends PhoenixEvent {
         battleBox.newBattle(partips, [this.x, this.y]);
         battleBox.getAttackDiceRoll().onchange = function () { battleBox.updateDisplay(); };
         battleBox.getDefenseDiceRoll().onchange = function () { battleBox.updateDisplay(); };
-        let battleButton = GUI.getBattleBox().getBattleButton();
+        let battleButton = gui_1.GUI.getBattleBox().getBattleButton();
         battleButton.addEventListener("click", (e) => this.battleButtonLogic(battleBox));
         battleButton.disabled = true;
         battleButton.style.cursor = "not-allowed";
-        GUI.getBattleBox().getCloseBattleButton().onclick = function () {
-            hide(battleBox.getSelf());
+        gui_1.GUI.getBattleBox().getCloseBattleButton().onclick = function () {
+            boxVisibilty_1.BoxVisibility.hide(battleBox.getSelf());
         };
     }
     determineEventStatus() {
@@ -60,9 +66,10 @@ class BattleEvent extends PhoenixEvent {
     }
     battleButtonLogic(battleBox) {
         battleBox.battleHandler.resolve(battleBox.getAttackDiceRoll(), battleBox.getDefenseDiceRoll());
-        hide(battleBox.getSelf());
+        boxVisibilty_1.BoxVisibility.hide(battleBox.getSelf());
         this.status = 'checked';
         fillEventList();
-        Drawing.drawStuff();
+        drawingFunctions_1.Drawing.drawStuff();
     }
 }
+exports.BattleEvent = BattleEvent;

@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class MapEntity {
     constructor(position, owner) {
         this.position = [0, 0];
@@ -11,3 +12,4 @@ class MapEntity {
         return [this.position[0], this.position[1]];
     }
 }
+exports.MapEntity = MapEntity;

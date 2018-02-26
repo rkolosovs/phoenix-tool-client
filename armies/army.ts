@@ -1,6 +1,9 @@
 import {GameState} from "../gameState";
 import {HexFunction} from "../libraries/hexFunctions";
 import {Constants} from "../constants";
+import {MobileEntity} from "./mobileEntity";
+import {Field} from "../map/field";
+import {Realm} from "../realm";
 
 export abstract class Army extends MobileEntity{
     protected troopCount: number;

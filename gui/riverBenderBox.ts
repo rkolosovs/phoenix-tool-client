@@ -1,4 +1,4 @@
-class RiverBenderBox{
+export class RiverBenderBox{
     private self: HTMLDivElement;
     private buildRiverSection: HTMLTableSectionElement;
     private addRiverNW: HTMLButtonElement;

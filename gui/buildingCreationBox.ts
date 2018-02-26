@@ -1,4 +1,4 @@
-class BuildingCreationBox{
+export class BuildingCreationBox{
     private self: HTMLDivElement;
     private addCastle: HTMLButtonElement;
     private addCity: HTMLButtonElement;

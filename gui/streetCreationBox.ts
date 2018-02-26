@@ -1,4 +1,4 @@
-class StreetCreationBox{
+export class StreetCreationBox{
     private self: HTMLDivElement;
     private buildStreet: HTMLTableSectionElement;
     private addStreetNW: HTMLButtonElement;

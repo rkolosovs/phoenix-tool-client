@@ -1,4 +1,4 @@
-class River{
+export class River{
     readonly leftBank: [number, number];
     readonly rightBank: [number, number];
 

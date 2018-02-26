@@ -1,4 +1,4 @@
-class GodModeBox{
+export class GodModeBox{
     private self: HTMLDivElement;
     private toggleWorldCreationMode: HTMLButtonElement;
     private toggleRiverCreationMode: HTMLButtonElement;

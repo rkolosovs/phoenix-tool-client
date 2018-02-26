@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class InfoBox {
     getSelf() {
         if (this.self == undefined) {
@@ -97,3 +98,4 @@ class InfoBox {
         return this.logoutBtn;
     }
 }
+exports.InfoBox = InfoBox;

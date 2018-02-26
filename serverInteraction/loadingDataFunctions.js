@@ -1,7 +1,31 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const authenticationFunctions_1 = require("./authenticationFunctions");
+const gameState_1 = require("../gameState");
+const moveEvent_1 = require("../events/moveEvent");
+const battleEvent_1 = require("../events/battleEvent");
+const shootEvent_1 = require("../events/shootEvent");
+const mergEvent_1 = require("../events/mergEvent");
+const mountEvent_1 = require("../events/mountEvent");
+const transferEvent_1 = require("../events/transferEvent");
+const splitEvent_1 = require("../events/splitEvent");
+const realm_1 = require("../realm");
+const riderArmy_1 = require("../armies/riderArmy");
+const river_1 = require("../map/river");
+const field_1 = require("../map/field");
+const footArmy_1 = require("../armies/footArmy");
+const fleet_1 = require("../armies/fleet");
+const direction_1 = require("../map/direction");
+const hexFunctions_1 = require("../libraries/hexFunctions");
+const wall_1 = require("../buildings/wall");
+const productionBuilding_1 = require("../buildings/productionBuilding");
+const nonDestructibleBuilding_1 = require("../buildings/nonDestructibleBuilding");
+const images_1 = require("../gui/images");
 var Loading;
 (function (Loading) {
     // help function to fetch current data from the server
+    var url = authenticationFunctions_1.Authentication.url;
     function getNewDataFromServer() {
         loadMap();
     }
@@ -9,7 +33,7 @@ var Loading;
     function loadTurnNumber() {
         $.getJSON(url + "/databaseLink/getturn/", function (json) {
             currentTurn = json;
-            Drawing.writeTurnNumber();
+            drawingFunctions_1.Drawing.writeTurnNumber();
         });
     }
     Loading.loadTurnNumber = loadTurnNumber;
@@ -17,30 +41,30 @@ var Loading;
         //	console.log("loadPendingEvents()");
         $.getJSON(url + "/databaseLink/getevents/", function (json) {
             let pendingEvents = json;
-            GameState.pendingNewEvents = [];
+            gameState_1.GameState.pendingNewEvents = [];
             pendingEvents.forEach(function (item, index) {
                 let content = pendingEvents[index].content;
                 switch (item.type) {
                     case "move":
-                        GameState.pendingNewEvents.push(new MoveEvent(index, "undetermined", GameState.realms.find(realm => (realm === content.realm)), content.armyId, content.fromX, content.fromY, content.toX, content.toY, item.pk));
+                        gameState_1.GameState.pendingNewEvents.push(new moveEvent_1.MoveEvent(index, "undetermined", gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.armyId, content.fromX, content.fromY, content.toX, content.toY, item.pk));
                         break;
                     case "battle":
-                        GameState.pendingNewEvents.push(new BattleEvent(index, "undetermined", content.participants, GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, item.pk));
+                        gameState_1.GameState.pendingNewEvents.push(new battleEvent_1.BattleEvent(index, "undetermined", content.participants, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, item.pk));
                         break;
                     case "shoot":
-                        GameState.pendingNewEvents.push(new ShootEvent(index, "undetermined", GameState.realms.find(realm => (realm === content.realm)), content.armyId, content.toX, content.toY, content.fromX, content.fromY, content.LKPcount, content.SKPcount, content.target, item.pk));
+                        gameState_1.GameState.pendingNewEvents.push(new shootEvent_1.ShootEvent(index, "undetermined", gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.armyId, content.toX, content.toY, content.fromX, content.fromY, content.LKPcount, content.SKPcount, content.target, item.pk));
                         break;
                     case "split":
-                        GameState.pendingNewEvents.push(new SplitEvent(index, "undetermined", content.fromArmy, content.newArmy, GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.mounts, content.lkp, content.skp, content.x, content.y, item.pk));
+                        gameState_1.GameState.pendingNewEvents.push(new splitEvent_1.SplitEvent(index, "undetermined", content.fromArmy, content.newArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.mounts, content.lkp, content.skp, content.x, content.y, item.pk));
                         break;
                     case "merge":
-                        GameState.pendingNewEvents.push(new MergeEvent(index, "undetermined", content.fromArmy, content.toArmy, GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, item.pk));
+                        gameState_1.GameState.pendingNewEvents.push(new mergEvent_1.MergeEvent(index, "undetermined", content.fromArmy, content.toArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, item.pk));
                         break;
                     case "mount":
-                        GameState.pendingNewEvents.push(new MountEvent(index, "undetermined", content.fromArmy, content.newArmy, GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.x, content.y, item.pk));
+                        gameState_1.GameState.pendingNewEvents.push(new mountEvent_1.MountEvent(index, "undetermined", content.fromArmy, content.newArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.x, content.y, item.pk));
                         break;
                     case "transfer":
-                        GameState.pendingNewEvents.push(new TransferEvent(index, "undetermined", content.fromArmy, content.toArmy, GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.mounts, content.lkp, content.skp, content.x, content.y, item.pk));
+                        gameState_1.GameState.pendingNewEvents.push(new transferEvent_1.TransferEvent(index, "undetermined", content.fromArmy, content.toArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.mounts, content.lkp, content.skp, content.x, content.y, item.pk));
                         break;
                 }
             });
@@ -55,9 +79,9 @@ var Loading;
             for (let i = 0; i < json.length; i++) {
                 timetest += json[i];
             }
-            if (Authentication.logintime === undefined || Authentication.logintime < Date.parse(timetest)) {
-                Authentication.logintime = Date.now();
-                console.log("loginzeit: " + Authentication.logintime);
+            if (authenticationFunctions_1.Authentication.logintime === undefined || authenticationFunctions_1.Authentication.logintime < Date.parse(timetest)) {
+                authenticationFunctions_1.Authentication.logintime = Date.now();
+                console.log("loginzeit: " + authenticationFunctions_1.Authentication.logintime);
                 loadCSRFToken();
                 loadRealmData();
                 loadFieldData();
@@ -71,7 +95,7 @@ var Loading;
     Loading.loadMap = loadMap;
     function loadCSRFToken() {
         $.getJSON(url + "/databaseLink/gettoken/", function (json) {
-            currentCSRFToken = json;
+            authenticationFunctions_1.Authentication.currentCSRFToken = json;
         });
     }
     Loading.loadCSRFToken = loadCSRFToken;
@@ -80,14 +104,14 @@ var Loading;
     function loadArmies() {
         $.post({
             url: url + "/databaseLink/armydata/",
-            data: { authorization: authenticationToken },
+            data: { authorization: authenticationFunctions_1.Authentication.authenticationToken },
             success: function (data) {
-                GameState.armies = data.map(army => {
-                    let armyOwner = GameState.realms.find(realm => realm.tag === army.realm);
+                gameState_1.GameState.armies = data.map(army => {
+                    let armyOwner = gameState_1.GameState.realms.find(realm => realm.tag === army.realm);
                     switch (Math.floor(army.armyId / 100)) {
-                        case 1: return new FootArmy(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp, [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
-                        case 2: return new RiderArmy(army.armyId, armyOwner, army.count, army.leaders, [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
-                        case 3: return new Fleet(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp, [army.x, army.y], army.movementPoints, army.isGuard);
+                        case 1: return new footArmy_1.FootArmy(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp, [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
+                        case 2: return new riderArmy_1.RiderArmy(army.armyId, armyOwner, army.count, army.leaders, [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
+                        case 3: return new fleet_1.Fleet(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp, [army.x, army.y], army.movementPoints, army.isGuard);
                         default: return undefined;
                     }
                 });
@@ -95,8 +119,8 @@ var Loading;
                 data.forEach(army => {
                     let transporterId = parseInt(army.isLoadedIn);
                     if (!isNaN(transporterId)) {
-                        GameState.armies.find(transport => transport.getErkenfaraID() === transporterId &&
-                            transport.owner.tag === army.realm).loadArmy(GameState.armies.find(transported => transported.getErkenfaraID() === army.armyId &&
+                        gameState_1.GameState.armies.find(transport => transport.getErkenfaraID() === transporterId &&
+                            transport.owner.tag === army.realm).loadArmy(gameState_1.GameState.armies.find(transported => transported.getErkenfaraID() === army.armyId &&
                             transported.owner.tag === army.realm));
                     }
                 });
@@ -109,22 +133,22 @@ var Loading;
     Loading.loadArmies = loadArmies;
     function loadFieldData() {
         $.getJSON(url + "/databaseLink/fielddata/", function (json) {
-            GameState.fields = json.map(field => new Field([field.x, field.y], field.type));
+            gameState_1.GameState.fields = json.map(field => new field_1.Field([field.x, field.y], field.type));
             fields = json; //TODO: Remove once everything uses the GameState class.
-            Drawing.resizeCanvas();
+            drawingFunctions_1.Drawing.resizeCanvas();
         });
     }
     Loading.loadFieldData = loadFieldData;
     function loadRealmData() {
         $.getJSON(url + "/databaseLink/getrealms/", function (json) {
-            GameState.realms = json.map(realm => new Realm(realm.name, realm.tag, realm.color, Number(realm.homeTurf), realm.active));
+            gameState_1.GameState.realms = json.map(realm => new realm_1.Realm(realm.name, realm.tag, realm.color, Number(realm.homeTurf), realm.active));
             realms = json; //TODO: Remove once everything uses the GameState class.
         });
     }
     Loading.loadRealmData = loadRealmData;
     function loadRiverData() {
         $.getJSON(url + "/databaseLink/getriverdata/", function (json) {
-            GameState.rivers = json.map(river => new River([river.firstX, river.firstY], [river.secondX, river.secondY]));
+            gameState_1.GameState.rivers = json.map(river => new river_1.River([river.firstX, river.firstY], [river.secondX, river.secondY]));
             rivers = []; //TODO: Remove once everything uses the GameState class.
             json.forEach(function (element) {
                 rivers.push([[element.firstX, element.firstY], [element.secondX, element.secondY]]);
@@ -134,20 +158,20 @@ var Loading;
     Loading.loadRiverData = loadRiverData;
     function loadBuildingData() {
         $.getJSON(url + "/databaseLink/buildingdata/", function (json) {
-            let realms = GameState.realms;
-            GameState.buildings = json.map(building => {
+            let realms = gameState_1.GameState.realms;
+            gameState_1.GameState.buildings = json.map(building => {
                 switch (building.type) {
                     case 0:
                     case 1:
                     case 2:
                     case 3:
-                    case 4: return new ProductionBuilding(building.type, [building.x, building.y], realms.find(realm => realm.tag === building.realm), -1); //TODO: BuildPoints
-                    case 5: return new Wall(building.type, [building.x, building.y], realms.find(realm => realm.tag === building.realm), -1, stringToDirection(building.direction), -1); //TODO: BuildPoints, Soldiers
+                    case 4: return new productionBuilding_1.ProductionBuilding(building.type, [building.x, building.y], realms.find(realm => realm.tag === building.realm), -1); //TODO: BuildPoints
+                    case 5: return new wall_1.Wall(building.type, [building.x, building.y], realms.find(realm => realm.tag === building.realm), -1, direction_1.stringToDirection(building.direction), -1); //TODO: BuildPoints, Soldiers
                     case 6:
                     case 7:
-                        let secondPos = HexFunction.neighbors([building.x, building.y])[stringToDirection(building.direction)];
-                        return new NonDestructibleBuilding(building.type, [building.x, building.y], [secondPos[0], secondPos[1]], realms.find(realm => realm.tag === building.realm));
-                    case 8: return new NonDestructibleBuilding(building.type, [building.firstX, building.firstY], [building.secondX, building.secondY], realms.find(realm => realm.tag === building.realm));
+                        let secondPos = hexFunctions_1.HexFunction.neighbors([building.x, building.y])[direction_1.stringToDirection(building.direction)];
+                        return new nonDestructibleBuilding_1.NonDestructibleBuilding(building.type, [building.x, building.y], [secondPos[0], secondPos[1]], realms.find(realm => realm.tag === building.realm));
+                    case 8: return new nonDestructibleBuilding_1.NonDestructibleBuilding(building.type, [building.firstX, building.firstY], [building.secondX, building.secondY], realms.find(realm => realm.tag === building.realm));
                     default: return undefined;
                 }
             });
@@ -159,9 +183,9 @@ var Loading;
     function loadBorderData() {
         $.getJSON(url + "/databaseLink/getborderdata/", function (json) {
             json.forEach(realm => {
-                let realmToFill = GameState.realms.find(candidate => candidate.tag === realm.tag);
+                let realmToFill = gameState_1.GameState.realms.find(candidate => candidate.tag === realm.tag);
                 if (realmToFill != undefined) {
-                    realmToFill.territory = realm.land.map(land => GameState.fields.find(field => field.coordinates === land)).filter(field => field != undefined);
+                    realmToFill.territory = realm.land.map(land => gameState_1.GameState.fields.find(field => field.coordinates === land)).filter(field => field != undefined);
                 }
             });
             //TODO: Remove once everything uses the GameState class.
@@ -171,42 +195,42 @@ var Loading;
     Loading.loadBorderData = loadBorderData;
     function loadImages(tileset) {
         let pathPrefix = './tilesets/' + tileset; //build the path prefix common to all tile images
-        Images.shallows.src = pathPrefix + '/shallows.svg'; //terrain
-        Images.deepsea.src = pathPrefix + '/deepsea.svg';
-        Images.lowlands.src = pathPrefix + '/lowlands.svg';
-        Images.woods.src = pathPrefix + '/woods.svg';
-        Images.hills.src = pathPrefix + '/hills.svg';
-        Images.highlands.src = pathPrefix + '/highlands.svg';
-        Images.mountains.src = pathPrefix + '/mountains.svg';
-        Images.desert.src = pathPrefix + '/desert.svg';
-        Images.swamp.src = pathPrefix + '/swamp.svg';
-        Images.default.src = pathPrefix + '/default.svg';
-        Images.troops.src = pathPrefix + '/troops.svg'; //troops
-        Images.mounts.src = pathPrefix + '/mounts.svg';
-        Images.boats.src = pathPrefix + '/boat.svg';
-        Images.castle.src = pathPrefix + '/castle.svg'; //buildings
-        Images.city.src = pathPrefix + '/city.svg';
-        Images.fortress.src = pathPrefix + '/fortress.svg';
-        Images.capital.src = pathPrefix + '/capital_city.svg';
-        Images.capitalFort.src = pathPrefix + '/capital_fortress.svg';
-        Images.wallW.src = pathPrefix + '/wall_w.svg';
-        Images.wallE.src = pathPrefix + '/wall_e.svg';
-        Images.wallNW.src = pathPrefix + '/wall_nw.svg';
-        Images.wallSW.src = pathPrefix + '/wall_sw.svg';
-        Images.wallNE.src = pathPrefix + '/wall_ne.svg';
-        Images.wallSE.src = pathPrefix + '/wall_se.svg';
-        Images.harborW.src = pathPrefix + '/harbor_w.svg';
-        Images.harborE.src = pathPrefix + '/harbor_e.svg';
-        Images.harborNW.src = pathPrefix + '/harbor_nw.svg';
-        Images.harborSW.src = pathPrefix + '/harbor_sw.svg';
-        Images.harborNE.src = pathPrefix + '/harbor_ne.svg';
-        Images.harborSE.src = pathPrefix + '/harbor_se.svg';
-        Images.bridgeW.src = pathPrefix + '/bridge_w.svg';
-        Images.bridgeE.src = pathPrefix + '/bridge_e.svg';
-        Images.bridgeNW.src = pathPrefix + '/bridge_nw.svg';
-        Images.bridgeSW.src = pathPrefix + '/bridge_sw.svg';
-        Images.bridgeNE.src = pathPrefix + '/bridge_ne.svg';
-        Images.bridgeSE.src = pathPrefix + '/bridge_se.svg';
+        images_1.Images.shallows.src = pathPrefix + '/shallows.svg'; //terrain
+        images_1.Images.deepsea.src = pathPrefix + '/deepsea.svg';
+        images_1.Images.lowlands.src = pathPrefix + '/lowlands.svg';
+        images_1.Images.woods.src = pathPrefix + '/woods.svg';
+        images_1.Images.hills.src = pathPrefix + '/hills.svg';
+        images_1.Images.highlands.src = pathPrefix + '/highlands.svg';
+        images_1.Images.mountains.src = pathPrefix + '/mountains.svg';
+        images_1.Images.desert.src = pathPrefix + '/desert.svg';
+        images_1.Images.swamp.src = pathPrefix + '/swamp.svg';
+        images_1.Images.default.src = pathPrefix + '/default.svg';
+        images_1.Images.troops.src = pathPrefix + '/troops.svg'; //troops
+        images_1.Images.mounts.src = pathPrefix + '/mounts.svg';
+        images_1.Images.boats.src = pathPrefix + '/boat.svg';
+        images_1.Images.castle.src = pathPrefix + '/castle.svg'; //buildings
+        images_1.Images.city.src = pathPrefix + '/city.svg';
+        images_1.Images.fortress.src = pathPrefix + '/fortress.svg';
+        images_1.Images.capital.src = pathPrefix + '/capital_city.svg';
+        images_1.Images.capitalFort.src = pathPrefix + '/capital_fortress.svg';
+        images_1.Images.wallW.src = pathPrefix + '/wall_w.svg';
+        images_1.Images.wallE.src = pathPrefix + '/wall_e.svg';
+        images_1.Images.wallNW.src = pathPrefix + '/wall_nw.svg';
+        images_1.Images.wallSW.src = pathPrefix + '/wall_sw.svg';
+        images_1.Images.wallNE.src = pathPrefix + '/wall_ne.svg';
+        images_1.Images.wallSE.src = pathPrefix + '/wall_se.svg';
+        images_1.Images.harborW.src = pathPrefix + '/harbor_w.svg';
+        images_1.Images.harborE.src = pathPrefix + '/harbor_e.svg';
+        images_1.Images.harborNW.src = pathPrefix + '/harbor_nw.svg';
+        images_1.Images.harborSW.src = pathPrefix + '/harbor_sw.svg';
+        images_1.Images.harborNE.src = pathPrefix + '/harbor_ne.svg';
+        images_1.Images.harborSE.src = pathPrefix + '/harbor_se.svg';
+        images_1.Images.bridgeW.src = pathPrefix + '/bridge_w.svg';
+        images_1.Images.bridgeE.src = pathPrefix + '/bridge_e.svg';
+        images_1.Images.bridgeNW.src = pathPrefix + '/bridge_nw.svg';
+        images_1.Images.bridgeSW.src = pathPrefix + '/bridge_sw.svg';
+        images_1.Images.bridgeNE.src = pathPrefix + '/bridge_ne.svg';
+        images_1.Images.bridgeSE.src = pathPrefix + '/bridge_se.svg';
     }
     Loading.loadImages = loadImages;
-})(Loading || (Loading = {}));
+})(Loading = exports.Loading || (exports.Loading = {}));

@@ -1,4 +1,6 @@
-class Realm {
+import {FieldType, Field} from "./map/field";
+
+export class Realm {
     name: string = "";
     tag: string = "";
     color: string = "000,000,000";

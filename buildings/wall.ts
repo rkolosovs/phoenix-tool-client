@@ -1,4 +1,9 @@
-class Wall extends DestructibleBuilding{
+import {Direction} from "../map/direction";
+import {DestructibleBuilding} from "./destructibleBuilding";
+import {BuildingType} from "./building";
+import {Realm} from "../realm";
+
+export class Wall extends DestructibleBuilding{
     readonly facing: Direction;
     //TODO: Know number of soldiers inside
 

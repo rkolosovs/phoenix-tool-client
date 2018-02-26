@@ -1,5 +1,13 @@
 import {GUI} from "../gui/gui";
-class BattleEvent extends PhoenixEvent{
+import {Army} from "../armies/army";
+import {BoxVisibility} from "../gui/boxVisibilty";
+import {Drawing} from "../gui/drawingFunctions";
+import {GameState} from "../gameState";
+import {BattleBox} from "../gui/battleBox";
+import {PhoenixEvent} from "./event";
+import {Realm} from "../realm";
+
+export class BattleEvent extends PhoenixEvent{
     
     constructor(protected id: number, protected status: string, protected participants: Army[],
         protected realm: Realm, protected x: number, protected y: number, protected pk: number){
@@ -9,7 +17,7 @@ class BattleEvent extends PhoenixEvent{
 
     checkEvent(): void{
         let battleBox: BattleBox = GUI.getBattleBox();
-        show(battleBox.getSelf());
+        BoxVisibility.show(battleBox.getSelf());
 
         let partips = [];
         this.participants.forEach(function (item) {
@@ -27,7 +35,7 @@ class BattleEvent extends PhoenixEvent{
         battleButton.disabled = true;
         battleButton.style.cursor = "not-allowed";
         GUI.getBattleBox().getCloseBattleButton().onclick = function () {
-            hide(battleBox.getSelf());
+            BoxVisibility.hide(battleBox.getSelf());
         };
     }
     
@@ -64,7 +72,7 @@ class BattleEvent extends PhoenixEvent{
 
     private battleButtonLogic(battleBox: BattleBox): void {
         battleBox.battleHandler.resolve(battleBox.getAttackDiceRoll(), battleBox.getDefenseDiceRoll());
-        hide(battleBox.getSelf());
+        BoxVisibility.hide(battleBox.getSelf());
         this.status = 'checked';
         fillEventList();
         Drawing.drawStuff();

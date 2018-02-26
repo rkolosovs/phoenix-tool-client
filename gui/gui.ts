@@ -1,4 +1,17 @@
 import {MainBox} from "./mainBox";
+import {BattleBox} from "./battleBox";
+import {ShootingBigBox} from "./shootingBigBox";
+import {InfoBox} from "./infoBox";
+import {GodModeBox} from "./godModeBox";
+import {ArmyGeneratorBox} from "./armyGeneratorBox";
+import {WorldBenderBox} from "./worldBenderBox";
+import {RiverBenderBox} from "./riverBenderBox";
+import {BuildingCreationBox} from "./buildingCreationBox";
+import {WallCreationBox} from "./wallCreationBox";
+import {HarborCreationBox} from "./harborCreationBox";
+import {BridgeCreationBox} from "./bridgeCreationBox";
+import {StreetCreationBox} from "./streetCreationBox";
+import {InfoChangeBox} from "./infoChangeBox";
 
 export class GUI{
     //this holds all our UI elements and getter (with on-demand generation) for them

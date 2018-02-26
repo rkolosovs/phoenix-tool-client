@@ -3,6 +3,10 @@ import {Drawing} from "../gui/drawingFunctions";
 import {Controls} from "../controls/controlVariables";
 import {directionToString} from "../map/direction";
 import {HexFunction} from "../libraries/hexFunctions";
+import {Authentication} from "./authenticationFunctions";
+import {NonDestructibleBuilding} from "../buildings/nonDestructibleBuilding";
+import {FootArmy} from "../armies/footArmy";
+import {LandArmy} from "../armies/landArmy";
 
 export namespace Saving{
 

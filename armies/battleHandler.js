@@ -1,4 +1,12 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const gameState_1 = require("../gameState");
+const hexFunctions_1 = require("../libraries/hexFunctions");
+const battleResult_1 = require("./battleResult");
+const landArmy_1 = require("./landArmy");
+const fleet_1 = require("./fleet");
+const riderArmy_1 = require("./riderArmy");
+const footArmy_1 = require("./footArmy");
 class BattleHandler {
     constructor(participants, location) {
         this.attackerArmies = [];
@@ -8,7 +16,7 @@ class BattleHandler {
     }
     resolve(attackDie, defenceDie) {
         let battleResult = this.calculateResult(this.attackerArmies.map((val) => (val)), this.defenderArmies.map((val) => (val)), [], [], this.location, attackDie, defenceDie);
-        if (battleResult.result === Result.ATTACKER_OVERRUN) {
+        if (battleResult.result === 1 /* ATTACKER_OVERRUN */) {
             this.attackerArmies.forEach(function (item) {
                 item.setMovePoints(item.getMovePoints() - 7);
                 item.conquer(); //try to conquer the land
@@ -17,13 +25,13 @@ class BattleHandler {
                 item.takeDamage(item.getTroopCount());
             });
         }
-        else if (battleResult.result === Result.DEFENDER_OVERRUN) {
+        else if (battleResult.result === 3 /* DEFENDER_OVERRUN */) {
             this.attackerArmies.forEach(function (item) {
                 item.takeDamage(item.getTroopCount());
             });
         }
         else {
-            if (battleResult.result === Result.ATTACKER_VICTORY) {
+            if (battleResult.result === 0 /* ATTACKER_VICTORY */) {
                 //wipe the looser out
                 this.defenderArmies.forEach(function (item) {
                     item.takeDamage(item.getTroopCount());
@@ -35,7 +43,7 @@ class BattleHandler {
                     item.conquer(); //try to conquer the land
                 }, this);
             }
-            else if (battleResult.result === Result.DEFENDER_VICTORY) {
+            else if (battleResult.result === 2 /* DEFENDER_VICTORY */) {
                 //wipe the looser out
                 this.attackerArmies.forEach(function (item) {
                     item.takeDamage(item.getTroopCount());
@@ -45,7 +53,7 @@ class BattleHandler {
                     item.takeDamage(battleResult.defenderLosses[index]);
                 }, this);
             }
-            else if (battleResult.result === Result.TIE) {
+            else if (battleResult.result === 4 /* TIE */) {
                 //wipe all combatants out
                 this.attackerArmies.forEach(function (item) {
                     item.takeDamage(item.getTroopCount());
@@ -58,14 +66,14 @@ class BattleHandler {
                 console.log("Battle resolution error.");
             }
         }
-        GameState.purgeDeadArmies();
+        gameState_1.GameState.purgeDeadArmies();
     }
     static armyArrayCount(armyArray, fieldType) {
-        return armyArray.filter((val) => ((val instanceof Fleet && fieldType <= 1) || (fieldType >= 2 && val instanceof LandArmy)), this).
+        return armyArray.filter((val) => ((val instanceof fleet_1.Fleet && fieldType <= 1) || (fieldType >= 2 && val instanceof landArmy_1.LandArmy)), this).
             reduce((total, elem) => (elem.getTroopCount() + total), 0);
     }
     static terrainGP(army, attacker, fieldType, location) {
-        let buildingsOnTheField = GameState.buildings.filter(current => (current.getPosition()[0] === location[0] && current.getPosition()[1] === location[1] && current.type <= 4));
+        let buildingsOnTheField = gameState_1.GameState.buildings.filter(current => (current.getPosition()[0] === location[0] && current.getPosition()[1] === location[1] && current.type <= 4));
         if (buildingsOnTheField.length > 0) {
             if (attacker) {
                 return 0;
@@ -84,14 +92,14 @@ class BattleHandler {
         }
         else {
             let terrainGPBonus = 0;
-            let homeTurf = GameState.realms.find(realm => (realm === army.owner)).homeTurf;
-            if (homeTurf === fieldType || (homeTurf === FieldType.HIGHLANDS && fieldType === FieldType.MOUNTAINS) ||
-                (homeTurf === FieldType.MOUNTAINS && fieldType === FieldType.HIGHLANDS)) {
+            let homeTurf = gameState_1.GameState.realms.find(realm => (realm === army.owner)).homeTurf;
+            if (homeTurf === fieldType || (homeTurf === 5 /* HIGHLANDS */ && fieldType === 6 /* MOUNTAINS */) ||
+                (homeTurf === 6 /* MOUNTAINS */ && fieldType === 5 /* HIGHLANDS */)) {
                 terrainGPBonus += 50;
             }
-            if ((army instanceof FootArmy && (fieldType === FieldType.WOODS || fieldType === FieldType.SWAMP)) ||
-                (army instanceof RiderArmy && (fieldType === FieldType.LOWLANDS || fieldType === FieldType.HILLS ||
-                    fieldType === FieldType.DESERT))) {
+            if ((army instanceof footArmy_1.FootArmy && (fieldType === 3 /* WOODS */ || fieldType === 8 /* SWAMP */)) ||
+                (army instanceof riderArmy_1.RiderArmy && (fieldType === 2 /* LOWLANDS */ || fieldType === 4 /* HILLS */ ||
+                    fieldType === 7 /* DESERT */))) {
                 terrainGPBonus += 140;
             }
             return terrainGPBonus;
@@ -107,32 +115,32 @@ class BattleHandler {
         let armyPosition = army.getPosition();
         let oldArmyPosition = army.getOldPosition();
         if (attacker) {
-            if (HexFunction.height(oldArmyPosition) >
-                HexFunction.height(armyPosition)) {
+            if (hexFunctions_1.HexFunction.height(oldArmyPosition) >
+                hexFunctions_1.HexFunction.height(armyPosition)) {
                 result += 20;
             } //fighting downhill
-            if (HexFunction.fieldType(armyPosition) === FieldType.DESERT ||
-                HexFunction.fieldType(armyPosition) === FieldType.SWAMP) {
+            if (hexFunctions_1.HexFunction.fieldType(armyPosition) === 7 /* DESERT */ ||
+                hexFunctions_1.HexFunction.fieldType(armyPosition) === 8 /* SWAMP */) {
                 result += 20;
             } //attacking into swamp or desert
-            if (HexFunction.fieldType(oldArmyPosition) === FieldType.WOODS) {
+            if (hexFunctions_1.HexFunction.fieldType(oldArmyPosition) === 3 /* WOODS */) {
                 result += 20;
             } //attacking out of a forest
-            if (HexFunction.hasStreet(armyPosition)) {
+            if (hexFunctions_1.HexFunction.hasStreet(armyPosition)) {
                 result += 20;
             } //attacking onto a street
         }
         else {
-            let adjacentWalls = HexFunction.walls(armyPosition);
-            let adjacentRivers = HexFunction.fluesse(armyPosition);
-            let adjacentBridges = HexFunction.bridges(armyPosition);
-            let neighbor = HexFunction.neighbors(armyPosition);
+            let adjacentWalls = hexFunctions_1.HexFunction.walls(armyPosition);
+            let adjacentRivers = hexFunctions_1.HexFunction.fluesse(armyPosition);
+            let adjacentBridges = hexFunctions_1.HexFunction.bridges(armyPosition);
+            let neighbor = hexFunctions_1.HexFunction.neighbors(armyPosition);
             let downhillBonus = false;
             let wallBonus = false;
             let bridgeBonus = false;
             let riverBonus = false;
             attackingArmies.forEach((attackingArmy) => {
-                if (HexFunction.height(oldArmyPosition) < HexFunction.height(armyPosition)) {
+                if (hexFunctions_1.HexFunction.height(oldArmyPosition) < hexFunctions_1.HexFunction.height(armyPosition)) {
                     downhillBonus = true;
                 }
                 neighbor.forEach((neighbor, index) => {
@@ -181,7 +189,7 @@ class BattleHandler {
         return (lossesWithGP / totalStrength) * armyStrength;
     }
     calculateResult(armiesAttack, armiesDefense, charsAttack, charsDefense, location, attackDieRoll, defenseDieRoll) {
-        let fieldType = HexFunction.fieldType(location);
+        let fieldType = hexFunctions_1.HexFunction.fieldType(location);
         let overrunAttack = BattleHandler.armyArrayCount(armiesAttack, fieldType) >=
             10 * BattleHandler.armyArrayCount(armiesDefense, fieldType) &&
             armiesDefense.filter((elem) => (elem.isGuard)).length === 0 &&
@@ -192,7 +200,7 @@ class BattleHandler {
             BattleHandler.armyArrayCount(armiesDefense, fieldType) > 0;
         let totalStrengthAttackerArmy = armiesAttack.map((elem) => (elem.getTroopCount()));
         let totalStrengthDefenderArmy = armiesDefense.map((elem) => {
-            if (elem instanceof Fleet) {
+            if (elem instanceof fleet_1.Fleet) {
                 return elem.getTroopCount() + elem.getLightCatapultCount() * 5 + elem.getHeavyCatapultCount() * 10;
             }
             else {
@@ -200,7 +208,7 @@ class BattleHandler {
             }
         });
         let totalAttackerArmyGP = armiesAttack.map((elem) => (attackDieRoll + elem.leaderGp() + BattleHandler.terrainGP(elem, true, fieldType, location) +
-            BattleHandler.characterGP(elem, charsAttack) + BattleHandler.directionalTerrainGP(elem, true, null)));
+            BattleHandler.characterGP(elem, charsAttack) + BattleHandler.directionalTerrainGP(elem, true, [])));
         let totalDefenderArmyGP = armiesDefense.map((elem) => (defenseDieRoll + elem.leaderGp() + BattleHandler.terrainGP(elem, false, fieldType, location) +
             BattleHandler.characterGP(elem, charsDefense) + BattleHandler.directionalTerrainGP(elem, false, armiesAttack)));
         let combatRatingAttackerArmy = BattleHandler.computeCombatRating(totalStrengthAttackerArmy, totalAttackerArmyGP);
@@ -211,24 +219,24 @@ class BattleHandler {
         let defenderTotalCombatRating = combatRatingDefenderArmy.reduce((total, elem) => (total + elem), 0);
         let result;
         if (overrunAttack) {
-            result = Result.ATTACKER_OVERRUN;
+            result = 1 /* ATTACKER_OVERRUN */;
         }
         else if (attackerTotalCombatRating > defenderTotalCombatRating) {
-            result = Result.ATTACKER_VICTORY;
+            result = 0 /* ATTACKER_VICTORY */;
         }
         else if (overrunDefense) {
-            result = Result.DEFENDER_OVERRUN;
+            result = 3 /* DEFENDER_OVERRUN */;
         }
         else if (attackerTotalCombatRating < defenderTotalCombatRating) {
-            result = Result.DEFENDER_VICTORY;
+            result = 2 /* DEFENDER_VICTORY */;
         }
         else {
-            result = Result.TIE;
+            result = 4 /* TIE */;
         }
         let attackerBaseLosses = totalDefenderStrength;
         let defenderBaseLosses = totalAttackerStrength;
-        let attackerLossFactor = BattleHandler.computeLossFactor(totalAttackerStrength, totalDefenderStrength, (result === Result.ATTACKER_VICTORY || result === Result.ATTACKER_OVERRUN));
-        let defenderLossFactor = BattleHandler.computeLossFactor(totalDefenderStrength, totalAttackerStrength, (result === Result.DEFENDER_VICTORY || result === Result.DEFENDER_OVERRUN));
+        let attackerLossFactor = BattleHandler.computeLossFactor(totalAttackerStrength, totalDefenderStrength, (result === 0 /* ATTACKER_VICTORY */ || result === 1 /* ATTACKER_OVERRUN */));
+        let defenderLossFactor = BattleHandler.computeLossFactor(totalDefenderStrength, totalAttackerStrength, (result === 2 /* DEFENDER_VICTORY */ || result === 3 /* DEFENDER_OVERRUN */));
         //multiplication and subsequent division by 100 done for reasons of numerical stability
         let attackerNewBaseLosses = Math.floor((attackerBaseLosses * (100 + (attackerLossFactor * 100))) / 100);
         let defenderNewBaseLosses = Math.floor((defenderBaseLosses * (100 + (defenderLossFactor * 100))) / 100);
@@ -240,6 +248,7 @@ class BattleHandler {
         let defenderGPDiffArmy = totalDefenderArmyGP.map((elem) => ((elem / 200) - (attackerMeanGP / 100)));
         let finalLossesAttackerArmy = baseLossesAttackerArmy.map((elem, index) => (BattleHandler.computeFinalLosses(elem, attackerGPDiffArmy[index], totalStrengthAttackerArmy[index], totalStrengthAttackerArmy[index])));
         let finalLossesDefenderArmy = baseLossesDefenderArmy.map((elem, index) => (BattleHandler.computeFinalLosses(elem, defenderGPDiffArmy[index], armiesDefense[index].getTroopCount(), totalStrengthDefenderArmy[index])));
-        return new BattleResult(result, finalLossesAttackerArmy, finalLossesDefenderArmy);
+        return new battleResult_1.BattleResult(result, finalLossesAttackerArmy, finalLossesDefenderArmy);
     }
 }
+exports.BattleHandler = BattleHandler;

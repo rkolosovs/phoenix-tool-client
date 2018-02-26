@@ -4,8 +4,29 @@ const controlVariables_1 = require("./controlVariables");
 const gameState_1 = require("../gameState");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
 const gui_1 = require("../gui/gui");
+const boxVisibilty_1 = require("../gui/boxVisibilty");
+const riderArmy_1 = require("../armies/riderArmy");
+const hexFunctions_1 = require("../libraries/hexFunctions");
+const footArmy_1 = require("../armies/footArmy");
+const fleet_1 = require("../armies/fleet");
 var MouseFunctions;
 (function (MouseFunctions) {
+    var skpBuffer = boxVisibilty_1.BoxVisibility.skpBuffer;
+    var leaderBuffer = boxVisibilty_1.BoxVisibility.leaderBuffer;
+    var countBuffer = boxVisibilty_1.BoxVisibility.countBuffer;
+    var armyIdBuffer = boxVisibilty_1.BoxVisibility.armyIdBuffer;
+    var guardBuffer = boxVisibilty_1.BoxVisibility.guardBuffer;
+    var lkpBuffer = boxVisibilty_1.BoxVisibility.lkpBuffer;
+    var ownerBuffer = boxVisibilty_1.BoxVisibility.ownerBuffer;
+    var armyWithNextClick = boxVisibilty_1.BoxVisibility.armyWithNextClick;
+    var mountsBuffer = boxVisibilty_1.BoxVisibility.mountsBuffer;
+    var switchBtnBoxTo = boxVisibilty_1.BoxVisibility.switchBtnBoxTo;
+    var switchModeTo = boxVisibilty_1.BoxVisibility.switchModeTo;
+    var worldCreationModeOnClick = boxVisibilty_1.BoxVisibility.worldCreationModeOnClick;
+    var changeFieldToType = boxVisibilty_1.BoxVisibility.changeFieldToType;
+    var shootingModeOn = boxVisibilty_1.BoxVisibility.shootingModeOn;
+    var restoreInfoBox = boxVisibilty_1.BoxVisibility.restoreInfoBox;
+    var updateInfoBox = boxVisibilty_1.BoxVisibility.updateInfoBox;
     function mouseDown(event) {
         if (event.button === 0) {
             controlVariables_1.Controls.leftMousePressed = true;
@@ -93,13 +114,13 @@ var MouseFunctions;
             }
             switch (Math.floor(armyIdBuffer / 100)) {
                 case 3:
-                    gameState_1.GameState.armies.push(new Fleet(armyIdBuffer, owner, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, clickedField, Fleet.MAX_MOVE_POINTS, guardBuffer));
+                    gameState_1.GameState.armies.push(new fleet_1.Fleet(armyIdBuffer, owner, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, clickedField, fleet_1.Fleet.MAX_MOVE_POINTS, guardBuffer));
                     break;
                 case 2:
-                    gameState_1.GameState.armies.push(new RiderArmy(armyIdBuffer, owner, countBuffer, leaderBuffer, clickedField, RiderArmy.MAX_MOVE_POINTS, RiderArmy.MAX_HEIGHT_POINTS, guardBuffer));
+                    gameState_1.GameState.armies.push(new riderArmy_1.RiderArmy(armyIdBuffer, owner, countBuffer, leaderBuffer, clickedField, riderArmy_1.RiderArmy.MAX_MOVE_POINTS, riderArmy_1.RiderArmy.MAX_HEIGHT_POINTS, guardBuffer));
                     break;
                 case 1:
-                    gameState_1.GameState.armies.push(new FootArmy(armyIdBuffer, owner, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, clickedField, FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, guardBuffer));
+                    gameState_1.GameState.armies.push(new footArmy_1.FootArmy(armyIdBuffer, owner, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, clickedField, footArmy_1.FootArmy.MAX_MOVE_POINTS, footArmy_1.FootArmy.MAX_HEIGHT_POINTS, guardBuffer));
                     break;
             }
             ownerBuffer = gui_1.GUI.getArmyGeneratorBox().getOwnerField().value;
@@ -119,7 +140,7 @@ var MouseFunctions;
             switchModeTo("none");
         }
         else if (worldCreationModeOnClick) {
-            let posi = HexFunction.positionInList(clickedField);
+            let posi = hexFunctions_1.HexFunction.positionInList(clickedField);
             if (changeFieldToType === -1) {
                 // checks if Field should be changed to a specific type, if not use
                 // normal world creation mode on click
@@ -214,7 +235,7 @@ var MouseFunctions;
     function registerRightClick() {
         let clickedField = getClickedField();
         if (worldCreationModeOnClick) {
-            let posi = HexFunction.positionInList(clickedField);
+            let posi = hexFunctions_1.HexFunction.positionInList(clickedField);
             if (changeFieldToType == -1) {
                 // checks if Field should be changed to a specific type (then
                 // rightclick is disabled)
@@ -248,7 +269,7 @@ var MouseFunctions;
             else {
                 let clickedArmy = [gameState_1.GameState.armies[selectedArmyIndex].getPosition()[0],
                     gameState_1.GameState.armies[selectedArmyIndex].getPosition()[1]];
-                let localNeighbors = HexFunction.neighbors(clickedArmy);
+                let localNeighbors = hexFunctions_1.HexFunction.neighbors(clickedArmy);
                 for (let i = 0; i < localNeighbors.length; i++) {
                     if (localNeighbors[i][0] === clickedField[0] && localNeighbors[i][1] === clickedField[1]) {
                         let moveSuccessfull = true;

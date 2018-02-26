@@ -1,4 +1,4 @@
-class BridgeCreationBox {
+export class BridgeCreationBox {
     private self: HTMLDivElement;
     private buildBridge: HTMLTableSectionElement;
     private addBridgeNW: HTMLButtonElement;

@@ -2,16 +2,19 @@ import { GameState } from "../gameState";
 import { Drawing } from "../gui/drawingFunctions";
 import { Army } from "./army";
 import { Direction } from "../map/direction";
-    //when unit is clicked generates a list of neighbors that can be moved to
+import {MobileEntity} from "./mobileEntity";
+
+//when unit is clicked generates a list of neighbors that can be moved to
     function clickedMoves(army: MobileEntity): void {
         if (army.owner.tag === login || login === "sl") {
             army.possibleMoves = [];
             //goes through all neighbors to see if the army can move there
-            for (let direction in Direction) {
-                if (!isNaN(Number(direction))) {
-                    army.checkForPossibleMove(parseInt(direction) as Direction);
-                }
-            }
+            army.checkForPossibleMove(Direction.NW);
+            army.checkForPossibleMove(Direction.NE);
+            army.checkForPossibleMove(Direction.E);
+            army.checkForPossibleMove(Direction.SE);
+            army.checkForPossibleMove(Direction.SW);
+            army.checkForPossibleMove(Direction.W);
         }
     }
 
@@ -19,7 +22,7 @@ import { Direction } from "../map/direction";
     function createMultifield(army: Army) {
         for (let j = 0; j < GameState.armies.length; j++) {
             let someArmy = GameState.armies[j];
-            if (someArmy.x === army.getPosition()[0] && someArmy.y === army.getPosition()[1] && someArmy !== army) {
+            if (someArmy.getPosition()[0] === army.getPosition()[0] && someArmy.getPosition()[1] === army.getPosition()[1] && someArmy !== army) {
                 if (someArmy.multiArmyField === true || army.multiArmyField === true) {
                     addToMultifield(someArmy, army);
                 }

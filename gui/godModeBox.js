@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class GodModeBox {
     getSelf() {
         if (this.self == undefined) {
@@ -79,3 +80,4 @@ class GodModeBox {
         return this.factionToCreateBuildingsFor;
     }
 }
+exports.GodModeBox = GodModeBox;

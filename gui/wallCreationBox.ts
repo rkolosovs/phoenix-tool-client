@@ -1,4 +1,4 @@
-class WallCreationBox{
+export class WallCreationBox{
     private self: HTMLDivElement;
     private buildWall: HTMLTableSectionElement;
     private addWallNW: HTMLButtonElement;

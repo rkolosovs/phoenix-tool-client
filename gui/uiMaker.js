@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var UIMaker;
 (function (UIMaker) {
     //this holds functions to make HTML UI elements
@@ -28,4 +29,4 @@ var UIMaker;
     //         buttonsBox, (event: MouseEvent) => toggleGodModeBar());
     //     return [buttonsBox, toggleGMBarButton];
     // }
-})(UIMaker || (UIMaker = {}));
+})(UIMaker = exports.UIMaker || (exports.UIMaker = {}));

@@ -1,12 +1,28 @@
 "use strict";
-class FootArmy extends LandArmy {
-    constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
+Object.defineProperty(exports, "__esModule", { value: true });
+const hexFunctions_1 = require("../libraries/hexFunctions");
+const landArmy_1 = require("./landArmy");
+const gameState_1 = require("../gameState");
+const fleet_1 = require("./fleet");
+const constants_1 = require("../constants");
+var FOOTMAN_RP = constants_1.Constants.FOOTMAN_RP;
+var LIGHT_CATA_RP = constants_1.Constants.LIGHT_CATA_RP;
+var HEAVY_CATA_RP = constants_1.Constants.HEAVY_CATA_RP;
+var MOUNT_RP = constants_1.Constants.MOUNT_RP;
+var FOOTMAN_BP = constants_1.Constants.FOOTMAN_BP;
+var MOUNT_BP = constants_1.Constants.MOUNT_BP;
+var LIGHT_CATA_BP = constants_1.Constants.LIGHT_CATA_BP;
+var HEAVY_CATA_BP = constants_1.Constants.HEAVY_CATA_BP;
+var OFFICER_RP = constants_1.Constants.OFFICER_RP;
+class FootArmy extends landArmy_1.LandArmy {
+    constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, mountCount, position, movePoints, heightPoints, isGuard) {
         if (isGuard != undefined) {
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard);
         }
         else {
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints);
         }
+        this.mountCount = mountCount;
     }
     getErkenfaraID() {
         return 100 + this.id;
@@ -21,18 +37,20 @@ class FootArmy extends LandArmy {
         return this.mountCount;
     }
     setMountCount(value) {
-        this.mountCount = Math.max(0, value);
+        if (this.canHaveMounts()) {
+            this.mountCount = Math.max(0, value);
+        }
     }
     computeMoveCost(thereIsAStreet, thereIsAHarbor, thereIsARiver, thereIsABridge, rightOfPassage, target) {
-        switch (HexFunction.fieldType(target)) {
-            case FieldType.SHALLOWS:
-            case FieldType.DEEPSEA://watter
+        switch (hexFunctions_1.HexFunction.fieldType(target)) {
+            case 0 /* SHALLOWS */:
+            case 1 /* DEEPSEA */://watter
                 //already embarked
                 if (this.transportingFleet != undefined) {
                     throw new Error("You are already embarked on a Fleet.");
                     // there are no viable fleets on destination
                 }
-                else if (GameState.armies.filter(army => army instanceof Fleet && army.getPosition()[0] === target[0] &&
+                else if (gameState_1.GameState.armies.filter(army => army instanceof fleet_1.Fleet && army.getPosition()[0] === target[0] &&
                     army.getPosition()[1] === target[1] && army.owner === this.owner && army.canLoad(this)).length === 0) {
                     throw new Error("You can't walk on Water.");
                     // at least one fleet on destination
@@ -40,9 +58,9 @@ class FootArmy extends LandArmy {
                 else {
                     return 0; //embarking doesn't cost move points
                 }
-            case FieldType.LOWLANDS:
-            case FieldType.HILLS:
-            case FieldType.DESERT: if (thereIsARiver && !thereIsABridge) {
+            case 2 /* LOWLANDS */:
+            case 4 /* HILLS */:
+            case 7 /* DESERT */: if (thereIsARiver && !thereIsABridge) {
                 if (this.movePoints >= this.getMaxMovePoints()) {
                     return this.getMaxMovePoints();
                 }
@@ -88,7 +106,7 @@ class FootArmy extends LandArmy {
                     throw new Error("You don't have enough movement Points.");
                 }
             }
-            case FieldType.HIGHLANDS: if (thereIsARiver && !thereIsABridge) {
+            case 5 /* HIGHLANDS */: if (thereIsARiver && !thereIsABridge) {
                 if (this.movePoints >= this.getMaxMovePoints()) {
                     return 9;
                 }
@@ -155,7 +173,7 @@ class FootArmy extends LandArmy {
                     }
                 }
             }
-            case FieldType.MOUNTAINS: if (thereIsARiver && !thereIsABridge) {
+            case 6 /* MOUNTAINS */: if (thereIsARiver && !thereIsABridge) {
                 if (this.movePoints >= this.getMaxMovePoints()) {
                     return 9;
                 }
@@ -209,8 +227,8 @@ class FootArmy extends LandArmy {
                     }
                 }
             }
-            case FieldType.WOODS:
-            case FieldType.SWAMP: if (thereIsARiver && !thereIsABridge) {
+            case 3 /* WOODS */:
+            case 8 /* SWAMP */: if (thereIsARiver && !thereIsABridge) {
                 if (this.movePoints >= this.getMaxMovePoints()) {
                     return 9;
                 }
@@ -282,6 +300,9 @@ class FootArmy extends LandArmy {
             HEAVY_CATA_RP * (this.heavyCatapultCount / this.troopCount))));
     }
     canHaveCatapults() {
+        return !this.isGuard;
+    }
+    canHaveMounts() {
         return !this.isGuard;
     }
     getRoomPointsSansOfficers() {
@@ -494,3 +515,4 @@ class FootArmy extends LandArmy {
     }
 }
 FootArmy.MAX_MOVE_POINTS = 9;
+exports.FootArmy = FootArmy;

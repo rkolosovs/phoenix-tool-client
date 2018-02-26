@@ -1,5 +1,12 @@
 import {GUI} from "../gui/gui";
-class ShootEvent extends PhoenixEvent{
+import {BoxVisibility} from "../gui/boxVisibilty";
+import {Drawing} from "../gui/drawingFunctions";
+import {ShootingBigBox} from "../gui/shootingBigBox";
+import {Realm} from "../realm";
+import {GameState} from "../gameState";
+import {PhoenixEvent} from "./event";
+
+export class ShootEvent extends PhoenixEvent{
     
     constructor(protected id: number, protected status: string, protected realm: Realm, 
         protected armyId: number, protected toX: number, protected toY: number, protected fromX: number, 
@@ -10,7 +17,7 @@ class ShootEvent extends PhoenixEvent{
 
     checkEvent(): void{
         let shootBox: ShootingBigBox = GUI.getShootingBigBox();
-        show(shootBox.getSelf());
+        BoxVisibility.show(shootBox.getSelf());
 
         shootBox.getShooterTitleText().innerHTML = this.armyId + ", " + this.realm.tag;;
         shootBox.getAttackersLKPText().innerHTML = this.lkpCount.toString();
@@ -23,7 +30,7 @@ class ShootEvent extends PhoenixEvent{
         shootButton.addEventListener("click", (e:Event) => this.shootButtonLogic(shootBox));
 
         shootBox.getCloseRangedBattleButton().onclick = function(){
-            hide(shootBox.getSelf());
+            BoxVisibility.hide(shootBox.getSelf());
         };
         fillEventList();
         //sendCheckEvent(event.pk, event.type);
@@ -108,7 +115,7 @@ class ShootEvent extends PhoenixEvent{
             return false;
         }else{
             fernkampf(lkpRolls, skpRolls, shooter, this.target, [this.toX, this.toY], null);// TODO chars
-            hide(shootBox.getSelf());
+            BoxVisibility.hide(shootBox.getSelf());
             this.status = 'checked';
             fillEventList();
             Drawing.drawStuff();

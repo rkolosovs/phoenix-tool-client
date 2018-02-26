@@ -1,6 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mainBox_1 = require("./mainBox");
+const battleBox_1 = require("./battleBox");
+const shootingBigBox_1 = require("./shootingBigBox");
+const infoBox_1 = require("./infoBox");
+const godModeBox_1 = require("./godModeBox");
+const armyGeneratorBox_1 = require("./armyGeneratorBox");
+const worldBenderBox_1 = require("./worldBenderBox");
+const riverBenderBox_1 = require("./riverBenderBox");
+const buildingCreationBox_1 = require("./buildingCreationBox");
+const wallCreationBox_1 = require("./wallCreationBox");
+const harborCreationBox_1 = require("./harborCreationBox");
+const bridgeCreationBox_1 = require("./bridgeCreationBox");
+const streetCreationBox_1 = require("./streetCreationBox");
+const infoChangeBox_1 = require("./infoChangeBox");
 class GUI {
     static getCanvas() {
         if (GUI.canvas == undefined) {
@@ -46,19 +59,19 @@ class GUI {
     }
     static getBattleBox() {
         if (GUI.battleBox == undefined) {
-            GUI.battleBox = new BattleBox();
+            GUI.battleBox = new battleBox_1.BattleBox();
         }
         return GUI.battleBox;
     }
     static getShootingBigBox() {
         if (GUI.shootingBigBox == undefined) {
-            GUI.shootingBigBox = new ShootingBigBox();
+            GUI.shootingBigBox = new shootingBigBox_1.ShootingBigBox();
         }
         return GUI.shootingBigBox;
     }
     static getInfoBox() {
         if (GUI.infoBox == undefined) {
-            GUI.infoBox = new InfoBox();
+            GUI.infoBox = new infoBox_1.InfoBox();
         }
         return GUI.infoBox;
     }
@@ -280,7 +293,7 @@ class GUI {
     }
     static getInfoChangeBox() {
         if (GUI.infoChangeBox == undefined) {
-            GUI.infoChangeBox = new InfoChangeBox();
+            GUI.infoChangeBox = new infoChangeBox_1.InfoChangeBox();
         }
         return GUI.infoChangeBox;
     }
@@ -316,55 +329,55 @@ class GUI {
     }
     static getGodModeBox() {
         if (GUI.godmodeBox == undefined) {
-            GUI.godmodeBox = new GodModeBox();
+            GUI.godmodeBox = new godModeBox_1.GodModeBox();
         }
         return GUI.godmodeBox;
     }
     static getArmyGeneratorBox() {
         if (GUI.armyGeneratorBox == undefined) {
-            GUI.armyGeneratorBox = new ArmyGeneratorBox();
+            GUI.armyGeneratorBox = new armyGeneratorBox_1.ArmyGeneratorBox();
         }
         return GUI.armyGeneratorBox;
     }
     static getWorldBenderBox() {
         if (GUI.worldBenderBox == undefined) {
-            GUI.worldBenderBox = new WorldBenderBox();
+            GUI.worldBenderBox = new worldBenderBox_1.WorldBenderBox();
         }
         return GUI.worldBenderBox;
     }
     static getRiverBenderBox() {
         if (GUI.riverBenderBox == undefined) {
-            GUI.riverBenderBox = new RiverBenderBox();
+            GUI.riverBenderBox = new riverBenderBox_1.RiverBenderBox();
         }
         return GUI.riverBenderBox;
     }
     static getBuildingCreationBox() {
         if (GUI.buildingCreationBox == undefined) {
-            GUI.buildingCreationBox = new BuildingCreationBox();
+            GUI.buildingCreationBox = new buildingCreationBox_1.BuildingCreationBox();
         }
         return GUI.buildingCreationBox;
     }
     static getWallCreationBox() {
         if (GUI.wallCreationBox == undefined) {
-            GUI.wallCreationBox = new WallCreationBox();
+            GUI.wallCreationBox = new wallCreationBox_1.WallCreationBox();
         }
         return GUI.wallCreationBox;
     }
     static getHarborCreationBox() {
         if (GUI.harborCreationBox == undefined) {
-            GUI.harborCreationBox = new HarborCreationBox();
+            GUI.harborCreationBox = new harborCreationBox_1.HarborCreationBox();
         }
         return GUI.harborCreationBox;
     }
     static getBridgeCreationBox() {
         if (GUI.bridgeCreationBox == undefined) {
-            GUI.bridgeCreationBox = new BridgeCreationBox();
+            GUI.bridgeCreationBox = new bridgeCreationBox_1.BridgeCreationBox();
         }
         return GUI.bridgeCreationBox;
     }
     static getStreetCreationBox() {
         if (GUI.streetCreationBox == undefined) {
-            GUI.streetCreationBox = new StreetCreationBox();
+            GUI.streetCreationBox = new streetCreationBox_1.StreetCreationBox();
         }
         return GUI.streetCreationBox;
     }

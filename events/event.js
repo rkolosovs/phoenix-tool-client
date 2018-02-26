@@ -1,4 +1,7 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const gameState_1 = require("../gameState");
+const hexFunctions_1 = require("../libraries/hexFunctions");
 class PhoenixEvent {
     constructor(id, status, pk) {
         this.id = id;
@@ -43,7 +46,7 @@ class PhoenixEvent {
     }
     deleteEvent() {
         let eli = document.getElementById("eli" + this.id);
-        let event = GameState.pendingNewEvents[this.id];
+        let event = gameState_1.GameState.pendingNewEvents[this.id];
         this.status = 'deleted';
         fillEventList();
     }
@@ -65,8 +68,8 @@ class PhoenixEvent {
     //TODO this needs a big overhaul
     //begin of helper methods for event status determining
     stillSplitEventsInFaction(realm) {
-        for (let i = 0; i < GameState.pendingNewEvents.length; i++) {
-            let event = GameState.pendingNewEvents[i];
+        for (let i = 0; i < gameState_1.GameState.pendingNewEvents.length; i++) {
+            let event = gameState_1.GameState.pendingNewEvents[i];
             if ((event.status === 'withheld' || event.status === 'available' || event.status === 'undetermined') && event.getType() === 'split') {
                 return true;
             }
@@ -78,8 +81,8 @@ class PhoenixEvent {
             return true;
         }
         else {
-            for (let i = 0; i < GameState.pendingNewEvents.length; i++) {
-                let event = GameState.pendingNewEvents[i];
+            for (let i = 0; i < gameState_1.GameState.pendingNewEvents.length; i++) {
+                let event = gameState_1.GameState.pendingNewEvents[i];
                 if ((event.status === 'withheld' || event.status === 'available') && event.getType() === 'move' && Math.floor(event.content.armyId / 100) !== 3 &&
                     ((event.content.fromX === fromX && event.content.fromY === fromY) ||
                         (event.content.toX === fromX && event.content.toY === fromY))) {
@@ -91,8 +94,8 @@ class PhoenixEvent {
     }
     noPendingMountEvents(realm, armyId, fromX, fromY) {
         if (Math.floor(armyId / 100) != 3) {
-            for (let i = 0; i < GameState.pendingNewEvents.length; i++) {
-                let event = GameState.pendingNewEvents[i];
+            for (let i = 0; i < gameState_1.GameState.pendingNewEvents.length; i++) {
+                let event = gameState_1.GameState.pendingNewEvents[i];
                 if ((event.status === 'withheld' || event.status === 'available' || event.status === 'undetermined') &&
                     event.getType() === 'mount' && Math.floor(event.content.fromArmy) === armyId &&
                     (event.content.x === fromX && event.content.y === fromY)) {
@@ -113,8 +116,8 @@ class PhoenixEvent {
         }, true));
     }
     findArmyPlaceInList(armyId, owner) {
-        for (let i = 0; i < GameState.armies.length; i++) {
-            if (GameState.armies[i].getErkenfaraID() === armyId && GameState.armies[i].owner === owner) {
+        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
+            if (gameState_1.GameState.armies[i].getErkenfaraID() === armyId && gameState_1.GameState.armies[i].owner === owner) {
                 return i;
             }
         }
@@ -136,19 +139,19 @@ class PhoenixEvent {
         }, true));
     }
     armyExists(realm, id) {
-        return GameState.armies.some(function (val) {
+        return gameState_1.GameState.armies.some(function (val) {
             return (val.owner.tag === realm) && (val.getErkenfaraID() === id);
         }, this);
     }
     armyExistsAndIsLocated(realm, id, x, y) {
-        return GameState.armies.some(function (val) {
+        return gameState_1.GameState.armies.some(function (val) {
             return (val.owner.tag === realm) &&
                 (val.getErkenfaraID() === id) &&
                 (val.getPosition()[0] === x) && (val.getPosition()[1] === y);
         }, this);
     }
     possibleMoveOfArmyTo(realm, id, x, y) {
-        return GameState.pendingNewEvents.some(function (pEv) {
+        return gameState_1.GameState.pendingNewEvents.some(function (pEv) {
             return (pEv.getType() === 'move') && (pEv.content.realm === realm) &&
                 (pEv.content.armyId === id) && (pEv.status !== 'deleted' || pEv.status !== 'checked') &&
                 (pEv.content.toX === x) && (pEv.content.toY === y) &&
@@ -156,7 +159,7 @@ class PhoenixEvent {
         }, this);
     }
     unprocessedBattleAtContainingArmy(realm, id, x, y) {
-        return GameState.pendingNewEvents.some(function (pEv) {
+        return gameState_1.GameState.pendingNewEvents.some(function (pEv) {
             return (pEv.getType() === 'battle') &&
                 (pEv.status !== 'deleted') &&
                 (pEv.status !== 'checked') &&
@@ -168,11 +171,11 @@ class PhoenixEvent {
         }, this);
     }
     canMove(realm, id, fromX, fromY, toX, toY) {
-        let foundArmy = GameState.armies.find(function (army) {
+        let foundArmy = gameState_1.GameState.armies.find(function (army) {
             return (army.getErkenfaraID() === id) && (army.owner.tag === realm);
         }, this);
         if (foundArmy != undefined && foundArmy.getPosition()[0] === fromX && foundArmy.getPosition()[1] === fromY) {
-            let adjacency = HexFunction.getAdjacency([fromX, fromY], [[toX, toY]]);
+            let adjacency = hexFunctions_1.HexFunction.getAdjacency([fromX, fromY], [[toX, toY]]);
             if (adjacency.reduce((total, current) => (total || current), false)) {
                 foundArmy.possibleMoves = [];
                 let direction = (adjacency.findIndex((dir) => dir === 1) + 1) % 6;
@@ -186,3 +189,4 @@ class PhoenixEvent {
         }
     }
 }
+exports.PhoenixEvent = PhoenixEvent;

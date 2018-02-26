@@ -1,19 +1,10 @@
 "use strict";
-var BuildingType;
-(function (BuildingType) {
-    BuildingType[BuildingType["CASTLE"] = 0] = "CASTLE";
-    BuildingType[BuildingType["CITY"] = 1] = "CITY";
-    BuildingType[BuildingType["FORTRESS"] = 2] = "FORTRESS";
-    BuildingType[BuildingType["CAPITAL"] = 3] = "CAPITAL";
-    BuildingType[BuildingType["CAPITAL_FORT"] = 4] = "CAPITAL_FORT";
-    BuildingType[BuildingType["WALL"] = 5] = "WALL";
-    BuildingType[BuildingType["HARBOR"] = 6] = "HARBOR";
-    BuildingType[BuildingType["BRIDGE"] = 7] = "BRIDGE";
-    BuildingType[BuildingType["STREET"] = 8] = "STREET"; //"Straße"
-})(BuildingType || (BuildingType = {}));
-class Building extends MapEntity {
+Object.defineProperty(exports, "__esModule", { value: true });
+const mapEntity_1 = require("../map/mapEntity");
+class Building extends mapEntity_1.MapEntity {
     constructor(type, position, owner) {
         super(position, owner);
         this.type = type;
     }
 }
+exports.Building = Building;

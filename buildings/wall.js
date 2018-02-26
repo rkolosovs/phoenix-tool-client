@@ -1,5 +1,7 @@
 "use strict";
-class Wall extends DestructibleBuilding {
+Object.defineProperty(exports, "__esModule", { value: true });
+const destructibleBuilding_1 = require("./destructibleBuilding");
+class Wall extends destructibleBuilding_1.DestructibleBuilding {
     //TODO: Know number of soldiers inside
     constructor(type, position, owner, buildPoints, facing, guardCount) {
         super(type, position, owner, buildPoints);
@@ -7,3 +9,4 @@ class Wall extends DestructibleBuilding {
         //TODO: set number of soldiers
     }
 }
+exports.Wall = Wall;

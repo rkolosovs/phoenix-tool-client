@@ -1,4 +1,22 @@
-class Fleet extends Army{
+import {Army} from "./army";
+import {Constants} from "../constants";
+import SHIP_RP = Constants.SHIP_RP;
+import GUARD_RP_MULT = Constants.GUARD_RP_MULT;
+import {Realm} from "../realm";
+import LIGHT_WS_RP = Constants.LIGHT_WS_RP;
+import HEAVY_WS_RP = Constants.HEAVY_WS_RP;
+import {LandArmy} from "./landArmy";
+import {Direction} from "../map/direction";
+import {HexFunction} from "../libraries/hexFunctions";
+import {FieldType} from "../map/field";
+import {Move} from "./move";
+import SHIP_BP = Constants.SHIP_BP;
+import HEAVY_WS_BP = Constants.HEAVY_WS_BP;
+import LIGHT_WS_BP = Constants.LIGHT_WS_BP;
+import SHIP_TRANSPORT_CAPACITY = Constants.SHIP_TRANSPORT_CAPACITY;
+import {GameState} from "../gameState";
+
+export class Fleet extends Army{
     static readonly MAX_HEIGHT_POINTS: number = 0;
     protected transportedArmies: LandArmy[];
 
@@ -62,13 +80,14 @@ class Fleet extends Army{
 
     checkForPossibleMove(direction: Direction): void {
         let neighborCoords: [number, number][] = HexFunction.neighbors(this.position);
-        let target: [number, number] = neighborCoords[direction]
+        let target: [number, number] = neighborCoords[direction];
         let neighborsOfNeighbors = HexFunction.neighbors(target).
             map((neighbor) => HexFunction.neighbors(neighbor)).
             reduce((total, current) => (total.concat(current)), []);
         // TODO: Effects of diplomacy go here.
-        let coastalSailing = borders.some((realm) => (realm === this.owner && realm.land.some((field) =>
-            neighborsOfNeighbors.some((neighbor) => (field[0] === neighbor[0] && field[1] === neighbor[1])))));
+        let coastalSailing = GameState.realms.find(realm => this.owner.tag === realm.tag).territory.some(
+            field => neighborsOfNeighbors.some(neighbor => field.coordinates[0] === neighbor[0] &&
+                field.coordinates[1] === neighbor[1]));
         switch(HexFunction.fieldType(target)){
             case FieldType.SHALLOWS: //shallow sea
                 if(this.lightCatapultCount + this.heavyCatapultCount <= 0){ //shallow sea & no warships

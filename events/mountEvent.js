@@ -1,5 +1,12 @@
 "use strict";
-class MountEvent extends PhoenixEvent {
+Object.defineProperty(exports, "__esModule", { value: true });
+const event_1 = require("./event");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const gameState_1 = require("../gameState");
+const riderArmy_1 = require("../armies/riderArmy");
+const fleet_1 = require("../armies/fleet");
+const footArmy_1 = require("../armies/footArmy");
+class MountEvent extends event_1.PhoenixEvent {
     constructor(id, status, fromArmy, newArmy, realm, troops, leaders, x, y, pk) {
         super(id, status, pk);
         this.id = id;
@@ -21,44 +28,44 @@ class MountEvent extends PhoenixEvent {
         let realm = this.realm;
         let toSplit = this.troops;
         let leadersToSplit = this.leaders;
-        for (let i = 0; i < GameState.armies.length; i++) {
-            if (GameState.armies[i].getErkenfaraID() == armyFromId && GameState.armies[i].owner == realm) {
+        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
+            if (gameState_1.GameState.armies[i].getErkenfaraID() == armyFromId && gameState_1.GameState.armies[i].owner == realm) {
                 armyFromPlaceInList = i;
             }
         }
         console.log("place: " + armyFromPlaceInList);
         if (armyFromPlaceInList >= 0) {
-            if (GameState.armies[armyFromPlaceInList] instanceof FootArmy) {
+            if (gameState_1.GameState.armies[armyFromPlaceInList] instanceof footArmy_1.FootArmy) {
                 mountWithParams(armyFromPlaceInList, toSplit, leadersToSplit, newArmyId);
                 this.status = 'checked';
-                if (GameState.armies[armyFromPlaceInList] instanceof RiderArmy) {
+                if (gameState_1.GameState.armies[armyFromPlaceInList] instanceof riderArmy_1.RiderArmy) {
                     unMountWithParams(armyFromPlaceInList, toSplit, leadersToSplit, newArmyId);
                     this.status = 'checked';
                 }
             }
         }
         fillEventList();
-        Drawing.drawStuff();
+        drawingFunctions_1.Drawing.drawStuff();
     }
     determineEventStatus() {
         let typefactor = 1;
-        let army = GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
+        let army = gameState_1.GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
         if (army == undefined) {
             this.status = 'withheld';
         }
         else {
-            if (army instanceof RiderArmy) {
+            if (army instanceof riderArmy_1.RiderArmy) {
                 typefactor = 2;
             }
-            else if (army instanceof Fleet) {
+            else if (army instanceof fleet_1.Fleet) {
                 typefactor = 100;
             }
             if (army.getPosition()[0] != this.x || army.getPosition()[1] != this.y) {
                 this.status = 'withheld';
             }
-            else if ((army instanceof FootArmy && (((army.getTroopCount() - this.troops) >= 0) &&
+            else if ((army instanceof footArmy_1.FootArmy && (((army.getTroopCount() - this.troops) >= 0) &&
                 ((army.getOfficerCount() - this.leaders) >= 0) && ((army.getMountCount() - this.troops) >= 0))) ||
-                (army instanceof RiderArmy && (((army.getTroopCount() - this.troops) >= 0) &&
+                (army instanceof riderArmy_1.RiderArmy && (((army.getTroopCount() - this.troops) >= 0) &&
                     ((army.getOfficerCount() - this.leaders) >= 0)))) {
                 this.status = 'available';
             }
@@ -69,15 +76,15 @@ class MountEvent extends PhoenixEvent {
         let mountCount = 0;
         let lkpCount = 0;
         let skpCount = 0;
-        if (army instanceof RiderArmy) {
+        if (army instanceof riderArmy_1.RiderArmy) {
             typefactor = 2;
         }
-        else if (army instanceof Fleet) {
+        else if (army instanceof fleet_1.Fleet) {
             typefactor = 100;
             lkpCount = army.getLightCatapultCount();
             skpCount = army.getHeavyCatapultCount();
         }
-        else if (army instanceof FootArmy) {
+        else if (army instanceof footArmy_1.FootArmy) {
             mountCount = army.getMountCount();
             lkpCount = army.getLightCatapultCount();
             skpCount = army.getHeavyCatapultCount();
@@ -105,3 +112,4 @@ class MountEvent extends PhoenixEvent {
         return "mount";
     }
 }
+exports.MountEvent = MountEvent;

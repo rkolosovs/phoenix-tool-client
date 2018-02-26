@@ -1,4 +1,4 @@
-class InfoChangeBox{
+export class InfoChangeBox{
     private self: HTMLDivElement;
     private guardChangeInput: HTMLInputElement;
     private ownerChange: HTMLParagraphElement;

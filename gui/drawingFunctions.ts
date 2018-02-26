@@ -5,6 +5,17 @@ import {GameState} from "../gameState";
 import {Direction} from "../map/direction";
 import {BoxVisibility} from "./boxVisibilty";
 import {Army} from "../armies/army";
+import {HexFunction} from "../libraries/hexFunctions";
+import {Field, FieldType} from "../map/field";
+import {BuildingType, Building} from "../buildings/building";
+import {Images} from "./images";
+import {Wall} from "../buildings/wall";
+import {NonDestructibleBuilding} from "../buildings/nonDestructibleBuilding";
+import {FootArmy} from "../armies/footArmy";
+import {RiderArmy} from "../armies/riderArmy";
+import {Fleet} from "../armies/fleet";
+import {Saving} from "../serverInteraction/savingFunctions";
+import {Loading} from "../serverInteraction/loadingDataFunctions";
 
 export namespace Drawing{
     export let c: number = 1;
@@ -621,7 +632,7 @@ export namespace Drawing{
 						Saving.saveFactionsTerritories();
 						Saving.saveArmies();
 					} else { //Players and SL during player's turn send events
-						sendEventlistInOrder();
+                        Saving.sendEventlistInOrder();
 					}
 					Saving.sendNextTurn();
 				}
@@ -659,7 +670,7 @@ export namespace Drawing{
 					if (confirm("Do you want to save the events issued so far without ending the turn?" +
 					" Once saved the progress can only be reverted by the SL.")){
 						console.log(3);
-						sendEventlistInOrder();
+                        Saving.sendEventlistInOrder();
 					}
 				}
 			});

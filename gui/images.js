@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class Images {
 }
 Images.shallows = new Image();
@@ -37,3 +38,4 @@ Images.bridgeSW = new Image();
 Images.bridgeNW = new Image();
 Images.bridgeSE = new Image();
 Images.bridgeNE = new Image();
+exports.Images = Images;

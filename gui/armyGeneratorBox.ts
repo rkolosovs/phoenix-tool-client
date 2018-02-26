@@ -1,4 +1,4 @@
-class ArmyGeneratorBox{
+export class ArmyGeneratorBox{
     private self: HTMLDivElement;
     private ownerField: HTMLInputElement;
     private armyNumberField: HTMLInputElement;

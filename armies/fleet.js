@@ -1,5 +1,19 @@
 "use strict";
-class Fleet extends Army {
+Object.defineProperty(exports, "__esModule", { value: true });
+const army_1 = require("./army");
+const constants_1 = require("../constants");
+var SHIP_RP = constants_1.Constants.SHIP_RP;
+var GUARD_RP_MULT = constants_1.Constants.GUARD_RP_MULT;
+var LIGHT_WS_RP = constants_1.Constants.LIGHT_WS_RP;
+var HEAVY_WS_RP = constants_1.Constants.HEAVY_WS_RP;
+const hexFunctions_1 = require("../libraries/hexFunctions");
+const move_1 = require("./move");
+var SHIP_BP = constants_1.Constants.SHIP_BP;
+var HEAVY_WS_BP = constants_1.Constants.HEAVY_WS_BP;
+var LIGHT_WS_BP = constants_1.Constants.LIGHT_WS_BP;
+var SHIP_TRANSPORT_CAPACITY = constants_1.Constants.SHIP_TRANSPORT_CAPACITY;
+const gameState_1 = require("../gameState");
+class Fleet extends army_1.Army {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, isGuard) {
         if (isGuard != undefined) {
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, 0, isGuard);
@@ -14,6 +28,9 @@ class Fleet extends Army {
     }
     canHaveCatapults() {
         return !this.isGuard;
+    }
+    canHaveMounts() {
+        return false;
     }
     getMaxMovePoints() {
         return Fleet.MAX_MOVE_POINTS;
@@ -47,22 +64,23 @@ class Fleet extends Army {
         // return moveToList(army, direction);
     }
     checkForPossibleMove(direction) {
-        let neighborCoords = HexFunction.neighbors(this.position);
+        let neighborCoords = hexFunctions_1.HexFunction.neighbors(this.position);
         let target = neighborCoords[direction];
-        let neighborsOfNeighbors = HexFunction.neighbors(target).
-            map((neighbor) => HexFunction.neighbors(neighbor)).
+        let neighborsOfNeighbors = hexFunctions_1.HexFunction.neighbors(target).
+            map((neighbor) => hexFunctions_1.HexFunction.neighbors(neighbor)).
             reduce((total, current) => (total.concat(current)), []);
         // TODO: Effects of diplomacy go here.
-        let coastalSailing = borders.some((realm) => (realm === this.owner && realm.land.some((field) => neighborsOfNeighbors.some((neighbor) => (field[0] === neighbor[0] && field[1] === neighbor[1])))));
-        switch (HexFunction.fieldType(target)) {
-            case FieldType.SHALLOWS://shallow sea
+        let coastalSailing = gameState_1.GameState.realms.find(realm => this.owner.tag === realm.tag).territory.some(field => neighborsOfNeighbors.some(neighbor => field.coordinates[0] === neighbor[0] &&
+            field.coordinates[1] === neighbor[1]));
+        switch (hexFunctions_1.HexFunction.fieldType(target)) {
+            case 0 /* SHALLOWS */://shallow sea
                 if (this.lightCatapultCount + this.heavyCatapultCount <= 0) {
                     if (coastalSailing && this.movePoints >= 5) {
-                        this.possibleMoves.push(new Move(5, 0, false, false, target, direction));
+                        this.possibleMoves.push(new move_1.Move(5, 0, false, false, target, direction));
                         break;
                     }
                     else if (this.movePoints >= 7) {
-                        this.possibleMoves.push(new Move(7, 0, false, false, target, direction));
+                        this.possibleMoves.push(new move_1.Move(7, 0, false, false, target, direction));
                         break;
                     }
                     else {
@@ -71,11 +89,11 @@ class Fleet extends Army {
                 }
                 else if (this.heavyCatapultCount > 0) {
                     if (coastalSailing && this.movePoints >= 7) {
-                        this.possibleMoves.push(new Move(7, 0, false, false, target, direction));
+                        this.possibleMoves.push(new move_1.Move(7, 0, false, false, target, direction));
                         break;
                     }
                     else if (this.movePoints >= 10) {
-                        this.possibleMoves.push(new Move(10, 0, false, false, target, direction));
+                        this.possibleMoves.push(new move_1.Move(10, 0, false, false, target, direction));
                         break;
                     }
                     else {
@@ -84,25 +102,25 @@ class Fleet extends Army {
                 }
                 else if (this.lightCatapultCount > 0) {
                     if (coastalSailing && this.movePoints >= 6) {
-                        this.possibleMoves.push(new Move(6, 0, false, false, target, direction));
+                        this.possibleMoves.push(new move_1.Move(6, 0, false, false, target, direction));
                         break;
                     }
                     else if (this.movePoints >= 8) {
-                        this.possibleMoves.push(new Move(8, 0, false, false, target, direction));
+                        this.possibleMoves.push(new move_1.Move(8, 0, false, false, target, direction));
                         break;
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
                     }
                 }
-            case FieldType.DEEPSEA://deep sea
+            case 1 /* DEEPSEA */://deep sea
                 if (this.lightCatapultCount + this.heavyCatapultCount <= 0) {
                     if (coastalSailing && this.movePoints >= 8) {
-                        this.possibleMoves.push(new Move(8, 0, false, false, target, direction));
+                        this.possibleMoves.push(new move_1.Move(8, 0, false, false, target, direction));
                         break;
                     }
                     else if (this.movePoints >= 12) {
-                        this.possibleMoves.push(new Move(12, 0, false, false, target, direction));
+                        this.possibleMoves.push(new move_1.Move(12, 0, false, false, target, direction));
                         break;
                     }
                     else {
@@ -111,11 +129,11 @@ class Fleet extends Army {
                 }
                 else if (this.heavyCatapultCount > 0) {
                     if (coastalSailing && this.movePoints >= 14) {
-                        this.possibleMoves.push(new Move(14, 0, false, false, target, direction));
+                        this.possibleMoves.push(new move_1.Move(14, 0, false, false, target, direction));
                         break;
                     }
                     else if (this.movePoints >= 21) {
-                        this.possibleMoves.push(new Move(21, 0, false, false, target, direction));
+                        this.possibleMoves.push(new move_1.Move(21, 0, false, false, target, direction));
                         break;
                     }
                     else {
@@ -124,24 +142,24 @@ class Fleet extends Army {
                 }
                 else if (this.lightCatapultCount > 0) {
                     if (coastalSailing && this.movePoints >= 14) {
-                        this.possibleMoves.push(new Move(14, 0, false, false, target, direction));
+                        this.possibleMoves.push(new move_1.Move(14, 0, false, false, target, direction));
                         break;
                     }
                     else if (this.movePoints >= 21) {
-                        this.possibleMoves.push(new Move(21, 0, false, false, target, direction));
+                        this.possibleMoves.push(new move_1.Move(21, 0, false, false, target, direction));
                         break;
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
                     }
                 }
-            case FieldType.LOWLANDS:
-            case FieldType.WOODS:
-            case FieldType.HILLS:
-            case FieldType.HIGHLANDS:
-            case FieldType.MOUNTAINS:
-            case FieldType.DESERT:
-            case FieldType.SWAMP: throw new Error("You can't drive your ships up land.");
+            case 2 /* LOWLANDS */:
+            case 3 /* WOODS */:
+            case 4 /* HILLS */:
+            case 5 /* HIGHLANDS */:
+            case 6 /* MOUNTAINS */:
+            case 7 /* DESERT */:
+            case 8 /* SWAMP */: throw new Error("You can't drive your ships up land.");
             default: throw new Error("Unknown terrain type.");
         }
     }
@@ -393,3 +411,4 @@ class Fleet extends Army {
     }
 }
 Fleet.MAX_HEIGHT_POINTS = 0;
+exports.Fleet = Fleet;

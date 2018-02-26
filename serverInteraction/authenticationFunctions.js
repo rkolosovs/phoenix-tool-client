@@ -1,6 +1,14 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const gui_1 = require("../gui/gui");
+const boxVisibilty_1 = require("../gui/boxVisibilty");
+const loadingDataFunctions_1 = require("./loadingDataFunctions");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const gameState_1 = require("../gameState");
 var Authentication;
 (function (Authentication) {
+    var show = boxVisibilty_1.BoxVisibility.show;
+    var hide = boxVisibilty_1.BoxVisibility.hide;
     //put the url/IP for the remote game server here
     // export let url = "http://phoenixserver.h2610265.stratoserver.net"; // online server
     Authentication.url = "http://localhost:8000"; // for local debug
@@ -24,24 +32,24 @@ var Authentication;
                 login = data.group;
                 // if the user is a GM, godmode possibility is displayed
                 if (login === 'sl') {
-                    GUI.getToggleGMBarButton().style.display = "";
+                    gui_1.GUI.getToggleGMBarButton().style.display = "";
                     if (currentTurn.status === 'fi') {
                         show(document.getElementById("eventTabsButton"));
-                        Loading.loadPendingEvents();
+                        loadingDataFunctions_1.Loading.loadPendingEvents();
                     }
                 }
                 // overwrite old known data
-                Loading.getNewDataFromServer();
+                loadingDataFunctions_1.Loading.getNewDataFromServer();
                 Authentication.logintime = undefined;
                 hide(document.getElementById("eventTabsButton"));
                 let eventList = document.getElementById("eventsTab");
                 eventList.innerHTML = "";
-                Drawing.writeTurnNumber();
+                drawingFunctions_1.Drawing.writeTurnNumber();
             },
             error: function (data) {
                 // alert for a failed login
                 alert("Login failed and logged in as guest. Check username or password.");
-                Loading.getNewDataFromServer();
+                loadingDataFunctions_1.Loading.getNewDataFromServer();
             },
             dataType: "json"
         });
@@ -58,8 +66,8 @@ var Authentication;
         });
         // turning off godmode Box, and changing infoBox to Login Box
         login = 'guest';
-        switchBtnBoxTo(GUI.getButtonsBox());
-        switchModeTo("none");
+        boxVisibilty_1.BoxVisibility.switchBtnBoxTo(gui_1.GUI.getButtonsBox());
+        boxVisibilty_1.BoxVisibility.switchModeTo("none");
         // Hide gm functionalities
         document.getElementById("godmodeBox").style.visibility = "hidden";
         document.getElementById("ToggleGodModeBar").style.display = "none";
@@ -70,15 +78,15 @@ var Authentication;
         // forget old authenticationToken
         Authentication.authenticationToken = 0;
         // overwrite previously known data
-        Loading.getNewDataFromServer();
+        loadingDataFunctions_1.Loading.getNewDataFromServer();
         Authentication.logintime = undefined;
         hide(document.getElementById("eventTabsButton"));
         let eventList = document.getElementById("eventsTab");
         eventList.innerHTML = "";
         openTab(null, "");
-        GameState.pendingNewEvents = [];
+        gameState_1.GameState.pendingNewEvents = [];
         preparedEvents = [];
-        Drawing.writeTurnNumber();
+        drawingFunctions_1.Drawing.writeTurnNumber();
     }
     Authentication.logoutFromServer = logoutFromServer;
-})(Authentication || (Authentication = {}));
+})(Authentication = exports.Authentication || (exports.Authentication = {}));

@@ -3,13 +3,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const gameState_1 = require("../gameState");
 const hexFunctions_1 = require("../libraries/hexFunctions");
 const constants_1 = require("../constants");
-class Army extends MobileEntity {
+const mobileEntity_1 = require("./mobileEntity");
+class Army extends mobileEntity_1.MobileEntity {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
         super(id, owner, position, movePoints, heightPoints);
         this.lightCatapultCount = 0;
         this.heavyCatapultCount = 0;
-        this.lightCatapultShot = 0;
-        this.heavtCatapultShot = 0;
+        this.lightCatapultsShot = 0;
+        this.heavyCatapultsShot = 0;
+        this.multiArmyField = false;
+        this.targetList = []; //TODO: this needs to be reviewed, together with findShottingTargets ect.
         this.isGuard = false;
         this.wasShotAt = false;
         this.possibleTargets = [];
@@ -56,10 +59,20 @@ class Army extends MobileEntity {
         }
     }
     getHeavyCatapultsShot() {
-        return this.heavtCatapultShot;
+        return this.heavyCatapultsShot;
+    }
+    addHeavyCatapultsShot(value) {
+        if (this.getHeavyCatapultsShot() + Math.max(0, value) <= this.getHeavyCatapultCount()) {
+            this.heavyCatapultsShot += Math.max(0, value);
+        }
     }
     getLightCatapultsShot() {
-        return this.lightCatapultShot;
+        return this.lightCatapultsShot;
+    }
+    addLightCatapultsShot(value) {
+        if (this.getLightCatapultsShot() + Math.max(0, value) <= this.getLightCatapultCount()) {
+            this.lightCatapultsShot += Math.max(0, value);
+        }
     }
     conquer() {
         if (this.canConquer()) {

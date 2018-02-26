@@ -1,4 +1,5 @@
 import {GameState} from "../gameState";
+import {BoxVisibility} from "./boxVisibilty";
 
 export class MainBox{
     private self: HTMLDivElement;
@@ -33,7 +34,7 @@ export class MainBox{
         // Get all elements with class="tabcontent" and hide them
         tabcontent = document.getElementsByClassName("tabcontent");
         for (i = 0; i < tabcontent.length; i++) {
-            hide(tabcontent[i] as HTMLElement);
+            BoxVisibility.hide(tabcontent[i] as HTMLElement);
         }
 
         // Get all elements with class="tablinks" and remove the class "active"
@@ -44,7 +45,7 @@ export class MainBox{
 
         // Show the current tab, and add an "active" class to the button that opened the tab
         if (event != undefined && tab != undefined) {
-            show(tab);
+            BoxVisibility.show(tab);
             (event.currentTarget as HTMLElement).className += " active";
         }
     }

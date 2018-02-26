@@ -1,3 +1,6 @@
+import {Field} from "../map/field";
+import {Building} from "../buildings/building";
+
 export class Controls{
     static selectedFields: [number, number][]  = []; // list of fields to be highlighted
     static selectedArmyIndex: number = -1; // index of the currently selected army in the GameState.armies

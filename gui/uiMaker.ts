@@ -1,4 +1,4 @@
-namespace UIMaker{
+export namespace UIMaker{
     //this holds functions to make HTML UI elements
 
     export function makeElement(id: string, type: string, parent: HTMLElement): HTMLElement{

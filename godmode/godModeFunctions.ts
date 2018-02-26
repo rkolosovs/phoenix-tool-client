@@ -1,11 +1,24 @@
 // TODO: before pushing check added and deleted buildings if one is already inside the other, if it is then delete it.
-import {Controls} from "../Controls/controlVariables";
 import {GameState} from "../gameState";
 import {GUI} from "../gui/gui";
+import {BoxVisibility} from "../gui/boxVisibilty";
+import {Drawing} from "../gui/drawingFunctions";
+import {Realm} from "../realm";
+import {ProductionBuilding} from "../buildings/productionBuilding";
+import {HexFunction} from "../libraries/hexFunctions";
+import {River} from "../map/river";
+import {ArmyGeneratorBox} from "../gui/armyGeneratorBox";
+import {InfoChangeBox} from "../gui/infoChangeBox";
+import {Controls} from "../controls/controlVariables";
 
-namespace GodFunctions{
-
-	let factionToCreateBuildingsFor: Realm = GameState.realms[0];
+export namespace GodFunctions{
+    import worldCreationModeOnClick = BoxVisibility.worldCreationModeOnClick;
+    import changeFieldToType = BoxVisibility.changeFieldToType;
+    import hide = BoxVisibility.hide;
+    import show = BoxVisibility.show;
+    import switchModeTo = BoxVisibility.switchModeTo;
+    import changedBuildings = Controls.changedBuildings;
+    let factionToCreateBuildingsFor: Realm = GameState.realms[0];
 
 	export function setFactionToCreateBuildingsFor(faction: Realm): void{
 		factionToCreateBuildingsFor = faction;
@@ -48,7 +61,7 @@ namespace GodFunctions{
 			}
 		}
 		if(found){
-			changedBuildings.push([true, {"type": 0, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);	//<----------------------------------------Realm
+            changedBuildings.push([true, {"type": 0, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);	//<----------------------------------------Realm
 			// console.log({"type": 0, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
 		} else {
 			changedBuildings.push([true, {"type": 0, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor}]);
@@ -293,34 +306,35 @@ namespace GodFunctions{
 	// the function for the Gm posibility to make an army out of nothing
 	export function generateArmyBtn(): boolean{
 		let armyMakerBox: ArmyGeneratorBox = GUI.getArmyGeneratorBox();
-		ownerBuffer = armyMakerBox.getOwnerField().value;
-		armyIdBuffer = Number(armyMakerBox.getArmyNumberField().value);
-		countBuffer = Number(armyMakerBox.getCountField().value);
-		leaderBuffer = Number(armyMakerBox.getLeaderField().value);
-		mountsBuffer = Number(armyMakerBox.getMountsField().value);
-		lkpBuffer = Number(armyMakerBox.getLKPField().value);
-		skpBuffer = Number(armyMakerBox.getSKPField().value);
+        BoxVisibility.ownerBuffer = armyMakerBox.getOwnerField().value;
+        BoxVisibility.armyIdBuffer = Number(armyMakerBox.getArmyNumberField().value);
+        BoxVisibility.countBuffer = Number(armyMakerBox.getCountField().value);
+        BoxVisibility.leaderBuffer = Number(armyMakerBox.getLeaderField().value);
+        BoxVisibility.mountsBuffer = Number(armyMakerBox.getMountsField().value);
+        BoxVisibility.lkpBuffer = Number(armyMakerBox.getLKPField().value);
+        BoxVisibility.skpBuffer = Number(armyMakerBox.getSKPField().value);
 		// TODO be able to generate guard armies
-		guardBuffer = false;
-		if(armyIdBuffer < 101 || armyIdBuffer > 399){
+        BoxVisibility.guardBuffer = false;
+		if(BoxVisibility.armyIdBuffer < 101 || BoxVisibility.armyIdBuffer > 399){
 			window.alert("Die Armee-Id muss zwischen 101 und 399 liegen.");
 			return false;
 		}
 		// check for any other armies with the same armyId
 		for(let i=0; i < GameState.armies.length; i++){
-			if(GameState.armies[i].armyId == armyIdBuffer && GameState.armies[i].owner === ownerBuffer){
+			if(GameState.armies[i].armyId == BoxVisibility.armyIdBuffer &&
+				GameState.armies[i].owner === BoxVisibility.ownerBuffer){
 				window.alert("Ein Heer mit dieser Nummer existiert bereits in diesem Königreich.");
 				return false;
 			}
 		}
 		// check for catabults in a rider army, and for mounts in a rider army, or fleet
-		if(Math.floor(armyIdBuffer/100) == 2) {
-			if(mountsBuffer > 0 || lkpBuffer > 0 || skpBuffer > 0){
+		if(Math.floor(BoxVisibility.armyIdBuffer/100) == 2) {
+			if(BoxVisibility.mountsBuffer > 0 || BoxVisibility.lkpBuffer > 0 || BoxVisibility.skpBuffer > 0){
 				window.alert("In einem Reiterheer sollten weder einzelne Reittiere, noch Katapulte sein. Wenn das Heer ein Fußheer sein sollte gib, ihm eine Nummer zwischen 100 und 199.")
 				return false;
 			}
-		} else if (Math.floor(armyIdBuffer/100) == 3){
-			if(mountsBuffer > 0){
+		} else if (Math.floor(BoxVisibility.armyIdBuffer/100) == 3){
+			if(BoxVisibility.mountsBuffer > 0){
 				window.alert("In einer Flotte sollten keine Reittiere enthalten sein. Wenn das Heer ein Fußheer sein sollte, gib ihm eine Nummer zwischen 100 und 199.")
 				return false;
 			}
