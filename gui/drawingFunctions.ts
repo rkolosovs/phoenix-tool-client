@@ -4,6 +4,7 @@ import {Controls} from "../controls/controlVariables";
 import {GameState} from "../gameState";
 import {Direction} from "../map/direction";
 import {BoxVisibility} from "./boxVisibilty";
+import {Army} from "../armies/army";
 
 export namespace Drawing{
     export let c: number = 1;
