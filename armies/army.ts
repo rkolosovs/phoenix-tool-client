@@ -7,8 +7,9 @@ export abstract class Army extends MobileEntity{
     protected officerCount: number;
     protected lightCatapultCount: number = 0;
     protected heavyCatapultCount: number = 0;
-    protected lightCatapultShot: number = 0;
-    protected heavyCatapultShot: number = 0;
+    protected lightCatapultsShot: number = 0;
+    protected heavyCatapultsShot: number = 0;
+    multiArmyField: boolean = false;
     targetList: [number, number][] = []; //TODO: this needs to be reviewed, together with findShottingTargets ect.
     isGuard: boolean = false;
     wasShotAt: boolean = false;
@@ -26,6 +27,8 @@ export abstract class Army extends MobileEntity{
     }
 
     abstract canHaveCatapults(): boolean;
+
+    abstract canHaveMounts(): boolean;
 
     abstract getRoomPointsSansOfficers(): number;
 
@@ -82,11 +85,23 @@ export abstract class Army extends MobileEntity{
     }
 
     getHeavyCatapultsShot(): number{
-        return this.heavyCatapultShot;
+        return this.heavyCatapultsShot;
+    }
+
+    addHeavyCatapultsShot(value: number): void{
+        if(this.getHeavyCatapultsShot() + Math.max(0, value) <= this.getHeavyCatapultCount()) {
+            this.heavyCatapultsShot += Math.max(0, value);
+        }
     }
 
     getLightCatapultsShot(): number{
-        return this.lightCatapultShot;
+        return this.lightCatapultsShot;
+    }
+
+    addLightCatapultsShot(value: number): void{
+        if(this.getLightCatapultsShot() + Math.max(0, value) <= this.getLightCatapultCount()) {
+            this.lightCatapultsShot += Math.max(0, value);
+        }
     }
 
     conquer(): void {

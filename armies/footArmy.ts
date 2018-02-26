@@ -1,10 +1,11 @@
 class FootArmy extends LandArmy{
     static readonly MAX_MOVE_POINTS = 9;
     protected mountCount: number;
+    
 
     constructor(id: number, owner: Realm, troopCount: number, officerCount: number, lightCatapultCount: number,
-                heavyCatapultCount: number, position: [number, number], movePoints: number, heightPoints: number,
-                isGuard?: boolean){
+                heavyCatapultCount: number, mountCount: number, position: [number, number], movePoints: number, 
+                heightPoints: number, isGuard?: boolean){
         if(isGuard != undefined){
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position,
                 movePoints, heightPoints, isGuard);
@@ -12,6 +13,7 @@ class FootArmy extends LandArmy{
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position,
                 movePoints, heightPoints);
         }
+        this.mountCount = mountCount;
     }
 
     getErkenfaraID(): number{
@@ -31,7 +33,9 @@ class FootArmy extends LandArmy{
     }
 
     setMountCount(value: number): void{
-        this.mountCount = Math.max(0, value);
+        if(this.canHaveMounts()){
+            this.mountCount = Math.max(0,value);
+        }
     }
 
     computeMoveCost(thereIsAStreet: boolean, thereIsAHarbor: boolean, thereIsARiver: boolean, thereIsABridge: boolean,
@@ -213,6 +217,10 @@ class FootArmy extends LandArmy{
     }
 
     canHaveCatapults(): boolean{
+        return !this.isGuard;
+    }
+
+    canHaveMounts(): boolean{
         return !this.isGuard;
     }
 

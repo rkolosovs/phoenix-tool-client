@@ -1,68 +1,236 @@
-import {Controls} from "../Controls/controlVariables";
-import {GameState} from "../gameState";
-import {GUI} from "../gui/gui";
-import {BoxVisibility} from "../gui/boxVisibilty";
-import {Drawing} from "../gui/drawingFunctions";
-import {Army} from "./army";
-
+import { Controls } from "../Controls/controlVariables";
+import { GameState } from "../gameState";
+import { GUI } from "../gui/gui";
+import { BoxVisibility } from "../gui/boxVisibilty";
+import { Drawing } from "../gui/drawingFunctions";
+import { Army } from "./army";
+import { HexFunction } from "../libraries/hexFunctions";
 // array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null),
 // schießende Armee, ziel Armee, Charaktere und Zauberer auf dem Zielfeld
 // TODO define chars
-function fernkampf(dicerollsL: number[], dicerollsS: number[], shooter: Army, target: Army, targetField: [number, number], chars: any) {
-    let charGpSum = 0;
-    if(chars != undefined){
-        let cLen = chars.length;
-        for (let i = 0; i<cLen; i++){
-            charGpSum += chars[i].gp;
-        }
+function fernkampf(dicerollsL: number[], dicerollsS: number[], shooter: Army, target: String, targetField: [number, number], chars: any) {
+	let charGpSum = 0;
+	if (chars != undefined) {
+		let cLen = chars.length;
+		for (let i = 0; i < cLen; i++) {
+			charGpSum += chars[i].gp;
+		}
 	}
 
-	let damage = shooter.fireLkp(dicerollsL, checkCondition(shooter, targetField, false)) +
-		shooter.fireSkp(dicerollsS, checkCondition(shooter, targetField, true));
+	let damage = shooter.fireLightCatapults(dicerollsL, checkShootingCondition(shooter, targetField, false)) +
+		shooter.fireHeavyCatapults(dicerollsS, checkShootingCondition(shooter, targetField, true));
 	let allTargets = [];
 	let sumAllBP = 0;
-	if(target === "On Field"){
-		for(let i = 0; i < GameState.buildings.length; i++){
-			if(GameState.buildings[i].getPosition()[0] === targetField[0] && GameState.buildings[i].getPosition()[1] === targetField[1] && GameState.buildings[i].type < 5){
+	if (target === "On Field") {
+		for (let i = 0; i < GameState.buildings.length; i++) {
+			if (GameState.buildings[i].getPosition()[0] === targetField[0] && GameState.buildings[i].getPosition()[1] === targetField[1] && GameState.buildings[i].type < 5) {
 				//TODO building takes 2/3 damage
 				//building[i].takeFire(damage * (2/3));
-				damage = damage * (1/3);
+				damage = damage * (1 / 3);
 			}
 		}
 
-		for(let i = 0; i < GameState.armies.length; i++){
-			if(GameState.armies[i].getPosition()[0] === targetField[0] && GameState.armies[i].getPosition()[1] === targetField[1]){
+		for (let i = 0; i < GameState.armies.length; i++) {
+			if (GameState.armies[i].getPosition()[0] === targetField[0] && GameState.armies[i].getPosition()[1] === targetField[1]) {
 				allTargets.push(GameState.armies[i]);
 				sumAllBP += GameState.armies[i].sumBP();
 			}
 		}
-		for(let i = 0; i < allTargets.length; i++){
+		for (let i = 0; i < allTargets.length; i++) {
 			//target may be a building. GameState.buildings need to have this funktion
-			allTargets[i].takeFire(damage/(1+(allTargets[i].leaderGp()+charGpSum)/100) * (allTargets[i].sumBP() / sumAllBP));
+			allTargets[i].takeFire(damage / (1 + (allTargets[i].leaderGp() + charGpSum) / 100) * (allTargets[i].sumBP() / sumAllBP));
 		}
 	}
 	//TODO Wall Damage
 	checkArmiesForLiveliness();
 
-	shooter.LKPShotThisTurn += dicerollsL.length;
-	shooter.SKPShotThisTurn += dicerollsS.length;
+	shooter.addLightCatapultsShot(dicerollsL.length);
+	shooter.addHeavyCatapultsShot(dicerollsS.length);
 
 	//check to see if shooting after moving and stop the army if it moved this turn.
-	if(shooter.remainingMovePoints <= shooter.startingMovepoints){
+	if (shooter.remainingMovePoints <= shooter.startingMovepoints) {
 		shooter.remainingMovePoints = 0;
 		shooter.possibleMoves = [];
 	}
 }
 
+function checkAllShootingConditions(army: Army, targetTileList: [number, number][]) {
+	let templist = targetTileList.slice();
+	let hasSKP = false;
+	if (army.getHeavyCatapultCount() - army.getHeavyCatapultsShot() > 0) {
+		hasSKP = true;
+	}
+	//to find out the conditions and maybe kick out if not shootable
+	for (let i = templist.length - 1; i >= 0; i--) {
+		if (checkShootingCondition(army, templist[i], hasSKP) === 'impossible shot') {
+			targetTileList.splice(i, 1);
+		}
+	}
+
+	return targetTileList;
+}
+
+function checkShootingCondition(army: Army, target: [number, number], skpShot: boolean) {//TODO mixed shooting
+	let condition = 'impossible shot';
+	let range = HexFunction.distance([army.getPosition()[0], army.getPosition()[1]], target);
+	if (skpShot) {//skp shooting
+		if (range == 1) {//for range of 1
+			if (HexFunction.height(target) - HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) <= 2) {
+				condition = 'high';
+			}
+			if (HexFunction.height(target) - HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) <= 1) {
+				condition = 'short';
+			}
+			if (HexFunction.height(target) - HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) === 1 &&
+				findWallInWay([army.getPosition()[0], army.getPosition()[1]], target).length > 0) {
+				condition = 'high';
+			}
+		} else if (range == 2) {//for range of 2
+			if (HexFunction.height(target) - HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) <= 1) {
+				condition = 'farAndUp';
+			}
+			if (HexFunction.height(target) - HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) < 1) {
+				condition = 'far';
+			}
+			if (HexFunction.height(target) - HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) === 0 &&
+				findWallInWay([army.getPosition()[0], army.getPosition()[1]], target).length > 0) {
+				condition = 'farAndUp';
+			}
+			//if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
+			let commonNeig = HexFunction.findCommonNeighbor([army.getPosition()[0], army.getPosition()[1]], target);
+			let walls = findWallInWay([army.getPosition()[0], army.getPosition()[1]], target);
+			for (let i = 0; i < commonNeig.length; i++) {
+				if (walls.length > 0) {
+					for (let j = 0; j < walls.length; j++) {
+						if (((HexFunction.height([commonNeig[i][0], commonNeig[i][1]]) -
+							HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) === 1)
+							&& GameState.buildings[walls[j]].getPosition()[0] === commonNeig[i][0] &&
+							GameState.buildings[walls[j]].getPosition()[1] === commonNeig[i][1])) {
+							condition = 'impossible shot';
+						}
+					}
+				}
+				if (HexFunction.height([commonNeig[i][0], commonNeig[i][1]]) -
+					HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) > 1) {
+					condition = 'impossible shot';
+				}
+			}
+
+		}
+	} else {//for lkp shooting
+		if (HexFunction.height(target) - HexFunction.height([army.getPosition()[0], army.getPosition()[1]]) <= 1) {
+			condition = 'lkp';
+		}
+	}
+	return condition;
+}
+
 //to fill the targetList(fields)
-function findPossibleTargetFields(){
+function findPossibleTargetFields() {
 	findShootingTargets(GameState.armies[Controls.selectedArmyIndex]);
 }
 
+//to find all fields in a two tile proximity
+function findShootingTargets(army: Army) {
+	let tilesInRange: [number, number][] = []
+	if (army.getHeavyCatapultCount() - army.getHeavyCatapultsShot() > 0) {//in a 2 tile range
+		tilesInRange = HexFunction.neighborInRange([army.getPosition()[0], army.getPosition()[0]], 2);
+	}
+	else if (army.getLightCatapultCount() - army.getLightCatapultsShot() > 0) {//one tile range
+		tilesInRange = HexFunction.neighborInRange([army.getPosition()[0], army.getPosition()[0]], 1);
+	}
+	army.targetList = checkAllShootingConditions(army, tilesInRange);
+}
+
+
+
+function findWallInWay(from: [number, number], to: [number, number]) {
+	let foundWallsIndeces = [];
+	let dir = HexFunction.getDirectionToNeighbor(from, to);
+	if (HexFunction.distance(from, to) === 1) {
+		dir = (dir + 3) % 6;
+		let wallIndex = getWallIndexOnFieldInDirection(to, dir);
+		if (wallIndex != -1) {
+			foundWallsIndeces.push(wallIndex)
+			return foundWallsIndeces;
+		}
+	} else if (HexFunction.distance(from, to) === 2) {
+		if (dir % 1 === 0) {
+			let commonNeig = HexFunction.findCommonNeighbor(from, to);
+			if (getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dir) !== -1) {//case back facing wall on common neighbor
+				foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dir));
+			}
+			dir = (dir + 3) % 6;
+			if (getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dir) !== -1) {//case front facing wall on common neighbor
+				foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dir));
+			}
+			if (getWallIndexOnFieldInDirection(to, dir) !== -1) {//case front wall on target
+				foundWallsIndeces.push(getWallIndexOnFieldInDirection(to, dir));
+			}
+		} else {
+			let commonNeig = HexFunction.findCommonNeighbor(from, to);
+			dir = Math.floor(dir);
+			let dirCommon1 = (dir + 3) % 6;
+			if (getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dirCommon1) !== -1) {//case front facing wall on common neighbor 1
+				foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dirCommon1));
+			}
+			dirCommon1 = (dir + 1) % 6;
+			if (getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dirCommon1) !== -1) {//case back facing wall on common neighbor 1
+				foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dirCommon1));
+			}
+
+			let dirCommon2 = (dir + 4) % 6;
+			if (getWallIndexOnFieldInDirection([commonNeig[1][0], commonNeig[1][1]], dirCommon2) !== -1) {//case front facing wall on common neighbor 2
+				foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[1][0], commonNeig[1][1]], dirCommon2));
+			}
+			dirCommon2 = dir;
+			if (getWallIndexOnFieldInDirection([commonNeig[1][0], commonNeig[1][1]], dirCommon2) !== -1) {//case back facing wall on common neighbor 2
+				foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[1][0], commonNeig[1][1]], dirCommon2));
+			}
+
+			let dirTarget = (dir + 3) % 6;
+			if (getWallIndexOnFieldInDirection(to, dirTarget) !== -1) {//case front facing wall on target
+				foundWallsIndeces.push(getWallIndexOnFieldInDirection(to, dirTarget));
+			}
+			dirTarget = (dir + 4) % 6;
+			if (getWallIndexOnFieldInDirection(to, dirTarget) !== -1) {//case front facing wall on target
+				foundWallsIndeces.push(getWallIndexOnFieldInDirection(to, dirTarget));
+			}
+		}
+	}
+	return foundWallsIndeces;
+}
+
+//returns all walls on target field
+function getWallIndexOnFieldInDirection(hex: [number, number], direction: number) {
+	for (let i = 0; i < GameState.buildings.length; i++) {
+		if (GameState.buildings[i] instanceof Wall) {
+			let thisIsAWall = GameState.buildings[i] as Wall;
+			if (thisIsAWall.getPosition()[0] === hex[0] &&
+				thisIsAWall.getPosition()[1] === hex[1] && thisIsAWall.facing === convertDirection(direction)) {
+				return i;
+			}
+		}
+	}
+	return -1;
+}
+
+
+function convertDirection(dir: number) {
+	switch (dir) {
+		case 0: return "nw";
+		case 1: return "ne";
+		case 2: return "e";
+		case 3: return "se";
+		case 4: return "sw";
+		case 5: return "w";
+		default: return "nw";
+	}
+}
+
 //to actually shoot stuff, with events
-function shoot(){
-	if(login == 'guest')
-	{
+function shoot() {
+	if (login == 'guest') {
 		window.alert("Zuschauer haben keine Rechte.");
 		return false;
 	}
@@ -70,47 +238,47 @@ function shoot(){
 	let SKPshooting = parseInt(GUI.getShootingSKPInput().value);
 	let shootingarmy = GameState.armies[Controls.selectedArmyIndex];
 
-	if(isNaN(LKPshooting)|| LKPshooting === undefined){
+	if (isNaN(LKPshooting) || LKPshooting === undefined) {
 		LKPshooting = 0;
 	}
-	if(isNaN(SKPshooting) || SKPshooting === undefined){
+	if (isNaN(SKPshooting) || SKPshooting === undefined) {
 		SKPshooting = 0;
 	}
-	if(shootingarmy.lkp - shootingarmy.LKPShotThisTurn < LKPshooting){//check if remaining Lkp that have not shot yet
-		window.alert("Die Armee hat nur noch " + (shootingarmy.lkp - shootingarmy.LKPShotThisTurn) +" leichte Katapulte/Kriegsschiffe die noch nicht geschossen haben.");
+	if (shootingarmy.lkp - shootingarmy.LKPShotThisTurn < LKPshooting) {//check if remaining Lkp that have not shot yet
+		window.alert("Die Armee hat nur noch " + (shootingarmy.lkp - shootingarmy.LKPShotThisTurn) + " leichte Katapulte/Kriegsschiffe die noch nicht geschossen haben.");
 		return false;
 	}
-	if(shootingarmy.skp - shootingarmy.SKPShotThisTurn < SKPshooting){//check if remaining Skp that have not shot yet
-		window.alert("Die Armee hat nur noch " + (shootingarmy.skp - shootingarmy.SKPShotThisTurn) +" schwere Katapulte/Kriegsschiffe die noch nicht geschossen haben.");
+	if (shootingarmy.skp - shootingarmy.SKPShotThisTurn < SKPshooting) {//check if remaining Skp that have not shot yet
+		window.alert("Die Armee hat nur noch " + (shootingarmy.skp - shootingarmy.SKPShotThisTurn) + " schwere Katapulte/Kriegsschiffe die noch nicht geschossen haben.");
 		return false;
 	}
-	if(LKPshooting > shootingarmy.lkp){
+	if (LKPshooting > shootingarmy.lkp) {
 		window.alert("Die Armee hat nicht genug leichte Katapulte/Kriegsschiffe");
 		return false;
 	}
-	if(SKPshooting > shootingarmy.skp){
+	if (SKPshooting > shootingarmy.skp) {
 		window.alert("Die Armee hat nicht genug schwere Katapulte/Kriegsschiffe");
 		return false;
 	}
-	if(LKPshooting === 0 && SKPshooting === 0){
+	if (LKPshooting === 0 && SKPshooting === 0) {
 		window.alert("Sie müssen eine Anzahl Katapulte eintragen");
 		return false;
 	}
-	if(Controls.selectedFields[1] === undefined){
+	if (Controls.selectedFields[1] === undefined) {
 		window.alert("Wählen Sie ein Feld auf das Sie schießen wollen");
 		return false;
 	}
-	if(shootingarmy.targetList === undefined){
+	if (shootingarmy.targetList === undefined) {
 		window.alert("bitte Zielen Sie erst");
 		return false;
-	}else{
+	} else {
 		let aimedTargetFound = false;
-		for(let i = 0; i < shootingarmy.targetList.length; i++){
-			if(shootingarmy.targetList[i][0] === Controls.selectedFields[1][0] && shootingarmy.targetList[i][1] === Controls.selectedFields[1][1]){
+		for (let i = 0; i < shootingarmy.targetList.length; i++) {
+			if (shootingarmy.targetList[i][0] === Controls.selectedFields[1][0] && shootingarmy.targetList[i][1] === Controls.selectedFields[1][1]) {
 				aimedTargetFound = true;
 			}
 		}
-		if(aimedTargetFound === false){
+		if (aimedTargetFound === false) {
 			window.alert("Schießen Sie auf ein markiertes Feld");
 			return false;
 		}
@@ -118,9 +286,9 @@ function shoot(){
 	let target = "On Field";
 
 	//check for mixed shooting(reachable by both lkp and skp)
-	if(LKPshooting < 0){
-		let cond = checkCondition(shootingarmy, Controls.selectedFields[1], false);
-		if(cond === 'impossible shot'){
+	if (LKPshooting < 0) {
+		let cond = checkShootingCondition(shootingarmy, Controls.selectedFields[1], false);
+		if (cond === 'impossible shot') {
 			window.alert("Sie müssen auf ein gemeinsam erreichbares Feld schießen");
 			return false;
 		}
@@ -128,7 +296,7 @@ function shoot(){
 
 	preparedEvents.push({
 		type: "shoot", content: {
-			shooterID: GameState.armies[Controls.selectedArmyIndex].armyId, 
+			shooterID: GameState.armies[Controls.selectedArmyIndex].armyId,
 			realm: GameState.armies[Controls.selectedArmyIndex].ownerTag(),
 			LKPcount: LKPshooting,
 			SKPcount: SKPshooting,
@@ -144,7 +312,7 @@ function shoot(){
 	shootingarmy.SKPShotThisTurn += SKPshooting;
 
 	//check to see if shooting after moving and stop the army if it moved this turn.
-	if(shootingarmy.remainingMovePoints <= shootingarmy.startingMovepoints){
+	if (shootingarmy.remainingMovePoints <= shootingarmy.startingMovepoints) {
 		shootingarmy.remainingMovePoints = 0;
 		shootingarmy.possibleMoves = [];
 	}
@@ -244,15 +412,23 @@ function splitSelectedArmy() {
 	}
 	if (GameState.armies[Controls.selectedArmyIndex].armyType() == 1) {
 		let newArmyId = generateArmyId(1, GameState.armies[Controls.selectedArmyIndex].owner);
-		let newArmy = new FootArmy(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, false,
-			GameState.armies[Controls.selectedArmyIndex].x, GameState.armies[Controls.selectedArmyIndex].y, GameState.armies[Controls.selectedArmyIndex].owner);
-			GameState.armies.push(newArmy);
-			GameState.armies[Controls.selectedArmyIndex].removeSoldiers(toSplit);
-			GameState.armies[Controls.selectedArmyIndex].removeLeaders(leadersToSplit);
-			GameState.armies[Controls.selectedArmyIndex].removeLkp(lkpToSplit);
-			GameState.armies[Controls.selectedArmyIndex].removeSkp(skpToSplit);
-			GameState.armies[Controls.selectedArmyIndex].removeMounts(mountsToSplit);
-			GameState.armies.push({
+		if(newArmyId !== false){
+			newArmyId = <number> newArmyId;
+		} else {
+			return false;
+		}
+		let newArmy = new FootArmy(newArmyId, GameState.armies[Controls.selectedArmyIndex].owner, toSplit, 
+			leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, [GameState.armies[Controls.selectedArmyIndex].getPosition()[0], 
+			GameState.armies[Controls.selectedArmyIndex].getPosition()[1]], 
+			GameState.armies[Controls.selectedArmyIndex].getMovePoints(),
+			GameState.armies[Controls.selectedArmyIndex].getHeightPoints(), false,);
+		GameState.armies.push(newArmy);
+		GameState.armies[Controls.selectedArmyIndex].removeSoldiers(toSplit);
+		GameState.armies[Controls.selectedArmyIndex].removeLeaders(leadersToSplit);
+		GameState.armies[Controls.selectedArmyIndex].removeLkp(lkpToSplit);
+		GameState.armies[Controls.selectedArmyIndex].removeSkp(skpToSplit);
+		GameState.armies[Controls.selectedArmyIndex].removeMounts(mountsToSplit);
+		GameState.armies.push({
 			type: "split", content: {
 				fromArmyId: GameState.armies[Controls.selectedArmyIndex].armyId,
 				realm: GameState.armies[Controls.selectedArmyIndex].ownerTag(),
@@ -269,11 +445,19 @@ function splitSelectedArmy() {
 	}
 	if (GameState.armies[Controls.selectedArmyIndex].armyType() == 2) {
 		let newArmyId = generateArmyId(2, GameState.armies[Controls.selectedArmyIndex].owner);
-		let newArmy = new RiderArmy(newArmyId, toSplit, leadersToSplit, false,
-			GameState.armies[Controls.selectedArmyIndex].x, GameState.armies[Controls.selectedArmyIndex].y, GameState.armies[Controls.selectedArmyIndex].owner);
-			GameState.armies.push(newArmy);
-			GameState.armies[Controls.selectedArmyIndex].removeSoldiers(toSplit);
-			GameState.armies[Controls.selectedArmyIndex].removeLeaders(leadersToSplit);
+		if(newArmyId !== false){
+			newArmyId = <number> newArmyId;
+		} else {
+			return false;
+		}
+		let newArmy = new RiderArmy(newArmyId, GameState.armies[Controls.selectedArmyIndex].owner, toSplit, leadersToSplit,
+			[GameState.armies[Controls.selectedArmyIndex].getPosition()[0], 
+			GameState.armies[Controls.selectedArmyIndex].getPosition()[1]],
+			GameState.armies[Controls.selectedArmyIndex].getMovePoints(),
+			GameState.armies[Controls.selectedArmyIndex].getHeightPoints(), false);
+		GameState.armies.push(newArmy);
+		GameState.armies[Controls.selectedArmyIndex].removeSoldiers(toSplit);
+		GameState.armies[Controls.selectedArmyIndex].removeLeaders(leadersToSplit);
 		preparedEvents.push({
 			type: "split", content: {
 				fromArmyId: GameState.armies[Controls.selectedArmyIndex].armyId,
@@ -291,13 +475,20 @@ function splitSelectedArmy() {
 	}
 	if (GameState.armies[Controls.selectedArmyIndex].armyType() == 3) {
 		let newArmyId = generateArmyId(3, GameState.armies[Controls.selectedArmyIndex].owner);
-		let newArmy = new Fleet(newArmyId, toSplit, leadersToSplit, lkpToSplit,
-			skpToSplit, false, GameState.armies[Controls.selectedArmyIndex].x, GameState.armies[Controls.selectedArmyIndex].y, GameState.armies[Controls.selectedArmyIndex].owner);
-			GameState.armies.push(newArmy);
-			GameState.armies[Controls.selectedArmyIndex].removeSoldiers(toSplit);
-			GameState.armies[Controls.selectedArmyIndex].removeLeaders(leadersToSplit);
-			GameState.armies[Controls.selectedArmyIndex].removeLkp(lkpToSplit);
-			GameState.armies[Controls.selectedArmyIndex].removeSkp(skpToSplit);
+		if(newArmyId !== false){
+			newArmyId = <number> newArmyId;
+		} else {
+			return false;
+		}
+		let newArmy = new Fleet(newArmyId, GameState.armies[Controls.selectedArmyIndex].owner, toSplit, leadersToSplit, 
+			lkpToSplit, skpToSplit, [GameState.armies[Controls.selectedArmyIndex].getPosition()[0], 
+			GameState.armies[Controls.selectedArmyIndex].getPosition()[1]],
+			GameState.armies[Controls.selectedArmyIndex].getMovePoints(), false);
+		GameState.armies.push(newArmy);
+		GameState.armies[Controls.selectedArmyIndex].removeSoldiers(toSplit);
+		GameState.armies[Controls.selectedArmyIndex].removeLeaders(leadersToSplit);
+		GameState.armies[Controls.selectedArmyIndex].removeLkp(lkpToSplit);
+		GameState.armies[Controls.selectedArmyIndex].removeSkp(skpToSplit);
 		preparedEvents.push({
 			type: "split", content: {
 				fromArmyId: GameState.armies[Controls.selectedArmyIndex].armyId,
@@ -326,10 +517,19 @@ function mountSelected() {
 
 // mounting with parameters
 //TODO: If the army has moved, set the new mounted army's move points to the apropriate, non-max value.
-function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
-	if (toMount === "" || leadersToMount === "" || toMount === null || leadersToMount === null) {
+function mountWithParams(armyIndex: number, toMountIn: String, leadersToMountIn: String, newArmyId: number) {
+	if (toMountIn === "" || leadersToMountIn === "" || toMountIn === null || leadersToMountIn === null) {
 		window.alert("Alle felder müssen ausgefüllt sein");
 		return false;
+	}
+	let toMount: number = 0;
+	let leadersToMount: number = 0;
+	if(isNaN(Number(toMountIn)) || isNaN(Number(leadersToMountIn))){
+		window.alert("Tragen sie Zahlen für Truppen und Heerführer ein.");
+		return false;
+	} else {
+		toMount = Number(toMountIn);
+		leadersToMount = Number(leadersToMountIn);
 	}
 	// generiere armyId falls keine vorhanden
 	if (newArmyId === null) {
@@ -375,7 +575,7 @@ function mountWithParams(armyIndex, toMount, leadersToMount, newArmyId) {
 		newArmy.setRemainingHeightPoints(GameState.armies[armyIndex].remainingHeightPoints);
 		if (GameState.armies[armyIndex].remainingMovePoints !== GameState.armies[armyIndex].startingMovepoints) {
 			newArmy.setRemainingMovePoints(0);
-		} else newArmy.setRemainingMovePoints(newArmy.startingMovepoints);
+		} else newArmy.setRemainingMovePoints(newArmy.getMaxMovePoints());
 		// Nachricht, falls Katapulte vorhanden waren.
 		if (GameState.armies[armyIndex].skp > 0 || GameState.armies[armyIndex].lkp > 0) {
 			window.alert("Da kein Fußheer mehr bestehen bleibt, wurden die Katapulte zerstört.")
@@ -525,7 +725,7 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 		newArmy.setRemainingHeightPoints(GameState.armies[armyIndex].remainingHeightPoints);
 		if (GameState.armies[armyIndex].remainingMovePoints !== GameState.armies[armyIndex].startingMovepoints) {
 			newArmy.setRemainingMovePoints(0);
-		}  else newArmy.setRemainingMovePoints(newArmy.startingMovepoints);
+		} else newArmy.setRemainingMovePoints(newArmy.startingMovepoints);
 		// zahlen im alten Reiterheer anpassen
 		GameState.armies[armyIndex].removeSoldiers(toUnMount);
 		GameState.armies[armyIndex].removeLeaders(leadersToUnMount);

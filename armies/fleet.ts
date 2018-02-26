@@ -22,6 +22,10 @@ class Fleet extends Army{
         return !this.isGuard;
     }
 
+    canHaveMounts(): boolean{
+        return false;
+    }
+
     getMaxMovePoints(): number{
         return Fleet.MAX_MOVE_POINTS;
     }

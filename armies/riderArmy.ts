@@ -117,6 +117,10 @@ class RiderArmy extends LandArmy{
         return false;
     }
 
+    canHaveMounts(): boolean{
+        return false;
+    }
+
     getRoomPointsSansOfficers(): number{
         return this.troopCount * RIDER_RP;
     }
