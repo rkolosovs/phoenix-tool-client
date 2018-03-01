@@ -180,9 +180,13 @@ export class Fleet extends Army{
         return false;
     }
 
+    totalBP(): number{
+        return this.troopCount * SHIP_BP + this.lightCatapultCount * LIGHT_WS_BP +
+            this.heavyCatapultCount * HEAVY_WS_BP;
+    }
+
     takeBPDamage(bpDamage: number): void{
-        let totalBP = this.troopCount * SHIP_BP +
-            this.lightCatapultCount * LIGHT_WS_BP + this.heavyCatapultCount * HEAVY_WS_BP;
+        let totalBP = this.totalBP();
         this.setOfficerCount(this.officerCount - this.troopCount * (bpDamage / totalBP));
         this.setTroopCount(this.troopCount - bpDamage * (this.troopCount * SHIP_BP / totalBP) / SHIP_BP);
         this.setLightCatapultCount(this.lightCatapultCount - bpDamage * (this.lightCatapultCount * LIGHT_WS_BP /

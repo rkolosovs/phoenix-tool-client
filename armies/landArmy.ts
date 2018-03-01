@@ -10,7 +10,7 @@ import {NonDestructibleBuilding} from "../buildings/nonDestructibleBuilding";
 import {FieldType} from "../map/field";
 
 export abstract class LandArmy extends Army{
-    transportingFleet: Fleet;
+    transportingFleet: Fleet|undefined;
 
     constructor(id: number, owner: Realm, troopCount: number, officerCount: number, lightCatapultCount: number,
                 heavyCatapultCount: number, position: [number, number], movePoints: number, heightPoints: number,

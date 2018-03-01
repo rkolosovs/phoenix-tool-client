@@ -14,6 +14,11 @@ var MOUNT_BP = constants_1.Constants.MOUNT_BP;
 var LIGHT_CATA_BP = constants_1.Constants.LIGHT_CATA_BP;
 var HEAVY_CATA_BP = constants_1.Constants.HEAVY_CATA_BP;
 var OFFICER_RP = constants_1.Constants.OFFICER_RP;
+const riderArmy_1 = require("./riderArmy");
+const controlVariables_1 = require("../controls/controlVariables");
+const boxVisibilty_1 = require("../gui/boxVisibilty");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const armyFunctions_1 = require("../libraries/armyFunctions");
 class FootArmy extends landArmy_1.LandArmy {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, mountCount, position, movePoints, heightPoints, isGuard) {
         if (isGuard != undefined) {
@@ -311,9 +316,12 @@ class FootArmy extends landArmy_1.LandArmy {
             this.heavyCatapultCount * HEAVY_CATA_RP +
             this.mountCount * MOUNT_RP;
     }
-    takeBPDamage(bpDamage) {
-        let totalBP = this.troopCount * FOOTMAN_BP + this.mountCount * MOUNT_BP +
+    totalBP() {
+        return this.troopCount * FOOTMAN_BP + this.mountCount * MOUNT_BP +
             this.lightCatapultCount * LIGHT_CATA_BP + this.heavyCatapultCount * HEAVY_CATA_BP;
+    }
+    takeBPDamage(bpDamage) {
+        let totalBP = this.totalBP();
         this.setOfficerCount(this.officerCount - this.troopCount * (bpDamage / totalBP));
         this.setTroopCount(this.troopCount - bpDamage * (this.troopCount * FOOTMAN_BP / totalBP) / FOOTMAN_BP);
         this.setMountCount(this.mountCount - bpDamage * (this.mountCount * MOUNT_BP / totalBP) / MOUNT_BP);
@@ -512,6 +520,121 @@ class FootArmy extends landArmy_1.LandArmy {
             }
         }
         return damageBP;
+    }
+    // mounting with parameters
+    //TODO: If the army has moved, set the new mounted army's move points to the apropriate, non-max value.
+    mount(toMount, leadersToMount, newArmyId) {
+        // generiere armyId falls keine vorhanden
+        if (newArmyId == undefined) {
+            newArmyId = armyFunctions_1.ArmyFunctions.generateArmyId(2, this.owner);
+        }
+        // sitzen genug Truppen auf?
+        if (toMount < 50) {
+            window.alert("Es müssen mindestens 50 Reiter in einem Reiterheer sein.");
+            return false;
+        }
+        // sitzen genug Heerführer auf?
+        if (leadersToMount < 1) {
+            window.alert("Es muss mindestens ein Heerführer bei der neuen Armee sein.");
+            return false;
+        }
+        // bleibt ein Hf bei der armee zurück?
+        if (toMount != this.troopCount && leadersToMount === this.officerCount) {
+            window.alert("Es muss mindestens ein Heerführer bei der Armee verbleiben.");
+            return false;
+        }
+        // genug Truppen vorhanden?
+        if (toMount != this.troopCount && (toMount * 2 > this.getRoomPointsSansOfficers() - 100)) {
+            window.alert("Es müssen alle aufsitzen, oder mindestens 100 Raumpunkte verbleiben");
+            return false;
+            // genug Reittiere vorhanden?
+        }
+        // genug Truppen vorhanden?
+        if (toMount > this.troopCount) {
+            window.alert("Du hast zu wenige Truppen zum aufsitzen");
+            return false;
+            // genug Reittiere vorhanden?
+        }
+        else if (toMount > this.mountCount) {
+            window.alert("Du hast zu wenige Reittiere zum aufsitzen");
+            return false;
+            // Sitzen alle auf?
+        }
+        else if (toMount === this.troopCount) {
+            // neues Reiterheer mit generierter Id an selben Koordinaten
+            let newArmy = new riderArmy_1.RiderArmy(newArmyId, this.owner, toMount, this.officerCount, this.getPosition(), 0, this.heightPoints, this.isGuard);
+            if (this.movePoints !== this.getMaxMovePoints()) {
+                newArmy.setMovePoints(0);
+            }
+            else {
+                newArmy.setMovePoints(newArmy.getMaxMovePoints());
+            }
+            // Nachricht, falls Katapulte vorhanden waren.
+            if (this.heavyCatapultCount > 0 || this.lightCatapultCount > 0) {
+                window.alert("Da kein Fußheer mehr bestehen bleibt, wurden die Katapulte zerstört.");
+            }
+            // in GameState.armies einfügen und alte Armee löschen, ist dann automatisch armyIndex
+            gameState_1.GameState.armies.push(newArmy);
+            //in preparedEvents pushen
+            preparedEvents.push({
+                type: "mount", content: {
+                    fromArmyId: this.getErkenfaraID(),
+                    realm: this.owner.tag,
+                    troops: toMount,
+                    leaders: leadersToMount,
+                    x: this.position[0],
+                    y: this.position[1],
+                    newArmysId: newArmy.getErkenfaraID()
+                }
+            });
+            armyFunctions_1.ArmyFunctions.deleteArmy(this);
+            boxVisibilty_1.BoxVisibility.restoreInfoBox();
+            drawingFunctions_1.Drawing.drawStuff();
+            boxVisibilty_1.BoxVisibility.updateInfoBox();
+            return true;
+        }
+        else if (leadersToMount >= this.officerCount) {
+            window.alert("Du hast zu wenige Heerführer zum aufsitzen");
+            return false;
+        }
+        else if (this.isGuard) {
+            window.alert("Die Garde muss zusammen bleiben");
+            return false;
+        }
+        else {
+            // neues Reiterheer mit generierter Id an selben Koordinaten
+            let newArmy = new riderArmy_1.RiderArmy(newArmyId, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner, toMount, leadersToMount, this.getPosition(), 0, this.heightPoints, false);
+            if (this.movePoints !== this.getMaxMovePoints()) {
+                newArmy.setMovePoints(0);
+            }
+            else {
+                newArmy.setMovePoints(newArmy.getMaxMovePoints());
+            }
+            // zahlen im alten Heer anpassen
+            this.setTroopCount(this.troopCount - toMount);
+            this.setOfficerCount(this.officerCount - leadersToMount);
+            this.setMountCount(this.mountCount - toMount);
+            // in GameState.armies einfügen
+            gameState_1.GameState.armies.push(newArmy);
+            //in preparedEvents pushen
+            preparedEvents.push({
+                type: "mount", content: {
+                    fromArmyId: this.getErkenfaraID(),
+                    realm: this.owner.tag,
+                    troops: toMount,
+                    leaders: leadersToMount,
+                    x: this.position[0],
+                    y: this.position[0],
+                    newArmysId: newArmy.getErkenfaraID()
+                }
+            });
+            // Controls.selectedArmyIndex zeigt auf neues Heer
+            controlVariables_1.Controls.selectedArmyIndex = gameState_1.GameState.armies.length - 1;
+            drawingFunctions_1.Drawing.drawStuff();
+            boxVisibilty_1.BoxVisibility.restoreInfoBox();
+            boxVisibilty_1.BoxVisibility.updateInfoBox();
+            return true;
+        }
     }
 }
 FootArmy.MAX_MOVE_POINTS = 9;

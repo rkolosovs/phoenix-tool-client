@@ -223,4 +223,74 @@ var HexFunction;
         return result;
     }
     HexFunction.getAdjacency = getAdjacency;
+    function findWallInWay(from, to) {
+        let foundWallsIndeces = [];
+        let dir = HexFunction.getDirectionToNeighbor(from, to);
+        if (HexFunction.distance(from, to) === 1) {
+            dir = (dir + 3) % 6;
+            let wallIndex = getWallIndexOnFieldInDirection(to, dir);
+            if (wallIndex != -1) {
+                foundWallsIndeces.push(wallIndex);
+                return foundWallsIndeces;
+            }
+        }
+        else if (HexFunction.distance(from, to) === 2) {
+            if (dir % 1 === 0) {
+                let commonNeig = HexFunction.findCommonNeighbor(from, to);
+                if (getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dir) !== -1) {
+                    foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dir));
+                }
+                dir = (dir + 3) % 6;
+                if (getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dir) !== -1) {
+                    foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dir));
+                }
+                if (getWallIndexOnFieldInDirection(to, dir) !== -1) {
+                    foundWallsIndeces.push(getWallIndexOnFieldInDirection(to, dir));
+                }
+            }
+            else {
+                let commonNeig = HexFunction.findCommonNeighbor(from, to);
+                dir = Math.floor(dir);
+                let dirCommon1 = (dir + 3) % 6;
+                if (getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dirCommon1) !== -1) {
+                    foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dirCommon1));
+                }
+                dirCommon1 = (dir + 1) % 6;
+                if (getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dirCommon1) !== -1) {
+                    foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dirCommon1));
+                }
+                let dirCommon2 = (dir + 4) % 6;
+                if (getWallIndexOnFieldInDirection([commonNeig[1][0], commonNeig[1][1]], dirCommon2) !== -1) {
+                    foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[1][0], commonNeig[1][1]], dirCommon2));
+                }
+                dirCommon2 = dir;
+                if (getWallIndexOnFieldInDirection([commonNeig[1][0], commonNeig[1][1]], dirCommon2) !== -1) {
+                    foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[1][0], commonNeig[1][1]], dirCommon2));
+                }
+                let dirTarget = (dir + 3) % 6;
+                if (getWallIndexOnFieldInDirection(to, dirTarget) !== -1) {
+                    foundWallsIndeces.push(getWallIndexOnFieldInDirection(to, dirTarget));
+                }
+                dirTarget = (dir + 4) % 6;
+                if (getWallIndexOnFieldInDirection(to, dirTarget) !== -1) {
+                    foundWallsIndeces.push(getWallIndexOnFieldInDirection(to, dirTarget));
+                }
+            }
+        }
+        return foundWallsIndeces;
+    }
+    HexFunction.findWallInWay = findWallInWay;
+    //returns all walls on target field
+    function getWallIndexOnFieldInDirection(hex, direction) {
+        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
+            if (gameState_1.GameState.buildings[i] instanceof wall_1.Wall) {
+                let thisIsAWall = gameState_1.GameState.buildings[i];
+                if (thisIsAWall.getPosition()[0] === hex[0] &&
+                    thisIsAWall.getPosition()[1] === hex[1] && thisIsAWall.facing === direction) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
 })(HexFunction = exports.HexFunction || (exports.HexFunction = {}));

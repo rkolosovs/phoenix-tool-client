@@ -166,9 +166,12 @@ class Fleet extends army_1.Army {
     canConquer() {
         return false;
     }
+    totalBP() {
+        return this.troopCount * SHIP_BP + this.lightCatapultCount * LIGHT_WS_BP +
+            this.heavyCatapultCount * HEAVY_WS_BP;
+    }
     takeBPDamage(bpDamage) {
-        let totalBP = this.troopCount * SHIP_BP +
-            this.lightCatapultCount * LIGHT_WS_BP + this.heavyCatapultCount * HEAVY_WS_BP;
+        let totalBP = this.totalBP();
         this.setOfficerCount(this.officerCount - this.troopCount * (bpDamage / totalBP));
         this.setTroopCount(this.troopCount - bpDamage * (this.troopCount * SHIP_BP / totalBP) / SHIP_BP);
         this.setLightCatapultCount(this.lightCatapultCount - bpDamage * (this.lightCatapultCount * LIGHT_WS_BP /

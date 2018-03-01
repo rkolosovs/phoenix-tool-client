@@ -39,6 +39,8 @@ export abstract class Army extends MobileEntity{
 
     abstract takeBPDamage(bpDamage: number): void;
 
+    abstract totalBP(): number;
+
     abstract fireLightCatapults(dicerolls: number[], badConditions: string): number;
 
     abstract fireHeavyCatapults(dicerolls: number[], badConditions: string): number;
@@ -105,6 +107,86 @@ export abstract class Army extends MobileEntity{
         if(this.getLightCatapultsShot() + Math.max(0, value) <= this.getLightCatapultCount()) {
             this.lightCatapultsShot += Math.max(0, value);
         }
+    }
+
+    //to find all fields in a two tile proximity
+    findShootingTargets() {
+        let tilesInRange: [number, number][] = []
+        if (this.heavyCatapultCount - this.heavyCatapultsShot > 0) {//in a 2 tile range
+            tilesInRange = HexFunction.neighborInRange(this.position, 2);
+        }
+        else if (this.lightCatapultCount - this.lightCatapultsShot > 0) {//one tile range
+            tilesInRange = HexFunction.neighborInRange(this.position, 1);
+        }
+        this.targetList = this.checkAllShootingConditions(tilesInRange);
+    }
+
+    checkAllShootingConditions(targetTileList: [number, number][]): [number, number][] {
+        let templist = targetTileList.slice();
+        let hasSKP = false;
+        if (this.heavyCatapultCount - this.heavyCatapultsShot > 0) {
+            hasSKP = true;
+        }
+        //to find out the conditions and maybe kick out if not shootable
+        for (let i = templist.length - 1; i >= 0; i--) {
+            if (this.checkShootingCondition(templist[i], hasSKP) === 'impossible shot') {
+                targetTileList.splice(i, 1);
+            }
+        }
+        return targetTileList;
+    }
+
+    checkShootingCondition(target: [number, number], skpShot: boolean): string {
+        let condition = 'impossible shot';
+        let range = HexFunction.distance(this.position, target);
+        if (skpShot) {//skp shooting
+            if (range == 1) {//for range of 1
+                if (HexFunction.height(target) - HexFunction.height(this.position) <= 2) {
+                    condition = 'high';
+                }
+                if (HexFunction.height(target) - HexFunction.height(this.position) <= 1) {
+                    condition = 'short';
+                }
+                if (HexFunction.height(target) - HexFunction.height(this.position) === 1 &&
+                    HexFunction.findWallInWay(this.position, target).length > 0) {
+                    condition = 'high';
+                }
+            } else if (range == 2) {//for range of 2
+                if (HexFunction.height(target) - HexFunction.height(this.position) <= 1) {
+                    condition = 'farAndUp';
+                }
+                if (HexFunction.height(target) - HexFunction.height(this.position) < 1) {
+                    condition = 'far';
+                }
+                if (HexFunction.height(target) - HexFunction.height(this.position) === 0 &&
+                    HexFunction.findWallInWay(this.position, target).length > 0) {
+                    condition = 'farAndUp';
+                }
+                //if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
+                let commonNeig = HexFunction.findCommonNeighbor(this.position, target);
+                let walls = HexFunction.findWallInWay(this.position, target);
+                for (let i = 0; i < commonNeig.length; i++) {
+                    if (walls.length > 0) {
+                        for (let j = 0; j < walls.length; j++) {
+                            if (((HexFunction.height([commonNeig[i][0], commonNeig[i][1]]) -
+                                    HexFunction.height(this.position) === 1)
+                                    && GameState.buildings[walls[j]].getPosition()[0] === commonNeig[i][0] &&
+                                    GameState.buildings[walls[j]].getPosition()[1] === commonNeig[i][1])) {
+                                condition = 'impossible shot';
+                            }
+                        }
+                    }
+                    if (HexFunction.height(commonNeig[i]) - HexFunction.height(this.position) > 1) {
+                        condition = 'impossible shot';
+                    }
+                }
+            }
+        } else {//for lkp shooting
+            if (HexFunction.height(target) - HexFunction.height(this.position) <= 1) {
+                condition = 'lkp';
+            }
+        }
+        return condition;
     }
 
     conquer(): void {
