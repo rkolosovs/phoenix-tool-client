@@ -10,6 +10,8 @@ import {River} from "../map/river";
 import {ArmyGeneratorBox} from "../gui/armyGeneratorBox";
 import {InfoChangeBox} from "../gui/infoChangeBox";
 import {Controls} from "../controls/controlVariables";
+import {Direction} from "../map/direction";
+import {BuildingType} from "../buildings/building";
 
 export namespace GodFunctions{
     import worldCreationModeOnClick = BoxVisibility.worldCreationModeOnClick;
@@ -175,7 +177,7 @@ export namespace GodFunctions{
 				if(i === GameState.buildings.length-1){
 					GameState.buildings.pop();
 				} else {
-					GameState.buildings[i] = GameState.buildings.pop();
+					GameState.buildings.splice(i, 1);
 				}
 			}
 		}
@@ -183,47 +185,54 @@ export namespace GodFunctions{
 	}
 
 	// adds a street in the target direction
-	export function addStreet(direction): void{
+	export function addStreet(direction: Direction): void{
 		let sf = Controls.selectedFields[0];
-		let targets = HexFunction.neighbors(sf[0], sf[1]);
+		let targets = HexFunction.neighbors(sf);
 		let target = targets[direction];
 		let found = false;
-		for(let i = 0; i < buildings.length; i++){
-			let building = buildings[i];//TODO change this to accomodate new Types probably with differentlist for streets
-			if((building.type === 8 && (building.firstX === sf[0] && building.firstY === sf[1] && building.secondX === target[0] && building.secondY === target[1])) || 
-			(building.type === 8 &&(building.firstX === target[0] && building.firstY === target[1] && building.secondX === sf[0] && building.secondY === sf[1]))){
+		for(let i = 0; i < GameState.buildings.length; i++){
+			let building = GameState.buildings[i];//TODO change this to accomodate new Types probably with differentlist for streets
+			if((building.type === 8 && (building.firstX === sf[0] && building.firstY === sf[1] &&
+					building.secondX === target[0] && building.secondY === target[1])) ||
+			(building.type === 8 &&(building.firstX === target[0] && building.firstY === target[1] &&
+				building.secondX === sf[0] && building.secondY === sf[1]))){
 				found = true;
 			}
 		}
 		if(found){
 		} else {
-			changedBuildings.push([true, {"type": 8, "firstX":sf[0], "firstY":sf[1], "secondX": target[0], "secondY": target[1], "realm":factionToCreateBuildingsFor}]);
-			buildings.push({"type": 8, "firstX":sf[0], "firstY":sf[1], "secondX": target[0], "secondY": target[1], "realm":factionToCreateBuildingsFor});
+			changedBuildings.push([true, {"type": 8, "firstX":sf[0], "firstY":sf[1], "secondX": target[0],
+				"secondY": target[1], "realm":factionToCreateBuildingsFor}]);
+            GameState.buildings.push({"type": 8, "firstX":sf[0], "firstY":sf[1], "secondX": target[0],
+				"secondY": target[1], "realm":factionToCreateBuildingsFor});
 			Controls.selectedFields[0]=[target[0], target[1]];
 		}
 		Drawing.resizeCanvas()
 	}
 
 	// removes a street in the target direction
-	export function removeStreet(direction): void{
+	export function removeStreet(direction: Direction): void{
 		let sf = Controls.selectedFields[0];
-		let targets = HexFunction.neighbors(sf[0], sf[1]);
+		let targets = HexFunction.neighbors(sf);
 		let target = targets[direction];
 		let found = undefined;
-		for(let i = 0; i < buildings.length; i++){
-			let building = buildings[i];//TODO change this to accomodate new Types probably with differentlist for streets
-			if(building.type === 8 && ((building.firstX === sf[0] && building.firstY === sf[1] && building.secondX === target[0] && building.secondY === target[1]) || 
-			(building.firstX === target[0] && building.firstY === target[1] && building.secondX === sf[0] && building.secondY === sf[1]))){
+		for(let i = 0; i < GameState.buildings.length; i++){
+			let building = GameState.buildings[i];//TODO change this to accomodate new Types probably with differentlist for streets
+			if(building.type === 8 && ((building.firstX === sf[0] && building.firstY === sf[1] &&
+					building.secondX === target[0] && building.secondY === target[1]) ||
+			(building.firstX === target[0] && building.firstY === target[1] && building.secondX === sf[0] &&
+				building.secondY === sf[1]))){
 				found = i;
 			}
 		}
 		if(found != undefined){
-			changedBuildings.push([false, {"type": 8, "firstX":sf[0], "firstY":sf[1], "secondX": target[0], "secondY": target[1], "realm":factionToCreateBuildingsFor}]);
-			if(found == buildings.length-1){
-				buildings.pop();
+			changedBuildings.push([false, {"type": 8, "firstX":sf[0], "firstY":sf[1], "secondX": target[0],
+                "secondY": target[1], "realm":factionToCreateBuildingsFor}]);
+			if(found === GameState.buildings.length-1){
+                GameState.buildings.pop();
 				Controls.selectedFields[0]=[target[0], target[1]];
 			} else {
-				buildings[found] = buildings.pop();
+                GameState.buildings.splice(found, 1);
 				Controls.selectedFields[0]=[target[0], target[1]];
 			}
 		}
@@ -231,15 +240,17 @@ export namespace GodFunctions{
 	}
 
 	// adds a river in the target direction
-	export function addRiver(direction): void{
+	export function addRiver(direction: Direction): void{
 		let sf = Controls.selectedFields[0];
-		let targets = HexFunction.neighbors(sf[0], sf[1]);
+		let targets = HexFunction.neighbors(sf);
 		let target = targets[direction];
 		let found = false;
 		for(let i = 0; i < GameState.rivers.length; i++){
 			let river = GameState.rivers[i];
-			if((river.rightBank[0] === sf[0] && river.rightBank[1] === sf[1] && river.leftBank[0] === target[0] && river.leftBank[1] === target[1] ) || 
-			(river.leftBank[0] === sf[0] && river.leftBank[1] === sf[1] && river.rightBank[0] === target[0] && river.rightBank[1] === target[1])){
+			if((river.rightBank[0] === sf[0] && river.rightBank[1] === sf[1] && river.leftBank[0] === target[0] &&
+                    river.leftBank[1] === target[1] ) ||
+			(river.leftBank[0] === sf[0] && river.leftBank[1] === sf[1] && river.rightBank[0] === target[0] &&
+                river.rightBank[1] === target[1])){
 				found = true;
 			}
 		}
@@ -251,15 +262,17 @@ export namespace GodFunctions{
 	}
 
 	// removes a river in the target direction
-	export function removeRiver(direction): void{
+	export function removeRiver(direction: Direction): void{
 		let sf = Controls.selectedFields[0];
-		let targets = HexFunction.neighbors(sf[0], sf[1]);
+		let targets = HexFunction.neighbors(sf);
 		let target = targets[direction];
 		let found = undefined;
 		for(let i = 0; i < GameState.rivers.length; i++){
 			let river = GameState.rivers[i];
-			if((river.rightBank[0] == sf[0] && river.rightBank[1] == sf[1] && river.leftBank[0] == target[0] && river.leftBank[1] == target[1] ) || 
-			(river.leftBank[0] == sf[0] && river.leftBank[1] == sf[1] && river.rightBank[0] == target[0] && river.rightBank[1] == target[1])){
+			if((river.rightBank[0] == sf[0] && river.rightBank[1] == sf[1] && river.leftBank[0] == target[0] &&
+                    river.leftBank[1] == target[1] ) ||
+			(river.leftBank[0] == sf[0] && river.leftBank[1] == sf[1] && river.rightBank[0] == target[0] &&
+                river.rightBank[1] == target[1])){
 				found = i;
 			}
 		}
@@ -267,36 +280,40 @@ export namespace GodFunctions{
 			if(found == GameState.rivers.length-1){
 				GameState.rivers.pop();
 			} else {
-				GameState.rivers[found] = GameState.rivers.pop();
+				GameState.rivers.splice(found, 1);
 			}
 		}
 		Drawing.resizeCanvas();
 	}
 
 	//add = true means add a building, else remove it.
-	export function manipulateBorderBuilding(type, direction, add): void{
+	export function manipulateBorderBuilding(type: BuildingType, direction: Direction, add: boolean): void{
 		let sf = Controls.selectedFields[0];
 		let found = undefined;
-		for(let i = 0; i < buildings.length; i++){
-			let building = buildings[i];
-			if(building.type == type && (building.x == sf[0] && building.y == sf[1] && building.direction == direction)){
+		for(let i = 0; i < GameState.buildings.length; i++){
+			let building = GameState.buildings[i];
+			if(building.type === type && (building.x == sf[0] && building.y == sf[1] && building.direction == direction)){
 				found = i;
 			}
 		}
 		if(add){
 			if(found){
-				changedBuildings.push([true, {"type": type, "x": sf[0], "y": sf[1], "direction": direction, "realm":factionToCreateBuildingsFor}]);
+				changedBuildings.push([true, {"type": type, "x": sf[0], "y": sf[1], "direction": direction,
+                    "realm":factionToCreateBuildingsFor}]);
 			} else {
-				changedBuildings.push([true, {"type": type, "x": sf[0], "y": sf[1], "direction": direction, "realm":factionToCreateBuildingsFor}]);
-				buildings.push({"type": type, "x": sf[0], "y": sf[1], "direction": direction, "realm":factionToCreateBuildingsFor});
+				changedBuildings.push([true, {"type": type, "x": sf[0], "y": sf[1], "direction": direction,
+                    "realm":factionToCreateBuildingsFor}]);
+                GameState.buildings.push({"type": type, "x": sf[0], "y": sf[1], "direction": direction,
+                    "realm":factionToCreateBuildingsFor});
 			}
 		} else {
 			if(found != undefined){
-				changedBuildings.push([false, {"type": type, "x": sf[0], "y": sf[1], "direction": direction, "realm":factionToCreateBuildingsFor}]);
-				if(found == buildings.length-1){
-					buildings.pop();
+				changedBuildings.push([false, {"type": type, "x": sf[0], "y": sf[1], "direction": direction,
+                    "realm":factionToCreateBuildingsFor}]);
+				if(found === GameState.buildings.length-1){
+                    GameState.buildings.pop();
 				}else{
-					buildings[found] = buildings.pop();
+                    GameState.buildings.splice(found, 1);
 				}
 			}
 		}
@@ -321,8 +338,8 @@ export namespace GodFunctions{
 		}
 		// check for any other armies with the same armyId
 		for(let i=0; i < GameState.armies.length; i++){
-			if(GameState.armies[i].armyId == BoxVisibility.armyIdBuffer &&
-				GameState.armies[i].owner === BoxVisibility.ownerBuffer){
+			if(GameState.armies[i].getErkenfaraID() == BoxVisibility.armyIdBuffer &&
+				GameState.armies[i].owner.tag === BoxVisibility.ownerBuffer){
 				window.alert("Ein Heer mit dieser Nummer existiert bereits in diesem Königreich.");
 				return false;
 			}
@@ -330,12 +347,14 @@ export namespace GodFunctions{
 		// check for catabults in a rider army, and for mounts in a rider army, or fleet
 		if(Math.floor(BoxVisibility.armyIdBuffer/100) == 2) {
 			if(BoxVisibility.mountsBuffer > 0 || BoxVisibility.lkpBuffer > 0 || BoxVisibility.skpBuffer > 0){
-				window.alert("In einem Reiterheer sollten weder einzelne Reittiere, noch Katapulte sein. Wenn das Heer ein Fußheer sein sollte gib, ihm eine Nummer zwischen 100 und 199.")
+				window.alert("In einem Reiterheer sollten weder einzelne Reittiere, noch Katapulte sein. " +
+                    "Wenn das Heer ein Fußheer sein sollte gib, ihm eine Nummer zwischen 100 und 199.")
 				return false;
 			}
 		} else if (Math.floor(BoxVisibility.armyIdBuffer/100) == 3){
 			if(BoxVisibility.mountsBuffer > 0){
-				window.alert("In einer Flotte sollten keine Reittiere enthalten sein. Wenn das Heer ein Fußheer sein sollte, gib ihm eine Nummer zwischen 100 und 199.")
+				window.alert("In einer Flotte sollten keine Reittiere enthalten sein. Wenn das Heer ein Fußheer sein " +
+                    "sollte, gib ihm eine Nummer zwischen 100 und 199.")
 				return false;
 			}
 		}
@@ -358,8 +377,8 @@ export namespace GodFunctions{
 	export function changeArmyInfo(): void{
 		for(let i = 0; i<GameState.armies.length; i++){
 			let infoChangeBox: InfoChangeBox = GUI.getInfoChangeBox();
-			if(i!=selectedArmyIndex && GameState.armies[i].owner === infoChangeBox.getOwnerChangeInput().value &&
-				GameState.armies[i].armyId === infoChangeBox.getArmyIdChangeInput().value){
+			if(i!=selectedArmyIndex && GameState.armies[i].owner.tag === infoChangeBox.getOwnerChangeInput().value &&
+				GameState.armies[i].getErkenfaraID() === parseInt(infoChangeBox.getArmyIdChangeInput().value)){
 					window.alert("Diese Armee-Id ist in diesem Reich bereits vergeben.");
 			} else {
 				GameState.armies[selectedArmyIndex].isGuard = infoChangeBox.getGuardChangeInput().checked;

@@ -33,7 +33,7 @@ var Authentication;
                 // if the user is a GM, godmode possibility is displayed
                 if (login === 'sl') {
                     gui_1.GUI.getToggleGMBarButton().style.display = "";
-                    if (currentTurn.status === 'fi') {
+                    if (gameState_1.GameState.currentTurn.status === 'fi') {
                         show(document.getElementById("eventTabsButton"));
                         loadingDataFunctions_1.Loading.loadPendingEvents();
                     }

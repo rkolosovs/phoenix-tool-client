@@ -209,7 +209,7 @@ export namespace MouseFunctions{
                         updateInfoBox();
                         restoreInfoBox();
                         if (selectedArmyIndex !== undefined) {
-                            clickedMoves(GameState.armies[selectedArmyIndex]);
+                            GameState.armies[selectedArmyIndex].clickedMoves();
                         }
                         Drawing.drawStuff();
                     });
@@ -219,7 +219,7 @@ export namespace MouseFunctions{
             }
             updateInfoBox();
             if (selectedArmyIndex !== undefined) {
-                clickedMoves(GameState.armies[selectedArmyIndex]);
+                GameState.armies[selectedArmyIndex].clickedMoves();
             }
         }
     }

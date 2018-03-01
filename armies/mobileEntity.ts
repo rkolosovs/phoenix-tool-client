@@ -31,6 +31,19 @@ export abstract class MobileEntity extends MapEntity{
 
     abstract getRoomPoints(): number;
 
+    clickedMoves(): void {
+        if (this.owner.tag === login || login === "sl") {
+            this.possibleMoves = [];
+            //goes through all neighbors to see if the army can move there
+            this.checkForPossibleMove(Direction.NW);
+            this.checkForPossibleMove(Direction.NE);
+            this.checkForPossibleMove(Direction.E);
+            this.checkForPossibleMove(Direction.SE);
+            this.checkForPossibleMove(Direction.SW);
+            this.checkForPossibleMove(Direction.W);
+        }
+    }
+
     changePosition(newPos: [number, number]): void {
         this.oldPosition[0] = newPos[0];
         this.oldPosition[1] = newPos[1];

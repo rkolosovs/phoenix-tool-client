@@ -8,6 +8,9 @@ import { HexFunction } from "../libraries/hexFunctions";
 import {Wall} from "../buildings/wall";
 import {FootArmy} from "./footArmy";
 import {RiderArmy} from "./riderArmy";
+import {MultiFieldFunctions} from "../gui/multifieldFunctions";
+import {Realm} from "../realm";
+
 // array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null),
 // schießende Armee, ziel Armee, Charaktere und Zauberer auf dem Zielfeld
 // TODO define chars
@@ -698,7 +701,7 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 		// in GameState.armies einfügen und alte Armee löschen, ist dann automatisch armyIndex
 		GameState.armies.push(newArmy);
 		if (GameState.armies[armyIndex].multiArmyField === true) {
-			addToMultifield(GameState.armies[armyIndex], newArmy);
+			MultiFieldFunctions.addToMultifield(GameState.armies[armyIndex], newArmy);
 			// deleteFromMultifield(GameState.armies[armyIndex]);
 		}
 		preparedEvents.push({
@@ -735,7 +738,7 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
 		// in GameState.armies einfügen
 		GameState.armies.push(newArmy);
 		if (GameState.armies[armyIndex].multiArmyField === true) {
-			addToMultifield(GameState.armies[armyIndex], newArmy);
+			MultiFieldFunctions.addToMultifield(GameState.armies[armyIndex], newArmy);
 			// deleteFromMultifield(GameState.armies[armyIndex]);
 		}
 		preparedEvents.push({
@@ -1027,7 +1030,7 @@ function generateArmyId(type: number, owner: Realm) {
 		while (j < 200) {
 			let found = false;
 			for (let i = 0; i < GameState.armies.length; i++) {
-				if (GameState.armies[i].armyId === j && GameState.armies[i].owner === owner) {
+				if (GameState.armies[i].getErkenfaraID() === j && GameState.armies[i].owner === owner) {
 					j++;
 					found = true;
 				}
@@ -1059,7 +1062,7 @@ function generateArmyId(type: number, owner: Realm) {
 		while (j < 400) {
 			let found = false;
 			for (let i = 0; i < GameState.armies.length; i++) {
-				if (GameState.armies[i].armyId === j && GameState.armies[i].owner === owner) {
+				if (GameState.armies[i].getErkenfaraID() === j && GameState.armies[i].owner === owner) {
 					j++;
 					found = true;
 				}

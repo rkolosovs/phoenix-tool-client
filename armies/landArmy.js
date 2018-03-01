@@ -49,7 +49,7 @@ class LandArmy extends army_1.Army {
                     else if (chosenFleet !== undefined && chosenFleet !== '') {
                         let foundFleet = fleetsOnDestination.find(fleet => fleet.getErkenfaraID() === parseInt(chosenFleet));
                         if (foundFleet != undefined) {
-                            let loadString = foundFleet.loadArmy(army.indexInListOfArmies());
+                            let loadString = foundFleet.loadArmy(this);
                             // TODO: throw error
                             // return (loadString);
                         }

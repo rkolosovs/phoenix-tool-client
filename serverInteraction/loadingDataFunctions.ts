@@ -33,7 +33,7 @@ export namespace Loading{
 
 	export function loadTurnNumber() {
 		$.getJSON(url + "/databaseLink/getturn/", function(json){
-			currentTurn = json;
+			GameState.currentTurn = json;
 			Drawing.writeTurnNumber();
 		});
 	}
@@ -89,7 +89,7 @@ export namespace Loading{
 
 	export function loadMap() {
 		let timetest;
-		$.getJSON(url +"/databaseLink/getlastsavedtimestamp/", function(json){// loads the time stamp from the database
+		$.getJSON(url +"/databaseLink/getlastsavedtimestamp/", function(json: JSON){// loads the time stamp from the database
 			timetest = "";
 			for(let i = 0; i< json.length; i++){
 				timetest += json[i];

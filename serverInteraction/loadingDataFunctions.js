@@ -32,7 +32,7 @@ var Loading;
     Loading.getNewDataFromServer = getNewDataFromServer;
     function loadTurnNumber() {
         $.getJSON(url + "/databaseLink/getturn/", function (json) {
-            currentTurn = json;
+            gameState_1.GameState.currentTurn = json;
             drawingFunctions_1.Drawing.writeTurnNumber();
         });
     }

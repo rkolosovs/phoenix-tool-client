@@ -112,20 +112,20 @@ class RiderArmy extends landArmy_1.LandArmy {
                 }
             }
             else if (thereIsAStreet) {
-                if (rightOfPassage && army.remainingMovePoints >= 3) {
+                if (rightOfPassage && this.getMovePoints() >= 3) {
                     return 3;
                 }
-                else if (army.remainingMovePoints >= 5) {
+                else if (this.getMovePoints() >= 5) {
                     return 5;
                 }
                 else {
                     throw new Error("You don't have enough movement Points.");
                 }
             }
-            else if (rightOfPassage && army.remainingMovePoints >= 5) {
+            else if (rightOfPassage && this.getMovePoints() >= 5) {
                 return 5;
             }
-            else if (army.remainingMovePoints >= 10) {
+            else if (this.getMovePoints() >= 10) {
                 return 10;
             }
             else {

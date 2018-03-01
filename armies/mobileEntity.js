@@ -16,6 +16,18 @@ class MobileEntity extends mapEntity_1.MapEntity {
         this.setMovePoints(movePoints);
         this.setHeightPoints(heightPoints);
     }
+    clickedMoves() {
+        if (this.owner.tag === login || login === "sl") {
+            this.possibleMoves = [];
+            //goes through all neighbors to see if the army can move there
+            this.checkForPossibleMove(0 /* NW */);
+            this.checkForPossibleMove(1 /* NE */);
+            this.checkForPossibleMove(2 /* E */);
+            this.checkForPossibleMove(3 /* SE */);
+            this.checkForPossibleMove(4 /* SW */);
+            this.checkForPossibleMove(5 /* W */);
+        }
+    }
     changePosition(newPos) {
         this.oldPosition[0] = newPos[0];
         this.oldPosition[1] = newPos[1];

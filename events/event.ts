@@ -83,7 +83,8 @@ export abstract class PhoenixEvent{
 protected stillSplitEventsInFaction(realm) {
 	for (let i = 0; i < GameState.pendingNewEvents.length; i++) {
 		let event = GameState.pendingNewEvents[i];
-		if ((event.status === 'withheld' || event.status === 'available' || event.status === 'undetermined') && event.getType() === 'split') {
+		if ((event.status === 'withheld' || event.status === 'available' || event.status === 'undetermined') &&
+			event.getType() === 'split') {
 			return true;
 		}
 	}
@@ -96,7 +97,8 @@ protected noPendingLoadEvents(realm, armyId, fromX, fromY) {
 	} else {
 		for (let i = 0; i < GameState.pendingNewEvents.length; i++) {
 			let event = GameState.pendingNewEvents[i];
-			if ((event.status === 'withheld' || event.status === 'available') && event.getType() === 'move' && Math.floor(event.content.armyId / 100) !== 3 &&
+			if ((event.status === 'withheld' || event.status === 'available') && event.getType() === 'move' &&
+				Math.floor(event.content.armyId / 100) !== 3 &&
 				((event.content.fromX === fromX && event.content.fromY === fromY) ||
 					(event.content.toX === fromX && event.content.toY === fromY))) {
 				return false;

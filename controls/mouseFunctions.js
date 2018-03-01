@@ -218,7 +218,7 @@ var MouseFunctions;
                         updateInfoBox();
                         restoreInfoBox();
                         if (selectedArmyIndex !== undefined) {
-                            clickedMoves(gameState_1.GameState.armies[selectedArmyIndex]);
+                            gameState_1.GameState.armies[selectedArmyIndex].clickedMoves();
                         }
                         drawingFunctions_1.Drawing.drawStuff();
                     });
@@ -228,7 +228,7 @@ var MouseFunctions;
             }
             updateInfoBox();
             if (selectedArmyIndex !== undefined) {
-                clickedMoves(gameState_1.GameState.armies[selectedArmyIndex]);
+                gameState_1.GameState.armies[selectedArmyIndex].clickedMoves();
             }
         }
     }

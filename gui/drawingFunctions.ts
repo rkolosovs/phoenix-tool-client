@@ -16,6 +16,7 @@ import {RiderArmy} from "../armies/riderArmy";
 import {Fleet} from "../armies/fleet";
 import {Saving} from "../serverInteraction/savingFunctions";
 import {Loading} from "../serverInteraction/loadingDataFunctions";
+import {MultiFieldFunctions} from "./multifieldFunctions";
 
 export namespace Drawing{
     export let c: number = 1;
@@ -446,7 +447,7 @@ export namespace Drawing{
 
 		//getting the multifield list ready
 		for (let i = 0; i < GameState.armies.length; i++) {
-			createMultifield(GameState.armies[i]);
+			MultiFieldFunctions.createMultifield(GameState.armies[i]);
 		}
 
 		for (let i = 0; i < GameState.armies.length; i++) {
@@ -632,7 +633,7 @@ export namespace Drawing{
 						Saving.saveFactionsTerritories();
 						Saving.saveArmies();
 					} else { //Players and SL during player's turn send events
-                        Saving.sendEventlistInOrder();
+                        Saving.sendEventlistInOrder(0);
 					}
 					Saving.sendNextTurn();
 				}

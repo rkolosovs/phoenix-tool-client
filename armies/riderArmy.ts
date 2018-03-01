@@ -102,16 +102,16 @@ export class RiderArmy extends LandArmy{
                     throw new Error("You need you full movement to cross a river.");
                 }
             } else if(thereIsAStreet){
-                if(rightOfPassage && army.remainingMovePoints >= 3){ //street & right of passage
+                if(rightOfPassage && this.getMovePoints() >= 3){ //street & right of passage
                     return 3;
-                } else if(army.remainingMovePoints >= 5){ //street & no right of passage
+                } else if(this.getMovePoints() >= 5){ //street & no right of passage
                     return 5;
                 } else {
                     throw new Error("You don't have enough movement Points.");
                 }
-            } else if(rightOfPassage && army.remainingMovePoints >= 5){//no street && right of passage
+            } else if(rightOfPassage && this.getMovePoints() >= 5){//no street && right of passage
                 return 5;
-            } else if(army.remainingMovePoints >= 10){//no street & no right of passage
+            } else if(this.getMovePoints() >= 10){//no street & no right of passage
                 return 10;
             } else {
                 throw new Error("You don't have enough movement Points.");

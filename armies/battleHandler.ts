@@ -155,11 +155,11 @@ export class BattleHandler {
         return result;
     }
 
-    private static computeCombatRating(strengthArmy, totalArmyGP): number[] {
+    private static computeCombatRating(strengthArmy: number[], totalArmyGP: number[]): number[] {
         return strengthArmy.map((elem, index) => (elem * (1 + (totalArmyGP[index] / 200))));
     }
 
-    private static computeLossFactor(ownForces, enemyForces, victorious): number {
+    private static computeLossFactor(ownForces: number, enemyForces: number, victorious: boolean): number {
         let baseFactor = (ownForces / enemyForces) / 10;
         if (victorious && ownForces >= enemyForces) {
             return - baseFactor;
@@ -170,7 +170,8 @@ export class BattleHandler {
         }
     }
 
-    private static computeFinalLosses(baseArmyLosses, armyGPDiff, armyStrength, totalStrength): number {
+    private static computeFinalLosses(baseArmyLosses: number, armyGPDiff: number, armyStrength: number,
+                                      totalStrength: number): number {
         let lossesWithGP = 0;
         if (armyGPDiff >= 0) {
             lossesWithGP = baseArmyLosses / (1 + armyGPDiff);

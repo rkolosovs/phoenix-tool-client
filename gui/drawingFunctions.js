@@ -12,6 +12,7 @@ const riderArmy_1 = require("../armies/riderArmy");
 const fleet_1 = require("../armies/fleet");
 const savingFunctions_1 = require("../serverInteraction/savingFunctions");
 const loadingDataFunctions_1 = require("../serverInteraction/loadingDataFunctions");
+const multifieldFunctions_1 = require("./multifieldFunctions");
 var Drawing;
 (function (Drawing) {
     Drawing.c = 1;
@@ -620,7 +621,7 @@ var Drawing;
         Drawing.listOfMultiArmyFields = [];
         //getting the multifield list ready
         for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-            createMultifield(gameState_1.GameState.armies[i]);
+            multifieldFunctions_1.MultiFieldFunctions.createMultifield(gameState_1.GameState.armies[i]);
         }
         for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
             let armyData = gameState_1.GameState.armies[i]; // get army coordinates
@@ -813,7 +814,7 @@ var Drawing;
                         savingFunctions_1.Saving.saveArmies();
                     }
                     else {
-                        savingFunctions_1.Saving.sendEventlistInOrder();
+                        savingFunctions_1.Saving.sendEventlistInOrder(0);
                     }
                     savingFunctions_1.Saving.sendNextTurn();
                 }

@@ -9,6 +9,7 @@ const hexFunctions_1 = require("../libraries/hexFunctions");
 const wall_1 = require("../buildings/wall");
 const footArmy_1 = require("./footArmy");
 const riderArmy_1 = require("./riderArmy");
+const multifieldFunctions_1 = require("../gui/multifieldFunctions");
 // array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null),
 // schießende Armee, ziel Armee, Charaktere und Zauberer auf dem Zielfeld
 // TODO define chars
@@ -673,7 +674,7 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
         // in GameState.armies einfügen und alte Armee löschen, ist dann automatisch armyIndex
         gameState_1.GameState.armies.push(newArmy);
         if (gameState_1.GameState.armies[armyIndex].multiArmyField === true) {
-            addToMultifield(gameState_1.GameState.armies[armyIndex], newArmy);
+            multifieldFunctions_1.MultiFieldFunctions.addToMultifield(gameState_1.GameState.armies[armyIndex], newArmy);
             // deleteFromMultifield(GameState.armies[armyIndex]);
         }
         preparedEvents.push({
@@ -714,7 +715,7 @@ function unMountWithParams(armyIndex, toUnMount, leadersToUnMount, newArmyId) {
         // in GameState.armies einfügen
         gameState_1.GameState.armies.push(newArmy);
         if (gameState_1.GameState.armies[armyIndex].multiArmyField === true) {
-            addToMultifield(gameState_1.GameState.armies[armyIndex], newArmy);
+            multifieldFunctions_1.MultiFieldFunctions.addToMultifield(gameState_1.GameState.armies[armyIndex], newArmy);
             // deleteFromMultifield(GameState.armies[armyIndex]);
         }
         preparedEvents.push({
@@ -1004,7 +1005,7 @@ function generateArmyId(type, owner) {
         while (j < 200) {
             let found = false;
             for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-                if (gameState_1.GameState.armies[i].armyId === j && gameState_1.GameState.armies[i].owner === owner) {
+                if (gameState_1.GameState.armies[i].getErkenfaraID() === j && gameState_1.GameState.armies[i].owner === owner) {
                     j++;
                     found = true;
                 }
@@ -1038,7 +1039,7 @@ function generateArmyId(type, owner) {
         while (j < 400) {
             let found = false;
             for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-                if (gameState_1.GameState.armies[i].armyId === j && gameState_1.GameState.armies[i].owner === owner) {
+                if (gameState_1.GameState.armies[i].getErkenfaraID() === j && gameState_1.GameState.armies[i].owner === owner) {
                     j++;
                     found = true;
                 }
