@@ -8,8 +8,8 @@ const fleet_1 = require("../armies/fleet");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
 const gui_1 = require("../gui/gui");
 class SplitEvent extends event_1.PhoenixEvent {
-    constructor(listPosition, status, fromArmy, newArmy, realm, troops, leaders, mounts, lkp, skp, position, databasePrimaryKey) {
-        super(listPosition, status, databasePrimaryKey);
+    constructor(listPosition, status, prerequisiteEvents, fromArmy, newArmy, realm, troops, leaders, mounts, lkp, skp, position, databasePrimaryKey) {
+        super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.fromArmy = fromArmy;
         this.newArmy = newArmy;
         this.realm = realm;
@@ -23,6 +23,10 @@ class SplitEvent extends event_1.PhoenixEvent {
     getContent() {
         // TODO
         return JSON.parse('{}');
+    }
+    validGameState() {
+        // TODO
+        return false;
     }
     checkEvent() {
         console.log("this is a split event");

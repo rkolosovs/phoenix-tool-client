@@ -10,14 +10,19 @@ import {EventStatus} from "./eventStatus";
 
 export class BattleEvent extends PhoenixEvent{
     
-    constructor(listPosition: number, status: EventStatus, protected participants: Army[],
+    constructor(listPosition: number, status: EventStatus, prerequisiteEvents: number[], protected participants: Army[],
         protected realm: Realm, protected position: [number, number], databasePrimaryKey: number){
-        super(listPosition, status, databasePrimaryKey);
+        super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
 
     getContent(): JSON{
         // TODO
         return JSON.parse('{}');
+    }
+
+    validGameState(): boolean{
+        // TODO
+        return false;
     }
 
     checkEvent(): void{

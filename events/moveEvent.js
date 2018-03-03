@@ -6,8 +6,8 @@ const drawingFunctions_1 = require("../gui/drawingFunctions");
 const gameState_1 = require("../gameState");
 const gui_1 = require("../gui/gui");
 class MoveEvent extends event_1.PhoenixEvent {
-    constructor(listPosition, status, realm, armyId, from, to, databasePrimaryKey) {
-        super(listPosition, status, databasePrimaryKey);
+    constructor(listPosition, status, prerequisiteEvents, realm, armyId, from, to, databasePrimaryKey) {
+        super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.realm = realm;
         this.armyId = armyId;
         this.from = from;
@@ -16,6 +16,10 @@ class MoveEvent extends event_1.PhoenixEvent {
     getContent() {
         // TODO
         return JSON.parse('{}');
+    }
+    validGameState() {
+        // TODO
+        return false;
     }
     checkEvent() {
         let army = gameState_1.GameState.armies.find(army => army.owner === this.realm &&

@@ -7,8 +7,8 @@ const gameState_1 = require("../gameState");
 const event_1 = require("./event");
 const buttonFunctions_1 = require("../controls/buttonFunctions");
 class ShootEvent extends event_1.PhoenixEvent {
-    constructor(listPosition, status, realm, armyId, to, from, lkpCount, skpCount, target, databasePrimaryKey) {
-        super(listPosition, status, databasePrimaryKey);
+    constructor(listPosition, status, prerequisiteEvents, realm, armyId, to, from, lkpCount, skpCount, target, databasePrimaryKey) {
+        super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.realm = realm;
         this.armyId = armyId;
         this.to = to;
@@ -20,6 +20,10 @@ class ShootEvent extends event_1.PhoenixEvent {
     getContent() {
         // TODO
         return JSON.parse('{}');
+    }
+    validGameState() {
+        // TODO
+        return false;
     }
     getLightCatapultCount() {
         return this.lkpCount;

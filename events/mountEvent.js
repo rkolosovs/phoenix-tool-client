@@ -8,9 +8,9 @@ const fleet_1 = require("../armies/fleet");
 const footArmy_1 = require("../armies/footArmy");
 const gui_1 = require("../gui/gui");
 class MountEvent extends event_1.PhoenixEvent {
-    constructor(listPosition, status, fromArmy, newArmy, realm, troops, leaders, position, databasePrimaryKey) {
+    constructor(listPosition, status, prerequisiteEvents, fromArmy, newArmy, realm, troops, leaders, position, databasePrimaryKey) {
         //protected mounts: number, protected lkp: number, protected skp: number,
-        super(listPosition, status, databasePrimaryKey);
+        super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.fromArmy = fromArmy;
         this.newArmy = newArmy;
         this.realm = realm;
@@ -21,6 +21,10 @@ class MountEvent extends event_1.PhoenixEvent {
     getContent() {
         // TODO
         return JSON.parse('{}');
+    }
+    validGameState() {
+        // TODO
+        return false;
     }
     checkEvent() {
         let armyFromPlaceInList = -1;

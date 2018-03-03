@@ -6,8 +6,8 @@ const drawingFunctions_1 = require("../gui/drawingFunctions");
 const gameState_1 = require("../gameState");
 const event_1 = require("./event");
 class BattleEvent extends event_1.PhoenixEvent {
-    constructor(listPosition, status, participants, realm, position, databasePrimaryKey) {
-        super(listPosition, status, databasePrimaryKey);
+    constructor(listPosition, status, prerequisiteEvents, participants, realm, position, databasePrimaryKey) {
+        super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.participants = participants;
         this.realm = realm;
         this.position = position;
@@ -15,6 +15,10 @@ class BattleEvent extends event_1.PhoenixEvent {
     getContent() {
         // TODO
         return JSON.parse('{}');
+    }
+    validGameState() {
+        // TODO
+        return false;
     }
     checkEvent() {
         let battleBox = gui_1.GUI.getBattleBox();

@@ -11,17 +11,22 @@ import {EventStatus} from "./eventStatus";
 
 export class MountEvent extends PhoenixEvent{
     
-    constructor(listPosition: number, status: EventStatus, protected fromArmy: number,
+    constructor(listPosition: number, status: EventStatus, prerequisiteEvents: number[], protected fromArmy: number,
         protected newArmy: number, protected realm: Realm, protected troops: number, protected leaders: number, 
          protected position: [number, number], databasePrimaryKey: number){
         //protected mounts: number, protected lkp: number, protected skp: number,
-        super(listPosition, status, databasePrimaryKey);
+        super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
 
     }
 
     getContent(): JSON{
         // TODO
         return JSON.parse('{}');
+    }
+
+    validGameState(): boolean{
+        // TODO
+        return false;
     }
 
     checkEvent(): void{

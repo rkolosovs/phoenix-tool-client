@@ -10,8 +10,8 @@ const buttonFunctions_1 = require("../controls/buttonFunctions");
 const gui_1 = require("../gui/gui");
 const controlVariables_1 = require("../controls/controlVariables");
 class MergeEvent extends event_1.PhoenixEvent {
-    constructor(listPosition, status, fromArmy, toArmy, realm, position, databasePrimaryKey) {
-        super(listPosition, status, databasePrimaryKey);
+    constructor(listPosition, status, prerequisiteEvents, fromArmy, toArmy, realm, position, databasePrimaryKey) {
+        super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.fromArmy = fromArmy;
         this.toArmy = toArmy;
         this.realm = realm;
@@ -20,6 +20,10 @@ class MergeEvent extends event_1.PhoenixEvent {
     getContent() {
         // TODO
         return JSON.parse('{}');
+    }
+    validGameState() {
+        // TODO
+        return false;
     }
     checkEvent() {
         let armyFromPlaceInList = -1;

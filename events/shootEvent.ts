@@ -10,15 +10,21 @@ import {ButtonFunctions} from "../controls/buttonFunctions";
 
 export class ShootEvent extends PhoenixEvent{
     
-    constructor(listPosition: number, status: EventStatus, protected realm: Realm, protected armyId: number,
-                protected to: [number, number], protected from: [number, number], protected lkpCount: number,
-                protected skpCount: number, protected target: string, databasePrimaryKey: number){
-        super(listPosition, status, databasePrimaryKey);
+    constructor(listPosition: number, status: EventStatus, prerequisiteEvents: number[], protected realm: Realm,
+                protected armyId: number, protected to: [number, number], protected from: [number, number],
+                protected lkpCount: number, protected skpCount: number, protected target: string,
+                databasePrimaryKey: number){
+        super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
 
     getContent(): JSON{
         // TODO
         return JSON.parse('{}');
+    }
+
+    validGameState(): boolean{
+        // TODO
+        return false;
     }
 
     getLightCatapultCount(): number{

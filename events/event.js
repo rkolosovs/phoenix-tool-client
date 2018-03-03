@@ -4,10 +4,30 @@ const gameState_1 = require("../gameState");
 const hexFunctions_1 = require("../libraries/hexFunctions");
 const gui_1 = require("../gui/gui");
 class PhoenixEvent {
-    constructor(listPosition, status, databasePrimaryKey) {
+    constructor(listPosition, status, prerequisiteEvents, databasePrimaryKey) {
         this.listPosition = listPosition;
         this.status = status;
+        this.prerequisiteEvents = prerequisiteEvents;
         this.databasePrimaryKey = databasePrimaryKey;
+    }
+    determineEventStatus() {
+        if (this.validGameState() && this.prerequisiteEvents.every(prereqEvent => gameState_1.GameState.pendingNewEvents.some(event => event.getDatabasePrimaryKey() === prereqEvent &&
+            (event.getStatus() === 0 /* Checked */ || event.getStatus() === 1 /* Deleted */)))) {
+            //The event is available if the GM has attended to all prerequisite events and the board state allows it.
+            this.status = 4 /* Available */;
+        }
+        else if (!this.validGameState() && this.prerequisiteEvents.every(prereqEvent => gameState_1.GameState.pendingNewEvents.some(event => event.getDatabasePrimaryKey() === prereqEvent &&
+            (event.getStatus() === 0 /* Checked */ || event.getStatus() === 1 /* Deleted */)))) {
+            //The event is not available because the board state doesn't allow it and it won't become available in the
+            //future because all prerequisite events have been attended to by the GM. The GM has to manually fix the
+            //board state to make the event available or delete it.
+            this.status = 2 /* Impossible */;
+        }
+        else {
+            //The event is not available but might become available in the future because the board state doesn't allow
+            //it but some prerequisite events haven't been attended to by a GM yet and they might fix the board state.
+            this.status = 3 /* Withheld */;
+        }
     }
     makeEventListItem() {
         let eli = document.createElement("DIV");

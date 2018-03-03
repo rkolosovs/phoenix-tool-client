@@ -5,16 +5,37 @@ import {EventStatus} from "./eventStatus";
 
 export abstract class PhoenixEvent{
 
-    constructor(protected listPosition: number, protected status: EventStatus, protected databasePrimaryKey: number){
+    constructor(protected listPosition: number, protected status: EventStatus,
+                protected prerequisiteEvents: number[], protected databasePrimaryKey: number){
 	}
 
     abstract checkEvent(): void;
 
-    abstract determineEventStatus(): void;
-
     protected abstract makeEventListItemText(): string;
 
 	abstract getContent(): JSON;
+
+	protected abstract validGameState(): boolean;
+
+    determineEventStatus(): void{
+        if(this.validGameState() && this.prerequisiteEvents.every(prereqEvent =>
+                GameState.pendingNewEvents.some(event => event.getDatabasePrimaryKey() === prereqEvent &&
+                    (event.getStatus() === EventStatus.Checked || event.getStatus() === EventStatus.Deleted)))){
+            //The event is available if the GM has attended to all prerequisite events and the board state allows it.
+            this.status = EventStatus.Available;
+        } else if(!this.validGameState() && this.prerequisiteEvents.every(prereqEvent =>
+                GameState.pendingNewEvents.some(event => event.getDatabasePrimaryKey() === prereqEvent &&
+                    (event.getStatus() === EventStatus.Checked || event.getStatus() === EventStatus.Deleted)))){
+            //The event is not available because the board state doesn't allow it and it won't become available in the
+            //future because all prerequisite events have been attended to by the GM. The GM has to manually fix the
+            //board state to make the event available or delete it.
+            this.status = EventStatus.Impossible;
+        } else {
+            //The event is not available but might become available in the future because the board state doesn't allow
+            //it but some prerequisite events haven't been attended to by a GM yet and they might fix the board state.
+            this.status = EventStatus.Withheld;
+        }
+    }
 
     makeEventListItem(): HTMLElement{
         let eli = document.createElement("DIV");
