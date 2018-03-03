@@ -5,14 +5,18 @@ import {ShootingBigBox} from "../gui/shootingBigBox";
 import {Realm} from "../realm";
 import {GameState} from "../gameState";
 import {PhoenixEvent} from "./event";
+import {ShootingFunctions} from "../armies/shootingFunctions";
 
 export class ShootEvent extends PhoenixEvent{
     
-    constructor(protected id: number, protected status: string, protected realm: Realm, 
-        protected armyId: number, protected toX: number, protected toY: number, protected fromX: number, 
-        protected fromY: number, protected lkpCount: number, protected skpCount: number, protected target: string, protected pk: number){
-            
-            super(id, status, pk);
+    constructor(listPosition: number, status: string, protected realm: Realm, protected armyId: number,
+                protected to: [number, number], protected from: [number, number], protected lkpCount: number,
+                protected skpCount: number, protected target: string, databasePrimaryKey: number){
+        super(listPosition, status, databasePrimaryKey);
+    }
+
+    getContent(): JSON{
+        // TODO
     }
 
     checkEvent(): void{
@@ -23,8 +27,8 @@ export class ShootEvent extends PhoenixEvent{
         shootBox.getAttackersLKPText().innerHTML = this.lkpCount.toString();
         shootBox.getAttackersSKPText().innerHTML = this.skpCount.toString();
         shootBox.getTargetText().innerHTML = this.target;
-        shootBox.getXTargetText().innerHTML = this.toX.toString();
-        shootBox.getYTargetText().innerHTML = this.toY.toString();
+        shootBox.getXTargetText().innerHTML = this.to[0].toString();
+        shootBox.getYTargetText().innerHTML = this.to[1].toString();
 
         let shootButton = shootBox.getRangedBattleButton();
         shootButton.addEventListener("click", (e:Event) => this.shootButtonLogic(shootBox));
@@ -32,7 +36,7 @@ export class ShootEvent extends PhoenixEvent{
         shootBox.getCloseRangedBattleButton().onclick = function(){
             BoxVisibility.hide(shootBox.getSelf());
         };
-        fillEventList();
+        GUI.getBigBox().fillEventList();
         //sendCheckEvent(event.pk, event.type);
         Drawing.drawStuff();
     }
@@ -51,10 +55,10 @@ export class ShootEvent extends PhoenixEvent{
                 canShoot = false;
             }
 
-            if (this.armyExistsAndIsLocated(shooter.owner.tag, this.armyId, this.fromX, this.fromY) && canShoot) {
+            if (this.armyExistsAndIsLocated(shooter.owner.tag, this.armyId, this.from[0], this.from[1]) && canShoot) {
                 this.status = 'available';
             } else if (this.armyExists(this.realm, this.armyId) && 
-            this.possibleMoveOfArmyTo(shooter.owner.tag, this.armyId, this.fromX, this.fromY)) {
+            this.possibleMoveOfArmyTo(shooter.owner.tag, this.armyId, this.from[0], this.from[1])) {
                 this.status = 'withheld';
             } else {
                 this.status = 'impossible';
@@ -65,12 +69,12 @@ export class ShootEvent extends PhoenixEvent{
     makeEventListItem(): HTMLElement{
         let eli = document.createElement("DIV");
         eli.classList.add("eventListItem");
-        eli.id = "eli" + this.id;
+        eli.id = "eli" + this.listPosition;
         
-        eli.innerHTML = "<div>"+ this.realm.tag +"'s army "+this.armyId+" shoots a Field ("+this.toX+", "+
-        this.toY+") with "+this.lkpCount + " LKP and " + this.skpCount + " SKP.</div>";
+        eli.innerHTML = "<div>"+ this.realm.tag +"'s army "+this.armyId+" shoots a Field ("+this.to[0]+", "+
+        this.to[1]+") with "+this.lkpCount + " LKP and " + this.skpCount + " SKP.</div>";
 
-        return this.commonEventListItem(eli, this.id);
+        return this.commonEventListItem(eli, this.listPosition);
     }
 
     getType(): string{
@@ -114,10 +118,10 @@ export class ShootEvent extends PhoenixEvent{
             window.alert("Sie haben zu viele Würfe für schwere Katapulte/Kriegsschiffe eingetragenen");
             return false;
         }else{
-            fernkampf(lkpRolls, skpRolls, shooter, this.target, [this.toX, this.toY], null);// TODO chars
+            ShootingFunctions.fernkampf(lkpRolls, skpRolls, shooter, this.target, this.to, null);// TODO chars
             BoxVisibility.hide(shootBox.getSelf());
             this.status = 'checked';
-            fillEventList();
+            GUI.getBigBox().fillEventList();
             Drawing.drawStuff();
             return true;
         }

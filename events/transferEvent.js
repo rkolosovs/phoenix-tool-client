@@ -5,11 +5,11 @@ const gameState_1 = require("../gameState");
 const footArmy_1 = require("../armies/footArmy");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
 const riderArmy_1 = require("../armies/riderArmy");
+const fleet_1 = require("../armies/fleet");
+const gui_1 = require("../gui/gui");
 class TransferEvent extends event_1.PhoenixEvent {
-    constructor(id, status, fromArmy, toArmy, realm, troops, leaders, mounts, lkp, skp, x, y, pk) {
-        super(id, status, pk);
-        this.id = id;
-        this.status = status;
+    constructor(listPosition, status, fromArmy, toArmy, realm, troops, leaders, mounts, lkp, skp, position, databasePrimaryKey) {
+        super(listPosition, status, databasePrimaryKey);
         this.fromArmy = fromArmy;
         this.toArmy = toArmy;
         this.realm = realm;
@@ -18,9 +18,10 @@ class TransferEvent extends event_1.PhoenixEvent {
         this.mounts = mounts;
         this.lkp = lkp;
         this.skp = skp;
-        this.x = x;
-        this.y = y;
-        this.pk = pk;
+        this.position = position;
+    }
+    getContent() {
+        // TODO
     }
     checkEvent() {
         console.log("this is a transfer event");
@@ -53,25 +54,25 @@ class TransferEvent extends event_1.PhoenixEvent {
                 armyToTransferFrom.setMountCount(armyToTransferFrom.getMountCount() - mountsToSplit);
                 armyToTransferTo.setMountCount(armyToTransferTo.getMountCount() + mountsToSplit);
             }
-            if (armyToTransferFrom instanceof footArmy_1.FootArmy || armyToTransferFrom instanceof Fleet) {
+            if (armyToTransferFrom instanceof footArmy_1.FootArmy || armyToTransferFrom instanceof fleet_1.Fleet) {
                 armyToTransferFrom.setLightCatapultCount(armyToTransferFrom.getLightCatapultCount() - lkpToSplit);
                 armyToTransferTo.setLightCatapultCount(armyToTransferTo.getLightCatapultCount() + lkpToSplit);
                 armyToTransferFrom.setHeavyCatapultCount(armyToTransferFrom.getHeavyCatapultCount() - skpToSplit);
                 armyToTransferTo.setHeavyCatapultCount(armyToTransferTo.getHeavyCatapultCount() + skpToSplit);
             }
             if (leadersToSplit > 0 &&
-                gameState_1.GameState.armies[armyFromPlaceInList].getMovePoints() < gameState_1.GameState.armies[armyFromPlaceInList].getMaxMovePoints()) {
-                gameState_1.GameState.armies[armyToPlaceInList].setMovePoints(0);
+                armyToTransferFrom.getMovePoints() < armyToTransferFrom.getMaxMovePoints()) {
+                armyToTransferTo.setMovePoints(0);
             }
-            else if (gameState_1.GameState.armies[armyFromPlaceInList].getMovePoints() < gameState_1.GameState.armies[armyToPlaceInList].getMovePoints()) {
-                gameState_1.GameState.armies[armyToPlaceInList].setMovePoints(gameState_1.GameState.armies[armyFromPlaceInList].getMovePoints());
+            else if (armyToTransferFrom.getMovePoints() < armyToTransferTo.getMovePoints()) {
+                armyToTransferTo.setMovePoints(armyToTransferFrom.getMovePoints());
             }
-            if (gameState_1.GameState.armies[armyFromPlaceInList].getHeightPoints() < gameState_1.GameState.armies[armyToPlaceInList].getHeightPoints()) {
-                gameState_1.GameState.armies[armyToPlaceInList].setHeightPoints(gameState_1.GameState.armies[armyFromPlaceInList].getHeightPoints());
+            if (armyToTransferFrom.getHeightPoints() < armyToTransferTo.getHeightPoints()) {
+                armyToTransferTo.setHeightPoints(armyToTransferFrom.getHeightPoints());
             }
         }
         this.status = 'checked';
-        fillEventList();
+        gui_1.GUI.getBigBox().fillEventList();
         drawingFunctions_1.Drawing.drawStuff();
     }
     determineEventStatus() {
@@ -80,8 +81,8 @@ class TransferEvent extends event_1.PhoenixEvent {
         if (army1 == undefined || army2 == undefined) {
             this.status = 'withheld';
         }
-        else if (army1.getPosition()[0] !== this.x || army1.getPosition()[1] !== this.y ||
-            army2.getPosition()[0] !== this.x || army2.getPosition()[1] !== this.y) {
+        else if (army1.getPosition()[0] !== this.position[0] || army1.getPosition()[1] !== this.position[1] ||
+            army2.getPosition()[0] !== this.position[0] || army2.getPosition()[1] !== this.position[1]) {
             this.status = 'withheld';
         }
         else if ((army1.constructor === army2.constructor || (this.troops === 0 && this.mounts === 0 &&
@@ -90,8 +91,8 @@ class TransferEvent extends event_1.PhoenixEvent {
             this.status = 'available';
         }
         else if (((((army1 instanceof footArmy_1.FootArmy || army1 instanceof riderArmy_1.RiderArmy) && army1.getMovePoints() < 3) ||
-            army1 instanceof Fleet && army1.getMovePoints() < 5) && (((army2 instanceof footArmy_1.FootArmy ||
-            army2 instanceof riderArmy_1.RiderArmy) && army2.getMovePoints() < 3) || army2 instanceof Fleet && army2.getMovePoints() < 5))) {
+            army1 instanceof fleet_1.Fleet && army1.getMovePoints() < 5) && (((army2 instanceof footArmy_1.FootArmy ||
+            army2 instanceof riderArmy_1.RiderArmy) && army2.getMovePoints() < 3) || army2 instanceof fleet_1.Fleet && army2.getMovePoints() < 5))) {
             this.status = 'impossible';
         }
         else {
@@ -101,7 +102,7 @@ class TransferEvent extends event_1.PhoenixEvent {
     makeEventListItem() {
         let eli = document.createElement("DIV");
         eli.classList.add("eventListItem");
-        eli.id = "eli" + this.id;
+        eli.id = "eli" + this.listPosition;
         let innerHTMLString = "<div>" + this.realm.tag + "'s army " + this.fromArmy + " transfers ";
         if (this.troops !== 0) {
             innerHTMLString += this.troops + " troops, ";
@@ -118,9 +119,9 @@ class TransferEvent extends event_1.PhoenixEvent {
         if (this.skp !== 0) {
             innerHTMLString += this.skp + " skp ";
         }
-        innerHTMLString += "to " + this.toArmy + " in (" + this.x + "," + this.y + ").</div>";
+        innerHTMLString += "to " + this.toArmy + " in (" + this.position[0] + "," + this.position[1] + ").</div>";
         eli.innerHTML = innerHTMLString;
-        return this.commonEventListItem(eli, this.id);
+        return this.commonEventListItem(eli, this.listPosition);
     }
     getType() {
         return "transfer";

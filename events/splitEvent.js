@@ -6,11 +6,10 @@ const footArmy_1 = require("../armies/footArmy");
 const riderArmy_1 = require("../armies/riderArmy");
 const fleet_1 = require("../armies/fleet");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
+const gui_1 = require("../gui/gui");
 class SplitEvent extends event_1.PhoenixEvent {
-    constructor(id, status, fromArmy, newArmy, realm, troops, leaders, mounts, lkp, skp, x, y, pk) {
-        super(id, status, pk);
-        this.id = id;
-        this.status = status;
+    constructor(listPosition, status, fromArmy, newArmy, realm, troops, leaders, mounts, lkp, skp, position, databasePrimaryKey) {
+        super(listPosition, status, databasePrimaryKey);
         this.fromArmy = fromArmy;
         this.newArmy = newArmy;
         this.realm = realm;
@@ -19,9 +18,10 @@ class SplitEvent extends event_1.PhoenixEvent {
         this.mounts = mounts;
         this.lkp = lkp;
         this.skp = skp;
-        this.x = x;
-        this.y = y;
-        this.pk = pk;
+        this.position = position;
+    }
+    getContent() {
+        // TODO
     }
     checkEvent() {
         console.log("this is a split event");
@@ -50,26 +50,18 @@ class SplitEvent extends event_1.PhoenixEvent {
                 armyToSplitFrom.setLightCatapultCount(armyToSplitFrom.getLightCatapultCount() - lkpToSplit);
                 armyToSplitFrom.setHeavyCatapultCount(armyToSplitFrom.getHeavyCatapultCount() - skpToSplit);
             }
-            let army;
             if (Math.floor(newArmyId / 100) === 1) {
-                army = new footArmy_1.FootArmy(newArmyId, realm, toSplit, leadersToSplit, lkpToSplit, skpToSplit, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints(), armyToSplitFrom.getHeightPoints());
-                // new heer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, false,
-                // GameState.armies[armyFromPlaceInList].x, GameState.armies[armyFromPlaceInList].y, realm);
+                gameState_1.GameState.armies.push(new footArmy_1.FootArmy(newArmyId, realm, toSplit, leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints(), armyToSplitFrom.getHeightPoints()));
             }
             else if (Math.floor(newArmyId / 100) === 2) {
-                army = new riderArmy_1.RiderArmy(newArmyId, realm, toSplit, leadersToSplit, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints(), armyToSplitFrom.getHeightPoints());
-                // new reiterHeer(newArmyId, toSplit, leadersToSplit, false, GameState.armies[armyFromPlaceInList].x,
-                // GameState.armies[armyFromPlaceInList].y, realm);
+                gameState_1.GameState.armies.push(new riderArmy_1.RiderArmy(newArmyId, realm, toSplit, leadersToSplit, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints(), armyToSplitFrom.getHeightPoints()));
             }
             else if (Math.floor(newArmyId / 100) === 3) {
-                army = new fleet_1.Fleet(newArmyId, realm, toSplit, leadersToSplit, lkpToSplit, skpToSplit, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints());
-                // new seeHeer(newArmyId, toSplit, leadersToSplit, lkpToSplit, skpToSplit, false,
-                // GameState.armies[armyFromPlaceInList].x, GameState.armies[armyFromPlaceInList].y, realm);
+                gameState_1.GameState.armies.push(new fleet_1.Fleet(newArmyId, realm, toSplit, leadersToSplit, lkpToSplit, skpToSplit, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints()));
             }
-            gameState_1.GameState.armies.push(army);
         }
         this.status = 'checked';
-        fillEventList();
+        gui_1.GUI.getBigBox().fillEventList();
         drawingFunctions_1.Drawing.drawStuff();
     }
     determineEventStatus() {
@@ -95,7 +87,7 @@ class SplitEvent extends event_1.PhoenixEvent {
                 lkpCount = army.getLightCatapultCount();
                 skpCount = army.getHeavyCatapultCount();
             }
-            if (army.getPosition()[0] != this.x || army.getPosition()[1] != this.y) {
+            if (army.getPosition()[0] != this.position[0] || army.getPosition()[1] != this.position[1]) {
                 this.status = 'withheld';
             }
             else if (((army.getTroopCount() - this.troops) >= (100 / typefactor)) &&
@@ -113,7 +105,7 @@ class SplitEvent extends event_1.PhoenixEvent {
     makeEventListItem() {
         let eli = document.createElement("DIV");
         eli.classList.add("eventListItem");
-        eli.id = "eli" + this.id;
+        eli.id = "eli" + this.listPosition;
         // TODO: detailed explanation
         let innerHTMLString = "<div>" + this.realm.tag + "'s army " + this.fromArmy + " splits off army " + this.newArmy + " with ";
         if (this.troops !== 0) {
@@ -131,9 +123,9 @@ class SplitEvent extends event_1.PhoenixEvent {
         if (this.skp !== 0) {
             innerHTMLString += this.skp + " skp ";
         }
-        innerHTMLString += "in (" + this.x + "," + this.y + ").</div>";
+        innerHTMLString += "in (" + this.position[0] + "," + this.position[1] + ").</div>";
         eli.innerHTML = innerHTMLString;
-        return this.commonEventListItem(eli, this.id);
+        return this.commonEventListItem(eli, this.listPosition);
     }
     getType() {
         return "split";

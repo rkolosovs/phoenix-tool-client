@@ -5,21 +5,20 @@ const boxVisibilty_1 = require("../gui/boxVisibilty");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
 const gameState_1 = require("../gameState");
 const event_1 = require("./event");
+const shootingFunctions_1 = require("../armies/shootingFunctions");
 class ShootEvent extends event_1.PhoenixEvent {
-    constructor(id, status, realm, armyId, toX, toY, fromX, fromY, lkpCount, skpCount, target, pk) {
-        super(id, status, pk);
-        this.id = id;
-        this.status = status;
+    constructor(listPosition, status, realm, armyId, to, from, lkpCount, skpCount, target, databasePrimaryKey) {
+        super(listPosition, status, databasePrimaryKey);
         this.realm = realm;
         this.armyId = armyId;
-        this.toX = toX;
-        this.toY = toY;
-        this.fromX = fromX;
-        this.fromY = fromY;
+        this.to = to;
+        this.from = from;
         this.lkpCount = lkpCount;
         this.skpCount = skpCount;
         this.target = target;
-        this.pk = pk;
+    }
+    getContent() {
+        // TODO
     }
     checkEvent() {
         let shootBox = gui_1.GUI.getShootingBigBox();
@@ -29,14 +28,14 @@ class ShootEvent extends event_1.PhoenixEvent {
         shootBox.getAttackersLKPText().innerHTML = this.lkpCount.toString();
         shootBox.getAttackersSKPText().innerHTML = this.skpCount.toString();
         shootBox.getTargetText().innerHTML = this.target;
-        shootBox.getXTargetText().innerHTML = this.toX.toString();
-        shootBox.getYTargetText().innerHTML = this.toY.toString();
+        shootBox.getXTargetText().innerHTML = this.to[0].toString();
+        shootBox.getYTargetText().innerHTML = this.to[1].toString();
         let shootButton = shootBox.getRangedBattleButton();
         shootButton.addEventListener("click", (e) => this.shootButtonLogic(shootBox));
         shootBox.getCloseRangedBattleButton().onclick = function () {
             boxVisibilty_1.BoxVisibility.hide(shootBox.getSelf());
         };
-        fillEventList();
+        gui_1.GUI.getBigBox().fillEventList();
         //sendCheckEvent(event.pk, event.type);
         drawingFunctions_1.Drawing.drawStuff();
     }
@@ -51,11 +50,11 @@ class ShootEvent extends event_1.PhoenixEvent {
             if (shooter.getHeavyCatapultCount() - shooter.getHeavyCatapultsShot() < this.skpCount) {
                 canShoot = false;
             }
-            if (this.armyExistsAndIsLocated(shooter.owner.tag, this.armyId, this.fromX, this.fromY) && canShoot) {
+            if (this.armyExistsAndIsLocated(shooter.owner.tag, this.armyId, this.from[0], this.from[1]) && canShoot) {
                 this.status = 'available';
             }
             else if (this.armyExists(this.realm, this.armyId) &&
-                this.possibleMoveOfArmyTo(shooter.owner.tag, this.armyId, this.fromX, this.fromY)) {
+                this.possibleMoveOfArmyTo(shooter.owner.tag, this.armyId, this.from[0], this.from[1])) {
                 this.status = 'withheld';
             }
             else {
@@ -66,10 +65,10 @@ class ShootEvent extends event_1.PhoenixEvent {
     makeEventListItem() {
         let eli = document.createElement("DIV");
         eli.classList.add("eventListItem");
-        eli.id = "eli" + this.id;
-        eli.innerHTML = "<div>" + this.realm.tag + "'s army " + this.armyId + " shoots a Field (" + this.toX + ", " +
-            this.toY + ") with " + this.lkpCount + " LKP and " + this.skpCount + " SKP.</div>";
-        return this.commonEventListItem(eli, this.id);
+        eli.id = "eli" + this.listPosition;
+        eli.innerHTML = "<div>" + this.realm.tag + "'s army " + this.armyId + " shoots a Field (" + this.to[0] + ", " +
+            this.to[1] + ") with " + this.lkpCount + " LKP and " + this.skpCount + " SKP.</div>";
+        return this.commonEventListItem(eli, this.listPosition);
     }
     getType() {
         return "shoot";
@@ -114,10 +113,10 @@ class ShootEvent extends event_1.PhoenixEvent {
             return false;
         }
         else {
-            fernkampf(lkpRolls, skpRolls, shooter, this.target, [this.toX, this.toY], null); // TODO chars
+            shootingFunctions_1.ShootingFunctions.fernkampf(lkpRolls, skpRolls, shooter, this.target, this.to, null); // TODO chars
             boxVisibilty_1.BoxVisibility.hide(shootBox.getSelf());
             this.status = 'checked';
-            fillEventList();
+            gui_1.GUI.getBigBox().fillEventList();
             drawingFunctions_1.Drawing.drawStuff();
             return true;
         }
