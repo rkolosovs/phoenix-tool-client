@@ -5,13 +5,13 @@ import {Drawing} from "../gui/drawingFunctions";
 import {GameState} from "../gameState";
 import {BattleBox} from "../gui/battleBox";
 import {PhoenixEvent} from "./event";
-import {Realm} from "../realm";
 import {EventStatus} from "./eventStatus";
 
 export class BattleEvent extends PhoenixEvent{
     
-    constructor(listPosition: number, status: EventStatus, prerequisiteEvents: number[], protected participants: Army[],
-        protected realm: Realm, protected position: [number, number], databasePrimaryKey: number){
+    constructor(listPosition: number, status: EventStatus, prerequisiteEvents: number[],
+                protected participants: {'id': number, 'realm': string}[], protected position: [number, number],
+                databasePrimaryKey: number){
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
 
@@ -21,25 +21,30 @@ export class BattleEvent extends PhoenixEvent{
     }
 
     validGameState(): boolean{
-        // TODO
-        return false;
+        //Every participating army exists and is located at the position of the battle.
+        return this.participants.every(participant => GameState.armies.some(army =>
+            army.getErkenfaraID() === participant.id &&
+            army.owner.tag === participant.realm &&
+            army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]));
     }
 
     checkEvent(): void{
         let battleBox: BattleBox = GUI.getBattleBox();
         BoxVisibility.show(battleBox.getSelf());
 
-        let partips: Army[] = [];
-        this.participants.forEach(function (item) {
-            let a = GameState.armies.find(function (candidate) {
-                return (item.owner.tag === candidate.owner.tag && (item.getErkenfaraID() === candidate.getErkenfaraID()));
+        let participatingArmies: Army[] = [];
+        this.participants.forEach(participant => {
+            let army = GameState.armies.find(candidate => {
+                return (participant.realm === candidate.owner.tag && (participant.id === candidate.getErkenfaraID()));
             });
-            if(a != undefined){
-                partips.push(a);
+            if(army != undefined){
+                participatingArmies.push(army);
+            } else{
+                throw new Error("A participating army is missing.");
             }
         });
 
-        battleBox.newBattle(partips, this.position);
+        battleBox.newBattle(participatingArmies, this.position);
         battleBox.getAttackDiceRoll().onchange = function () { battleBox.updateDisplay() };
         battleBox.getDefenseDiceRoll().onchange = function () { battleBox.updateDisplay() };
         let battleButton: HTMLButtonElement = GUI.getBattleBox().getBattleButton();
@@ -51,21 +56,10 @@ export class BattleEvent extends PhoenixEvent{
         };
     }
     
-    // determineEventStatus(): void{
-    //     if (this.eachArmyExistsAndIsLocated(this.participants, this.position[0], this.position[1])) {
-    //         this.status = EventStatus.Available;
-    //     } else if (this.stillSplitEventsInFaction(this.realm) || (this.eachArmyExists(this.participants) &&
-    //         this.possibleMoveOfEachArmyTo(this.participants, this.position[0], this.position[1]))) {
-    //             this.status = EventStatus.Withheld;
-    //     } else {
-    //         this.status = EventStatus.Impossible;
-    //     }
-    // }
-    
     makeEventListItemText(): string{
         let result: string = "Battle at (" + this.position[0] + ", " + this.position[1] + ") involving";
         for (let j = 0; j < this.participants.length; j++) {
-            result += " [" + this.participants[j].owner.tag + " " + this.participants[j].getErkenfaraID() + "]";
+            result += " [" + this.participants[j].realm + " " + this.participants[j].id + "]";
         }
         return result;
     }
