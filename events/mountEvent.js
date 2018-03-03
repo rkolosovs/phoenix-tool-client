@@ -38,10 +38,10 @@ class MountEvent extends event_1.PhoenixEvent {
             let army = gameState_1.GameState.armies[armyFromPlaceInList];
             if (army instanceof footArmy_1.FootArmy) {
                 army.mount(toSplit, leadersToSplit, newArmyId);
-                this.status = 'checked';
+                this.status = 0 /* Checked */;
                 if (army instanceof riderArmy_1.RiderArmy) {
                     army.dismount(toSplit, leadersToSplit, newArmyId);
-                    this.status = 'checked';
+                    this.status = 0 /* Checked */;
                 }
             }
         }
@@ -52,7 +52,7 @@ class MountEvent extends event_1.PhoenixEvent {
         let typefactor = 1;
         let army = gameState_1.GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
         if (army == undefined) {
-            this.status = 'withheld';
+            this.status = 3 /* Withheld */;
         }
         else {
             if (army instanceof riderArmy_1.RiderArmy) {
@@ -62,16 +62,16 @@ class MountEvent extends event_1.PhoenixEvent {
                 typefactor = 100;
             }
             if (army.getPosition()[0] != this.position[0] || army.getPosition()[1] != this.position[1]) {
-                this.status = 'withheld';
+                this.status = 3 /* Withheld */;
             }
             else if ((army instanceof footArmy_1.FootArmy && (((army.getTroopCount() - this.troops) >= 0) &&
                 ((army.getOfficerCount() - this.leaders) >= 0) && ((army.getMountCount() - this.troops) >= 0))) ||
                 (army instanceof riderArmy_1.RiderArmy && (((army.getTroopCount() - this.troops) >= 0) &&
                     ((army.getOfficerCount() - this.leaders) >= 0)))) {
-                this.status = 'available';
+                this.status = 4 /* Available */;
             }
             else {
-                this.status = 'impossible';
+                this.status = 2 /* Impossible */;
             }
         }
         let mountCount = 0;
@@ -97,18 +97,15 @@ class MountEvent extends event_1.PhoenixEvent {
         //((lkpCount - this.lkp) >= 0) &&
         //((skpCount - this.skp) >= 0))
         {
-            this.status = 'available';
+            this.status = 4 /* Available */;
         }
         else {
-            this.status = 'impossible';
+            this.status = 2 /* Impossible */;
         }
     }
     makeEventListItemText() {
         return "" + this.realm.tag + "'s army " + this.fromArmy + " mounts " + this.troops + " troops, and " +
             this.leaders + " leaders to " + this.newArmy + " in (" + this.position[0] + "," + this.position[1] + ")";
-    }
-    getType() {
-        return "mount";
     }
 }
 exports.MountEvent = MountEvent;

@@ -6,10 +6,11 @@ import {GameState} from "../gameState";
 import {BattleBox} from "../gui/battleBox";
 import {PhoenixEvent} from "./event";
 import {Realm} from "../realm";
+import {EventStatus} from "./eventStatus";
 
 export class BattleEvent extends PhoenixEvent{
     
-    constructor(listPosition: number, status: string, protected participants: Army[],
+    constructor(listPosition: number, status: EventStatus, protected participants: Army[],
         protected realm: Realm, protected position: [number, number], databasePrimaryKey: number){
         super(listPosition, status, databasePrimaryKey);
     }
@@ -47,12 +48,12 @@ export class BattleEvent extends PhoenixEvent{
     
     determineEventStatus(): void{
         if (this.eachArmyExistsAndIsLocated(this.participants, this.position[0], this.position[1])) {
-            this.status = 'available';
+            this.status = EventStatus.Available;
         } else if (this.stillSplitEventsInFaction(this.realm) || (this.eachArmyExists(this.participants) &&
             this.possibleMoveOfEachArmyTo(this.participants, this.position[0], this.position[1]))) {
-                this.status = 'withheld';
+                this.status = EventStatus.Withheld;
         } else {
-            this.status = 'impossible';
+            this.status = EventStatus.Impossible;
         }
     }
     
@@ -64,15 +65,11 @@ export class BattleEvent extends PhoenixEvent{
         return result;
     }
 
-    getType(): string{
-        return "battle";
-    }
-
     private battleButtonLogic(battleBox: BattleBox): void {
         battleBox.battleHandler.resolve(parseInt(battleBox.getAttackDiceRoll().value),
             parseInt(battleBox.getDefenseDiceRoll().value));
         BoxVisibility.hide(battleBox.getSelf());
-        this.status = 'checked';
+        this.status = EventStatus.Checked;
         GUI.getBigBox().fillEventList();
         Drawing.drawStuff();
     }

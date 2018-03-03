@@ -41,14 +41,14 @@ class BattleEvent extends event_1.PhoenixEvent {
     }
     determineEventStatus() {
         if (this.eachArmyExistsAndIsLocated(this.participants, this.position[0], this.position[1])) {
-            this.status = 'available';
+            this.status = 4 /* Available */;
         }
         else if (this.stillSplitEventsInFaction(this.realm) || (this.eachArmyExists(this.participants) &&
             this.possibleMoveOfEachArmyTo(this.participants, this.position[0], this.position[1]))) {
-            this.status = 'withheld';
+            this.status = 3 /* Withheld */;
         }
         else {
-            this.status = 'impossible';
+            this.status = 2 /* Impossible */;
         }
     }
     makeEventListItemText() {
@@ -58,13 +58,10 @@ class BattleEvent extends event_1.PhoenixEvent {
         }
         return result;
     }
-    getType() {
-        return "battle";
-    }
     battleButtonLogic(battleBox) {
         battleBox.battleHandler.resolve(parseInt(battleBox.getAttackDiceRoll().value), parseInt(battleBox.getDefenseDiceRoll().value));
         boxVisibilty_1.BoxVisibility.hide(battleBox.getSelf());
-        this.status = 'checked';
+        this.status = 0 /* Checked */;
         gui_1.GUI.getBigBox().fillEventList();
         drawingFunctions_1.Drawing.drawStuff();
     }

@@ -27,7 +27,7 @@ class MoveEvent extends event_1.PhoenixEvent {
             if (!this.unprocessedBattleAtContainingArmy(army.owner.tag, army.getErkenfaraID(), army.getPosition()[0], army.getPosition()[1])) {
                 army.conquer();
             }
-            this.status = 'checked';
+            this.status = 0 /* Checked */;
             gui_1.GUI.getBigBox().fillEventList();
             drawingFunctions_1.Drawing.drawStuff();
         }
@@ -41,25 +41,22 @@ class MoveEvent extends event_1.PhoenixEvent {
             this.canMove(this.realm, this.armyId, this.from[0], this.from[1], this.to[0], this.to[1]) &&
             this.noPendingLoadEvents(this.realm, this.armyId, this.from[0], this.from[1]) &&
             this.noPendingMountEvents(this.realm, this.armyId, this.from[0], this.from[1])) {
-            this.status = 'available';
+            this.status = 4 /* Available */;
         }
         else if ((this.stillSplitEventsInFaction(this.realm) || this.armyExistsAndIsLocated(this.realm, this.armyId, this.from[0], this.from[1])) && !this.unprocessedBattleAtContainingArmy(this.realm, this.armyId, this.from[0], this.from[1]) && this.canMove(this.realm, this.armyId, this.from[0], this.from[1], this.to[0], this.to[1]) && (!this.noPendingLoadEvents(this.realm, this.armyId, this.from[0], this.from[1]) || !this.noPendingMountEvents(this.realm, this.armyId, this.from[0], this.from[1]))) {
-            this.status = 'withheld';
+            this.status = 3 /* Withheld */;
         }
         else if (this.stillSplitEventsInFaction(this.realm) || (this.armyExists(this.realm, this.armyId) &&
             this.possibleMoveOfArmyTo(this.realm, this.armyId, this.from[0], this.from[1]))) {
-            this.status = 'withheld';
+            this.status = 3 /* Withheld */;
         }
         else {
-            this.status = 'impossible';
+            this.status = 2 /* Impossible */;
         }
     }
     makeEventListItemText() {
         return "Move " + this.realm + " army " + this.armyId + " from (" + this.from[0] + ", " + this.from[1] +
             ") to (" + this.to[0] + ", " + this.to[1] + ")";
-    }
-    getType() {
-        return "move";
     }
 }
 exports.MoveEvent = MoveEvent;

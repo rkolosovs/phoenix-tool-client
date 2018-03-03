@@ -6,10 +6,11 @@ import {Realm} from "../realm";
 import {GUI} from "../gui/gui";
 import {Army} from "../armies/army";
 import {Direction} from "../map/direction";
+import {EventStatus} from "./eventStatus";
 
 export class MoveEvent extends PhoenixEvent{
     
-    constructor(listPosition: number, status: string, protected realm: Realm, protected armyId: number,
+    constructor(listPosition: number, status: EventStatus, protected realm: Realm, protected armyId: number,
                 protected from: [number, number], protected to: [number, number], databasePrimaryKey: number){
         super(listPosition, status, databasePrimaryKey);
     }
@@ -30,7 +31,7 @@ export class MoveEvent extends PhoenixEvent{
                     army.getPosition()[0], army.getPosition()[1])) {
                 army.conquer();
             }
-            this.status = 'checked';
+            this.status = EventStatus.Checked;
             GUI.getBigBox().fillEventList();
             Drawing.drawStuff();
         } else {
@@ -44,27 +45,23 @@ export class MoveEvent extends PhoenixEvent{
         this.canMove(this.realm, this.armyId, this.from[0], this.from[1], this.to[0], this.to[1]) &&
         this.noPendingLoadEvents(this.realm, this.armyId, this.from[0], this.from[1]) &&
         this.noPendingMountEvents(this.realm, this.armyId, this.from[0], this.from[1])) {
-        this.status = 'available';
+        this.status = EventStatus.Available;
         } else if ((this.stillSplitEventsInFaction(this.realm) || this.armyExistsAndIsLocated(this.realm, this.armyId,
                 this.from[0], this.from[1])) && !this.unprocessedBattleAtContainingArmy(this.realm, this.armyId,
                 this.from[0], this.from[1]) && this.canMove(this.realm, this.armyId, this.from[0], this.from[1],
                 this.to[0], this.to[1]) && (!this.noPendingLoadEvents(this.realm, this.armyId, this.from[0],
                 this.from[1]) || !this.noPendingMountEvents(this.realm, this.armyId, this.from[0], this.from[1]))) {
-            this.status = 'withheld';
+            this.status = EventStatus.Withheld;
         } else if (this.stillSplitEventsInFaction(this.realm) || (this.armyExists(this.realm, this.armyId) &&
             this.possibleMoveOfArmyTo(this.realm, this.armyId, this.from[0], this.from[1]))) {
-            this.status = 'withheld';
+            this.status = EventStatus.Withheld;
         } else {
-            this.status = 'impossible';
+            this.status = EventStatus.Impossible;
         }
     }
 
     makeEventListItemText(): string{
         return "Move " + this.realm + " army " + this.armyId + " from (" + this.from[0] + ", " + this.from[1] +
             ") to (" + this.to[0] + ", " + this.to[1] + ")";
-    }
-
-    getType(): string{
-        return "move";
     }
 }

@@ -4,7 +4,7 @@ import {GameState} from "../gameState";
 import {MoveEvent} from "../events/moveEvent";
 import {BattleEvent} from "../events/battleEvent";
 import {ShootEvent} from "../events/shootEvent";
-import {MergeEvent} from "../events/mergEvent";
+import {MergeEvent} from "../events/mergeEvent";
 import {MountEvent} from "../events/mountEvent";
 import {TransferEvent} from "../events/transferEvent";
 import {SplitEvent} from "../events/splitEvent";

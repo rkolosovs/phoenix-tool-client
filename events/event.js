@@ -26,33 +26,31 @@ class PhoenixEvent {
         checkButton.addEventListener("click", (e) => this.checkEvent());
         eli.appendChild(deleteButton);
         eli.appendChild(checkButton);
-        if (this.status === 'checked') {
+        if (this.status === 0 /* Checked */) {
             eli.classList.add("checkedELI");
             deleteButton.disabled = true;
             checkButton.disabled = true;
         }
-        else if (this.status === 'deleted') {
+        else if (this.status === 1 /* Deleted */) {
             eli.classList.add("deletedELI");
             deleteButton.disabled = true;
             checkButton.disabled = true;
         }
-        else if (this.status === 'impossible') {
+        else if (this.status === 2 /* Impossible */) {
             eli.classList.add("impossibleELI");
             checkButton.disabled = true;
         }
-        else if (this.status === 'withheld') {
+        else if (this.status === 3 /* Withheld */) {
             eli.classList.add("withheldELI");
             checkButton.disabled = true;
         }
-        else if (this.status === 'available') {
+        else if (this.status === 4 /* Available */) {
             eli.classList.add("availableELI");
         }
         return eli;
     }
     deleteEvent() {
-        let eli = document.getElementById("eli" + this.listPosition);
-        let event = gameState_1.GameState.pendingNewEvents[this.listPosition];
-        this.status = 'deleted';
+        this.status = 1 /* Deleted */;
         gui_1.GUI.getBigBox().fillEventList();
     }
     getListPosition() {
@@ -75,7 +73,8 @@ class PhoenixEvent {
     stillSplitEventsInFaction(realm) {
         for (let i = 0; i < gameState_1.GameState.pendingNewEvents.length; i++) {
             let event = gameState_1.GameState.pendingNewEvents[i];
-            if ((event.status === 'withheld' || event.status === 'available' || event.status === 'undetermined') &&
+            if ((event.status === 3 /* Withheld */ || event.status === 4 /* Available */ ||
+                event.status === 5 /* Undetermined */) &&
                 event.getType() === 'split') {
                 return true;
             }

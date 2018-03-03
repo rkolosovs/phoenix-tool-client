@@ -7,10 +7,11 @@ import {RiderArmy} from "../armies/riderArmy";
 import {Fleet} from "../armies/fleet";
 import {Drawing} from "../gui/drawingFunctions";
 import {GUI} from "../gui/gui";
+import {EventStatus} from "./eventStatus";
 
 export class SplitEvent extends PhoenixEvent{
     
-    constructor(listPosition: number, status: string, protected fromArmy: number, protected newArmy: number,
+    constructor(listPosition: number, status: EventStatus, protected fromArmy: number, protected newArmy: number,
                 protected realm: Realm, protected troops: number, protected leaders: number, protected mounts: number,
                 protected lkp: number, protected skp: number, protected position: [number, number],
                 databasePrimaryKey: number){
@@ -63,7 +64,7 @@ export class SplitEvent extends PhoenixEvent{
                     armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints()));
             }
         }
-        this.status = 'checked';
+        this.status = EventStatus.Checked;
         GUI.getBigBox().fillEventList();
         Drawing.drawStuff();
     }
@@ -72,7 +73,7 @@ export class SplitEvent extends PhoenixEvent{
         let typefactor = 1;
         let army = GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
         if (army == undefined) {
-            this.status = 'withheld';
+            this.status = EventStatus.Withheld;
         } else {
             let mountCount: number = 0;
             let lkpCount: number = 0;
@@ -90,16 +91,16 @@ export class SplitEvent extends PhoenixEvent{
                 skpCount = (army as FootArmy).getHeavyCatapultCount();
             }
             if (army.getPosition()[0] != this.position[0] || army.getPosition()[1] != this.position[1]) {
-                this.status = 'withheld';
+                this.status = EventStatus.Withheld;
             } else if (((army.getTroopCount() - this.troops) >= (100 / typefactor)) &&
                 ((army.getOfficerCount() - this.leaders) >= 1) &&
                 ((mountCount - this.mounts) >= 0) &&
                 ((lkpCount - this.lkp) >= 0) &&
                 ((skpCount - this.skp) >= 0)) {
-                this.status = 'available';
+                this.status = EventStatus.Available;
             }
             else {
-                this.status = 'impossible';
+                this.status = EventStatus.Impossible;
             }
         }
     }
@@ -124,9 +125,5 @@ export class SplitEvent extends PhoenixEvent{
             result += this.skp + " skp ";
         }
         return result + "in (" + this.position[0] + "," + this.position[1] + ")";
-    }
-
-    getType(): string{
-        return "split";
     }
 }

@@ -5,11 +5,12 @@ import {ShootingBigBox} from "../gui/shootingBigBox";
 import {Realm} from "../realm";
 import {GameState} from "../gameState";
 import {PhoenixEvent} from "./event";
-import {ShootingFunctions} from "../armies/shootingFunctions";
+import {EventStatus} from "./eventStatus";
+import {ButtonFunctions} from "../controls/buttonFunctions";
 
 export class ShootEvent extends PhoenixEvent{
     
-    constructor(listPosition: number, status: string, protected realm: Realm, protected armyId: number,
+    constructor(listPosition: number, status: EventStatus, protected realm: Realm, protected armyId: number,
                 protected to: [number, number], protected from: [number, number], protected lkpCount: number,
                 protected skpCount: number, protected target: string, databasePrimaryKey: number){
         super(listPosition, status, databasePrimaryKey);
@@ -18,6 +19,30 @@ export class ShootEvent extends PhoenixEvent{
     getContent(): JSON{
         // TODO
         return JSON.parse('{}');
+    }
+
+    getLightCatapultCount(): number{
+        return this.lkpCount;
+    }
+
+    getHeavyCatapultCount(): number{
+        return this.skpCount;
+    }
+
+    getTo(): [number, number]{
+        return this.to;
+    }
+
+    getTarget(): string{
+        return this.target;
+    }
+
+    getArmyId(): number{
+        return this.armyId;
+    }
+
+    getRealm(): Realm{
+        return this.realm;
     }
 
     checkEvent(): void{
@@ -32,7 +57,7 @@ export class ShootEvent extends PhoenixEvent{
         shootBox.getYTargetText().innerHTML = this.to[1].toString();
 
         let shootButton = shootBox.getRangedBattleButton();
-        shootButton.addEventListener("click", (e:Event) => this.shootButtonLogic(shootBox));
+        shootButton.addEventListener("click", (e:Event) => ButtonFunctions.shootButtonLogic(this));
 
         shootBox.getCloseRangedBattleButton().onclick = function(){
             BoxVisibility.hide(shootBox.getSelf());
@@ -43,26 +68,27 @@ export class ShootEvent extends PhoenixEvent{
     }
     
     determineEventStatus(): void{
-        if (this.status === 'undetermined' || this.status === 'available' ||
-        this.status === 'withheld' || this.status === 'impossible') {
+        if (!(this.status === EventStatus.Checked || this.status === EventStatus.Deleted)) {
 
             let shooter = GameState.armies[this.findArmyPlaceInList(this.armyId, this.realm)];
             let canShoot = true;
 
-            if(shooter.getLightCatapultCount() - shooter.getLightCatapultsShot() < this.lkpCount){//check if remaining Lkp that have not shot yet
+            //check if remaining Lkp that have not shot yet
+            if(shooter.getLightCatapultCount() - shooter.getLightCatapultsShot() < this.lkpCount){
                 canShoot = false;
             }
-            if(shooter.getHeavyCatapultCount() - shooter.getHeavyCatapultsShot() < this.skpCount){//check if remaining Lkp that have not shot yet
+            //check if remaining Lkp that have not shot yet
+            if(shooter.getHeavyCatapultCount() - shooter.getHeavyCatapultsShot() < this.skpCount){
                 canShoot = false;
             }
 
             if (this.armyExistsAndIsLocated(shooter.owner.tag, this.armyId, this.from[0], this.from[1]) && canShoot) {
-                this.status = 'available';
+                this.status = EventStatus.Available;
             } else if (this.armyExists(this.realm, this.armyId) && 
             this.possibleMoveOfArmyTo(shooter.owner.tag, this.armyId, this.from[0], this.from[1])) {
-                this.status = 'withheld';
+                this.status = EventStatus.Withheld;
             } else {
-                this.status = 'impossible';
+                this.status = EventStatus.Impossible;
             }
         }
     }
@@ -71,55 +97,4 @@ export class ShootEvent extends PhoenixEvent{
         return ""+ this.realm.tag +"'s army "+this.armyId+" shoots a Field ("+this.to[0]+", "+ this.to[1]+") with " +
             this.lkpCount + " LKP and " + this.skpCount + " SKP";
     }
-
-    getType(): string{
-        return "shoot";
-    }
-
-    private shootButtonLogic(shootBox: ShootingBigBox): boolean{
-        let shooter;
-        let lkpRolls = [];
-        let skpRolls = [];
-        for(let i = 0; i < GameState.armies.length; i++){//TODO use array functions
-            if(GameState.armies[i].getErkenfaraID() === this.armyId && GameState.armies[i].owner === this.realm)
-            shooter = GameState.armies[i];
-        }
-        for(let i = 0; i < 10; i++){//creating the dice roll array
-            let currentRollLKP = parseInt(shootBox.getLKPInputs()[i].value, 10);
-            let currentRollSKP = parseInt(shootBox.getSKPInputs()[i].value, 10);
-            if(!isNaN(currentRollLKP) && currentRollLKP !== 0){
-                for(let j = 0; j < currentRollLKP; j++){
-                    lkpRolls.push(i);
-                }
-            }
-            if(!isNaN(currentRollSKP) && currentRollSKP !== 0){
-                for(let j = 0; j < currentRollSKP; j++){
-                    skpRolls.push(i);
-                }
-            }
-        }
-        //TODO check target field
-
-        if(lkpRolls.length < this.lkpCount){
-            window.alert("Sie haben zu wenig Würfe für leichte Katapulte/Kriegsschiffe eingetragenen");
-            return false;
-        }else if(skpRolls.length < this.skpCount){
-            window.alert("Sie haben zu wenig Würfe für schwere Katapulte/Kriegsschiffe eingetragenen");
-            return false;
-        }else if(lkpRolls.length > this.lkpCount){
-            window.alert("Sie haben zu viele Würfe für leichte Katapulte/Kriegsschiffe eingetragenen");
-            return false;
-        }else if(skpRolls.length > this.skpCount){
-            window.alert("Sie haben zu viele Würfe für schwere Katapulte/Kriegsschiffe eingetragenen");
-            return false;
-        }else{
-            ShootingFunctions.fernkampf(lkpRolls, skpRolls, shooter, this.target, this.to, null);// TODO chars
-            BoxVisibility.hide(shootBox.getSelf());
-            this.status = 'checked';
-            GUI.getBigBox().fillEventList();
-            Drawing.drawStuff();
-            return true;
-        }
-    }
-
 }

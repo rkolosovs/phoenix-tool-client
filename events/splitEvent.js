@@ -61,7 +61,7 @@ class SplitEvent extends event_1.PhoenixEvent {
                 gameState_1.GameState.armies.push(new fleet_1.Fleet(newArmyId, realm, toSplit, leadersToSplit, lkpToSplit, skpToSplit, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints()));
             }
         }
-        this.status = 'checked';
+        this.status = 0 /* Checked */;
         gui_1.GUI.getBigBox().fillEventList();
         drawingFunctions_1.Drawing.drawStuff();
     }
@@ -69,7 +69,7 @@ class SplitEvent extends event_1.PhoenixEvent {
         let typefactor = 1;
         let army = gameState_1.GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
         if (army == undefined) {
-            this.status = 'withheld';
+            this.status = 3 /* Withheld */;
         }
         else {
             let mountCount = 0;
@@ -89,17 +89,17 @@ class SplitEvent extends event_1.PhoenixEvent {
                 skpCount = army.getHeavyCatapultCount();
             }
             if (army.getPosition()[0] != this.position[0] || army.getPosition()[1] != this.position[1]) {
-                this.status = 'withheld';
+                this.status = 3 /* Withheld */;
             }
             else if (((army.getTroopCount() - this.troops) >= (100 / typefactor)) &&
                 ((army.getOfficerCount() - this.leaders) >= 1) &&
                 ((mountCount - this.mounts) >= 0) &&
                 ((lkpCount - this.lkp) >= 0) &&
                 ((skpCount - this.skp) >= 0)) {
-                this.status = 'available';
+                this.status = 4 /* Available */;
             }
             else {
-                this.status = 'impossible';
+                this.status = 2 /* Impossible */;
             }
         }
     }
@@ -123,9 +123,6 @@ class SplitEvent extends event_1.PhoenixEvent {
             result += this.skp + " skp ";
         }
         return result + "in (" + this.position[0] + "," + this.position[1] + ")";
-    }
-    getType() {
-        return "split";
     }
 }
 exports.SplitEvent = SplitEvent;

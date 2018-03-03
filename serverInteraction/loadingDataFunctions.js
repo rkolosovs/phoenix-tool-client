@@ -6,7 +6,7 @@ const gameState_1 = require("../gameState");
 const moveEvent_1 = require("../events/moveEvent");
 const battleEvent_1 = require("../events/battleEvent");
 const shootEvent_1 = require("../events/shootEvent");
-const mergEvent_1 = require("../events/mergEvent");
+const mergeEvent_1 = require("../events/mergeEvent");
 const mountEvent_1 = require("../events/mountEvent");
 const transferEvent_1 = require("../events/transferEvent");
 const splitEvent_1 = require("../events/splitEvent");
@@ -58,7 +58,7 @@ var Loading;
                         gameState_1.GameState.pendingNewEvents.push(new splitEvent_1.SplitEvent(index, "undetermined", content.fromArmy, content.newArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.mounts, content.lkp, content.skp, content.x, content.y, item.pk));
                         break;
                     case "merge":
-                        gameState_1.GameState.pendingNewEvents.push(new mergEvent_1.MergeEvent(index, "undetermined", content.fromArmy, content.toArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, item.pk));
+                        gameState_1.GameState.pendingNewEvents.push(new mergeEvent_1.MergeEvent(index, "undetermined", content.fromArmy, content.toArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, item.pk));
                         break;
                     case "mount":
                         gameState_1.GameState.pendingNewEvents.push(new mountEvent_1.MountEvent(index, "undetermined", content.fromArmy, content.newArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.x, content.y, item.pk));

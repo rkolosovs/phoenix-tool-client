@@ -7,10 +7,11 @@ import {Fleet} from "../armies/fleet";
 import {FootArmy} from "../armies/footArmy";
 import {Army} from "../armies/army";
 import {GUI} from "../gui/gui";
+import {EventStatus} from "./eventStatus";
 
 export class MountEvent extends PhoenixEvent{
     
-    constructor(listPosition: number, status: string, protected fromArmy: number,
+    constructor(listPosition: number, status: EventStatus, protected fromArmy: number,
         protected newArmy: number, protected realm: Realm, protected troops: number, protected leaders: number, 
          protected position: [number, number], databasePrimaryKey: number){
         //protected mounts: number, protected lkp: number, protected skp: number,
@@ -39,10 +40,10 @@ export class MountEvent extends PhoenixEvent{
             let army: Army = GameState.armies[armyFromPlaceInList];
             if (army instanceof FootArmy) {
                 (army as FootArmy).mount(toSplit, leadersToSplit, newArmyId);
-                this.status = 'checked';
+                this.status = EventStatus.Checked;
 				if (army instanceof RiderArmy) {
                     (army as RiderArmy).dismount(toSplit, leadersToSplit, newArmyId);
-                this.status = 'checked';
+                this.status = EventStatus.Checked;
                 }
             }
         }
@@ -55,7 +56,7 @@ export class MountEvent extends PhoenixEvent{
         
         let army = GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
         if (army == undefined) {
-            this.status = 'withheld';
+            this.status = EventStatus.Withheld;
         } else {
             if (army instanceof RiderArmy) {
                 typefactor = 2;
@@ -64,14 +65,14 @@ export class MountEvent extends PhoenixEvent{
                 typefactor = 100;
             }
             if (army.getPosition()[0] != this.position[0] || army.getPosition()[1] != this.position[1]) {
-                this.status = 'withheld';
+                this.status = EventStatus.Withheld;
             } else if ((army instanceof FootArmy && (((army.getTroopCount() - this.troops) >= 0) &&
                 ((army.getOfficerCount() - this.leaders) >= 0) && (((army as FootArmy).getMountCount() - this.troops) >= 0))) ||
                 (army instanceof RiderArmy && (((army.getTroopCount() - this.troops) >= 0) &&
                     ((army.getOfficerCount() - this.leaders) >= 0)))) {
-                        this.status = 'available';
+                        this.status = EventStatus.Available;
             } else {
-                this.status = 'impossible';
+                this.status = EventStatus.Impossible;
             }
         }
         let mountCount: number = 0;
@@ -96,20 +97,16 @@ export class MountEvent extends PhoenixEvent{
          //((lkpCount - this.lkp) >= 0) &&
          //((skpCount - this.skp) >= 0))
         {
-            this.status = 'available';
+            this.status = EventStatus.Available;
         }
         else
         {
-            this.status = 'impossible';
+            this.status = EventStatus.Impossible;
         }
     }
 
     makeEventListItemText(): string{
         return "" + this.realm.tag + "'s army " + this.fromArmy + " mounts " + this.troops + " troops, and " +
             this.leaders + " leaders to " + this.newArmy + " in (" + this.position[0] + "," + this.position[1] + ")";
-    }
-
-    getType(): string{
-        return "mount";
     }
 }

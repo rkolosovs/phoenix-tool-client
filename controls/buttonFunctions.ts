@@ -8,6 +8,11 @@ import {FootArmy} from "../armies/footArmy";
 import {Army} from "../armies/army";
 import {ArmyFunctions} from "../libraries/armyFunctions";
 import {Fleet} from "../armies/fleet";
+import {EventStatus} from "../events/eventStatus";
+import {Drawing} from "../gui/drawingFunctions";
+import {ShootingFunctions} from "../armies/shootingFunctions";
+import {ShootingBigBox} from "../gui/shootingBigBox";
+import {ShootEvent} from "../events/shootEvent";
 
 export namespace ButtonFunctions{
 
@@ -505,5 +510,54 @@ export namespace ButtonFunctions{
         Controls.selectedArmyIndex = mergeId;
         BoxVisibility.updateInfoBox();
         BoxVisibility.restoreInfoBox();
+    }
+
+    //TODO: throw errors instead of returning a boolean
+    export function shootButtonLogic(shootEvent: ShootEvent): boolean{
+        let shootBox: ShootingBigBox = GUI.getShootingBigBox();
+        let shooter: Army|undefined = GameState.armies.find(
+            army => army.getErkenfaraID() === shootEvent.getArmyId() && army.owner === shootEvent.getRealm());
+        let lkpRolls = [];
+        let skpRolls = [];
+        for(let i = 0; i < 10; i++){//creating the dice roll array
+            let currentRollLKP = parseInt(shootBox.getLKPInputs()[i].value, 10);
+            let currentRollSKP = parseInt(shootBox.getSKPInputs()[i].value, 10);
+            if(!isNaN(currentRollLKP) && currentRollLKP !== 0){
+                for(let j = 0; j < currentRollLKP; j++){
+                    lkpRolls.push(i);
+                }
+            }
+            if(!isNaN(currentRollSKP) && currentRollSKP !== 0){
+                for(let j = 0; j < currentRollSKP; j++){
+                    skpRolls.push(i);
+                }
+            }
+        }
+        //TODO check target field
+
+        if(lkpRolls.length < shootEvent.getLightCatapultCount()){
+            window.alert("Sie haben zu wenig Würfe für leichte Katapulte/Kriegsschiffe eingetragenen");
+            return false;
+        } else if(skpRolls.length < shootEvent.getHeavyCatapultCount()){
+            window.alert("Sie haben zu wenig Würfe für schwere Katapulte/Kriegsschiffe eingetragenen");
+            return false;
+        } else if(lkpRolls.length > shootEvent.getLightCatapultCount()){
+            window.alert("Sie haben zu viele Würfe für leichte Katapulte/Kriegsschiffe eingetragenen");
+            return false;
+        } else if(skpRolls.length > shootEvent.getHeavyCatapultCount()){
+            window.alert("Sie haben zu viele Würfe für schwere Katapulte/Kriegsschiffe eingetragenen");
+            return false;
+        } else if(shooter != undefined){
+            ShootingFunctions.fernkampf(lkpRolls, skpRolls, shooter, shootEvent.getTarget(),
+                shootEvent.getTo(), null);
+            // TODO chars
+            BoxVisibility.hide(shootBox.getSelf());
+            shootEvent.setStatus(EventStatus.Checked);
+            GUI.getBigBox().fillEventList();
+            Drawing.drawStuff();
+            return true;
+        } else{
+            return false;
+        }
     }
 }

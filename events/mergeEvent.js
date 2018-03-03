@@ -42,7 +42,7 @@ class MergeEvent extends event_1.PhoenixEvent {
             buttonFunctions_1.ButtonFunctions.mergeSelectedArmy(armyToPlaceInList);
             preparedEvents.pop();
         }
-        this.status = 'checked';
+        this.status = 0 /* Checked */;
         gui_1.GUI.getBigBox().fillEventList();
         drawingFunctions_1.Drawing.drawStuff();
         controlVariables_1.Controls.selectedArmyIndex = -1;
@@ -51,32 +51,29 @@ class MergeEvent extends event_1.PhoenixEvent {
         let army1 = gameState_1.GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
         let army2 = gameState_1.GameState.armies[this.findArmyPlaceInList(this.toArmy, this.realm)];
         if (army1 == undefined || army2 == undefined) {
-            this.status = 'withheld';
+            this.status = 3 /* Withheld */;
         }
         else if (army1.getPosition()[0] !== this.position[0] || army1.getPosition()[1] !== this.position[1] ||
             army2.getPosition()[0] !== this.position[0] || army2.getPosition()[1] !== this.position[1]) {
-            this.status = 'withheld';
+            this.status = 3 /* Withheld */;
         }
         else if (army1.constructor === army2.constructor &&
             army1.getPosition()[0] === army2.getPosition()[0] && army1.getPosition()[1] === army2.getPosition()[1]) {
-            this.status = 'available';
+            this.status = 4 /* Available */;
         }
         else if ((army1.constructor !== army2.constructor) ||
             ((((army1 instanceof footArmy_1.FootArmy || army1 instanceof riderArmy_1.RiderArmy) && army1.getMovePoints() < 3) ||
                 army1 instanceof fleet_1.Fleet && army1.getMovePoints() < 5) && (((army2 instanceof footArmy_1.FootArmy || army2 instanceof riderArmy_1.RiderArmy) &&
                 army2.getMovePoints() < 3) || army2 instanceof fleet_1.Fleet && army2.getMovePoints() < 5))) {
-            this.status = 'impossible';
+            this.status = 2 /* Impossible */;
         }
         else {
-            this.status = 'withheld';
+            this.status = 3 /* Withheld */;
         }
     }
     makeEventListItemText() {
         return "" + this.realm.tag + "'s army " + this.fromArmy + " merges with army " + this.toArmy + " in (" +
             this.position[0] + "," + this.position[1] + ")";
-    }
-    getType() {
-        return "merge";
     }
 }
 exports.MergeEvent = MergeEvent;

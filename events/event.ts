@@ -1,23 +1,22 @@
 import {GameState} from "../gameState";
 import {HexFunction} from "../libraries/hexFunctions";
 import {GUI} from "../gui/gui";
+import {EventStatus} from "./eventStatus";
 
 export abstract class PhoenixEvent{
 
-    constructor(protected listPosition: number, protected status: string, protected databasePrimaryKey: number){
+    constructor(protected listPosition: number, protected status: EventStatus, protected databasePrimaryKey: number){
 	}
 
     abstract checkEvent(): void;
 
     abstract determineEventStatus(): void;
 
-	abstract makeEventListItemText(): string;
-	
-	abstract getType(): string;
+    protected abstract makeEventListItemText(): string;
 
 	abstract getContent(): JSON;
 
-    protected makeEventListItem(): HTMLElement{
+    makeEventListItem(): HTMLElement{
         let eli = document.createElement("DIV");
         eli.classList.add("eventListItem");
         eli.id = "eli" + this.listPosition;
@@ -36,21 +35,21 @@ export abstract class PhoenixEvent{
         eli.appendChild(deleteButton);
         eli.appendChild(checkButton);
     
-        if (this.status === 'checked') {
+        if (this.status === EventStatus.Checked) {
             eli.classList.add("checkedELI");
             deleteButton.disabled = true;
             checkButton.disabled = true;
-        } else if (this.status === 'deleted') {
+        } else if (this.status === EventStatus.Deleted) {
             eli.classList.add("deletedELI");
             deleteButton.disabled = true;
             checkButton.disabled = true;
-        } else if (this.status === 'impossible') {
+        } else if (this.status === EventStatus.Impossible) {
             eli.classList.add("impossibleELI");
             checkButton.disabled = true;
-        } else if (this.status === 'withheld') {
+        } else if (this.status === EventStatus.Withheld) {
             eli.classList.add("withheldELI");
             checkButton.disabled = true;
-        } else if (this.status === 'available') {
+        } else if (this.status === EventStatus.Available) {
             eli.classList.add("availableELI");
         }
     
@@ -58,9 +57,7 @@ export abstract class PhoenixEvent{
     }
 
     deleteEvent(): void{
-        let eli = document.getElementById("eli" + this.listPosition);
-        let event = GameState.pendingNewEvents[this.listPosition];
-        this.status = 'deleted';
+        this.status = EventStatus.Deleted;
         GUI.getBigBox().fillEventList();
     }
 
@@ -72,11 +69,11 @@ export abstract class PhoenixEvent{
 		this.listPosition = newPosition;
 	}
 
-	getStatus(): string{
+	getStatus(): EventStatus{
 		return this.status;
 	}
 
-	setStatus(status: string): void{
+	setStatus(status: EventStatus): void{
 		this.status = status;
 	}
 
@@ -84,13 +81,13 @@ export abstract class PhoenixEvent{
 		return this.databasePrimaryKey;
 	}
 
-
 	//TODO this needs a big overhaul
     //begin of helper methods for event status determining
     protected stillSplitEventsInFaction(realm) {
 	    for (let i = 0; i < GameState.pendingNewEvents.length; i++) {
 		    let event = GameState.pendingNewEvents[i];
-		    if ((event.status === 'withheld' || event.status === 'available' || event.status === 'undetermined') &&
+		    if ((event.status === EventStatus.Withheld || event.status === EventStatus.Available ||
+                    event.status === EventStatus.Undetermined) &&
 			    event.getType() === 'split') {
 			    return true;
 		    }
