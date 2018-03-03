@@ -74,7 +74,7 @@ class LandArmy extends army_1.Army {
     checkForPossibleMove(direction) {
         let neighborCoords = hexFunctions_1.HexFunction.neighbors(this.position);
         let target = neighborCoords[direction];
-        let heightCost;
+        let heightCost = 0;
         let thereIsAStreet = false;
         let thereIsABridge = false;
         let thereIsAHarbor = false;
@@ -117,9 +117,10 @@ class LandArmy extends army_1.Army {
             }
         }
         let moveCost = this.computeMoveCost(thereIsAStreet, thereIsAHarbor, thereIsARiver, thereIsABridge, rightOfPassage, target);
-        this.possibleMoves.push(new move_1.Move(moveCost, heightCost, (hexFunctions_1.HexFunction.fieldType(target) === 0 /* SHALLOWS */ ||
+        return new move_1.Move(moveCost, heightCost, (hexFunctions_1.HexFunction.fieldType(target) === 0 /* SHALLOWS */ ||
             hexFunctions_1.HexFunction.fieldType(target) === 1 /* DEEPSEA */), (hexFunctions_1.HexFunction.fieldType(this.position) === 0 /* SHALLOWS */ ||
-            hexFunctions_1.HexFunction.fieldType(this.position) === 1 /* DEEPSEA */), target, direction));
+            hexFunctions_1.HexFunction.fieldType(this.position) === 1 /* DEEPSEA */), target, direction);
+        ;
     }
     canConquer() {
         return this.getRoomPointsSansOfficers() >= 1000 && this.officerCount >= 1;

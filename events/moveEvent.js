@@ -5,6 +5,7 @@ const event_1 = require("./event");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
 const gameState_1 = require("../gameState");
 const gui_1 = require("../gui/gui");
+const battleEvent_1 = require("./battleEvent");
 class MoveEvent extends event_1.PhoenixEvent {
     constructor(listPosition, status, prerequisiteEvents, realm, armyId, from, to, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
@@ -18,8 +19,21 @@ class MoveEvent extends event_1.PhoenixEvent {
         return JSON.parse('{}');
     }
     validGameState() {
-        // TODO
-        return false;
+        //The army exists, is positioned on the from-field and the army can move to the to-field.
+        let army = gameState_1.GameState.armies.find(army => army.owner === this.realm &&
+            this.armyId === army.getErkenfaraID());
+        if (army != undefined) {
+            try {
+                army.checkForPossibleMove(hexFunctions_1.HexFunction.getDirectionToNeighbor(this.from, this.to));
+            }
+            catch (e) {
+                return false;
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     checkEvent() {
         let army = gameState_1.GameState.armies.find(army => army.owner === this.realm &&
@@ -28,7 +42,12 @@ class MoveEvent extends event_1.PhoenixEvent {
             let direction = hexFunctions_1.HexFunction.getDirectionToNeighbor(this.from, this.to);
             army.checkForPossibleMove(direction);
             army.move(direction);
-            if (!this.unprocessedBattleAtContainingArmy(army.owner.tag, army.getErkenfaraID(), army.getPosition()[0], army.getPosition()[1])) {
+            if (!gameState_1.GameState.events.some(event => (event instanceof battleEvent_1.BattleEvent) &&
+                !(event.getStatus() === 0 /* Checked */ || event.getStatus() === 1 /* Deleted */) &&
+                event.getPosition()[0] === this.to[0] &&
+                event.getPosition()[1] === this.to[1] &&
+                event.getParticipants().some(participant => army.getErkenfaraID() === participant.id &&
+                    army.owner.tag === participant.realm))) {
                 army.conquer();
             }
             this.status = 0 /* Checked */;
@@ -39,26 +58,6 @@ class MoveEvent extends event_1.PhoenixEvent {
             window.alert("Army not found.");
         }
     }
-    // determineEventStatus(): void{
-    //     if (this.armyExistsAndIsLocated(this.realm, this.armyId, this.from[0], this.from[1]) &&
-    //     !this.unprocessedBattleAtContainingArmy(this.realm, this.armyId, this.from[0], this.from[1]) &&
-    //     this.canMove(this.realm, this.armyId, this.from[0], this.from[1], this.to[0], this.to[1]) &&
-    //     this.noPendingLoadEvents(this.realm, this.armyId, this.from[0], this.from[1]) &&
-    //     this.noPendingMountEvents(this.realm, this.armyId, this.from[0], this.from[1])) {
-    //     this.status = EventStatus.Available;
-    //     } else if ((this.stillSplitEventsInFaction(this.realm) || this.armyExistsAndIsLocated(this.realm, this.armyId,
-    //             this.from[0], this.from[1])) && !this.unprocessedBattleAtContainingArmy(this.realm, this.armyId,
-    //             this.from[0], this.from[1]) && this.canMove(this.realm, this.armyId, this.from[0], this.from[1],
-    //             this.to[0], this.to[1]) && (!this.noPendingLoadEvents(this.realm, this.armyId, this.from[0],
-    //             this.from[1]) || !this.noPendingMountEvents(this.realm, this.armyId, this.from[0], this.from[1]))) {
-    //         this.status = EventStatus.Withheld;
-    //     } else if (this.stillSplitEventsInFaction(this.realm) || (this.armyExists(this.realm, this.armyId) &&
-    //         this.possibleMoveOfArmyTo(this.realm, this.armyId, this.from[0], this.from[1]))) {
-    //         this.status = EventStatus.Withheld;
-    //     } else {
-    //         this.status = EventStatus.Impossible;
-    //     }
-    // }
     makeEventListItemText() {
         return "Move " + this.realm + " army " + this.armyId + " from (" + this.from[0] + ", " + this.from[1] +
             ") to (" + this.to[0] + ", " + this.to[1] + ")";

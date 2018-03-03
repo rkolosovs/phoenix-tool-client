@@ -12,7 +12,6 @@ var SHIP_BP = constants_1.Constants.SHIP_BP;
 var HEAVY_WS_BP = constants_1.Constants.HEAVY_WS_BP;
 var LIGHT_WS_BP = constants_1.Constants.LIGHT_WS_BP;
 var SHIP_TRANSPORT_CAPACITY = constants_1.Constants.SHIP_TRANSPORT_CAPACITY;
-const gameState_1 = require("../gameState");
 class Fleet extends army_1.Army {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, isGuard) {
         if (isGuard != undefined) {
@@ -70,18 +69,16 @@ class Fleet extends army_1.Army {
             map((neighbor) => hexFunctions_1.HexFunction.neighbors(neighbor)).
             reduce((total, current) => (total.concat(current)), []);
         // TODO: Effects of diplomacy go here.
-        let coastalSailing = gameState_1.GameState.realms.find(realm => this.owner.tag === realm.tag).territory.some(field => neighborsOfNeighbors.some(neighbor => field.coordinates[0] === neighbor[0] &&
+        let coastalSailing = this.owner.territory.some(field => neighborsOfNeighbors.some(neighbor => field.coordinates[0] === neighbor[0] &&
             field.coordinates[1] === neighbor[1]));
         switch (hexFunctions_1.HexFunction.fieldType(target)) {
             case 0 /* SHALLOWS */://shallow sea
                 if (this.lightCatapultCount + this.heavyCatapultCount <= 0) {
                     if (coastalSailing && this.movePoints >= 5) {
-                        this.possibleMoves.push(new move_1.Move(5, 0, false, false, target, direction));
-                        break;
+                        return new move_1.Move(5, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 7) {
-                        this.possibleMoves.push(new move_1.Move(7, 0, false, false, target, direction));
-                        break;
+                        return new move_1.Move(7, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
@@ -89,12 +86,10 @@ class Fleet extends army_1.Army {
                 }
                 else if (this.heavyCatapultCount > 0) {
                     if (coastalSailing && this.movePoints >= 7) {
-                        this.possibleMoves.push(new move_1.Move(7, 0, false, false, target, direction));
-                        break;
+                        return new move_1.Move(7, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 10) {
-                        this.possibleMoves.push(new move_1.Move(10, 0, false, false, target, direction));
-                        break;
+                        return new move_1.Move(10, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
@@ -102,12 +97,10 @@ class Fleet extends army_1.Army {
                 }
                 else if (this.lightCatapultCount > 0) {
                     if (coastalSailing && this.movePoints >= 6) {
-                        this.possibleMoves.push(new move_1.Move(6, 0, false, false, target, direction));
-                        break;
+                        return new move_1.Move(6, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 8) {
-                        this.possibleMoves.push(new move_1.Move(8, 0, false, false, target, direction));
-                        break;
+                        return new move_1.Move(8, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
@@ -116,12 +109,10 @@ class Fleet extends army_1.Army {
             case 1 /* DEEPSEA */://deep sea
                 if (this.lightCatapultCount + this.heavyCatapultCount <= 0) {
                     if (coastalSailing && this.movePoints >= 8) {
-                        this.possibleMoves.push(new move_1.Move(8, 0, false, false, target, direction));
-                        break;
+                        return new move_1.Move(8, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 12) {
-                        this.possibleMoves.push(new move_1.Move(12, 0, false, false, target, direction));
-                        break;
+                        return new move_1.Move(12, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
@@ -129,12 +120,10 @@ class Fleet extends army_1.Army {
                 }
                 else if (this.heavyCatapultCount > 0) {
                     if (coastalSailing && this.movePoints >= 14) {
-                        this.possibleMoves.push(new move_1.Move(14, 0, false, false, target, direction));
-                        break;
+                        return new move_1.Move(14, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 21) {
-                        this.possibleMoves.push(new move_1.Move(21, 0, false, false, target, direction));
-                        break;
+                        return new move_1.Move(21, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
@@ -142,12 +131,10 @@ class Fleet extends army_1.Army {
                 }
                 else if (this.lightCatapultCount > 0) {
                     if (coastalSailing && this.movePoints >= 14) {
-                        this.possibleMoves.push(new move_1.Move(14, 0, false, false, target, direction));
-                        break;
+                        return new move_1.Move(14, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 21) {
-                        this.possibleMoves.push(new move_1.Move(21, 0, false, false, target, direction));
-                        break;
+                        return new move_1.Move(21, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");

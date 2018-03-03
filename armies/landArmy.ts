@@ -86,10 +86,10 @@ export abstract class LandArmy extends Army{
         // return moveToList(army, direction);
     }
 
-    checkForPossibleMove(direction: Direction): void {
+    checkForPossibleMove(direction: Direction): Move {
         let neighborCoords: [number, number][] = HexFunction.neighbors(this.position);
         let target: [number, number] = neighborCoords[direction];
-        let heightCost: number;
+        let heightCost: number = 0;
         let thereIsAStreet: boolean = false;
         let thereIsABridge: boolean = false;
         let thereIsAHarbor: boolean = false;
@@ -136,7 +136,7 @@ export abstract class LandArmy extends Army{
         let moveCost: number = this.computeMoveCost(thereIsAStreet, thereIsAHarbor, thereIsARiver, thereIsABridge,
             rightOfPassage, target);
 
-        this.possibleMoves.push(new Move(moveCost, heightCost,
+        return new Move(moveCost, heightCost,
             (HexFunction.fieldType(target) === FieldType.SHALLOWS ||
                 HexFunction.fieldType(target) === FieldType.DEEPSEA),
             (HexFunction.fieldType(this.position) === FieldType.SHALLOWS ||

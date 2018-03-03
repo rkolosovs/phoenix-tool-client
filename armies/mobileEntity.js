@@ -20,12 +20,12 @@ class MobileEntity extends mapEntity_1.MapEntity {
         if (this.owner.tag === login || login === "sl") {
             this.possibleMoves = [];
             //goes through all neighbors to see if the army can move there
-            this.checkForPossibleMove(0 /* NW */);
-            this.checkForPossibleMove(1 /* NE */);
-            this.checkForPossibleMove(2 /* E */);
-            this.checkForPossibleMove(3 /* SE */);
-            this.checkForPossibleMove(4 /* SW */);
-            this.checkForPossibleMove(5 /* W */);
+            this.possibleMoves.push(this.checkForPossibleMove(0 /* NW */));
+            this.possibleMoves.push(this.checkForPossibleMove(1 /* NE */));
+            this.possibleMoves.push(this.checkForPossibleMove(2 /* E */));
+            this.possibleMoves.push(this.checkForPossibleMove(3 /* SE */));
+            this.possibleMoves.push(this.checkForPossibleMove(4 /* SW */));
+            this.possibleMoves.push(this.checkForPossibleMove(5 /* W */));
         }
     }
     changePosition(newPos) {

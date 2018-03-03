@@ -11,7 +11,7 @@ export class GameState{
     static rivers: River[] = [];
     static armies: Army[] = [];
     static buildings: Building[] = [];
-    static pendingNewEvents: PhoenixEvent[] = [];
+    static events: PhoenixEvent[] = [];
     static login: string = "guest"; // either realm tag, "sl", or "guest"
     //"st" for start, "fi" for finished
     static currentTurn: {'turn': number, 'realm': string, 'status': string} = {'turn': 0, 'realm': "sl", 'status': "st"};

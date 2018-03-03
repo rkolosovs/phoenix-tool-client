@@ -79,51 +79,39 @@ export class Fleet extends Army{
         // return moveToList(army, direction);
     }
 
-    checkForPossibleMove(direction: Direction): void {
+    checkForPossibleMove(direction: Direction): Move {
         let neighborCoords: [number, number][] = HexFunction.neighbors(this.position);
         let target: [number, number] = neighborCoords[direction];
         let neighborsOfNeighbors = HexFunction.neighbors(target).
             map((neighbor) => HexFunction.neighbors(neighbor)).
             reduce((total, current) => (total.concat(current)), []);
         // TODO: Effects of diplomacy go here.
-        let coastalSailing = GameState.realms.find(realm => this.owner.tag === realm.tag).territory.some(
+        let coastalSailing = this.owner.territory.some(
             field => neighborsOfNeighbors.some(neighbor => field.coordinates[0] === neighbor[0] &&
                 field.coordinates[1] === neighbor[1]));
         switch(HexFunction.fieldType(target)){
             case FieldType.SHALLOWS: //shallow sea
                 if(this.lightCatapultCount + this.heavyCatapultCount <= 0){ //shallow sea & no warships
                     if(coastalSailing && this.movePoints >= 5){//shallow sea, coast & no warships
-                        this.possibleMoves.push(
-                            new Move(5, 0, false, false, target, direction));
-                        break;
+                        return new Move(5, 0, false, false, target, direction);
                     } else if(this.movePoints >= 7 ){//shallow sea, no coast & no warships
-                        this.possibleMoves.push(
-                            new Move(7, 0, false, false, target, direction));
-                        break;
+                        return new Move(7, 0, false, false, target, direction);
                     } else {
                         throw new Error("You don't have enough movement Points.");
                     }
                 } else if(this.heavyCatapultCount > 0){ //shallow sea & heavy warships
                     if(coastalSailing && this.movePoints >= 7){//shallow sea, coast & heavy warships
-                        this.possibleMoves.push(
-                            new Move(7, 0, false, false, target, direction));
-                        break;
+                        return new Move(7, 0, false, false, target, direction);
                     } else if(this.movePoints >= 10 ){//shallow sea, no coast & heavy warships
-                        this.possibleMoves.push(
-                            new Move(10, 0, false, false, target, direction));
-                        break;
+                        return new Move(10, 0, false, false, target, direction);
                     } else {
                         throw new Error("You don't have enough movement Points.");
                     }
                 } else if(this.lightCatapultCount > 0){//shallow sea & light warships
                     if(coastalSailing && this.movePoints >= 6){//shallow sea, coast & light warships
-                        this.possibleMoves.push(
-                            new Move(6, 0, false, false, target, direction));
-                        break;
+                        return new Move(6, 0, false, false, target, direction);
                     } else if(this.movePoints >= 8 ){//shallow sea, no coast & light warships
-                        this.possibleMoves.push(
-                            new Move(8, 0, false, false, target, direction));
-                        break;
+                        return new Move(8, 0, false, false, target, direction);
                     } else {
                         throw new Error("You don't have enough movement Points.");
                     }
@@ -131,37 +119,25 @@ export class Fleet extends Army{
             case FieldType.DEEPSEA: //deep sea
                 if(this.lightCatapultCount + this.heavyCatapultCount <= 0){//deep sea & no warships
                     if(coastalSailing && this.movePoints >= 8){//deep sea, coast & no warships
-                        this.possibleMoves.push(
-                            new Move(8, 0, false, false, target, direction));
-                        break;
+                        return new Move(8, 0, false, false, target, direction);
                     } else if(this.movePoints >= 12 ){//deep sea, no coast & no warships
-                        this.possibleMoves.push(
-                            new Move(12, 0, false, false, target, direction));
-                        break;
+                        return new Move(12, 0, false, false, target, direction);
                     } else {
                         throw new Error("You don't have enough movement Points.");
                     }
                 } else if(this.heavyCatapultCount > 0){//deep sea & heavy warships
                     if(coastalSailing && this.movePoints >= 14){//deep sea, coast & heavy warships
-                        this.possibleMoves.push(
-                            new Move(14, 0, false, false, target, direction));
-                        break;
+                        return new Move(14, 0, false, false, target, direction);
                     } else if(this.movePoints >= 21 ){//deep sea, no coast & heavy warships
-                        this.possibleMoves.push(
-                            new Move(21, 0, false, false, target, direction));
-                        break;
+                        return new Move(21, 0, false, false, target, direction);
                     } else {
                         throw new Error("You don't have enough movement Points.");
                     }
                 } else if(this.lightCatapultCount > 0){//deep sea & light warships
                     if(coastalSailing && this.movePoints >= 14){//deep sea, coast & light warships
-                        this.possibleMoves.push(
-                            new Move(14, 0, false, false, target, direction));
-                        break;
+                        return new Move(14, 0, false, false, target, direction);
                     } else if(this.movePoints >= 21 ){//deep sea, no coast & light warships
-                        this.possibleMoves.push(
-                            new Move(21, 0, false, false, target, direction));
-                        break;
+                        return new Move(21, 0, false, false, target, direction);
                     } else {
                         throw new Error("You don't have enough movement Points.");
                     }
