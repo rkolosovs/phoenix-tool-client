@@ -3,12 +3,14 @@ import {Controls} from "../controls/controlVariables";
 import {GUI} from "../gui/gui";
 import {GameState} from "../gameState";
 import {BoxVisibility} from "../gui/boxVisibilty";
+import {ArmyFunctions} from "../libraries/armyFunctions";
 
 export namespace ShootingFunctions{
     // array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null),
     // schießende Armee, ziel Armee, Charaktere und Zauberer auf dem Zielfeld
+
     export function fernkampf(dicerollsL: number[], dicerollsS: number[], shooter: Army, target: String,
-                       targetField: [number, number], chars: any) {
+                              targetField: [number, number], chars: any) {
         let charGpSum = 0;
         if (chars != undefined) {
             let cLen = chars.length;
@@ -46,7 +48,7 @@ export namespace ShootingFunctions{
             }
         }
         //TODO Wall Damage
-        checkArmiesForLiveliness();
+        ArmyFunctions.checkArmiesForLiveliness();
 
         shooter.addLightCatapultsShot(dicerollsL.length);
         shooter.addHeavyCatapultsShot(dicerollsS.length);
@@ -134,7 +136,7 @@ export namespace ShootingFunctions{
             }
         }
 
-        preparedEvents.push({
+        GameState.events.push({
             type: "shoot", content: {
                 shooterID: GameState.armies[Controls.selectedArmyIndex].armyId,
                 realm: GameState.armies[Controls.selectedArmyIndex].ownerTag(),

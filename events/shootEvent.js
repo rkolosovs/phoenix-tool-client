@@ -3,13 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const gui_1 = require("../gui/gui");
 const boxVisibilty_1 = require("../gui/boxVisibilty");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
+const gameState_1 = require("../gameState");
 const event_1 = require("./event");
 const buttonFunctions_1 = require("../controls/buttonFunctions");
 class ShootEvent extends event_1.PhoenixEvent {
-    constructor(listPosition, status, prerequisiteEvents, realm, armyId, to, from, lkpCount, skpCount, target, databasePrimaryKey) {
+    constructor(listPosition, status, prerequisiteEvents, realm, shooterId, to, from, lkpCount, skpCount, target, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.realm = realm;
-        this.armyId = armyId;
+        this.shooterId = shooterId;
         this.to = to;
         this.from = from;
         this.lkpCount = lkpCount;
@@ -21,8 +22,20 @@ class ShootEvent extends event_1.PhoenixEvent {
         return JSON.parse('{}');
     }
     validGameState() {
-        // TODO
-        return false;
+        //Shooter exists, is positioned on the from-field, has enough catapults and the target is valid
+        let shooter = gameState_1.GameState.armies.find(army => army.owner === this.realm &&
+            army.getErkenfaraID() === this.shooterId &&
+            army.getPosition()[0] === this.from[0] &&
+            army.getPosition()[1] === this.from[1]);
+        if (shooter != undefined) {
+            shooter.findShootingTargets();
+            return (shooter.getLightCatapultCount() - shooter.getLightCatapultsShot() >= this.lkpCount) &&
+                (shooter.getHeavyCatapultCount() - shooter.getHeavyCatapultsShot() >= this.skpCount) &&
+                shooter.targetList.some(target => target[0] === this.to[0] && target[1] === this.to[1]);
+        }
+        else {
+            return false;
+        }
     }
     getLightCatapultCount() {
         return this.lkpCount;
@@ -36,8 +49,8 @@ class ShootEvent extends event_1.PhoenixEvent {
     getTarget() {
         return this.target;
     }
-    getArmyId() {
-        return this.armyId;
+    getShooterId() {
+        return this.shooterId;
     }
     getRealm() {
         return this.realm;
@@ -45,7 +58,7 @@ class ShootEvent extends event_1.PhoenixEvent {
     checkEvent() {
         let shootBox = gui_1.GUI.getShootingBigBox();
         boxVisibilty_1.BoxVisibility.show(shootBox.getSelf());
-        shootBox.getShooterTitleText().innerHTML = this.armyId + ", " + this.realm.tag;
+        shootBox.getShooterTitleText().innerHTML = this.shooterId + ", " + this.realm.tag;
         ;
         shootBox.getAttackersLKPText().innerHTML = this.lkpCount.toString();
         shootBox.getAttackersSKPText().innerHTML = this.skpCount.toString();
@@ -61,33 +74,8 @@ class ShootEvent extends event_1.PhoenixEvent {
         //sendCheckEvent(event.pk, event.type);
         drawingFunctions_1.Drawing.drawStuff();
     }
-    // determineEventStatus(): void{
-    //     if (!(this.status === EventStatus.Checked || this.status === EventStatus.Deleted)) {
-    //
-    //         let shooter = GameState.armies[this.findArmyPlaceInList(this.armyId, this.realm)];
-    //         let canShoot = true;
-    //
-    //         //check if remaining Lkp that have not shot yet
-    //         if(shooter.getLightCatapultCount() - shooter.getLightCatapultsShot() < this.lkpCount){
-    //             canShoot = false;
-    //         }
-    //         //check if remaining Lkp that have not shot yet
-    //         if(shooter.getHeavyCatapultCount() - shooter.getHeavyCatapultsShot() < this.skpCount){
-    //             canShoot = false;
-    //         }
-    //
-    //         if (this.armyExistsAndIsLocated(shooter.owner.tag, this.armyId, this.from[0], this.from[1]) && canShoot) {
-    //             this.status = EventStatus.Available;
-    //         } else if (this.armyExists(this.realm, this.armyId) &&
-    //         this.possibleMoveOfArmyTo(shooter.owner.tag, this.armyId, this.from[0], this.from[1])) {
-    //             this.status = EventStatus.Withheld;
-    //         } else {
-    //             this.status = EventStatus.Impossible;
-    //         }
-    //     }
-    // }
     makeEventListItemText() {
-        return "" + this.realm.tag + "'s army " + this.armyId + " shoots a Field (" + this.to[0] + ", " + this.to[1] + ") with " +
+        return "" + this.realm.tag + "'s army " + this.shooterId + " shoots a Field (" + this.to[0] + ", " + this.to[1] + ") with " +
             this.lkpCount + " LKP and " + this.skpCount + " SKP";
     }
 }

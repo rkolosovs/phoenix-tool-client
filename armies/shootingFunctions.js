@@ -4,6 +4,7 @@ const controlVariables_1 = require("../controls/controlVariables");
 const gui_1 = require("../gui/gui");
 const gameState_1 = require("../gameState");
 const boxVisibilty_1 = require("../gui/boxVisibilty");
+const armyFunctions_1 = require("../libraries/armyFunctions");
 var ShootingFunctions;
 (function (ShootingFunctions) {
     // array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null),
@@ -44,7 +45,7 @@ var ShootingFunctions;
             }
         }
         //TODO Wall Damage
-        checkArmiesForLiveliness();
+        armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
         shooter.addLightCatapultsShot(dicerollsL.length);
         shooter.addHeavyCatapultsShot(dicerollsS.length);
         //check to see if shooting after moving and stop the army if it moved this turn.
@@ -128,7 +129,7 @@ var ShootingFunctions;
                 return false;
             }
         }
-        preparedEvents.push({
+        gameState_1.GameState.events.push({
             type: "shoot", content: {
                 shooterID: gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].armyId,
                 realm: gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].ownerTag(),

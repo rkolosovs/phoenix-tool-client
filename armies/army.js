@@ -76,6 +76,7 @@ class Army extends mobileEntity_1.MobileEntity {
     }
     //to find all fields in a two tile proximity
     findShootingTargets() {
+        this.targetList = [];
         let tilesInRange = [];
         if (this.heavyCatapultCount - this.heavyCatapultsShot > 0) {
             tilesInRange = hexFunctions_1.HexFunction.neighborInRange(this.position, 2);

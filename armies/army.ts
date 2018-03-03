@@ -111,6 +111,7 @@ export abstract class Army extends MobileEntity{
 
     //to find all fields in a two tile proximity
     findShootingTargets() {
+        this.targetList = [];
         let tilesInRange: [number, number][] = []
         if (this.heavyCatapultCount - this.heavyCatapultsShot > 0) {//in a 2 tile range
             tilesInRange = HexFunction.neighborInRange(this.position, 2);
