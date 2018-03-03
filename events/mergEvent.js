@@ -6,17 +6,19 @@ const gameState_1 = require("../gameState");
 const riderArmy_1 = require("../armies/riderArmy");
 const fleet_1 = require("../armies/fleet");
 const footArmy_1 = require("../armies/footArmy");
+const buttonFunctions_1 = require("../controls/buttonFunctions");
+const gui_1 = require("../gui/gui");
+const controlVariables_1 = require("../controls/controlVariables");
 class MergeEvent extends event_1.PhoenixEvent {
-    constructor(id, status, fromArmy, toArmy, realm, x, y, pk) {
-        super(id, status, pk);
-        this.id = id;
-        this.status = status;
+    constructor(listPosition, status, fromArmy, toArmy, realm, position, databasePrimaryKey) {
+        super(listPosition, status, databasePrimaryKey);
         this.fromArmy = fromArmy;
         this.toArmy = toArmy;
         this.realm = realm;
-        this.x = x;
-        this.y = y;
-        this.pk = pk;
+        this.position = position;
+    }
+    getContent() {
+        // TODO
     }
     checkEvent() {
         let armyFromPlaceInList = -1;
@@ -36,13 +38,13 @@ class MergeEvent extends event_1.PhoenixEvent {
         }
         if (armyFromPlaceInList >= 0 && armyToPlaceInList >= 0) {
             selectedArmyIndex = armyFromPlaceInList;
-            mergeSelectedArmy(armyToPlaceInList);
+            buttonFunctions_1.ButtonFunctions.mergeSelectedArmy(armyToPlaceInList);
             preparedEvents.pop();
         }
         this.status = 'checked';
-        fillEventList();
+        gui_1.GUI.getBigBox().fillEventList();
         drawingFunctions_1.Drawing.drawStuff();
-        selectedArmyIndex = undefined;
+        controlVariables_1.Controls.selectedArmyIndex = -1;
     }
     determineEventStatus() {
         let army1 = gameState_1.GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
@@ -50,8 +52,8 @@ class MergeEvent extends event_1.PhoenixEvent {
         if (army1 == undefined || army2 == undefined) {
             this.status = 'withheld';
         }
-        else if (army1.getPosition()[0] !== this.x || army1.getPosition()[1] !== this.y ||
-            army2.getPosition()[0] !== this.x || army2.getPosition()[1] !== this.y) {
+        else if (army1.getPosition()[0] !== this.position[0] || army1.getPosition()[1] !== this.position[1] ||
+            army2.getPosition()[0] !== this.position[0] || army2.getPosition()[1] !== this.position[1]) {
             this.status = 'withheld';
         }
         else if (army1.constructor === army2.constructor &&
@@ -71,10 +73,10 @@ class MergeEvent extends event_1.PhoenixEvent {
     makeEventListItem() {
         let eli = document.createElement("DIV");
         eli.classList.add("eventListItem");
-        eli.id = "eli" + this.id;
+        eli.id = "eli" + this.listPosition;
         eli.innerHTML = "<div>" + this.realm.tag + "'s army " + this.fromArmy + " merges with army " + this.toArmy +
-            " in (" + this.x + "," + this.y + ").</div>";
-        return this.commonEventListItem(eli, this.id);
+            " in (" + this.position[0] + "," + this.position[1] + ").</div>";
+        return this.commonEventListItem(eli, this.listPosition);
     }
     getType() {
         return "merge";

@@ -6,15 +6,14 @@ const drawingFunctions_1 = require("../gui/drawingFunctions");
 const gameState_1 = require("../gameState");
 const event_1 = require("./event");
 class BattleEvent extends event_1.PhoenixEvent {
-    constructor(id, status, participants, realm, x, y, pk) {
-        super(id, status, pk);
-        this.id = id;
-        this.status = status;
+    constructor(listPosition, status, participants, realm, position, databasePrimaryKey) {
+        super(listPosition, status, databasePrimaryKey);
         this.participants = participants;
         this.realm = realm;
-        this.x = x;
-        this.y = y;
-        this.pk = pk;
+        this.position = position;
+    }
+    getContent() {
+        // TODO
     }
     checkEvent() {
         let battleBox = gui_1.GUI.getBattleBox();
@@ -24,9 +23,11 @@ class BattleEvent extends event_1.PhoenixEvent {
             let a = gameState_1.GameState.armies.find(function (candidate) {
                 return (item.owner.tag === candidate.owner.tag && (item.getErkenfaraID() === candidate.getErkenfaraID()));
             });
-            partips.push(a);
+            if (a != undefined) {
+                partips.push(a);
+            }
         });
-        battleBox.newBattle(partips, [this.x, this.y]);
+        battleBox.newBattle(partips, this.position);
         battleBox.getAttackDiceRoll().onchange = function () { battleBox.updateDisplay(); };
         battleBox.getDefenseDiceRoll().onchange = function () { battleBox.updateDisplay(); };
         let battleButton = gui_1.GUI.getBattleBox().getBattleButton();
@@ -38,11 +39,11 @@ class BattleEvent extends event_1.PhoenixEvent {
         };
     }
     determineEventStatus() {
-        if (this.eachArmyExistsAndIsLocated(this.participants, this.x, this.y)) {
+        if (this.eachArmyExistsAndIsLocated(this.participants, this.position[0], this.position[1])) {
             this.status = 'available';
         }
         else if (this.stillSplitEventsInFaction(this.realm) || (this.eachArmyExists(this.participants) &&
-            this.possibleMoveOfEachArmyTo(this.participants, this.x, this.y))) {
+            this.possibleMoveOfEachArmyTo(this.participants, this.position[0], this.position[1]))) {
             this.status = 'withheld';
         }
         else {
@@ -52,23 +53,23 @@ class BattleEvent extends event_1.PhoenixEvent {
     makeEventListItem() {
         let eli = document.createElement("DIV");
         eli.classList.add("eventListItem");
-        eli.id = "eli" + this.id;
-        let html = "<div>Battle at (" + this.x + ", " + this.y + ") involving";
+        eli.id = "eli" + this.listPosition;
+        let html = "<div>Battle at (" + this.position[0] + ", " + this.position[1] + ") involving";
         let partips = this.participants;
         for (let j = 0; j < partips.length; j++) {
             html += " [" + partips[j].owner.tag + " " + partips[j].getErkenfaraID() + "]";
         }
         eli.innerHTML = html + "</div>";
-        return this.commonEventListItem(eli, this.id);
+        return this.commonEventListItem(eli, this.listPosition);
     }
     getType() {
         return "battle";
     }
     battleButtonLogic(battleBox) {
-        battleBox.battleHandler.resolve(battleBox.getAttackDiceRoll(), battleBox.getDefenseDiceRoll());
+        battleBox.battleHandler.resolve(parseInt(battleBox.getAttackDiceRoll().value), parseInt(battleBox.getDefenseDiceRoll().value));
         boxVisibilty_1.BoxVisibility.hide(battleBox.getSelf());
         this.status = 'checked';
-        fillEventList();
+        gui_1.GUI.getBigBox().fillEventList();
         drawingFunctions_1.Drawing.drawStuff();
     }
 }

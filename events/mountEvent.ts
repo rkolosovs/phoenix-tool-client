@@ -5,19 +5,24 @@ import {GameState} from "../gameState";
 import {RiderArmy} from "../armies/riderArmy";
 import {Fleet} from "../armies/fleet";
 import {FootArmy} from "../armies/footArmy";
+import {Army} from "../armies/army";
+import {GUI} from "../gui/gui";
 
 export class MountEvent extends PhoenixEvent{
     
-    constructor(protected id: number, protected status: string, protected fromArmy: number,
+    constructor(listPosition: number, status: string, protected fromArmy: number,
         protected newArmy: number, protected realm: Realm, protected troops: number, protected leaders: number, 
-         protected x: number, protected y: number, protected pk: number){//protected mounts: number, protected lkp: number, protected skp: number,
-            
-        super(id, status, pk);
+         protected position: [number, number], databasePrimaryKey: number){
+        //protected mounts: number, protected lkp: number, protected skp: number,
+        super(listPosition, status, databasePrimaryKey);
 
     }
 
+    getContent(): JSON{
+        // TODO
+    }
+
     checkEvent(): void{
-        console.log("this is a mount event");
         let armyFromPlaceInList = -1;
         let armyFromId = this.fromArmy;
         let newArmyId = this.newArmy;
@@ -29,18 +34,18 @@ export class MountEvent extends PhoenixEvent{
                 armyFromPlaceInList = i;
             }
         }
-        console.log("place: " + armyFromPlaceInList);
         if (armyFromPlaceInList >= 0) {
-            if (GameState.armies[armyFromPlaceInList] instanceof FootArmy) {
-                mountWithParams(armyFromPlaceInList, toSplit, leadersToSplit, newArmyId);
+            let army: Army = GameState.armies[armyFromPlaceInList];
+            if (army instanceof FootArmy) {
+                (army as FootArmy).mount(toSplit, leadersToSplit, newArmyId);
                 this.status = 'checked';
-				if (GameState.armies[armyFromPlaceInList] instanceof RiderArmy) {
-                    unMountWithParams(armyFromPlaceInList, toSplit, leadersToSplit, newArmyId);
+				if (army instanceof RiderArmy) {
+                    (army as RiderArmy).dismount(toSplit, leadersToSplit, newArmyId);
                 this.status = 'checked';
                 }
             }
         }
-        fillEventList();
+        GUI.getBigBox().fillEventList();
         Drawing.drawStuff();
     }
     
@@ -57,7 +62,7 @@ export class MountEvent extends PhoenixEvent{
             else if (army instanceof Fleet) {
                 typefactor = 100;
             }
-            if (army.getPosition()[0] != this.x || army.getPosition()[1] != this.y) {
+            if (army.getPosition()[0] != this.position[0] || army.getPosition()[1] != this.position[1]) {
                 this.status = 'withheld';
             } else if ((army instanceof FootArmy && (((army.getTroopCount() - this.troops) >= 0) &&
                 ((army.getOfficerCount() - this.leaders) >= 0) && (((army as FootArmy).getMountCount() - this.troops) >= 0))) ||
@@ -84,12 +89,13 @@ export class MountEvent extends PhoenixEvent{
             skpCount = (army as FootArmy).getHeavyCatapultCount();
         }
         if(((army.getTroopCount() - this.troops) >= (100/typefactor)) &&
-         ((army.getOfficerCount() - this.leaders) >= 1) &&
-         ((mountCount - this.mounts) >= 0) &&//TODO probably needs to go and change the fields in the contrudtor accordingly
-         ((lkpCount - this.lkp) >= 0) &&
-         ((skpCount - this.skp) >= 0)){
+         ((army.getOfficerCount() - this.leaders) >= 1)) //&&
+         //((mountCount - this.mounts) >= 0) &&//TODO probably needs to go and change the fields in the contrudtor accordingly
+         //((lkpCount - this.lkp) >= 0) &&
+         //((skpCount - this.skp) >= 0))
+        {
             this.status = 'available';
-         }
+        }
         else
         {
             this.status = 'impossible';
@@ -99,12 +105,12 @@ export class MountEvent extends PhoenixEvent{
     makeEventListItem(): HTMLElement{
         let eli = document.createElement("DIV");
         eli.classList.add("eventListItem");
-        eli.id = "eli" + this.id;
+        eli.id = "eli" + this.listPosition;
         
         eli.innerHTML = "<div>" + this.realm.tag + "'s army " + this.fromArmy + " mounts " + this.troops + " troops, and "
-        + this.leaders + " leaders to " + this.newArmy + " in (" + this.x + "," + this.y + ").</div>";
+        + this.leaders + " leaders to " + this.newArmy + " in (" + this.position[0] + "," + this.position[1] + ").</div>";
 
-        return this.commonEventListItem(eli, this.id);
+        return this.commonEventListItem(eli, this.listPosition);
     }
 
     getType(): string{

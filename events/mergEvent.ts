@@ -5,13 +5,19 @@ import {GameState} from "../gameState";
 import {RiderArmy} from "../armies/riderArmy";
 import {Fleet} from "../armies/fleet";
 import {FootArmy} from "../armies/footArmy";
+import {ButtonFunctions} from "../controls/buttonFunctions";
+import {GUI} from "../gui/gui";
+import {Controls} from "../controls/controlVariables";
 
 export class MergeEvent extends PhoenixEvent{
 
-    constructor(protected id: number, protected status: string, protected fromArmy: number,
-        protected toArmy: number, protected realm: Realm, protected x: number, protected y: number, protected pk: number){
-            
-            super(id, status, pk);
+    constructor(listPosition: number, status: string, protected fromArmy: number,
+        protected toArmy: number, protected realm: Realm, protected position: [number, number], databasePrimaryKey: number){
+            super(listPosition, status, databasePrimaryKey);
+    }
+
+    getContent(): JSON{
+        // TODO
     }
 
     checkEvent(): void{
@@ -32,13 +38,13 @@ export class MergeEvent extends PhoenixEvent{
         }
         if (armyFromPlaceInList >= 0 && armyToPlaceInList >= 0) {
             selectedArmyIndex = armyFromPlaceInList;
-            mergeSelectedArmy(armyToPlaceInList);
+            ButtonFunctions.mergeSelectedArmy(armyToPlaceInList);
             preparedEvents.pop();
         }
         this.status = 'checked';
-        fillEventList();
+        GUI.getBigBox().fillEventList();
         Drawing.drawStuff();
-        selectedArmyIndex = undefined;
+        Controls.selectedArmyIndex = -1;
     }
     
     determineEventStatus(): void{
@@ -47,8 +53,8 @@ export class MergeEvent extends PhoenixEvent{
         if (army1 == undefined || army2 == undefined) {
             this.status = 'withheld';
         }
-        else if (army1.getPosition()[0] !== this.x || army1.getPosition()[1] !== this.y ||
-            army2.getPosition()[0] !== this.x || army2.getPosition()[1] !== this.y) {
+        else if (army1.getPosition()[0] !== this.position[0] || army1.getPosition()[1] !== this.position[1] ||
+            army2.getPosition()[0] !== this.position[0] || army2.getPosition()[1] !== this.position[1]) {
                 this.status = 'withheld';
         } else if (army1.constructor === army2.constructor &&
             army1.getPosition()[0] === army2.getPosition()[0] && army1.getPosition()[1] === army2.getPosition()[1]) {
@@ -68,12 +74,12 @@ export class MergeEvent extends PhoenixEvent{
     makeEventListItem(): HTMLElement{
         let eli = document.createElement("DIV");
         eli.classList.add("eventListItem");
-        eli.id = "eli" + this.id;
+        eli.id = "eli" + this.listPosition;
         
         eli.innerHTML = "<div>" + this.realm.tag + "'s army " + this.fromArmy + " merges with army " + this.toArmy + 
-        " in (" + this.x + "," + this.y + ").</div>";
+        " in (" + this.position[0] + "," + this.position[1] + ").</div>";
 
-        return this.commonEventListItem(eli, this.id);
+        return this.commonEventListItem(eli, this.listPosition);
     }
 
     getType(): string{

@@ -2,11 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const gameState_1 = require("../gameState");
 const hexFunctions_1 = require("../libraries/hexFunctions");
+const gui_1 = require("../gui/gui");
 class PhoenixEvent {
-    constructor(id, status, pk) {
-        this.id = id;
+    constructor(listPosition, status, databasePrimaryKey) {
+        this.listPosition = listPosition;
         this.status = status;
-        this.pk = pk;
+        this.databasePrimaryKey = databasePrimaryKey;
     }
     commonEventListItem(eli, id) {
         let deleteButton = document.createElement("BUTTON");
@@ -45,16 +46,16 @@ class PhoenixEvent {
         return eli;
     }
     deleteEvent() {
-        let eli = document.getElementById("eli" + this.id);
-        let event = gameState_1.GameState.pendingNewEvents[this.id];
+        let eli = document.getElementById("eli" + this.listPosition);
+        let event = gameState_1.GameState.pendingNewEvents[this.listPosition];
         this.status = 'deleted';
-        fillEventList();
+        gui_1.GUI.getBigBox().fillEventList();
     }
-    getId() {
-        return this.id;
+    getListPosition() {
+        return this.listPosition;
     }
-    setId(id) {
-        this.id = id;
+    setListPosition(newPosition) {
+        this.listPosition = newPosition;
     }
     getStatus() {
         return this.status;
@@ -62,8 +63,8 @@ class PhoenixEvent {
     setStatus(status) {
         this.status = status;
     }
-    getPK() {
-        return this.pk;
+    getDatabasePrimaryKey() {
+        return this.databasePrimaryKey;
     }
     //TODO this needs a big overhaul
     //begin of helper methods for event status determining
