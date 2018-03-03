@@ -8,11 +8,12 @@ import {Fleet} from "../armies/fleet";
 import {Drawing} from "../gui/drawingFunctions";
 import {GUI} from "../gui/gui";
 import {EventStatus} from "./eventStatus";
+import {ArmyFunctions} from "../libraries/armyFunctions";
 
 export class SplitEvent extends PhoenixEvent{
     
-    constructor(listPosition: number, status: EventStatus, prerequisiteEvents: number[], protected fromArmy: number,
-                protected newArmy: number, protected realm: Realm, protected troops: number, protected leaders: number,
+    constructor(listPosition: number, status: EventStatus, prerequisiteEvents: number[], protected fromArmyId: number,
+                protected newArmyId: number, protected realm: Realm, protected troops: number, protected leaders: number,
                 protected mounts: number, protected lkp: number, protected skp: number,
                 protected position: [number, number], databasePrimaryKey: number){
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
@@ -24,96 +25,71 @@ export class SplitEvent extends PhoenixEvent{
     }
 
     validGameState(): boolean{
-        // TODO
-        return false;
+        //The from-army exists and is in position.
+        let fromArmy: Army|undefined = GameState.armies.find(army =>
+            army.owner === this.realm &&
+            army.getErkenfaraID() === this.fromArmyId &&
+            army.getPosition()[0] === this.position[0] &&
+            army.getPosition()[1] === this.position[1]);
+        if(fromArmy == undefined){
+            return false;
+        }
+        //The new army doesn't yet exist.
+        if(GameState.armies.some(army =>
+                army.owner === this.realm &&
+                army.getErkenfaraID() === this.newArmyId)){
+            return false;
+        }
+        //There are enough troops, officers, catapults and if at least one mount has to be split, there are enough of
+        //those and army to be split from is a foot army. No check for viability of the remaining army is made since
+        //abandoning a few stragglers or the catapults is not prohibited by the rules.
+        return this.troops <= fromArmy.getTroopCount() &&
+            this.leaders <= fromArmy.getOfficerCount() &&
+            this.lkp <= fromArmy.getLightCatapultCount() &&
+            this.skp <= fromArmy.getHeavyCatapultCount() &&
+            (this.mounts > 0 && fromArmy instanceof FootArmy && this.mounts <= fromArmy.getMountCount());
     }
 
     checkEvent(): void{
-        console.log("this is a split event");
-        let armyFromPlaceInList = -1;
-        let armyFromId = this.fromArmy;
-        let newArmyId = this.newArmy;
-        let realm = this.realm;
-        let toSplit = this.troops;
-        let leadersToSplit = this.leaders;
-        let mountsToSplit = this.mounts;
-        let lkpToSplit = this.lkp;
-        let skpToSplit = this.skp;
-        for (let i = 0; i < GameState.armies.length; i++) {
-            if (GameState.armies[i].getErkenfaraID() === armyFromId && GameState.armies[i].owner === realm) {
-                armyFromPlaceInList = i;
-            }
-        }
-        if (armyFromPlaceInList >= 0) {
-            let armyToSplitFrom: Army = GameState.armies[armyFromPlaceInList];
-            armyToSplitFrom.setTroopCount(armyToSplitFrom.getTroopCount() - toSplit);
-            armyToSplitFrom.setOfficerCount(armyToSplitFrom.getOfficerCount() - leadersToSplit);
+        let armyToSplitFrom: Army|undefined = GameState.armies.find(army =>
+            army.getErkenfaraID() === this.fromArmyId &&
+            army.owner === this.realm &&
+            army.getPosition()[0] === this.position[0] &&
+            army.getPosition()[1] === this.position[1]);
+        if (armyToSplitFrom != undefined) {
+            armyToSplitFrom.setTroopCount(armyToSplitFrom.getTroopCount() - this.troops);
+            armyToSplitFrom.setOfficerCount(armyToSplitFrom.getOfficerCount() - this.leaders);
             if (armyToSplitFrom instanceof FootArmy) {
-                armyToSplitFrom.setMountCount(armyToSplitFrom.getMountCount() - mountsToSplit);
+                armyToSplitFrom.setMountCount(armyToSplitFrom.getMountCount() - this.mounts);
             }
             if (armyToSplitFrom instanceof FootArmy || armyToSplitFrom instanceof Fleet) {
-                armyToSplitFrom.setLightCatapultCount(armyToSplitFrom.getLightCatapultCount() - lkpToSplit);
-                armyToSplitFrom.setHeavyCatapultCount(armyToSplitFrom.getHeavyCatapultCount() - skpToSplit);
+                armyToSplitFrom.setLightCatapultCount(armyToSplitFrom.getLightCatapultCount() - this.lkp);
+                armyToSplitFrom.setHeavyCatapultCount(armyToSplitFrom.getHeavyCatapultCount() - this.skp);
             }
-            if (Math.floor(newArmyId / 100) === 1) {
-                GameState.armies.push(new FootArmy(newArmyId, realm, toSplit, leadersToSplit, lkpToSplit, skpToSplit,
-                    mountsToSplit, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints(),
+            if (armyToSplitFrom instanceof FootArmy) {
+                GameState.armies.push(new FootArmy(this.newArmyId, this.realm, this.troops, this.leaders, this.lkp,
+                    this.skp, this.mounts, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints(),
                     armyToSplitFrom.getHeightPoints()));
             }
-            else if (Math.floor(newArmyId / 100) === 2) {
-                GameState.armies.push(new RiderArmy(newArmyId, realm, toSplit, leadersToSplit,
+            else if (armyToSplitFrom instanceof RiderArmy) {
+                GameState.armies.push(new RiderArmy(this.newArmyId, this.realm, this.troops, this.leaders,
                     armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints(), armyToSplitFrom.getHeightPoints()));
             }
-            else if (Math.floor(newArmyId / 100) === 3) {
-                GameState.armies.push(new Fleet(newArmyId, realm, toSplit, leadersToSplit, lkpToSplit, skpToSplit,
-                    armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints()));
+            else if (armyToSplitFrom instanceof Fleet) {
+                GameState.armies.push(new Fleet(this.newArmyId, this.realm, this.troops, this.leaders, this.lkp,
+                    this.skp, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints()));
             }
         }
         this.status = EventStatus.Checked;
+        ArmyFunctions.checkArmiesForLiveliness();
         GUI.getBigBox().fillEventList();
         Drawing.drawStuff();
     }
-    
-    // determineEventStatus(): void{
-    //     let typefactor = 1;
-    //     let army = GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
-    //     if (army == undefined) {
-    //         this.status = EventStatus.Withheld;
-    //     } else {
-    //         let mountCount: number = 0;
-    //         let lkpCount: number = 0;
-    //         let skpCount: number = 0;
-    //         if (army instanceof RiderArmy) {
-    //             typefactor = 2;
-    //         }
-    //         else if (army instanceof Fleet) {
-    //             typefactor = 100;
-    //             lkpCount = (army as Fleet).getLightCatapultCount();
-    //             skpCount = (army as Fleet).getHeavyCatapultCount();
-    //         } else if (army instanceof FootArmy) {
-    //             mountCount = (army as FootArmy).getMountCount();
-    //             lkpCount = (army as FootArmy).getLightCatapultCount();
-    //             skpCount = (army as FootArmy).getHeavyCatapultCount();
-    //         }
-    //         if (army.getPosition()[0] != this.position[0] || army.getPosition()[1] != this.position[1]) {
-    //             this.status = EventStatus.Withheld;
-    //         } else if (((army.getTroopCount() - this.troops) >= (100 / typefactor)) &&
-    //             ((army.getOfficerCount() - this.leaders) >= 1) &&
-    //             ((mountCount - this.mounts) >= 0) &&
-    //             ((lkpCount - this.lkp) >= 0) &&
-    //             ((skpCount - this.skp) >= 0)) {
-    //             this.status = EventStatus.Available;
-    //         }
-    //         else {
-    //             this.status = EventStatus.Impossible;
-    //         }
-    //     }
-    // }
 
     makeEventListItemText(): string{
         // TODO: detailed explanation
-        let result: string = "" + this.realm.tag + "'s army " + this.fromArmy + " splits off army " +
-            this.newArmy + " with ";
+        let result: string = "" + this.realm.tag + "'s army " + this.fromArmyId + " splits off army " +
+            this.newArmyId + " with ";
         if (this.troops !== 0) {
             result += this.troops + " troops, ";
         }
