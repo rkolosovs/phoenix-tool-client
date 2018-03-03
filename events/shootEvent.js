@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const gui_1 = require("../gui/gui");
 const boxVisibilty_1 = require("../gui/boxVisibilty");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
-const gameState_1 = require("../gameState");
 const event_1 = require("./event");
 const buttonFunctions_1 = require("../controls/buttonFunctions");
 class ShootEvent extends event_1.PhoenixEvent {
@@ -62,30 +61,31 @@ class ShootEvent extends event_1.PhoenixEvent {
         //sendCheckEvent(event.pk, event.type);
         drawingFunctions_1.Drawing.drawStuff();
     }
-    determineEventStatus() {
-        if (!(this.status === 0 /* Checked */ || this.status === 1 /* Deleted */)) {
-            let shooter = gameState_1.GameState.armies[this.findArmyPlaceInList(this.armyId, this.realm)];
-            let canShoot = true;
-            //check if remaining Lkp that have not shot yet
-            if (shooter.getLightCatapultCount() - shooter.getLightCatapultsShot() < this.lkpCount) {
-                canShoot = false;
-            }
-            //check if remaining Lkp that have not shot yet
-            if (shooter.getHeavyCatapultCount() - shooter.getHeavyCatapultsShot() < this.skpCount) {
-                canShoot = false;
-            }
-            if (this.armyExistsAndIsLocated(shooter.owner.tag, this.armyId, this.from[0], this.from[1]) && canShoot) {
-                this.status = 4 /* Available */;
-            }
-            else if (this.armyExists(this.realm, this.armyId) &&
-                this.possibleMoveOfArmyTo(shooter.owner.tag, this.armyId, this.from[0], this.from[1])) {
-                this.status = 3 /* Withheld */;
-            }
-            else {
-                this.status = 2 /* Impossible */;
-            }
-        }
-    }
+    // determineEventStatus(): void{
+    //     if (!(this.status === EventStatus.Checked || this.status === EventStatus.Deleted)) {
+    //
+    //         let shooter = GameState.armies[this.findArmyPlaceInList(this.armyId, this.realm)];
+    //         let canShoot = true;
+    //
+    //         //check if remaining Lkp that have not shot yet
+    //         if(shooter.getLightCatapultCount() - shooter.getLightCatapultsShot() < this.lkpCount){
+    //             canShoot = false;
+    //         }
+    //         //check if remaining Lkp that have not shot yet
+    //         if(shooter.getHeavyCatapultCount() - shooter.getHeavyCatapultsShot() < this.skpCount){
+    //             canShoot = false;
+    //         }
+    //
+    //         if (this.armyExistsAndIsLocated(shooter.owner.tag, this.armyId, this.from[0], this.from[1]) && canShoot) {
+    //             this.status = EventStatus.Available;
+    //         } else if (this.armyExists(this.realm, this.armyId) &&
+    //         this.possibleMoveOfArmyTo(shooter.owner.tag, this.armyId, this.from[0], this.from[1])) {
+    //             this.status = EventStatus.Withheld;
+    //         } else {
+    //             this.status = EventStatus.Impossible;
+    //         }
+    //     }
+    // }
     makeEventListItemText() {
         return "" + this.realm.tag + "'s army " + this.armyId + " shoots a Field (" + this.to[0] + ", " + this.to[1] + ") with " +
             this.lkpCount + " LKP and " + this.skpCount + " SKP";

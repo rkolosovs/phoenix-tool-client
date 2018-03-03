@@ -69,44 +69,41 @@ class SplitEvent extends event_1.PhoenixEvent {
         gui_1.GUI.getBigBox().fillEventList();
         drawingFunctions_1.Drawing.drawStuff();
     }
-    determineEventStatus() {
-        let typefactor = 1;
-        let army = gameState_1.GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
-        if (army == undefined) {
-            this.status = 3 /* Withheld */;
-        }
-        else {
-            let mountCount = 0;
-            let lkpCount = 0;
-            let skpCount = 0;
-            if (army instanceof riderArmy_1.RiderArmy) {
-                typefactor = 2;
-            }
-            else if (army instanceof fleet_1.Fleet) {
-                typefactor = 100;
-                lkpCount = army.getLightCatapultCount();
-                skpCount = army.getHeavyCatapultCount();
-            }
-            else if (army instanceof footArmy_1.FootArmy) {
-                mountCount = army.getMountCount();
-                lkpCount = army.getLightCatapultCount();
-                skpCount = army.getHeavyCatapultCount();
-            }
-            if (army.getPosition()[0] != this.position[0] || army.getPosition()[1] != this.position[1]) {
-                this.status = 3 /* Withheld */;
-            }
-            else if (((army.getTroopCount() - this.troops) >= (100 / typefactor)) &&
-                ((army.getOfficerCount() - this.leaders) >= 1) &&
-                ((mountCount - this.mounts) >= 0) &&
-                ((lkpCount - this.lkp) >= 0) &&
-                ((skpCount - this.skp) >= 0)) {
-                this.status = 4 /* Available */;
-            }
-            else {
-                this.status = 2 /* Impossible */;
-            }
-        }
-    }
+    // determineEventStatus(): void{
+    //     let typefactor = 1;
+    //     let army = GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
+    //     if (army == undefined) {
+    //         this.status = EventStatus.Withheld;
+    //     } else {
+    //         let mountCount: number = 0;
+    //         let lkpCount: number = 0;
+    //         let skpCount: number = 0;
+    //         if (army instanceof RiderArmy) {
+    //             typefactor = 2;
+    //         }
+    //         else if (army instanceof Fleet) {
+    //             typefactor = 100;
+    //             lkpCount = (army as Fleet).getLightCatapultCount();
+    //             skpCount = (army as Fleet).getHeavyCatapultCount();
+    //         } else if (army instanceof FootArmy) {
+    //             mountCount = (army as FootArmy).getMountCount();
+    //             lkpCount = (army as FootArmy).getLightCatapultCount();
+    //             skpCount = (army as FootArmy).getHeavyCatapultCount();
+    //         }
+    //         if (army.getPosition()[0] != this.position[0] || army.getPosition()[1] != this.position[1]) {
+    //             this.status = EventStatus.Withheld;
+    //         } else if (((army.getTroopCount() - this.troops) >= (100 / typefactor)) &&
+    //             ((army.getOfficerCount() - this.leaders) >= 1) &&
+    //             ((mountCount - this.mounts) >= 0) &&
+    //             ((lkpCount - this.lkp) >= 0) &&
+    //             ((skpCount - this.skp) >= 0)) {
+    //             this.status = EventStatus.Available;
+    //         }
+    //         else {
+    //             this.status = EventStatus.Impossible;
+    //         }
+    //     }
+    // }
     makeEventListItemText() {
         // TODO: detailed explanation
         let result = "" + this.realm.tag + "'s army " + this.fromArmy + " splits off army " +

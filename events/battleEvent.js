@@ -43,18 +43,16 @@ class BattleEvent extends event_1.PhoenixEvent {
             boxVisibilty_1.BoxVisibility.hide(battleBox.getSelf());
         };
     }
-    determineEventStatus() {
-        if (this.eachArmyExistsAndIsLocated(this.participants, this.position[0], this.position[1])) {
-            this.status = 4 /* Available */;
-        }
-        else if (this.stillSplitEventsInFaction(this.realm) || (this.eachArmyExists(this.participants) &&
-            this.possibleMoveOfEachArmyTo(this.participants, this.position[0], this.position[1]))) {
-            this.status = 3 /* Withheld */;
-        }
-        else {
-            this.status = 2 /* Impossible */;
-        }
-    }
+    // determineEventStatus(): void{
+    //     if (this.eachArmyExistsAndIsLocated(this.participants, this.position[0], this.position[1])) {
+    //         this.status = EventStatus.Available;
+    //     } else if (this.stillSplitEventsInFaction(this.realm) || (this.eachArmyExists(this.participants) &&
+    //         this.possibleMoveOfEachArmyTo(this.participants, this.position[0], this.position[1]))) {
+    //             this.status = EventStatus.Withheld;
+    //     } else {
+    //         this.status = EventStatus.Impossible;
+    //     }
+    // }
     makeEventListItemText() {
         let result = "Battle at (" + this.position[0] + ", " + this.position[1] + ") involving";
         for (let j = 0; j < this.participants.length; j++) {

@@ -4,7 +4,6 @@ const event_1 = require("./event");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
 const gameState_1 = require("../gameState");
 const riderArmy_1 = require("../armies/riderArmy");
-const fleet_1 = require("../armies/fleet");
 const footArmy_1 = require("../armies/footArmy");
 const gui_1 = require("../gui/gui");
 class MountEvent extends event_1.PhoenixEvent {
@@ -52,61 +51,59 @@ class MountEvent extends event_1.PhoenixEvent {
         gui_1.GUI.getBigBox().fillEventList();
         drawingFunctions_1.Drawing.drawStuff();
     }
-    determineEventStatus() {
-        let typefactor = 1;
-        let army = gameState_1.GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
-        if (army == undefined) {
-            this.status = 3 /* Withheld */;
-        }
-        else {
-            if (army instanceof riderArmy_1.RiderArmy) {
-                typefactor = 2;
-            }
-            else if (army instanceof fleet_1.Fleet) {
-                typefactor = 100;
-            }
-            if (army.getPosition()[0] != this.position[0] || army.getPosition()[1] != this.position[1]) {
-                this.status = 3 /* Withheld */;
-            }
-            else if ((army instanceof footArmy_1.FootArmy && (((army.getTroopCount() - this.troops) >= 0) &&
-                ((army.getOfficerCount() - this.leaders) >= 0) && ((army.getMountCount() - this.troops) >= 0))) ||
-                (army instanceof riderArmy_1.RiderArmy && (((army.getTroopCount() - this.troops) >= 0) &&
-                    ((army.getOfficerCount() - this.leaders) >= 0)))) {
-                this.status = 4 /* Available */;
-            }
-            else {
-                this.status = 2 /* Impossible */;
-            }
-        }
-        let mountCount = 0;
-        let lkpCount = 0;
-        let skpCount = 0;
-        if (army instanceof riderArmy_1.RiderArmy) {
-            typefactor = 2;
-        }
-        else if (army instanceof fleet_1.Fleet) {
-            typefactor = 100;
-            lkpCount = army.getLightCatapultCount();
-            skpCount = army.getHeavyCatapultCount();
-        }
-        else if (army instanceof footArmy_1.FootArmy) {
-            mountCount = army.getMountCount();
-            lkpCount = army.getLightCatapultCount();
-            skpCount = army.getHeavyCatapultCount();
-        }
-        if (((army.getTroopCount() - this.troops) >= (100 / typefactor)) &&
-            ((army.getOfficerCount() - this.leaders) >= 1)) 
-        //TODO probably needs to go and change the fields in the contrudtor accordingly
-        //((mountCount - this.mounts) >= 0) &&
-        //((lkpCount - this.lkp) >= 0) &&
-        //((skpCount - this.skp) >= 0))
-        {
-            this.status = 4 /* Available */;
-        }
-        else {
-            this.status = 2 /* Impossible */;
-        }
-    }
+    // determineEventStatus(): void{
+    //     let typefactor = 1;
+    //
+    //     let army = GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
+    //     if (army == undefined) {
+    //         this.status = EventStatus.Withheld;
+    //     } else {
+    //         if (army instanceof RiderArmy) {
+    //             typefactor = 2;
+    //         }
+    //         else if (army instanceof Fleet) {
+    //             typefactor = 100;
+    //         }
+    //         if (army.getPosition()[0] != this.position[0] || army.getPosition()[1] != this.position[1]) {
+    //             this.status = EventStatus.Withheld;
+    //         } else if ((army instanceof FootArmy && (((army.getTroopCount() - this.troops) >= 0) &&
+    //             ((army.getOfficerCount() - this.leaders) >= 0) && (((army as FootArmy).getMountCount() - this.troops) >= 0))) ||
+    //             (army instanceof RiderArmy && (((army.getTroopCount() - this.troops) >= 0) &&
+    //                 ((army.getOfficerCount() - this.leaders) >= 0)))) {
+    //                     this.status = EventStatus.Available;
+    //         } else {
+    //             this.status = EventStatus.Impossible;
+    //         }
+    //     }
+    //     let mountCount: number = 0;
+    //     let lkpCount: number = 0;
+    //     let skpCount: number = 0;
+    //     if (army instanceof RiderArmy) {
+    //         typefactor = 2;
+    //     }
+    //     else if (army instanceof Fleet) {
+    //         typefactor = 100;
+    //         lkpCount = (army as Fleet).getLightCatapultCount();
+    //         skpCount = (army as Fleet).getHeavyCatapultCount();
+    //     } else if (army instanceof FootArmy) {
+    //         mountCount = (army as FootArmy).getMountCount();
+    //         lkpCount = (army as FootArmy).getLightCatapultCount();
+    //         skpCount = (army as FootArmy).getHeavyCatapultCount();
+    //     }
+    //     if(((army.getTroopCount() - this.troops) >= (100/typefactor)) &&
+    //      ((army.getOfficerCount() - this.leaders) >= 1)) //&&
+    //      //TODO probably needs to go and change the fields in the contrudtor accordingly
+    //      //((mountCount - this.mounts) >= 0) &&
+    //      //((lkpCount - this.lkp) >= 0) &&
+    //      //((skpCount - this.skp) >= 0))
+    //     {
+    //         this.status = EventStatus.Available;
+    //     }
+    //     else
+    //     {
+    //         this.status = EventStatus.Impossible;
+    //     }
+    // }
     makeEventListItemText() {
         return "" + this.realm.tag + "'s army " + this.fromArmy + " mounts " + this.troops + " troops, and " +
             this.leaders + " leaders to " + this.newArmy + " in (" + this.position[0] + "," + this.position[1] + ")";

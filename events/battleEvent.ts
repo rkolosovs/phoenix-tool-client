@@ -51,16 +51,16 @@ export class BattleEvent extends PhoenixEvent{
         };
     }
     
-    determineEventStatus(): void{
-        if (this.eachArmyExistsAndIsLocated(this.participants, this.position[0], this.position[1])) {
-            this.status = EventStatus.Available;
-        } else if (this.stillSplitEventsInFaction(this.realm) || (this.eachArmyExists(this.participants) &&
-            this.possibleMoveOfEachArmyTo(this.participants, this.position[0], this.position[1]))) {
-                this.status = EventStatus.Withheld;
-        } else {
-            this.status = EventStatus.Impossible;
-        }
-    }
+    // determineEventStatus(): void{
+    //     if (this.eachArmyExistsAndIsLocated(this.participants, this.position[0], this.position[1])) {
+    //         this.status = EventStatus.Available;
+    //     } else if (this.stillSplitEventsInFaction(this.realm) || (this.eachArmyExists(this.participants) &&
+    //         this.possibleMoveOfEachArmyTo(this.participants, this.position[0], this.position[1]))) {
+    //             this.status = EventStatus.Withheld;
+    //     } else {
+    //         this.status = EventStatus.Impossible;
+    //     }
+    // }
     
     makeEventListItemText(): string{
         let result: string = "Battle at (" + this.position[0] + ", " + this.position[1] + ") involving";

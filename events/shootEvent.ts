@@ -73,31 +73,31 @@ export class ShootEvent extends PhoenixEvent{
         Drawing.drawStuff();
     }
     
-    determineEventStatus(): void{
-        if (!(this.status === EventStatus.Checked || this.status === EventStatus.Deleted)) {
-
-            let shooter = GameState.armies[this.findArmyPlaceInList(this.armyId, this.realm)];
-            let canShoot = true;
-
-            //check if remaining Lkp that have not shot yet
-            if(shooter.getLightCatapultCount() - shooter.getLightCatapultsShot() < this.lkpCount){
-                canShoot = false;
-            }
-            //check if remaining Lkp that have not shot yet
-            if(shooter.getHeavyCatapultCount() - shooter.getHeavyCatapultsShot() < this.skpCount){
-                canShoot = false;
-            }
-
-            if (this.armyExistsAndIsLocated(shooter.owner.tag, this.armyId, this.from[0], this.from[1]) && canShoot) {
-                this.status = EventStatus.Available;
-            } else if (this.armyExists(this.realm, this.armyId) && 
-            this.possibleMoveOfArmyTo(shooter.owner.tag, this.armyId, this.from[0], this.from[1])) {
-                this.status = EventStatus.Withheld;
-            } else {
-                this.status = EventStatus.Impossible;
-            }
-        }
-    }
+    // determineEventStatus(): void{
+    //     if (!(this.status === EventStatus.Checked || this.status === EventStatus.Deleted)) {
+    //
+    //         let shooter = GameState.armies[this.findArmyPlaceInList(this.armyId, this.realm)];
+    //         let canShoot = true;
+    //
+    //         //check if remaining Lkp that have not shot yet
+    //         if(shooter.getLightCatapultCount() - shooter.getLightCatapultsShot() < this.lkpCount){
+    //             canShoot = false;
+    //         }
+    //         //check if remaining Lkp that have not shot yet
+    //         if(shooter.getHeavyCatapultCount() - shooter.getHeavyCatapultsShot() < this.skpCount){
+    //             canShoot = false;
+    //         }
+    //
+    //         if (this.armyExistsAndIsLocated(shooter.owner.tag, this.armyId, this.from[0], this.from[1]) && canShoot) {
+    //             this.status = EventStatus.Available;
+    //         } else if (this.armyExists(this.realm, this.armyId) &&
+    //         this.possibleMoveOfArmyTo(shooter.owner.tag, this.armyId, this.from[0], this.from[1])) {
+    //             this.status = EventStatus.Withheld;
+    //         } else {
+    //             this.status = EventStatus.Impossible;
+    //         }
+    //     }
+    // }
 
     makeEventListItemText(): string{
         return ""+ this.realm.tag +"'s army "+this.armyId+" shoots a Field ("+this.to[0]+", "+ this.to[1]+") with " +

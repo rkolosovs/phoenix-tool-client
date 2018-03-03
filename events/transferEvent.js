@@ -4,7 +4,6 @@ const event_1 = require("./event");
 const gameState_1 = require("../gameState");
 const footArmy_1 = require("../armies/footArmy");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
-const riderArmy_1 = require("../armies/riderArmy");
 const fleet_1 = require("../armies/fleet");
 const gui_1 = require("../gui/gui");
 class TransferEvent extends event_1.PhoenixEvent {
@@ -80,30 +79,29 @@ class TransferEvent extends event_1.PhoenixEvent {
         gui_1.GUI.getBigBox().fillEventList();
         drawingFunctions_1.Drawing.drawStuff();
     }
-    determineEventStatus() {
-        let army1 = gameState_1.GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
-        let army2 = gameState_1.GameState.armies[this.findArmyPlaceInList(this.toArmy, this.realm)];
-        if (army1 == undefined || army2 == undefined) {
-            this.status = 3 /* Withheld */;
-        }
-        else if (army1.getPosition()[0] !== this.position[0] || army1.getPosition()[1] !== this.position[1] ||
-            army2.getPosition()[0] !== this.position[0] || army2.getPosition()[1] !== this.position[1]) {
-            this.status = 3 /* Withheld */;
-        }
-        else if ((army1.constructor === army2.constructor || (this.troops === 0 && this.mounts === 0 &&
-            this.lkp === 0 && this.skp === 0)) && army1.getPosition()[0] === army2.getPosition()[0] &&
-            army1.getPosition()[1] === army2.getPosition()[1]) {
-            this.status = 4 /* Available */;
-        }
-        else if (((((army1 instanceof footArmy_1.FootArmy || army1 instanceof riderArmy_1.RiderArmy) && army1.getMovePoints() < 3) ||
-            army1 instanceof fleet_1.Fleet && army1.getMovePoints() < 5) && (((army2 instanceof footArmy_1.FootArmy ||
-            army2 instanceof riderArmy_1.RiderArmy) && army2.getMovePoints() < 3) || army2 instanceof fleet_1.Fleet && army2.getMovePoints() < 5))) {
-            this.status = 2 /* Impossible */;
-        }
-        else {
-            this.status = 3 /* Withheld */;
-        }
-    }
+    // determineEventStatus(): void{
+    //     let army1 = GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
+    //     let army2 = GameState.armies[this.findArmyPlaceInList(this.toArmy, this.realm)];
+    //     if (army1 == undefined || army2 == undefined) {
+    //         this.status = EventStatus.Withheld;
+    //     }
+    //     else if (army1.getPosition()[0] !== this.position[0] || army1.getPosition()[1] !== this.position[1] ||
+    //     army2.getPosition()[0] !== this.position[0] || army2.getPosition()[1] !== this.position[1]) {
+    //         this.status = EventStatus.Withheld;
+    //     } else if ((army1.constructor === army2.constructor || (this.troops === 0 && this.mounts === 0 &&
+    //         this.lkp === 0 && this.skp === 0)) && army1.getPosition()[0] === army2.getPosition()[0] &&
+    //             army1.getPosition()[1] === army2.getPosition()[1]) {
+    //                 this.status = EventStatus.Available;
+    //     }
+    //     else if (((((army1 instanceof FootArmy || army1 instanceof RiderArmy) && army1.getMovePoints() < 3) ||
+    //         army1 instanceof Fleet && army1.getMovePoints() < 5) && (((army2 instanceof FootArmy ||
+    //         army2 instanceof RiderArmy) && army2.getMovePoints() < 3) || army2 instanceof Fleet && army2.getMovePoints() < 5))) {
+    //         this.status = EventStatus.Impossible;
+    //     }
+    //     else {
+    //         this.status = EventStatus.Withheld;
+    //     }
+    // }
     makeEventListItemText() {
         let result = "" + this.realm.tag + "'s army " + this.fromArmy + " transfers ";
         if (this.troops !== 0) {

@@ -45,26 +45,26 @@ export class MoveEvent extends PhoenixEvent{
         }
     }
     
-    determineEventStatus(): void{
-        if (this.armyExistsAndIsLocated(this.realm, this.armyId, this.from[0], this.from[1]) &&
-        !this.unprocessedBattleAtContainingArmy(this.realm, this.armyId, this.from[0], this.from[1]) &&
-        this.canMove(this.realm, this.armyId, this.from[0], this.from[1], this.to[0], this.to[1]) &&
-        this.noPendingLoadEvents(this.realm, this.armyId, this.from[0], this.from[1]) &&
-        this.noPendingMountEvents(this.realm, this.armyId, this.from[0], this.from[1])) {
-        this.status = EventStatus.Available;
-        } else if ((this.stillSplitEventsInFaction(this.realm) || this.armyExistsAndIsLocated(this.realm, this.armyId,
-                this.from[0], this.from[1])) && !this.unprocessedBattleAtContainingArmy(this.realm, this.armyId,
-                this.from[0], this.from[1]) && this.canMove(this.realm, this.armyId, this.from[0], this.from[1],
-                this.to[0], this.to[1]) && (!this.noPendingLoadEvents(this.realm, this.armyId, this.from[0],
-                this.from[1]) || !this.noPendingMountEvents(this.realm, this.armyId, this.from[0], this.from[1]))) {
-            this.status = EventStatus.Withheld;
-        } else if (this.stillSplitEventsInFaction(this.realm) || (this.armyExists(this.realm, this.armyId) &&
-            this.possibleMoveOfArmyTo(this.realm, this.armyId, this.from[0], this.from[1]))) {
-            this.status = EventStatus.Withheld;
-        } else {
-            this.status = EventStatus.Impossible;
-        }
-    }
+    // determineEventStatus(): void{
+    //     if (this.armyExistsAndIsLocated(this.realm, this.armyId, this.from[0], this.from[1]) &&
+    //     !this.unprocessedBattleAtContainingArmy(this.realm, this.armyId, this.from[0], this.from[1]) &&
+    //     this.canMove(this.realm, this.armyId, this.from[0], this.from[1], this.to[0], this.to[1]) &&
+    //     this.noPendingLoadEvents(this.realm, this.armyId, this.from[0], this.from[1]) &&
+    //     this.noPendingMountEvents(this.realm, this.armyId, this.from[0], this.from[1])) {
+    //     this.status = EventStatus.Available;
+    //     } else if ((this.stillSplitEventsInFaction(this.realm) || this.armyExistsAndIsLocated(this.realm, this.armyId,
+    //             this.from[0], this.from[1])) && !this.unprocessedBattleAtContainingArmy(this.realm, this.armyId,
+    //             this.from[0], this.from[1]) && this.canMove(this.realm, this.armyId, this.from[0], this.from[1],
+    //             this.to[0], this.to[1]) && (!this.noPendingLoadEvents(this.realm, this.armyId, this.from[0],
+    //             this.from[1]) || !this.noPendingMountEvents(this.realm, this.armyId, this.from[0], this.from[1]))) {
+    //         this.status = EventStatus.Withheld;
+    //     } else if (this.stillSplitEventsInFaction(this.realm) || (this.armyExists(this.realm, this.armyId) &&
+    //         this.possibleMoveOfArmyTo(this.realm, this.armyId, this.from[0], this.from[1]))) {
+    //         this.status = EventStatus.Withheld;
+    //     } else {
+    //         this.status = EventStatus.Impossible;
+    //     }
+    // }
 
     makeEventListItemText(): string{
         return "Move " + this.realm + " army " + this.armyId + " from (" + this.from[0] + ", " + this.from[1] +

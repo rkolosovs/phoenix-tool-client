@@ -74,41 +74,41 @@ export class SplitEvent extends PhoenixEvent{
         Drawing.drawStuff();
     }
     
-    determineEventStatus(): void{
-        let typefactor = 1;
-        let army = GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
-        if (army == undefined) {
-            this.status = EventStatus.Withheld;
-        } else {
-            let mountCount: number = 0;
-            let lkpCount: number = 0;
-            let skpCount: number = 0;
-            if (army instanceof RiderArmy) {
-                typefactor = 2;
-            }
-            else if (army instanceof Fleet) {
-                typefactor = 100;
-                lkpCount = (army as Fleet).getLightCatapultCount();
-                skpCount = (army as Fleet).getHeavyCatapultCount();
-            } else if (army instanceof FootArmy) {
-                mountCount = (army as FootArmy).getMountCount();
-                lkpCount = (army as FootArmy).getLightCatapultCount();
-                skpCount = (army as FootArmy).getHeavyCatapultCount();
-            }
-            if (army.getPosition()[0] != this.position[0] || army.getPosition()[1] != this.position[1]) {
-                this.status = EventStatus.Withheld;
-            } else if (((army.getTroopCount() - this.troops) >= (100 / typefactor)) &&
-                ((army.getOfficerCount() - this.leaders) >= 1) &&
-                ((mountCount - this.mounts) >= 0) &&
-                ((lkpCount - this.lkp) >= 0) &&
-                ((skpCount - this.skp) >= 0)) {
-                this.status = EventStatus.Available;
-            }
-            else {
-                this.status = EventStatus.Impossible;
-            }
-        }
-    }
+    // determineEventStatus(): void{
+    //     let typefactor = 1;
+    //     let army = GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
+    //     if (army == undefined) {
+    //         this.status = EventStatus.Withheld;
+    //     } else {
+    //         let mountCount: number = 0;
+    //         let lkpCount: number = 0;
+    //         let skpCount: number = 0;
+    //         if (army instanceof RiderArmy) {
+    //             typefactor = 2;
+    //         }
+    //         else if (army instanceof Fleet) {
+    //             typefactor = 100;
+    //             lkpCount = (army as Fleet).getLightCatapultCount();
+    //             skpCount = (army as Fleet).getHeavyCatapultCount();
+    //         } else if (army instanceof FootArmy) {
+    //             mountCount = (army as FootArmy).getMountCount();
+    //             lkpCount = (army as FootArmy).getLightCatapultCount();
+    //             skpCount = (army as FootArmy).getHeavyCatapultCount();
+    //         }
+    //         if (army.getPosition()[0] != this.position[0] || army.getPosition()[1] != this.position[1]) {
+    //             this.status = EventStatus.Withheld;
+    //         } else if (((army.getTroopCount() - this.troops) >= (100 / typefactor)) &&
+    //             ((army.getOfficerCount() - this.leaders) >= 1) &&
+    //             ((mountCount - this.mounts) >= 0) &&
+    //             ((lkpCount - this.lkp) >= 0) &&
+    //             ((skpCount - this.skp) >= 0)) {
+    //             this.status = EventStatus.Available;
+    //         }
+    //         else {
+    //             this.status = EventStatus.Impossible;
+    //         }
+    //     }
+    // }
 
     makeEventListItemText(): string{
         // TODO: detailed explanation
