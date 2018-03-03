@@ -42,11 +42,11 @@ class LandArmy extends army_1.Army {
                 else {
                     let fleetString = fleetsOnDestination.reduce((accumulator, fleet) => accumulator += " " + fleet.getErkenfaraID(), "");
                     let chosenFleet = prompt("Mögliche Flotten sind: " + fleetString);
-                    if (chosenFleet === null) {
+                    if (chosenFleet == undefined) {
                         // TODO: throw error
                         // return "Embarkation canceled."
                     }
-                    else if (chosenFleet !== undefined && chosenFleet !== '') {
+                    else if (chosenFleet != undefined && chosenFleet !== '') {
                         let foundFleet = fleetsOnDestination.find(fleet => fleet.getErkenfaraID() === parseInt(chosenFleet));
                         if (foundFleet != undefined) {
                             let loadString = foundFleet.loadArmy(this);

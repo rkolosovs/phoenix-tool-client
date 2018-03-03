@@ -5,6 +5,7 @@ import {GameState} from "../gameState";
 import {Realm} from "../realm";
 import {GUI} from "../gui/gui";
 import {Army} from "../armies/army";
+import {Direction} from "../map/direction";
 
 export class MoveEvent extends PhoenixEvent{
     
@@ -22,27 +23,9 @@ export class MoveEvent extends PhoenixEvent{
         let army: Army|undefined = GameState.armies.find(army => army.owner === this.realm &&
             this.armyId === army.getErkenfaraID());
         if(army != undefined) {
-            //TODO use the new movement
-            let adjacency = HexFunction.getAdjacency(army.getPosition(), [this.to]);
-            if (adjacency[0] === true) {
-                army.moveToList(1);
-                army.move(1);//move to ne
-            } else if (adjacency[1] === true) {
-                army.moveToList(2);
-                army.move(2);//move to e
-            } else if (adjacency[2] === true) {
-                army.moveToList(3);
-                army.move(3);//move to se
-            } else if (adjacency[3] === true) {
-                army.moveToList(4);
-                army.move(4);//move to sw
-            } else if (adjacency[4] === true) {
-                army.moveToList(5);
-                army.move(5);//move to w
-            } else if (adjacency[5] === true) {
-                army.moveToList(0);
-                army.move(0);//move to nw
-            }
+            let direction: Direction = HexFunction.getDirectionToNeighbor(this.from, this.to);
+            army.checkForPossibleMove(direction);
+            army.move(direction);
             if (!this.unprocessedBattleAtContainingArmy(army.owner.tag, army.getErkenfaraID(),
                     army.getPosition()[0], army.getPosition()[1])) {
                 army.conquer();

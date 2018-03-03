@@ -39,14 +39,14 @@ export abstract class LandArmy extends Army{
     }
 
     move(direction: Direction): void {
-        let move: Move = this.possibleMoves.find(possMove => possMove.direction === direction);
+        let move: Move|undefined = this.possibleMoves.find(possMove => possMove.direction === direction);
         if(move != undefined){
             if(move.unloading && this.isTransported()){
-                this.transportingFleet.unloadArmy(this);
+                (this.transportingFleet as Fleet).unloadArmy(this);
             } else if(move.loading && !this.isTransported()) {
                 let fleetsOnDestination: Fleet[] = GameState.armies.filter(
-                    army => army instanceof Fleet && army.getPosition()[0] === move.destination[0] &&
-                        army.getPosition()[1] === move.destination[1]).map(
+                    army => army instanceof Fleet && army.getPosition()[0] === (move as Move).destination[0] &&
+                        army.getPosition()[1] === (move as Move).destination[1]).map(
                     army => army as Fleet);
                 if(fleetsOnDestination.length === 0){
                     // TODO: throw error
@@ -57,12 +57,12 @@ export abstract class LandArmy extends Army{
                     let fleetString: String = fleetsOnDestination.reduce(
                         (accumulator, fleet) => accumulator += " " + fleet.getErkenfaraID(), "");
                     let chosenFleet = prompt("Mögliche Flotten sind: " + fleetString);
-                    if (chosenFleet === null) {
+                    if (chosenFleet == undefined) {
                         // TODO: throw error
                         // return "Embarkation canceled."
-                    } else if (chosenFleet !== undefined && chosenFleet !== '') {
+                    } else if (chosenFleet != undefined && chosenFleet !== '') {
                         let foundFleet = fleetsOnDestination.find(
-                            fleet => fleet.getErkenfaraID() === parseInt(chosenFleet));
+                            fleet => fleet.getErkenfaraID() === parseInt((chosenFleet as string)));
                         if (foundFleet != undefined) {
                             let loadString = foundFleet.loadArmy(this);
                             // TODO: throw error
