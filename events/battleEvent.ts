@@ -16,6 +16,7 @@ export class BattleEvent extends PhoenixEvent{
 
     getContent(): JSON{
         // TODO
+        return JSON.parse('{}');
     }
 
     checkEvent(): void{
@@ -55,20 +56,12 @@ export class BattleEvent extends PhoenixEvent{
         }
     }
     
-    makeEventListItem(): HTMLElement{
-
-        let eli = document.createElement("DIV");
-        eli.classList.add("eventListItem");
-        eli.id = "eli" + this.listPosition;
-        
-        let html = "<div>Battle at (" + this.position[0] + ", " + this.position[1] + ") involving";
-        let partips = this.participants
-        for (let j = 0; j < partips.length; j++) {
-            html += " [" + partips[j].owner.tag + " " + partips[j].getErkenfaraID() + "]";
+    makeEventListItemText(): string{
+        let result: string = "Battle at (" + this.position[0] + ", " + this.position[1] + ") involving";
+        for (let j = 0; j < this.participants.length; j++) {
+            result += " [" + this.participants[j].owner.tag + " " + this.participants[j].getErkenfaraID() + "]";
         }
-        eli.innerHTML = html + "</div>";
-
-        return this.commonEventListItem(eli, this.listPosition);
+        return result;
     }
 
     getType(): string{

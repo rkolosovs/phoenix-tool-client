@@ -15,6 +15,7 @@ class MoveEvent extends event_1.PhoenixEvent {
     }
     getContent() {
         // TODO
+        return JSON.parse('{}');
     }
     checkEvent() {
         let army = gameState_1.GameState.armies.find(army => army.owner === this.realm &&
@@ -65,11 +66,7 @@ class MoveEvent extends event_1.PhoenixEvent {
             this.noPendingMountEvents(this.realm, this.armyId, this.from[0], this.from[1])) {
             this.status = 'available';
         }
-        else if ((this.stillSplitEventsInFaction(this.realm) || this.armyExistsAndIsLocated(this.realm, this.armyId, this.from[0], this.from[1])) &&
-            !this.unprocessedBattleAtContainingArmy(this.realm, this.armyId, this.from[0], this.from[1]) &&
-            this.canMove(this.realm, this.armyId, this.from[0], this.from[1], this.to[0], this.to[1]) &&
-            (!this.noPendingLoadEvents(this.realm, this.armyId, this.from[0], this.from[1]) ||
-                !this.noPendingMountEvents(this.realm, this.armyId, this.from[0], this.from[1]))) {
+        else if ((this.stillSplitEventsInFaction(this.realm) || this.armyExistsAndIsLocated(this.realm, this.armyId, this.from[0], this.from[1])) && !this.unprocessedBattleAtContainingArmy(this.realm, this.armyId, this.from[0], this.from[1]) && this.canMove(this.realm, this.armyId, this.from[0], this.from[1], this.to[0], this.to[1]) && (!this.noPendingLoadEvents(this.realm, this.armyId, this.from[0], this.from[1]) || !this.noPendingMountEvents(this.realm, this.armyId, this.from[0], this.from[1]))) {
             this.status = 'withheld';
         }
         else if (this.stillSplitEventsInFaction(this.realm) || (this.armyExists(this.realm, this.armyId) &&
@@ -80,13 +77,9 @@ class MoveEvent extends event_1.PhoenixEvent {
             this.status = 'impossible';
         }
     }
-    makeEventListItem() {
-        let eli = document.createElement("DIV");
-        eli.classList.add("eventListItem");
-        eli.id = "eli" + this.listPosition;
-        eli.innerHTML = "<div>Move " + this.realm + " army " + this.armyId + " from (" + this.from[0] + ", " +
-            this.from[1] + ") to (" + this.to[0] + ", " + this.to[1] + ")</div>";
-        return this.commonEventListItem(eli, this.listPosition);
+    makeEventListItemText() {
+        return "Move " + this.realm + " army " + this.armyId + " from (" + this.from[0] + ", " + this.from[1] +
+            ") to (" + this.to[0] + ", " + this.to[1] + ")";
     }
     getType() {
         return "move";

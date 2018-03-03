@@ -20,6 +20,7 @@ class MountEvent extends event_1.PhoenixEvent {
     }
     getContent() {
         // TODO
+        return JSON.parse('{}');
     }
     checkEvent() {
         let armyFromPlaceInList = -1;
@@ -91,7 +92,8 @@ class MountEvent extends event_1.PhoenixEvent {
         }
         if (((army.getTroopCount() - this.troops) >= (100 / typefactor)) &&
             ((army.getOfficerCount() - this.leaders) >= 1)) 
-        //((mountCount - this.mounts) >= 0) &&//TODO probably needs to go and change the fields in the contrudtor accordingly
+        //TODO probably needs to go and change the fields in the contrudtor accordingly
+        //((mountCount - this.mounts) >= 0) &&
         //((lkpCount - this.lkp) >= 0) &&
         //((skpCount - this.skp) >= 0))
         {
@@ -101,13 +103,9 @@ class MountEvent extends event_1.PhoenixEvent {
             this.status = 'impossible';
         }
     }
-    makeEventListItem() {
-        let eli = document.createElement("DIV");
-        eli.classList.add("eventListItem");
-        eli.id = "eli" + this.listPosition;
-        eli.innerHTML = "<div>" + this.realm.tag + "'s army " + this.fromArmy + " mounts " + this.troops + " troops, and "
-            + this.leaders + " leaders to " + this.newArmy + " in (" + this.position[0] + "," + this.position[1] + ").</div>";
-        return this.commonEventListItem(eli, this.listPosition);
+    makeEventListItemText() {
+        return "" + this.realm.tag + "'s army " + this.fromArmy + " mounts " + this.troops + " troops, and " +
+            this.leaders + " leaders to " + this.newArmy + " in (" + this.position[0] + "," + this.position[1] + ")";
     }
     getType() {
         return "mount";

@@ -18,6 +18,7 @@ export class MergeEvent extends PhoenixEvent{
 
     getContent(): JSON{
         // TODO
+        return JSON.parse('{}');
     }
 
     checkEvent(): void{
@@ -70,16 +71,10 @@ export class MergeEvent extends PhoenixEvent{
             this.status = 'withheld';
         }
     }
-    
-    makeEventListItem(): HTMLElement{
-        let eli = document.createElement("DIV");
-        eli.classList.add("eventListItem");
-        eli.id = "eli" + this.listPosition;
-        
-        eli.innerHTML = "<div>" + this.realm.tag + "'s army " + this.fromArmy + " merges with army " + this.toArmy + 
-        " in (" + this.position[0] + "," + this.position[1] + ").</div>";
 
-        return this.commonEventListItem(eli, this.listPosition);
+    makeEventListItemText(): string{
+        return "" + this.realm.tag + "'s army " + this.fromArmy + " merges with army " + this.toArmy + " in (" +
+            this.position[0] + "," + this.position[1] + ")";
     }
 
     getType(): string{

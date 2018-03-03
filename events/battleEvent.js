@@ -14,6 +14,7 @@ class BattleEvent extends event_1.PhoenixEvent {
     }
     getContent() {
         // TODO
+        return JSON.parse('{}');
     }
     checkEvent() {
         let battleBox = gui_1.GUI.getBattleBox();
@@ -50,17 +51,12 @@ class BattleEvent extends event_1.PhoenixEvent {
             this.status = 'impossible';
         }
     }
-    makeEventListItem() {
-        let eli = document.createElement("DIV");
-        eli.classList.add("eventListItem");
-        eli.id = "eli" + this.listPosition;
-        let html = "<div>Battle at (" + this.position[0] + ", " + this.position[1] + ") involving";
-        let partips = this.participants;
-        for (let j = 0; j < partips.length; j++) {
-            html += " [" + partips[j].owner.tag + " " + partips[j].getErkenfaraID() + "]";
+    makeEventListItemText() {
+        let result = "Battle at (" + this.position[0] + ", " + this.position[1] + ") involving";
+        for (let j = 0; j < this.participants.length; j++) {
+            result += " [" + this.participants[j].owner.tag + " " + this.participants[j].getErkenfaraID() + "]";
         }
-        eli.innerHTML = html + "</div>";
-        return this.commonEventListItem(eli, this.listPosition);
+        return result;
     }
     getType() {
         return "battle";

@@ -9,14 +9,18 @@ class PhoenixEvent {
         this.status = status;
         this.databasePrimaryKey = databasePrimaryKey;
     }
-    commonEventListItem(eli, id) {
+    makeEventListItem() {
+        let eli = document.createElement("DIV");
+        eli.classList.add("eventListItem");
+        eli.id = "eli" + this.listPosition;
+        eli.innerHTML = "<div>" + this.makeEventListItemText() + "</div>";
         let deleteButton = document.createElement("BUTTON");
-        deleteButton.id = "delBtn" + id;
+        deleteButton.id = "delBtn" + this.listPosition;
         deleteButton.classList.add("eventListButton");
         deleteButton.classList.add("eventListDeleteButton");
         deleteButton.addEventListener("click", (e) => this.deleteEvent());
         let checkButton = document.createElement("BUTTON");
-        checkButton.id = "checkBtn" + id;
+        checkButton.id = "checkBtn" + this.listPosition;
         checkButton.classList.add("eventListButton");
         checkButton.classList.add("eventListCheckButton");
         checkButton.addEventListener("click", (e) => this.checkEvent());

@@ -22,6 +22,7 @@ class SplitEvent extends event_1.PhoenixEvent {
     }
     getContent() {
         // TODO
+        return JSON.parse('{}');
     }
     checkEvent() {
         console.log("this is a split event");
@@ -102,30 +103,26 @@ class SplitEvent extends event_1.PhoenixEvent {
             }
         }
     }
-    makeEventListItem() {
-        let eli = document.createElement("DIV");
-        eli.classList.add("eventListItem");
-        eli.id = "eli" + this.listPosition;
+    makeEventListItemText() {
         // TODO: detailed explanation
-        let innerHTMLString = "<div>" + this.realm.tag + "'s army " + this.fromArmy + " splits off army " + this.newArmy + " with ";
+        let result = "" + this.realm.tag + "'s army " + this.fromArmy + " splits off army " +
+            this.newArmy + " with ";
         if (this.troops !== 0) {
-            innerHTMLString += this.troops + " troops, ";
+            result += this.troops + " troops, ";
         }
         if (this.leaders !== 0) {
-            innerHTMLString += this.leaders + " leaders, ";
+            result += this.leaders + " leaders, ";
         }
         if (this.mounts !== 0) {
-            innerHTMLString += this.mounts + " mounts, ";
+            result += this.mounts + " mounts, ";
         }
         if (this.lkp !== 0) {
-            innerHTMLString += this.lkp + " lkp, ";
+            result += this.lkp + " lkp, ";
         }
         if (this.skp !== 0) {
-            innerHTMLString += this.skp + " skp ";
+            result += this.skp + " skp ";
         }
-        innerHTMLString += "in (" + this.position[0] + "," + this.position[1] + ").</div>";
-        eli.innerHTML = innerHTMLString;
-        return this.commonEventListItem(eli, this.listPosition);
+        return result + "in (" + this.position[0] + "," + this.position[1] + ")";
     }
     getType() {
         return "split";

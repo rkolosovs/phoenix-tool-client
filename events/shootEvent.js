@@ -19,6 +19,7 @@ class ShootEvent extends event_1.PhoenixEvent {
     }
     getContent() {
         // TODO
+        return JSON.parse('{}');
     }
     checkEvent() {
         let shootBox = gui_1.GUI.getShootingBigBox();
@@ -62,13 +63,9 @@ class ShootEvent extends event_1.PhoenixEvent {
             }
         }
     }
-    makeEventListItem() {
-        let eli = document.createElement("DIV");
-        eli.classList.add("eventListItem");
-        eli.id = "eli" + this.listPosition;
-        eli.innerHTML = "<div>" + this.realm.tag + "'s army " + this.armyId + " shoots a Field (" + this.to[0] + ", " +
-            this.to[1] + ") with " + this.lkpCount + " LKP and " + this.skpCount + " SKP.</div>";
-        return this.commonEventListItem(eli, this.listPosition);
+    makeEventListItemText() {
+        return "" + this.realm.tag + "'s army " + this.armyId + " shoots a Field (" + this.to[0] + ", " + this.to[1] + ") with " +
+            this.lkpCount + " LKP and " + this.skpCount + " SKP";
     }
     getType() {
         return "shoot";

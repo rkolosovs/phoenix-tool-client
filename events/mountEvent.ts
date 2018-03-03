@@ -20,6 +20,7 @@ export class MountEvent extends PhoenixEvent{
 
     getContent(): JSON{
         // TODO
+        return JSON.parse('{}');
     }
 
     checkEvent(): void{
@@ -90,7 +91,8 @@ export class MountEvent extends PhoenixEvent{
         }
         if(((army.getTroopCount() - this.troops) >= (100/typefactor)) &&
          ((army.getOfficerCount() - this.leaders) >= 1)) //&&
-         //((mountCount - this.mounts) >= 0) &&//TODO probably needs to go and change the fields in the contrudtor accordingly
+         //TODO probably needs to go and change the fields in the contrudtor accordingly
+         //((mountCount - this.mounts) >= 0) &&
          //((lkpCount - this.lkp) >= 0) &&
          //((skpCount - this.skp) >= 0))
         {
@@ -101,16 +103,10 @@ export class MountEvent extends PhoenixEvent{
             this.status = 'impossible';
         }
     }
-    
-    makeEventListItem(): HTMLElement{
-        let eli = document.createElement("DIV");
-        eli.classList.add("eventListItem");
-        eli.id = "eli" + this.listPosition;
-        
-        eli.innerHTML = "<div>" + this.realm.tag + "'s army " + this.fromArmy + " mounts " + this.troops + " troops, and "
-        + this.leaders + " leaders to " + this.newArmy + " in (" + this.position[0] + "," + this.position[1] + ").</div>";
 
-        return this.commonEventListItem(eli, this.listPosition);
+    makeEventListItemText(): string{
+        return "" + this.realm.tag + "'s army " + this.fromArmy + " mounts " + this.troops + " troops, and " +
+            this.leaders + " leaders to " + this.newArmy + " in (" + this.position[0] + "," + this.position[1] + ")";
     }
 
     getType(): string{

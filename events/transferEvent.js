@@ -22,6 +22,7 @@ class TransferEvent extends event_1.PhoenixEvent {
     }
     getContent() {
         // TODO
+        return JSON.parse('{}');
     }
     checkEvent() {
         console.log("this is a transfer event");
@@ -99,29 +100,24 @@ class TransferEvent extends event_1.PhoenixEvent {
             this.status = 'withheld';
         }
     }
-    makeEventListItem() {
-        let eli = document.createElement("DIV");
-        eli.classList.add("eventListItem");
-        eli.id = "eli" + this.listPosition;
-        let innerHTMLString = "<div>" + this.realm.tag + "'s army " + this.fromArmy + " transfers ";
+    makeEventListItemText() {
+        let result = "" + this.realm.tag + "'s army " + this.fromArmy + " transfers ";
         if (this.troops !== 0) {
-            innerHTMLString += this.troops + " troops, ";
+            result += this.troops + " troops, ";
         }
         if (this.leaders !== 0) {
-            innerHTMLString += this.leaders + " leaders, ";
+            result += this.leaders + " leaders, ";
         }
         if (this.mounts !== 0) {
-            innerHTMLString += this.mounts + " mounts, ";
+            result += this.mounts + " mounts, ";
         }
         if (this.lkp !== 0) {
-            innerHTMLString += this.lkp + " lkp, ";
+            result += this.lkp + " lkp, ";
         }
         if (this.skp !== 0) {
-            innerHTMLString += this.skp + " skp ";
+            result += this.skp + " skp ";
         }
-        innerHTMLString += "to " + this.toArmy + " in (" + this.position[0] + "," + this.position[1] + ").</div>";
-        eli.innerHTML = innerHTMLString;
-        return this.commonEventListItem(eli, this.listPosition);
+        return result + "to " + this.toArmy + " in (" + this.position[0] + "," + this.position[1] + ")";
     }
     getType() {
         return "transfer";

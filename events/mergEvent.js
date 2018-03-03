@@ -19,6 +19,7 @@ class MergeEvent extends event_1.PhoenixEvent {
     }
     getContent() {
         // TODO
+        return JSON.parse('{}');
     }
     checkEvent() {
         let armyFromPlaceInList = -1;
@@ -70,13 +71,9 @@ class MergeEvent extends event_1.PhoenixEvent {
             this.status = 'withheld';
         }
     }
-    makeEventListItem() {
-        let eli = document.createElement("DIV");
-        eli.classList.add("eventListItem");
-        eli.id = "eli" + this.listPosition;
-        eli.innerHTML = "<div>" + this.realm.tag + "'s army " + this.fromArmy + " merges with army " + this.toArmy +
-            " in (" + this.position[0] + "," + this.position[1] + ").</div>";
-        return this.commonEventListItem(eli, this.listPosition);
+    makeEventListItemText() {
+        return "" + this.realm.tag + "'s army " + this.fromArmy + " merges with army " + this.toArmy + " in (" +
+            this.position[0] + "," + this.position[1] + ")";
     }
     getType() {
         return "merge";
