@@ -7,10 +7,10 @@ const buttonFunctions_1 = require("../controls/buttonFunctions");
 const gui_1 = require("../gui/gui");
 const controlVariables_1 = require("../controls/controlVariables");
 class MergeEvent extends event_1.PhoenixEvent {
-    constructor(listPosition, status, prerequisiteEvents, fromArmy, toArmy, realm, position, databasePrimaryKey) {
+    constructor(listPosition, status, prerequisiteEvents, fromArmyId, toArmyId, realm, position, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
-        this.fromArmy = fromArmy;
-        this.toArmy = toArmy;
+        this.fromArmyId = fromArmyId;
+        this.toArmyId = toArmyId;
         this.realm = realm;
         this.position = position;
     }
@@ -18,36 +18,23 @@ class MergeEvent extends event_1.PhoenixEvent {
         return "merge";
     }
     getContent() {
-        return "{'realm': " + this.realm.tag + ", 'fromArmy': " + this.fromArmy + ", 'toArmy', " +
-            this.toArmy + "'x': " + this.position[0] + ", 'y': " + this.position[1] + "}";
+        return "{'realm': " + this.realm.tag + ", 'fromArmy': " + this.fromArmyId + ", 'toArmy', " +
+            this.toArmyId + "'x': " + this.position[0] + ", 'y': " + this.position[1] + "}";
     }
     validGameState() {
         //Both armies exist and are in position.
         let ownArmiesOnCorrectField = gameState_1.GameState.armies.filter(army => army.owner === this.realm &&
             army.getPosition()[0] === this.position[0] &&
             army.getPosition()[1] === this.position[1]);
-        return ownArmiesOnCorrectField.some(army => army.getErkenfaraID() === this.fromArmy) &&
-            ownArmiesOnCorrectField.some(army => army.getErkenfaraID() === this.toArmy);
+        return ownArmiesOnCorrectField.some(army => army.getErkenfaraID() === this.fromArmyId) &&
+            ownArmiesOnCorrectField.some(army => army.getErkenfaraID() === this.toArmyId);
     }
     checkEvent() {
-        let armyFromPlaceInList = -1;
-        let armyToPlaceInList = -1;
-        let armyFromId = this.fromArmy;
-        let armyToId = this.toArmy;
-        let realm = this.realm;
-        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-            if (gameState_1.GameState.armies[i].getErkenfaraID() == armyFromId && gameState_1.GameState.armies[i].owner == realm) {
-                armyFromPlaceInList = i;
-                console.log("i1=" + i);
-            }
-            else if (gameState_1.GameState.armies[i].getErkenfaraID() == armyToId && gameState_1.GameState.armies[i].owner == realm) {
-                armyToPlaceInList = i;
-                console.log("i2=" + i);
-            }
-        }
-        if (armyFromPlaceInList >= 0 && armyToPlaceInList >= 0) {
-            selectedArmyIndex = armyFromPlaceInList;
-            buttonFunctions_1.ButtonFunctions.mergeSelectedArmy(armyToPlaceInList);
+        let fromArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId && army.owner === this.realm);
+        let toArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.toArmyId && army.owner === this.realm);
+        if (fromArmy != undefined && toArmy != undefined) {
+            selectedArmyIndex = gameState_1.GameState.armies.findIndex(army => army === fromArmy);
+            buttonFunctions_1.ButtonFunctions.mergeSelectedArmy(gameState_1.GameState.armies.findIndex(army => army === toArmy));
             gameState_1.GameState.loadedEvents.pop();
         }
         this.status = 0 /* Checked */;
@@ -56,7 +43,7 @@ class MergeEvent extends event_1.PhoenixEvent {
         controlVariables_1.Controls.selectedArmyIndex = -1;
     }
     makeEventListItemText() {
-        return "" + this.realm.tag + "'s army " + this.fromArmy + " merges with army " + this.toArmy + " in (" +
+        return "" + this.realm.tag + "'s army " + this.fromArmyId + " merges with army " + this.toArmyId + " in (" +
             this.position[0] + "," + this.position[1] + ")";
     }
 }
