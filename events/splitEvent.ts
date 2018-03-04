@@ -47,7 +47,8 @@ export class SplitEvent extends PhoenixEvent{
             this.leaders <= fromArmy.getOfficerCount() &&
             this.lkp <= fromArmy.getLightCatapultCount() &&
             this.skp <= fromArmy.getHeavyCatapultCount() &&
-            (this.mounts > 0 && fromArmy instanceof FootArmy && this.mounts <= fromArmy.getMountCount());
+            ((this.mounts > 0 && fromArmy instanceof FootArmy && this.mounts <= fromArmy.getMountCount()) ||
+                this.mounts <= 0);
     }
 
     checkEvent(): void{

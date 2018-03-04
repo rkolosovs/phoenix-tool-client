@@ -6,11 +6,12 @@ const footArmy_1 = require("../armies/footArmy");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
 const fleet_1 = require("../armies/fleet");
 const gui_1 = require("../gui/gui");
+const armyFunctions_1 = require("../libraries/armyFunctions");
 class TransferEvent extends event_1.PhoenixEvent {
-    constructor(listPosition, status, prerequisiteEvents, fromArmy, toArmy, realm, troops, leaders, mounts, lkp, skp, position, databasePrimaryKey) {
+    constructor(listPosition, status, prerequisiteEvents, fromArmyId, toArmyId, realm, troops, leaders, mounts, lkp, skp, position, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
-        this.fromArmy = fromArmy;
-        this.toArmy = toArmy;
+        this.fromArmyId = fromArmyId;
+        this.toArmyId = toArmyId;
         this.realm = realm;
         this.troops = troops;
         this.leaders = leaders;
@@ -24,86 +25,62 @@ class TransferEvent extends event_1.PhoenixEvent {
         return JSON.parse('{}');
     }
     validGameState() {
-        // TODO
-        return false;
+        let fromArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId && army.owner === this.realm &&
+            army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]);
+        let toArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.toArmyId && army.owner === this.realm &&
+            army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]);
+        //Both armies exist, are in position and have the same type.
+        //There are enough troops, officers, catapults and if at least one mount has to be split, there are enough
+        //of those and army to be split from is a foot army. No check for viability of the remaining army is made
+        //since abandoning a few stragglers or the catapults is not prohibited by the rules.
+        return fromArmy != undefined &&
+            toArmy != undefined &&
+            fromArmy.constructor === toArmy.constructor &&
+            this.troops <= fromArmy.getTroopCount() &&
+            this.leaders <= fromArmy.getOfficerCount() &&
+            this.lkp <= fromArmy.getLightCatapultCount() &&
+            this.skp <= fromArmy.getHeavyCatapultCount() &&
+            ((this.mounts > 0 && fromArmy instanceof footArmy_1.FootArmy && this.mounts <= fromArmy.getMountCount()) ||
+                this.mounts <= 0);
     }
     checkEvent() {
-        console.log("this is a transfer event");
-        let armyFromPlaceInList = -1;
-        let armyToPlaceInList = -1;
-        let armyFromId = this.fromArmy;
-        let armyToId = this.toArmy;
-        let realm = this.realm;
-        let toSplit = this.troops;
-        let leadersToSplit = this.leaders;
-        let mountsToSplit = this.mounts;
-        let lkpToSplit = this.lkp;
-        let skpToSplit = this.skp;
-        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-            if (gameState_1.GameState.armies[i].getErkenfaraID() === armyFromId && gameState_1.GameState.armies[i].owner === realm) {
-                armyFromPlaceInList = i;
+        let fromArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId && army.owner === this.realm &&
+            army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]);
+        let toArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.toArmyId && army.owner === this.realm &&
+            army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]);
+        if (fromArmy != undefined && toArmy != undefined) {
+            fromArmy.setTroopCount(fromArmy.getTroopCount() - this.troops);
+            toArmy.setTroopCount(toArmy.getTroopCount() + this.troops);
+            fromArmy.setOfficerCount(fromArmy.getOfficerCount() - this.leaders);
+            toArmy.setOfficerCount(toArmy.getOfficerCount() + this.leaders);
+            if (fromArmy instanceof footArmy_1.FootArmy) {
+                fromArmy.setMountCount(fromArmy.getMountCount() - this.mounts);
+                toArmy.setMountCount(toArmy.getMountCount() + this.mounts);
             }
-            else if (gameState_1.GameState.armies[i].getErkenfaraID() === armyToId && gameState_1.GameState.armies[i].owner === realm) {
-                armyToPlaceInList = i;
+            if (fromArmy instanceof footArmy_1.FootArmy || fromArmy instanceof fleet_1.Fleet) {
+                fromArmy.setLightCatapultCount(fromArmy.getLightCatapultCount() - this.lkp);
+                toArmy.setLightCatapultCount(toArmy.getLightCatapultCount() + this.lkp);
+                fromArmy.setHeavyCatapultCount(fromArmy.getHeavyCatapultCount() - this.skp);
+                toArmy.setHeavyCatapultCount(toArmy.getHeavyCatapultCount() + this.skp);
             }
-        }
-        if (armyFromPlaceInList >= 0 && armyToPlaceInList >= 0) {
-            let armyToTransferFrom = gameState_1.GameState.armies[armyFromPlaceInList];
-            let armyToTransferTo = gameState_1.GameState.armies[armyToPlaceInList];
-            armyToTransferFrom.setTroopCount(armyToTransferFrom.getTroopCount() - toSplit);
-            armyToTransferTo.setTroopCount(armyToTransferTo.getTroopCount() + toSplit);
-            armyToTransferFrom.setOfficerCount(armyToTransferFrom.getOfficerCount() - leadersToSplit);
-            armyToTransferTo.setOfficerCount(armyToTransferTo.getOfficerCount() + leadersToSplit);
-            if (armyToTransferFrom instanceof footArmy_1.FootArmy) {
-                armyToTransferFrom.setMountCount(armyToTransferFrom.getMountCount() - mountsToSplit);
-                armyToTransferTo.setMountCount(armyToTransferTo.getMountCount() + mountsToSplit);
+            if (this.leaders > 0 &&
+                fromArmy.getMovePoints() < fromArmy.getMaxMovePoints()) {
+                toArmy.setMovePoints(0);
             }
-            if (armyToTransferFrom instanceof footArmy_1.FootArmy || armyToTransferFrom instanceof fleet_1.Fleet) {
-                armyToTransferFrom.setLightCatapultCount(armyToTransferFrom.getLightCatapultCount() - lkpToSplit);
-                armyToTransferTo.setLightCatapultCount(armyToTransferTo.getLightCatapultCount() + lkpToSplit);
-                armyToTransferFrom.setHeavyCatapultCount(armyToTransferFrom.getHeavyCatapultCount() - skpToSplit);
-                armyToTransferTo.setHeavyCatapultCount(armyToTransferTo.getHeavyCatapultCount() + skpToSplit);
+            else if (fromArmy.getMovePoints() < toArmy.getMovePoints()) {
+                toArmy.setMovePoints(fromArmy.getMovePoints());
             }
-            if (leadersToSplit > 0 &&
-                armyToTransferFrom.getMovePoints() < armyToTransferFrom.getMaxMovePoints()) {
-                armyToTransferTo.setMovePoints(0);
-            }
-            else if (armyToTransferFrom.getMovePoints() < armyToTransferTo.getMovePoints()) {
-                armyToTransferTo.setMovePoints(armyToTransferFrom.getMovePoints());
-            }
-            if (armyToTransferFrom.getHeightPoints() < armyToTransferTo.getHeightPoints()) {
-                armyToTransferTo.setHeightPoints(armyToTransferFrom.getHeightPoints());
+            if (fromArmy.getHeightPoints() < toArmy.getHeightPoints()) {
+                toArmy.setHeightPoints(fromArmy.getHeightPoints());
             }
         }
         this.status = 0 /* Checked */;
+        armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
         gui_1.GUI.getBigBox().fillEventList();
         drawingFunctions_1.Drawing.drawStuff();
     }
-    // determineEventStatus(): void{
-    //     let army1 = GameState.armies[this.findArmyPlaceInList(this.fromArmy, this.realm)];
-    //     let army2 = GameState.armies[this.findArmyPlaceInList(this.toArmy, this.realm)];
-    //     if (army1 == undefined || army2 == undefined) {
-    //         this.status = EventStatus.Withheld;
-    //     }
-    //     else if (army1.getPosition()[0] !== this.position[0] || army1.getPosition()[1] !== this.position[1] ||
-    //     army2.getPosition()[0] !== this.position[0] || army2.getPosition()[1] !== this.position[1]) {
-    //         this.status = EventStatus.Withheld;
-    //     } else if ((army1.constructor === army2.constructor || (this.troops === 0 && this.mounts === 0 &&
-    //         this.lkp === 0 && this.skp === 0)) && army1.getPosition()[0] === army2.getPosition()[0] &&
-    //             army1.getPosition()[1] === army2.getPosition()[1]) {
-    //                 this.status = EventStatus.Available;
-    //     }
-    //     else if (((((army1 instanceof FootArmy || army1 instanceof RiderArmy) && army1.getMovePoints() < 3) ||
-    //         army1 instanceof Fleet && army1.getMovePoints() < 5) && (((army2 instanceof FootArmy ||
-    //         army2 instanceof RiderArmy) && army2.getMovePoints() < 3) || army2 instanceof Fleet && army2.getMovePoints() < 5))) {
-    //         this.status = EventStatus.Impossible;
-    //     }
-    //     else {
-    //         this.status = EventStatus.Withheld;
-    //     }
-    // }
     makeEventListItemText() {
-        let result = "" + this.realm.tag + "'s army " + this.fromArmy + " transfers ";
+        let result = "" + this.realm.tag + "'s army " + this.fromArmyId + " transfers ";
         if (this.troops !== 0) {
             result += this.troops + " troops, ";
         }
@@ -119,7 +96,7 @@ class TransferEvent extends event_1.PhoenixEvent {
         if (this.skp !== 0) {
             result += this.skp + " skp ";
         }
-        return result + "to " + this.toArmy + " in (" + this.position[0] + "," + this.position[1] + ")";
+        return result + "to " + this.toArmyId + " in (" + this.position[0] + "," + this.position[1] + ")";
     }
 }
 exports.TransferEvent = TransferEvent;
