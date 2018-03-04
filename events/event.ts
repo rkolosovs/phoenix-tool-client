@@ -1,5 +1,4 @@
 import {GameState} from "../gameState";
-import {HexFunction} from "../libraries/hexFunctions";
 import {GUI} from "../gui/gui";
 import {EventStatus} from "./eventStatus";
 
