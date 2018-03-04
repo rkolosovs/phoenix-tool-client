@@ -14,9 +14,12 @@ class MergeEvent extends event_1.PhoenixEvent {
         this.realm = realm;
         this.position = position;
     }
+    getType() {
+        return "merge";
+    }
     getContent() {
-        // TODO
-        return JSON.parse('{}');
+        return "{'realm': " + this.realm.tag + ", 'fromArmy': " + this.fromArmy + ", 'toArmy', " +
+            this.toArmy + "'x': " + this.position[0] + ", 'y': " + this.position[1] + "}";
     }
     validGameState() {
         //Both armies exist and are in position.
@@ -45,7 +48,7 @@ class MergeEvent extends event_1.PhoenixEvent {
         if (armyFromPlaceInList >= 0 && armyToPlaceInList >= 0) {
             selectedArmyIndex = armyFromPlaceInList;
             buttonFunctions_1.ButtonFunctions.mergeSelectedArmy(armyToPlaceInList);
-            preparedEvents.pop();
+            gameState_1.GameState.events.pop();
         }
         this.status = 0 /* Checked */;
         gui_1.GUI.getBigBox().fillEventList();

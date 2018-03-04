@@ -11,9 +11,12 @@ class BattleEvent extends event_1.PhoenixEvent {
         this.participants = participants;
         this.position = position;
     }
+    getType() {
+        return "battle";
+    }
     getContent() {
-        // TODO
-        return JSON.parse('{}');
+        return "{'x': " + this.position[0] + ", 'y': " + this.position[1] +
+            ", 'participants': [" + this.participants.map(participant => "{'armyId': " + participant.id + ", 'realm': " + participant.realm + "}").reduce((total, current) => total + current, "") + "]}";
     }
     getPosition() {
         return [this.position[0], this.position[1]];

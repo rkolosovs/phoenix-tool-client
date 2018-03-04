@@ -16,12 +16,16 @@ export class MergeEvent extends PhoenixEvent{
             super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
 
-    getContent(): JSON{
-        // TODO
-        return JSON.parse('{}');
+    protected getType(): string{
+        return "merge";
     }
 
-    validGameState(): boolean{
+    protected getContent(): string{
+        return "{'realm': " + this.realm.tag + ", 'fromArmy': " + this.fromArmy + ", 'toArmy', " +
+            this.toArmy + "'x': " + this.position[0] + ", 'y': " + this.position[1] + "}";
+    }
+
+    protected validGameState(): boolean{
         //Both armies exist and are in position.
         let ownArmiesOnCorrectField: Army[] = GameState.armies.filter(army =>
             army.owner === this.realm &&
@@ -50,7 +54,7 @@ export class MergeEvent extends PhoenixEvent{
         if (armyFromPlaceInList >= 0 && armyToPlaceInList >= 0) {
             selectedArmyIndex = armyFromPlaceInList;
             ButtonFunctions.mergeSelectedArmy(armyToPlaceInList);
-            preparedEvents.pop();
+            GameState.events.pop();
         }
         this.status = EventStatus.Checked;
         GUI.getBigBox().fillEventList();

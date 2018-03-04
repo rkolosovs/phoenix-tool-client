@@ -19,12 +19,18 @@ export class SplitEvent extends PhoenixEvent{
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
 
-    getContent(): JSON{
-        // TODO
-        return JSON.parse('{}');
+    protected getType(): string{
+        return "split";
     }
 
-    validGameState(): boolean{
+    protected getContent(): string{
+        return "{'fromArmyId': " + this.fromArmyId + ", 'newArmyId': " + this.newArmyId +
+            ", 'realm': " + this.realm.tag + ", 'troops': " + this.troops + ", 'leaders': " + this.leaders +
+            ", 'mounts': " + this.mounts + ", 'lkp': " + this.lkp + ", 'skp': " + this.skp +
+            ", 'x': " + this.position[0] + ", 'y': " + this.position[1] + "}";
+    }
+
+    protected validGameState(): boolean{
         //The from-army exists and is in position.
         let fromArmy: Army|undefined = GameState.armies.find(army =>
             army.owner === this.realm &&

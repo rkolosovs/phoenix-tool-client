@@ -19,12 +19,18 @@ export class TransferEvent extends PhoenixEvent{
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
 
-    getContent(): JSON{
-        // TODO
-        return JSON.parse('{}');
+    protected getType(): string{
+        return "transfer";
     }
 
-    validGameState(): boolean{
+    protected getContent(): string{
+        return "{'fromArmyId': " + this.fromArmyId + ", 'toArmyId': " + this.toArmyId +
+            ", 'realm': " + this.realm.tag + ", 'troops': " + this.troops + ", 'leaders': " + this.leaders +
+            ", 'mounts': " + this.mounts + ", 'lkp': " + this.lkp + ", 'skp': " + this.skp +
+            ", 'x': " + this.position[0] + ", 'y': " + this.position[1] + "}";
+    }
+
+    protected validGameState(): boolean{
         let fromArmy: Army|undefined = GameState.armies.find(army =>
             army.getErkenfaraID() === this.fromArmyId && army.owner === this.realm &&
             army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]);

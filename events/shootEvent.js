@@ -17,9 +17,14 @@ class ShootEvent extends event_1.PhoenixEvent {
         this.skpCount = skpCount;
         this.target = target;
     }
+    getType() {
+        return "shoot";
+    }
     getContent() {
-        // TODO
-        return JSON.parse('{}');
+        return "{'armyId': " + this.shooterId + ", 'realm': " + this.realm.tag +
+            ", 'LKPcount': " + this.lkpCount + ", 'SKPcount': " + this.skpCount +
+            ", 'fromX': " + this.from[0] + ", 'fromY': " + this.from[1] +
+            ", 'toX': " + this.to[0] + ", 'toY': " + this.to[1] + "}";
     }
     validGameState() {
         //Shooter exists, is positioned on the from-field, has enough catapults and the target is valid

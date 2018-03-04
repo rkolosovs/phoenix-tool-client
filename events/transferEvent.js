@@ -20,9 +20,14 @@ class TransferEvent extends event_1.PhoenixEvent {
         this.skp = skp;
         this.position = position;
     }
+    getType() {
+        return "transfer";
+    }
     getContent() {
-        // TODO
-        return JSON.parse('{}');
+        return "{'fromArmyId': " + this.fromArmyId + ", 'toArmyId': " + this.toArmyId +
+            ", 'realm': " + this.realm.tag + ", 'troops': " + this.troops + ", 'leaders': " + this.leaders +
+            ", 'mounts': " + this.mounts + ", 'lkp': " + this.lkp + ", 'skp': " + this.skp +
+            ", 'x': " + this.position[0] + ", 'y': " + this.position[1] + "}";
     }
     validGameState() {
         let fromArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId && army.owner === this.realm &&

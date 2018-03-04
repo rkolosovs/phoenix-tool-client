@@ -17,12 +17,17 @@ export class MoveEvent extends PhoenixEvent{
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
 
-    getContent(): JSON{
-        // TODO
-        return JSON.parse('{}');
+    protected getType(): string{
+        return "move";
     }
 
-    validGameState(): boolean{
+    protected getContent(): string{
+        return "{'armyId': " + this.armyId + ", 'realm': " + this.realm.tag +
+            ", 'fromX': " + this.from[0] + ", 'fromY': " + this.from[1] +
+            ", 'toX': " + this.to[0] + ", 'toY': " + this.to[1] + "}";
+    }
+
+    protected validGameState(): boolean{
         //The army exists, is positioned on the from-field and the army can move to the to-field.
         let army: Army|undefined = GameState.armies.find(army =>
             army.owner === this.realm &&
