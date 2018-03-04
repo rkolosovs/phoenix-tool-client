@@ -14,6 +14,8 @@ import {BoxVisibility} from "../gui/boxVisibilty";
 import {FootArmy} from "./footArmy";
 import {Drawing} from "../gui/drawingFunctions";
 import {ArmyFunctions} from "../libraries/armyFunctions";
+import { MountEvent } from "../events/mountEvent";
+import { EventStatus } from "../events/eventStatus";
 
 export class RiderArmy extends LandArmy{
     static readonly MAX_MOVE_POINTS = 21;
@@ -208,17 +210,11 @@ export class RiderArmy extends LandArmy{
                 MultiFieldFunctions.addToMultifield(this, newArmy);
                 // deleteFromMultifield(this);
             }
-            preparedEvents.push({
-                type: "mount", content: {
-                    fromArmyId: this.getErkenfaraID(),
-                    realm: this.owner.tag,
-                    troops: toUnMount,
-                    leaders: leadersToUnMount,
-                    x: this.position[0],
-                    y: this.position[1],
-                    newArmysId: newArmy.getErkenfaraID()
-                }
-            });
+            //in GameState.events pushen
+            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Undetermined, [], 
+                this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, 
+                [this.position[0], this.position[1]], -1) 
+            GameState.newEvents.push(eventToPush);
             ArmyFunctions.deleteArmy(this);
             Drawing.drawStuff();
             BoxVisibility.restoreInfoBox();
@@ -247,17 +243,11 @@ export class RiderArmy extends LandArmy{
                 MultiFieldFunctions.addToMultifield(this, newArmy);
                 // deleteFromMultifield(this);
             }
-            preparedEvents.push({
-                type: "mount", content: {
-                    fromArmyId: this.getErkenfaraID(),
-                    realm: this.owner.tag,
-                    troops: toUnMount,
-                    leaders: leadersToUnMount,
-                    x: this.position[0],
-                    y: this.position[1],
-                    newArmysId: newArmy.getErkenfaraID()
-                }
-            });
+            //in GameState.events pushen
+            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Undetermined, [], 
+                this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, 
+                [this.position[0], this.position[1]], -1) 
+            GameState.newEvents.push(eventToPush);
             // armyIndex zeigt auf neues Heer
             Controls.selectedArmyIndex = GameState.armies.length - 1;
             Drawing.drawStuff();

@@ -94,11 +94,11 @@ export abstract class LandArmy extends Army{
         let thereIsABridge: boolean = false;
         let thereIsAHarbor: boolean = false;
         // TODO: effects of diplomacy go here
-        let rightOfPassage = borders.some((realm) => (realm === this.owner && realm.land.some((field) =>
-            (target[0] === field[0] && target[1] === field[1]))));
+        let rightOfPassage = GameState.realms.some((realm) => (realm === this.owner && realm.territory.some((field) =>
+            (target[0] === field.coordinates[0] && target[1] === field.coordinates[1]))));
         let thereIsARiver = GameState.rivers.some((river) =>
-            (river[0][0] === this.position[0] && river[0][1] === this.position[1] && river[1][0] === target[0] && river[1][1] === target[1]) ||
-            (river[0][0] === target[0] && river[0][1] === target[1] && river[1][0] === this.position[0] && river[1][1] === this.position[1])
+            (river.leftBank[0] === this.position[0] && river.leftBank[1] === this.position[1] && river.rightBank[0] === target[0] && river.rightBank[1] === target[1]) ||
+            (river.leftBank[0] === target[0] && river.leftBank[1] === target[1] && river.rightBank[0] === this.position[0] && river.rightBank[1] === this.position[1])
         );
         // check if there is a steet, a harbor or a bridge on the route
         GameState.buildings.forEach(building => {
@@ -140,7 +140,7 @@ export abstract class LandArmy extends Army{
             (HexFunction.fieldType(target) === FieldType.SHALLOWS ||
                 HexFunction.fieldType(target) === FieldType.DEEPSEA),
             (HexFunction.fieldType(this.position) === FieldType.SHALLOWS ||
-                HexFunction.fieldType(this.position) === FieldType.DEEPSEA), target, direction));
+                HexFunction.fieldType(this.position) === FieldType.DEEPSEA), target, direction);
     }
 
     protected abstract computeMoveCost(thereIsAStreet: boolean, thereIsAHarbor: boolean, thereIsARiver: boolean,

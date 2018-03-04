@@ -16,6 +16,7 @@ export abstract class MobileEntity extends MapEntity{
     constructor(id: number, owner: Realm, position: [number, number], movePoints: number, heightPoints: number){
         super(position, owner);
         // copy the position so that this object doesn't share a reference with anything else
+        this.id = id;
         this.oldPosition[0] = position[0];
         this.oldPosition[1] = position[1];
         this.setID(id);
