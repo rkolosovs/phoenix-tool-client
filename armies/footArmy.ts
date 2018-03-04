@@ -19,6 +19,8 @@ import {Controls} from "../controls/controlVariables";
 import {BoxVisibility} from "../gui/boxVisibilty";
 import {Drawing} from "../gui/drawingFunctions";
 import {ArmyFunctions} from "../libraries/armyFunctions";
+import { MountEvent } from "../events/mountEvent";
+import { EventStatus } from "../events/eventStatus";
 
 export class FootArmy extends LandArmy{
     static readonly MAX_MOVE_POINTS = 9;
@@ -412,18 +414,11 @@ export class FootArmy extends LandArmy{
             }
             // in GameState.armies einfügen und alte Armee löschen, ist dann automatisch armyIndex
             GameState.armies.push(newArmy);
-            //in preparedEvents pushen
-            preparedEvents.push({
-                type: "mount", content: {
-                    fromArmyId: this.getErkenfaraID(),
-                    realm: this.owner.tag,
-                    troops: toMount,
-                    leaders: leadersToMount,
-                    x: this.position[0],
-                    y: this.position[1],
-                    newArmysId: newArmy.getErkenfaraID()
-                }
-            });
+            //in GameState.events pushen
+            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Undetermined, [], 
+                this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, 
+                [this.position[0], this.position[1]], -1) 
+            GameState.newEvents.push(eventToPush);
             ArmyFunctions.deleteArmy(this);
             BoxVisibility.restoreInfoBox();
             Drawing.drawStuff();
@@ -453,18 +448,11 @@ export class FootArmy extends LandArmy{
             this.setMountCount(this.mountCount - toMount);
             // in GameState.armies einfügen
             GameState.armies.push(newArmy);
-            //in preparedEvents pushen
-            preparedEvents.push({
-                type: "mount", content: {
-                    fromArmyId: this.getErkenfaraID(),
-                    realm: this.owner.tag,
-                    troops: toMount,
-                    leaders: leadersToMount,
-                    x: this.position[0],
-                    y: this.position[0],
-                    newArmysId: newArmy.getErkenfaraID()
-                }
-            });
+            //in GameState.events pushen
+            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Undetermined, [], 
+                this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, 
+                [this.position[0], this.position[1]], -1) 
+            GameState.newEvents.push(eventToPush);
             // Controls.selectedArmyIndex zeigt auf neues Heer
             Controls.selectedArmyIndex = GameState.armies.length - 1;
             Drawing.drawStuff();

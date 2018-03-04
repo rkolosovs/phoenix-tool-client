@@ -93,7 +93,11 @@ export class BattleHandler {
             }
         } else { //usual terrain bonus applies
             let terrainGPBonus = 0;
-            let homeTurf = GameState.realms.find(realm => (realm === army.owner)).homeTurf;
+            let findRealm = GameState.realms.find(realm => (realm === army.owner));
+            let homeTurf= FieldType.SHALLOWS;
+            if(findRealm != undefined){
+                homeTurf = findRealm.homeTurf;
+            }
             if(homeTurf === fieldType || (homeTurf === FieldType.HIGHLANDS && fieldType === FieldType.MOUNTAINS) ||
                 (homeTurf === FieldType.MOUNTAINS && fieldType === FieldType.HIGHLANDS)) { //home terrain bonus applies
                 terrainGPBonus += 50;

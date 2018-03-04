@@ -22,8 +22,9 @@ export abstract class Army extends MobileEntity{
                 heavyCatapultCount: number, position: [number, number], movePoints: number, heightPoints: number,
                 isGuard?: boolean){
         super(id, owner, position, movePoints, heightPoints);
-        this.setTroopCount(troopCount);
-        this.setOfficerCount(officerCount);
+        
+        this.troopCount = Math.max(0, troopCount);
+        this.officerCount = Math.max(0, officerCount);
         if(isGuard != undefined){this.isGuard = isGuard;}
         this.setLightCatapultCount(lightCatapultCount);
         this.setHeavyCatapultCount(heavyCatapultCount);

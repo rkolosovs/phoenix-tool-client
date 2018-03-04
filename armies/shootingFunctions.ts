@@ -4,6 +4,8 @@ import {GUI} from "../gui/gui";
 import {GameState} from "../gameState";
 import {BoxVisibility} from "../gui/boxVisibilty";
 import {ArmyFunctions} from "../libraries/armyFunctions";
+import { ShootEvent } from "../events/shootEvent";
+import { EventStatus } from "../events/eventStatus";
 
 export namespace ShootingFunctions{
     // array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null),
@@ -135,20 +137,12 @@ export namespace ShootingFunctions{
                 return false;
             }
         }
-
-        GameState.events.push({
-            type: "shoot", content: {
-                shooterID: GameState.armies[Controls.selectedArmyIndex].armyId,
-                realm: GameState.armies[Controls.selectedArmyIndex].ownerTag(),
-                LKPcount: LKPshooting,
-                SKPcount: SKPshooting,
-                toX: Controls.selectedFields[1][0],
-                toY: Controls.selectedFields[1][1],
-                target: target,
-                fromX: GameState.armies[Controls.selectedArmyIndex].x,
-                fromY: GameState.armies[Controls.selectedArmyIndex].y
-            }
-        });
+        //in GameState.events pushen
+        let eventToPush: ShootEvent = new ShootEvent(GameState.newEvents.length, EventStatus.Undetermined, [], 
+            GameState.armies[Controls.selectedArmyIndex].owner, GameState.armies[Controls.selectedArmyIndex].getID(),
+            [Controls.selectedFields[1][0], Controls.selectedFields[1][1]], 
+            GameState.armies[Controls.selectedArmyIndex].getPosition(), LKPshooting, SKPshooting, target, -1) 
+        GameState.newEvents.push(eventToPush);
 
         shootingarmy.addLightCatapultsShot(LKPshooting);
         shootingarmy.addHeavyCatapultsShot(SKPshooting);
