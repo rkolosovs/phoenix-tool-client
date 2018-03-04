@@ -18,12 +18,18 @@ export class ShootEvent extends PhoenixEvent{
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
 
-    getContent(): JSON{
-        // TODO
-        return JSON.parse('{}');
+    protected getType(): string{
+        return "shoot";
     }
 
-    validGameState(): boolean{
+    protected getContent(): string{
+        return "{'armyId': " + this.shooterId + ", 'realm': " + this.realm.tag +
+            ", 'LKPcount': " + this.lkpCount + ", 'SKPcount': " + this.skpCount +
+            ", 'fromX': " + this.from[0] + ", 'fromY': " + this.from[1] +
+            ", 'toX': " + this.to[0] + ", 'toY': " + this.to[1] + "}";
+    }
+
+    protected validGameState(): boolean{
         //Shooter exists, is positioned on the from-field, has enough catapults and the target is valid
         let shooter: Army|undefined = GameState.armies.find(army =>
             army.owner === this.realm &&

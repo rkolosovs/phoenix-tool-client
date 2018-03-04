@@ -21,9 +21,14 @@ class SplitEvent extends event_1.PhoenixEvent {
         this.skp = skp;
         this.position = position;
     }
+    getType() {
+        return "split";
+    }
     getContent() {
-        // TODO
-        return JSON.parse('{}');
+        return "{'fromArmyId': " + this.fromArmyId + ", 'newArmyId': " + this.newArmyId +
+            ", 'realm': " + this.realm.tag + ", 'troops': " + this.troops + ", 'leaders': " + this.leaders +
+            ", 'mounts': " + this.mounts + ", 'lkp': " + this.lkp + ", 'skp': " + this.skp +
+            ", 'x': " + this.position[0] + ", 'y': " + this.position[1] + "}";
     }
     validGameState() {
         //The from-army exists and is in position.

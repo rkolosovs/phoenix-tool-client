@@ -16,15 +16,19 @@ export class MountEvent extends PhoenixEvent{
          protected position: [number, number], databasePrimaryKey: number){
         //protected mounts: number, protected lkp: number, protected skp: number,
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
-
     }
 
-    getContent(): JSON{
-        // TODO
-        return JSON.parse('{}');
+    protected getType(): string{
+        return "mount/dismount";
     }
 
-    validGameState(): boolean{
+    protected getContent(): string{
+        return "{'realm': " + this.realm.tag + ", 'fromArmy': " + this.fromArmyId +
+            ", 'newArmy': " + this.newArmyId + ", 'troops': " + this.troops + ", 'leaders': " + this.leaders +
+            ", 'x': " + this.position[0] + ", 'y': " + this.position[1] + "}";
+    }
+
+    protected validGameState(): boolean{
         //The from-army exists and is in position.
         let fromArmy: Army|undefined = GameState.armies.find(army =>
             army.owner === this.realm &&

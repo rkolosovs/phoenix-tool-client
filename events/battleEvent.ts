@@ -15,9 +15,15 @@ export class BattleEvent extends PhoenixEvent{
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
 
-    getContent(): JSON{
-        // TODO
-        return JSON.parse('{}');
+    protected getType(): string{
+        return "battle";
+    }
+
+    protected getContent(): string{
+        return "{'x': " + this.position[0] + ", 'y': " + this.position[1] +
+            ", 'participants': [" + this.participants.map(participant =>
+                    "{'armyId': " + participant.id + ", 'realm': " + participant.realm + "}").reduce(
+                        (total, current) => total+current, "") + "]}";
     }
 
     getPosition(): [number, number]{
@@ -28,7 +34,7 @@ export class BattleEvent extends PhoenixEvent{
         return this.participants;
     }
 
-    validGameState(): boolean{
+    protected validGameState(): boolean{
         //Every participating army exists and is located at the position of the battle.
         return this.participants.every(participant => GameState.armies.some(army =>
             army.getErkenfaraID() === participant.id &&

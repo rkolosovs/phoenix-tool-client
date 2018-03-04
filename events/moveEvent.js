@@ -14,9 +14,13 @@ class MoveEvent extends event_1.PhoenixEvent {
         this.from = from;
         this.to = to;
     }
+    getType() {
+        return "move";
+    }
     getContent() {
-        // TODO
-        return JSON.parse('{}');
+        return "{'armyId': " + this.armyId + ", 'realm': " + this.realm.tag +
+            ", 'fromX': " + this.from[0] + ", 'fromY': " + this.from[1] +
+            ", 'toX': " + this.to[0] + ", 'toY': " + this.to[1] + "}";
     }
     validGameState() {
         //The army exists, is positioned on the from-field and the army can move to the to-field.

@@ -18,9 +18,13 @@ class MountEvent extends event_1.PhoenixEvent {
         this.leaders = leaders;
         this.position = position;
     }
+    getType() {
+        return "mount/dismount";
+    }
     getContent() {
-        // TODO
-        return JSON.parse('{}');
+        return "{'realm': " + this.realm.tag + ", 'fromArmy': " + this.fromArmyId +
+            ", 'newArmy': " + this.newArmyId + ", 'troops': " + this.troops + ", 'leaders': " + this.leaders +
+            ", 'x': " + this.position[0] + ", 'y': " + this.position[1] + "}";
     }
     validGameState() {
         //The from-army exists and is in position.
