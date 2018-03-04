@@ -51,7 +51,7 @@ export class MoveEvent extends PhoenixEvent{
             let direction: Direction = HexFunction.getDirectionToNeighbor(this.from, this.to);
             army.checkForPossibleMove(direction);
             army.move(direction);
-            if (!GameState.events.some(event =>
+            if (!GameState.loadedEvents.some(event =>
                     (event instanceof BattleEvent) &&
                     !(event.getStatus() === EventStatus.Checked || event.getStatus() === EventStatus.Deleted) &&
                     (event as BattleEvent).getPosition()[0] === this.to[0] &&

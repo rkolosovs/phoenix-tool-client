@@ -54,7 +54,7 @@ export class MergeEvent extends PhoenixEvent{
         if (armyFromPlaceInList >= 0 && armyToPlaceInList >= 0) {
             selectedArmyIndex = armyFromPlaceInList;
             ButtonFunctions.mergeSelectedArmy(armyToPlaceInList);
-            GameState.events.pop();
+            GameState.loadedEvents.pop();
         }
         this.status = EventStatus.Checked;
         GUI.getBigBox().fillEventList();

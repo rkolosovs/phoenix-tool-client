@@ -12,7 +12,8 @@ GameState.fields = [];
 GameState.rivers = [];
 GameState.armies = [];
 GameState.buildings = [];
-GameState.events = [];
+GameState.newEvents = [];
+GameState.loadedEvents = [];
 GameState.login = "guest"; // either realm tag, "sl", or "guest"
 //"st" for start, "fi" for finished
 GameState.currentTurn = { 'turn': 0, 'realm': "sl", 'status': "st" };

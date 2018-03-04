@@ -10,17 +10,15 @@ class PhoenixEvent {
         this.databasePrimaryKey = databasePrimaryKey;
     }
     asJSON() {
-        return JSON.parse("'type': " + this.getType() + ", 'content': " + this.getContent() +
-            ", 'prerequisites': [" + this.prerequisiteEvents.reduce((total, current) => total + current, "") +
-            "], 'pk': " + this.databasePrimaryKey + "}");
+        return JSON.parse("'type': " + this.getType() + ", 'content': " + this.getContent() + "}");
     }
     determineEventStatus() {
-        if (this.validGameState() && this.prerequisiteEvents.every(prereqEvent => gameState_1.GameState.events.some(event => event.getDatabasePrimaryKey() === prereqEvent &&
+        if (this.validGameState() && this.prerequisiteEvents.every(prereqEvent => gameState_1.GameState.loadedEvents.some(event => event.getDatabasePrimaryKey() === prereqEvent &&
             (event.getStatus() === 0 /* Checked */ || event.getStatus() === 1 /* Deleted */)))) {
             //The event is available if the GM has attended to all prerequisite events and the board state allows it.
             this.status = 4 /* Available */;
         }
-        else if (!this.validGameState() && this.prerequisiteEvents.every(prereqEvent => gameState_1.GameState.events.some(event => event.getDatabasePrimaryKey() === prereqEvent &&
+        else if (!this.validGameState() && this.prerequisiteEvents.every(prereqEvent => gameState_1.GameState.loadedEvents.some(event => event.getDatabasePrimaryKey() === prereqEvent &&
             (event.getStatus() === 0 /* Checked */ || event.getStatus() === 1 /* Deleted */)))) {
             //The event is not available because the board state doesn't allow it and it won't become available in the
             //future because all prerequisite events have been attended to by the GM. The GM has to manually fix the
