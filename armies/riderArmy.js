@@ -14,6 +14,7 @@ const boxVisibilty_1 = require("../gui/boxVisibilty");
 const footArmy_1 = require("./footArmy");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
 const armyFunctions_1 = require("../libraries/armyFunctions");
+const mountEvent_1 = require("../events/mountEvent");
 class RiderArmy extends landArmy_1.LandArmy {
     constructor(id, owner, troopCount, officerCount, position, movePoints, heightPoints, isGuard) {
         if (isGuard != undefined) {
@@ -161,6 +162,20 @@ class RiderArmy extends landArmy_1.LandArmy {
         this.setTroopCount(this.troopCount - bpDamage / RIDER_BP);
         this.wasShotAt = true;
     }
+    merge(fromArmy) {
+        if (!(fromArmy instanceof RiderArmy)) {
+            throw new Error("Can't merge armies other than rider armies with a rider army.");
+        }
+        this.troopCount += fromArmy.getTroopCount();
+        this.officerCount += fromArmy.getOfficerCount();
+        if (fromArmy.getMovePoints() < this.getMovePoints()) {
+            this.setMovePoints(fromArmy.getMovePoints());
+        }
+        if (fromArmy.getHeightPoints() < this.getHeightPoints()) {
+            this.setHeightPoints(fromArmy.getHeightPoints());
+        }
+        armyFunctions_1.ArmyFunctions.deleteArmy(fromArmy);
+    }
     fireLightCatapults(dicerolls, badConditions) {
         return 0;
     }
@@ -215,17 +230,9 @@ class RiderArmy extends landArmy_1.LandArmy {
                 multifieldFunctions_1.MultiFieldFunctions.addToMultifield(this, newArmy);
                 // deleteFromMultifield(this);
             }
-            preparedEvents.push({
-                type: "mount", content: {
-                    fromArmyId: this.getErkenfaraID(),
-                    realm: this.owner.tag,
-                    troops: toUnMount,
-                    leaders: leadersToUnMount,
-                    x: this.position[0],
-                    y: this.position[1],
-                    newArmysId: newArmy.getErkenfaraID()
-                }
-            });
+            //in GameState.events pushen
+            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 5 /* Undetermined */, [], this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, [this.position[0], this.position[1]], -1);
+            gameState_1.GameState.newEvents.push(eventToPush);
             armyFunctions_1.ArmyFunctions.deleteArmy(this);
             drawingFunctions_1.Drawing.drawStuff();
             boxVisibilty_1.BoxVisibility.restoreInfoBox();
@@ -258,17 +265,9 @@ class RiderArmy extends landArmy_1.LandArmy {
                 multifieldFunctions_1.MultiFieldFunctions.addToMultifield(this, newArmy);
                 // deleteFromMultifield(this);
             }
-            preparedEvents.push({
-                type: "mount", content: {
-                    fromArmyId: this.getErkenfaraID(),
-                    realm: this.owner.tag,
-                    troops: toUnMount,
-                    leaders: leadersToUnMount,
-                    x: this.position[0],
-                    y: this.position[1],
-                    newArmysId: newArmy.getErkenfaraID()
-                }
-            });
+            //in GameState.events pushen
+            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 5 /* Undetermined */, [], this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, [this.position[0], this.position[1]], -1);
+            gameState_1.GameState.newEvents.push(eventToPush);
             // armyIndex zeigt auf neues Heer
             controlVariables_1.Controls.selectedArmyIndex = gameState_1.GameState.armies.length - 1;
             drawingFunctions_1.Drawing.drawStuff();

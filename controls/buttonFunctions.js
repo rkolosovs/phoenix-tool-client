@@ -397,119 +397,29 @@ var ButtonFunctions;
     }
     ButtonFunctions.transferTroopsFromSelectedArmy = transferTroopsFromSelectedArmy;
     // merges selectedArmy with the army at position mergeId in GameState.armies
-    function mergeSelectedArmy(mergeId) {
-        let selectedArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
-        // depending on army type different fields are needed
-        if (selectedArmy instanceof footArmy_1.FootArmy) {
-            gameState_1.GameState.armies[mergeId].getTroopCount() += selectedArmy.getTroopCount();
-            gameState_1.GameState.armies[mergeId].getOfficerCount() += selectedArmy.getOfficerCount();
-            gameState_1.GameState.armies[mergeId].getMountCount() += selectedArmy.getMountCount();
-            gameState_1.GameState.armies[mergeId].getLightCatapultCount() += selectedArmy.getLightCatapultCount();
-            gameState_1.GameState.armies[mergeId].getHeavyCatapultCount() += selectedArmy.getHeavyCatapultCount();
-            if (selectedArmy.getMovePoints() < gameState_1.GameState.armies[mergeId].getMovePoints()) {
-                gameState_1.GameState.armies[mergeId].setMovePoints(selectedArmy.getMovePoints());
+    function mergeSelectedArmy(fromArmyId) {
+        let toArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
+        let fromArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === fromArmyId && army.owner === toArmy.owner);
+        if (fromArmy != undefined) {
+            try {
+                toArmy.merge(fromArmy);
             }
-            if (selectedArmy.getHeightPoints() < gameState_1.GameState.armies[mergeId].getHeightPoints()) {
-                gameState_1.GameState.armies[mergeId].setHeightPoints(selectedArmy.getHeightPoints());
+            catch (e) {
+                window.alert(e.message);
             }
-            preparedEvents.push({
-                type: "merge", content: {
-                    fromArmyId: selectedArmy.getErkenfaraID(),
-                    toArmyId: gameState_1.GameState.armies[mergeId].getErkenfaraID(),
-                    realm: selectedArmy.owner.tag,
-                    troops: selectedArmy.getTroopCount(),
-                    leaders: selectedArmy.getOfficerCount(),
-                    lkp: selectedArmy.getLightCatapultCount(),
-                    skp: selectedArmy.getHeavyCatapultCount(),
-                    mounts: selectedArmy.getMountCount(),
-                    x: selectedArmy.getPosition()[0],
-                    y: selectedArmy.getPosition()[1]
-                }
-            });
-            armyFunctions_1.ArmyFunctions.deleteArmy(selectedArmy);
+            boxVisibilty_1.BoxVisibility.updateInfoBox();
+            boxVisibilty_1.BoxVisibility.restoreInfoBox();
+            drawingFunctions_1.Drawing.drawStuff();
         }
-        else if (selectedArmy instanceof riderArmy_1.RiderArmy) {
-            gameState_1.GameState.armies[mergeId].getTroopCount() += selectedArmy.getTroopCount();
-            gameState_1.GameState.armies[mergeId].getOfficerCount() += selectedArmy.getOfficerCount();
-            if (selectedArmy.getMovePoints() < gameState_1.GameState.armies[mergeId].getMovePoints()) {
-                gameState_1.GameState.armies[mergeId].setMovePoints(selectedArmy.getMovePoints());
-            }
-            if (selectedArmy.getHeightPoints() < gameState_1.GameState.armies[mergeId].getHeightPoints()) {
-                gameState_1.GameState.armies[mergeId].setHeightPoints(selectedArmy.getHeightPoints());
-            }
-            preparedEvents.push({
-                type: "merge", content: {
-                    fromArmyId: selectedArmy.getErkenfaraID(),
-                    toArmyId: gameState_1.GameState.armies[mergeId].getErkenfaraID(),
-                    realm: selectedArmy.owner.tag,
-                    troops: selectedArmy.getTroopCount(),
-                    leaders: selectedArmy.getOfficerCount(),
-                    lkp: 0,
-                    skp: 0,
-                    mounts: 0,
-                    x: selectedArmy.getPosition()[0],
-                    y: selectedArmy.getPosition()[1]
-                }
-            });
-            armyFunctions_1.ArmyFunctions.deleteArmy(selectedArmy);
+        else {
+            window.alert("Army to be merged into selected army doesn't exist.");
         }
-        else if (selectedArmy instanceof fleet_1.Fleet) {
-            gameState_1.GameState.armies[mergeId].getTroopCount() += selectedArmy.getTroopCount();
-            gameState_1.GameState.armies[mergeId].getOfficerCount() += selectedArmy.getOfficerCount();
-            gameState_1.GameState.armies[mergeId].getLightCatapultCount() += selectedArmy.getLightCatapultCount();
-            gameState_1.GameState.armies[mergeId].getHeavyCatapultCount() += selectedArmy.getHeavyCatapultCount();
-            gameState_1.GameState.armies[mergeId].loadedArmies = gameState_1.GameState.armies[mergeId].loadedArmies.concat(selectedArmy.loadedArmies);
-            if (selectedArmy.getMovePoints() < gameState_1.GameState.armies[mergeId].getMovePoints()) {
-                gameState_1.GameState.armies[mergeId].setMovePoints(selectedArmy.getMovePoints());
-            }
-            if (selectedArmy.getHeightPoints() < gameState_1.GameState.armies[mergeId].getHeightPoints()) {
-                gameState_1.GameState.armies[mergeId].setHeightPoints(selectedArmy.getHeightPoints());
-            }
-            if (selectedArmy.loadedArmies.length > 0) {
-                for (let j = 0; j < selectedArmy.loadedArmies.length; j++) {
-                    for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-                        if (selectedArmy.loadedArmies[j] == gameState_1.GameState.armies[i].getErkenfaraID() &&
-                            gameState_1.GameState.armies[mergeId].owner === gameState_1.GameState.armies[i].owner) {
-                            gameState_1.GameState.armies[i].isLoadedIn = gameState_1.GameState.armies[mergeId].getErkenfaraID();
-                        }
-                    }
-                }
-            }
-            for (let j = 0; j < gameState_1.GameState.armies[mergeId].loadedArmies.length; j++) {
-                for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-                    if (gameState_1.GameState.armies[mergeId].loadedArmies[j] == gameState_1.GameState.armies[i].getErkenfaraID() &&
-                        gameState_1.GameState.armies[mergeId].owner === gameState_1.GameState.armies[i].owner) {
-                    }
-                }
-            }
-            preparedEvents.push({
-                type: "merge", content: {
-                    fromArmyId: selectedArmy.getErkenfaraID(),
-                    toArmyId: gameState_1.GameState.armies[mergeId].getErkenfaraID(),
-                    realm: selectedArmy.owner.tag,
-                    troops: selectedArmy.getTroopCount(),
-                    leaders: selectedArmy.getOfficerCount(),
-                    lkp: 0,
-                    skp: 0,
-                    mounts: 0,
-                    x: selectedArmy.getPosition()[0],
-                    y: selectedArmy.getPosition()[1]
-                }
-            });
-            armyFunctions_1.ArmyFunctions.deleteArmy(selectedArmy);
-        }
-        if (mergeId = gameState_1.GameState.armies.length) {
-            mergeId -= 1;
-        }
-        controlVariables_1.Controls.selectedArmyIndex = mergeId;
-        boxVisibilty_1.BoxVisibility.updateInfoBox();
-        boxVisibilty_1.BoxVisibility.restoreInfoBox();
     }
     ButtonFunctions.mergeSelectedArmy = mergeSelectedArmy;
     //TODO: throw errors instead of returning a boolean
     function shootButtonLogic(shootEvent) {
         let shootBox = gui_1.GUI.getShootingBigBox();
-        let shooter = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === shootEvent.getArmyId() && army.owner === shootEvent.getRealm());
+        let shooter = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === shootEvent.getShooterId() && army.owner === shootEvent.getRealm());
         let lkpRolls = [];
         let skpRolls = [];
         for (let i = 0; i < 10; i++) {

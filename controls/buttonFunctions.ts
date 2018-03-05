@@ -403,120 +403,29 @@ export namespace ButtonFunctions{
     }
 
     // merges selectedArmy with the army at position mergeId in GameState.armies
-    export function mergeSelectedArmy(mergeId: number) {
-        let selectedArmy: Army = GameState.armies[Controls.selectedArmyIndex];
-        // depending on army type different fields are needed
-        if (selectedArmy instanceof FootArmy) {
-            GameState.armies[mergeId].getTroopCount() += selectedArmy.getTroopCount();
-            GameState.armies[mergeId].getOfficerCount() += selectedArmy.getOfficerCount();
-            GameState.armies[mergeId].getMountCount() += selectedArmy.getMountCount();
-            GameState.armies[mergeId].getLightCatapultCount() += selectedArmy.getLightCatapultCount();
-            GameState.armies[mergeId].getHeavyCatapultCount() += selectedArmy.getHeavyCatapultCount();
-            if (selectedArmy.getMovePoints() < GameState.armies[mergeId].getMovePoints()) {
-                GameState.armies[mergeId].setMovePoints(selectedArmy.getMovePoints());
+    export function mergeSelectedArmy(fromArmyId: number): void {
+        let toArmy: Army = GameState.armies[Controls.selectedArmyIndex];
+        let fromArmy: Army|undefined = GameState.armies.find(army =>
+            army.getErkenfaraID() === fromArmyId && army.owner === toArmy.owner);
+        if(fromArmy != undefined){
+            try {
+                toArmy.merge(fromArmy);
+            } catch(e){
+                window.alert((e as Error).message);
             }
-            if (selectedArmy.getHeightPoints() < GameState.armies[mergeId].getHeightPoints()) {
-                GameState.armies[mergeId].setHeightPoints(selectedArmy.getHeightPoints());
-            }
-            preparedEvents.push({
-                type: "merge", content: {
-                    fromArmyId: selectedArmy.getErkenfaraID(),
-                    toArmyId: GameState.armies[mergeId].getErkenfaraID(),
-                    realm: selectedArmy.owner.tag,
-                    troops: selectedArmy.getTroopCount(),
-                    leaders: selectedArmy.getOfficerCount(),
-                    lkp: selectedArmy.getLightCatapultCount(),
-                    skp: selectedArmy.getHeavyCatapultCount(),
-                    mounts: selectedArmy.getMountCount(),
-                    x: selectedArmy.getPosition()[0],
-                    y: selectedArmy.getPosition()[1]
-                }
-            });
-            ArmyFunctions.deleteArmy(selectedArmy);
+            BoxVisibility.updateInfoBox();
+            BoxVisibility.restoreInfoBox();
+            Drawing.drawStuff();
+        } else {
+            window.alert("Army to be merged into selected army doesn't exist.");
         }
-        else if (selectedArmy instanceof RiderArmy) {
-            GameState.armies[mergeId].getTroopCount() += selectedArmy.getTroopCount();
-            GameState.armies[mergeId].getOfficerCount() += selectedArmy.getOfficerCount();
-            if (selectedArmy.getMovePoints() < GameState.armies[mergeId].getMovePoints()) {
-                GameState.armies[mergeId].setMovePoints(selectedArmy.getMovePoints());
-            }
-            if (selectedArmy.getHeightPoints() < GameState.armies[mergeId].getHeightPoints()) {
-                GameState.armies[mergeId].setHeightPoints(selectedArmy.getHeightPoints());
-            }
-            preparedEvents.push({
-                type: "merge", content: {
-                    fromArmyId: selectedArmy.getErkenfaraID(),
-                    toArmyId: GameState.armies[mergeId].getErkenfaraID(),
-                    realm: selectedArmy.owner.tag,
-                    troops: selectedArmy.getTroopCount(),
-                    leaders: selectedArmy.getOfficerCount(),
-                    lkp: 0,
-                    skp: 0,
-                    mounts: 0,
-                    x: selectedArmy.getPosition()[0],
-                    y: selectedArmy.getPosition()[1]
-                }
-            });
-            ArmyFunctions.deleteArmy(selectedArmy);
-        }
-        else if (selectedArmy instanceof Fleet) {
-            GameState.armies[mergeId].getTroopCount() += selectedArmy.getTroopCount();
-            GameState.armies[mergeId].getOfficerCount() += selectedArmy.getOfficerCount();
-            GameState.armies[mergeId].getLightCatapultCount() += selectedArmy.getLightCatapultCount();
-            GameState.armies[mergeId].getHeavyCatapultCount() += selectedArmy.getHeavyCatapultCount();
-            GameState.armies[mergeId].loadedArmies = GameState.armies[mergeId].loadedArmies.concat(selectedArmy.loadedArmies);
-            if (selectedArmy.getMovePoints() < GameState.armies[mergeId].getMovePoints()) {
-                GameState.armies[mergeId].setMovePoints(selectedArmy.getMovePoints());
-            }
-            if (selectedArmy.getHeightPoints() < GameState.armies[mergeId].getHeightPoints()) {
-                GameState.armies[mergeId].setHeightPoints(selectedArmy.getHeightPoints());
-            }
-            if (selectedArmy.loadedArmies.length > 0) {
-                for (let j = 0; j < selectedArmy.loadedArmies.length; j++) {
-                    for (let i = 0; i < GameState.armies.length; i++) {
-                        if (selectedArmy.loadedArmies[j] == GameState.armies[i].getErkenfaraID() &&
-                            GameState.armies[mergeId].owner === GameState.armies[i].owner) {
-                            GameState.armies[i].isLoadedIn = GameState.armies[mergeId].getErkenfaraID();
-                        }
-                    }
-                }
-            }
-            for (let j = 0; j < GameState.armies[mergeId].loadedArmies.length; j++) {
-                for (let i = 0; i < GameState.armies.length; i++) {
-                    if (GameState.armies[mergeId].loadedArmies[j] == GameState.armies[i].getErkenfaraID() &&
-                        GameState.armies[mergeId].owner === GameState.armies[i].owner) {
-                    }
-                }
-            }
-            preparedEvents.push({
-                type: "merge", content: {
-                    fromArmyId: selectedArmy.getErkenfaraID(),
-                    toArmyId: GameState.armies[mergeId].getErkenfaraID(),
-                    realm: selectedArmy.owner.tag,
-                    troops: selectedArmy.getTroopCount(),
-                    leaders: selectedArmy.getOfficerCount(),
-                    lkp: 0,
-                    skp: 0,
-                    mounts: 0,
-                    x: selectedArmy.getPosition()[0],
-                    y: selectedArmy.getPosition()[1]
-                }
-            });
-            ArmyFunctions.deleteArmy(selectedArmy);
-        }
-        if (mergeId = GameState.armies.length) {
-            mergeId -= 1;
-        }
-        Controls.selectedArmyIndex = mergeId;
-        BoxVisibility.updateInfoBox();
-        BoxVisibility.restoreInfoBox();
     }
 
     //TODO: throw errors instead of returning a boolean
     export function shootButtonLogic(shootEvent: ShootEvent): boolean{
         let shootBox: ShootingBigBox = GUI.getShootingBigBox();
         let shooter: Army|undefined = GameState.armies.find(
-            army => army.getErkenfaraID() === shootEvent.getArmyId() && army.owner === shootEvent.getRealm());
+            army => army.getErkenfaraID() === shootEvent.getShooterId() && army.owner === shootEvent.getRealm());
         let lkpRolls = [];
         let skpRolls = [];
         for(let i = 0; i < 10; i++){//creating the dice roll array

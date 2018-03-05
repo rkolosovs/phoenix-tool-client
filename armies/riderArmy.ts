@@ -16,6 +16,7 @@ import {Drawing} from "../gui/drawingFunctions";
 import {ArmyFunctions} from "../libraries/armyFunctions";
 import { MountEvent } from "../events/mountEvent";
 import { EventStatus } from "../events/eventStatus";
+import {Army} from "./army";
 
 export class RiderArmy extends LandArmy{
     static readonly MAX_MOVE_POINTS = 21;
@@ -153,6 +154,21 @@ export class RiderArmy extends LandArmy{
         this.setOfficerCount(this.officerCount - this.troopCount * (bpDamage / totalBP));
         this.setTroopCount(this.troopCount - bpDamage / RIDER_BP);
         this.wasShotAt = true;
+    }
+
+    merge(fromArmy: Army): void{
+        if(!(fromArmy instanceof RiderArmy)){
+            throw new Error("Can't merge armies other than rider armies with a rider army.");
+        }
+        this.troopCount += fromArmy.getTroopCount();
+        this.officerCount += fromArmy.getOfficerCount();
+        if (fromArmy.getMovePoints() < this.getMovePoints()) {
+            this.setMovePoints(fromArmy.getMovePoints());
+        }
+        if (fromArmy.getHeightPoints() < this.getHeightPoints()) {
+            this.setHeightPoints(fromArmy.getHeightPoints());
+        }
+        ArmyFunctions.deleteArmy(fromArmy);
     }
 
     fireLightCatapults(dicerolls: number[], badConditions: string): number{

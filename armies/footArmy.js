@@ -19,6 +19,7 @@ const controlVariables_1 = require("../controls/controlVariables");
 const boxVisibilty_1 = require("../gui/boxVisibilty");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
 const armyFunctions_1 = require("../libraries/armyFunctions");
+const mountEvent_1 = require("../events/mountEvent");
 class FootArmy extends landArmy_1.LandArmy {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, mountCount, position, movePoints, heightPoints, isGuard) {
         if (isGuard != undefined) {
@@ -331,6 +332,23 @@ class FootArmy extends landArmy_1.LandArmy {
             totalBP) / HEAVY_CATA_BP);
         this.wasShotAt = true;
     }
+    merge(fromArmy) {
+        if (!(fromArmy instanceof FootArmy)) {
+            throw new Error("Can't merge armies other than foot armies with a foot army.");
+        }
+        this.troopCount += fromArmy.getTroopCount();
+        this.officerCount += fromArmy.getOfficerCount();
+        this.mountCount += fromArmy.getMountCount();
+        this.lightCatapultCount += fromArmy.getLightCatapultCount();
+        this.heavyCatapultCount += fromArmy.getHeavyCatapultCount();
+        if (fromArmy.getMovePoints() < this.getMovePoints()) {
+            this.setMovePoints(fromArmy.getMovePoints());
+        }
+        if (fromArmy.getHeightPoints() < this.getHeightPoints()) {
+            this.setHeightPoints(fromArmy.getHeightPoints());
+        }
+        armyFunctions_1.ArmyFunctions.deleteArmy(fromArmy);
+    }
     fireLightCatapults(dicerolls, badConditions) {
         let rollLen = dicerolls.length;
         let damageBP = 0;
@@ -575,18 +593,9 @@ class FootArmy extends landArmy_1.LandArmy {
             }
             // in GameState.armies einfügen und alte Armee löschen, ist dann automatisch armyIndex
             gameState_1.GameState.armies.push(newArmy);
-            //in preparedEvents pushen
-            preparedEvents.push({
-                type: "mount", content: {
-                    fromArmyId: this.getErkenfaraID(),
-                    realm: this.owner.tag,
-                    troops: toMount,
-                    leaders: leadersToMount,
-                    x: this.position[0],
-                    y: this.position[1],
-                    newArmysId: newArmy.getErkenfaraID()
-                }
-            });
+            //in GameState.events pushen
+            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 5 /* Undetermined */, [], this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, [this.position[0], this.position[1]], -1);
+            gameState_1.GameState.newEvents.push(eventToPush);
             armyFunctions_1.ArmyFunctions.deleteArmy(this);
             boxVisibilty_1.BoxVisibility.restoreInfoBox();
             drawingFunctions_1.Drawing.drawStuff();
@@ -616,18 +625,9 @@ class FootArmy extends landArmy_1.LandArmy {
             this.setMountCount(this.mountCount - toMount);
             // in GameState.armies einfügen
             gameState_1.GameState.armies.push(newArmy);
-            //in preparedEvents pushen
-            preparedEvents.push({
-                type: "mount", content: {
-                    fromArmyId: this.getErkenfaraID(),
-                    realm: this.owner.tag,
-                    troops: toMount,
-                    leaders: leadersToMount,
-                    x: this.position[0],
-                    y: this.position[0],
-                    newArmysId: newArmy.getErkenfaraID()
-                }
-            });
+            //in GameState.events pushen
+            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 5 /* Undetermined */, [], this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, [this.position[0], this.position[1]], -1);
+            gameState_1.GameState.newEvents.push(eventToPush);
             // Controls.selectedArmyIndex zeigt auf neues Heer
             controlVariables_1.Controls.selectedArmyIndex = gameState_1.GameState.armies.length - 1;
             drawingFunctions_1.Drawing.drawStuff();

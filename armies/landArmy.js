@@ -79,9 +79,9 @@ class LandArmy extends army_1.Army {
         let thereIsABridge = false;
         let thereIsAHarbor = false;
         // TODO: effects of diplomacy go here
-        let rightOfPassage = borders.some((realm) => (realm === this.owner && realm.land.some((field) => (target[0] === field[0] && target[1] === field[1]))));
-        let thereIsARiver = gameState_1.GameState.rivers.some((river) => (river[0][0] === this.position[0] && river[0][1] === this.position[1] && river[1][0] === target[0] && river[1][1] === target[1]) ||
-            (river[0][0] === target[0] && river[0][1] === target[1] && river[1][0] === this.position[0] && river[1][1] === this.position[1]));
+        let rightOfPassage = gameState_1.GameState.realms.some((realm) => (realm === this.owner && realm.territory.some((field) => (target[0] === field.coordinates[0] && target[1] === field.coordinates[1]))));
+        let thereIsARiver = gameState_1.GameState.rivers.some((river) => (river.leftBank[0] === this.position[0] && river.leftBank[1] === this.position[1] && river.rightBank[0] === target[0] && river.rightBank[1] === target[1]) ||
+            (river.leftBank[0] === target[0] && river.leftBank[1] === target[1] && river.rightBank[0] === this.position[0] && river.rightBank[1] === this.position[1]));
         // check if there is a steet, a harbor or a bridge on the route
         gameState_1.GameState.buildings.forEach(building => {
             if (building.type === 8 /* STREET */ &&
@@ -120,7 +120,6 @@ class LandArmy extends army_1.Army {
         return new move_1.Move(moveCost, heightCost, (hexFunctions_1.HexFunction.fieldType(target) === 0 /* SHALLOWS */ ||
             hexFunctions_1.HexFunction.fieldType(target) === 1 /* DEEPSEA */), (hexFunctions_1.HexFunction.fieldType(this.position) === 0 /* SHALLOWS */ ||
             hexFunctions_1.HexFunction.fieldType(this.position) === 1 /* DEEPSEA */), target, direction);
-        ;
     }
     canConquer() {
         return this.getRoomPointsSansOfficers() >= 1000 && this.officerCount >= 1;

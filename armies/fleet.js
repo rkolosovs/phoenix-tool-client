@@ -12,6 +12,7 @@ var SHIP_BP = constants_1.Constants.SHIP_BP;
 var HEAVY_WS_BP = constants_1.Constants.HEAVY_WS_BP;
 var LIGHT_WS_BP = constants_1.Constants.LIGHT_WS_BP;
 var SHIP_TRANSPORT_CAPACITY = constants_1.Constants.SHIP_TRANSPORT_CAPACITY;
+const armyFunctions_1 = require("../libraries/armyFunctions");
 class Fleet extends army_1.Army {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, isGuard) {
         if (isGuard != undefined) {
@@ -167,6 +168,35 @@ class Fleet extends army_1.Army {
             totalBP) / HEAVY_WS_BP);
         this.killTransportedTroops();
         this.wasShotAt = true;
+    }
+    merge(fromArmy) {
+        if (!(fromArmy instanceof Fleet)) {
+            throw new Error("Can't merge armies other than fleets with a fleet.");
+        }
+        this.troopCount += fromArmy.getTroopCount();
+        this.officerCount += fromArmy.getOfficerCount();
+        this.lightCatapultCount += fromArmy.getLightCatapultCount();
+        this.heavyCatapultCount += fromArmy.getHeavyCatapultCount();
+        if (fromArmy.getMovePoints() < this.getMovePoints()) {
+            this.setMovePoints(fromArmy.getMovePoints());
+        }
+        if (fromArmy.getHeightPoints() < this.getHeightPoints()) {
+            this.setHeightPoints(fromArmy.getHeightPoints());
+        }
+        armyFunctions_1.ArmyFunctions.deleteArmy(fromArmy);
+        let discardedArmies = 0;
+        fromArmy.transportedArmies.forEach(transportedArmy => {
+            fromArmy.unloadArmy(transportedArmy);
+            try {
+                this.loadArmy(transportedArmy);
+            }
+            catch (e) {
+                discardedArmies++;
+            }
+        });
+        if (discardedArmies > 0) {
+            window.alert("" + discardedArmies + "armies have been thrown overboard.");
+        }
     }
     fireLightCatapults(dicerolls, badConditions) {
         let rollLen = dicerolls.length;

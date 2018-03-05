@@ -41,14 +41,13 @@ export class MergeEvent extends PhoenixEvent{
         let toArmy: Army|undefined = GameState.armies.find(
             army => army.getErkenfaraID() === this.toArmyId && army.owner === this.realm);
         if (fromArmy != undefined && toArmy != undefined) {
-            selectedArmyIndex = GameState.armies.findIndex(army => army === fromArmy);
-            ButtonFunctions.mergeSelectedArmy(GameState.armies.findIndex(army => army === toArmy));
-            GameState.loadedEvents.pop();
+            toArmy.merge(fromArmy);
+        } else {
+            throw new Error("One of the armies to be merged does not exist.");
         }
         this.status = EventStatus.Checked;
         GUI.getBigBox().fillEventList();
         Drawing.drawStuff();
-        Controls.selectedArmyIndex = -1;
     }
 
     makeEventListItemText(): string{

@@ -15,6 +15,8 @@ import HEAVY_WS_BP = Constants.HEAVY_WS_BP;
 import LIGHT_WS_BP = Constants.LIGHT_WS_BP;
 import SHIP_TRANSPORT_CAPACITY = Constants.SHIP_TRANSPORT_CAPACITY;
 import {GameState} from "../gameState";
+import {ArmyFunctions} from "../libraries/armyFunctions";
+import {FootArmy} from "./footArmy";
 
 export class Fleet extends Army{
     static readonly MAX_HEIGHT_POINTS: number = 0;
@@ -172,6 +174,35 @@ export class Fleet extends Army{
             totalBP) / HEAVY_WS_BP);
         this.killTransportedTroops();
         this.wasShotAt = true;
+    }
+
+    merge(fromArmy: Army): void{
+        if(!(fromArmy instanceof Fleet)){
+            throw new Error("Can't merge armies other than fleets with a fleet.");
+        }
+        this.troopCount += fromArmy.getTroopCount();
+        this.officerCount += fromArmy.getOfficerCount();
+        this.lightCatapultCount += fromArmy.getLightCatapultCount();
+        this.heavyCatapultCount += fromArmy.getHeavyCatapultCount();
+        if (fromArmy.getMovePoints() < this.getMovePoints()) {
+            this.setMovePoints(fromArmy.getMovePoints());
+        }
+        if (fromArmy.getHeightPoints() < this.getHeightPoints()) {
+            this.setHeightPoints(fromArmy.getHeightPoints());
+        }
+        ArmyFunctions.deleteArmy(fromArmy);
+        let discardedArmies: number = 0;
+        fromArmy.transportedArmies.forEach(transportedArmy => {
+            fromArmy.unloadArmy(transportedArmy);
+            try {
+                this.loadArmy(transportedArmy);
+            } catch(e){
+                discardedArmies++;
+            }
+        });
+        if(discardedArmies > 0){
+            window.alert("" + discardedArmies + "armies have been thrown overboard.");
+        }
     }
 
     fireLightCatapults(dicerolls: number[], badConditions: string): number{

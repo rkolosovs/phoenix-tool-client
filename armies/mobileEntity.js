@@ -10,6 +10,7 @@ class MobileEntity extends mapEntity_1.MapEntity {
         this.possibleMoves = [];
         this.onMultifield = false;
         // copy the position so that this object doesn't share a reference with anything else
+        this.id = id;
         this.oldPosition[0] = position[0];
         this.oldPosition[1] = position[1];
         this.setID(id);

@@ -5,6 +5,7 @@ const gui_1 = require("../gui/gui");
 const gameState_1 = require("../gameState");
 const boxVisibilty_1 = require("../gui/boxVisibilty");
 const armyFunctions_1 = require("../libraries/armyFunctions");
+const shootEvent_1 = require("../events/shootEvent");
 var ShootingFunctions;
 (function (ShootingFunctions) {
     // array der Würfelergebnisse leichte, array der Würfelergebnisse schwere, badConditions("far"/"farAndUp"/"high"/null),
@@ -129,19 +130,9 @@ var ShootingFunctions;
                 return false;
             }
         }
-        gameState_1.GameState.events.push({
-            type: "shoot", content: {
-                shooterID: gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].armyId,
-                realm: gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].ownerTag(),
-                LKPcount: LKPshooting,
-                SKPcount: SKPshooting,
-                toX: controlVariables_1.Controls.selectedFields[1][0],
-                toY: controlVariables_1.Controls.selectedFields[1][1],
-                target: target,
-                fromX: gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].x,
-                fromY: gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].y
-            }
-        });
+        //in GameState.events pushen
+        let eventToPush = new shootEvent_1.ShootEvent(gameState_1.GameState.newEvents.length, 5 /* Undetermined */, [], gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getID(), [controlVariables_1.Controls.selectedFields[1][0], controlVariables_1.Controls.selectedFields[1][1]], gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition(), LKPshooting, SKPshooting, target, -1);
+        gameState_1.GameState.newEvents.push(eventToPush);
         shootingarmy.addLightCatapultsShot(LKPshooting);
         shootingarmy.addHeavyCatapultsShot(SKPshooting);
         //check to see if shooting after moving and stop the army if it moved this turn.
