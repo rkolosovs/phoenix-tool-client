@@ -11,10 +11,10 @@ import {Army} from "../armies/army";
 
 export class ShootEvent extends PhoenixEvent{
     
-    constructor(listPosition: number, status: EventStatus, prerequisiteEvents: number[], protected realm: Realm,
-                protected shooterId: number, protected to: [number, number], protected from: [number, number],
-                protected lkpCount: number, protected skpCount: number, protected target: string,
-                databasePrimaryKey: number){
+    constructor(listPosition: number, status: EventStatus, protected realm: Realm, protected shooterId: number,
+                protected to: [number, number], protected from: [number, number], protected lkpCount: number,
+                protected skpCount: number, protected target: string, prerequisiteEvents?: number[],
+                databasePrimaryKey?: number){
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
 

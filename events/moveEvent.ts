@@ -11,9 +11,9 @@ import {BattleEvent} from "./battleEvent";
 
 export class MoveEvent extends PhoenixEvent{
     
-    constructor(listPosition: number, status: EventStatus, prerequisiteEvents: number[], protected realm: Realm,
-                protected armyId: number, protected from: [number, number], protected to: [number, number],
-                databasePrimaryKey: number){
+    constructor(listPosition: number, status: EventStatus, protected realm: Realm, protected armyId: number,
+                protected from: [number, number], protected to: [number, number], prerequisiteEvents?: number[],
+                databasePrimaryKey?: number){
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
 

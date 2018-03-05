@@ -7,7 +7,7 @@ const gameState_1 = require("../gameState");
 const event_1 = require("./event");
 const buttonFunctions_1 = require("../controls/buttonFunctions");
 class ShootEvent extends event_1.PhoenixEvent {
-    constructor(listPosition, status, prerequisiteEvents, realm, shooterId, to, from, lkpCount, skpCount, target, databasePrimaryKey) {
+    constructor(listPosition, status, realm, shooterId, to, from, lkpCount, skpCount, target, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.realm = realm;
         this.shooterId = shooterId;

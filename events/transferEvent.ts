@@ -11,10 +11,10 @@ import {ArmyFunctions} from "../libraries/armyFunctions";
 
 export class TransferEvent extends PhoenixEvent{
     
-    constructor(listPosition: number, status: EventStatus, prerequisiteEvents: number[], protected fromArmyId: number,
-                protected toArmyId: number, protected realm: Realm, protected troops: number, protected leaders: number,
-                protected mounts: number, protected lkp: number, protected skp: number,
-                protected position: [number, number], databasePrimaryKey: number){
+    constructor(listPosition: number, status: EventStatus, protected fromArmyId: number, protected toArmyId: number,
+                protected realm: Realm, protected troops: number, protected leaders: number, protected mounts: number,
+                protected lkp: number, protected skp: number, protected position: [number, number],
+                prerequisiteEvents?: number[], databasePrimaryKey?: number){
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
 

@@ -8,7 +8,7 @@ const footArmy_1 = require("../armies/footArmy");
 const gui_1 = require("../gui/gui");
 const armyFunctions_1 = require("../libraries/armyFunctions");
 class MountEvent extends event_1.PhoenixEvent {
-    constructor(listPosition, status, prerequisiteEvents, fromArmyId, newArmyId, realm, troops, leaders, position, databasePrimaryKey) {
+    constructor(listPosition, status, fromArmyId, newArmyId, realm, troops, leaders, position, prerequisiteEvents, databasePrimaryKey) {
         //protected mounts: number, protected lkp: number, protected skp: number,
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.fromArmyId = fromArmyId;

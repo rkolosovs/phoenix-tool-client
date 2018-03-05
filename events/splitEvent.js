@@ -9,7 +9,7 @@ const drawingFunctions_1 = require("../gui/drawingFunctions");
 const gui_1 = require("../gui/gui");
 const armyFunctions_1 = require("../libraries/armyFunctions");
 class SplitEvent extends event_1.PhoenixEvent {
-    constructor(listPosition, status, prerequisiteEvents, fromArmyId, newArmyId, realm, troops, leaders, mounts, lkp, skp, position, databasePrimaryKey) {
+    constructor(listPosition, status, fromArmyId, newArmyId, realm, troops, leaders, mounts, lkp, skp, position, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.fromArmyId = fromArmyId;
         this.newArmyId = newArmyId;

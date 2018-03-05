@@ -8,7 +8,7 @@ const fleet_1 = require("../armies/fleet");
 const gui_1 = require("../gui/gui");
 const armyFunctions_1 = require("../libraries/armyFunctions");
 class TransferEvent extends event_1.PhoenixEvent {
-    constructor(listPosition, status, prerequisiteEvents, fromArmyId, toArmyId, realm, troops, leaders, mounts, lkp, skp, position, databasePrimaryKey) {
+    constructor(listPosition, status, fromArmyId, toArmyId, realm, troops, leaders, mounts, lkp, skp, position, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.fromArmyId = fromArmyId;
         this.toArmyId = toArmyId;

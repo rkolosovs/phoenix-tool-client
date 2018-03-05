@@ -7,7 +7,7 @@ const gameState_1 = require("../gameState");
 const gui_1 = require("../gui/gui");
 const battleEvent_1 = require("./battleEvent");
 class MoveEvent extends event_1.PhoenixEvent {
-    constructor(listPosition, status, prerequisiteEvents, realm, armyId, from, to, databasePrimaryKey) {
+    constructor(listPosition, status, realm, armyId, from, to, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.realm = realm;
         this.armyId = armyId;

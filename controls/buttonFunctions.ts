@@ -411,7 +411,7 @@ export namespace ButtonFunctions{
         if(fromArmy != undefined){
             try {
                 toArmy.merge(fromArmy);
-                GameState.newEvents.push(new MergeEvent(GameState.newEvents.length, EventStatus.Checked, 
+                GameState.newEvents.push(new MergeEvent(GameState.newEvents.length, EventStatus.Checked,
                     fromArmy.getErkenfaraID(), toArmy.getErkenfaraID(), toArmy.owner, toArmy.getPosition()));
             } catch(e){
                 window.alert((e as Error).message);

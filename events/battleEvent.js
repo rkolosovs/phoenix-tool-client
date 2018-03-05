@@ -6,7 +6,7 @@ const drawingFunctions_1 = require("../gui/drawingFunctions");
 const gameState_1 = require("../gameState");
 const event_1 = require("./event");
 class BattleEvent extends event_1.PhoenixEvent {
-    constructor(listPosition, status, prerequisiteEvents, participants, position, databasePrimaryKey) {
+    constructor(listPosition, status, participants, position, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.participants = participants;
         this.position = position;
