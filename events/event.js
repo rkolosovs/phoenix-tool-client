@@ -9,8 +9,11 @@ class PhoenixEvent {
         this.prerequisiteEvents = prerequisiteEvents;
         this.databasePrimaryKey = databasePrimaryKey;
     }
+    asStringifiedJSON() {
+        return JSON.stringify({ 'type': this.getType(), 'content': JSON.parse(this.getContent()) });
+    }
     asJSON() {
-        return JSON.parse("'type': " + this.getType() + ", 'content': " + this.getContent() + "}");
+        return JSON.parse(this.asStringifiedJSON());
     }
     determineEventStatus() {
         if (this.validGameState() && this.prerequisiteEvents.every(prereqEvent => gameState_1.GameState.loadedEvents.some(event => event.getDatabasePrimaryKey() === prereqEvent &&

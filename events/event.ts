@@ -18,8 +18,12 @@ export abstract class PhoenixEvent{
 
 	protected abstract validGameState(): boolean;
 
-	asJSON(): JSON{
-	    return JSON.parse("'type': " + this.getType() + ", 'content': " + this.getContent() + "}");
+	asStringifiedJSON(): string{
+	    return JSON.stringify({'type': this.getType(), 'content': JSON.parse(this.getContent())});
+    }
+
+    asJSON(): JSON{
+	    return JSON.parse(this.asStringifiedJSON());
     }
 
     determineEventStatus(): void{
