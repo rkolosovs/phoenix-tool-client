@@ -21,6 +21,8 @@ import {Wall} from "../buildings/wall";
 import {ProductionBuilding} from "../buildings/productionBuilding";
 import {NonDestructibleBuilding} from "../buildings/nonDestructibleBuilding";
 import {Images} from "../gui/images";
+import { PhoenixEvent } from "../events/event";
+import {GUI} from "../gui/gui";
 
 export namespace Loading{
 	// help function to fetch current data from the server
@@ -42,47 +44,47 @@ export namespace Loading{
 	//	console.log("loadPendingEvents()");
 		$.getJSON(url + "/databaseLink/getevents/", function(json){
 			let pendingEvents = json;
-			GameState.pendingNewEvents =[];
-			pendingEvents.forEach(function(item, index){
+			GameState.loadedEvents =[];
+			pendingEvents.forEach(function(index: number){
 				let content = pendingEvents[index].content;
 
-				switch(item.type){
+				switch(pendingEvents[index].type){
 					case "move":
-						GameState.pendingNewEvents.push(new MoveEvent(index, "undetermined",
+						GameState.loadedEvents.push(new MoveEvent(index, "undetermined",
 							GameState.realms.find(realm => (realm === content.realm)), content.armyId, content.fromX,
-							content.fromY, content.toX, content.toY, item.pk));
+							content.fromY, content.toX, content.toY, pendingEvents[index].pk));
 							break;
 					case "battle":
-						GameState.pendingNewEvents.push(new BattleEvent(index, "undetermined", content.participants,
-							GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, item.pk));
+						GameState.loadedEvents.push(new BattleEvent(index, "undetermined", content.participants,
+							GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, pendingEvents[index].pk));
 						break;
 					case "shoot":
-						GameState.pendingNewEvents.push(new ShootEvent(index, "undetermined",
+						GameState.loadedEvents.push(new ShootEvent(index, "undetermined",
 							GameState.realms.find(realm => (realm === content.realm)), content.armyId, content.toX,
-							content.toY, content.fromX, content.fromY, content.LKPcount, content.SKPcount, content.target, item.pk));
+							content.toY, content.fromX, content.fromY, content.LKPcount, content.SKPcount, content.target, pendingEvents[index].pk));
 						break;
 					case "split":
-						GameState.pendingNewEvents.push(new SplitEvent(index, "undetermined", content.fromArmy, content.newArmy,
+						GameState.loadedEvents.push(new SplitEvent(index, "undetermined", content.fromArmy, content.newArmy,
 							GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders,
-							content.mounts, content.lkp, content.skp, content.x, content.y, item.pk));
+							content.mounts, content.lkp, content.skp, content.x, content.y, pendingEvents[index].pk));
 						break;
 					case "merge":
-						GameState.pendingNewEvents.push(new MergeEvent(index, "undetermined", content.fromArmy, content.toArmy,
-							GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, item.pk));
+						GameState.loadedEvents.push(new MergeEvent(index, "undetermined", content.fromArmy, content.toArmy,
+							GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, pendingEvents[index].pk));
 						break;
 					case "mount":
-						GameState.pendingNewEvents.push(new MountEvent(index, "undetermined", content.fromArmy, content.newArmy,
+						GameState.loadedEvents.push(new MountEvent(index, "undetermined", content.fromArmy, content.newArmy,
 							GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders,
-							content.x, content.y, item.pk));
+							content.x, content.y, pendingEvents[index].pk));
 						break;
 					case "transfer":
-						GameState.pendingNewEvents.push(new TransferEvent(index, "undetermined", content.fromArmy, content.toArmy,
+						GameState.loadedEvents.push(new TransferEvent(index, "undetermined", content.fromArmy, content.toArmy,
 							GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders,
-							content.mounts, content.lkp, content.skp, content.x, content.y, item.pk));
+							content.mounts, content.lkp, content.skp, content.x, content.y, pendingEvents[index].pk));
 						break;
 				}
 			});
-			fillEventList();
+			GUI.getBigBox().fillEventList();
 		});
 	}
 
