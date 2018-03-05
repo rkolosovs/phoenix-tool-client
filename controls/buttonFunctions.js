@@ -11,6 +11,7 @@ const armyFunctions_1 = require("../libraries/armyFunctions");
 const fleet_1 = require("../armies/fleet");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
 const shootingFunctions_1 = require("../armies/shootingFunctions");
+const mergeEvent_1 = require("../events/mergeEvent");
 var ButtonFunctions;
 (function (ButtonFunctions) {
     function mainButton() {
@@ -403,6 +404,7 @@ var ButtonFunctions;
         if (fromArmy != undefined) {
             try {
                 toArmy.merge(fromArmy);
+                gameState_1.GameState.newEvents.push(new mergeEvent_1.MergeEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, fromArmy.getErkenfaraID(), toArmy.getErkenfaraID(), toArmy.owner, toArmy.getPosition()));
             }
             catch (e) {
                 window.alert(e.message);

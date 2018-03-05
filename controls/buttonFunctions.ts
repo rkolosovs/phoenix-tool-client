@@ -13,6 +13,7 @@ import {Drawing} from "../gui/drawingFunctions";
 import {ShootingFunctions} from "../armies/shootingFunctions";
 import {ShootingBigBox} from "../gui/shootingBigBox";
 import {ShootEvent} from "../events/shootEvent";
+import {MergeEvent} from "../events/mergeEvent";
 
 export namespace ButtonFunctions{
 
@@ -410,6 +411,8 @@ export namespace ButtonFunctions{
         if(fromArmy != undefined){
             try {
                 toArmy.merge(fromArmy);
+                GameState.newEvents.push(new MergeEvent(GameState.newEvents.length, EventStatus.Checked, 
+                    fromArmy.getErkenfaraID(), toArmy.getErkenfaraID(), toArmy.owner, toArmy.getPosition()));
             } catch(e){
                 window.alert((e as Error).message);
             }

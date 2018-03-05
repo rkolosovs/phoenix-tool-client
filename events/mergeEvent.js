@@ -5,7 +5,7 @@ const drawingFunctions_1 = require("../gui/drawingFunctions");
 const gameState_1 = require("../gameState");
 const gui_1 = require("../gui/gui");
 class MergeEvent extends event_1.PhoenixEvent {
-    constructor(listPosition, status, prerequisiteEvents, fromArmyId, toArmyId, realm, position, databasePrimaryKey) {
+    constructor(listPosition, status, fromArmyId, toArmyId, realm, position, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.fromArmyId = fromArmyId;
         this.toArmyId = toArmyId;
