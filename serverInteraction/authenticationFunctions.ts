@@ -92,7 +92,7 @@ export namespace Authentication{
 		let eventList = GUI.getBigBox().getEventsTab();
 		eventList.innerHTML = "";
 		// TODO: closeTab function
-		GUI.getBigBox().openTab(null, "");
+		GUI.getBigBox().closeAllTabs();
 		GameState.newEvents = [];
 		GameState.loadedEvents = [];
 		Drawing.writeTurnNumber();
