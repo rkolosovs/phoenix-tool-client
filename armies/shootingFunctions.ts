@@ -138,10 +138,10 @@ export namespace ShootingFunctions{
             }
         }
         //in GameState.events pushen
-        let eventToPush: ShootEvent = new ShootEvent(GameState.newEvents.length, EventStatus.Undetermined, [], 
+        let eventToPush: ShootEvent = new ShootEvent(GameState.newEvents.length, EventStatus.Undetermined, 
             GameState.armies[Controls.selectedArmyIndex].owner, GameState.armies[Controls.selectedArmyIndex].getID(),
             [Controls.selectedFields[1][0], Controls.selectedFields[1][1]], 
-            GameState.armies[Controls.selectedArmyIndex].getPosition(), LKPshooting, SKPshooting, target, -1) 
+            GameState.armies[Controls.selectedArmyIndex].getPosition(), LKPshooting, SKPshooting, target) 
         GameState.newEvents.push(eventToPush);
 
         shootingarmy.addLightCatapultsShot(LKPshooting);

@@ -227,9 +227,9 @@ export class RiderArmy extends LandArmy{
                 // deleteFromMultifield(this);
             }
             //in GameState.events pushen
-            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Undetermined, [], 
+            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Undetermined,
                 this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, 
-                [this.position[0], this.position[1]], -1) 
+                [this.position[0], this.position[1]]) 
             GameState.newEvents.push(eventToPush);
             ArmyFunctions.deleteArmy(this);
             Drawing.drawStuff();
@@ -260,9 +260,9 @@ export class RiderArmy extends LandArmy{
                 // deleteFromMultifield(this);
             }
             //in GameState.events pushen
-            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Undetermined, [], 
+            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Undetermined,
                 this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, 
-                [this.position[0], this.position[1]], -1) 
+                [this.position[0], this.position[1]]) 
             GameState.newEvents.push(eventToPush);
             // armyIndex zeigt auf neues Heer
             Controls.selectedArmyIndex = GameState.armies.length - 1;

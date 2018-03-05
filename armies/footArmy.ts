@@ -434,9 +434,9 @@ export class FootArmy extends LandArmy{
             // in GameState.armies einfügen und alte Armee löschen, ist dann automatisch armyIndex
             GameState.armies.push(newArmy);
             //in GameState.events pushen
-            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Undetermined, [], 
+            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Undetermined, 
                 this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, 
-                [this.position[0], this.position[1]], -1) 
+                [this.position[0], this.position[1]]) 
             GameState.newEvents.push(eventToPush);
             ArmyFunctions.deleteArmy(this);
             BoxVisibility.restoreInfoBox();
@@ -468,9 +468,9 @@ export class FootArmy extends LandArmy{
             // in GameState.armies einfügen
             GameState.armies.push(newArmy);
             //in GameState.events pushen
-            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Undetermined, [], 
+            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Undetermined, 
                 this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, 
-                [this.position[0], this.position[1]], -1) 
+                [this.position[0], this.position[1]]) 
             GameState.newEvents.push(eventToPush);
             // Controls.selectedArmyIndex zeigt auf neues Heer
             Controls.selectedArmyIndex = GameState.armies.length - 1;
