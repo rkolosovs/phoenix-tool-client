@@ -131,7 +131,7 @@ var ShootingFunctions;
             }
         }
         //in GameState.events pushen
-        let eventToPush = new shootEvent_1.ShootEvent(gameState_1.GameState.newEvents.length, 5 /* Undetermined */, [], gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getID(), [controlVariables_1.Controls.selectedFields[1][0], controlVariables_1.Controls.selectedFields[1][1]], gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition(), LKPshooting, SKPshooting, target, -1);
+        let eventToPush = new shootEvent_1.ShootEvent(gameState_1.GameState.newEvents.length, 5 /* Undetermined */, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getID(), [controlVariables_1.Controls.selectedFields[1][0], controlVariables_1.Controls.selectedFields[1][1]], gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition(), LKPshooting, SKPshooting, target);
         gameState_1.GameState.newEvents.push(eventToPush);
         shootingarmy.addLightCatapultsShot(LKPshooting);
         shootingarmy.addHeavyCatapultsShot(SKPshooting);

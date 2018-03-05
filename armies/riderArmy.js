@@ -231,7 +231,7 @@ class RiderArmy extends landArmy_1.LandArmy {
                 // deleteFromMultifield(this);
             }
             //in GameState.events pushen
-            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 5 /* Undetermined */, [], this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, [this.position[0], this.position[1]], -1);
+            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 5 /* Undetermined */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, [this.position[0], this.position[1]]);
             gameState_1.GameState.newEvents.push(eventToPush);
             armyFunctions_1.ArmyFunctions.deleteArmy(this);
             drawingFunctions_1.Drawing.drawStuff();
@@ -266,7 +266,7 @@ class RiderArmy extends landArmy_1.LandArmy {
                 // deleteFromMultifield(this);
             }
             //in GameState.events pushen
-            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 5 /* Undetermined */, [], this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, [this.position[0], this.position[1]], -1);
+            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 5 /* Undetermined */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, [this.position[0], this.position[1]]);
             gameState_1.GameState.newEvents.push(eventToPush);
             // armyIndex zeigt auf neues Heer
             controlVariables_1.Controls.selectedArmyIndex = gameState_1.GameState.armies.length - 1;

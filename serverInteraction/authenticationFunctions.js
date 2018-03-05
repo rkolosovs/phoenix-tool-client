@@ -19,7 +19,7 @@ var Authentication;
         let password = document.getElementById("loginPassword").value;
         // Request to server with username and password in plaintext
         // TODO: make safe
-        Authentication.logintime = undefined;
+        Authentication.logintime = 0;
         $.post({
             url: Authentication.url + "/databaseLink/login/",
             data: {
@@ -34,16 +34,18 @@ var Authentication;
                 if (login === 'sl') {
                     gui_1.GUI.getToggleGMBarButton().style.display = "";
                     if (gameState_1.GameState.currentTurn.status === 'fi') {
-                        show(document.getElementById("eventTabsButton"));
+                        let btnToShow = document.getElementById("eventTabsButton");
+                        if (btnToShow !== null) {
+                            show(btnToShow);
+                        }
                         loadingDataFunctions_1.Loading.loadPendingEvents();
                     }
                 }
                 // overwrite old known data
                 loadingDataFunctions_1.Loading.getNewDataFromServer();
-                Authentication.logintime = undefined;
-                hide(document.getElementById("eventTabsButton"));
-                let eventList = document.getElementById("eventsTab");
-                eventList.innerHTML = "";
+                Authentication.logintime = 0;
+                hide(gui_1.GUI.getBigBox().getEventTabsButton());
+                gui_1.GUI.getBigBox().getEventsTab().innerHTML = "";
                 drawingFunctions_1.Drawing.writeTurnNumber();
             },
             error: function (data) {
@@ -54,8 +56,8 @@ var Authentication;
             dataType: "json"
         });
         // change loginBox to infoBox
-        document.getElementById("infoBox").style.display = "";
-        document.getElementById("loginBox").style.display = "none";
+        show(gui_1.GUI.getInfoBox().getSelf());
+        hide(gui_1.GUI.getLoginBox());
     }
     Authentication.loginToServer = loginToServer;
     // logs out from Server, closes everything you need login for, deletes login time
@@ -69,23 +71,24 @@ var Authentication;
         boxVisibilty_1.BoxVisibility.switchBtnBoxTo(gui_1.GUI.getButtonsBox());
         boxVisibilty_1.BoxVisibility.switchModeTo("none");
         // Hide gm functionalities
-        document.getElementById("godmodeBox").style.visibility = "hidden";
-        document.getElementById("ToggleGodModeBar").style.display = "none";
-        document.getElementById("infoBox").style.display = "none";
-        document.getElementById("loginBox").style.display = "";
+        hide(gui_1.GUI.getGodModeBox().getSelf());
+        hide(gui_1.GUI.getToggleGMBarButton());
+        hide(gui_1.GUI.getInfoBox().getSelf());
+        show(gui_1.GUI.getLoginBox());
         //change the info change box, back to the normal info Box
-        document.getElementById("infoChangeBox").style.display = "none";
+        hide(gui_1.GUI.getInfoChangeBox().getSelf());
         // forget old authenticationToken
         Authentication.authenticationToken = 0;
         // overwrite previously known data
         loadingDataFunctions_1.Loading.getNewDataFromServer();
-        Authentication.logintime = undefined;
-        hide(document.getElementById("eventTabsButton"));
-        let eventList = document.getElementById("eventsTab");
+        Authentication.logintime = 0;
+        hide(gui_1.GUI.getBigBox().getEventTabsButton());
+        let eventList = gui_1.GUI.getBigBox().getEventsTab();
         eventList.innerHTML = "";
-        openTab(null, "");
-        gameState_1.GameState.pendingNewEvents = [];
-        preparedEvents = [];
+        // TODO: closeTab function
+        gui_1.GUI.getBigBox().openTab(null, "");
+        gameState_1.GameState.newEvents = [];
+        gameState_1.GameState.loadedEvents = [];
         drawingFunctions_1.Drawing.writeTurnNumber();
     }
     Authentication.logoutFromServer = logoutFromServer;

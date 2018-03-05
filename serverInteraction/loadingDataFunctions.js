@@ -22,6 +22,7 @@ const wall_1 = require("../buildings/wall");
 const productionBuilding_1 = require("../buildings/productionBuilding");
 const nonDestructibleBuilding_1 = require("../buildings/nonDestructibleBuilding");
 const images_1 = require("../gui/images");
+const gui_1 = require("../gui/gui");
 var Loading;
 (function (Loading) {
     // help function to fetch current data from the server
@@ -41,34 +42,34 @@ var Loading;
         //	console.log("loadPendingEvents()");
         $.getJSON(url + "/databaseLink/getevents/", function (json) {
             let pendingEvents = json;
-            gameState_1.GameState.pendingNewEvents = [];
-            pendingEvents.forEach(function (item, index) {
+            gameState_1.GameState.loadedEvents = [];
+            pendingEvents.forEach(function (index) {
                 let content = pendingEvents[index].content;
-                switch (item.type) {
+                switch (pendingEvents[index].type) {
                     case "move":
-                        gameState_1.GameState.pendingNewEvents.push(new moveEvent_1.MoveEvent(index, "undetermined", gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.armyId, content.fromX, content.fromY, content.toX, content.toY, item.pk));
+                        gameState_1.GameState.loadedEvents.push(new moveEvent_1.MoveEvent(index, "undetermined", gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.armyId, content.fromX, content.fromY, content.toX, content.toY, pendingEvents[index].pk));
                         break;
                     case "battle":
-                        gameState_1.GameState.pendingNewEvents.push(new battleEvent_1.BattleEvent(index, "undetermined", content.participants, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, item.pk));
+                        gameState_1.GameState.loadedEvents.push(new battleEvent_1.BattleEvent(index, "undetermined", content.participants, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, pendingEvents[index].pk));
                         break;
                     case "shoot":
-                        gameState_1.GameState.pendingNewEvents.push(new shootEvent_1.ShootEvent(index, "undetermined", gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.armyId, content.toX, content.toY, content.fromX, content.fromY, content.LKPcount, content.SKPcount, content.target, item.pk));
+                        gameState_1.GameState.loadedEvents.push(new shootEvent_1.ShootEvent(index, "undetermined", gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.armyId, content.toX, content.toY, content.fromX, content.fromY, content.LKPcount, content.SKPcount, content.target, pendingEvents[index].pk));
                         break;
                     case "split":
-                        gameState_1.GameState.pendingNewEvents.push(new splitEvent_1.SplitEvent(index, "undetermined", content.fromArmy, content.newArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.mounts, content.lkp, content.skp, content.x, content.y, item.pk));
+                        gameState_1.GameState.loadedEvents.push(new splitEvent_1.SplitEvent(index, "undetermined", content.fromArmy, content.newArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.mounts, content.lkp, content.skp, content.x, content.y, pendingEvents[index].pk));
                         break;
                     case "merge":
-                        gameState_1.GameState.pendingNewEvents.push(new mergeEvent_1.MergeEvent(index, "undetermined", content.fromArmy, content.toArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, item.pk));
+                        gameState_1.GameState.loadedEvents.push(new mergeEvent_1.MergeEvent(index, "undetermined", content.fromArmy, content.toArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, pendingEvents[index].pk));
                         break;
                     case "mount":
-                        gameState_1.GameState.pendingNewEvents.push(new mountEvent_1.MountEvent(index, "undetermined", content.fromArmy, content.newArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.x, content.y, item.pk));
+                        gameState_1.GameState.loadedEvents.push(new mountEvent_1.MountEvent(index, "undetermined", content.fromArmy, content.newArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.x, content.y, pendingEvents[index].pk));
                         break;
                     case "transfer":
-                        gameState_1.GameState.pendingNewEvents.push(new transferEvent_1.TransferEvent(index, "undetermined", content.fromArmy, content.toArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.mounts, content.lkp, content.skp, content.x, content.y, item.pk));
+                        gameState_1.GameState.loadedEvents.push(new transferEvent_1.TransferEvent(index, "undetermined", content.fromArmy, content.toArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.mounts, content.lkp, content.skp, content.x, content.y, pendingEvents[index].pk));
                         break;
                 }
             });
-            fillEventList();
+            gui_1.GUI.getBigBox().fillEventList();
         });
     }
     Loading.loadPendingEvents = loadPendingEvents;

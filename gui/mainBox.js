@@ -21,19 +21,20 @@ class MainBox {
         }
         return this.eventsTab;
     }
-    openTab(event, tab) {
-        // Declare all variables
-        let i, tabcontent, tablinks;
+    closeAllTabs() {
         // Get all elements with class="tabcontent" and hide them
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
+        let tabcontent = document.getElementsByClassName("tabcontent");
+        for (let i = 0; i < tabcontent.length; i++) {
             boxVisibilty_1.BoxVisibility.hide(tabcontent[i]);
         }
         // Get all elements with class="tablinks" and remove the class "active"
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
+        let tablinks = document.getElementsByClassName("tablinks");
+        for (let i = 0; i < tablinks.length; i++) {
             tablinks[i].className = tablinks[i].className.replace(" active", "");
         }
+    }
+    openTab(event, tab) {
+        this.closeAllTabs();
         // Show the current tab, and add an "active" class to the button that opened the tab
         if (event != undefined && tab != undefined) {
             boxVisibilty_1.BoxVisibility.show(tab);
@@ -43,9 +44,9 @@ class MainBox {
     fillEventList() {
         let eventList = this.getEventsTab();
         eventList.innerHTML = "";
-        for (let i = 0; i < gameState_1.GameState.pendingNewEvents.length; i++) {
-            gameState_1.GameState.pendingNewEvents[i].determineEventStatus();
-            eventList.appendChild(gameState_1.GameState.pendingNewEvents[i].makeEventListItem());
+        for (let i = 0; i < gameState_1.GameState.loadedEvents.length; i++) {
+            gameState_1.GameState.loadedEvents[i].determineEventStatus();
+            eventList.appendChild(gameState_1.GameState.loadedEvents[i].makeEventListItem());
         }
     }
 }
