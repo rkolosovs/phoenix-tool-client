@@ -3,6 +3,7 @@ import {BoxVisibility} from "../gui/boxVisibilty";
 import {Loading} from "./loadingDataFunctions";
 import {Drawing} from "../gui/drawingFunctions";
 import {GameState} from "../gameState";
+import { MainBox } from "../gui/mainBox";
 
 export namespace Authentication{
     import show = BoxVisibility.show;
@@ -23,7 +24,7 @@ export namespace Authentication{
 		let password = (document.getElementById("loginPassword") as HTMLInputElement).value;
 		// Request to server with username and password in plaintext
 		// TODO: make safe
-		logintime = undefined;
+		logintime = 0;
 		$.post({
 			url: url + "/databaseLink/login/",
 			data: {
@@ -38,16 +39,18 @@ export namespace Authentication{
 				if (login === 'sl') {
 					GUI.getToggleGMBarButton().style.display = "";
 					if (GameState.currentTurn.status === 'fi') {
-						show(document.getElementById("eventTabsButton"));
+						let btnToShow = document.getElementById("eventTabsButton");
+						if(btnToShow!==null){
+							show(btnToShow);
+						}
 						Loading.loadPendingEvents();
 					}
 				}
 				// overwrite old known data
 				Loading.getNewDataFromServer();
-				logintime = undefined;
-				hide(document.getElementById("eventTabsButton"));
-				let eventList = document.getElementById("eventsTab");
-				eventList.innerHTML = "";
+				logintime = 0;
+				hide(GUI.getBigBox().getEventTabsButton());
+				GUI.getBigBox().getEventsTab().innerHTML = "";
 				Drawing.writeTurnNumber();
 			},
 			error: function(data){
@@ -58,8 +61,8 @@ export namespace Authentication{
 			dataType: "json"
 		});
 		// change loginBox to infoBox
-		document.getElementById("infoBox").style.display = "";
-		document.getElementById("loginBox").style.display = "none";
+		show(GUI.getInfoBox().getSelf());
+		hide(GUI.getLoginBox());
 	}
 
 
@@ -74,23 +77,24 @@ export namespace Authentication{
         BoxVisibility.switchBtnBoxTo(GUI.getButtonsBox());
         BoxVisibility.switchModeTo("none");
 		// Hide gm functionalities
-		document.getElementById("godmodeBox").style.visibility = "hidden";
-		document.getElementById("ToggleGodModeBar").style.display = "none";
-		document.getElementById("infoBox").style.display = "none";
-		document.getElementById("loginBox").style.display = "";
+		hide(GUI.getGodModeBox().getSelf());
+		hide(GUI.getToggleGMBarButton());
+		hide(GUI.getInfoBox().getSelf());
+		show(GUI.getLoginBox());
 		//change the info change box, back to the normal info Box
-		document.getElementById("infoChangeBox").style.display = "none"
+		hide(GUI.getInfoChangeBox().getSelf());
 		// forget old authenticationToken
 		authenticationToken = 0;
 		// overwrite previously known data
 		Loading.getNewDataFromServer();
-		logintime = undefined;
-		hide(document.getElementById("eventTabsButton"));
-		let eventList = document.getElementById("eventsTab");
+		logintime = 0;
+		hide(GUI.getBigBox().getEventTabsButton());
+		let eventList = GUI.getBigBox().getEventsTab();
 		eventList.innerHTML = "";
-		openTab(null, "");
-		GameState.pendingNewEvents = [];
-		preparedEvents = [];
+		// TODO: closeTab function
+		GUI.getBigBox().openTab(null, "");
+		GameState.newEvents = [];
+		GameState.loadedEvents = [];
 		Drawing.writeTurnNumber();
 	}
-}
+} 
