@@ -4,7 +4,6 @@ const event_1 = require("./event");
 const gameState_1 = require("../gameState");
 const footArmy_1 = require("../armies/footArmy");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
-const fleet_1 = require("../armies/fleet");
 const gui_1 = require("../gui/gui");
 const armyFunctions_1 = require("../libraries/armyFunctions");
 class TransferEvent extends event_1.PhoenixEvent {
@@ -54,35 +53,20 @@ class TransferEvent extends event_1.PhoenixEvent {
         let toArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.toArmyId && army.owner === this.realm &&
             army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]);
         if (fromArmy != undefined && toArmy != undefined) {
-            fromArmy.setTroopCount(fromArmy.getTroopCount() - this.troops);
-            toArmy.setTroopCount(toArmy.getTroopCount() + this.troops);
-            fromArmy.setOfficerCount(fromArmy.getOfficerCount() - this.leaders);
-            toArmy.setOfficerCount(toArmy.getOfficerCount() + this.leaders);
-            if (fromArmy instanceof footArmy_1.FootArmy) {
-                fromArmy.setMountCount(fromArmy.getMountCount() - this.mounts);
-                toArmy.setMountCount(toArmy.getMountCount() + this.mounts);
+            try {
+                fromArmy.transferTo(toArmy, this.troops, this.leaders, this.lkp, this.skp, this.mounts);
+                this.status = 0 /* Checked */;
+                armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
+                gui_1.GUI.getBigBox().fillEventList();
+                drawingFunctions_1.Drawing.drawStuff();
             }
-            if (fromArmy instanceof footArmy_1.FootArmy || fromArmy instanceof fleet_1.Fleet) {
-                fromArmy.setLightCatapultCount(fromArmy.getLightCatapultCount() - this.lkp);
-                toArmy.setLightCatapultCount(toArmy.getLightCatapultCount() + this.lkp);
-                fromArmy.setHeavyCatapultCount(fromArmy.getHeavyCatapultCount() - this.skp);
-                toArmy.setHeavyCatapultCount(toArmy.getHeavyCatapultCount() + this.skp);
-            }
-            if (this.leaders > 0 &&
-                fromArmy.getMovePoints() < fromArmy.getMaxMovePoints()) {
-                toArmy.setMovePoints(0);
-            }
-            else if (fromArmy.getMovePoints() < toArmy.getMovePoints()) {
-                toArmy.setMovePoints(fromArmy.getMovePoints());
-            }
-            if (fromArmy.getHeightPoints() < toArmy.getHeightPoints()) {
-                toArmy.setHeightPoints(fromArmy.getHeightPoints());
+            catch (e) {
+                window.alert(e.message);
             }
         }
-        this.status = 0 /* Checked */;
-        armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
-        gui_1.GUI.getBigBox().fillEventList();
-        drawingFunctions_1.Drawing.drawStuff();
+        else {
+            window.alert("Army to be transferred to of from does not exist.");
+        }
     }
     makeEventListItemText() {
         let result = "" + this.realm.tag + "'s army " + this.fromArmyId + " transfers ";

@@ -347,6 +347,10 @@ class FootArmy extends landArmy_1.LandArmy {
         armyToTransferTo.setLightCatapultCount(armyToTransferTo.getLightCatapultCount() + lkpToTransfer);
         armyToTransferTo.setHeavyCatapultCount(armyToTransferTo.getHeavyCatapultCount() + skpToTransfer);
         armyToTransferTo.setMountCount(armyToTransferTo.getMountCount() + mountsToTransfer);
+        if (troopsToTransfer + lkpToTransfer + skpToTransfer + mountsToTransfer > 0) {
+            this.movePoints = Math.min(this.movePoints, armyToTransferTo.getMovePoints());
+            armyToTransferTo.setMovePoints(Math.min(this.movePoints, armyToTransferTo.getMovePoints()));
+        }
     }
     split(troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, mountsToSplit, newArmyId) {
         if (this.isGuard) {

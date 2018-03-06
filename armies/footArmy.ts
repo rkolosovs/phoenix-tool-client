@@ -289,6 +289,10 @@ export class FootArmy extends LandArmy{
         armyToTransferTo.setLightCatapultCount(armyToTransferTo.getLightCatapultCount() + lkpToTransfer);
         armyToTransferTo.setHeavyCatapultCount(armyToTransferTo.getHeavyCatapultCount() + skpToTransfer);
         (armyToTransferTo as FootArmy).setMountCount((armyToTransferTo as FootArmy).getMountCount() + mountsToTransfer);
+        if(troopsToTransfer + lkpToTransfer + skpToTransfer + mountsToTransfer > 0){
+            this.movePoints = Math.min(this.movePoints, armyToTransferTo.getMovePoints());
+            armyToTransferTo.setMovePoints(Math.min(this.movePoints, armyToTransferTo.getMovePoints()));
+        }
     }
 
     split(troopsToSplit: number, leadersToSplit: number, lightCatapultsToSplit: number,

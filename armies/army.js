@@ -29,9 +29,8 @@ class Army extends mobileEntity_1.MobileEntity {
         if (this.constructor !== armyToTransferTo.constructor &&
             troopsToTransfer + lkpToTransfer + skpToTransfer + mountsToTransfer <= 0) {
             //Transferring officers only.
-            if (this.movePoints < this.getMaxMovePoints() ||
-                armyToTransferTo.getMovePoints() < armyToTransferTo.getMaxMovePoints()) {
-                throw new Error("Can only transfer officers between armies that haven't moved yet.");
+            if (this.movePoints < this.getMaxMovePoints()) {
+                throw new Error("Can only transfer officers from armies that haven't moved yet.");
             }
             if (this.officerCount < leadersToTransfer) {
                 throw new Error("Not enough officers.");

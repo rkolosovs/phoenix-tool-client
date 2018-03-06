@@ -59,36 +59,18 @@ export class TransferEvent extends PhoenixEvent{
             army.getErkenfaraID() === this.toArmyId && army.owner === this.realm &&
             army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]);
         if (fromArmy != undefined && toArmy != undefined) {
-            fromArmy.setTroopCount(fromArmy.getTroopCount() - this.troops);
-            toArmy.setTroopCount(toArmy.getTroopCount() + this.troops);
-            fromArmy.setOfficerCount(fromArmy.getOfficerCount() - this.leaders);
-            toArmy.setOfficerCount(toArmy.getOfficerCount() + this.leaders);
-            if (fromArmy instanceof FootArmy) {
-                (fromArmy as FootArmy).setMountCount(
-                    (fromArmy as FootArmy).getMountCount() - this.mounts);
-                (toArmy as FootArmy).setMountCount(
-                    (toArmy as FootArmy).getMountCount() + this.mounts);
+            try {
+                fromArmy.transferTo(toArmy, this.troops, this.leaders, this.lkp, this.skp, this.mounts);
+                this.status = EventStatus.Checked;
+                ArmyFunctions.checkArmiesForLiveliness();
+                GUI.getBigBox().fillEventList();
+                Drawing.drawStuff();
+            } catch(e){
+                window.alert((e as Error).message);
             }
-            if (fromArmy instanceof FootArmy || fromArmy instanceof Fleet) {
-                fromArmy.setLightCatapultCount(fromArmy.getLightCatapultCount() - this.lkp);
-                toArmy.setLightCatapultCount(toArmy.getLightCatapultCount() + this.lkp);
-                fromArmy.setHeavyCatapultCount(fromArmy.getHeavyCatapultCount() - this.skp);
-                toArmy.setHeavyCatapultCount(toArmy.getHeavyCatapultCount() + this.skp);
-            }
-            if (this.leaders > 0 &&
-                fromArmy.getMovePoints() < fromArmy.getMaxMovePoints()) {
-                toArmy.setMovePoints(0);
-            } else if (fromArmy.getMovePoints() < toArmy.getMovePoints()) {
-                toArmy.setMovePoints(fromArmy.getMovePoints());
-            }
-            if (fromArmy.getHeightPoints() < toArmy.getHeightPoints()) {
-                toArmy.setHeightPoints(fromArmy.getHeightPoints());
-            }
+        } else{
+            window.alert("Army to be transferred to of from does not exist.");
         }
-        this.status = EventStatus.Checked;
-        ArmyFunctions.checkArmiesForLiveliness();
-        GUI.getBigBox().fillEventList();
-        Drawing.drawStuff();
     }
 
     makeEventListItemText(): string{

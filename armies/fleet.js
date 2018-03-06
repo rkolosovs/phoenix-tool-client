@@ -181,6 +181,10 @@ class Fleet extends army_1.Army {
         armyToTransferTo.setOfficerCount(armyToTransferTo.getOfficerCount() + leadersToTransfer);
         armyToTransferTo.setLightCatapultCount(armyToTransferTo.getLightCatapultCount() + lkpToTransfer);
         armyToTransferTo.setHeavyCatapultCount(armyToTransferTo.getHeavyCatapultCount() + skpToTransfer);
+        if (troopsToTransfer + lkpToTransfer + skpToTransfer + mountsToTransfer > 0) {
+            this.movePoints = Math.min(this.movePoints, armyToTransferTo.getMovePoints());
+            armyToTransferTo.setMovePoints(Math.min(this.movePoints, armyToTransferTo.getMovePoints()));
+        }
     }
     split(troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, mountsToSplit, newArmyId) {
         if (this.isGuard) {
