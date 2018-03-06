@@ -162,6 +162,13 @@ class RiderArmy extends landArmy_1.LandArmy {
         this.setTroopCount(this.troopCount - bpDamage / RIDER_BP);
         this.wasShotAt = true;
     }
+    transferTo(armyToTransferTo, troopsToTransfer, leadersToTransfer, lkpToTransfer, skpToTransfer, mountsToTransfer) {
+        super.transferTo(armyToTransferTo, troopsToTransfer, leadersToTransfer, lkpToTransfer, skpToTransfer, mountsToTransfer);
+        this.troopCount -= troopsToTransfer;
+        this.officerCount -= leadersToTransfer;
+        armyToTransferTo.setTroopCount(armyToTransferTo.getTroopCount() + troopsToTransfer);
+        armyToTransferTo.setOfficerCount(armyToTransferTo.getOfficerCount() + leadersToTransfer);
+    }
     split(troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, mountsToSplit, newArmyId) {
         if (this.isGuard) {
             throw new Error("Guard can't be split.");

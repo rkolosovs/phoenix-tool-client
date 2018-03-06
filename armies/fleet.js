@@ -171,6 +171,17 @@ class Fleet extends army_1.Army {
         this.killTransportedTroops();
         this.wasShotAt = true;
     }
+    transferTo(armyToTransferTo, troopsToTransfer, leadersToTransfer, lkpToTransfer, skpToTransfer, mountsToTransfer) {
+        super.transferTo(armyToTransferTo, troopsToTransfer, leadersToTransfer, lkpToTransfer, skpToTransfer, mountsToTransfer);
+        this.troopCount -= troopsToTransfer;
+        this.officerCount -= leadersToTransfer;
+        this.lightCatapultCount -= lkpToTransfer;
+        this.heavyCatapultCount -= skpToTransfer;
+        armyToTransferTo.setTroopCount(armyToTransferTo.getTroopCount() + troopsToTransfer);
+        armyToTransferTo.setOfficerCount(armyToTransferTo.getOfficerCount() + leadersToTransfer);
+        armyToTransferTo.setLightCatapultCount(armyToTransferTo.getLightCatapultCount() + lkpToTransfer);
+        armyToTransferTo.setHeavyCatapultCount(armyToTransferTo.getHeavyCatapultCount() + skpToTransfer);
+    }
     split(troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, mountsToSplit, newArmyId) {
         if (this.isGuard) {
             throw new Error("Guard can't be split.");

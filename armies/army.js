@@ -24,6 +24,31 @@ class Army extends mobileEntity_1.MobileEntity {
         this.setLightCatapultCount(lightCatapultCount);
         this.setHeavyCatapultCount(heavyCatapultCount);
     }
+    transferTo(armyToTransferTo, troopsToTransfer, leadersToTransfer, lkpToTransfer, skpToTransfer, mountsToTransfer) {
+        //Common functionality of the transfer functions of all army types.
+        if (this.constructor !== armyToTransferTo.constructor &&
+            troopsToTransfer + lkpToTransfer + skpToTransfer + mountsToTransfer <= 0) {
+            //Transferring officers only.
+            if (this.movePoints < this.getMaxMovePoints() ||
+                armyToTransferTo.getMovePoints() < armyToTransferTo.getMaxMovePoints()) {
+                throw new Error("Can only transfer officers between armies that haven't moved yet.");
+            }
+            if (this.officerCount < leadersToTransfer) {
+                throw new Error("Not enough officers.");
+            }
+            this.officerCount -= leadersToTransfer;
+            armyToTransferTo.setOfficerCount(armyToTransferTo.getOfficerCount() + leadersToTransfer);
+        }
+        else if (this.constructor !== armyToTransferTo.constructor) {
+            //Different army types but attempting to transfer not only officers.
+            throw new Error("Can't transfer troops (only officers) between armies of different types.");
+        }
+        else if (this.troopCount < troopsToTransfer || this.officerCount < leadersToTransfer ||
+            this.lightCatapultCount < lkpToTransfer || this.heavyCatapultCount < skpToTransfer) {
+            //Same army type but not enough troops/officers/catapults to transfer.
+            throw new Error("Not enough troops to transfer.");
+        }
+    }
     getTroopCount() {
         return this.troopCount;
     }

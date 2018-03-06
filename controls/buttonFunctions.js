@@ -13,6 +13,7 @@ const drawingFunctions_1 = require("../gui/drawingFunctions");
 const shootingFunctions_1 = require("../armies/shootingFunctions");
 const mergeEvent_1 = require("../events/mergeEvent");
 const splitEvent_1 = require("../events/splitEvent");
+const transferEvent_1 = require("../events/transferEvent");
 var ButtonFunctions;
 (function (ButtonFunctions) {
     function mainButton() {
@@ -137,149 +138,53 @@ var ButtonFunctions;
     }
     ButtonFunctions.allUnMountSelected = allUnMountSelected;
     // move troops or leaders from Controls.selectedArmyIndex to the army at position mergeId in GameState.armies
-    function transferTroopsFromSelectedArmy(mergeId) {
-        let toSplit = 0;
-        let leadersToSplit = 0;
-        let mountsToSplit = 0;
-        let lkpToSplit = 0;
-        let skpToSplit = 0;
+    function transferTroopsFromSelectedArmy(transferToId) {
         let selectedArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
-        // depending on army type different fields are needed
-        if (selectedArmy instanceof footArmy_1.FootArmy) {
-            toSplit = parseInt(gui_1.GUI.getSplitInput().value);
-            leadersToSplit = parseInt(gui_1.GUI.getSplitLeadersInput().value);
-            mountsToSplit = parseInt(gui_1.GUI.getSplitMountsInput().value);
-            lkpToSplit = parseInt(gui_1.GUI.getSplitLkpInput().value);
-            skpToSplit = parseInt(gui_1.GUI.getSplitSkpInput().value);
-            if (toSplit >= 0 && leadersToSplit >= 0 && mountsToSplit >= 0 && lkpToSplit >= 0 && skpToSplit >= 0) {
-                selectedArmy.setTroopCount(selectedArmy.getTroopCount() - toSplit);
-                gameState_1.GameState.armies[mergeId].setTroopCount(gameState_1.GameState.armies[mergeId].getTroopCount() + toSplit);
-                selectedArmy.setOfficerCount(selectedArmy.getOfficerCount() - leadersToSplit);
-                gameState_1.GameState.armies[mergeId].setOfficerCount(gameState_1.GameState.armies[mergeId].getOfficerCount() + leadersToSplit);
-                if (selectedArmy instanceof footArmy_1.FootArmy) {
-                    selectedArmy.setMountCount(selectedArmy.getMountCount() - mountsToSplit);
-                    gameState_1.GameState.armies[mergeId].setMountCount(gameState_1.GameState.armies[mergeId].getMountCount() + mountsToSplit);
-                }
-                selectedArmy.setLightCatapultCount(selectedArmy.getLightCatapultCount() - lkpToSplit);
-                gameState_1.GameState.armies[mergeId].getLightCatapultCount() += lkpToSplit;
-                selectedArmy.setHeavyCatapultCount(selectedArmy.getHeavyCatapultCount() - skpToSplit);
-                gameState_1.GameState.armies[mergeId].getHeavyCatapultCount() += skpToSplit;
-                if (leadersToSplit > 0 && selectedArmy.getMovePoints() < selectedArmy.getMaxMovePoints()) {
-                    gameState_1.GameState.armies[mergeId].setMovePoints(0);
-                }
-                else if (selectedArmy.getMovePoints() < gameState_1.GameState.armies[mergeId].getMovePoints()) {
-                    gameState_1.GameState.armies[mergeId].setMovePoints(selectedArmy.getMovePoints());
-                }
-                if (selectedArmy.getHeightPoints() < gameState_1.GameState.armies[mergeId].getHeightPoints()) {
-                    gameState_1.GameState.armies[mergeId].setHeightPoints(selectedArmy.getHeightPoints());
-                }
-                preparedEvents.push({
-                    type: "transfer", content: {
-                        fromArmyId: selectedArmy.getErkenfaraID(),
-                        toArmyId: gameState_1.GameState.armies[mergeId].getErkenfaraID(),
-                        realm: selectedArmy.owner.tag,
-                        troops: toSplit,
-                        leaders: leadersToSplit,
-                        lkp: lkpToSplit,
-                        skp: skpToSplit,
-                        mounts: mountsToSplit,
-                        x: selectedArmy.getPosition()[0],
-                        y: selectedArmy.getPosition()[1]
-                    }
-                });
+        let armyToTransferTo = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === transferToId && army.owner === selectedArmy.owner);
+        if (armyToTransferTo != undefined) {
+            let troopsToTransfer = parseInt(gui_1.GUI.getSplitInput().value);
+            let leadersToTransfer = parseInt(gui_1.GUI.getSplitLeadersInput().value);
+            let mountsToTransfer = parseInt(gui_1.GUI.getSplitMountsInput().value);
+            let lkpToTransfer = parseInt(gui_1.GUI.getSplitLkpInput().value);
+            let skpToTransfer = parseInt(gui_1.GUI.getSplitSkpInput().value);
+            if (isNaN(troopsToTransfer) || isNaN(leadersToTransfer)) {
+                window.alert("Give a proper number of troops and officers to be transferred.");
+                return;
             }
             else {
-                window.alert("Es müssen positive Werte abgespalten werden");
-                return false;
-            }
-        }
-        else if (selectedArmy instanceof riderArmy_1.RiderArmy) {
-            toSplit = parseInt(gui_1.GUI.getSplitMountedInput().value);
-            leadersToSplit = parseInt(gui_1.GUI.getSplitMountedLeadersInput().value);
-            if (toSplit >= 0 && leadersToSplit >= 0) {
-                selectedArmy.getTroopCount() -= toSplit;
-                gameState_1.GameState.armies[mergeId].getTroopCount() += toSplit;
-                selectedArmy.getOfficerCount() -= leadersToSplit;
-                gameState_1.GameState.armies[mergeId].getOfficerCount() += leadersToSplit;
-                selectedArmy.getLightCatapultCount() -= lkpToSplit;
-                gameState_1.GameState.armies[mergeId].getLightCatapultCount() += lkpToSplit;
-                selectedArmy.getHeavyCatapultCount() -= skpToSplit;
-                gameState_1.GameState.armies[mergeId].getHeavyCatapultCount() += skpToSplit;
-                if (leadersToSplit > 0 && selectedArmy.getMovePoints() < selectedArmy.getMaxMovePoints()) {
-                    gameState_1.GameState.armies[mergeId].setMovePoints(0);
+                if (selectedArmy instanceof riderArmy_1.RiderArmy || armyToTransferTo instanceof riderArmy_1.RiderArmy) {
+                    mountsToTransfer = 0;
+                    lkpToTransfer = 0;
+                    skpToTransfer = 0;
                 }
-                else if (selectedArmy.getMovePoints() < gameState_1.GameState.armies[mergeId].getMovePoints()) {
-                    gameState_1.GameState.armies[mergeId].setMovePoints(selectedArmy.getMovePoints());
-                }
-                if (selectedArmy.getHeightPoints() < gameState_1.GameState.armies[mergeId].getHeightPoints()) {
-                    gameState_1.GameState.armies[mergeId].setHeightPoints(selectedArmy.getHeightPoints());
-                }
-                preparedEvents.push({
-                    type: "transfer", content: {
-                        fromArmyId: selectedArmy.getErkenfaraID(),
-                        toArmyId: gameState_1.GameState.armies[mergeId].getErkenfaraID(),
-                        realm: selectedArmy.owner.tag,
-                        troops: toSplit,
-                        leaders: leadersToSplit,
-                        lkp: 0,
-                        skp: 0,
-                        mounts: 0,
-                        x: selectedArmy.getPosition()[0],
-                        y: selectedArmy.getPosition()[1]
+                else {
+                    if (isNaN(lkpToTransfer) || isNaN(skpToTransfer)) {
+                        window.alert("Give a proper number of catapults to be transferred.");
+                        return;
                     }
-                });
-            }
-            else {
-                window.alert("Es müssen positive Werte abgespalten werden");
-                return false;
-            }
-        }
-        else if (selectedArmy instanceof fleet_1.Fleet) {
-            toSplit = parseInt(gui_1.GUI.getSplitFleetInput().value);
-            leadersToSplit = parseInt(gui_1.GUI.getSplitFleetLeadersInput().value);
-            lkpToSplit = parseInt(gui_1.GUI.getSplitFleetLkpInput().value);
-            skpToSplit = parseInt(gui_1.GUI.getSplitFleetSkpInput().value);
-            if (toSplit >= 0 && leadersToSplit >= 0 && lkpToSplit >= 0 && skpToSplit >= 0) {
-                selectedArmy.getTroopCount() -= toSplit;
-                gameState_1.GameState.armies[mergeId].getTroopCount() += toSplit;
-                selectedArmy.getOfficerCount() -= leadersToSplit;
-                gameState_1.GameState.armies[mergeId].getOfficerCount() += leadersToSplit;
-                selectedArmy.getLightCatapultCount() -= lkpToSplit;
-                gameState_1.GameState.armies[mergeId].getLightCatapultCount() += lkpToSplit;
-                selectedArmy.getHeavyCatapultCount() -= skpToSplit;
-                gameState_1.GameState.armies[mergeId].getHeavyCatapultCount() += skpToSplit;
-                if (leadersToSplit > 0 && selectedArmy.getMovePoints() < selectedArmy.getMaxMovePoints()) {
-                    gameState_1.GameState.armies[mergeId].setMovePoints(0);
-                }
-                else if (selectedArmy.getMovePoints() < gameState_1.GameState.armies[mergeId].getMovePoints()) {
-                    gameState_1.GameState.armies[mergeId].setMovePoints(selectedArmy.getMovePoints());
-                }
-                if (selectedArmy.getHeightPoints() < gameState_1.GameState.armies[mergeId].getHeightPoints()) {
-                    gameState_1.GameState.armies[mergeId].setHeightPoints(selectedArmy.getHeightPoints());
-                }
-                preparedEvents.push({
-                    type: "transfer", content: {
-                        fromArmyId: selectedArmy.getErkenfaraID(),
-                        toArmyId: gameState_1.GameState.armies[mergeId].getErkenfaraID(),
-                        realm: selectedArmy.owner.tag,
-                        troops: toSplit,
-                        leaders: leadersToSplit,
-                        lkp: lkpToSplit,
-                        skp: skpToSplit,
-                        mounts: 0,
-                        x: selectedArmy.getPosition()[0],
-                        y: selectedArmy.getPosition()[1]
+                    else {
+                        if (selectedArmy instanceof fleet_1.Fleet || armyToTransferTo instanceof fleet_1.Fleet) {
+                            mountsToTransfer = 0;
+                        }
+                        else if (isNaN(mountsToTransfer)) {
+                            window.alert("Give a proper number of mounts to be transferred.");
+                            return;
+                        }
                     }
-                });
+                }
             }
-            else {
-                window.alert("Es müssen positive Werte abgespalten werden");
-                return false;
+            //All relevant input values are valid. Executing the actual transfer now.
+            try {
+                selectedArmy.transferTo(armyToTransferTo, troopsToTransfer, leadersToTransfer, lkpToTransfer, skpToTransfer, mountsToTransfer);
+                gameState_1.GameState.newEvents.push(new transferEvent_1.TransferEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, selectedArmy.getErkenfaraID(), armyToTransferTo.getErkenfaraID(), selectedArmy.owner, troopsToTransfer, leadersToTransfer, mountsToTransfer, lkpToTransfer, skpToTransfer, selectedArmy.getPosition()));
+            }
+            catch (e) {
+                window.alert(e.message);
             }
         }
-        boxVisibilty_1.BoxVisibility.updateInfoBox();
-        boxVisibilty_1.BoxVisibility.restoreInfoBox();
-        return true;
+        else {
+            window.alert("Die Zielarmee existiert nicht.");
+        }
     }
     ButtonFunctions.transferTroopsFromSelectedArmy = transferTroopsFromSelectedArmy;
     // merges selectedArmy with the army at position mergeId in GameState.armies

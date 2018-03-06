@@ -156,6 +156,16 @@ export class RiderArmy extends LandArmy{
         this.wasShotAt = true;
     }
 
+    transferTo(armyToTransferTo: Army, troopsToTransfer: number, leadersToTransfer: number, lkpToTransfer: number,
+               skpToTransfer: number, mountsToTransfer: number): void{
+        super.transferTo(armyToTransferTo, troopsToTransfer, leadersToTransfer, lkpToTransfer, skpToTransfer,
+            mountsToTransfer);
+        this.troopCount -= troopsToTransfer;
+        this.officerCount -= leadersToTransfer;
+        armyToTransferTo.setTroopCount(armyToTransferTo.getTroopCount() + troopsToTransfer);
+        armyToTransferTo.setOfficerCount(armyToTransferTo.getOfficerCount() + leadersToTransfer);
+    }
+
     split(troopsToSplit: number, leadersToSplit: number, lightCatapultsToSplit: number,
                    heavyCatapultsToSplit: number, mountsToSplit: number, newArmyId: number): void{
         if(this.isGuard){

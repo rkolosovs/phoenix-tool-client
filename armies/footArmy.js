@@ -332,6 +332,22 @@ class FootArmy extends landArmy_1.LandArmy {
             totalBP) / HEAVY_CATA_BP);
         this.wasShotAt = true;
     }
+    transferTo(armyToTransferTo, troopsToTransfer, leadersToTransfer, lkpToTransfer, skpToTransfer, mountsToTransfer) {
+        super.transferTo(armyToTransferTo, troopsToTransfer, leadersToTransfer, lkpToTransfer, skpToTransfer, mountsToTransfer);
+        if (this.mountCount < mountsToTransfer) {
+            throw new Error("Not enough mounts to transfer");
+        }
+        this.troopCount -= troopsToTransfer;
+        this.officerCount -= leadersToTransfer;
+        this.lightCatapultCount -= lkpToTransfer;
+        this.heavyCatapultCount -= skpToTransfer;
+        this.mountCount -= mountsToTransfer;
+        armyToTransferTo.setTroopCount(armyToTransferTo.getTroopCount() + troopsToTransfer);
+        armyToTransferTo.setOfficerCount(armyToTransferTo.getOfficerCount() + leadersToTransfer);
+        armyToTransferTo.setLightCatapultCount(armyToTransferTo.getLightCatapultCount() + lkpToTransfer);
+        armyToTransferTo.setHeavyCatapultCount(armyToTransferTo.getHeavyCatapultCount() + skpToTransfer);
+        armyToTransferTo.setMountCount(armyToTransferTo.getMountCount() + mountsToTransfer);
+    }
     split(troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, mountsToSplit, newArmyId) {
         if (this.isGuard) {
             throw new Error("Guard can't be split.");
