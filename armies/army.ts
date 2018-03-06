@@ -42,6 +42,9 @@ export abstract class Army extends MobileEntity{
 
     abstract totalBP(): number;
 
+    abstract split(troopsToSplit: number, leadersToSplit: number, lightCatapultsToSplit: number,
+                   heavyCatapultsToSplit: number, mountsToSplit: number, newArmyId: number): void;
+
     abstract merge(fromArmy: Army): void;
 
     abstract fireLightCatapults(dicerolls: number[], badConditions: string): number;

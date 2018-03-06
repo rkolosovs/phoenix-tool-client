@@ -176,6 +176,40 @@ export class Fleet extends Army{
         this.wasShotAt = true;
     }
 
+    split(troopsToSplit: number, leadersToSplit: number, lightCatapultsToSplit: number,
+          heavyCatapultsToSplit: number, mountsToSplit: number, newArmyId: number): void{
+        if(this.isGuard){
+            throw new Error("Guard can't be split.");
+        }
+        if(troopsToSplit + 1 > this.troopCount){
+            throw new Error("Not enough troops (at least 1 ship must stay with the old army).");
+        }
+        if(troopsToSplit < 1){
+            throw new Error("New army must have at least 1 ship.");
+        }
+        if(leadersToSplit + 1 > this.officerCount){
+            throw new Error("Not enough officers (at least 1 officer must stay with the old army).");
+        }
+        if(leadersToSplit < 1){
+            throw new Error("New army must have at least 1 officer.");
+        }
+        if (troopsToSplit * Constants.SHIP_TRANSPORT_CAPACITY > this.freeTransportCapacity()) {
+            throw new Error("Du kannst keine beladenen Schiffe abspalten.")
+        }
+        if(lightCatapultsToSplit > this.lightCatapultCount){
+            throw new Error("Not enough light catapults.");
+        }
+        if(heavyCatapultsToSplit > this.heavyCatapultCount){
+            throw new Error("Not enough heavy catapults.");
+        }
+        GameState.armies.push(new FootArmy(newArmyId, this.owner, troopsToSplit, leadersToSplit, lightCatapultsToSplit,
+            heavyCatapultsToSplit, 0, this.getPosition(), this.movePoints, this.heightPoints));
+        this.troopCount -= troopsToSplit;
+        this.officerCount -= leadersToSplit;
+        this.lightCatapultCount -= lightCatapultsToSplit;
+        this.heavyCatapultCount -= heavyCatapultsToSplit;
+    }
+
     merge(fromArmy: Army): void{
         if(!(fromArmy instanceof Fleet)){
             throw new Error("Can't merge armies other than fleets with a fleet.");

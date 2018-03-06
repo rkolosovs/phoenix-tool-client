@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const controlVariables_1 = require("../controls/controlVariables");
 const gameState_1 = require("../gameState");
 const landArmy_1 = require("../armies/landArmy");
+const fleet_1 = require("../armies/fleet");
+const footArmy_1 = require("../armies/footArmy");
+const riderArmy_1 = require("../armies/riderArmy");
 var ArmyFunctions;
 (function (ArmyFunctions) {
     function deleteArmy(army) {
@@ -21,59 +24,36 @@ var ArmyFunctions;
     ArmyFunctions.deleteArmy = deleteArmy;
     // returns the next armyId not yet assigned for the caller
     function generateArmyId(type, owner) {
+        let ownedArmies = gameState_1.GameState.armies.filter(army => army.owner === owner);
         if (type === 1) {
-            let j = 101;
-            while (j < 200) {
-                let found = false;
-                for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-                    if (gameState_1.GameState.armies[i].getErkenfaraID() === j && gameState_1.GameState.armies[i].owner === owner) {
-                        j++;
-                        found = true;
-                    }
-                }
-                if (!found) {
-                    return j;
+            let ownedFootArmies = ownedArmies.filter(army => army instanceof footArmy_1.FootArmy);
+            for (let result = 101; result < 200; result++) {
+                if (!ownedFootArmies.some(army => army.getErkenfaraID() === result)) {
+                    return result;
                 }
             }
-            window.alert("Du hast die maximale Anzahl an Fußheeren erreicht.");
-            return -1;
+            throw new Error("Du hast die maximale Anzahl an Fußheeren erreicht.");
         }
         else if (type === 2) {
-            let j = 201;
-            while (j < 300) {
-                let found = false;
-                for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-                    if (gameState_1.GameState.armies[i].getErkenfaraID() === j && gameState_1.GameState.armies[i].owner === owner) {
-                        j++;
-                        found = true;
-                    }
-                }
-                if (!found) {
-                    return j;
+            let ownedRiderArmies = ownedArmies.filter(army => army instanceof riderArmy_1.RiderArmy);
+            for (let result = 201; result < 300; result++) {
+                if (!ownedRiderArmies.some(army => army.getErkenfaraID() === result)) {
+                    return result;
                 }
             }
-            window.alert("Du hast die maximale Anzahl an Reiterheeren erreicht.");
-            return -1;
+            throw new Error("Du hast die maximale Anzahl an Reiterheeren erreicht.");
         }
         else if (type === 3) {
-            let j = 301;
-            while (j < 400) {
-                let found = false;
-                for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-                    if (gameState_1.GameState.armies[i].getErkenfaraID() === j && gameState_1.GameState.armies[i].owner === owner) {
-                        j++;
-                        found = true;
-                    }
-                }
-                if (!found) {
-                    return j;
+            let ownedFleets = ownedArmies.filter(army => army instanceof fleet_1.Fleet);
+            for (let result = 301; result < 400; result++) {
+                if (!ownedFleets.some(army => army.getErkenfaraID() === result)) {
+                    return result;
                 }
             }
-            window.alert("Du hast die maximale Anzahl an Flotten erreicht.");
-            return -1;
+            throw new Error("Du hast die maximale Anzahl an Flotten erreicht.");
         }
         else {
-            return -1;
+            throw new Error("Unknown army type.");
         }
     }
     ArmyFunctions.generateArmyId = generateArmyId;

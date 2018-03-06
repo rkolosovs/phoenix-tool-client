@@ -332,6 +332,38 @@ class FootArmy extends landArmy_1.LandArmy {
             totalBP) / HEAVY_CATA_BP);
         this.wasShotAt = true;
     }
+    split(troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, mountsToSplit, newArmyId) {
+        if (this.isGuard) {
+            throw new Error("Guard can't be split.");
+        }
+        if (troopsToSplit + 100 > this.troopCount) {
+            throw new Error("Not enough troops (at least 100 soldiers must stay with the old army).");
+        }
+        if (troopsToSplit < 100) {
+            throw new Error("New army must have at least 100 soldiers.");
+        }
+        if (leadersToSplit + 1 > this.officerCount) {
+            throw new Error("Not enough officers (at least 1 officer must stay with the old army).");
+        }
+        if (leadersToSplit < 1) {
+            throw new Error("New army must have at least 1 officer.");
+        }
+        if (mountsToSplit > this.mountCount) {
+            throw new Error("Not enough mounts.");
+        }
+        if (lightCatapultsToSplit > this.lightCatapultCount) {
+            throw new Error("Not enough light catapults.");
+        }
+        if (heavyCatapultsToSplit > this.heavyCatapultCount) {
+            throw new Error("Not enough heavy catapults.");
+        }
+        gameState_1.GameState.armies.push(new FootArmy(newArmyId, this.owner, troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, mountsToSplit, this.getPosition(), this.movePoints, this.heightPoints));
+        this.troopCount -= troopsToSplit;
+        this.officerCount -= leadersToSplit;
+        this.mountCount -= mountsToSplit;
+        this.lightCatapultCount -= lightCatapultsToSplit;
+        this.heavyCatapultCount -= heavyCatapultsToSplit;
+    }
     merge(fromArmy) {
         if (!(fromArmy instanceof FootArmy)) {
             throw new Error("Can't merge armies other than foot armies with a foot army.");

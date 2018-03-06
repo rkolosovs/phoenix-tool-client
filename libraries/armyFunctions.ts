@@ -4,6 +4,8 @@ import {Realm} from "../realm";
 import {Army} from "../armies/army";
 import {LandArmy} from "../armies/landArmy";
 import {Fleet} from "../armies/fleet";
+import {FootArmy} from "../armies/footArmy";
+import {RiderArmy} from "../armies/riderArmy";
 
 export namespace ArmyFunctions{
 
@@ -23,56 +25,33 @@ export namespace ArmyFunctions{
 
     // returns the next armyId not yet assigned for the caller
     export function generateArmyId(type: number, owner: Realm): number {
-        if (type === 1) {
-            let j = 101;
-            while (j < 200) {
-                let found = false;
-                for (let i = 0; i < GameState.armies.length; i++) {
-                    if (GameState.armies[i].getErkenfaraID() === j && GameState.armies[i].owner === owner) {
-                        j++;
-                        found = true;
-                    }
-                }
-                if (!found) {
-                    return j;
+        let ownedArmies: Army[] = GameState.armies.filter(army => army.owner === owner);
+        if (type === 1) {//foot armies
+            let ownedFootArmies: Army[] = ownedArmies.filter(army => army instanceof FootArmy);
+            for(let result = 101; result < 200; result++){
+                if(!ownedFootArmies.some(army => army.getErkenfaraID() === result)){
+                    return result;
                 }
             }
-            window.alert("Du hast die maximale Anzahl an Fußheeren erreicht.")
-            return -1;
-        } else if (type === 2) {
-            let j = 201;
-            while (j < 300) {
-                let found = false;
-                for (let i = 0; i < GameState.armies.length; i++) {
-                    if (GameState.armies[i].getErkenfaraID() === j && GameState.armies[i].owner === owner) {
-                        j++;
-                        found = true;
-                    }
-                }
-                if (!found) {
-                    return j;
+            throw new Error("Du hast die maximale Anzahl an Fußheeren erreicht.");
+        } else if (type === 2) {//rider armies
+            let ownedRiderArmies: Army[] = ownedArmies.filter(army => army instanceof RiderArmy);
+            for(let result = 201; result < 300; result++){
+                if(!ownedRiderArmies.some(army => army.getErkenfaraID() === result)){
+                    return result;
                 }
             }
-            window.alert("Du hast die maximale Anzahl an Reiterheeren erreicht.")
-            return -1;
-        } else if (type === 3) {
-            let j = 301;
-            while (j < 400) {
-                let found = false;
-                for (let i = 0; i < GameState.armies.length; i++) {
-                    if (GameState.armies[i].getErkenfaraID() === j && GameState.armies[i].owner === owner) {
-                        j++;
-                        found = true;
-                    }
-                }
-                if (!found) {
-                    return j;
+            throw new Error("Du hast die maximale Anzahl an Reiterheeren erreicht.");
+        } else if (type === 3) {//fleets
+            let ownedFleets: Army[] = ownedArmies.filter(army => army instanceof Fleet);
+            for(let result = 301; result < 400; result++){
+                if(!ownedFleets.some(army => army.getErkenfaraID() === result)){
+                    return result;
                 }
             }
-            window.alert("Du hast die maximale Anzahl an Flotten erreicht.")
-            return -1;
+            throw new Error("Du hast die maximale Anzahl an Flotten erreicht.");
         } else {
-            return -1;
+            throw new Error("Unknown army type.");
         }
     }
 

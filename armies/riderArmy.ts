@@ -156,6 +156,29 @@ export class RiderArmy extends LandArmy{
         this.wasShotAt = true;
     }
 
+    split(troopsToSplit: number, leadersToSplit: number, lightCatapultsToSplit: number,
+                   heavyCatapultsToSplit: number, mountsToSplit: number, newArmyId: number): void{
+        if(this.isGuard){
+            throw new Error("Guard can't be split.");
+        }
+        if(troopsToSplit + 50 > this.troopCount){
+            throw new Error("Not enough troops (at least 50 riders must stay with the old army).");
+        }
+        if(troopsToSplit < 50){
+            throw new Error("New army must have at least 50 soldiers.");
+        }
+        if(leadersToSplit + 1 > this.officerCount){
+            throw new Error("Not enough officers (at least 1 officer must stay with the old army).");
+        }
+        if(leadersToSplit < 1){
+            throw new Error("New army must have at least 1 officer.");
+        }
+        GameState.armies.push(new FootArmy(newArmyId, this.owner, troopsToSplit, leadersToSplit, 0,
+            0, 0, this.getPosition(), this.movePoints, this.heightPoints));
+        this.troopCount -= troopsToSplit;
+        this.officerCount -= leadersToSplit;
+    }
+
     merge(fromArmy: Army): void{
         if(!(fromArmy instanceof RiderArmy)){
             throw new Error("Can't merge armies other than rider armies with a rider army.");

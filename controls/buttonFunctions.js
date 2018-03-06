@@ -12,6 +12,7 @@ const fleet_1 = require("../armies/fleet");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
 const shootingFunctions_1 = require("../armies/shootingFunctions");
 const mergeEvent_1 = require("../events/mergeEvent");
+const splitEvent_1 = require("../events/splitEvent");
 var ButtonFunctions;
 (function (ButtonFunctions) {
     function mainButton() {
@@ -38,179 +39,63 @@ var ButtonFunctions;
     }
     ButtonFunctions.nextTurn = nextTurn;
     // the splitArmy funtion of the split box
-    // TODO: If the army has moved, set the new split army's move points to the appropriate, non-max value.
     function splitSelectedArmy() {
-        if (login === 'guest') {
-            window.alert("Zuschauer haben keine Rechte.");
-            return false;
-        }
-        if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].isGuard) {
-            window.alert("Garde Armeen können nicht geteilt werden.");
-            return false;
-        }
         let selectedArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
-        let toSplit = 0;
-        let leadersToSplit = 0;
-        let mountsToSplit = 0;
-        let lkpToSplit = 0;
-        let skpToSplit = 0;
-        // depending on army type different fields are needed
-        if (selectedArmy instanceof footArmy_1.FootArmy) {
-            toSplit = parseInt(gui_1.GUI.getSplitInput().value);
-            leadersToSplit = parseInt(gui_1.GUI.getSplitLeadersInput().value);
-            mountsToSplit = parseInt(gui_1.GUI.getSplitMountsInput().value);
-            lkpToSplit = parseInt(gui_1.GUI.getSplitLkpInput().value);
-            skpToSplit = parseInt(gui_1.GUI.getSplitSkpInput().value);
-            if (toSplit > (selectedArmy.getTroopCount() - 100)) {
-                window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.");
-                return false;
-            }
-            if (toSplit < 100) {
-                window.alert("Es müssen mindestens 100 Heeresstärke abgespalten werden.");
-                return false;
-            }
-            if (mountsToSplit > selectedArmy.getMountCount()) {
-                window.alert("So viele Reittiere hast du nicht.");
-                return false;
-            }
-            if (lkpToSplit > selectedArmy.getLightCatapultCount()) {
-                window.alert("So viele leichte Katapulte hast du nicht.");
-                return false;
-            }
-            if (skpToSplit > selectedArmy.getHeavyCatapultCount()) {
-                window.alert("So viele schwere Katapulte hast du nicht.");
-                return false;
-            }
-        }
-        else if (selectedArmy instanceof riderArmy_1.RiderArmy) {
-            toSplit = parseInt(gui_1.GUI.getSplitMountedInput().value);
-            leadersToSplit = parseInt(gui_1.GUI.getSplitMountedLeadersInput().value);
-            if (toSplit > (selectedArmy.getTroopCount() - 50)) {
-                window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.");
-                return false;
-            }
-            if (toSplit < 50) {
-                window.alert("Es müssen mindestens 100 Heeresstärke abgespalten werden. (50 Reiter)");
-                return false;
-            }
-        }
-        else if (selectedArmy instanceof fleet_1.Fleet) {
-            toSplit = parseInt(gui_1.GUI.getSplitFleetInput().value);
-            leadersToSplit = parseInt(gui_1.GUI.getSplitFleetLeadersInput().value);
-            lkpToSplit = parseInt(gui_1.GUI.getSplitFleetLkpInput().value);
-            skpToSplit = parseInt(gui_1.GUI.getSplitFleetSkpInput().value);
-            if (toSplit > (selectedArmy.getTroopCount() - 1)) {
-                window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.");
-                return false;
-            }
-            if (toSplit * 100 > (selectedArmy.freeTransportCapacity())) {
-                window.alert("Du kannst keine beladenen Schiffe abspalten.");
-                return false;
-            }
-            if (toSplit < 1) {
-                window.alert("Es müssen mindestens 100 Heeresstärke abgespalten werden. (1 Schiff)");
-                return false;
-            }
-            if (lkpToSplit > selectedArmy.getLightCatapultCount()) {
-                window.alert("So viele leichte Kriegsschiffe hast du nicht.");
-                return false;
-            }
-            if (skpToSplit > selectedArmy.getHeavyCatapultCount()) {
-                window.alert("So viele schwere Kriegsschiffe hast du nicht.");
-                return false;
-            }
-        }
-        if (leadersToSplit > (selectedArmy.getOfficerCount() - 1)) {
-            window.alert("Es muss mindestens 1 Heerführer beim Ursprungsheer verbleiben.");
-            return false;
-        }
-        if (leadersToSplit < 1) {
-            window.alert("Es muss mindestens 1 Heerführer abgespalten werden.");
-            return false;
-        }
-        if (selectedArmy instanceof footArmy_1.FootArmy) {
-            let newArmyId = armyFunctions_1.ArmyFunctions.generateArmyId(1, selectedArmy.owner);
-            if (newArmyId === -1) {
-                return false;
-            }
-            let newArmy = new footArmy_1.FootArmy(newArmyId, selectedArmy.owner, toSplit, leadersToSplit, lkpToSplit, skpToSplit, mountsToSplit, [selectedArmy.getPosition()[0],
-                selectedArmy.getPosition()[1]], selectedArmy.getMovePoints(), selectedArmy.getHeightPoints(), false);
-            gameState_1.GameState.armies.push(newArmy);
-            selectedArmy.setTroopCount(selectedArmy.getTroopCount() - toSplit);
-            selectedArmy.setOfficerCount(selectedArmy.getOfficerCount() - leadersToSplit);
-            selectedArmy.setLightCatapultCount(selectedArmy.getLightCatapultCount() - lkpToSplit);
-            selectedArmy.setHeavyCatapultCount(selectedArmy.getHeavyCatapultCount() - skpToSplit);
-            selectedArmy.setMountCount(selectedArmy.getMountCount() - mountsToSplit);
-            gameState_1.GameState.armies.push({
-                type: "split", content: {
-                    fromArmyId: selectedArmy.getErkenfaraID(),
-                    realm: selectedArmy.owner.tag,
-                    troops: toSplit,
-                    leaders: leadersToSplit,
-                    lkp: lkpToSplit,
-                    skp: skpToSplit,
-                    mounts: mountsToSplit,
-                    x: selectedArmy.getPosition()[0],
-                    y: selectedArmy.getPosition()[1],
-                    newArmysId: newArmyId
+        if (login === 'sl' || login === selectedArmy.owner.tag) {
+            try {
+                let troopsToSplit = parseInt(gui_1.GUI.getSplitInput().value);
+                let leadersToSplit = parseInt(gui_1.GUI.getSplitLeadersInput().value);
+                let mountsToSplit = parseInt(gui_1.GUI.getSplitMountsInput().value);
+                let lightCatapultsToSplit = parseInt(gui_1.GUI.getSplitLkpInput().value);
+                let heavyCatapultsToSplit = parseInt(gui_1.GUI.getSplitSkpInput().value);
+                let newArmyId = -1;
+                if (selectedArmy instanceof footArmy_1.FootArmy) {
+                    if (!(isNaN(troopsToSplit) || isNaN(leadersToSplit) || isNaN(mountsToSplit) ||
+                        isNaN(lightCatapultsToSplit) || isNaN(heavyCatapultsToSplit))) {
+                        newArmyId = armyFunctions_1.ArmyFunctions.generateArmyId(1, selectedArmy.owner);
+                    }
+                    else {
+                        throw new Error("All values have to be a valid number.");
+                    }
                 }
-            });
-        }
-        if (selectedArmy instanceof riderArmy_1.RiderArmy) {
-            let newArmyId = armyFunctions_1.ArmyFunctions.generateArmyId(2, selectedArmy.owner);
-            if (newArmyId === -1) {
-                return false;
-            }
-            let newArmy = new riderArmy_1.RiderArmy(newArmyId, selectedArmy.owner, toSplit, leadersToSplit, [selectedArmy.getPosition()[0],
-                selectedArmy.getPosition()[1]], selectedArmy.getMovePoints(), selectedArmy.getHeightPoints(), false);
-            gameState_1.GameState.armies.push(newArmy);
-            selectedArmy.setTroopCount(selectedArmy.getTroopCount() - toSplit);
-            selectedArmy.setOfficerCount(selectedArmy.getOfficerCount() - leadersToSplit);
-            preparedEvents.push({
-                type: "split", content: {
-                    fromArmyId: selectedArmy.getErkenfaraID(),
-                    realm: selectedArmy.owner.tag,
-                    troops: toSplit,
-                    leaders: leadersToSplit,
-                    lkp: 0,
-                    skp: 0,
-                    mounts: 0,
-                    x: selectedArmy.getPosition()[0],
-                    y: selectedArmy.getPosition()[1],
-                    newArmysId: newArmyId
+                else if (selectedArmy instanceof riderArmy_1.RiderArmy) {
+                    if (!(isNaN(troopsToSplit) || isNaN(leadersToSplit))) {
+                        lightCatapultsToSplit = 0;
+                        heavyCatapultsToSplit = 0;
+                        mountsToSplit = 0;
+                        newArmyId = armyFunctions_1.ArmyFunctions.generateArmyId(2, selectedArmy.owner);
+                    }
+                    else {
+                        throw new Error("Troops and leaders have to be a valid number.");
+                    }
                 }
-            });
-        }
-        if (selectedArmy instanceof fleet_1.Fleet) {
-            let newArmyId = armyFunctions_1.ArmyFunctions.generateArmyId(3, selectedArmy.owner);
-            if (newArmyId === -1) {
-                return false;
-            }
-            let newArmy = new fleet_1.Fleet(newArmyId, selectedArmy.owner, toSplit, leadersToSplit, lkpToSplit, skpToSplit, [selectedArmy.getPosition()[0],
-                selectedArmy.getPosition()[1]], selectedArmy.getMovePoints(), false);
-            gameState_1.GameState.armies.push(newArmy);
-            selectedArmy.setTroopCount(selectedArmy.getTroopCount() - toSplit);
-            selectedArmy.setOfficerCount(selectedArmy.getOfficerCount() - leadersToSplit);
-            selectedArmy.setLightCatapultCount(selectedArmy.getLightCatapultCount() - lkpToSplit);
-            selectedArmy.setHeavyCatapultCount(selectedArmy.getHeavyCatapultCount() - skpToSplit);
-            preparedEvents.push({
-                type: "split", content: {
-                    fromArmyId: selectedArmy.getErkenfaraID(),
-                    realm: selectedArmy.owner.tag,
-                    troops: toSplit,
-                    leaders: leadersToSplit,
-                    lkp: lkpToSplit,
-                    skp: skpToSplit,
-                    mounts: 0,
-                    x: selectedArmy.getPosition()[0],
-                    y: selectedArmy.getPosition()[1],
-                    newArmysId: newArmyId
+                else if (selectedArmy instanceof fleet_1.Fleet) {
+                    if (!(isNaN(troopsToSplit) || isNaN(leadersToSplit) ||
+                        isNaN(lightCatapultsToSplit) || isNaN(heavyCatapultsToSplit))) {
+                        mountsToSplit = 0;
+                        newArmyId = armyFunctions_1.ArmyFunctions.generateArmyId(3, selectedArmy.owner);
+                    }
+                    else {
+                        throw new Error("All values have to be a valid number.");
+                    }
                 }
-            });
+                else {
+                    throw new Error("Unknown army type.");
+                }
+                selectedArmy.split(troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, mountsToSplit, newArmyId);
+                gameState_1.GameState.newEvents.push(new splitEvent_1.SplitEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, selectedArmy.getErkenfaraID(), newArmyId, selectedArmy.owner, troopsToSplit, leadersToSplit, mountsToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, selectedArmy.getPosition()));
+            }
+            catch (e) {
+                window.alert(e.message);
+            }
         }
+        else {
+            window.alert("Man muss eingeloggt sein, um Armeen aufzusplaten.");
+        }
+        armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
         boxVisibilty_1.BoxVisibility.restoreInfoBox();
         boxVisibilty_1.BoxVisibility.updateInfoBox();
-        return true;
+        drawingFunctions_1.Drawing.drawStuff();
     }
     ButtonFunctions.splitSelectedArmy = splitSelectedArmy;
     // the mount function of the mount box

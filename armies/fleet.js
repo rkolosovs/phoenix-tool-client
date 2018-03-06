@@ -12,7 +12,9 @@ var SHIP_BP = constants_1.Constants.SHIP_BP;
 var HEAVY_WS_BP = constants_1.Constants.HEAVY_WS_BP;
 var LIGHT_WS_BP = constants_1.Constants.LIGHT_WS_BP;
 var SHIP_TRANSPORT_CAPACITY = constants_1.Constants.SHIP_TRANSPORT_CAPACITY;
+const gameState_1 = require("../gameState");
 const armyFunctions_1 = require("../libraries/armyFunctions");
+const footArmy_1 = require("./footArmy");
 class Fleet extends army_1.Army {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, isGuard) {
         if (isGuard != undefined) {
@@ -168,6 +170,37 @@ class Fleet extends army_1.Army {
             totalBP) / HEAVY_WS_BP);
         this.killTransportedTroops();
         this.wasShotAt = true;
+    }
+    split(troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, mountsToSplit, newArmyId) {
+        if (this.isGuard) {
+            throw new Error("Guard can't be split.");
+        }
+        if (troopsToSplit + 1 > this.troopCount) {
+            throw new Error("Not enough troops (at least 1 ship must stay with the old army).");
+        }
+        if (troopsToSplit < 1) {
+            throw new Error("New army must have at least 1 ship.");
+        }
+        if (leadersToSplit + 1 > this.officerCount) {
+            throw new Error("Not enough officers (at least 1 officer must stay with the old army).");
+        }
+        if (leadersToSplit < 1) {
+            throw new Error("New army must have at least 1 officer.");
+        }
+        if (troopsToSplit * constants_1.Constants.SHIP_TRANSPORT_CAPACITY > this.freeTransportCapacity()) {
+            throw new Error("Du kannst keine beladenen Schiffe abspalten.");
+        }
+        if (lightCatapultsToSplit > this.lightCatapultCount) {
+            throw new Error("Not enough light catapults.");
+        }
+        if (heavyCatapultsToSplit > this.heavyCatapultCount) {
+            throw new Error("Not enough heavy catapults.");
+        }
+        gameState_1.GameState.armies.push(new footArmy_1.FootArmy(newArmyId, this.owner, troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, 0, this.getPosition(), this.movePoints, this.heightPoints));
+        this.troopCount -= troopsToSplit;
+        this.officerCount -= leadersToSplit;
+        this.lightCatapultCount -= lightCatapultsToSplit;
+        this.heavyCatapultCount -= heavyCatapultsToSplit;
     }
     merge(fromArmy) {
         if (!(fromArmy instanceof Fleet)) {
