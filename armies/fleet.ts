@@ -201,21 +201,9 @@ export class Fleet extends Army{
         if(troopsToSplit > this.troopCount){
             throw new Error("Not enough troops.");
         }
-        // if(troopsToSplit + 1 > this.troopCount){
-        //     throw new Error("Not enough troops (at least 1 ship must stay with the old army).");
-        // }
-        // if(troopsToSplit < 1){
-        //     throw new Error("New army must have at least 1 ship.");
-        // }
         if(leadersToSplit > this.officerCount){
-            throw new Error("Not enough officers (at least 1 officer must stay with the old army).");
+            throw new Error("Not enough officers.");
         }
-        // if(leadersToSplit + 1 > this.officerCount){
-        //     throw new Error("Not enough officers (at least 1 officer must stay with the old army).");
-        // }
-        // if(leadersToSplit < 1){
-        //     throw new Error("New army must have at least 1 officer.");
-        // }
         if (troopsToSplit * Constants.SHIP_TRANSPORT_CAPACITY > this.freeTransportCapacity()) {
             throw new Error("Du kannst keine beladenen Schiffe abspalten.")
         }
@@ -224,6 +212,16 @@ export class Fleet extends Army{
         }
         if(heavyCatapultsToSplit > this.heavyCatapultCount){
             throw new Error("Not enough heavy catapults.");
+        }
+        if(troopsToSplit + 1 > this.troopCount || leadersToSplit + 1 > this.officerCount){
+            if(!confirm("The remaining fleet is too small and will be destroyed. Proceed anyway?")) {
+                throw new Error("Aborted by the user.");
+            }
+        }
+        if(troopsToSplit < 1 || leadersToSplit < 1){
+            if(!confirm("The new fleet is too small and will be destroyed. Proceed anyway?")) {
+                throw new Error("Aborted by the user.");
+            }
         }
         GameState.armies.push(new FootArmy(newArmyId, this.owner, troopsToSplit, leadersToSplit, lightCatapultsToSplit,
             heavyCatapultsToSplit, 0, this.getPosition(), this.movePoints, this.heightPoints));

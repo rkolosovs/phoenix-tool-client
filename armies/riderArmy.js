@@ -179,18 +179,19 @@ class RiderArmy extends landArmy_1.LandArmy {
         if (troopsToSplit > this.troopCount) {
             throw new Error("Not enough troops.");
         }
-        // if(troopsToSplit + 50 > this.troopCount){
-        //     throw new Error("Not enough troops (at least 50 riders must stay with the old army).");
-        // }
-        // if(troopsToSplit < 50){
-        //     throw new Error("New army must have at least 50 soldiers.");
-        // }
         if (leadersToSplit > this.officerCount) {
             throw new Error("Not enough officers.");
         }
-        // if(leadersToSplit + 1 > this.officerCount){
-        //     throw new Error("Not enough officers (at least 1 officer must stay with the old army).");
-        // }
+        if (troopsToSplit + 50 > this.troopCount || leadersToSplit + 1 > this.officerCount) {
+            if (!confirm("The remaining army is too small and will be destroyed. Proceed anyway?")) {
+                throw new Error("Aborted by the user.");
+            }
+        }
+        if (troopsToSplit < 50 || leadersToSplit < 1) {
+            if (!confirm("The new army is too small and will be destroyed. Proceed anyway?")) {
+                throw new Error("Aborted by the user.");
+            }
+        }
         if (leadersToSplit < 1) {
             throw new Error("New army must have at least 1 officer.");
         }
