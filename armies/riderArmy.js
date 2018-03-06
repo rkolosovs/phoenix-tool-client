@@ -169,7 +169,6 @@ class RiderArmy extends landArmy_1.LandArmy {
         armyToTransferTo.setTroopCount(armyToTransferTo.getTroopCount() + troopsToTransfer);
         armyToTransferTo.setOfficerCount(armyToTransferTo.getOfficerCount() + leadersToTransfer);
         if (troopsToTransfer + lkpToTransfer + skpToTransfer + mountsToTransfer > 0) {
-            this.movePoints = Math.min(this.movePoints, armyToTransferTo.getMovePoints());
             armyToTransferTo.setMovePoints(Math.min(this.movePoints, armyToTransferTo.getMovePoints()));
         }
     }
