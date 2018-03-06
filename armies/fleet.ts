@@ -198,18 +198,24 @@ export class Fleet extends Army{
         if(this.isGuard){
             throw new Error("Guard can't be split.");
         }
-        if(troopsToSplit + 1 > this.troopCount){
-            throw new Error("Not enough troops (at least 1 ship must stay with the old army).");
+        if(troopsToSplit > this.troopCount){
+            throw new Error("Not enough troops.");
         }
-        if(troopsToSplit < 1){
-            throw new Error("New army must have at least 1 ship.");
-        }
-        if(leadersToSplit + 1 > this.officerCount){
+        // if(troopsToSplit + 1 > this.troopCount){
+        //     throw new Error("Not enough troops (at least 1 ship must stay with the old army).");
+        // }
+        // if(troopsToSplit < 1){
+        //     throw new Error("New army must have at least 1 ship.");
+        // }
+        if(leadersToSplit > this.officerCount){
             throw new Error("Not enough officers (at least 1 officer must stay with the old army).");
         }
-        if(leadersToSplit < 1){
-            throw new Error("New army must have at least 1 officer.");
-        }
+        // if(leadersToSplit + 1 > this.officerCount){
+        //     throw new Error("Not enough officers (at least 1 officer must stay with the old army).");
+        // }
+        // if(leadersToSplit < 1){
+        //     throw new Error("New army must have at least 1 officer.");
+        // }
         if (troopsToSplit * Constants.SHIP_TRANSPORT_CAPACITY > this.freeTransportCapacity()) {
             throw new Error("Du kannst keine beladenen Schiffe abspalten.")
         }

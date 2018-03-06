@@ -355,18 +355,24 @@ class FootArmy extends landArmy_1.LandArmy {
         if (this.isGuard) {
             throw new Error("Guard can't be split.");
         }
-        if (troopsToSplit + 100 > this.troopCount) {
-            throw new Error("Not enough troops (at least 100 soldiers must stay with the old army).");
+        if (troopsToSplit > this.troopCount) {
+            throw new Error("Not enough troops.");
         }
-        if (troopsToSplit < 100) {
-            throw new Error("New army must have at least 100 soldiers.");
-        }
-        if (leadersToSplit + 1 > this.officerCount) {
+        // if(troopsToSplit + 100 > this.troopCount){
+        //     throw new Error("Not enough troops (at least 100 soldiers must stay with the old army).");
+        // }
+        // if(troopsToSplit < 100){
+        //     throw new Error("New army must have at least 100 soldiers.");
+        // }
+        if (leadersToSplit > this.officerCount) {
             throw new Error("Not enough officers (at least 1 officer must stay with the old army).");
         }
-        if (leadersToSplit < 1) {
-            throw new Error("New army must have at least 1 officer.");
-        }
+        // if(leadersToSplit + 1 > this.officerCount){
+        //     throw new Error("Not enough officers (at least 1 officer must stay with the old army).");
+        // }
+        // if(leadersToSplit < 1){
+        //     throw new Error("New army must have at least 1 officer.");
+        // }
         if (mountsToSplit > this.mountCount) {
             throw new Error("Not enough mounts.");
         }
