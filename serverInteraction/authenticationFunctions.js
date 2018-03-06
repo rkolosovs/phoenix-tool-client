@@ -86,7 +86,7 @@ var Authentication;
         let eventList = gui_1.GUI.getBigBox().getEventsTab();
         eventList.innerHTML = "";
         // TODO: closeTab function
-        gui_1.GUI.getBigBox().openTab(null, "");
+        gui_1.GUI.getBigBox().closeAllTabs();
         gameState_1.GameState.newEvents = [];
         gameState_1.GameState.loadedEvents = [];
         drawingFunctions_1.Drawing.writeTurnNumber();
