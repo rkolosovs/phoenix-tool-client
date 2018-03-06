@@ -3,8 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const event_1 = require("./event");
 const gameState_1 = require("../gameState");
 const footArmy_1 = require("../armies/footArmy");
-const riderArmy_1 = require("../armies/riderArmy");
-const fleet_1 = require("../armies/fleet");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
 const gui_1 = require("../gui/gui");
 const armyFunctions_1 = require("../libraries/armyFunctions");
@@ -60,26 +58,14 @@ class SplitEvent extends event_1.PhoenixEvent {
             army.getPosition()[0] === this.position[0] &&
             army.getPosition()[1] === this.position[1]);
         if (armyToSplitFrom != undefined) {
-            armyToSplitFrom.setTroopCount(armyToSplitFrom.getTroopCount() - this.troops);
-            armyToSplitFrom.setOfficerCount(armyToSplitFrom.getOfficerCount() - this.leaders);
-            if (armyToSplitFrom instanceof footArmy_1.FootArmy) {
-                armyToSplitFrom.setMountCount(armyToSplitFrom.getMountCount() - this.mounts);
+            try {
+                armyToSplitFrom.split(this.troops, this.leaders, this.lkp, this.skp, this.mounts, this.newArmyId);
+                this.status = 0 /* Checked */;
             }
-            if (armyToSplitFrom instanceof footArmy_1.FootArmy || armyToSplitFrom instanceof fleet_1.Fleet) {
-                armyToSplitFrom.setLightCatapultCount(armyToSplitFrom.getLightCatapultCount() - this.lkp);
-                armyToSplitFrom.setHeavyCatapultCount(armyToSplitFrom.getHeavyCatapultCount() - this.skp);
-            }
-            if (armyToSplitFrom instanceof footArmy_1.FootArmy) {
-                gameState_1.GameState.armies.push(new footArmy_1.FootArmy(this.newArmyId, this.realm, this.troops, this.leaders, this.lkp, this.skp, this.mounts, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints(), armyToSplitFrom.getHeightPoints()));
-            }
-            else if (armyToSplitFrom instanceof riderArmy_1.RiderArmy) {
-                gameState_1.GameState.armies.push(new riderArmy_1.RiderArmy(this.newArmyId, this.realm, this.troops, this.leaders, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints(), armyToSplitFrom.getHeightPoints()));
-            }
-            else if (armyToSplitFrom instanceof fleet_1.Fleet) {
-                gameState_1.GameState.armies.push(new fleet_1.Fleet(this.newArmyId, this.realm, this.troops, this.leaders, this.lkp, this.skp, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints()));
+            catch (e) {
+                window.alert(e.message);
             }
         }
-        this.status = 0 /* Checked */;
         armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
         gui_1.GUI.getBigBox().fillEventList();
         drawingFunctions_1.Drawing.drawStuff();

@@ -64,30 +64,13 @@ export class SplitEvent extends PhoenixEvent{
             army.getPosition()[0] === this.position[0] &&
             army.getPosition()[1] === this.position[1]);
         if (armyToSplitFrom != undefined) {
-            armyToSplitFrom.setTroopCount(armyToSplitFrom.getTroopCount() - this.troops);
-            armyToSplitFrom.setOfficerCount(armyToSplitFrom.getOfficerCount() - this.leaders);
-            if (armyToSplitFrom instanceof FootArmy) {
-                armyToSplitFrom.setMountCount(armyToSplitFrom.getMountCount() - this.mounts);
-            }
-            if (armyToSplitFrom instanceof FootArmy || armyToSplitFrom instanceof Fleet) {
-                armyToSplitFrom.setLightCatapultCount(armyToSplitFrom.getLightCatapultCount() - this.lkp);
-                armyToSplitFrom.setHeavyCatapultCount(armyToSplitFrom.getHeavyCatapultCount() - this.skp);
-            }
-            if (armyToSplitFrom instanceof FootArmy) {
-                GameState.armies.push(new FootArmy(this.newArmyId, this.realm, this.troops, this.leaders, this.lkp,
-                    this.skp, this.mounts, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints(),
-                    armyToSplitFrom.getHeightPoints()));
-            }
-            else if (armyToSplitFrom instanceof RiderArmy) {
-                GameState.armies.push(new RiderArmy(this.newArmyId, this.realm, this.troops, this.leaders,
-                    armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints(), armyToSplitFrom.getHeightPoints()));
-            }
-            else if (armyToSplitFrom instanceof Fleet) {
-                GameState.armies.push(new Fleet(this.newArmyId, this.realm, this.troops, this.leaders, this.lkp,
-                    this.skp, armyToSplitFrom.getPosition(), armyToSplitFrom.getMovePoints()));
+            try {
+                armyToSplitFrom.split(this.troops, this.leaders, this.lkp, this.skp, this.mounts, this.newArmyId);
+                this.status = EventStatus.Checked;
+            } catch(e){
+                window.alert((e as Error).message);
             }
         }
-        this.status = EventStatus.Checked;
         ArmyFunctions.checkArmiesForLiveliness();
         GUI.getBigBox().fillEventList();
         Drawing.drawStuff();
