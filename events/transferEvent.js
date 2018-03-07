@@ -19,7 +19,7 @@ class TransferEvent extends event_1.PhoenixEvent {
         this.skp = skp;
         this.position = position;
     }
-    getType() {
+    typeAsString() {
         return "transfer";
     }
     getContent() {

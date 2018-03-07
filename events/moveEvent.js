@@ -14,7 +14,7 @@ class MoveEvent extends event_1.PhoenixEvent {
         this.from = from;
         this.to = to;
     }
-    getType() {
+    typeAsString() {
         return "move";
     }
     getContent() {

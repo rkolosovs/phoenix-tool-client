@@ -14,12 +14,12 @@ export abstract class PhoenixEvent{
 
 	protected abstract getContent(): string;
 
-	protected abstract getType():string;
+	protected abstract typeAsString():string;
 
 	protected abstract validGameState(): boolean;
 
 	asStringifiedJSON(): string{
-	    return JSON.stringify({'type': this.getType(), 'content': JSON.parse(this.getContent())});
+	    return JSON.stringify({'type': this.typeAsString(), 'content': JSON.parse(this.getContent())});
     }
 
     asJSON(): JSON{

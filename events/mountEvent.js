@@ -18,7 +18,7 @@ class MountEvent extends event_1.PhoenixEvent {
         this.leaders = leaders;
         this.position = position;
     }
-    getType() {
+    typeAsString() {
         return "mount/dismount";
     }
     getContent() {

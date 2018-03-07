@@ -11,7 +11,7 @@ class BattleEvent extends event_1.PhoenixEvent {
         this.participants = participants;
         this.position = position;
     }
-    getType() {
+    typeAsString() {
         return "battle";
     }
     getContent() {

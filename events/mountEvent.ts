@@ -18,7 +18,7 @@ export class MountEvent extends PhoenixEvent{
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
 
-    protected getType(): string{
+    protected typeAsString(): string{
         return "mount/dismount";
     }
 

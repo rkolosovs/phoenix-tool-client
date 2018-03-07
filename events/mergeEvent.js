@@ -12,7 +12,7 @@ class MergeEvent extends event_1.PhoenixEvent {
         this.realm = realm;
         this.position = position;
     }
-    getType() {
+    typeAsString() {
         return "merge";
     }
     getContent() {

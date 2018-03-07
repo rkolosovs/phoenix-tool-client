@@ -10,7 +10,7 @@ class PhoenixEvent {
         this.databasePrimaryKey = databasePrimaryKey;
     }
     asStringifiedJSON() {
-        return JSON.stringify({ 'type': this.getType(), 'content': JSON.parse(this.getContent()) });
+        return JSON.stringify({ 'type': this.typeAsString(), 'content': JSON.parse(this.getContent()) });
     }
     asJSON() {
         return JSON.parse(this.asStringifiedJSON());

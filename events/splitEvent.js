@@ -19,7 +19,7 @@ class SplitEvent extends event_1.PhoenixEvent {
         this.skp = skp;
         this.position = position;
     }
-    getType() {
+    typeAsString() {
         return "split";
     }
     getContent() {

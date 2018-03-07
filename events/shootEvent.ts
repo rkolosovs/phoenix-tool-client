@@ -19,7 +19,7 @@ export class ShootEvent extends PhoenixEvent{
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
 
-    protected getType(): string{
+    protected typeAsString(): string{
         return "shoot";
     }
 
@@ -27,7 +27,8 @@ export class ShootEvent extends PhoenixEvent{
         return "{'armyId': " + this.shooterId + ", 'realm': " + this.realm.tag +
             ", 'LKPcount': " + this.lkpCount + ", 'SKPcount': " + this.skpCount +
             ", 'fromX': " + this.from[0] + ", 'fromY': " + this.from[1] +
-            ", 'toX': " + this.to[0] + ", 'toY': " + this.to[1] + "}";
+            ", 'toX': " + this.to[0] + ", 'toY': " + this.to[1] +
+            ", 'target': " + (this.target === ShootingTarget.OnField)?"on field":"wall" + "}";
     }
 
     protected validGameState(): boolean{
