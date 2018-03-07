@@ -268,19 +268,19 @@ var ButtonFunctions;
             return;
         }
         else if (!selectedArmy.targetList.some(field => field[0] ===
-            controlVariables_1.Controls.selectedFields[1][0] && field[1] === controlVariables_1.Controls.selectedFields[1][1])) {
+            controlVariables_1.Controls.shootingTarget[0] && field[1] === controlVariables_1.Controls.shootingTarget[1])) {
             window.alert("Ungültiges Ziel.");
             return;
         }
         //TODO: Shoot at things other than the field (mainly the wall).
         let target = 0 /* OnField */;
         try {
-            selectedArmy.shootAt(controlVariables_1.Controls.selectedFields[1], target, lkpToShootCount, skpToShootCount);
+            selectedArmy.shootAt(controlVariables_1.Controls.shootingTarget, target, lkpToShootCount, skpToShootCount);
         }
         catch (e) {
             window.alert(e.message);
         }
-        gameState_1.GameState.newEvents.push(new shootEvent_1.ShootEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getID(), controlVariables_1.Controls.selectedFields[1], gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition(), lkpToShootCount, skpToShootCount, target));
+        gameState_1.GameState.newEvents.push(new shootEvent_1.ShootEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getID(), controlVariables_1.Controls.shootingTarget, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition(), lkpToShootCount, skpToShootCount, target));
         boxVisibilty_1.BoxVisibility.updateInfoBox();
         window.alert("Die Geschosse sind unterwegs. Warte auf die Zugauswertung, um das Ergebnis zu erfahren!");
         drawingFunctions_1.Drawing.drawStuff();

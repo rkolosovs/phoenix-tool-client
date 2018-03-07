@@ -168,10 +168,6 @@ var MouseFunctions;
                     "y": gameState_1.GameState.fields[posi].coordinates[1] });
             }
         }
-        else if (shootingModeOn) {
-            //for shooting the bastards
-            controlVariables_1.Controls.selectedFields[1] = clickedField;
-        }
         else {
             // Feldauswahl
             let index = -1;
@@ -184,7 +180,7 @@ var MouseFunctions;
             }
             // Armeeauswahl
             restoreInfoBox();
-            controlVariables_1.Controls.selectedArmyIndex = undefined;
+            controlVariables_1.Controls.selectedArmyIndex = -1;
             let possibleSelections = [];
             gameState_1.GameState.armies.forEach((army, index) => {
                 if (army.getPosition()[0] === clickedField[0] && army.getPosition()[1] === clickedField[1]) {
@@ -261,6 +257,8 @@ var MouseFunctions;
             }
         }
         else if (shootingModeOn) {
+            //for shooting the bastards
+            controlVariables_1.Controls.shootingTarget = clickedField;
         }
         else {
             if (selectedArmyIndex === undefined) {

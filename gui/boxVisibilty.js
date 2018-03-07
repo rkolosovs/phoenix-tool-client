@@ -357,8 +357,8 @@ var BoxVisibility;
     function closeShootBox() {
         hide(gui_1.GUI.getShootBox());
         switchModeTo("none");
-        if (controlVariables_1.Controls.selectedFields[1] != undefined) {
-            controlVariables_1.Controls.selectedFields.pop();
+        if (controlVariables_1.Controls.shootingTarget != undefined) {
+            controlVariables_1.Controls.shootingTarget = undefined;
         }
         drawingFunctions_1.Drawing.drawStuff();
     }

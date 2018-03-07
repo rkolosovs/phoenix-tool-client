@@ -49,7 +49,8 @@ var Drawing;
         drawArmies(pos, Drawing.scale);
         drawArmySelection(pos, Drawing.scale, selectedArmyIndex);
         drawPossibleMoves(pos, Drawing.scale, selectedArmyIndex);
-        drawShootingTargets(pos, Drawing.scale, selectedArmyIndex);
+        drawPossibleShootingTargets(pos, Drawing.scale, gameState_1.GameState.armies[selectedArmyIndex]);
+        drawShootingTargetSelection(pos, Drawing.scale);
         writeFieldInfo();
     }
     Drawing.drawStuff = drawStuff;
@@ -604,8 +605,18 @@ var Drawing;
     function drawArmySelection(screenPos, scale, armyIndex) {
         gui_1.GUI.getContext().lineWidth = 5;
         gui_1.GUI.getContext().strokeStyle = "green";
-        if (armyIndex !== undefined) {
+        if (armyIndex != undefined) {
             let pos = hexFunctions_1.HexFunction.computePosition(screenPos, gameState_1.GameState.armies[armyIndex].getPosition(), scale);
+            gui_1.GUI.getContext().beginPath();
+            gui_1.GUI.getContext().arc(pos[0] + (0.5 * scale * constants_1.Constants.SIN60), pos[1] + (scale * 0.5), scale / 2.2, 0, 2 * Math.PI, false);
+            gui_1.GUI.getContext().stroke();
+        }
+    }
+    function drawShootingTargetSelection(screenPos, scale) {
+        gui_1.GUI.getContext().lineWidth = 5;
+        gui_1.GUI.getContext().strokeStyle = "red";
+        if (controlVariables_1.Controls.shootingTarget != undefined) {
+            let pos = hexFunctions_1.HexFunction.computePosition(screenPos, controlVariables_1.Controls.shootingTarget, scale);
             gui_1.GUI.getContext().beginPath();
             gui_1.GUI.getContext().arc(pos[0] + (0.5 * scale * constants_1.Constants.SIN60), pos[1] + (scale * 0.5), scale / 2.2, 0, 2 * Math.PI, false);
             gui_1.GUI.getContext().stroke();
@@ -700,7 +711,7 @@ var Drawing;
         gui_1.GUI.getContext().arc(screenPos[0] + (0.5 * scale * constants_1.Constants.SIN60) + Drawing.c, screenPos[1] + (scale * 0.5) + Drawing.c, scale / 16, Math.PI * 1.25, Math.PI * 1.75, false);
         gui_1.GUI.getContext().stroke();
     }
-    function drawShootingTargets(screenPos, scale, selectedArmy) {
+    function drawPossibleShootingTargets(screenPos, scale, selectedArmy) {
         if (selectedArmy != undefined && gameState_1.GameState.armies[selectedArmyIndex].possibleTargets.length > 0 &&
             boxVisibilty_1.BoxVisibility.shootingModeOn) {
             let targets = gameState_1.GameState.armies[selectedArmyIndex].possibleTargets;

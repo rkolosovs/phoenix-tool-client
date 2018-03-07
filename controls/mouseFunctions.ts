@@ -162,10 +162,7 @@ export namespace MouseFunctions{
                     "x": GameState.fields[posi].coordinates[0],
                     "y": GameState.fields[posi].coordinates[1] });
             }
-        } else if(shootingModeOn){
-            //for shooting the bastards
-            Controls.selectedFields[1] = clickedField;
-        }else {
+        } else {
             // Feldauswahl
             let index = -1;
             let sf = Controls.selectedFields[0];
@@ -176,7 +173,7 @@ export namespace MouseFunctions{
             }
             // Armeeauswahl
             restoreInfoBox();
-            Controls.selectedArmyIndex = undefined;
+            Controls.selectedArmyIndex = -1;
             let possibleSelections = [];
             GameState.armies.forEach((army, index) => {
                 if(army.getPosition()[0] === clickedField[0] && army.getPosition()[1] === clickedField[1]){
@@ -251,8 +248,9 @@ export namespace MouseFunctions{
                 }
             }
         } else if(shootingModeOn){
-
-        }else {
+            //for shooting the bastards
+            Controls.shootingTarget = clickedField;
+        } else {
             if(selectedArmyIndex === undefined){
                 console.log("Can't move with no army selected");
             } else {

@@ -325,8 +325,8 @@ export namespace BoxVisibility {
     export function closeShootBox(): void {
         hide(GUI.getShootBox());
         switchModeTo("none");
-        if (Controls.selectedFields[1] != undefined) {
-            Controls.selectedFields.pop();
+        if (Controls.shootingTarget != undefined) {
+            Controls.shootingTarget = undefined;
         }
         Drawing.drawStuff();
     }

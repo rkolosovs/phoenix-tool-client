@@ -3,6 +3,7 @@ import {Building} from "../buildings/building";
 
 export class Controls{
     static selectedFields: [number, number][]  = []; // list of fields to be highlighted
+    static shootingTarget: [number, number]|undefined;
     static selectedArmyIndex: number = -1; // index of the currently selected army in the GameState.armies
     static scrollSpeed: number = 0.2; // increment to scroll with each step
     static changedFields: Field[] = []; // Fields that were changes with World Builder
