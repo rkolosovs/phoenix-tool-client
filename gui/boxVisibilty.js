@@ -207,16 +207,6 @@ var BoxVisibility;
         }
     }
     BoxVisibility.toggleWallBuildingMode = toggleWallBuildingMode;
-    function toggleShootingMode() {
-        if (BoxVisibility.shootingModeOn) {
-            closeShootBox();
-        }
-        else if (!BoxVisibility.shootingModeOn) {
-            switchModeTo("shootingModeOn");
-            activateShootBox();
-        }
-    }
-    BoxVisibility.toggleShootingMode = toggleShootingMode;
     function toggleGodModeBar() {
         if (gui_1.GUI.getGodModeBox().getSelf().classList.contains("invisible")) {
             restoreInfoBox();
@@ -364,12 +354,6 @@ var BoxVisibility;
         show(gui_1.GUI.getUnMountBox());
     }
     BoxVisibility.activateUnMountBox = activateUnMountBox;
-    function activateShootBox() {
-        show(gui_1.GUI.getShootBox());
-        findPossibleTargetFields();
-        drawingFunctions_1.Drawing.drawStuff();
-    }
-    BoxVisibility.activateShootBox = activateShootBox;
     function closeShootBox() {
         hide(gui_1.GUI.getShootBox());
         switchModeTo("none");
@@ -379,19 +363,6 @@ var BoxVisibility;
         drawingFunctions_1.Drawing.drawStuff();
     }
     BoxVisibility.closeShootBox = closeShootBox;
-    function activateSplitbox() {
-        if (gameState_1.GameState.armies[selectedArmyIndex] instanceof footArmy_1.FootArmy) {
-            show(gui_1.GUI.getSplitBox());
-        }
-        else if (gameState_1.GameState.armies[selectedArmyIndex] instanceof riderArmy_1.RiderArmy) {
-            show(gui_1.GUI.getSplitMountedBox());
-        }
-        else if (gameState_1.GameState.armies[selectedArmyIndex] instanceof fleet_1.Fleet) {
-            show(gui_1.GUI.getSplitFleetBox());
-        }
-        hide(gui_1.GUI.getInfoBox().getSelf());
-    }
-    BoxVisibility.activateSplitbox = activateSplitbox;
     function activateTransmuteBox() {
         let toSplit = 0;
         let leadersToSplit = 0;

@@ -67,7 +67,7 @@ class ShootEvent extends event_1.PhoenixEvent {
         ;
         shootBox.getAttackersLKPText().innerHTML = this.lkpCount.toString();
         shootBox.getAttackersSKPText().innerHTML = this.skpCount.toString();
-        shootBox.getTargetText().innerHTML = this.target;
+        shootBox.getTargetText().innerHTML = this.target === 0 /* OnField */ ? "On Field" : "Wall";
         shootBox.getXTargetText().innerHTML = this.to[0].toString();
         shootBox.getYTargetText().innerHTML = this.to[1].toString();
         let shootButton = shootBox.getRangedBattleButton();

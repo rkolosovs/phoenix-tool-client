@@ -11,15 +11,43 @@ const armyFunctions_1 = require("../libraries/armyFunctions");
 const fleet_1 = require("../armies/fleet");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
 const shootingFunctions_1 = require("../armies/shootingFunctions");
+const shootEvent_1 = require("../events/shootEvent");
 const mergeEvent_1 = require("../events/mergeEvent");
 const splitEvent_1 = require("../events/splitEvent");
 const transferEvent_1 = require("../events/transferEvent");
 var ButtonFunctions;
 (function (ButtonFunctions) {
+    var show = boxVisibilty_1.BoxVisibility.show;
+    var hide = boxVisibilty_1.BoxVisibility.hide;
     function mainButton() {
         boxVisibilty_1.BoxVisibility.toggleVisibility(gui_1.GUI.getBigBox().getSelf());
     }
     ButtonFunctions.mainButton = mainButton;
+    function toggleShootingMode() {
+        if (boxVisibilty_1.BoxVisibility.shootingModeOn) {
+            boxVisibilty_1.BoxVisibility.closeShootBox();
+        }
+        else if (!boxVisibilty_1.BoxVisibility.shootingModeOn) {
+            boxVisibilty_1.BoxVisibility.switchModeTo("shootingModeOn");
+            show(gui_1.GUI.getShootBox());
+            gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].findShootingTargets();
+            drawingFunctions_1.Drawing.drawStuff();
+        }
+    }
+    ButtonFunctions.toggleShootingMode = toggleShootingMode;
+    function activateSplitbox() {
+        if (gameState_1.GameState.armies[selectedArmyIndex] instanceof footArmy_1.FootArmy) {
+            show(gui_1.GUI.getSplitBox());
+        }
+        else if (gameState_1.GameState.armies[selectedArmyIndex] instanceof riderArmy_1.RiderArmy) {
+            show(gui_1.GUI.getSplitMountedBox());
+        }
+        else if (gameState_1.GameState.armies[selectedArmyIndex] instanceof fleet_1.Fleet) {
+            show(gui_1.GUI.getSplitFleetBox());
+        }
+        hide(gui_1.GUI.getInfoBox().getSelf());
+    }
+    ButtonFunctions.activateSplitbox = activateSplitbox;
     function nextTurn() {
         let message = "";
         if (gameState_1.GameState.currentTurn.realm == undefined) {
@@ -208,7 +236,56 @@ var ButtonFunctions;
         }
     }
     ButtonFunctions.mergeSelectedArmy = mergeSelectedArmy;
-    //TODO: throw errors instead of returning a boolean
+    //read the proper inputs, check validity and construct a shoot event
+    function shootWithSelectedArmy() {
+        let selectedArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
+        if (gameState_1.GameState.login === 'guest') {
+            window.alert("Du musst eingeloggt sein um das zu tun.");
+            return;
+        }
+        else if (gameState_1.GameState.login !== 'sl' && gameState_1.GameState.login !== selectedArmy.owner.tag) {
+            window.alert("Du kannst nur mit deinen eigenen Armeen schießen.");
+            return;
+        }
+        let lkpToShootCount = parseInt(gui_1.GUI.getShootingLKPInput().value);
+        let skpToShootCount = parseInt(gui_1.GUI.getShootingSKPInput().value);
+        if (isNaN(lkpToShootCount)) {
+            lkpToShootCount = 0;
+        }
+        if (isNaN(skpToShootCount)) {
+            skpToShootCount = 0;
+        }
+        if (lkpToShootCount === 0 && skpToShootCount === 0) {
+            window.alert("Du muss mit mindestens einem Katapult schießen.");
+            return;
+        }
+        if (controlVariables_1.Controls.selectedFields.length < 2) {
+            window.alert("Wählen Sie ein Feld auf das Sie schießen wollen.");
+            return;
+        }
+        if (selectedArmy.targetList.length < 1) {
+            window.alert("No available targets.");
+            return;
+        }
+        else if (!selectedArmy.targetList.some(field => field[0] ===
+            controlVariables_1.Controls.selectedFields[1][0] && field[1] === controlVariables_1.Controls.selectedFields[1][1])) {
+            window.alert("Ungültiges Ziel.");
+            return;
+        }
+        //TODO: Shoot at things other than the field (mainly the wall).
+        let target = 0 /* OnField */;
+        try {
+            selectedArmy.shootAt(controlVariables_1.Controls.selectedFields[1], target, lkpToShootCount, skpToShootCount);
+        }
+        catch (e) {
+            window.alert(e.message);
+        }
+        gameState_1.GameState.newEvents.push(new shootEvent_1.ShootEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getID(), controlVariables_1.Controls.selectedFields[1], gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition(), lkpToShootCount, skpToShootCount, target));
+        boxVisibilty_1.BoxVisibility.updateInfoBox();
+        window.alert("Die Geschosse sind unterwegs. Warte auf die Zugauswertung, um das Ergebnis zu erfahren!");
+        drawingFunctions_1.Drawing.drawStuff();
+    }
+    ButtonFunctions.shootWithSelectedArmy = shootWithSelectedArmy;
     function shootButtonLogic(shootEvent) {
         let shootBox = gui_1.GUI.getShootingBigBox();
         let shooter = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === shootEvent.getShooterId() && army.owner === shootEvent.getRealm());
@@ -230,32 +307,34 @@ var ButtonFunctions;
         }
         //TODO check target field
         if (lkpRolls.length < shootEvent.getLightCatapultCount()) {
-            window.alert("Sie haben zu wenig Würfe für leichte Katapulte/Kriegsschiffe eingetragenen");
-            return false;
+            window.alert("Sie haben zu wenig Würfe für leichte Katapulte/Kriegsschiffe eingetragenen.");
+            return;
         }
         else if (skpRolls.length < shootEvent.getHeavyCatapultCount()) {
-            window.alert("Sie haben zu wenig Würfe für schwere Katapulte/Kriegsschiffe eingetragenen");
-            return false;
+            window.alert("Sie haben zu wenig Würfe für schwere Katapulte/Kriegsschiffe eingetragenen.");
+            return;
         }
         else if (lkpRolls.length > shootEvent.getLightCatapultCount()) {
-            window.alert("Sie haben zu viele Würfe für leichte Katapulte/Kriegsschiffe eingetragenen");
-            return false;
+            window.alert("Sie haben zu viele Würfe für leichte Katapulte/Kriegsschiffe eingetragenen.");
+            return;
         }
         else if (skpRolls.length > shootEvent.getHeavyCatapultCount()) {
-            window.alert("Sie haben zu viele Würfe für schwere Katapulte/Kriegsschiffe eingetragenen");
-            return false;
+            window.alert("Sie haben zu viele Würfe für schwere Katapulte/Kriegsschiffe eingetragenen.");
+            return;
         }
-        else if (shooter != undefined) {
-            shootingFunctions_1.ShootingFunctions.fernkampf(lkpRolls, skpRolls, shooter, shootEvent.getTarget(), shootEvent.getTo(), null);
+        else if (shooter == undefined) {
+            window.alert("Sie haben zu viele Würfe für schwere Katapulte/Kriegsschiffe eingetragenen");
+            return;
+        }
+        else {
+            shootingFunctions_1.ShootingFunctions.inflictRangedDamage(lkpRolls, skpRolls, shooter, shootEvent.getTarget(), shootEvent.getTo(), null);
+            shooter.shootAt(shootEvent.getTo(), shootEvent.getTarget(), shootEvent.getLightCatapultCount(), shootEvent.getHeavyCatapultCount());
             // TODO chars
             boxVisibilty_1.BoxVisibility.hide(shootBox.getSelf());
             shootEvent.setStatus(0 /* Checked */);
             gui_1.GUI.getBigBox().fillEventList();
             drawingFunctions_1.Drawing.drawStuff();
-            return true;
-        }
-        else {
-            return false;
+            return;
         }
     }
     ButtonFunctions.shootButtonLogic = shootButtonLogic;

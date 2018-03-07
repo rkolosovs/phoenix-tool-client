@@ -20,4 +20,14 @@ export namespace Constants{
     export const HEAVY_CATA_BP: number = 400;
     export const LIGHT_WS_BP: number = 200;
     export const HEAVY_WS_BP: number = 400;
+    export const LIGHT_CATA_DAMAGE: number[] = [225, 200, 175, 150, 125, 100, 70, 40, 10, 5];
+    export const HEAVY_CATA_DAMAGE_NEAR: number[] = [300, 270, 240, 210, 180, 150, 120, 90, 60, 30];
+    export const HEAVY_CATA_DAMAGE_HIGH: number[] = [120, 100, 80, 65, 50, 40, 30, 10, 5, 0];
+    export const HEAVY_CATA_DAMAGE_FARANDHIGH: number[] = [150, 120, 100, 80, 65, 50, 40, 30, 10, 5];
+    export const HEAVY_CATA_DAMAGE_FAR: number[] = [150, 130, 110, 90, 70, 50, 30, 10, 5, 0];
+    export const LIGHT_WS_DAMAGE: number[] = [175, 150, 125, 100, 75, 50, 25, 10, 5, 0];
+    export const HEAVY_WS_DAMAGE_NEAR: number[] = [250, 220, 190, 160, 130, 100, 70, 40, 10, 5];
+    export const HEAVY_WS_DAMAGE_HIGH: number[] = [100, 80, 65, 50, 40, 30, 10, 5, 0, 0];
+    export const HEAVY_WS_DAMAGE_FARANDHIGH: number[] = [120, 100, 80, 65, 50, 40, 30, 10, 5, 0];
+    export const HEAVY_WS_DAMAGE_FAR: number[] = [100, 80, 60, 40, 20, 10, 5, 0, 0, 0];
 }

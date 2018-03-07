@@ -213,10 +213,13 @@ class RiderArmy extends landArmy_1.LandArmy {
         }
         armyFunctions_1.ArmyFunctions.deleteArmy(fromArmy);
     }
-    fireLightCatapults(dicerolls, badConditions) {
+    shootAt(targetCoordinate, target, lkpToShootCount, skpToShootCount) {
+        throw new Error("Riders can't have catapults.");
+    }
+    getLightCatapultDamage(diceRolls, conditions) {
         return 0;
     }
-    fireHeavyCatapults(dicerolls, badConditions) {
+    getHeavyCatapultDamage(diceRolls, conditions) {
         return 0;
     }
     // the unMount function of the unMount box
@@ -247,7 +250,6 @@ class RiderArmy extends landArmy_1.LandArmy {
             window.alert("Es muss mindestens ein Heerführer bei der neuen Armee sein.");
             return false;
         }
-        console.log(toUnMount);
         if (toUnMount > this.troopCount) {
             window.alert("So viele Truppen hast du nicht zum absitzen");
             return false;

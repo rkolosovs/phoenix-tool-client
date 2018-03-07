@@ -10,7 +10,7 @@ import {ArmyFunctions} from "../libraries/armyFunctions";
 import {Fleet} from "../armies/fleet";
 import {EventStatus} from "../events/eventStatus";
 import {Drawing} from "../gui/drawingFunctions";
-import {ShootingFunctions} from "../armies/shootingFunctions";
+import {ShootingFunctions, ShootingTarget} from "../armies/shootingFunctions";
 import {ShootingBigBox} from "../gui/shootingBigBox";
 import {ShootEvent} from "../events/shootEvent";
 import {MergeEvent} from "../events/mergeEvent";
@@ -19,8 +19,35 @@ import {TransferEvent} from "../events/transferEvent";
 
 export namespace ButtonFunctions{
 
+    import show = BoxVisibility.show;
+    import hide = BoxVisibility.hide;
+
     export function mainButton() {
         BoxVisibility.toggleVisibility(GUI.getBigBox().getSelf());
+    }
+
+    export function toggleShootingMode(): void {
+        if (BoxVisibility.shootingModeOn) {
+            BoxVisibility.closeShootBox();
+        } else if (!BoxVisibility.shootingModeOn) {
+            BoxVisibility.switchModeTo("shootingModeOn");
+            show(GUI.getShootBox());
+            GameState.armies[Controls.selectedArmyIndex].findShootingTargets();
+            Drawing.drawStuff();
+        }
+    }
+
+    export function activateSplitbox(): void {
+        if (GameState.armies[selectedArmyIndex] instanceof FootArmy) {
+            show(GUI.getSplitBox());
+        }
+        else if (GameState.armies[selectedArmyIndex] instanceof RiderArmy) {
+            show(GUI.getSplitMountedBox());
+        }
+        else if (GameState.armies[selectedArmyIndex] instanceof Fleet) {
+            show(GUI.getSplitFleetBox());
+        }
+        hide(GUI.getInfoBox().getSelf());
     }
 
     export function nextTurn() {
@@ -203,8 +230,62 @@ export namespace ButtonFunctions{
         }
     }
 
-    //TODO: throw errors instead of returning a boolean
-    export function shootButtonLogic(shootEvent: ShootEvent): boolean{
+    //read the proper inputs, check validity and construct a shoot event
+    export function shootWithSelectedArmy(): void {
+        let selectedArmy: Army = GameState.armies[Controls.selectedArmyIndex];
+        if (GameState.login === 'guest') {
+            window.alert("Du musst eingeloggt sein um das zu tun.");
+            return;
+        } else if(GameState.login !== 'sl' && GameState.login !== selectedArmy.owner.tag){
+            window.alert("Du kannst nur mit deinen eigenen Armeen schießen.");
+            return;
+        }
+
+        let lkpToShootCount = parseInt(GUI.getShootingLKPInput().value);
+        let skpToShootCount = parseInt(GUI.getShootingSKPInput().value);
+
+        if (isNaN(lkpToShootCount)) {
+            lkpToShootCount = 0;
+        }
+        if (isNaN(skpToShootCount)) {
+            skpToShootCount = 0;
+        }
+        if (lkpToShootCount === 0 && skpToShootCount === 0) {
+            window.alert("Du muss mit mindestens einem Katapult schießen.");
+            return;
+        }
+        if (Controls.selectedFields.length < 2) {
+            window.alert("Wählen Sie ein Feld auf das Sie schießen wollen.");
+            return;
+        }
+        if (selectedArmy.targetList.length < 1) {
+            window.alert("No available targets.");
+            return;
+        } else if (!selectedArmy.targetList.some(field => field[0] ===
+                    Controls.selectedFields[1][0] && field[1] === Controls.selectedFields[1][1])) {
+            window.alert("Ungültiges Ziel.");
+            return;
+        }
+        //TODO: Shoot at things other than the field (mainly the wall).
+        let target: ShootingTarget = ShootingTarget.OnField;
+
+        try {
+            selectedArmy.shootAt(Controls.selectedFields[1], target, lkpToShootCount, skpToShootCount);
+        } catch(e){
+            window.alert((e as Error).message);
+        }
+
+        GameState.newEvents.push(new ShootEvent(GameState.newEvents.length, EventStatus.Checked,
+            GameState.armies[Controls.selectedArmyIndex].owner, GameState.armies[Controls.selectedArmyIndex].getID(),
+            Controls.selectedFields[1], GameState.armies[Controls.selectedArmyIndex].getPosition(),
+            lkpToShootCount, skpToShootCount, target));
+
+        BoxVisibility.updateInfoBox();
+        window.alert("Die Geschosse sind unterwegs. Warte auf die Zugauswertung, um das Ergebnis zu erfahren!");
+        Drawing.drawStuff();
+    }
+
+    export function shootButtonLogic(shootEvent: ShootEvent): void{
         let shootBox: ShootingBigBox = GUI.getShootingBigBox();
         let shooter: Army|undefined = GameState.armies.find(
             army => army.getErkenfaraID() === shootEvent.getShooterId() && army.owner === shootEvent.getRealm());
@@ -227,28 +308,31 @@ export namespace ButtonFunctions{
         //TODO check target field
 
         if(lkpRolls.length < shootEvent.getLightCatapultCount()){
-            window.alert("Sie haben zu wenig Würfe für leichte Katapulte/Kriegsschiffe eingetragenen");
-            return false;
+            window.alert("Sie haben zu wenig Würfe für leichte Katapulte/Kriegsschiffe eingetragenen.");
+            return;
         } else if(skpRolls.length < shootEvent.getHeavyCatapultCount()){
-            window.alert("Sie haben zu wenig Würfe für schwere Katapulte/Kriegsschiffe eingetragenen");
-            return false;
+            window.alert("Sie haben zu wenig Würfe für schwere Katapulte/Kriegsschiffe eingetragenen.");
+            return;
         } else if(lkpRolls.length > shootEvent.getLightCatapultCount()){
-            window.alert("Sie haben zu viele Würfe für leichte Katapulte/Kriegsschiffe eingetragenen");
-            return false;
+            window.alert("Sie haben zu viele Würfe für leichte Katapulte/Kriegsschiffe eingetragenen.");
+            return;
         } else if(skpRolls.length > shootEvent.getHeavyCatapultCount()){
+            window.alert("Sie haben zu viele Würfe für schwere Katapulte/Kriegsschiffe eingetragenen.");
+            return;
+        } else if(shooter == undefined){
             window.alert("Sie haben zu viele Würfe für schwere Katapulte/Kriegsschiffe eingetragenen");
-            return false;
-        } else if(shooter != undefined){
-            ShootingFunctions.fernkampf(lkpRolls, skpRolls, shooter, shootEvent.getTarget(),
+            return;
+        } else{
+            ShootingFunctions.inflictRangedDamage(lkpRolls, skpRolls, shooter, shootEvent.getTarget(),
                 shootEvent.getTo(), null);
+            shooter.shootAt(shootEvent.getTo(), shootEvent.getTarget(), shootEvent.getLightCatapultCount(),
+                shootEvent.getHeavyCatapultCount());
             // TODO chars
             BoxVisibility.hide(shootBox.getSelf());
             shootEvent.setStatus(EventStatus.Checked);
             GUI.getBigBox().fillEventList();
             Drawing.drawStuff();
-            return true;
-        } else{
-            return false;
+            return;
         }
     }
 }

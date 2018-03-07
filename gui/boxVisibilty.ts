@@ -181,15 +181,6 @@ export namespace BoxVisibility {
         }
     }
 
-    export function toggleShootingMode(): void {
-        if (shootingModeOn) {
-            closeShootBox();
-        } else if (!shootingModeOn) {
-            switchModeTo("shootingModeOn");
-            activateShootBox();
-        }
-    }
-
     export function toggleGodModeBar(): void {
         if (GUI.getGodModeBox().getSelf().classList.contains("invisible")) {
             restoreInfoBox();
@@ -331,13 +322,6 @@ export namespace BoxVisibility {
         show(GUI.getUnMountBox());
     }
 
-
-    export function activateShootBox(): void {
-        show(GUI.getShootBox());
-        findPossibleTargetFields();
-        Drawing.drawStuff();
-    }
-
     export function closeShootBox(): void {
         hide(GUI.getShootBox());
         switchModeTo("none");
@@ -345,19 +329,6 @@ export namespace BoxVisibility {
             Controls.selectedFields.pop();
         }
         Drawing.drawStuff();
-    }
-
-    export function activateSplitbox(): void {
-        if (GameState.armies[selectedArmyIndex] instanceof FootArmy) {
-            show(GUI.getSplitBox());
-        }
-        else if (GameState.armies[selectedArmyIndex] instanceof RiderArmy) {
-            show(GUI.getSplitMountedBox());
-        }
-        else if (GameState.armies[selectedArmyIndex] instanceof Fleet) {
-            show(GUI.getSplitFleetBox());
-        }
-        hide(GUI.getInfoBox().getSelf());
     }
 
     export function activateTransmuteBox(): boolean {

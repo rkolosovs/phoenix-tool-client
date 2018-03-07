@@ -249,195 +249,30 @@ class Fleet extends army_1.Army {
             window.alert("" + discardedArmies + "armies have been thrown overboard.");
         }
     }
-    fireLightCatapults(dicerolls, badConditions) {
-        let rollLen = dicerolls.length;
-        let damageBP = 0;
-        if (badConditions === "lkp") {
-            for (let i = 0; i < rollLen; i++) {
-                switch (dicerolls[i]) {
-                    case 9:
-                        damageBP += 0;
-                        break;
-                    case 8:
-                        damageBP += 5;
-                        break;
-                    case 7:
-                        damageBP += 10;
-                        break;
-                    case 6:
-                        damageBP += 25;
-                        break;
-                    case 5:
-                        damageBP += 50;
-                        break;
-                    case 4:
-                        damageBP += 75;
-                        break;
-                    case 3:
-                        damageBP += 100;
-                        break;
-                    case 2:
-                        damageBP += 125;
-                        break;
-                    case 1:
-                        damageBP += 150;
-                        break;
-                    case 0:
-                        damageBP += 175;
-                        break;
-                }
-            }
+    getLightCatapultDamage(diceRolls, conditions) {
+        if (conditions === 6 /* LightCatapults */) {
+            return diceRolls.map(roll => constants_1.Constants.LIGHT_WS_DAMAGE[roll]).reduce((total, current) => total + current, 0);
         }
-        return damageBP;
+        else {
+            return 0;
+        }
     }
-    fireHeavyCatapults(dicerolls, badConditions) {
-        let rollLen = dicerolls.length;
-        let damageBP = 0;
-        if (badConditions === "short") {
-            for (let i = 0; i < rollLen; i++) {
-                switch (dicerolls[i]) {
-                    case 9:
-                        damageBP += 5;
-                        break;
-                    case 8:
-                        damageBP += 10;
-                        break;
-                    case 7:
-                        damageBP += 40;
-                        break;
-                    case 6:
-                        damageBP += 70;
-                        break;
-                    case 5:
-                        damageBP += 100;
-                        break;
-                    case 4:
-                        damageBP += 130;
-                        break;
-                    case 3:
-                        damageBP += 160;
-                        break;
-                    case 2:
-                        damageBP += 190;
-                        break;
-                    case 1:
-                        damageBP += 220;
-                        break;
-                    case 0:
-                        damageBP += 250;
-                        break;
-                }
-            }
+    getHeavyCatapultDamage(diceRolls, conditions) {
+        if (conditions === 1 /* Near */) {
+            return diceRolls.map(roll => constants_1.Constants.HEAVY_WS_DAMAGE_NEAR[roll]).reduce((total, current) => total + current, 0);
         }
-        else if (badConditions === "high") {
-            for (let i = 0; i < rollLen; i++) {
-                switch (dicerolls[i]) {
-                    case 9:
-                        damageBP += 0;
-                        break;
-                    case 8:
-                        damageBP += 0;
-                        break;
-                    case 7:
-                        damageBP += 5;
-                        break;
-                    case 6:
-                        damageBP += 10;
-                        break;
-                    case 5:
-                        damageBP += 30;
-                        break;
-                    case 4:
-                        damageBP += 40;
-                        break;
-                    case 3:
-                        damageBP += 50;
-                        break;
-                    case 2:
-                        damageBP += 65;
-                        break;
-                    case 1:
-                        damageBP += 80;
-                        break;
-                    case 0:
-                        damageBP += 100;
-                        break;
-                }
-            }
+        else if (conditions === 3 /* High */) {
+            return diceRolls.map(roll => constants_1.Constants.HEAVY_WS_DAMAGE_HIGH[roll]).reduce((total, current) => total + current, 0);
         }
-        else if (badConditions === "farAndUp") {
-            for (let i = 0; i < rollLen; i++) {
-                switch (dicerolls[i]) {
-                    case 9:
-                        damageBP += 0;
-                        break;
-                    case 8:
-                        damageBP += 5;
-                        break;
-                    case 7:
-                        damageBP += 10;
-                        break;
-                    case 6:
-                        damageBP += 30;
-                        break;
-                    case 5:
-                        damageBP += 40;
-                        break;
-                    case 4:
-                        damageBP += 50;
-                        break;
-                    case 3:
-                        damageBP += 65;
-                        break;
-                    case 2:
-                        damageBP += 80;
-                        break;
-                    case 1:
-                        damageBP += 100;
-                        break;
-                    case 0:
-                        damageBP += 120;
-                        break;
-                }
-            }
+        else if (conditions === 2 /* FarAndHigh */) {
+            return diceRolls.map(roll => constants_1.Constants.HEAVY_WS_DAMAGE_FARANDHIGH[roll]).reduce((total, current) => total + current, 0);
         }
-        else if (badConditions === "far") {
-            for (let i = 0; i < rollLen; i++) {
-                switch (dicerolls[i]) {
-                    case 9:
-                        damageBP += 0;
-                        break;
-                    case 8:
-                        damageBP += 0;
-                        break;
-                    case 7:
-                        damageBP += 0;
-                        break;
-                    case 6:
-                        damageBP += 5;
-                        break;
-                    case 5:
-                        damageBP += 10;
-                        break;
-                    case 4:
-                        damageBP += 20;
-                        break;
-                    case 3:
-                        damageBP += 40;
-                        break;
-                    case 2:
-                        damageBP += 60;
-                        break;
-                    case 1:
-                        damageBP += 80;
-                        break;
-                    case 0:
-                        damageBP += 100;
-                        break;
-                }
-            }
+        else if (conditions === 0 /* Far */) {
+            return diceRolls.map(roll => constants_1.Constants.HEAVY_WS_DAMAGE_FAR[roll]).reduce((total, current) => total + current, 0);
         }
-        return damageBP;
+        else {
+            return 0;
+        }
     }
     takeDamage(losses) {
         super.takeDamage(losses);

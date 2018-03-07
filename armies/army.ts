@@ -4,6 +4,7 @@ import {Constants} from "../constants";
 import {MobileEntity} from "./mobileEntity";
 import {Field} from "../map/field";
 import {Realm} from "../realm";
+import {ShootingCondition, ShootingTarget} from "./shootingFunctions";
 
 export abstract class Army extends MobileEntity{
     protected troopCount: number;
@@ -13,7 +14,7 @@ export abstract class Army extends MobileEntity{
     protected lightCatapultsShot: number = 0;
     protected heavyCatapultsShot: number = 0;
     multiArmyField: boolean = false;
-    targetList: [number, number][] = []; //TODO: this needs to be reviewed, together with findShottingTargets ect.
+    targetList: [number, number][] = [];
     isGuard: boolean = false;
     wasShotAt: boolean = false;
     possibleTargets: Field[] = [];
@@ -71,9 +72,9 @@ export abstract class Army extends MobileEntity{
 
     abstract merge(fromArmy: Army): void;
 
-    abstract fireLightCatapults(dicerolls: number[], badConditions: string): number;
+    abstract getLightCatapultDamage(diceRolls: number[], conditions: ShootingCondition): number;
 
-    abstract fireHeavyCatapults(dicerolls: number[], badConditions: string): number;
+    abstract getHeavyCatapultDamage(diceRolls: number[], conditions: ShootingCondition): number;
 
     getTroopCount(): number{
         return this.troopCount;
@@ -152,46 +153,69 @@ export abstract class Army extends MobileEntity{
         this.targetList = this.checkAllShootingConditions(tilesInRange);
     }
 
-    checkAllShootingConditions(targetTileList: [number, number][]): [number, number][] {
-        let templist = targetTileList.slice();
-        let hasSKP = false;
-        if (this.heavyCatapultCount - this.heavyCatapultsShot > 0) {
-            hasSKP = true;
+    shootAt(targetCoordinate: [number, number], target: ShootingTarget,
+            lkpToShootCount: number, skpToShootCount: number): void{
+        if (this.lightCatapultCount - this.lightCatapultsShot < lkpToShootCount) {
+            //check if remaining Lkp that have not shot yet
+            throw new Error("Die Armee hat nur noch " + (this.lightCatapultCount - this.lightCatapultsShot) +
+                " leichte Katapulte/Kriegsschiffe die noch nicht geschossen haben.");
         }
-        //to find out the conditions and maybe kick out if not shootable
-        for (let i = templist.length - 1; i >= 0; i--) {
-            if (this.checkShootingCondition(templist[i], hasSKP) === 'impossible shot') {
-                targetTileList.splice(i, 1);
-            }
+        if (this.heavyCatapultCount - this.heavyCatapultsShot < skpToShootCount) {
+            //check if remaining Skp that have not shot yet
+            throw new Error("Die Armee hat nur noch " + (this.heavyCatapultCount - this.heavyCatapultsShot) +
+                " schwere Katapulte/Kriegsschiffe die noch nicht geschossen haben.");
         }
-        return targetTileList;
+        if(lkpToShootCount > 0 &&
+            this.checkShootingCondition(targetCoordinate, false) === ShootingCondition.Impossible){
+            throw new Error("Die leichten Katapulte/Kriegsschiffe können nicht so weit schießen. " +
+                "Schieße nur mit schweren Katapulten/Kriegsschiffe oder suche dir ein anderes Ziel aus.");
+        }
+        if(skpToShootCount > 0 &&
+            this.checkShootingCondition(targetCoordinate, true) === ShootingCondition.Impossible){
+            throw new Error("Ungültiges Ziel.");
+        }
+        this.lightCatapultsShot += lkpToShootCount;
+        this.heavyCatapultsShot += skpToShootCount;
+
+        //check to see if shooting after moving and stop the army if it moved this turn.
+        if (this.movePoints < this.getMaxMovePoints()) {
+            this.movePoints = 0;
+            this.possibleMoves = [];
+        }
     }
 
-    checkShootingCondition(target: [number, number], skpShot: boolean): string {
-        let condition = 'impossible shot';
+    checkAllShootingConditions(targetTileList: [number, number][]): [number, number][] {
+        let hasSKP = this.heavyCatapultCount - this.heavyCatapultsShot > 0;
+        //filter out all impossible shots
+        return targetTileList.filter(target =>
+            this.checkShootingCondition(target, hasSKP) !== ShootingCondition.Impossible);
+    }
+
+    checkShootingCondition(target: [number, number], skpShot: boolean): ShootingCondition {
+        let condition: ShootingCondition = ShootingCondition.Impossible;
         let range = HexFunction.distance(this.position, target);
         if (skpShot) {//skp shooting
-            if (range == 1) {//for range of 1
+            if (range === 1) {//for range of 1
                 if (HexFunction.height(target) - HexFunction.height(this.position) <= 2) {
-                    condition = 'high';
+                    condition = ShootingCondition.High;
                 }
                 if (HexFunction.height(target) - HexFunction.height(this.position) <= 1) {
-                    condition = 'short';
+                    condition = ShootingCondition.Near;
                 }
                 if (HexFunction.height(target) - HexFunction.height(this.position) === 1 &&
                     HexFunction.findWallInWay(this.position, target).length > 0) {
-                    condition = 'high';
+                    condition = ShootingCondition.High;
                 }
-            } else if (range == 2) {//for range of 2
+            } else if (range === 2) {//for range of 2
                 if (HexFunction.height(target) - HexFunction.height(this.position) <= 1) {
-                    condition = 'farAndUp';
+                    condition = ShootingCondition.FarAndHigh;
                 }
                 if (HexFunction.height(target) - HexFunction.height(this.position) < 1) {
-                    condition = 'far';
+                    condition = ShootingCondition.Far;
                 }
                 if (HexFunction.height(target) - HexFunction.height(this.position) === 0 &&
                     HexFunction.findWallInWay(this.position, target).length > 0) {
-                    condition = 'farAndUp';
+                    condition = ShootingCondition.FarAndHigh;
                 }
                 //if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
                 let commonNeig = HexFunction.findCommonNeighbor(this.position, target);
@@ -203,18 +227,18 @@ export abstract class Army extends MobileEntity{
                                     HexFunction.height(this.position) === 1)
                                     && GameState.buildings[walls[j]].getPosition()[0] === commonNeig[i][0] &&
                                     GameState.buildings[walls[j]].getPosition()[1] === commonNeig[i][1])) {
-                                condition = 'impossible shot';
+                                condition = ShootingCondition.Impossible;
                             }
                         }
                     }
                     if (HexFunction.height(commonNeig[i]) - HexFunction.height(this.position) > 1) {
-                        condition = 'impossible shot';
+                        condition = ShootingCondition.Impossible;
                     }
                 }
             }
         } else {//for lkp shooting
             if (HexFunction.height(target) - HexFunction.height(this.position) <= 1) {
-                condition = 'lkp';
+                condition = ShootingCondition.LightCatapults;
             }
         }
         return condition;

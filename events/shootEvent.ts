@@ -8,12 +8,13 @@ import {PhoenixEvent} from "./event";
 import {EventStatus} from "./eventStatus";
 import {ButtonFunctions} from "../controls/buttonFunctions";
 import {Army} from "../armies/army";
+import {ShootingTarget} from "../armies/shootingFunctions";
 
 export class ShootEvent extends PhoenixEvent{
     
     constructor(listPosition: number, status: EventStatus, protected realm: Realm, protected shooterId: number,
                 protected to: [number, number], protected from: [number, number], protected lkpCount: number,
-                protected skpCount: number, protected target: string, prerequisiteEvents?: number[],
+                protected skpCount: number, protected target: ShootingTarget, prerequisiteEvents?: number[],
                 databasePrimaryKey?: number){
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
@@ -58,7 +59,7 @@ export class ShootEvent extends PhoenixEvent{
         return this.to;
     }
 
-    getTarget(): string{
+    getTarget(): ShootingTarget{
         return this.target;
     }
 
@@ -77,7 +78,7 @@ export class ShootEvent extends PhoenixEvent{
         shootBox.getShooterTitleText().innerHTML = this.shooterId + ", " + this.realm.tag;;
         shootBox.getAttackersLKPText().innerHTML = this.lkpCount.toString();
         shootBox.getAttackersSKPText().innerHTML = this.skpCount.toString();
-        shootBox.getTargetText().innerHTML = this.target;
+        shootBox.getTargetText().innerHTML = this.target === ShootingTarget.OnField?"On Field":"Wall";
         shootBox.getXTargetText().innerHTML = this.to[0].toString();
         shootBox.getYTargetText().innerHTML = this.to[1].toString();
 

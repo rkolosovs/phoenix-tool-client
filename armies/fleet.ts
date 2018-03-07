@@ -17,6 +17,7 @@ import SHIP_TRANSPORT_CAPACITY = Constants.SHIP_TRANSPORT_CAPACITY;
 import {GameState} from "../gameState";
 import {ArmyFunctions} from "../libraries/armyFunctions";
 import {FootArmy} from "./footArmy";
+import {ShootingCondition, ShootingTarget} from "./shootingFunctions";
 
 export class Fleet extends Army{
     static readonly MAX_HEIGHT_POINTS: number = 0;
@@ -260,93 +261,31 @@ export class Fleet extends Army{
         }
     }
 
-    fireLightCatapults(dicerolls: number[], badConditions: string): number{
-        let rollLen = dicerolls.length;
-        let damageBP = 0;
-        if(badConditions === "lkp"){
-            for (let i = 0; i < rollLen; i++){
-                switch(dicerolls[i]){
-                    case 9: damageBP += 0; break;
-                    case 8: damageBP += 5; break;
-                    case 7: damageBP += 10; break;
-                    case 6: damageBP += 25; break;
-                    case 5: damageBP += 50; break;
-                    case 4: damageBP += 75; break;
-                    case 3: damageBP += 100; break;
-                    case 2: damageBP += 125; break;
-                    case 1: damageBP += 150; break;
-                    case 0: damageBP += 175; break;
-                }
-            }
+    getLightCatapultDamage(diceRolls: number[], conditions: ShootingCondition): number{
+        if(conditions === ShootingCondition.LightCatapults){
+            return diceRolls.map(roll =>
+                Constants.LIGHT_WS_DAMAGE[roll]).reduce((total, current) => total+current, 0);
+        } else {
+            return 0;
         }
-        return damageBP;
     }
 
-    fireHeavyCatapults(dicerolls: number[], badConditions: string): number{
-        let rollLen = dicerolls.length;
-        let damageBP = 0;
-        if(badConditions === "short"){
-            for (let i = 0; i < rollLen; i++){
-                switch(dicerolls[i]){
-                    case 9: damageBP += 5; break;
-                    case 8: damageBP += 10; break;
-                    case 7: damageBP += 40; break;
-                    case 6: damageBP += 70; break;
-                    case 5: damageBP += 100; break;
-                    case 4: damageBP += 130; break;
-                    case 3: damageBP += 160; break;
-                    case 2: damageBP += 190; break;
-                    case 1: damageBP += 220; break;
-                    case 0: damageBP += 250; break;
-                }
-            }
-        } else if(badConditions === "high"){
-            for (let i = 0; i < rollLen; i++){
-                switch(dicerolls[i]){
-                    case 9: damageBP += 0; break;
-                    case 8: damageBP += 0; break;
-                    case 7: damageBP += 5; break;
-                    case 6: damageBP += 10; break;
-                    case 5: damageBP += 30; break;
-                    case 4: damageBP += 40; break;
-                    case 3: damageBP += 50; break;
-                    case 2: damageBP += 65; break;
-                    case 1: damageBP += 80; break;
-                    case 0: damageBP += 100; break;
-                }
-            }
-        } else if(badConditions === "farAndUp"){
-            for (let i = 0; i < rollLen; i++){
-                switch(dicerolls[i]){
-                    case 9: damageBP += 0; break;
-                    case 8: damageBP += 5; break;
-                    case 7: damageBP += 10; break;
-                    case 6: damageBP += 30; break;
-                    case 5: damageBP += 40; break;
-                    case 4: damageBP += 50; break;
-                    case 3: damageBP += 65; break;
-                    case 2: damageBP += 80; break;
-                    case 1: damageBP += 100; break;
-                    case 0: damageBP += 120; break;
-                }
-            }
-        } else if(badConditions === "far"){
-            for (let i = 0; i < rollLen; i++){
-                switch(dicerolls[i]){
-                    case 9: damageBP += 0; break;
-                    case 8: damageBP += 0; break;
-                    case 7: damageBP += 0; break;
-                    case 6: damageBP += 5; break;
-                    case 5: damageBP += 10; break;
-                    case 4: damageBP += 20; break;
-                    case 3: damageBP += 40; break;
-                    case 2: damageBP += 60; break;
-                    case 1: damageBP += 80; break;
-                    case 0: damageBP += 100; break;
-                }
-            }
+    getHeavyCatapultDamage(diceRolls: number[], conditions: ShootingCondition): number{
+        if(conditions === ShootingCondition.Near){
+            return diceRolls.map(roll =>
+                Constants.HEAVY_WS_DAMAGE_NEAR[roll]).reduce((total, current) => total+current, 0);
+        } else if(conditions === ShootingCondition.High){
+            return diceRolls.map(roll =>
+                Constants.HEAVY_WS_DAMAGE_HIGH[roll]).reduce((total, current) => total+current, 0);
+        } else if(conditions === ShootingCondition.FarAndHigh){
+            return diceRolls.map(roll =>
+                Constants.HEAVY_WS_DAMAGE_FARANDHIGH[roll]).reduce((total, current) => total+current, 0);
+        } else if(conditions === ShootingCondition.Far){
+            return diceRolls.map(roll =>
+                Constants.HEAVY_WS_DAMAGE_FAR[roll]).reduce((total, current) => total+current, 0);
+        } else {
+            return 0;
         }
-        return damageBP;
     }
 
     takeDamage(losses: number): void{

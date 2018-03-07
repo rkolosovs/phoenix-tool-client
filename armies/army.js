@@ -12,7 +12,7 @@ class Army extends mobileEntity_1.MobileEntity {
         this.lightCatapultsShot = 0;
         this.heavyCatapultsShot = 0;
         this.multiArmyField = false;
-        this.targetList = []; //TODO: this needs to be reviewed, together with findShottingTargets ect.
+        this.targetList = [];
         this.isGuard = false;
         this.wasShotAt = false;
         this.possibleTargets = [];
@@ -110,46 +110,65 @@ class Army extends mobileEntity_1.MobileEntity {
         }
         this.targetList = this.checkAllShootingConditions(tilesInRange);
     }
+    shootAt(targetCoordinate, target, lkpToShootCount, skpToShootCount) {
+        if (this.lightCatapultCount - this.lightCatapultsShot < lkpToShootCount) {
+            //check if remaining Lkp that have not shot yet
+            throw new Error("Die Armee hat nur noch " + (this.lightCatapultCount - this.lightCatapultsShot) +
+                " leichte Katapulte/Kriegsschiffe die noch nicht geschossen haben.");
+        }
+        if (this.heavyCatapultCount - this.heavyCatapultsShot < skpToShootCount) {
+            //check if remaining Skp that have not shot yet
+            throw new Error("Die Armee hat nur noch " + (this.heavyCatapultCount - this.heavyCatapultsShot) +
+                " schwere Katapulte/Kriegsschiffe die noch nicht geschossen haben.");
+        }
+        if (lkpToShootCount > 0 &&
+            this.checkShootingCondition(targetCoordinate, false) === 5 /* Impossible */) {
+            throw new Error("Die leichten Katapulte/Kriegsschiffe können nicht so weit schießen. " +
+                "Schieße nur mit schweren Katapulten/Kriegsschiffe oder suche dir ein anderes Ziel aus.");
+        }
+        if (skpToShootCount > 0 &&
+            this.checkShootingCondition(targetCoordinate, true) === 5 /* Impossible */) {
+            throw new Error("Ungültiges Ziel.");
+        }
+        this.lightCatapultsShot += lkpToShootCount;
+        this.heavyCatapultsShot += skpToShootCount;
+        //check to see if shooting after moving and stop the army if it moved this turn.
+        if (this.movePoints < this.getMaxMovePoints()) {
+            this.movePoints = 0;
+            this.possibleMoves = [];
+        }
+    }
     checkAllShootingConditions(targetTileList) {
-        let templist = targetTileList.slice();
-        let hasSKP = false;
-        if (this.heavyCatapultCount - this.heavyCatapultsShot > 0) {
-            hasSKP = true;
-        }
-        //to find out the conditions and maybe kick out if not shootable
-        for (let i = templist.length - 1; i >= 0; i--) {
-            if (this.checkShootingCondition(templist[i], hasSKP) === 'impossible shot') {
-                targetTileList.splice(i, 1);
-            }
-        }
-        return targetTileList;
+        let hasSKP = this.heavyCatapultCount - this.heavyCatapultsShot > 0;
+        //filter out all impossible shots
+        return targetTileList.filter(target => this.checkShootingCondition(target, hasSKP) !== 5 /* Impossible */);
     }
     checkShootingCondition(target, skpShot) {
-        let condition = 'impossible shot';
+        let condition = 5 /* Impossible */;
         let range = hexFunctions_1.HexFunction.distance(this.position, target);
         if (skpShot) {
-            if (range == 1) {
+            if (range === 1) {
                 if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) <= 2) {
-                    condition = 'high';
+                    condition = 3 /* High */;
                 }
                 if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) <= 1) {
-                    condition = 'short';
+                    condition = 1 /* Near */;
                 }
                 if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) === 1 &&
                     hexFunctions_1.HexFunction.findWallInWay(this.position, target).length > 0) {
-                    condition = 'high';
+                    condition = 3 /* High */;
                 }
             }
-            else if (range == 2) {
+            else if (range === 2) {
                 if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) <= 1) {
-                    condition = 'farAndUp';
+                    condition = 2 /* FarAndHigh */;
                 }
                 if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) < 1) {
-                    condition = 'far';
+                    condition = 0 /* Far */;
                 }
                 if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) === 0 &&
                     hexFunctions_1.HexFunction.findWallInWay(this.position, target).length > 0) {
-                    condition = 'farAndUp';
+                    condition = 2 /* FarAndHigh */;
                 }
                 //if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
                 let commonNeig = hexFunctions_1.HexFunction.findCommonNeighbor(this.position, target);
@@ -161,19 +180,19 @@ class Army extends mobileEntity_1.MobileEntity {
                                 hexFunctions_1.HexFunction.height(this.position) === 1)
                                 && gameState_1.GameState.buildings[walls[j]].getPosition()[0] === commonNeig[i][0] &&
                                 gameState_1.GameState.buildings[walls[j]].getPosition()[1] === commonNeig[i][1])) {
-                                condition = 'impossible shot';
+                                condition = 5 /* Impossible */;
                             }
                         }
                     }
                     if (hexFunctions_1.HexFunction.height(commonNeig[i]) - hexFunctions_1.HexFunction.height(this.position) > 1) {
-                        condition = 'impossible shot';
+                        condition = 5 /* Impossible */;
                     }
                 }
             }
         }
         else {
             if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) <= 1) {
-                condition = 'lkp';
+                condition = 6 /* LightCatapults */;
             }
         }
         return condition;

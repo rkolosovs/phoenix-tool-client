@@ -17,6 +17,7 @@ import {ArmyFunctions} from "../libraries/armyFunctions";
 import { MountEvent } from "../events/mountEvent";
 import { EventStatus } from "../events/eventStatus";
 import {Army} from "./army";
+import {ShootingCondition, ShootingTarget} from "./shootingFunctions";
 
 export class RiderArmy extends LandArmy{
     static readonly MAX_MOVE_POINTS = 21;
@@ -214,11 +215,16 @@ export class RiderArmy extends LandArmy{
         ArmyFunctions.deleteArmy(fromArmy);
     }
 
-    fireLightCatapults(dicerolls: number[], badConditions: string): number{
+    shootAt(targetCoordinate: [number, number], target: ShootingTarget, lkpToShootCount: number,
+            skpToShootCount: number): void{
+        throw new Error("Riders can't have catapults.");
+    }
+
+    getLightCatapultDamage(diceRolls: number[], conditions: ShootingCondition): number{
         return 0;
     }
 
-    fireHeavyCatapults(dicerolls: number[], badConditions: string): number{
+    getHeavyCatapultDamage(diceRolls: number[], conditions: ShootingCondition): number{
         return 0;
     }
 
@@ -250,7 +256,6 @@ export class RiderArmy extends LandArmy{
             window.alert("Es muss mindestens ein Heerführer bei der neuen Armee sein.");
             return false;
         }
-        console.log(toUnMount);
         if (toUnMount > this.troopCount) {
             window.alert("So viele Truppen hast du nicht zum absitzen")
             return false;
