@@ -127,6 +127,7 @@ var Loading;
                 loadRiverData();
                 loadBuildingData();
                 loadBorderData();
+                drawingFunctions_1.Drawing.drawStuff();
             }
         });
     }

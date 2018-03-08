@@ -143,6 +143,7 @@ export namespace Loading{
 				loadRiverData();
 				loadBuildingData();
 				loadBorderData();
+				Drawing.drawStuff();
 			}
 		});
 	}
