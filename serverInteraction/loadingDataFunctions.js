@@ -17,7 +17,6 @@ const field_1 = require("../map/field");
 const footArmy_1 = require("../armies/footArmy");
 const fleet_1 = require("../armies/fleet");
 const direction_1 = require("../map/direction");
-const hexFunctions_1 = require("../libraries/hexFunctions");
 const wall_1 = require("../buildings/wall");
 const productionBuilding_1 = require("../buildings/productionBuilding");
 const nonDestructibleBuilding_1 = require("../buildings/nonDestructibleBuilding");
@@ -32,40 +31,79 @@ var Loading;
     }
     Loading.getNewDataFromServer = getNewDataFromServer;
     function loadTurnNumber() {
-        $.getJSON(url + "/databaseLink/getturn/", function (json) {
+        $.getJSON(url + "/databaseLink/getturn/", (json) => {
             gameState_1.GameState.currentTurn = json;
             drawingFunctions_1.Drawing.writeTurnNumber();
         });
     }
     Loading.loadTurnNumber = loadTurnNumber;
     function loadPendingEvents() {
-        //	console.log("loadPendingEvents()");
-        $.getJSON(url + "/databaseLink/getevents/", function (json) {
+        $.getJSON(url + "/databaseLink/getevents/", (json) => {
             let pendingEvents = json;
             gameState_1.GameState.loadedEvents = [];
-            pendingEvents.forEach(function (index) {
-                let content = pendingEvents[index].content;
-                switch (pendingEvents[index].type) {
+            pendingEvents.forEach((item, index) => {
+                let content = item.content;
+                let realm;
+                switch (item.type) {
                     case "move":
-                        gameState_1.GameState.loadedEvents.push(new moveEvent_1.MoveEvent(index, "undetermined", gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.armyId, content.fromX, content.fromY, content.toX, content.toY, pendingEvents[index].pk));
+                        realm = gameState_1.GameState.realms.find(realm => (realm.tag === content.realm));
+                        if (realm != undefined) {
+                            gameState_1.GameState.loadedEvents.push(new moveEvent_1.MoveEvent(index, 5 /* Undetermined */, realm, content.armyId, [content.fromX, content.fromY], [content.toX, content.toY], item.prerequisiteEvents, item.pk));
+                        }
+                        else {
+                            window.alert("Realm with tag " + content.realm + " not found.");
+                        }
                         break;
                     case "battle":
-                        gameState_1.GameState.loadedEvents.push(new battleEvent_1.BattleEvent(index, "undetermined", content.participants, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, pendingEvents[index].pk));
+                        gameState_1.GameState.loadedEvents.push(new battleEvent_1.BattleEvent(index, 5 /* Undetermined */, content.participants, [content.x, content.y], item.prerequisiteEvents, item.pk));
                         break;
                     case "shoot":
-                        gameState_1.GameState.loadedEvents.push(new shootEvent_1.ShootEvent(index, "undetermined", gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.armyId, content.toX, content.toY, content.fromX, content.fromY, content.LKPcount, content.SKPcount, content.target, pendingEvents[index].pk));
+                        realm = gameState_1.GameState.realms.find(realm => (realm.tag === content.realm));
+                        if (realm != undefined) {
+                            gameState_1.GameState.loadedEvents.push(new shootEvent_1.ShootEvent(index, 5 /* Undetermined */, realm, content.armyId, [content.toX, content.toY], [content.fromX, content.fromY], content.LKPcount, content.SKPcount, content.target, item.prerequisiteEvents, item.pk));
+                        }
+                        else {
+                            window.alert("Realm with tag " + content.realm + " not found.");
+                        }
                         break;
                     case "split":
-                        gameState_1.GameState.loadedEvents.push(new splitEvent_1.SplitEvent(index, "undetermined", content.fromArmy, content.newArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.mounts, content.lkp, content.skp, content.x, content.y, pendingEvents[index].pk));
+                        realm = gameState_1.GameState.realms.find(realm => (realm.tag === content.realm));
+                        if (realm != undefined) {
+                            gameState_1.GameState.loadedEvents.push(new splitEvent_1.SplitEvent(index, 5 /* Undetermined */, content.fromArmy, content.newArmy, realm, content.troops, content.leaders, content.mounts, content.lkp, content.skp, [content.x, content.y], item.prerequisiteEvents, item.pk));
+                        }
+                        else {
+                            window.alert("Realm with tag " + content.realm + " not found.");
+                        }
                         break;
                     case "merge":
-                        gameState_1.GameState.loadedEvents.push(new mergeEvent_1.MergeEvent(index, "undetermined", content.fromArmy, content.toArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.x, content.y, pendingEvents[index].pk));
+                        realm = gameState_1.GameState.realms.find(realm => (realm.tag === content.realm));
+                        if (realm != undefined) {
+                            gameState_1.GameState.loadedEvents.push(new mergeEvent_1.MergeEvent(index, 5 /* Undetermined */, content.fromArmy, content.toArmy, realm, [content.x, content.y], item.prerequisiteEvents, item.pk));
+                        }
+                        else {
+                            window.alert("Realm with tag " + content.realm + " not found.");
+                        }
                         break;
                     case "mount":
-                        gameState_1.GameState.loadedEvents.push(new mountEvent_1.MountEvent(index, "undetermined", content.fromArmy, content.newArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.x, content.y, pendingEvents[index].pk));
+                        realm = gameState_1.GameState.realms.find(realm => (realm.tag === content.realm));
+                        if (realm != undefined) {
+                            gameState_1.GameState.loadedEvents.push(new mountEvent_1.MountEvent(index, 5 /* Undetermined */, content.fromArmy, content.newArmy, realm, content.troops, content.leaders, [content.x, content.y], item.prerequisiteEvents, item.pk));
+                        }
+                        else {
+                            window.alert("Realm with tag " + content.realm + " not found.");
+                        }
                         break;
                     case "transfer":
-                        gameState_1.GameState.loadedEvents.push(new transferEvent_1.TransferEvent(index, "undetermined", content.fromArmy, content.toArmy, gameState_1.GameState.realms.find(realm => (realm === content.realm)), content.troops, content.leaders, content.mounts, content.lkp, content.skp, content.x, content.y, pendingEvents[index].pk));
+                        realm = gameState_1.GameState.realms.find(realm => (realm.tag === content.realm));
+                        if (realm != undefined) {
+                            gameState_1.GameState.loadedEvents.push(new transferEvent_1.TransferEvent(index, 5 /* Undetermined */, content.fromArmy, content.toArmy, realm, content.troops, content.leaders, content.mounts, content.lkp, content.skp, [content.x, content.y], item.prerequisiteEvents, item.pk));
+                        }
+                        else {
+                            window.alert("Realm with tag " + content.realm + " not found.");
+                        }
+                        break;
+                    default:
+                        window.alert("Event of unknown type " + item.type + ".");
                         break;
                 }
             });
@@ -75,14 +113,13 @@ var Loading;
     Loading.loadPendingEvents = loadPendingEvents;
     function loadMap() {
         let timetest;
-        $.getJSON(url + "/databaseLink/getlastsavedtimestamp/", function (json) {
+        $.getJSON(url + "/databaseLink/getlastsavedtimestamp/", (json) => {
             timetest = "";
             for (let i = 0; i < json.length; i++) {
                 timetest += json[i];
             }
-            if (authenticationFunctions_1.Authentication.logintime === undefined || authenticationFunctions_1.Authentication.logintime < Date.parse(timetest)) {
+            if (authenticationFunctions_1.Authentication.logintime == undefined || authenticationFunctions_1.Authentication.logintime < Date.parse(timetest)) {
                 authenticationFunctions_1.Authentication.logintime = Date.now();
-                console.log("loginzeit: " + authenticationFunctions_1.Authentication.logintime);
                 loadCSRFToken();
                 loadRealmData();
                 loadFieldData();
@@ -95,7 +132,7 @@ var Loading;
     }
     Loading.loadMap = loadMap;
     function loadCSRFToken() {
-        $.getJSON(url + "/databaseLink/gettoken/", function (json) {
+        $.getJSON(url + "/databaseLink/gettoken/", (json) => {
             authenticationFunctions_1.Authentication.currentCSRFToken = json;
         });
     }
@@ -106,91 +143,104 @@ var Loading;
         $.post({
             url: url + "/databaseLink/armydata/",
             data: { authorization: authenticationFunctions_1.Authentication.authenticationToken },
-            success: function (data) {
+            success: (data) => {
                 gameState_1.GameState.armies = data.map(army => {
                     let armyOwner = gameState_1.GameState.realms.find(realm => realm.tag === army.realm);
-                    switch (Math.floor(army.armyId / 100)) {
-                        case 1: return new footArmy_1.FootArmy(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp, [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
-                        case 2: return new riderArmy_1.RiderArmy(army.armyId, armyOwner, army.count, army.leaders, [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
-                        case 3: return new fleet_1.Fleet(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp, [army.x, army.y], army.movementPoints, army.isGuard);
-                        default: return undefined;
+                    if (armyOwner != undefined) {
+                        switch (Math.floor(army.armyId / 100)) {
+                            case 1:
+                                return new footArmy_1.FootArmy(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp, army.mounts, [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
+                            case 2:
+                                return new riderArmy_1.RiderArmy(army.armyId, armyOwner, army.count, army.leaders, [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
+                            case 3:
+                                return new fleet_1.Fleet(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp, [army.x, army.y], army.movementPoints, army.isGuard);
+                            default:
+                                return undefined;
+                        }
                     }
-                });
+                    else {
+                        window.alert("Realm with tag " + army.realm + " not found.");
+                        return undefined;
+                    }
+                }).filter(army => army != undefined);
                 // if needed, load Troops into ships
                 data.forEach(army => {
-                    let transporterId = parseInt(army.isLoadedIn);
-                    if (!isNaN(transporterId)) {
-                        gameState_1.GameState.armies.find(transport => transport.getErkenfaraID() === transporterId &&
+                    if (army.isLoadedIn != undefined) {
+                        gameState_1.GameState.armies.find(transport => transport.getErkenfaraID() === army.isLoadedIn &&
                             transport.owner.tag === army.realm).loadArmy(gameState_1.GameState.armies.find(transported => transported.getErkenfaraID() === army.armyId &&
                             transported.owner.tag === army.realm));
                     }
                 });
                 // if the event loading finishes before the army loading is is needed, eventlist may be wrong otherwise
-                fillEventList();
+                gui_1.GUI.getBigBox().fillEventList();
             },
             dataType: "json"
         });
     }
     Loading.loadArmies = loadArmies;
     function loadFieldData() {
-        $.getJSON(url + "/databaseLink/fielddata/", function (json) {
+        $.getJSON(url + "/databaseLink/fielddata/", (json) => {
             gameState_1.GameState.fields = json.map(field => new field_1.Field([field.x, field.y], field.type));
-            fields = json; //TODO: Remove once everything uses the GameState class.
             drawingFunctions_1.Drawing.resizeCanvas();
+            drawingFunctions_1.Drawing.drawStuff();
         });
     }
     Loading.loadFieldData = loadFieldData;
     function loadRealmData() {
-        $.getJSON(url + "/databaseLink/getrealms/", function (json) {
+        $.getJSON(url + "/databaseLink/getrealms/", (json) => {
             gameState_1.GameState.realms = json.map(realm => new realm_1.Realm(realm.name, realm.tag, realm.color, Number(realm.homeTurf), realm.active));
-            realms = json; //TODO: Remove once everything uses the GameState class.
         });
     }
     Loading.loadRealmData = loadRealmData;
     function loadRiverData() {
-        $.getJSON(url + "/databaseLink/getriverdata/", function (json) {
+        $.getJSON(url + "/databaseLink/getriverdata/", (json) => {
+            //load the rivers from the database
             gameState_1.GameState.rivers = json.map(river => new river_1.River([river.firstX, river.firstY], [river.secondX, river.secondY]));
-            rivers = []; //TODO: Remove once everything uses the GameState class.
-            json.forEach(function (element) {
-                rivers.push([[element.firstX, element.firstY], [element.secondX, element.secondY]]);
-            }, this); //rivers are the coordinates of two fields on either side of the river
         });
     }
     Loading.loadRiverData = loadRiverData;
     function loadBuildingData() {
-        $.getJSON(url + "/databaseLink/buildingdata/", function (json) {
-            let realms = gameState_1.GameState.realms;
+        $.getJSON(url + "/databaseLink/buildingdata/", (json) => {
             gameState_1.GameState.buildings = json.map(building => {
-                switch (building.type) {
-                    case 0:
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4: return new productionBuilding_1.ProductionBuilding(building.type, [building.x, building.y], realms.find(realm => realm.tag === building.realm), -1); //TODO: BuildPoints
-                    case 5: return new wall_1.Wall(building.type, [building.x, building.y], realms.find(realm => realm.tag === building.realm), -1, direction_1.stringToDirection(building.direction), -1); //TODO: BuildPoints, Soldiers
-                    case 6:
-                    case 7:
-                        let secondPos = hexFunctions_1.HexFunction.neighbors([building.x, building.y])[direction_1.stringToDirection(building.direction)];
-                        return new nonDestructibleBuilding_1.NonDestructibleBuilding(building.type, [building.x, building.y], [secondPos[0], secondPos[1]], realms.find(realm => realm.tag === building.realm));
-                    case 8: return new nonDestructibleBuilding_1.NonDestructibleBuilding(building.type, [building.firstX, building.firstY], [building.secondX, building.secondY], realms.find(realm => realm.tag === building.realm));
-                    default: return undefined;
+                let owner = gameState_1.GameState.realms.find(realm => realm.tag === building.realm);
+                if (owner != undefined) {
+                    switch (building.type) {
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                            return new productionBuilding_1.ProductionBuilding(building.type, [building.firstX, building.firstY], owner, building.buildPoints);
+                        case 5:
+                            return new wall_1.Wall(building.type, [building.firstX, building.firstY], owner, building.buildPoints, direction_1.stringToDirection(building.direction), building.guardCount);
+                        case 6:
+                        case 7:
+                        case 8:
+                            return new nonDestructibleBuilding_1.NonDestructibleBuilding(building.type, [building.firstX, building.firstY], [building.secondX, building.secondY], owner);
+                        default:
+                            return undefined;
+                    }
                 }
-            });
-            //TODO: Remove once everything uses the GameState class.
-            buildings = json; //load the buildings from the buildings.json file
+                else {
+                    window.alert("Unknown realm with tag " + building.realm + ".");
+                    return undefined;
+                }
+            }).filter(building => building != undefined);
         });
     }
     Loading.loadBuildingData = loadBuildingData;
     function loadBorderData() {
-        $.getJSON(url + "/databaseLink/getborderdata/", function (json) {
+        $.getJSON(url + "/databaseLink/getborderdata/", (json) => {
+            //load the borders from the database
             json.forEach(realm => {
                 let realmToFill = gameState_1.GameState.realms.find(candidate => candidate.tag === realm.tag);
                 if (realmToFill != undefined) {
                     realmToFill.territory = realm.land.map(land => gameState_1.GameState.fields.find(field => field.coordinates === land)).filter(field => field != undefined);
                 }
+                else {
+                    window.alert("Unknown realm with tag " + realm.tag + ".");
+                }
             });
-            //TODO: Remove once everything uses the GameState class.
-            borders = json; //load the borders from the borders.json file
         });
     }
     Loading.loadBorderData = loadBorderData;
