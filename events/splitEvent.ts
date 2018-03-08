@@ -19,7 +19,7 @@ export class SplitEvent extends PhoenixEvent{
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
 
-    protected typeAsString(): string{
+    typeAsString(): string{
         return "split";
     }
 

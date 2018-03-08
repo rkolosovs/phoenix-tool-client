@@ -1,3 +1,4 @@
+//This collects all the rule based "magic numbers" in addition to some useful mathematical constants.
 export namespace Constants{
     export const SQRT3 = Math.sqrt(3); //about 1.732050808...
     export const SIN60 = 0.5 * SQRT3; //about 0.8660254037...
@@ -20,6 +21,13 @@ export namespace Constants{
     export const HEAVY_CATA_BP: number = 400;
     export const LIGHT_WS_BP: number = 200;
     export const HEAVY_WS_BP: number = 400;
+    export const CASTLE_BP: number = 1000;
+    export const CITY_BP: number = 2000;
+    export const FORTRESS_BP: number = 3000;
+    export const CAPITAL_BP: number = 5000;
+    export const CAPITAL_FORTRESS_BP: number = 6000;
+    export const WALL_BP: number = 100;
+    export const WALL_MAX_GUARD: number = 400;
     export const LIGHT_CATA_DAMAGE: number[] = [225, 200, 175, 150, 125, 100, 70, 40, 10, 5];
     export const HEAVY_CATA_DAMAGE_NEAR: number[] = [300, 270, 240, 210, 180, 150, 120, 90, 60, 30];
     export const HEAVY_CATA_DAMAGE_HIGH: number[] = [120, 100, 80, 65, 50, 40, 30, 10, 5, 0];

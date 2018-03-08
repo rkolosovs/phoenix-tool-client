@@ -14,7 +14,7 @@ export abstract class PhoenixEvent{
 
 	protected abstract getContent(): string;
 
-	protected abstract typeAsString():string;
+	abstract typeAsString():string;
 
 	protected abstract validGameState(): boolean;
 

@@ -18,4 +18,8 @@ export abstract class Building extends MapEntity{
     constructor(public type: BuildingType, position: [number, number], owner: Realm){
         super(position, owner);
     }
+
+    abstract buildingAsJSON(): {'realm': string, 'name': string, 'type': number, 'firstX': number, 'firstY': number,
+        'secondX': number|undefined, 'secondY': number|undefined, 'direction': string|undefined,
+        'guardCount': number|undefined, 'buildPoints': number|undefined};
 }

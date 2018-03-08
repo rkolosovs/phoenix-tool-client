@@ -7,28 +7,35 @@ import {Authentication} from "./authenticationFunctions";
 import {NonDestructibleBuilding} from "../buildings/nonDestructibleBuilding";
 import {FootArmy} from "../armies/footArmy";
 import {LandArmy} from "../armies/landArmy";
+import {EventStatus} from "../events/eventStatus";
+import {MoveEvent} from "../events/moveEvent";
+import {BattleEvent} from "../events/battleEvent";
+import {MergeEvent} from "../events/mergeEvent";
+import {TransferEvent} from "../events/transferEvent";
+import {SplitEvent} from "../events/splitEvent";
+import {MountEvent} from "../events/mountEvent";
+import {ShootEvent} from "../events/shootEvent";
+import {Building} from "../buildings/building";
 
 export namespace Saving{
 
     export function sendEvents() {
         sendEventlistInOrder(0);
-        GameState.pendingNewEvents.forEach(event => {
-            if (event.getStatus() === 'checked') {
-                sendCheckEvent(event.getPK(), event.getType());
-            } else if (event.getStatus() === 'deleted') {
-                sendDeleteEvent(event.getPK(), event.getType());
+        GameState.loadedEvents.forEach(event => {
+            if (event.getStatus() === EventStatus.Checked) {
+                sendCheckEvent(event.getDatabasePrimaryKey() as number, event.typeAsString());
+            } else if (event.getStatus() === EventStatus.Deleted) {
+                sendDeleteEvent(event.getDatabasePrimaryKey() as number, event.typeAsString());
             }
         });
         sendNextTurn();
     }
 
     export function sendEventlistInOrder(index: number) {
-        console.log("The index is " + index + " out of " + GameState.pendingNewEvents.length + ",");
-        if (index !== GameState.pendingNewEvents.length) {
-            var cPE = GameState.pendingNewEvents[index];
-            var cPEContent = JSON.stringify(cPE.getContent());
-            if (cPE.getType() === "move") {
-                console.log(GameState.pendingNewEvents);
+        if (index !== GameState.newEvents.length) {
+            let cPE = GameState.newEvents[index];
+            let cPEContent = cPE.asStringifiedJSON();
+            if (cPE instanceof MoveEvent) {
                 $.post({
                     url: Authentication.url + "/databaseLink/moveevent/",
                     data: {
@@ -51,7 +58,7 @@ export namespace Saving{
                         }
                     }
                 });
-            } else if (cPE.getType() === "battle") {
+            } else if (cPE instanceof BattleEvent) {
                 $.post({
                     url: Authentication.url + "/databaseLink/battleevent/",
                     data: {
@@ -74,7 +81,7 @@ export namespace Saving{
                         }
                     }
                 });
-            } else if (cPE.getType() === "merge") {
+            } else if (cPE instanceof MergeEvent) {
                 $.post({
                     url: Authentication.url + "/databaseLink/mergeevent/",
                     data: {
@@ -97,7 +104,7 @@ export namespace Saving{
                         }
                     }
                 });
-            } else if (cPE.getType() === "transfer") {
+            } else if (cPE instanceof TransferEvent) {
                 $.post({
                     url: Authentication.url + "/databaseLink/transferevent/",
                     data: {
@@ -120,7 +127,7 @@ export namespace Saving{
                         }
                     }
                 });
-            } else if (cPE.getType() === "split") {
+            } else if (cPE instanceof SplitEvent) {
                 $.post({
                     url: Authentication.url + "/databaseLink/splitevent/",
                     data: {
@@ -143,7 +150,7 @@ export namespace Saving{
                         }
                     }
                 });
-            } else if (cPE.getType() === "mount") {
+            } else if (cPE instanceof MountEvent) {
                 $.post({
                     url: Authentication.url + "/databaseLink/mountevent/",
                     data: {
@@ -166,7 +173,7 @@ export namespace Saving{
                         }
                     }
                 });
-            }else if (cPE.getType() === "shoot") {
+            }else if (cPE instanceof ShootEvent) {
                 $.post({
                     url: Authentication.url + "/databaseLink/shootevent/",
                     data: {
@@ -191,7 +198,7 @@ export namespace Saving{
                 });
             }
             else {
-                GameState.pendingNewEvents = [];
+                GameState.newEvents = [];
             }
         }
     }
@@ -202,18 +209,10 @@ export namespace Saving{
 				headers: { "X-CSRFToken": Authentication.currentCSRFToken } // getCookie("csrftoken")
 			});
 		});
-		let dataToServerString = "";
-		for (let i = 0; i < Controls.changedFields.length; i++) {
-			if (i != Controls.changedFields.length - 1) {
-				dataToServerString = dataToServerString + Controls.changedFields[i].type + ","
-				dataToServerString = dataToServerString + Controls.changedFields[i].coordinates[0] + ","
-				dataToServerString = dataToServerString + Controls.changedFields[i].coordinates[1] + ";"
-			} else {
-				dataToServerString = dataToServerString + Controls.changedFields[i].type + ","
-				dataToServerString = dataToServerString + Controls.changedFields[i].coordinates[0] + ","
-				dataToServerString = dataToServerString + Controls.changedFields[i].coordinates[1]
-			}
-		}
+		let dataToServerString = JSON.stringify(Controls.changedFields.map(
+		    changedField => {
+		        return {'type': changedField.type, 'x': changedField.coordinates[0], 'y': changedField.coordinates[1]};
+		    }));
 		$.post({
 			url: Authentication.url + "/databaseLink/savefielddata/",
 			data: {
@@ -236,28 +235,18 @@ export namespace Saving{
 
 	// probably deprecated
 	export function sendAllPreparedEvents(){
-		for (let i = 0; i < GameState.pendingNewEvents.length; i++) {
-			let cPE = GameState.pendingNewEvents[i];
-			let cPEContent = JSON.stringify(cPE.getContent());
-			sendNewEvent(cPE.getType(), cPEContent);
+		for (let i = 0; i < GameState.newEvents.length; i++) {
+			let cPE = GameState.newEvents[i];
+			let cPEContent = cPE.asStringifiedJSON();
+			sendNewEvent(cPE.typeAsString(), cPEContent);
 		}
 	}
 
 	export function saveRivers() { // saves the current rivers on the server
-		let dataToServerString = "";
-		for (let i = 0; i < GameState.rivers.length; i++) {
-			let river = GameState.rivers[i];
-
-			//TODO: check if left and rightbank are interchangeable
-			dataToServerString = dataToServerString + river.leftBank[0] + ","
-			dataToServerString = dataToServerString + river.leftBank[1] + ","
-			dataToServerString = dataToServerString + river.rightBank[0] + ","
-			dataToServerString = dataToServerString + river.rightBank[1]
-
-			if (i != GameState.rivers.length - 1) {
-				dataToServerString = dataToServerString + ";"
-			}
-		}
+		let dataToServerString = JSON.stringify(GameState.rivers.map(river => {
+		    return {'firstX:': river.rightBank[0], 'firstY:': river.rightBank[1],
+                'secondX:': river.leftBank[0], 'secondY:': river.leftBank[1]};
+        }));
 		$.post({
 			url: Authentication.url + "/databaseLink/saveriverdata/",
 			data: {
@@ -278,40 +267,10 @@ export namespace Saving{
 		});
 	}
 
-	// TODO: This is horrible and should be changed ASAP
 	export function saveBuildings() { // saves the current buildings on the server
-		let dataToServerString = "";
-		for (let i = 0; i < Controls.changedBuildings.length; i++) {
-			switch (Controls.changedBuildings[i][1].type) {
-				case 0:
-				case 1:
-				case 2:
-				case 3:
-				case 4:
-					dataToServerString += Controls.changedBuildings[i][1].type + ",";
-					dataToServerString += Controls.changedBuildings[i][1].owner.tag + ",";
-					dataToServerString += Controls.changedBuildings[i][1].getPosition()[0] + ",";
-					dataToServerString += Controls.changedBuildings[i][1].getPosition()[1] + ",";
-					dataToServerString += Controls.changedBuildings[i][0];
-					break;
-				case 5:
-				case 6:
-				case 7:
-				case 8:
-                    dataToServerString += Controls.changedBuildings[i][1].type + ",";
-                    dataToServerString += Controls.changedBuildings[i][1].owner.tag + ",";
-                    dataToServerString += Controls.changedBuildings[i][1].getPosition()[0] + ",";
-                    dataToServerString += Controls.changedBuildings[i][1].getPosition()[1] + ",";
-                    dataToServerString += directionToString(HexFunction.getDirectionToNeighbor(
-                        Controls.changedBuildings[i][1].getPosition(),
-                        (Controls.changedBuildings[i][1] as NonDestructibleBuilding).getSecondPosition())) + ",";
-                    dataToServerString += Controls.changedBuildings[i][0];
-                    break;
-			}
-			if (i != Controls.changedBuildings.length - 1) {
-				dataToServerString = dataToServerString + ";";
-			} 
-		}
+		let dataToServerString = JSON.stringify(Controls.changedBuildings.map(changedBuilding => {
+		    return {'added/changed': changedBuilding[0], 'building': changedBuilding[1].buildingAsJSON()};
+        }));
 		$.post({
 			url: Authentication.url + "/databaseLink/savebuildingdata/",
 			data: {

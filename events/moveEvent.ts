@@ -17,7 +17,7 @@ export class MoveEvent extends PhoenixEvent{
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
 
-    protected typeAsString(): string{
+    typeAsString(): string{
         return "move";
     }
 

@@ -16,7 +16,7 @@ export class MergeEvent extends PhoenixEvent{
             super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
     }
 
-    protected typeAsString(): string{
+    typeAsString(): string{
         return "merge";
     }
 

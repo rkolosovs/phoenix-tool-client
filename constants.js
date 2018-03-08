@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+//This collects all the rule based "magic numbers" in addition to some useful mathematical constants.
 var Constants;
 (function (Constants) {
     Constants.SQRT3 = Math.sqrt(3); //about 1.732050808...
@@ -23,6 +24,13 @@ var Constants;
     Constants.HEAVY_CATA_BP = 400;
     Constants.LIGHT_WS_BP = 200;
     Constants.HEAVY_WS_BP = 400;
+    Constants.CASTLE_BP = 1000;
+    Constants.CITY_BP = 2000;
+    Constants.FORTRESS_BP = 3000;
+    Constants.CAPITAL_BP = 5000;
+    Constants.CAPITAL_FORTRESS_BP = 6000;
+    Constants.WALL_BP = 100;
+    Constants.WALL_MAX_GUARD = 400;
     Constants.LIGHT_CATA_DAMAGE = [225, 200, 175, 150, 125, 100, 70, 40, 10, 5];
     Constants.HEAVY_CATA_DAMAGE_NEAR = [300, 270, 240, 210, 180, 150, 120, 90, 60, 30];
     Constants.HEAVY_CATA_DAMAGE_HIGH = [120, 100, 80, 65, 50, 40, 30, 10, 5, 0];
