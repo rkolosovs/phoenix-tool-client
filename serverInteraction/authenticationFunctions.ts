@@ -3,7 +3,6 @@ import {BoxVisibility} from "../gui/boxVisibilty";
 import {Loading} from "./loadingDataFunctions";
 import {Drawing} from "../gui/drawingFunctions";
 import {GameState} from "../gameState";
-import { MainBox } from "../gui/mainBox";
 
 export namespace Authentication{
     import show = BoxVisibility.show;
@@ -31,7 +30,7 @@ export namespace Authentication{
 				username: username,
 				password: password
 			},
-			success: function(data) {
+			success: (data: any) => {
 				// saving the authenticationToken
 				authenticationToken = data.token;
 				login = data.group;
@@ -53,7 +52,7 @@ export namespace Authentication{
 				GUI.getBigBox().getEventsTab().innerHTML = "";
 				Drawing.writeTurnNumber();
 			},
-			error: function(data){
+			error: (data: any) => {
 				// alert for a failed login
 				alert("Login failed and logged in as guest. Check username or password.");
 				Loading.getNewDataFromServer();
@@ -91,7 +90,6 @@ export namespace Authentication{
 		hide(GUI.getBigBox().getEventTabsButton());
 		let eventList = GUI.getBigBox().getEventsTab();
 		eventList.innerHTML = "";
-		// TODO: closeTab function
 		GUI.getBigBox().closeAllTabs();
 		GameState.newEvents = [];
 		GameState.loadedEvents = [];

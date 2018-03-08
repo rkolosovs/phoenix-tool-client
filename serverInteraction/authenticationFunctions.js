@@ -26,7 +26,7 @@ var Authentication;
                 username: username,
                 password: password
             },
-            success: function (data) {
+            success: (data) => {
                 // saving the authenticationToken
                 Authentication.authenticationToken = data.token;
                 login = data.group;
@@ -48,7 +48,7 @@ var Authentication;
                 gui_1.GUI.getBigBox().getEventsTab().innerHTML = "";
                 drawingFunctions_1.Drawing.writeTurnNumber();
             },
-            error: function (data) {
+            error: (data) => {
                 // alert for a failed login
                 alert("Login failed and logged in as guest. Check username or password.");
                 loadingDataFunctions_1.Loading.getNewDataFromServer();
@@ -85,7 +85,6 @@ var Authentication;
         hide(gui_1.GUI.getBigBox().getEventTabsButton());
         let eventList = gui_1.GUI.getBigBox().getEventsTab();
         eventList.innerHTML = "";
-        // TODO: closeTab function
         gui_1.GUI.getBigBox().closeAllTabs();
         gameState_1.GameState.newEvents = [];
         gameState_1.GameState.loadedEvents = [];
