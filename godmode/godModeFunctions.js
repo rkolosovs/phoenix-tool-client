@@ -9,27 +9,31 @@ const productionBuilding_1 = require("../buildings/productionBuilding");
 const hexFunctions_1 = require("../libraries/hexFunctions");
 const river_1 = require("../map/river");
 const controlVariables_1 = require("../controls/controlVariables");
+const nonDestructibleBuilding_1 = require("../buildings/nonDestructibleBuilding");
+const wall_1 = require("../buildings/wall");
+const footArmy_1 = require("../armies/footArmy");
+const constants_1 = require("../constants");
 var GodFunctions;
 (function (GodFunctions) {
-    var worldCreationModeOnClick = boxVisibilty_1.BoxVisibility.worldCreationModeOnClick;
     var changeFieldToType = boxVisibilty_1.BoxVisibility.changeFieldToType;
     var hide = boxVisibilty_1.BoxVisibility.hide;
     var show = boxVisibilty_1.BoxVisibility.show;
     var switchModeTo = boxVisibilty_1.BoxVisibility.switchModeTo;
-    var changedBuildings = controlVariables_1.Controls.changedBuildings;
+    let changedBuildings = controlVariables_1.Controls.changedBuildings;
     let factionToCreateBuildingsFor = gameState_1.GameState.realms[0];
     function setFactionToCreateBuildingsFor(faction) {
         factionToCreateBuildingsFor = faction;
     }
     GodFunctions.setFactionToCreateBuildingsFor = setFactionToCreateBuildingsFor;
     function toggleOnClickWorldCreationMode() {
-        if (worldCreationModeOnClick && (changeFieldToType == -1)) {
-            worldCreationModeOnClick = false;
+        if (boxVisibilty_1.BoxVisibility.worldCreationModeOnClick && (changeFieldToType == -1)) {
+            boxVisibilty_1.BoxVisibility.worldCreationModeOnClick = false;
             hide(gui_1.GUI.getWorldBenderBox().getCreationWarning());
         }
-        else if (!worldCreationModeOnClick || (worldCreationModeOnClick && (changeFieldToType != -1))) {
-            changeFieldToType = -1;
-            worldCreationModeOnClick = true;
+        else if (!boxVisibilty_1.BoxVisibility.worldCreationModeOnClick || (boxVisibilty_1.BoxVisibility.worldCreationModeOnClick &&
+            (changeFieldToType != -1))) {
+            boxVisibilty_1.BoxVisibility.changeFieldToType = -1;
+            boxVisibilty_1.BoxVisibility.worldCreationModeOnClick = true;
             show(gui_1.GUI.getWorldBenderBox().getCreationWarning());
         }
         drawingFunctions_1.Drawing.resizeCanvas();
@@ -38,155 +42,112 @@ var GodFunctions;
     function changeFieldClickedTo(number) {
         if (changeFieldToType != number) {
             switchModeTo("worldCreationModeOnClick");
-            changeFieldToType = number;
+            boxVisibilty_1.BoxVisibility.changeFieldToType = number;
             show(gui_1.GUI.getWorldBenderBox().getCreationWarning());
         }
         else {
-            changeFieldToType = -1;
+            boxVisibilty_1.BoxVisibility.changeFieldToType = -1;
             switchModeTo("worldCreationModeOn");
             hide(gui_1.GUI.getWorldBenderBox().getCreationWarning());
         }
         drawingFunctions_1.Drawing.resizeCanvas();
     }
     GodFunctions.changeFieldClickedTo = changeFieldClickedTo;
+    function addProductionBuilding(type, position, realm) {
+        let maxBP = 0;
+        switch (type) {
+            case 0 /* CASTLE */:
+                maxBP = constants_1.Constants.CASTLE_BP;
+                break;
+            case 1 /* CITY */:
+                maxBP = constants_1.Constants.CITY_BP;
+                break;
+            case 2 /* FORTRESS */:
+                maxBP = constants_1.Constants.FORTRESS_BP;
+                break;
+            case 3 /* CAPITAL */:
+                maxBP = constants_1.Constants.CAPITAL_BP;
+                break;
+            case 4 /* CAPITAL_FORT */:
+                maxBP = constants_1.Constants.CAPITAL_FORTRESS_BP;
+                break;
+            default: break;
+        }
+        //make sure the right thing is contained in the changedBuildings
+        let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1] instanceof productionBuilding_1.ProductionBuilding &&
+            entry[1].getPosition()[0] === position[0] &&
+            entry[1].getPosition()[1] === position[1]);
+        if (entryInChangedBuildings == undefined) {
+            controlVariables_1.Controls.changedBuildings.push([true, new productionBuilding_1.ProductionBuilding(type, "", position, realm, maxBP)]);
+        }
+        else if (!entryInChangedBuildings[0]) {
+            entryInChangedBuildings[0] = true;
+        }
+        else if (entryInChangedBuildings[1].type !== type) {
+            entryInChangedBuildings[1].type = type;
+        }
+        //make sure the right thing is contained in the GameState.buildings
+        let entryInActualBuildings = gameState_1.GameState.buildings.find(building => building instanceof productionBuilding_1.ProductionBuilding &&
+            building.getPosition()[0] === position[0] &&
+            building.getPosition()[1] === position[1]);
+        if (entryInActualBuildings == undefined) {
+            gameState_1.GameState.buildings.push(new productionBuilding_1.ProductionBuilding(type, "", position, realm, maxBP));
+        }
+        else if (entryInActualBuildings.type !== type) {
+            entryInActualBuildings.type = type;
+        }
+        drawingFunctions_1.Drawing.drawStuff();
+    }
     // add a castle in the selectedField
     function addCastle() {
-        let sf = controlVariables_1.Controls.selectedFields[0];
-        let found = false;
-        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
-            let building = gameState_1.GameState.buildings[i];
-            if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] == sf[1]) {
-                gameState_1.GameState.buildings[i].type = 0;
-                found = true;
-            }
-        }
-        if (found) {
-            changedBuildings.push([true, { "type": 0, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]); //<----------------------------------------Realm
-            // console.log({"type": 0, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
-        }
-        else {
-            changedBuildings.push([true, { "type": 0, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]);
-            gameState_1.GameState.buildings.push(new productionBuilding_1.ProductionBuilding(0, [sf[0], sf[1]], factionToCreateBuildingsFor, 500)); //TODO correct BP
-            // console.log("this is a new:");
-            // console.log(changedBuildings[changedBuildings.length-1]);
-        }
-        drawingFunctions_1.Drawing.resizeCanvas();
+        addProductionBuilding(0 /* CASTLE */, controlVariables_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
     }
     GodFunctions.addCastle = addCastle;
     // add a city in the selectedField
     function addCity() {
-        let sf = controlVariables_1.Controls.selectedFields[0];
-        let found = false;
-        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
-            let building = gameState_1.GameState.buildings[i];
-            if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] === sf[1]) {
-                gameState_1.GameState.buildings[i].type = 1;
-                found = true;
-            }
-        }
-        if (found) {
-            changedBuildings.push([true, { "type": 1, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]);
-            // console.log({"type": 1, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
-        }
-        else {
-            changedBuildings.push([true, { "type": 1, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]);
-            gameState_1.GameState.buildings.push(new productionBuilding_1.ProductionBuilding(1, [sf[0], sf[1]], factionToCreateBuildingsFor, 500)); //TODO correct BP
-            // console.log("this is a new:");
-            // console.log(changedBuildings[changedBuildings.length-1]);
-        }
-        drawingFunctions_1.Drawing.resizeCanvas();
+        addProductionBuilding(1 /* CITY */, controlVariables_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
     }
     GodFunctions.addCity = addCity;
     // add a fortress in the selectedField
     function addFortress() {
-        let sf = controlVariables_1.Controls.selectedFields[0];
-        let found = false;
-        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
-            let building = gameState_1.GameState.buildings[i];
-            if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] === sf[1]) {
-                gameState_1.GameState.buildings[i].type = 2;
-                found = true;
-            }
-        }
-        if (found) {
-            changedBuildings.push([true, { "type": 2, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]);
-            // console.log({"type": 2, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
-        }
-        else {
-            changedBuildings.push([true, { "type": 2, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]);
-            gameState_1.GameState.buildings.push(new productionBuilding_1.ProductionBuilding(2, [sf[0], sf[1]], factionToCreateBuildingsFor, 500)); //TODO correct BP
-            // console.log("this is a new:");
-            // console.log(changedBuildings[changedBuildings.length-1]);
-        }
-        drawingFunctions_1.Drawing.resizeCanvas();
+        addProductionBuilding(2 /* FORTRESS */, controlVariables_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
     }
     GodFunctions.addFortress = addFortress;
     // add a capital city in the selectedField
     function addCapital() {
-        let sf = controlVariables_1.Controls.selectedFields[0];
-        let found = false;
-        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
-            let building = gameState_1.GameState.buildings[i];
-            if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] === sf[1]) {
-                gameState_1.GameState.buildings[i].type = 3;
-                found = true;
-            }
-        }
-        if (found) {
-            changedBuildings.push([true, { "type": 3, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]);
-            // console.log({"type": 3, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
-        }
-        else {
-            changedBuildings.push([true, { "type": 3, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]);
-            gameState_1.GameState.buildings.push(new productionBuilding_1.ProductionBuilding(3, [sf[0], sf[1]], factionToCreateBuildingsFor, 500)); //TODO correct BP
-            // console.log("this is a new:");
-            // console.log(changedBuildings[changedBuildings.length-1]);
-        }
-        drawingFunctions_1.Drawing.resizeCanvas();
+        addProductionBuilding(3 /* CAPITAL */, controlVariables_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
     }
     GodFunctions.addCapital = addCapital;
     // add a capital fortress in the selectedField
     function addCapitalFortress() {
-        let sf = controlVariables_1.Controls.selectedFields[0];
-        let found = false;
-        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
-            let building = gameState_1.GameState.buildings[i];
-            if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] === sf[1]) {
-                gameState_1.GameState.buildings[i].type = 4;
-                found = true;
-            }
-        }
-        if (found) {
-            changedBuildings.push([true, { "type": 4, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]);
-            // console.log({"type": 4, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
-        }
-        else {
-            changedBuildings.push([true, { "type": 4, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]);
-            gameState_1.GameState.buildings.push(new productionBuilding_1.ProductionBuilding(4, [sf[0], sf[1]], factionToCreateBuildingsFor, 500)); //TODO correct BP
-            // console.log("this is a new:");
-            // console.log(changedBuildings[changedBuildings.length-1]);
-        }
-        drawingFunctions_1.Drawing.resizeCanvas();
+        addProductionBuilding(4 /* CAPITAL_FORT */, controlVariables_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
     }
     GodFunctions.addCapitalFortress = addCapitalFortress;
-    // delete the building in the selectedField
-    function deleteBuilding() {
-        let sf = controlVariables_1.Controls.selectedFields[0];
-        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
-            let building = gameState_1.GameState.buildings[i];
-            if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] === sf[1]) {
-                changedBuildings.push([false, { "type": building.type, "x": sf[0], "y": sf[1], "realm": factionToCreateBuildingsFor }]);
-                if (i === gameState_1.GameState.buildings.length - 1) {
-                    gameState_1.GameState.buildings.pop();
-                }
-                else {
-                    gameState_1.GameState.buildings.splice(i, 1);
-                }
+    function deleteProductionBuildingOnField(position) {
+        let buildingToDelete = gameState_1.GameState.buildings.find(building => building instanceof productionBuilding_1.ProductionBuilding &&
+            building.getPosition()[0] === position[0] &&
+            building.getPosition()[1] === position[1]);
+        if (buildingToDelete != undefined) {
+            //make sure the right thing is in changedBuildings
+            let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1].type === buildingToDelete.type &&
+                entry[1].getPosition()[0] === position[0] &&
+                entry[1].getPosition()[1] === position[1]);
+            if (entryInChangedBuildings == undefined) {
+                controlVariables_1.Controls.changedBuildings.push([false, buildingToDelete]);
             }
+            else if (entryInChangedBuildings[0]) {
+                entryInChangedBuildings[0] = false;
+            }
+            //remove the building from GameState.buildings
+            gameState_1.GameState.buildings.splice(gameState_1.GameState.buildings.findIndex(building => building === buildingToDelete), 1);
         }
-        drawingFunctions_1.Drawing.resizeCanvas();
+        drawingFunctions_1.Drawing.drawStuff();
     }
-    GodFunctions.deleteBuilding = deleteBuilding;
+    // delete the production building in the selectedField
+    function deleteSelectredProductionBuilding() {
+        deleteProductionBuildingOnField(controlVariables_1.Controls.selectedFields[0]);
+    }
+    GodFunctions.deleteSelectredProductionBuilding = deleteSelectredProductionBuilding;
     // adds a street in the target direction
     function addStreet(direction) {
         let sf = controlVariables_1.Controls.selectedFields[0];
@@ -194,21 +155,23 @@ var GodFunctions;
         let target = targets[direction];
         let found = false;
         for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
-            let building = gameState_1.GameState.buildings[i]; //TODO change this to accomodate new Types probably with differentlist for streets
-            if ((building.type === 8 && (building.firstX === sf[0] && building.firstY === sf[1] &&
-                building.secondX === target[0] && building.secondY === target[1])) ||
-                (building.type === 8 && (building.firstX === target[0] && building.firstY === target[1] &&
-                    building.secondX === sf[0] && building.secondY === sf[1]))) {
-                found = true;
+            if (gameState_1.GameState.buildings[i].type === 8) {
+                let building = gameState_1.GameState.buildings[i]; //TODO change this to accomodate new Types probably with differentlist for streets
+                if (((building.getPosition()[0] === sf[0] && building.getSecondPosition()[1] === sf[1] &&
+                    building.getSecondPosition()[0] === target[0] && building.getSecondPosition()[1] === target[1])) ||
+                    (building.type === 8 && (building.getPosition()[0] === target[0] &&
+                        building.getPosition()[1] === target[1] && building.getSecondPosition()[0] === sf[0] &&
+                        building.getSecondPosition()[1] === sf[1]))) {
+                    found = true;
+                }
             }
         }
         if (found) {
         }
         else {
-            changedBuildings.push([true, { "type": 8, "firstX": sf[0], "firstY": sf[1], "secondX": target[0],
-                    "secondY": target[1], "realm": factionToCreateBuildingsFor }]);
-            gameState_1.GameState.buildings.push({ "type": 8, "firstX": sf[0], "firstY": sf[1], "secondX": target[0],
-                "secondY": target[1], "realm": factionToCreateBuildingsFor });
+            let newStreet = new nonDestructibleBuilding_1.NonDestructibleBuilding(8, [sf[0], sf[1]], [target[0], target[1]], factionToCreateBuildingsFor);
+            controlVariables_1.Controls.changedBuildings.push([true, newStreet]);
+            gameState_1.GameState.buildings.push(newStreet);
             controlVariables_1.Controls.selectedFields[0] = [target[0], target[1]];
         }
         drawingFunctions_1.Drawing.resizeCanvas();
@@ -221,17 +184,20 @@ var GodFunctions;
         let target = targets[direction];
         let found = undefined;
         for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
-            let building = gameState_1.GameState.buildings[i]; //TODO change this to accomodate new Types probably with differentlist for streets
-            if (building.type === 8 && ((building.firstX === sf[0] && building.firstY === sf[1] &&
-                building.secondX === target[0] && building.secondY === target[1]) ||
-                (building.firstX === target[0] && building.firstY === target[1] && building.secondX === sf[0] &&
-                    building.secondY === sf[1]))) {
-                found = i;
+            if (gameState_1.GameState.buildings[i].type === 8) {
+                let building = gameState_1.GameState.buildings[i]; //TODO change this to accomodate new Types probably with differentlist for streets
+                if (building.type === 8 && ((building.getPosition()[0] === sf[0] &&
+                    building.getPosition()[1] === sf[1] && building.getSecondPosition()[0] === target[0] &&
+                    building.getSecondPosition()[1] === target[1]) ||
+                    (building.getPosition()[0] === target[0] && building.getPosition()[1] === target[1] &&
+                        building.getSecondPosition()[0] === sf[0] && building.getSecondPosition()[1] === sf[1]))) {
+                    found = i;
+                }
             }
         }
         if (found != undefined) {
-            changedBuildings.push([false, { "type": 8, "firstX": sf[0], "firstY": sf[1], "secondX": target[0],
-                    "secondY": target[1], "realm": factionToCreateBuildingsFor }]);
+            let streetToRemove = new nonDestructibleBuilding_1.NonDestructibleBuilding(8, [sf[0], sf[1]], [target[0], target[1]], factionToCreateBuildingsFor);
+            changedBuildings.push([false, streetToRemove]);
             if (found === gameState_1.GameState.buildings.length - 1) {
                 gameState_1.GameState.buildings.pop();
                 controlVariables_1.Controls.selectedFields[0] = [target[0], target[1]];
@@ -297,28 +263,31 @@ var GodFunctions;
     function manipulateBorderBuilding(type, direction, add) {
         let sf = controlVariables_1.Controls.selectedFields[0];
         let found = undefined;
+        let wallFound = undefined;
         for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
-            let building = gameState_1.GameState.buildings[i];
-            if (building.type === type && (building.x == sf[0] && building.y == sf[1] && building.direction == direction)) {
-                found = i;
+            if (gameState_1.GameState.buildings[i].type === 5) {
+                let building = gameState_1.GameState.buildings[i];
+                if (building.type === type && (building.getPosition()[0] == sf[0] && building.getPosition()[1] == sf[1] && building.facing == direction)) {
+                    found = i;
+                    wallFound = gameState_1.GameState.buildings[i];
+                }
             }
         }
         if (add) {
-            if (found) {
-                changedBuildings.push([true, { "type": type, "x": sf[0], "y": sf[1], "direction": direction,
-                        "realm": factionToCreateBuildingsFor }]);
+            let wallToAdd = new wall_1.Wall(5, [sf[0], sf[1],], factionToCreateBuildingsFor, 100, direction, 400);
+            if (found !== undefined) {
+                controlVariables_1.Controls.changedBuildings.push([true, wallToAdd]);
             }
             else {
-                changedBuildings.push([true, { "type": type, "x": sf[0], "y": sf[1], "direction": direction,
-                        "realm": factionToCreateBuildingsFor }]);
-                gameState_1.GameState.buildings.push({ "type": type, "x": sf[0], "y": sf[1], "direction": direction,
-                    "realm": factionToCreateBuildingsFor });
+                controlVariables_1.Controls.changedBuildings.push([true, wallToAdd]);
+                gameState_1.GameState.buildings.push(wallToAdd);
             }
         }
         else {
-            if (found != undefined) {
-                changedBuildings.push([false, { "type": type, "x": sf[0], "y": sf[1], "direction": direction,
-                        "realm": factionToCreateBuildingsFor }]);
+            if (found !== undefined) {
+                if (wallFound !== undefined) {
+                    controlVariables_1.Controls.changedBuildings.push([false, wallFound]);
+                }
                 if (found === gameState_1.GameState.buildings.length - 1) {
                     gameState_1.GameState.buildings.pop();
                 }
@@ -395,15 +364,23 @@ var GodFunctions;
             }
             else {
                 gameState_1.GameState.armies[selectedArmyIndex].isGuard = infoChangeBox.getGuardChangeInput().checked;
-                gameState_1.GameState.armies[selectedArmyIndex].owner = infoChangeBox.getOwnerChangeInput().value;
-                gameState_1.GameState.armies[selectedArmyIndex].armyId = Number(infoChangeBox.getArmyIdChangeInput().value);
-                gameState_1.GameState.armies[selectedArmyIndex].count = Number(infoChangeBox.getCountChangeInput().value);
-                gameState_1.GameState.armies[selectedArmyIndex].leaders = Number(infoChangeBox.getLeadersChangeInput().value);
-                gameState_1.GameState.armies[selectedArmyIndex].mounts = Number(infoChangeBox.getMountsChangeInput().value);
-                gameState_1.GameState.armies[selectedArmyIndex].lkp = Number(infoChangeBox.getLKPChangeInput().value);
-                gameState_1.GameState.armies[selectedArmyIndex].skp = Number(infoChangeBox.getSKPChangeInput().value);
-                gameState_1.GameState.armies[selectedArmyIndex].remainingMovePoints = Number(infoChangeBox.getMovePointsChangeInput().value);
-                gameState_1.GameState.armies[selectedArmyIndex].remainingHeightPoints = Number(infoChangeBox.getHeightPointsChangeInput().value);
+                for (let i = 0; i > gameState_1.GameState.realms.length; i++) {
+                    // check for the realm tag, not the Name
+                    if (infoChangeBox.getOwnerChangeInput().value === gameState_1.GameState.realms[i].tag) {
+                        gameState_1.GameState.armies[selectedArmyIndex].owner = gameState_1.GameState.realms[i];
+                    }
+                }
+                gameState_1.GameState.armies[selectedArmyIndex].setID(Number(infoChangeBox.getArmyIdChangeInput().value));
+                gameState_1.GameState.armies[selectedArmyIndex].setTroopCount(Number(infoChangeBox.getCountChangeInput().value));
+                gameState_1.GameState.armies[selectedArmyIndex].setOfficerCount(Number(infoChangeBox.getLeadersChangeInput().value));
+                if (gameState_1.GameState.armies[selectedArmyIndex] instanceof footArmy_1.FootArmy) {
+                    let armyToChange = gameState_1.GameState.armies[selectedArmyIndex];
+                    armyToChange.setMountCount(Number(infoChangeBox.getMountsChangeInput().value));
+                }
+                gameState_1.GameState.armies[selectedArmyIndex].setLightCatapultCount(Number(infoChangeBox.getLKPChangeInput().value));
+                gameState_1.GameState.armies[selectedArmyIndex].setHeavyCatapultCount(Number(infoChangeBox.getSKPChangeInput().value));
+                gameState_1.GameState.armies[selectedArmyIndex].setMovePoints(Number(infoChangeBox.getMovePointsChangeInput().value));
+                gameState_1.GameState.armies[selectedArmyIndex].setHeightPoints(Number(infoChangeBox.getHeightPointsChangeInput().value));
             }
         }
         drawingFunctions_1.Drawing.resizeCanvas();

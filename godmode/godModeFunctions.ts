@@ -11,12 +11,11 @@ import { ArmyGeneratorBox } from "../gui/armyGeneratorBox";
 import { InfoChangeBox } from "../gui/infoChangeBox";
 import { Controls } from "../controls/controlVariables";
 import { Direction } from "../map/direction";
-import { BuildingType } from "../buildings/building";
+import { BuildingType, Building } from "../buildings/building";
 import { NonDestructibleBuilding } from "../buildings/nonDestructibleBuilding";
 import { Wall } from "../buildings/wall";
 import { FootArmy } from "../armies/footArmy";
-import { Army } from "../armies/army";
-import { Fleet } from "../armies/fleet";
+import {Constants} from "../constants";
 
 export namespace GodFunctions {
 	import worldCreationModeOnClick = BoxVisibility.worldCreationModeOnClick;
@@ -57,152 +56,93 @@ export namespace GodFunctions {
 		Drawing.resizeCanvas()
 	}
 
+	function addProductionBuilding(type: BuildingType, position: [number, number], realm: Realm): void{
+        let maxBP: number = 0;
+        switch(type){
+            case BuildingType.CASTLE: maxBP = Constants.CASTLE_BP; break;
+            case BuildingType.CITY: maxBP = Constants.CITY_BP; break;
+            case BuildingType.FORTRESS: maxBP = Constants.FORTRESS_BP; break;
+            case BuildingType.CAPITAL: maxBP = Constants.CAPITAL_BP; break;
+            case BuildingType.CAPITAL_FORT: maxBP = Constants.CAPITAL_FORTRESS_BP; break;
+            default: break;
+        }
+        //make sure the right thing is contained in the changedBuildings
+	    let entryInChangedBuildings: [boolean, Building]|undefined = Controls.changedBuildings.find(entry =>
+            entry[1] instanceof ProductionBuilding &&
+            entry[1].getPosition()[0] === position[0] &&
+            entry[1].getPosition()[1] === position[1]);
+	    if (entryInChangedBuildings == undefined) {
+	        Controls.changedBuildings.push([true, new ProductionBuilding(type, "", position, realm, maxBP)]);
+        } else if (!entryInChangedBuildings[0]) {
+	        entryInChangedBuildings[0] = true;
+        } else if (entryInChangedBuildings[1].type !== type){
+	        entryInChangedBuildings[1].type = type;
+        }
+        //make sure the right thing is contained in the GameState.buildings
+        let entryInActualBuildings: Building|undefined = GameState.buildings.find(building =>
+            building instanceof ProductionBuilding &&
+            building.getPosition()[0] === position[0] &&
+            building.getPosition()[1] === position[1]);
+	    if (entryInActualBuildings == undefined) {
+	        GameState.buildings.push(new ProductionBuilding(type, "", position, realm, maxBP));
+        } else if (entryInActualBuildings.type !== type) {
+	        entryInActualBuildings.type = type;
+        }
+
+        Drawing.drawStuff();
+    }
+
 	// add a castle in the selectedField
 	export function addCastle(): void {
-		let sf = Controls.selectedFields[0];
-		let found = false;
-		for (let i = 0; i < GameState.buildings.length; i++) {
-			let building = GameState.buildings[i]
-			if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] == sf[1]) {
-				GameState.buildings[i].type = 0;
-				found = true;
-			}
-		}
-		if (found) {
-			Controls.changedBuildings.push(
-				[true, new ProductionBuilding(0, "", [sf[0], sf[1]], factionToCreateBuildingsFor, 500)]);	//<----------------------------------------Realm
-			// console.log({"type": 0, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
-		} else {
-			Controls.changedBuildings.push(
-				[true, new ProductionBuilding(0, "", [sf[0], sf[1]], factionToCreateBuildingsFor, 500)]);
-			GameState.buildings.push(new ProductionBuilding(0, "", [sf[0], sf[1]], factionToCreateBuildingsFor, 500));
-			//TODO correct BP
-			// console.log("this is a new:");
-			// console.log(changedBuildings[changedBuildings.length-1]);
-		}
-		Drawing.resizeCanvas()
+	    addProductionBuilding(BuildingType.CASTLE, Controls.selectedFields[0], factionToCreateBuildingsFor);
 	}
 
 	// add a city in the selectedField
 	export function addCity(): void {
-		let sf = Controls.selectedFields[0];
-		let found = false;
-		for (let i = 0; i < GameState.buildings.length; i++) {
-			let building = GameState.buildings[i]
-			if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] === sf[1]) {
-				GameState.buildings[i].type = 1;
-				found = true;
-			}
-		}
-		if (found) {
-			Controls.changedBuildings.push(
-				[true, new ProductionBuilding(1, "", [sf[0], sf[1]], factionToCreateBuildingsFor, 500)]);
-			// console.log({"type": 1, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
-		} else {
-			Controls.changedBuildings.push(
-				[true, new ProductionBuilding(0, "", [sf[0], sf[1]], factionToCreateBuildingsFor, 500)]);
-			GameState.buildings.push(new ProductionBuilding(1, "", [sf[0], sf[1]], factionToCreateBuildingsFor, 500));
-			//TODO correct BP
-			// console.log("this is a new:");
-			// console.log(changedBuildings[changedBuildings.length-1]);
-		}
-		Drawing.resizeCanvas()
+        addProductionBuilding(BuildingType.CITY, Controls.selectedFields[0], factionToCreateBuildingsFor);
 	}
 
 	// add a fortress in the selectedField
 	export function addFortress(): void {
-		let sf = Controls.selectedFields[0];
-		let found = false;
-		for (let i = 0; i < GameState.buildings.length; i++) {
-			let building = GameState.buildings[i]
-			if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] === sf[1]) {
-				GameState.buildings[i].type = 2;
-				found = true;
-			}
-		}
-		if (found) {
-			Controls.changedBuildings.push(
-				[true, new ProductionBuilding(2, "", [sf[0], sf[1]], factionToCreateBuildingsFor, 500)]);
-			// console.log({"type": 2, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
-		} else {
-			Controls.changedBuildings.push(
-				[true, new ProductionBuilding(2, "", [sf[0], sf[1]], factionToCreateBuildingsFor, 500)]);
-			GameState.buildings.push(new ProductionBuilding(2, "", [sf[0], sf[1]], factionToCreateBuildingsFor, 500));
-			//TODO correct BP
-			// console.log("this is a new:");
-			// console.log(changedBuildings[changedBuildings.length-1]);
-
-		}
-		Drawing.resizeCanvas()
+        addProductionBuilding(BuildingType.FORTRESS, Controls.selectedFields[0], factionToCreateBuildingsFor);
 	}
 
 	// add a capital city in the selectedField
 	export function addCapital(): void {
-		let sf = Controls.selectedFields[0];
-		let found = false;
-		for (let i = 0; i < GameState.buildings.length; i++) {
-			let building = GameState.buildings[i];
-			if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] === sf[1]) {
-				GameState.buildings[i].type = 3;
-				found = true;
-			}
-		}
-		if (found) {
-			Controls.changedBuildings.push(
-				[true, new ProductionBuilding(3, "", [sf[0], sf[1]], factionToCreateBuildingsFor, 500)]);
-			// console.log({"type": 3, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
-		} else {
-			Controls.changedBuildings.push(
-				[true, new ProductionBuilding(3, "", [sf[0], sf[1]], factionToCreateBuildingsFor, 500)]);
-			GameState.buildings.push(new ProductionBuilding(3, "", [sf[0], sf[1]], factionToCreateBuildingsFor, 500));
-			//TODO correct BP
-			// console.log("this is a new:");
-			// console.log(changedBuildings[changedBuildings.length-1]);
-		}
-		Drawing.resizeCanvas();
+        addProductionBuilding(BuildingType.CAPITAL, Controls.selectedFields[0], factionToCreateBuildingsFor);
 	}
 
 	// add a capital fortress in the selectedField
 	export function addCapitalFortress(): void {
-		let sf = Controls.selectedFields[0];
-		let found = false;
-		for (let i = 0; i < GameState.buildings.length; i++) {
-			let building = GameState.buildings[i]
-			if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] === sf[1]) {
-				GameState.buildings[i].type = 4;
-				found = true;
-			}
-		}
-		if (found) {
-			Controls.changedBuildings.push(
-				[true, new ProductionBuilding(4, "", [sf[0], sf[1]], factionToCreateBuildingsFor, 500)]);
-			// console.log({"type": 4, "x": sf[0], "y": sf[1], "realm":factionToCreateBuildingsFor});
-		} else {
-			Controls.changedBuildings.push(
-				[true, new ProductionBuilding(4, "", [sf[0], sf[1]], factionToCreateBuildingsFor, 500)]);
-			GameState.buildings.push(new ProductionBuilding(4, "", [sf[0], sf[1]], factionToCreateBuildingsFor, 500));
-			//TODO correct BP
-			// console.log("this is a new:");
-			// console.log(changedBuildings[changedBuildings.length-1]);
-		}
-		Drawing.resizeCanvas()
+        addProductionBuilding(BuildingType.CAPITAL_FORT, Controls.selectedFields[0], factionToCreateBuildingsFor);
 	}
 
-	// delete the building in the selectedField
-	export function deleteBuilding(): void {
-		let sf = Controls.selectedFields[0];
-		for (let i = 0; i < GameState.buildings.length; i++) {
-			let building = GameState.buildings[i];
-			if (building.type < 5 && building.getPosition()[0] === sf[0] && building.getPosition()[1] === sf[1]) {
-				Controls.changedBuildings.push([false, GameState.buildings[i]]);
-				if (i === GameState.buildings.length - 1) {
-					GameState.buildings.pop();
-				} else {
-					GameState.buildings.splice(i, 1);
-				}
-			}
-		}
-		Drawing.resizeCanvas()
+	function deleteProductionBuildingOnField(position: [number, number]): void {
+        let buildingToDelete: Building|undefined = GameState.buildings.find(building =>
+            building instanceof ProductionBuilding &&
+            building.getPosition()[0] === position[0] &&
+            building.getPosition()[1] === position[1]);
+        if (buildingToDelete != undefined) {
+            //make sure the right thing is in changedBuildings
+            let entryInChangedBuildings: [boolean, Building]|undefined = Controls.changedBuildings.find(entry =>
+                entry[1].type === (buildingToDelete as Building).type &&
+                entry[1].getPosition()[0] === position[0] &&
+                entry[1].getPosition()[1] === position[1]);
+            if (entryInChangedBuildings == undefined) {
+                Controls.changedBuildings.push([false, buildingToDelete]);
+            } else if (entryInChangedBuildings[0]) {
+                entryInChangedBuildings[0] = false;
+            }
+            //remove the building from GameState.buildings
+            GameState.buildings.splice(GameState.buildings.findIndex(building =>
+                building === buildingToDelete), 1);
+        }
+        Drawing.drawStuff();
+    }
+
+	// delete the production building in the selectedField
+	export function deleteSelectredProductionBuilding(): void {
+        deleteProductionBuildingOnField(Controls.selectedFields[0]);
 	}
 
 	// adds a street in the target direction
