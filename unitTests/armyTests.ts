@@ -1,266 +1,58 @@
-QUnit.assert.armyEquals = function(actual, expected) {
-	var actualProps = Object.getOwnPropertyNames(actual);
-    var expectedProps = Object.getOwnPropertyNames(expected);
+import {QUnit} from "qunit";
+import {Army} from "../armies/army";
+import {FootArmy} from "../armies/footArmy";
+import {dataStructureTests} from "./armyTests/dataStructureTests";
+import {decimationTests} from "./armyTests/decimationTests";
+import {takingFireTests} from "./armyTests/takingFireTests";
+import {GameState} from "../gameState";
+import {Realm} from "../realm";
 
-    if (actualProps.length != expectedProps.length) {
-    	this.pushResult({result: false, actual: actual, expected: expected,
-            message: "Result is not an army."});
+QUnit.assert.armyEquals = function(actual: Army, expected: Army): boolean {
+	if(actual.constructor !== expected.constructor){this.pushResult({result: false, actual: actual, expected: expected,
+        message: "Wrong result: Type mismatch."});
         return false;
+	} else if (actual.getPosition()[0] !== expected.getPosition()[0] ||
+        actual.getPosition()[1] !== expected.getPosition()[1] ||
+        actual.getOldPosition()[0] !== expected.getOldPosition()[0] ||
+        actual.getOldPosition()[1] !== expected.getOldPosition()[1] ||
+        actual.getTroopCount() !== expected.getTroopCount() ||
+        actual.getOfficerCount() !== expected.getOfficerCount() ||
+        actual.getLightCatapultCount() !== expected.getLightCatapultCount() ||
+        actual.getHeavyCatapultCount() !== expected.getHeavyCatapultCount() ||
+        actual.getLightCatapultsShot() !== expected.getLightCatapultsShot() ||
+        actual.getHeavyCatapultsShot() !== expected.getHeavyCatapultsShot() ||
+        actual.getMovePoints() !== expected.getMovePoints() ||
+        actual.getHeightPoints() !== expected.getHeightPoints() ||
+        actual.getMaxMovePoints() !== expected.getMaxMovePoints() ||
+        actual.getMaxHeightPoints() !== expected.getMaxHeightPoints() ||
+        (actual instanceof FootArmy &&
+            (actual as FootArmy).getMountCount() !== (expected as FootArmy).getMountCount())) {
+        this.pushResult({result: false, actual: actual, expected: expected,
+            message: "Wrong result: Value mismatch."});
+        return false;
+    } else {
+        this.pushResult({result: true, actual: actual, expected: expected, message: "Success!"});
+        return true;
     }
-
-    for (var i = 0; i < actualProps.length; i++) {
-        var propName = actualProps[i];
-
-        if ((propName === "count" || propName === "leaders" || propName === "mounts" ||
-        		propName === "lkp" || propName === "skp") && actual[propName] !== expected[propName]) {
-        	this.pushResult({result: false, actual: actual, expected: expected,
-                message: "Wrong result: "+propName+" should be "+expected[propName]+" was "+actual[propName]});
-            return false;
-        }
-    }
-
-    this.pushResult({result: true, actual: actual, expected: expected, message: "Success!"});
-    return true;
 };
 
-var listOfArmies = [];
-var selectedArmyIndex = 0;
-
-module( "Army" , function() {
-	module( "Data Structure" , function() {
-		module( "Maximum MP and HP" , function() {
-		    test( "Foot army respects MP maximum", function(t){
-		        let realm = new Realm("Realm 1", "r01", "000,000,000", FieldType.SHALLOWS);
-                let army = new FootArmy(1, realm, 1000, 1,
-                    0,0,[0, 0], 0, 0);
-                army.setMovePoints(100);
-                t.strictEqual(army.getMovePoints(), 9, "Success!");
-            });
-            test( "Foot army respects MP minimum", function(t){
-                let realm = new Realm("Realm 1", "r01", "000,000,000", FieldType.SHALLOWS);
-                let army = new FootArmy(1, realm, 1000, 1,
-                    0,0,[0, 0], 0, 0);
-                army.setMovePoints(-100);
-                t.strictEqual(army.getMovePoints(), 0, "Success!");
-            });
-            test( "Foot army respects HP maximum", function(t){
-                let realm = new Realm("Realm 1", "r01", "000,000,000", FieldType.SHALLOWS);
-                let army = new FootArmy(1, realm, 1000, 1,
-                    0,0,[0, 0], 0, 0);
-                army.setHeightPoints(10);
-                t.strictEqual(army.getHeightPoints(), 2, "Success!");
-            });
-            test( "Foot army respects HP minimum", function(t){
-                let realm = new Realm("Realm 1", "r01", "000,000,000", FieldType.SHALLOWS);
-                let army = new FootArmy(1, realm, 1000, 1,
-                    0,0,[0, 0], 0, 0);
-                army.setHeightPoints(-10);
-                t.strictEqual(army.getHeightPoints(), 0, "Success!");
-            });
-            test( "Rider army respects MP maximum", function(t){
-                let realm = new Realm("Realm 1", "r01", "000,000,000", FieldType.SHALLOWS);
-                let army = new RiderArmy(1, realm, 1000, 1,[0, 0], 0, 0);
-                army.setMovePoints(100);
-                t.strictEqual(army.getMovePoints(), 21, "Success!");
-            });
-            test( "Rider army respects MP minimum", function(t){
-                let realm = new Realm("Realm 1", "r01", "000,000,000", FieldType.SHALLOWS);
-                let army = new RiderArmy(1, realm, 1000, 1,[0, 0], 0, 0);
-                army.setMovePoints(-100);
-                t.strictEqual(army.getMovePoints(), 0, "Success!");
-            });
-            test( "Rider army respects HP maximum", function(t){
-                let realm = new Realm("Realm 1", "r01", "000,000,000", FieldType.SHALLOWS);
-                let army = new RiderArmy(1, realm, 1000, 1,[0, 0], 0, 0);
-                army.setHeightPoints(10);
-                t.strictEqual(army.getHeightPoints(), 2, "Success!");
-            });
-            test( "Rider army respects HP minimum", function(t){
-                let realm = new Realm("Realm 1", "r01", "000,000,000", FieldType.SHALLOWS);
-                let army = new RiderArmy(1, realm, 1000, 1,[0, 0], 0, 0);
-                army.setHeightPoints(-10);
-                t.strictEqual(army.getHeightPoints(), 0, "Success!");
-            });
-            test( "Fleet army respects MP maximum", function(t){
-                let realm = new Realm("Realm 1", "r01", "000,000,000", FieldType.SHALLOWS);
-                let army = new Fleet(1, realm, 1000, 1,
-                    0,0,[0, 0], 0, 0);
-                army.setMovePoints(100);
-                t.strictEqual(army.getMovePoints(), 42, "Success!");
-            });
-            test( "Fleet army respects MP minimum", function(t){
-                let realm = new Realm("Realm 1", "r01", "000,000,000", FieldType.SHALLOWS);
-                let army = new Fleet(1, realm, 1000, 1,
-                    0,0,[0, 0], 0, 0);
-                army.setMovePoints(-100);
-                t.strictEqual(army.getMovePoints(), 0, "Success!");
-            });
-            test( "Fleet army respects HP maximum", function(t){
-                let realm = new Realm("Realm 1", "r01", "000,000,000", FieldType.SHALLOWS);
-                let army = new Fleet(1, realm, 1000, 1,
-                    0,0,[0, 0], 0, 0);
-                army.setHeightPoints(10);
-                t.strictEqual(army.getHeightPoints(), 0, "Success!");
-            });
-            test( "Fleet army respects HP minimum", function(t){
-                let realm = new Realm("Realm 1", "r01", "000,000,000", FieldType.SHALLOWS);
-                let army = new Fleet(1, realm, 1000, 1,
-                    0,0,[0, 0], 0, 0);
-                army.setHeightPoints(-10);
-                t.strictEqual(army.getHeightPoints(), 0, "Success!");
-            });
-        });
-	});
-	module( "Decimation" , function() {
-		module( "Regular" , function() {
-			test( "Foot army decimation", function(t){
-				var army = new heer(101, 10000, 100, 0, 0, 0, false, 0, 0, 1);
-				army.decimate(1000);
-				t.armyEquals(army, new heer(101, 9000, 90, 0, 0, 0, false, 0, 0, 1));
-			});
-			test( "Foot army with catapults decimation", function(t){
-				var army = new heer(101, 10000, 100, 10, 10, 0, false, 0, 0, 1);
-				army.decimate(1000);
-				t.armyEquals(army, new heer(101, 9000, 90, 9, 9, 0, false, 0, 0, 1));
-			});
-			test( "Foot army with mounts decimation", function(t){
-				var army = new heer(101, 10000, 100, 0, 0, 10000, false, 0, 0, 1);
-				army.decimate(1000);
-				t.armyEquals(army, new heer(101, 9000, 90, 0, 0, 9000, false, 0, 0, 1));
-			});
-			test( "Rider army decimation", function(t){
-				var army = new reiterHeer(201, 10000, 100, false, 0, 0, 1);
-				army.decimate(1000);
-				t.armyEquals(army, new reiterHeer(201, 9000, 90, false, 0, 0, 1));
-			});
-			test( "Fleet decimation", function(t){
-				var army = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
-				army.decimate(10);
-				t.armyEquals(army, new seeHeer(301, 90, 9, 0, 0, false, 0, 0, 1));
-			});
-			test( "Fleet with warships decimation", function(t){
-				var army = new seeHeer(301, 100, 10, 10, 10, false, 0, 0, 1);
-				army.decimate(10);
-				t.armyEquals(army, new seeHeer(301, 90, 9, 9, 9, false, 0, 0, 1));
-			});
-		});
-		module( "Transported Troops" , function() {
-			test( "Fleet transporting at full capacity halved", function(t){
-				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
-				var transportedArmy = new heer(101, 9000, 10, 0, 0, 0, false, 0, 0, 1);
-				listOfArmies = [transportedArmy];
-				fleet.loadArmy(0);
-				fleet.decimate(50);
-				t.armyEquals(transportedArmy, new heer(101, 4500, 5, 0, 0, 0, false, 0, 0, 1));
-			});
-			test( "Fleet transporting at 75% capacity halved", function(t){
-				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
-				var transportedArmy = new heer(101, 7000, 5, 0, 0, 0, false, 0, 0, 1);
-				listOfArmies = [transportedArmy];
-				fleet.loadArmy(0);
-				fleet.decimate(50);
-				t.armyEquals(transportedArmy, new heer(101, 4666, 3, 0, 0, 0, false, 0, 0, 1));
-			});
-			test( "Fleet transporting riders at full capacity halved", function(t){
-				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
-				var transportedArmy = new reiterHeer(201, 4500, 10, false, 0, 0, 1);
-				listOfArmies = [transportedArmy];
-				fleet.loadArmy(0);
-				fleet.decimate(50);
-				t.armyEquals(transportedArmy, new reiterHeer(201, 2250, 5, false, 0, 0, 1));
-			});
-			test( "Fleet transporting army with catapults at full capacity halved", function(t){
-				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
-				var transportedArmy = new heer(101, 1000, 10, 4, 2, 0, false, 0, 0, 1);
-				listOfArmies = [transportedArmy];
-				fleet.loadArmy(0);
-				fleet.decimate(50);
-				t.armyEquals(transportedArmy, new heer(101, 500, 5, 2, 1, 0, false, 0, 0, 1));
-			});
-			test( "Fleet transporting army with mounts at full capacity halved", function(t){
-				var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
-				var transportedArmy = new heer(101, 4500, 10, 0, 0, 4500, false, 0, 0, 1);
-				listOfArmies = [transportedArmy];
-				fleet.loadArmy(0);
-				fleet.decimate(50);
-				t.armyEquals(transportedArmy, new heer(101, 2250, 5, 0, 0, 2250, false, 0, 0, 1));
-			});
-		});
-	});
-	module( "Taking Fire" , function() {
-		module( "Regular" , function() {
-			test( "Foot army decimation", function(t){
-				// var army = new heer(101, 10000, 100, 0, 0, 0, false, 0, 0, 1);
-				// army.decimate(1000);
-				// t.armyEquals(army, new heer(101, 9000, 90, 0, 0, 0, false, 0, 0, 1));
-			});
-			test( "Foot army with catapults decimation", function(t){
-				// var army = new heer(101, 10000, 100, 10, 10, 0, false, 0, 0, 1);
-				// army.decimate(1000);
-				// t.armyEquals(army, new heer(101, 9000, 90, 9, 9, 0, false, 0, 0, 1));
-			});
-			test( "Foot army with mounts decimation", function(t){
-				// var army = new heer(101, 10000, 100, 0, 0, 10000, false, 0, 0, 1);
-				// army.decimate(1000);
-				// t.armyEquals(army, new heer(101, 9000, 90, 0, 0, 9000, false, 0, 0, 1));
-			});
-			test( "Rider army decimation", function(t){
-				// var army = new reiterHeer(201, 10000, 100, false, 0, 0, 1);
-				// army.decimate(1000);
-				// t.armyEquals(army, new reiterHeer(201, 9000, 90, false, 0, 0, 1));
-			});
-			test( "Fleet decimation", function(t){
-				// var army = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
-				// army.decimate(10);
-				// t.armyEquals(army, new seeHeer(301, 90, 9, 0, 0, false, 0, 0, 1));
-			});
-			test( "Fleet with warships decimation", function(t){
-				// var army = new seeHeer(301, 100, 10, 10, 10, false, 0, 0, 1);
-				// army.decimate(10);
-				// t.armyEquals(army, new seeHeer(301, 90, 9, 9, 9, false, 0, 0, 1));
-			});
-		});
-		module( "Transported Troops" , function() {
-			test( "Fleet transporting at full capacity halved", function(t){
-				// var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
-				// var transportedArmy = new heer(101, 9000, 10, 0, 0, 0, false, 0, 0, 1);
-				// listOfArmies = [transportedArmy];
-				// fleet.loadArmy(0);
-				// fleet.decimate(50);
-				// t.armyEquals(transportedArmy, new heer(101, 4500, 5, 0, 0, 0, false, 0, 0, 1));
-			});
-			test( "Fleet transporting at 75% capacity halved", function(t){
-				// var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
-				// var transportedArmy = new heer(101, 7000, 5, 0, 0, 0, false, 0, 0, 1);
-				// listOfArmies = [transportedArmy];
-				// fleet.loadArmy(0);
-				// fleet.decimate(50);
-				// t.armyEquals(transportedArmy, new heer(101, 4666, 3, 0, 0, 0, false, 0, 0, 1));
-			});
-			test( "Fleet transporting riders at full capacity halved", function(t){
-				// var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
-				// var transportedArmy = new reiterHeer(201, 4500, 10, false, 0, 0, 1);
-				// listOfArmies = [transportedArmy];
-				// fleet.loadArmy(0);
-				// fleet.decimate(50);
-				// t.armyEquals(transportedArmy, new reiterHeer(201, 2250, 5, false, 0, 0, 1));
-			});
-			test( "Fleet transporting army with catapults at full capacity halved", function(t){
-				// var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
-				// var transportedArmy = new heer(101, 1000, 10, 4, 2, 0, false, 0, 0, 1);
-				// listOfArmies = [transportedArmy];
-				// fleet.loadArmy(0);
-				// fleet.decimate(50);
-				// t.armyEquals(transportedArmy, new heer(101, 500, 5, 2, 1, 0, false, 0, 0, 1));
-			});
-			test( "Fleet transporting army with mounts at full capacity halved", function(t){
-				// var fleet = new seeHeer(301, 100, 10, 0, 0, false, 0, 0, 1);
-				// var transportedArmy = new heer(101, 4500, 10, 0, 0, 4500, false, 0, 0, 1);
-				// listOfArmies = [transportedArmy];
-				// fleet.loadArmy(0);
-				// fleet.decimate(50);
-				// t.armyEquals(transportedArmy, new heer(101, 2250, 5, 0, 0, 2250, false, 0, 0, 1));
-			});
-		});
-	});
+module( "Army" , {
+    before: function () {
+        GameState.reset();
+        GameState.realms.push(new Realm("Pink Realm", "r01", "213,038,181", 9, true));
+        GameState.realms.push(new Realm("Realm 2", "r02", "000,000,000", 9, true));
+        GameState.realms.push(new Realm("Realm 3", "r03", "000,000,000", 9, true));
+    },
+    beforeEach: function () {
+        GameState.fields = [];
+        GameState.buildings = [];
+        GameState.armies = [];
+        GameState.realms.forEach(realm => realm.territory = []);
+    },
+    after: function () {
+        GameState.reset();
+    }}, function() {
+	module( "Data Structure" , dataStructureTests);
+	module( "Decimation" , decimationTests);
+	module( "Taking Fire" , takingFireTests);
 });
