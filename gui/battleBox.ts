@@ -183,7 +183,7 @@ export class BattleBox {
     private updateArmyLists(): void {
         //fill the sortable lists of armies
         this.getAttackArmiesBox().innerHTML = "";
-        this.battleHandler.attackerArmies.forEach(function (item, index) {
+        this.battleHandler.attackerArmies.forEach((item, index) => {
             let listItem = document.createElement("DIV");
             this.getAttackArmiesBox().appendChild(listItem);
             listItem.classList.add("armyListItem");
@@ -201,7 +201,7 @@ export class BattleBox {
         }, this);
 
         this.getUnsortedArmiesBox().innerHTML = "";
-        this.battleHandler.unsortedArmies.forEach(function (item, index) {
+        this.battleHandler.unsortedArmies.forEach((item, index) => {
             let listItem = document.createElement("DIV");
             this.getUnsortedArmiesBox().appendChild(listItem);
             listItem.classList.add("armyListItem");
@@ -225,7 +225,7 @@ export class BattleBox {
         }, this);
 
         this.getDefenseArmiesBox().innerHTML = "";
-        this.battleHandler.defenderArmies.forEach(function (item, index) {
+        this.battleHandler.defenderArmies.forEach((item, index) => {
             let listItem = document.createElement("DIV");
             this.getDefenseArmiesBox().appendChild(listItem);
             listItem.classList.add("armyListItem");
