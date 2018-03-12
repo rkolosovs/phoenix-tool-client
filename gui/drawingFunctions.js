@@ -276,7 +276,7 @@ var Drawing;
         gui_1.GUI.getContext().lineCap = "round";
         for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
             let building = gameState_1.GameState.buildings[i];
-            let buildingPos;
+            let buildingPos = undefined;
             if (building.type !== 8 /* STREET */) {
                 buildingPos = hexFunctions_1.HexFunction.computePosition(screenPos, building.getPosition(), scale);
             }
@@ -378,13 +378,13 @@ var Drawing;
                     tileImg = images_1.Images.default;
                     break;
             }
-            if (building.type <= 4) {
+            if (building.type <= 4 && buildingPos !== undefined) {
                 gui_1.GUI.getContext().drawImage(tileImg, buildingPos[0], buildingPos[1], scale * constants_1.Constants.SIN60, scale); //draw the image
             }
-            else if (building.type === 5) {
+            else if (building.type === 5 && buildingPos !== undefined) {
                 gui_1.GUI.getContext().drawImage(tileImg, buildingPos[0], buildingPos[1], scale * constants_1.Constants.SIN60, scale); //draw the image
             }
-            else if (building.type <= 7) {
+            else if (building.type <= 7 && buildingPos !== undefined) {
                 gui_1.GUI.getContext().drawImage(tileImg, buildingPos[0] - Drawing.gW, buildingPos[1] - (0.5 * scale), 3 * Drawing.gW, 2 * scale); //draw the image
             }
             else if (building.type === 8) {
@@ -676,7 +676,7 @@ var Drawing;
         for (let j = 0; j < Drawing.listOfMultiArmyFields.length; j++) {
             for (let i = 0; i < Drawing.listOfMultiArmyFields[j].length; i++) {
                 let armyData = Drawing.listOfMultiArmyFields[j][i]; // get army coordinates
-                let pos = hexFunctions_1.HexFunction.computePosition(screenPos, Drawing.listOfMultiArmyFields[j][i], scale);
+                let pos = hexFunctions_1.HexFunction.computePosition(screenPos, Drawing.listOfMultiArmyFields[j][i].getPosition(), scale);
                 let circleScale = (scale * constants_1.Constants.SIN60) / Drawing.listOfMultiArmyFields[j].length;
                 //const double Angle = (M_PI * 2.0) / n;
                 //Für jedes i-te Objekt dann die Position des Mittelpunktes:
@@ -731,51 +731,53 @@ var Drawing;
         if (boxVisibilty_1.BoxVisibility.shootingModeOn) {
             index = 1;
         }
-        if (controlVariables_1.Controls.selectedFields[index] == undefined) {
-            minimapBox.innerHTML = '';
-        }
-        else {
-            let fieldPositionInList = hexFunctions_1.HexFunction.positionInList(controlVariables_1.Controls.selectedFields[index]);
-            let localfieldType = '';
-            switch (hexFunctions_1.HexFunction.fieldType(controlVariables_1.Controls.selectedFields[index])) {
-                case 0:
-                    localfieldType = 'Wasser';
-                    break;
-                case 1:
-                    localfieldType = 'Tiefsee';
-                    break;
-                case 2:
-                    localfieldType = 'Tiefland';
-                    break;
-                case 3:
-                    localfieldType = 'Wald';
-                    break;
-                case 4:
-                    localfieldType = 'Hochland';
-                    break;
-                case 5:
-                    localfieldType = 'Bergland';
-                    break;
-                case 6:
-                    localfieldType = 'Gebirge';
-                    break;
-                case 7:
-                    localfieldType = 'Wüste';
-                    break;
-                case 8:
-                    localfieldType = 'Sumpf';
-                    break;
-                default:
-                    localfieldType = 'Unbekannt';
-                    break;
+        if (minimapBox !== null) {
+            if (controlVariables_1.Controls.selectedFields[index] == undefined) {
+                minimapBox.innerHTML = '';
             }
-            let fieldOwner = gameState_1.GameState.realms.find(realm => (realm.territory.some(field => (field.coordinates[0] === controlVariables_1.Controls.selectedFields[index][0] &&
-                field.coordinates[1] === controlVariables_1.Controls.selectedFields[index][1]))));
-            let fieldOwnerString = (fieldOwner == undefined) ? 'keiner' : fieldOwner.tag;
-            minimapBox.innerHTML = '<p>Feld: (' + controlVariables_1.Controls.selectedFields[index][0] + ', ' + controlVariables_1.Controls.selectedFields[index][1] + ')' +
-                '</p><p>Gelände: ' + localfieldType +
-                '</p><p>Höhe: ' + hexFunctions_1.HexFunction.height(controlVariables_1.Controls.selectedFields[index]) +
-                '</p><p>Besitzer: ' + fieldOwnerString + '</p>';
+            else {
+                let fieldPositionInList = hexFunctions_1.HexFunction.positionInList(controlVariables_1.Controls.selectedFields[index]);
+                let localfieldType = '';
+                switch (hexFunctions_1.HexFunction.fieldType(controlVariables_1.Controls.selectedFields[index])) {
+                    case 0:
+                        localfieldType = 'Wasser';
+                        break;
+                    case 1:
+                        localfieldType = 'Tiefsee';
+                        break;
+                    case 2:
+                        localfieldType = 'Tiefland';
+                        break;
+                    case 3:
+                        localfieldType = 'Wald';
+                        break;
+                    case 4:
+                        localfieldType = 'Hochland';
+                        break;
+                    case 5:
+                        localfieldType = 'Bergland';
+                        break;
+                    case 6:
+                        localfieldType = 'Gebirge';
+                        break;
+                    case 7:
+                        localfieldType = 'Wüste';
+                        break;
+                    case 8:
+                        localfieldType = 'Sumpf';
+                        break;
+                    default:
+                        localfieldType = 'Unbekannt';
+                        break;
+                }
+                let fieldOwner = gameState_1.GameState.realms.find(realm => (realm.territory.some(field => (field.coordinates[0] === controlVariables_1.Controls.selectedFields[index][0] &&
+                    field.coordinates[1] === controlVariables_1.Controls.selectedFields[index][1]))));
+                let fieldOwnerString = (fieldOwner == undefined) ? 'keiner' : fieldOwner.tag;
+                minimapBox.innerHTML = '<p>Feld: (' + controlVariables_1.Controls.selectedFields[index][0] + ', ' + controlVariables_1.Controls.selectedFields[index][1] + ')' +
+                    '</p><p>Gelände: ' + localfieldType +
+                    '</p><p>Höhe: ' + hexFunctions_1.HexFunction.height(controlVariables_1.Controls.selectedFields[index]) +
+                    '</p><p>Besitzer: ' + fieldOwnerString + '</p>';
+            }
         }
     }
     function writeTurnNumber() {
@@ -795,9 +797,10 @@ var Drawing;
                     message = "Do you want to end the pre-turn phase?";
                 }
                 else if (gameState_1.GameState.currentTurn.status === 'fi') {
-                    let unprocessedEvents = gameState_1.GameState.pendingNewEvents.some(function (event) {
-                        return (event.getStatus() === 'available' || event.getStatus() === 'withheld' ||
-                            event.getStatus() === 'impossible');
+                    let unprocessedEvents = gameState_1.GameState.loadedEvents.some(function (event) {
+                        return (event.getStatus() === 4 /* Available */ ||
+                            event.getStatus() === 3 /* Withheld */ ||
+                            event.getStatus() === 2 /* Impossible */);
                     });
                     if (unprocessedEvents) {
                         message = "Some events are unprocessed.";
@@ -812,11 +815,11 @@ var Drawing;
                 }
                 if (confirm(message)) {
                     if (login === 'sl' && gameState_1.GameState.currentTurn.status === 'fi') {
-                        gameState_1.GameState.pendingNewEvents.forEach(function (event) {
-                            if (event.getStatus() === 'checked') {
+                        gameState_1.GameState.loadedEvents.forEach(function (event) {
+                            if (event.getStatus() === 0 /* Checked */) {
                                 savingFunctions_1.Saving.sendCheckEvent(event.getPK(), event.getType());
                             }
-                            else if (event.getStatus() === 'deleted') {
+                            else if (event.getStatus() === 1 /* Deleted */) {
                                 savingFunctions_1.Saving.sendDeleteEvent(event.getPK(), event.getType());
                             }
                         }, this);
@@ -845,16 +848,16 @@ var Drawing;
                 if (login === 'sl') {
                     if (confirm("Do you want to save the events handled so far without ending the turn?" +
                         " Once saved the progress can't be reverted anymore.")) {
-                        gameState_1.GameState.pendingNewEvents.forEach(function (event) {
-                            if (event.getStatus() === 'checked') {
+                        gameState_1.GameState.newEvents.forEach(function (event) {
+                            if (event.getStatus() === 0 /* Checked */) {
                                 savingFunctions_1.Saving.sendCheckEvent(event.getPK(), event.getType());
                             }
-                            else if (event.getStatus() === 'deleted') {
+                            else if (event.getStatus() === 1 /* Deleted */) {
                                 savingFunctions_1.Saving.sendDeleteEvent(event.getPK(), event.getType());
                             }
                         }, this);
-                        gameState_1.GameState.pendingNewEvents = [];
-                        preparedEvents = [];
+                        gameState_1.GameState.newEvents = [];
+                        gameState_1.GameState.loadedEvents = [];
                         savingFunctions_1.Saving.saveBuildings();
                         savingFunctions_1.Saving.saveFactionsTerritories();
                         savingFunctions_1.Saving.saveArmies();
@@ -864,7 +867,7 @@ var Drawing;
                     if (confirm("Do you want to save the events issued so far without ending the turn?" +
                         " Once saved the progress can only be reverted by the SL.")) {
                         console.log(3);
-                        savingFunctions_1.Saving.sendEventlistInOrder();
+                        savingFunctions_1.Saving.sendEventlistInOrder(0);
                     }
                 }
             });
@@ -875,8 +878,8 @@ var Drawing;
             revertBtn.style.backgroundImage = "url(images/revert_button.svg)";
             revertBtn.addEventListener('click', function () {
                 if (confirm("Do you want to revert the events handled so far?")) {
-                    gameState_1.GameState.pendingNewEvents = [];
-                    preparedEvents = [];
+                    gameState_1.GameState.newEvents = [];
+                    gameState_1.GameState.loadedEvents = [];
                     loadingDataFunctions_1.Loading.loadArmies();
                     loadingDataFunctions_1.Loading.loadBuildingData();
                     loadingDataFunctions_1.Loading.loadBorderData();

@@ -30,14 +30,14 @@ QUnit.assert.resultEquals = function (actual, expected) {
     return true;
 };
 //arrays to hold prepared armies for test
-var defenderArmies = [];
-var attackerArmies = [];
+let defenderArmies = [];
+let attackerArmies = [];
 //mock-up arrays of borders, buildings and field
-var borders = [];
-var buildings = [];
-var fields = [];
-var rivers = [];
-var realms = [];
+let borders = [];
+let buildings = [];
+let fields = [];
+let rivers = [];
+let realms = [];
 module("Battle", function () {
     module("Results", {
         before: function () {

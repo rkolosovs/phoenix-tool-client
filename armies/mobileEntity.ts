@@ -2,6 +2,7 @@ import {Move} from "./move";
 import {Direction} from "../map/direction";
 import {Realm} from "../realm";
 import {MapEntity} from "../map/mapEntity";
+import {GameState} from "../gameState";
 
 export abstract class MobileEntity extends MapEntity{
     static readonly MAX_MOVE_POINTS: number = 42;
@@ -33,7 +34,7 @@ export abstract class MobileEntity extends MapEntity{
     abstract getRoomPoints(): number;
 
     clickedMoves(): void {
-        if (this.owner.tag === login || login === "sl") {
+        if (this.owner.tag === GameState.login || GameState.login === "sl") {
             this.possibleMoves = [];
             //goes through all neighbors to see if the army can move there
             this.possibleMoves.push(this.checkForPossibleMove(Direction.NW));

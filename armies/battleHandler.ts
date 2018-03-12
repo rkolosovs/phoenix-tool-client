@@ -8,6 +8,7 @@ import {Fleet} from "./fleet";
 import {RiderArmy} from "./riderArmy";
 import {FootArmy} from "./footArmy";
 import {MobileEntity} from "./mobileEntity";
+import {ArmyFunctions} from "../libraries/armyFunctions";
 
 export class BattleHandler {
     unsortedArmies: Army[];
@@ -68,7 +69,7 @@ export class BattleHandler {
                 console.log("Battle resolution error.");
             }
         }
-        GameState.purgeDeadArmies();
+        ArmyFunctions.checkArmiesForLiveliness();
     }
 
     private static armyArrayCount(armyArray: Army[], fieldType: FieldType) {

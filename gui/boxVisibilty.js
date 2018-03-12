@@ -7,6 +7,7 @@ const controlVariables_1 = require("../controls/controlVariables");
 const footArmy_1 = require("../armies/footArmy");
 const riderArmy_1 = require("../armies/riderArmy");
 const fleet_1 = require("../armies/fleet");
+const buttonFunctions_1 = require("../controls/buttonFunctions");
 var BoxVisibility;
 (function (BoxVisibility) {
     BoxVisibility.worldCreationModeOn = false;
@@ -500,7 +501,7 @@ var BoxVisibility;
                     btn.appendChild(t);
                     btn.addEventListener('click', function (event) {
                         let posiInList = this.name.split(" ")[1];
-                        transferTroopsFromSelectedArmy(posiInList);
+                        buttonFunctions_1.ButtonFunctions.transferTroopsFromSelectedArmy(parseInt(posiInList));
                     });
                     x.appendChild(btn);
                 }
@@ -559,7 +560,7 @@ var BoxVisibility;
                     btn.appendChild(t);
                     btn.addEventListener('click', function (event) {
                         let posiInList = this.name.split(" ")[1];
-                        mergeSelectedArmy(posiInList);
+                        buttonFunctions_1.ButtonFunctions.mergeSelectedArmy(parseInt(posiInList));
                     });
                     x.appendChild(btn);
                 }

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mapEntity_1 = require("../map/mapEntity");
+const gameState_1 = require("../gameState");
 class MobileEntity extends mapEntity_1.MapEntity {
     constructor(id, owner, position, movePoints, heightPoints) {
         super(position, owner);
@@ -18,7 +19,7 @@ class MobileEntity extends mapEntity_1.MapEntity {
         this.setHeightPoints(heightPoints);
     }
     clickedMoves() {
-        if (this.owner.tag === login || login === "sl") {
+        if (this.owner.tag === gameState_1.GameState.login || gameState_1.GameState.login === "sl") {
             this.possibleMoves = [];
             //goes through all neighbors to see if the army can move there
             this.possibleMoves.push(this.checkForPossibleMove(0 /* NW */));

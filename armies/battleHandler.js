@@ -7,6 +7,7 @@ const landArmy_1 = require("./landArmy");
 const fleet_1 = require("./fleet");
 const riderArmy_1 = require("./riderArmy");
 const footArmy_1 = require("./footArmy");
+const armyFunctions_1 = require("../libraries/armyFunctions");
 class BattleHandler {
     constructor(participants, location) {
         this.attackerArmies = [];
@@ -66,7 +67,7 @@ class BattleHandler {
                 console.log("Battle resolution error.");
             }
         }
-        gameState_1.GameState.purgeDeadArmies();
+        armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
     }
     static armyArrayCount(armyArray, fieldType) {
         return armyArray.filter((val) => ((val instanceof fleet_1.Fleet && fieldType <= 1) || (fieldType >= 2 && val instanceof landArmy_1.LandArmy)), this).
