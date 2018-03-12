@@ -9,6 +9,7 @@ import {RiderArmy} from "../armies/riderArmy";
 import {Fleet} from "../armies/fleet";
 import {LandArmy} from "../armies/landArmy";
 import {Army} from "../armies/army";
+import {ButtonFunctions} from "../controls/buttonFunctions";
 
 export namespace BoxVisibility {
     export let worldCreationModeOn = false;
@@ -467,7 +468,7 @@ export namespace BoxVisibility {
                     btn.appendChild(t);
                     btn.addEventListener('click', function (event) {
                         let posiInList = this.name.split(" ")[1];
-                        transferTroopsFromSelectedArmy(posiInList);
+                        ButtonFunctions.transferTroopsFromSelectedArmy(parseInt(posiInList));
                     });
                     x.appendChild(btn);
                 }
@@ -526,7 +527,7 @@ export namespace BoxVisibility {
                     btn.appendChild(t);
                     btn.addEventListener('click', function (event) {
                         let posiInList = this.name.split(" ")[1];
-                        mergeSelectedArmy(posiInList);
+                        ButtonFunctions.mergeSelectedArmy(parseInt(posiInList));
                     });
                     x.appendChild(btn);
                 }
