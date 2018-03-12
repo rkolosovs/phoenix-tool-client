@@ -148,65 +148,69 @@ var GodFunctions;
         deleteProductionBuildingOnField(controlVariables_1.Controls.selectedFields[0]);
     }
     GodFunctions.deleteSelectredProductionBuilding = deleteSelectredProductionBuilding;
+    function addNonDestructibleBuilding(type, position, secondPosition, realm) {
+        //make sure the right thing is contained in the changedBuildings
+        let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1].type === type &&
+            entry[1].getPosition()[0] === position[0] &&
+            entry[1].getPosition()[1] === position[1] &&
+            entry[1].getSecondPosition()[0] === secondPosition[0] &&
+            entry[1].getSecondPosition()[1] === secondPosition[1]);
+        if (entryInChangedBuildings == undefined) {
+            controlVariables_1.Controls.changedBuildings.push([true, new nonDestructibleBuilding_1.NonDestructibleBuilding(type, position, secondPosition, realm)]);
+        }
+        else if (!entryInChangedBuildings[0]) {
+            entryInChangedBuildings[0] = true;
+        }
+        //make sure the right thing is contained in the GameState.buildings
+        let entryInActualBuildings = gameState_1.GameState.buildings.find(building => building.type === type &&
+            building.getPosition()[0] === position[0] &&
+            building.getPosition()[1] === position[1] &&
+            building.getSecondPosition()[0] === secondPosition[0] &&
+            building.getSecondPosition()[1] === secondPosition[1]);
+        if (entryInActualBuildings == undefined) {
+            gameState_1.GameState.buildings.push(new nonDestructibleBuilding_1.NonDestructibleBuilding(type, position, secondPosition, realm));
+        }
+        drawingFunctions_1.Drawing.drawStuff();
+    }
+    function deleteNonDestructibleBuilding(type, position, secondPosition) {
+        let buildingToDelete = gameState_1.GameState.buildings.find(building => building.type === type &&
+            building.getPosition()[0] === position[0] &&
+            building.getPosition()[1] === position[1] &&
+            building.getSecondPosition()[0] === secondPosition[0] &&
+            building.getSecondPosition()[1] === secondPosition[1]);
+        if (buildingToDelete != undefined) {
+            //make sure the right thing is in changedBuildings
+            let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1].type === buildingToDelete.type &&
+                entry[1].getPosition()[0] === position[0] &&
+                entry[1].getPosition()[1] === position[1] &&
+                entry[1].getSecondPosition()[0] === secondPosition[0] &&
+                entry[1].getSecondPosition()[1] === secondPosition[1]);
+            if (entryInChangedBuildings == undefined) {
+                controlVariables_1.Controls.changedBuildings.push([false, buildingToDelete]);
+            }
+            else if (entryInChangedBuildings[0]) {
+                entryInChangedBuildings[0] = false;
+            }
+            //remove the building from GameState.buildings
+            gameState_1.GameState.buildings.splice(gameState_1.GameState.buildings.findIndex(building => building === buildingToDelete), 1);
+        }
+        drawingFunctions_1.Drawing.drawStuff();
+    }
     // adds a street in the target direction
     function addStreet(direction) {
-        let sf = controlVariables_1.Controls.selectedFields[0];
-        let targets = hexFunctions_1.HexFunction.neighbors(sf);
+        let targets = hexFunctions_1.HexFunction.neighbors(controlVariables_1.Controls.selectedFields[0]);
         let target = targets[direction];
-        let found = false;
-        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
-            if (gameState_1.GameState.buildings[i].type === 8) {
-                let building = gameState_1.GameState.buildings[i]; //TODO change this to accomodate new Types probably with differentlist for streets
-                if (((building.getPosition()[0] === sf[0] && building.getSecondPosition()[1] === sf[1] &&
-                    building.getSecondPosition()[0] === target[0] && building.getSecondPosition()[1] === target[1])) ||
-                    (building.type === 8 && (building.getPosition()[0] === target[0] &&
-                        building.getPosition()[1] === target[1] && building.getSecondPosition()[0] === sf[0] &&
-                        building.getSecondPosition()[1] === sf[1]))) {
-                    found = true;
-                }
-            }
-        }
-        if (found) {
-        }
-        else {
-            let newStreet = new nonDestructibleBuilding_1.NonDestructibleBuilding(8, [sf[0], sf[1]], [target[0], target[1]], factionToCreateBuildingsFor);
-            controlVariables_1.Controls.changedBuildings.push([true, newStreet]);
-            gameState_1.GameState.buildings.push(newStreet);
-            controlVariables_1.Controls.selectedFields[0] = [target[0], target[1]];
-        }
-        drawingFunctions_1.Drawing.resizeCanvas();
+        addNonDestructibleBuilding(8 /* STREET */, controlVariables_1.Controls.selectedFields[0], target, factionToCreateBuildingsFor);
+        controlVariables_1.Controls.selectedFields[0] = [target[0], target[1]];
+        drawingFunctions_1.Drawing.drawStuff();
     }
     GodFunctions.addStreet = addStreet;
     // removes a street in the target direction
     function removeStreet(direction) {
-        let sf = controlVariables_1.Controls.selectedFields[0];
-        let targets = hexFunctions_1.HexFunction.neighbors(sf);
+        let targets = hexFunctions_1.HexFunction.neighbors(controlVariables_1.Controls.selectedFields[0]);
         let target = targets[direction];
-        let found = undefined;
-        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
-            if (gameState_1.GameState.buildings[i].type === 8) {
-                let building = gameState_1.GameState.buildings[i]; //TODO change this to accomodate new Types probably with differentlist for streets
-                if (building.type === 8 && ((building.getPosition()[0] === sf[0] &&
-                    building.getPosition()[1] === sf[1] && building.getSecondPosition()[0] === target[0] &&
-                    building.getSecondPosition()[1] === target[1]) ||
-                    (building.getPosition()[0] === target[0] && building.getPosition()[1] === target[1] &&
-                        building.getSecondPosition()[0] === sf[0] && building.getSecondPosition()[1] === sf[1]))) {
-                    found = i;
-                }
-            }
-        }
-        if (found != undefined) {
-            let streetToRemove = new nonDestructibleBuilding_1.NonDestructibleBuilding(8, [sf[0], sf[1]], [target[0], target[1]], factionToCreateBuildingsFor);
-            changedBuildings.push([false, streetToRemove]);
-            if (found === gameState_1.GameState.buildings.length - 1) {
-                gameState_1.GameState.buildings.pop();
-                controlVariables_1.Controls.selectedFields[0] = [target[0], target[1]];
-            }
-            else {
-                gameState_1.GameState.buildings.splice(found, 1);
-                controlVariables_1.Controls.selectedFields[0] = [target[0], target[1]];
-            }
-        }
+        deleteNonDestructibleBuilding(8 /* STREET */, controlVariables_1.Controls.selectedFields[0], target);
+        controlVariables_1.Controls.selectedFields[0] = [target[0], target[1]];
         drawingFunctions_1.Drawing.resizeCanvas();
     }
     GodFunctions.removeStreet = removeStreet;
@@ -249,54 +253,75 @@ var GodFunctions;
             }
         }
         if (found != undefined) {
-            if (found == gameState_1.GameState.rivers.length - 1) {
-                gameState_1.GameState.rivers.pop();
-            }
-            else {
-                gameState_1.GameState.rivers.splice(found, 1);
-            }
+            gameState_1.GameState.rivers.splice(found, 1);
         }
         drawingFunctions_1.Drawing.resizeCanvas();
     }
     GodFunctions.removeRiver = removeRiver;
+    function addWall(type, position, direction, realm) {
+        //make sure the right thing is contained in the changedBuildings
+        let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1].type === type &&
+            entry[1].getPosition()[0] === position[0] &&
+            entry[1].getPosition()[1] === position[1] &&
+            entry[1].facing === direction);
+        if (entryInChangedBuildings == undefined) {
+            controlVariables_1.Controls.changedBuildings.push([true, new wall_1.Wall(type, position, realm, constants_1.Constants.WALL_BP, direction, constants_1.Constants.WALL_MAX_GUARD)]);
+        }
+        else if (!entryInChangedBuildings[0]) {
+            entryInChangedBuildings[0] = true;
+        }
+        //make sure the right thing is contained in the GameState.buildings
+        let entryInActualBuildings = gameState_1.GameState.buildings.find(building => building.type === type &&
+            building.getPosition()[0] === position[0] &&
+            building.getPosition()[1] === position[1] &&
+            building.facing === direction);
+        if (entryInActualBuildings == undefined) {
+            gameState_1.GameState.buildings.push(new wall_1.Wall(type, position, realm, constants_1.Constants.WALL_BP, direction, constants_1.Constants.WALL_MAX_GUARD));
+        }
+        drawingFunctions_1.Drawing.drawStuff();
+    }
+    function deleteWall(type, position, direction) {
+        let buildingToDelete = gameState_1.GameState.buildings.find(building => building.type === type &&
+            building.getPosition()[0] === position[0] &&
+            building.getPosition()[1] === position[1] &&
+            building.facing === direction);
+        if (buildingToDelete != undefined) {
+            //make sure the right thing is in changedBuildings
+            let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1].type === buildingToDelete.type &&
+                entry[1].getPosition()[0] === position[0] &&
+                entry[1].getPosition()[1] === position[1] &&
+                entry[1].facing === direction);
+            if (entryInChangedBuildings == undefined) {
+                controlVariables_1.Controls.changedBuildings.push([false, buildingToDelete]);
+            }
+            else if (entryInChangedBuildings[0]) {
+                entryInChangedBuildings[0] = false;
+            }
+            //remove the building from GameState.buildings
+            gameState_1.GameState.buildings.splice(gameState_1.GameState.buildings.findIndex(building => building === buildingToDelete), 1);
+        }
+        drawingFunctions_1.Drawing.drawStuff();
+    }
     //add = true means add a building, else remove it.
     function manipulateBorderBuilding(type, direction, add) {
-        let sf = controlVariables_1.Controls.selectedFields[0];
-        let found = undefined;
-        let wallFound = undefined;
-        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
-            if (gameState_1.GameState.buildings[i].type === 5) {
-                let building = gameState_1.GameState.buildings[i];
-                if (building.type === type && (building.getPosition()[0] == sf[0] && building.getPosition()[1] == sf[1] && building.facing == direction)) {
-                    found = i;
-                    wallFound = gameState_1.GameState.buildings[i];
-                }
-            }
-        }
+        let targets = hexFunctions_1.HexFunction.neighbors(controlVariables_1.Controls.selectedFields[0]);
+        let target = targets[direction];
         if (add) {
-            let wallToAdd = new wall_1.Wall(5, [sf[0], sf[1],], factionToCreateBuildingsFor, 100, direction, 400);
-            if (found !== undefined) {
-                controlVariables_1.Controls.changedBuildings.push([true, wallToAdd]);
+            if (type === 5 /* WALL */) {
+                addWall(type, controlVariables_1.Controls.selectedFields[0], direction, factionToCreateBuildingsFor);
             }
             else {
-                controlVariables_1.Controls.changedBuildings.push([true, wallToAdd]);
-                gameState_1.GameState.buildings.push(wallToAdd);
+                addNonDestructibleBuilding(type, controlVariables_1.Controls.selectedFields[0], target, factionToCreateBuildingsFor);
             }
         }
         else {
-            if (found !== undefined) {
-                if (wallFound !== undefined) {
-                    controlVariables_1.Controls.changedBuildings.push([false, wallFound]);
-                }
-                if (found === gameState_1.GameState.buildings.length - 1) {
-                    gameState_1.GameState.buildings.pop();
-                }
-                else {
-                    gameState_1.GameState.buildings.splice(found, 1);
-                }
+            if (type === 5 /* WALL */) {
+                deleteWall(type, controlVariables_1.Controls.selectedFields[0], direction);
+            }
+            else {
+                deleteNonDestructibleBuilding(type, controlVariables_1.Controls.selectedFields[0], target);
             }
         }
-        drawingFunctions_1.Drawing.resizeCanvas();
     }
     GodFunctions.manipulateBorderBuilding = manipulateBorderBuilding;
     // the function for the Gm posibility to make an army out of nothing
