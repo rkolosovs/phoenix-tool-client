@@ -11,6 +11,7 @@ const fleetMovementTests_1 = require("./movementTests/fleetMovementTests");
 const lightWarshipMovement_1 = require("./movementTests/lightWarshipMovement");
 const heavyWarshipMovement_1 = require("./movementTests/heavyWarshipMovement");
 const movementWithRivers_1 = require("./movementTests/movementWithRivers");
+const { module } = qunit_1.QUnit;
 qunit_1.QUnit.assert.movePossible = function (actual, expected) {
     if (actual.some(possibleMove => possibleMove.heightPoints === expected.heightPoints &&
         possibleMove.movePoints === expected.movePoints &&

@@ -7,6 +7,7 @@ const decimationTests_1 = require("./armyTests/decimationTests");
 const takingFireTests_1 = require("./armyTests/takingFireTests");
 const gameState_1 = require("../gameState");
 const realm_1 = require("../realm");
+const { module } = qunit_1.QUnit;
 qunit_1.QUnit.assert.armyEquals = function (actual, expected) {
     if (actual.constructor !== expected.constructor) {
         this.pushResult({ result: false, actual: actual, expected: expected,

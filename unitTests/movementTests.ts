@@ -11,6 +11,8 @@ import {lightWarshipMovementTests} from "./movementTests/lightWarshipMovement";
 import {heavyWarshipMovementTests} from "./movementTests/heavyWarshipMovement";
 import {movementWithRiversTests} from "./movementTests/movementWithRivers";
 
+const { module } = QUnit;
+
 QUnit.assert.movePossible = function(actual: Move[], expected: Move): boolean {
     if(actual.some(possibleMove =>
 			possibleMove.heightPoints === expected.heightPoints &&

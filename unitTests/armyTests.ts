@@ -7,6 +7,8 @@ import {takingFireTests} from "./armyTests/takingFireTests";
 import {GameState} from "../gameState";
 import {Realm} from "../realm";
 
+const { module } = QUnit;
+
 QUnit.assert.armyEquals = function(actual: Army, expected: Army): boolean {
 	if(actual.constructor !== expected.constructor){this.pushResult({result: false, actual: actual, expected: expected,
         message: "Wrong result: Type mismatch."});
