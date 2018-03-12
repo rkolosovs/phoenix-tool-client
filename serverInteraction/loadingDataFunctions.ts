@@ -245,7 +245,8 @@ export namespace Loading{
                         case 2:
                         case 3:
                         case 4:
-                            return new ProductionBuilding(building.type, [building.firstX, building.firstY],
+                            // TODO Name to data from server
+                            return new ProductionBuilding(building.type, "", [building.firstX, building.firstY],
                                 owner, (building.buildPoints as number));
                         case 5:
                             return new Wall(building.type, [building.firstX, building.firstY], owner,
