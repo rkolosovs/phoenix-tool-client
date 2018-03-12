@@ -220,24 +220,20 @@ export namespace GodFunctions {
 
 	// adds a river in the target direction
 	export function addRiver(direction: Direction): void {
-		let sf = Controls.selectedFields[0];
-		let targets = HexFunction.neighbors(sf);
+		let targets = HexFunction.neighbors(Controls.selectedFields[0]);
 		let target = targets[direction];
-		let found = false;
-		for (let i = 0; i < GameState.rivers.length; i++) {
-			let river = GameState.rivers[i];
-			if ((river.rightBank[0] === sf[0] && river.rightBank[1] === sf[1] && river.leftBank[0] === target[0] &&
-				river.leftBank[1] === target[1]) ||
-				(river.leftBank[0] === sf[0] && river.leftBank[1] === sf[1] && river.rightBank[0] === target[0] &&
-					river.rightBank[1] === target[1])) {
-				found = true;
-			}
-		}
-		if (found) {
-		} else {
-			GameState.rivers.push(new River([sf[0], sf[1]], [target[0], target[1]]));
-		}
-		Drawing.resizeCanvas();
+		if(!GameState.rivers.some(river =>
+                (river.rightBank[0] === Controls.selectedFields[0][0] &&
+                    river.rightBank[1] === Controls.selectedFields[0][1] &&
+                    river.leftBank[0] === target[0] &&
+                    river.leftBank[1] === target[1]) ||
+                (river.leftBank[0] === Controls.selectedFields[0][0] &&
+                    river.leftBank[1] === Controls.selectedFields[0][1] &&
+                    river.rightBank[0] === target[0] &&
+                    river.rightBank[1] === target[1]))) {
+            GameState.rivers.push(new River(Controls.selectedFields[0], target));
+        }
+		Drawing.drawStuff();
 	}
 
 	// removes a river in the target direction
@@ -245,20 +241,19 @@ export namespace GodFunctions {
 		let sf = Controls.selectedFields[0];
 		let targets = HexFunction.neighbors(sf);
 		let target = targets[direction];
-		let found = undefined;
-		for (let i = 0; i < GameState.rivers.length; i++) {
-			let river = GameState.rivers[i];
-			if ((river.rightBank[0] == sf[0] && river.rightBank[1] == sf[1] && river.leftBank[0] == target[0] &&
-				river.leftBank[1] == target[1]) ||
-				(river.leftBank[0] == sf[0] && river.leftBank[1] == sf[1] && river.rightBank[0] == target[0] &&
-					river.rightBank[1] == target[1])) {
-				found = i;
-			}
+		let indexToDelete = GameState.rivers.findIndex(river =>
+            (river.rightBank[0] === Controls.selectedFields[0][0] &&
+                river.rightBank[1] === Controls.selectedFields[0][1] &&
+                river.leftBank[0] === target[0] &&
+                river.leftBank[1] === target[1]) ||
+            (river.leftBank[0] === Controls.selectedFields[0][0] &&
+                river.leftBank[1] === Controls.selectedFields[0][1] &&
+                river.rightBank[0] === target[0] &&
+                river.rightBank[1] === target[1]));
+		if (indexToDelete != undefined) {
+		    GameState.rivers.splice(indexToDelete, 1);
 		}
-		if (found != undefined) {
-		    GameState.rivers.splice(found, 1);
-		}
-		Drawing.resizeCanvas();
+		Drawing.drawStuff();
 	}
 
     function addWall(type: BuildingType, position: [number, number], direction: Direction, realm: Realm): void {
@@ -375,7 +370,7 @@ export namespace GodFunctions {
 
 	// used to delete the selected army
 	export function godDeleteSelectedArmy(): void {
-		if (confirm('Are you sure you want to delete your currenty selected army?')) {
+		if (confirm('Are you sure you want to delete your currently selected army?')) {
 			GameState.armies[selectedArmyIndex] = GameState.armies[GameState.armies.length - 1];
 			GameState.armies.pop()
 		} else {

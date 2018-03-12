@@ -215,25 +215,19 @@ var GodFunctions;
     GodFunctions.removeStreet = removeStreet;
     // adds a river in the target direction
     function addRiver(direction) {
-        let sf = controlVariables_1.Controls.selectedFields[0];
-        let targets = hexFunctions_1.HexFunction.neighbors(sf);
+        let targets = hexFunctions_1.HexFunction.neighbors(controlVariables_1.Controls.selectedFields[0]);
         let target = targets[direction];
-        let found = false;
-        for (let i = 0; i < gameState_1.GameState.rivers.length; i++) {
-            let river = gameState_1.GameState.rivers[i];
-            if ((river.rightBank[0] === sf[0] && river.rightBank[1] === sf[1] && river.leftBank[0] === target[0] &&
-                river.leftBank[1] === target[1]) ||
-                (river.leftBank[0] === sf[0] && river.leftBank[1] === sf[1] && river.rightBank[0] === target[0] &&
-                    river.rightBank[1] === target[1])) {
-                found = true;
-            }
+        if (!gameState_1.GameState.rivers.some(river => (river.rightBank[0] === controlVariables_1.Controls.selectedFields[0][0] &&
+            river.rightBank[1] === controlVariables_1.Controls.selectedFields[0][1] &&
+            river.leftBank[0] === target[0] &&
+            river.leftBank[1] === target[1]) ||
+            (river.leftBank[0] === controlVariables_1.Controls.selectedFields[0][0] &&
+                river.leftBank[1] === controlVariables_1.Controls.selectedFields[0][1] &&
+                river.rightBank[0] === target[0] &&
+                river.rightBank[1] === target[1]))) {
+            gameState_1.GameState.rivers.push(new river_1.River(controlVariables_1.Controls.selectedFields[0], target));
         }
-        if (found) {
-        }
-        else {
-            gameState_1.GameState.rivers.push(new river_1.River([sf[0], sf[1]], [target[0], target[1]]));
-        }
-        drawingFunctions_1.Drawing.resizeCanvas();
+        drawingFunctions_1.Drawing.drawStuff();
     }
     GodFunctions.addRiver = addRiver;
     // removes a river in the target direction
@@ -241,20 +235,18 @@ var GodFunctions;
         let sf = controlVariables_1.Controls.selectedFields[0];
         let targets = hexFunctions_1.HexFunction.neighbors(sf);
         let target = targets[direction];
-        let found = undefined;
-        for (let i = 0; i < gameState_1.GameState.rivers.length; i++) {
-            let river = gameState_1.GameState.rivers[i];
-            if ((river.rightBank[0] == sf[0] && river.rightBank[1] == sf[1] && river.leftBank[0] == target[0] &&
-                river.leftBank[1] == target[1]) ||
-                (river.leftBank[0] == sf[0] && river.leftBank[1] == sf[1] && river.rightBank[0] == target[0] &&
-                    river.rightBank[1] == target[1])) {
-                found = i;
-            }
+        let indexToDelete = gameState_1.GameState.rivers.findIndex(river => (river.rightBank[0] === controlVariables_1.Controls.selectedFields[0][0] &&
+            river.rightBank[1] === controlVariables_1.Controls.selectedFields[0][1] &&
+            river.leftBank[0] === target[0] &&
+            river.leftBank[1] === target[1]) ||
+            (river.leftBank[0] === controlVariables_1.Controls.selectedFields[0][0] &&
+                river.leftBank[1] === controlVariables_1.Controls.selectedFields[0][1] &&
+                river.rightBank[0] === target[0] &&
+                river.rightBank[1] === target[1]));
+        if (indexToDelete != undefined) {
+            gameState_1.GameState.rivers.splice(indexToDelete, 1);
         }
-        if (found != undefined) {
-            gameState_1.GameState.rivers.splice(found, 1);
-        }
-        drawingFunctions_1.Drawing.resizeCanvas();
+        drawingFunctions_1.Drawing.drawStuff();
     }
     GodFunctions.removeRiver = removeRiver;
     function addWall(type, position, direction, realm) {
@@ -368,7 +360,7 @@ var GodFunctions;
     GodFunctions.generateArmyBtn = generateArmyBtn;
     // used to delete the selected army
     function godDeleteSelectedArmy() {
-        if (confirm('Are you sure you want to delete your currenty selected army?')) {
+        if (confirm('Are you sure you want to delete your currently selected army?')) {
             gameState_1.GameState.armies[selectedArmyIndex] = gameState_1.GameState.armies[gameState_1.GameState.armies.length - 1];
             gameState_1.GameState.armies.pop();
         }
