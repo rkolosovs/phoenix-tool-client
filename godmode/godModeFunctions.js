@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// TODO: before pushing check added and deleted buildings if one is already inside the other, if it is then delete it.
 const gameState_1 = require("../gameState");
 const gui_1 = require("../gui/gui");
 const boxVisibilty_1 = require("../gui/boxVisibilty");
@@ -144,10 +143,10 @@ var GodFunctions;
         drawingFunctions_1.Drawing.drawStuff();
     }
     // delete the production building in the selectedField
-    function deleteSelectredProductionBuilding() {
+    function deleteSelectedProductionBuilding() {
         deleteProductionBuildingOnField(controlVariables_1.Controls.selectedFields[0]);
     }
-    GodFunctions.deleteSelectredProductionBuilding = deleteSelectredProductionBuilding;
+    GodFunctions.deleteSelectedProductionBuilding = deleteSelectedProductionBuilding;
     function addNonDestructibleBuilding(type, position, secondPosition, realm) {
         //make sure the right thing is contained in the changedBuildings
         let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1].type === type &&

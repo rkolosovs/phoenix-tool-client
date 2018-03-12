@@ -1,4 +1,3 @@
-// TODO: before pushing check added and deleted buildings if one is already inside the other, if it is then delete it.
 import { GameState } from "../gameState";
 import { GUI } from "../gui/gui";
 import { BoxVisibility } from "../gui/boxVisibilty";
@@ -141,7 +140,7 @@ export namespace GodFunctions {
     }
 
 	// delete the production building in the selectedField
-	export function deleteSelectredProductionBuilding(): void {
+	export function deleteSelectedProductionBuilding(): void {
         deleteProductionBuildingOnField(Controls.selectedFields[0]);
 	}
 
