@@ -258,11 +258,12 @@ export namespace ButtonFunctions{
             window.alert("Wählen Sie ein Feld auf das Sie schießen wollen.");
             return;
         }
+        let shootingTarget: [number, number] = Controls.shootingTarget as [number, number];
         if (selectedArmy.targetList.length < 1) {
             window.alert("No available targets.");
             return;
         } else if (!selectedArmy.targetList.some(field => field[0] ===
-                    Controls.shootingTarget[0] && field[1] === Controls.shootingTarget[1])) {
+                    shootingTarget[0] && field[1] === shootingTarget[1])) {
             window.alert("Ungültiges Ziel.");
             return;
         }
@@ -270,14 +271,14 @@ export namespace ButtonFunctions{
         let target: ShootingTarget = ShootingTarget.OnField;
 
         try {
-            selectedArmy.shootAt(Controls.shootingTarget, target, lkpToShootCount, skpToShootCount);
+            selectedArmy.shootAt(shootingTarget, target, lkpToShootCount, skpToShootCount);
         } catch(e){
             window.alert((e as Error).message);
         }
 
         GameState.newEvents.push(new ShootEvent(GameState.newEvents.length, EventStatus.Checked,
             GameState.armies[Controls.selectedArmyIndex].owner, GameState.armies[Controls.selectedArmyIndex].getID(),
-            Controls.shootingTarget, GameState.armies[Controls.selectedArmyIndex].getPosition(),
+            shootingTarget, GameState.armies[Controls.selectedArmyIndex].getPosition(),
             lkpToShootCount, skpToShootCount, target));
 
         BoxVisibility.updateInfoBox();

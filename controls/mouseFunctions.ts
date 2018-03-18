@@ -1,15 +1,19 @@
-import {Controls} from "./controlVariables";
-import {GameState} from "../gameState";
-import {Drawing} from "../gui/drawingFunctions";
-import {GUI} from "../gui/gui";
-import {BoxVisibility} from "../gui/boxVisibilty";
-import {RiderArmy} from "../armies/riderArmy";
-import {HexFunction} from "../libraries/hexFunctions";
-import {FootArmy} from "../armies/footArmy";
-import {Realm} from "../realm";
-import {Fleet} from "../armies/fleet";
+import { Controls } from "./controlVariables";
+import { GameState } from "../gameState";
+import { Drawing } from "../gui/drawingFunctions";
+import { GUI } from "../gui/gui";
+import { BoxVisibility } from "../gui/boxVisibilty";
+import { RiderArmy } from "../armies/riderArmy";
+import { HexFunction } from "../libraries/hexFunctions";
+import { FootArmy } from "../armies/footArmy";
+import { Realm } from "../realm";
+import { Fleet } from "../armies/fleet";
+import { Field } from "../map/field"
+import { MoveEvent } from "../events/moveEvent";
+import { EventStatus } from "../events/eventStatus";
+import { BattleEvent } from "../events/battleEvent";
 
-export namespace MouseFunctions{
+export namespace MouseFunctions {
     import skpBuffer = BoxVisibility.skpBuffer;
     import leaderBuffer = BoxVisibility.leaderBuffer;
     import countBuffer = BoxVisibility.countBuffer;
@@ -27,7 +31,7 @@ export namespace MouseFunctions{
     import restoreInfoBox = BoxVisibility.restoreInfoBox;
     import updateInfoBox = BoxVisibility.updateInfoBox;
 
-    export function mouseDown(event: MouseEvent){
+    export function mouseDown(event: MouseEvent) {
         if (event.button === 0) {
             Controls.leftMousePressed = true;
             // record the x coordinate of the mouse when it was clicked
@@ -44,7 +48,7 @@ export namespace MouseFunctions{
         Drawing.drawStuff();
     }
 
-    export function mouseUp(event: MouseEvent){
+    export function mouseUp(event: MouseEvent) {
         if (Controls.leftMousePressed && event.button === 0) {
             if (Controls.isDragging) { // mouse was dragged; run panning finish routine
                 // add the x offset from dragged mouse to the current x origin for drawing
@@ -73,7 +77,7 @@ export namespace MouseFunctions{
         Drawing.drawStuff();
     }
 
-    export function mouseMove(event: MouseEvent){
+    export function mouseMove(event: MouseEvent) {
         if (Controls.leftMousePressed === true) {
             Controls.isDragging = true; // for later click detection; no click if mouse was previously dragged
             Controls.move[0] = event.pageX - Controls.click[0]; // compute the x offset from dragged mouse
@@ -87,7 +91,7 @@ export namespace MouseFunctions{
         let mouse: [number, number] = [event.pageX, event.pageY]; // get current mouse position
         // get the tile the mouse is currently in (and the position in the tile)
         let pos: [number, number] = [(mouse[0] - Controls.origin[0]) / Drawing.scale,
-            (mouse[1] - Controls.origin[1]) / Drawing.scale];
+        (mouse[1] - Controls.origin[1]) / Drawing.scale];
         if (deltaY < 0) { // do the actuall scrolling
             Drawing.scale *= 1 + Controls.scrollSpeed;
         } else {
@@ -105,40 +109,44 @@ export namespace MouseFunctions{
         let clickedField: [number, number] = getClickedField(); // get selected field
         // If mount or unmount is activated, cancel it.
         if (armyWithNextClick) {
-            let owner: Realm|undefined = GameState.realms.find(realm => realm.tag === ownerBuffer);
-            if(owner == undefined){
+            let owner: Realm | undefined = GameState.realms.find(realm => realm.tag === BoxVisibility.ownerBuffer);
+            if (owner == undefined) {
                 throw new Error("Realm not found.");
             }
             switch (Math.floor(armyIdBuffer / 100)) {
-                case 3: GameState.armies.push(new Fleet(armyIdBuffer, owner, countBuffer, leaderBuffer, lkpBuffer, skpBuffer,
-                    clickedField, Fleet.MAX_MOVE_POINTS, guardBuffer));
+                case 3: GameState.armies.push(new Fleet(BoxVisibility.armyIdBuffer, owner, BoxVisibility.countBuffer,
+                    BoxVisibility.leaderBuffer, BoxVisibility.lkpBuffer, BoxVisibility.skpBuffer,
+                    clickedField, Fleet.MAX_MOVE_POINTS, BoxVisibility.guardBuffer));
                     break;
-                case 2: GameState.armies.push(new RiderArmy(armyIdBuffer, owner, countBuffer, leaderBuffer, clickedField,
-                    RiderArmy.MAX_MOVE_POINTS, RiderArmy.MAX_HEIGHT_POINTS, guardBuffer));
+                case 2: GameState.armies.push(new RiderArmy(BoxVisibility.armyIdBuffer, owner,
+                    BoxVisibility.countBuffer, BoxVisibility.leaderBuffer, clickedField,
+                    RiderArmy.MAX_MOVE_POINTS, RiderArmy.MAX_HEIGHT_POINTS, BoxVisibility.guardBuffer));
                     break;
-                case 1: GameState.armies.push(new FootArmy(armyIdBuffer, owner, countBuffer, leaderBuffer, lkpBuffer, skpBuffer,
-                    clickedField, FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, guardBuffer));
+                case 1: GameState.armies.push(new FootArmy(BoxVisibility.armyIdBuffer, owner, BoxVisibility.countBuffer,
+                    BoxVisibility.leaderBuffer, BoxVisibility.lkpBuffer, BoxVisibility.skpBuffer,
+                    BoxVisibility.mountsBuffer, clickedField, FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS,
+                    BoxVisibility.guardBuffer));
                     break;
             }
-            ownerBuffer = GUI.getArmyGeneratorBox().getOwnerField().value;
-            armyIdBuffer = 0;
+            BoxVisibility.ownerBuffer = GUI.getArmyGeneratorBox().getOwnerField().value;
+            BoxVisibility.armyIdBuffer = 0;
             GUI.getArmyGeneratorBox().getArmyNumberField().value = "0";
-            countBuffer = 0;
+            BoxVisibility.countBuffer = 0;
             GUI.getArmyGeneratorBox().getCountField().value = "0";
-            leaderBuffer = 0;
+            BoxVisibility.leaderBuffer = 0;
             GUI.getArmyGeneratorBox().getLeaderField().value = "0";
-            mountsBuffer = 0;
+            BoxVisibility.mountsBuffer = 0;
             GUI.getArmyGeneratorBox().getMountsField().value = "0";
-            lkpBuffer = 0;
+            BoxVisibility.lkpBuffer = 0;
             GUI.getArmyGeneratorBox().getLKPField().value = "0";
-            skpBuffer = 0;
+            BoxVisibility.skpBuffer = 0;
             GUI.getArmyGeneratorBox().getSKPField().value = "0";
 
             switchBtnBoxTo(GUI.getButtonsBox());
             switchModeTo("none");
-        } else if(worldCreationModeOnClick){
+        } else if (worldCreationModeOnClick) {
             let posi = HexFunction.positionInList(clickedField);
-            if(changeFieldToType === -1){
+            if (changeFieldToType === -1) {
                 // checks if Field should be changed to a specific type, if not use
                 // normal world creation mode on click
                 if (GameState.fields[posi].type === 8 || GameState.fields[posi].type === 9) {
@@ -150,17 +158,17 @@ export namespace MouseFunctions{
                 GameState.fields[posi].type = changeFieldToType;
             }
             let found = false;
-            for (let i = 0; i < changedFields.length; i++) {
-                if ((changedFields[i].x === GameState.fields[posi].coordinates[0]) &&
-                    (changedFields[i].y === GameState.fields[posi].coordinates[1])) {
-                    changedFields[i].type = GameState.fields[posi].type;
+            for (let i = 0; i < Controls.changedFields.length; i++) {
+                if ((Controls.changedFields[i].coordinates[0] === GameState.fields[posi].coordinates[0]) &&
+                    (Controls.changedFields[i].coordinates[1] === GameState.fields[posi].coordinates[1])) {
+                    Controls.changedFields[i].type = GameState.fields[posi].type;
                     found = true;
                 }
             }
             if (!found) {
-                changedFields.push({ "type": GameState.fields[posi].type,
-                    "x": GameState.fields[posi].coordinates[0],
-                    "y": GameState.fields[posi].coordinates[1] });
+                Controls.changedFields.push(
+                    new Field(GameState.fields[posi].coordinates, GameState.fields[posi].type)
+                );
             }
         } else {
             // Feldauswahl
@@ -174,15 +182,16 @@ export namespace MouseFunctions{
             // Armeeauswahl
             restoreInfoBox();
             Controls.selectedArmyIndex = -1;
-            let possibleSelections = [];
+            let possibleSelections: number[] = [];
             GameState.armies.forEach((army, index) => {
-                if(army.getPosition()[0] === clickedField[0] && army.getPosition()[1] === clickedField[1]){
+                if (army.getPosition()[0] === clickedField[0] && army.getPosition()[1] === clickedField[1]) {
                     possibleSelections.push(index);
-                    selectedArmyIndex = index;
-                }});
+                    Controls.selectedArmyIndex = index;
+                }
+            });
             if (document.getElementById("btnSection") != undefined) {
                 let d = GUI.getButtonsBox();
-                d.removeChild(document.getElementById("btnSection"));
+                d.removeChild(document.getElementById("btnSection") as HTMLElement);
             }
             if (possibleSelections.length !== 0) {
                 let x = document.createElement("SECTION");
@@ -192,7 +201,7 @@ export namespace MouseFunctions{
                     btn.setAttribute("class", "fixedPrettyButton");
                     btn.name = GameState.armies[possibleSelections[i]].getErkenfaraID() + " " +
                         GameState.armies[possibleSelections[i]].owner.tag;
-                    let t = document.createTextNode(""+ GameState.armies[possibleSelections[i]].getErkenfaraID());
+                    let t = document.createTextNode("" + GameState.armies[possibleSelections[i]].getErkenfaraID());
                     btn.appendChild(t);
                     btn.addEventListener('click', function (event) {
                         let idToSearchFor = this.name.split(" ")[0];
@@ -223,9 +232,9 @@ export namespace MouseFunctions{
 
     function registerRightClick() {
         let clickedField = getClickedField();
-        if(worldCreationModeOnClick){
+        if (worldCreationModeOnClick) {
             let posi = HexFunction.positionInList(clickedField);
-            if(changeFieldToType == -1){
+            if (changeFieldToType == -1) {
                 // checks if Field should be changed to a specific type (then
                 // rightclick is disabled)
                 if (GameState.fields[posi].type === 0 || GameState.fields[posi].type === 9) {
@@ -234,36 +243,35 @@ export namespace MouseFunctions{
                     GameState.fields[posi].type--;
                 }
                 let found = false;
-                for (let i = 0; i < changedFields.length; i++) {
-                    if ((changedFields[i].x == GameState.fields[posi].coordinates[0]) &&
-                        (changedFields[i].y == GameState.fields[posi].coordinates[1])) {
-                        changedFields[i].type = GameState.fields[posi].type;
+                for (let i = 0; i < Controls.changedFields.length; i++) {
+                    if ((Controls.changedFields[i].coordinates[0] == GameState.fields[posi].coordinates[0]) &&
+                        (Controls.changedFields[i].coordinates[1] == GameState.fields[posi].coordinates[1])) {
+                        Controls.changedFields[i].type = GameState.fields[posi].type;
                         found = true;
                     }
                 }
                 if (!found) {
-                    changedFields.push({ "type": GameState.fields[posi].type,
-                        "x": GameState.fields[posi].coordinates[0],
-                        "y": GameState.fields[posi].coordinates[1] });
+                    Controls.changedFields.push(
+                        new Field(GameState.fields[posi].coordinates, GameState.fields[posi].type));
                 }
             }
-        } else if(shootingModeOn){
+        } else if (shootingModeOn) {
             //for shooting the bastards
             Controls.shootingTarget = clickedField;
         } else {
-            if(Controls.selectedArmyIndex === undefined){
+            if (Controls.selectedArmyIndex === undefined) {
                 console.log("Can't move with no army selected");
             } else {
                 let clickedArmy: [number, number] = [GameState.armies[Controls.selectedArmyIndex].getPosition()[0],
-                    GameState.armies[Controls.selectedArmyIndex].getPosition()[1]];
+                GameState.armies[Controls.selectedArmyIndex].getPosition()[1]];
                 let localNeighbors = HexFunction.neighbors(clickedArmy);
-                for (let i = 0; i < localNeighbors.length; i++){
-                    if(localNeighbors[i][0] === clickedField[0] && localNeighbors[i][1] === clickedField[1]){
+                for (let i = 0; i < localNeighbors.length; i++) {
+                    if (localNeighbors[i][0] === clickedField[0] && localNeighbors[i][1] === clickedField[1]) {
                         let moveSuccessfull: boolean = true;
                         if (GameState.armies[Controls.selectedArmyIndex].owner.tag === GameState.login || GameState.login === "sl") {
-                            try{
+                            try {
                                 GameState.armies[Controls.selectedArmyIndex].move(i);
-                            } catch (e){
+                            } catch (e) {
                                 console.log(e);
                                 moveSuccessfull = false;
                             }
@@ -271,15 +279,12 @@ export namespace MouseFunctions{
                             console.log("Can only move your own armies.");
                         }
                         if (moveSuccessfull) {
-                            preparedEvents.push({
-                                type: "move", content: {
-                                    armyId: GameState.armies[Controls.selectedArmyIndex].getErkenfaraID(),
-                                    realm: GameState.armies[Controls.selectedArmyIndex].owner.tag,
-                                    fromX: clickedArmy[0], fromY: clickedArmy[1],
-                                    toX: GameState.armies[Controls.selectedArmyIndex].getPosition()[0],
-                                    toY: GameState.armies[Controls.selectedArmyIndex].getPosition()[1]
-                                }
-                            });
+                            GameState.newEvents.push(
+                                new MoveEvent(GameState.newEvents.length, EventStatus.Undetermined,
+                                    GameState.armies[Controls.selectedArmyIndex].owner,
+                                    GameState.armies[Controls.selectedArmyIndex].getErkenfaraID(), clickedArmy,
+                                    GameState.armies[Controls.selectedArmyIndex].getPosition())
+                            );
 
                             let battlePossible = false;
                             let participants = [];
@@ -310,16 +315,17 @@ export namespace MouseFunctions{
                                     armyId: GameState.armies[Controls.selectedArmyIndex].getErkenfaraID(),
                                     realm: GameState.armies[Controls.selectedArmyIndex].owner.tag
                                 });
-                                for (let j = 0; j < preparedEvents.length; j++) {
-                                    if (preparedEvents[j].type === "battle" &&
-                                        preparedEvents[j].content.x === GameState.armies[Controls.selectedArmyIndex].getPosition()[0] &&
-                                        preparedEvents[j].content.y === GameState.armies[Controls.selectedArmyIndex].getPosition()[1]) {
-                                        preparedEvents[j].content.participants = participants;
+                                for (let j = 0; j < GameState.newEvents.length; j++) {
+                                    let newEvent = GameState.newEvents[j] as BattleEvent;
+                                    if (GameState.newEvents[j] instanceof BattleEvent &&
+                                        newEvent.getPosition() === GameState.armies[Controls.selectedArmyIndex].getPosition()
+                                ) {
+                                        GameState.newEvents[j].content.participants = participants;
                                         inserted = true;
                                     }
                                 }
                                 if (!inserted) {
-                                    preparedEvents.push({
+                                    GameState.newEvents.push({
                                         type: "battle", content: {
                                             participants: participants,
                                             x: GameState.armies[Controls.selectedArmyIndex].getPosition()[0],
