@@ -57,9 +57,9 @@ export namespace Drawing {
 		drawMap(pos, scale);
 		drawFieldSelection(pos, scale);
 		drawArmies(pos, scale);
-		drawArmySelection(pos, scale, selectedArmyIndex);
-		drawPossibleMoves(pos, scale, selectedArmyIndex);
-		drawPossibleShootingTargets(pos, scale, GameState.armies[selectedArmyIndex]);
+		drawArmySelection(pos, scale, Controls.selectedArmyIndex);
+		drawPossibleMoves(pos, scale, Controls.selectedArmyIndex);
+		drawPossibleShootingTargets(pos, scale, GameState.armies[Controls.selectedArmyIndex]);
 		drawShootingTargetSelection(pos, scale);
 		writeFieldInfo();
 	}
@@ -498,7 +498,7 @@ export namespace Drawing {
 					GUI.getContext().drawImage(Images.boats, pos[0], pos[1], (scale * Constants.SIN60), scale);
 				}
 			}
-			if (armyData.owner.tag === login || login === "sl") {
+			if (armyData.owner.tag === GameState.login || GameState.login === "sl") {
 
 				if (armyData.possibleMoves.length > 0) {
 					drawRemainingMovement(pos, scale);
@@ -570,9 +570,9 @@ export namespace Drawing {
 	}
 
 	function drawPossibleShootingTargets(screenPos: [number, number], scale: number, selectedArmy: Army): void {
-		if (selectedArmy != undefined && GameState.armies[selectedArmyIndex].possibleTargets.length > 0 &&
+		if (selectedArmy != undefined && GameState.armies[Controls.selectedArmyIndex].possibleTargets.length > 0 &&
 			BoxVisibility.shootingModeOn) {
-			let targets = GameState.armies[selectedArmyIndex].possibleTargets;
+			let targets = GameState.armies[Controls.selectedArmyIndex].possibleTargets;
 			for (let i = 0; i < targets.length; i++) {
 				GUI.getContext().lineWidth = scale / 10;
 				GUI.getContext().strokeStyle = '#FF0000';
@@ -647,19 +647,23 @@ export namespace Drawing {
 						message = "Some events are unprocessed.";
 					}
 					message += ("Do you want to end processing the turn of " + GameState.currentTurn.realm + "?");
-				} else if (login === 'sl') {
+				} else if (GameState.login === 'sl') {
 					message = "Do you want to end the turn of " + GameState.currentTurn.realm + "?";
 				} else {
 					message = "Do you want to end your turn?";
 				}
 
 				if (confirm(message)) {
-					if (login === 'sl' && GameState.currentTurn.status === 'fi') { //SL sends DB change requests
+					if (GameState.login === 'sl' && GameState.currentTurn.status === 'fi') { //SL sends DB change requests
 						GameState.loadedEvents.forEach(function (event) {
 							if (event.getStatus() === EventStatus.Checked) {
-								Saving.sendCheckEvent(event.getPK(), event.getType());
+								if (event.getDatabasePrimaryKey() !== undefined) {
+									Saving.sendCheckEvent(event.getDatabasePrimaryKey() as number, event.typeAsString());
+								}
 							} else if (event.getStatus() === EventStatus.Deleted) {
-								Saving.sendDeleteEvent(event.getPK(), event.getType());
+								if (event.getDatabasePrimaryKey() !== undefined) {
+									Saving.sendDeleteEvent(event.getDatabasePrimaryKey() as number, event.typeAsString());
+								}
 							}
 						}, this);
 						Saving.saveBuildings();
@@ -684,14 +688,14 @@ export namespace Drawing {
 			stepBtn.id = "stepButton";
 			stepBtn.style.backgroundImage = "url(images/step_button.svg)";
 			stepBtn.addEventListener('click', function () {
-				if (login === 'sl') {
+				if (GameState.login === 'sl') {
 					if (confirm("Do you want to save the events handled so far without ending the turn?" +
 						" Once saved the progress can't be reverted anymore.")) {
 						GameState.newEvents.forEach(function (event) {
 							if (event.getStatus() === EventStatus.Checked) {
-								Saving.sendCheckEvent(event.getPK(), event.getType());
+								Saving.sendCheckEvent(event.getDatabasePrimaryKey() as number, event.typeAsString());
 							} else if (event.getStatus() === EventStatus.Deleted) {
-								Saving.sendDeleteEvent(event.getPK(), event.getType());
+								Saving.sendDeleteEvent(event.getDatabasePrimaryKey() as number, event.typeAsString());
 							}
 						}, this);
 						GameState.newEvents = [];
@@ -728,8 +732,8 @@ export namespace Drawing {
 			});
 		}
 
-		if (login !== 'sl' && (GameState.currentTurn.realm == undefined || GameState.currentTurn.status === 'fi' ||
-			login !== GameState.currentTurn.realm)) {
+		if (GameState.login !== 'sl' && (GameState.currentTurn.realm == undefined || GameState.currentTurn.status === 'fi' ||
+			GameState.login !== GameState.currentTurn.realm)) {
 			// if not logged in as the current realm or SL
 			nextTurnBtn.disabled = true;
 			nextTurnBtn.style.cursor = "not-allowed";
@@ -748,7 +752,7 @@ export namespace Drawing {
 			revertBtn.style.cursor = "initial";
 		}
 
-		if (login === 'sl' && GameState.currentTurn.status === 'fi') {
+		if (GameState.login === 'sl' && GameState.currentTurn.status === 'fi') {
 			Loading.loadPendingEvents();
 			BoxVisibility.show(GUI.getBigBox().getEventTabsButton());
 		} else {

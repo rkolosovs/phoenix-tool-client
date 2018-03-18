@@ -212,9 +212,9 @@ export namespace BoxVisibility {
     export function updateInfoBox(): void {
         let infoBox: InfoBox = GUI.getInfoBox();
         let changeBox: InfoChangeBox = GUI.getInfoChangeBox();
-        if (selectedArmyIndex != undefined) {
+        if (Controls.selectedArmyIndex != undefined) {
             // info Box
-            let infoArmy = GameState.armies[selectedArmyIndex];
+            let infoArmy = GameState.armies[Controls.selectedArmyIndex];
             if (infoArmy.isGuard) {
                 infoBox.getGuardText().innerHTML = "Garde";
             } else {
@@ -339,65 +339,65 @@ export namespace BoxVisibility {
         let lkpToSplit = 0;
         let skpToSplit = 0;
         // depending on army type different fields are needed
-        if (GameState.armies[selectedArmyIndex] instanceof FootArmy) {
+        if (GameState.armies[Controls.selectedArmyIndex] instanceof FootArmy) {
             toSplit = parseInt(GUI.getSplitInput().value);
             leadersToSplit = parseInt(GUI.getSplitLeadersInput().value);
             mountsToSplit = parseInt(GUI.getSplitMountsInput().value);
             lkpToSplit = parseInt(GUI.getSplitLkpInput().value);
             skpToSplit = parseInt(GUI.getSplitSkpInput().value);
-            if (toSplit > (GameState.armies[selectedArmyIndex].getTroopCount() - 100)) {
+            if (toSplit > (GameState.armies[Controls.selectedArmyIndex].getTroopCount() - 100)) {
                 window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.")
                 return false;
             }
-            if (mountsToSplit > (GameState.armies[selectedArmyIndex] as FootArmy).getMountCount()) {
+            if (mountsToSplit > (GameState.armies[Controls.selectedArmyIndex] as FootArmy).getMountCount()) {
                 window.alert("So viele Reittiere hast du nicht.")
                 return false;
             }
-            if (lkpToSplit > GameState.armies[selectedArmyIndex].getLightCatapultCount()) {
+            if (lkpToSplit > GameState.armies[Controls.selectedArmyIndex].getLightCatapultCount()) {
                 window.alert("So viele leichte Katapulte hast du nicht.")
                 return false;
             }
-            if (skpToSplit > GameState.armies[selectedArmyIndex].getHeavyCatapultCount()) {
+            if (skpToSplit > GameState.armies[Controls.selectedArmyIndex].getHeavyCatapultCount()) {
                 window.alert("So viele schwere Katapulte hast du nicht.")
                 return false;
             }
         }
-        else if (GameState.armies[selectedArmyIndex] instanceof RiderArmy) {
+        else if (GameState.armies[Controls.selectedArmyIndex] instanceof RiderArmy) {
             toSplit = parseInt(GUI.getSplitMountedInput().value);
             leadersToSplit = parseInt(GUI.getSplitMountedLeadersInput().value);
-            if (toSplit > (GameState.armies[selectedArmyIndex].getTroopCount() - 50)) {
+            if (toSplit > (GameState.armies[Controls.selectedArmyIndex].getTroopCount() - 50)) {
                 window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.")
                 return false;
             }
         }
-        else if (GameState.armies[selectedArmyIndex] instanceof Fleet) {
+        else if (GameState.armies[Controls.selectedArmyIndex] instanceof Fleet) {
             toSplit = parseInt(GUI.getSplitFleetInput().value);
             leadersToSplit = parseInt(GUI.getSplitFleetLeadersInput().value);
             lkpToSplit = parseInt(GUI.getSplitFleetLkpInput().value);
             skpToSplit = parseInt(GUI.getSplitFleetSkpInput().value);
-            if (toSplit > (GameState.armies[selectedArmyIndex].getTroopCount() - 1)) {
+            if (toSplit > (GameState.armies[Controls.selectedArmyIndex].getTroopCount() - 1)) {
                 window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.")
                 return false;
             }
-            if (toSplit * 100 > ((GameState.armies[selectedArmyIndex] as Fleet).freeTransportCapacity())) {
+            if (toSplit * 100 > ((GameState.armies[Controls.selectedArmyIndex] as Fleet).freeTransportCapacity())) {
                 window.alert("Du kannst keine beladenen Schiffe verschieben.")
                 return false;
             }
-            if (lkpToSplit > GameState.armies[selectedArmyIndex].getLightCatapultCount()) {
+            if (lkpToSplit > GameState.armies[Controls.selectedArmyIndex].getLightCatapultCount()) {
                 window.alert("So viele leichte Kriegsschiffe hast du nicht.")
                 return false;
             }
-            if (skpToSplit > GameState.armies[selectedArmyIndex].getHeavyCatapultCount()) {
+            if (skpToSplit > GameState.armies[Controls.selectedArmyIndex].getHeavyCatapultCount()) {
                 window.alert("So viele schwere Kriegsschiffe hast du nicht.")
                 return false;
             }
         }
-        if (leadersToSplit > (GameState.armies[selectedArmyIndex].getOfficerCount() - 1)) {
+        if (leadersToSplit > (GameState.armies[Controls.selectedArmyIndex].getOfficerCount() - 1)) {
             window.alert("Es muss mindestens 1 Heerführer beim Ursprungsheer verbleiben.")
             return false;
         }
         GUI.getTransmuteBox().style.display = "";
-        let selectedArmy: Army = GameState.armies[selectedArmyIndex];
+        let selectedArmy: Army = GameState.armies[Controls.selectedArmyIndex];
         if (selectedArmy instanceof FootArmy) {
             hide(GUI.getSplitBox());
         }
@@ -431,11 +431,11 @@ export namespace BoxVisibility {
                 onlyLeaders = true;
             }
         }
-        let selectedPos = GameState.armies[selectedArmyIndex].getPosition();
+        let selectedPos = GameState.armies[Controls.selectedArmyIndex].getPosition();
         let possibleTargets = [];
-        let targetOwner = GameState.armies[selectedArmyIndex].owner;
+        let targetOwner = GameState.armies[Controls.selectedArmyIndex].owner;
         for (let i = 0; i < GameState.armies.length; i++) {
-            if (i != selectedArmyIndex) {
+            if (i != Controls.selectedArmyIndex) {
                 if (onlyLeaders) {
                     if (GameState.armies[i].owner === targetOwner &&
                         GameState.armies[i].getPosition()[0] === selectedPos[0] &&
@@ -446,7 +446,7 @@ export namespace BoxVisibility {
                     if (GameState.armies[i].owner === targetOwner &&
                         GameState.armies[i].getPosition()[0] === selectedPos[0] &&
                         GameState.armies[i].getPosition()[1] === selectedPos[1] &&
-                        GameState.armies[i].constructor === GameState.armies[selectedArmyIndex].constructor) {
+                        GameState.armies[i].constructor === GameState.armies[Controls.selectedArmyIndex].constructor) {
                         possibleTargets.push(i);
                     }
                 }
@@ -488,7 +488,7 @@ export namespace BoxVisibility {
 
     export function activateMergeBox(): void {
         show(GUI.getMergeBox());
-        let selectedArmy: Army = GameState.armies[selectedArmyIndex];
+        let selectedArmy: Army = GameState.armies[Controls.selectedArmyIndex];
         if (selectedArmy instanceof FootArmy) {
             hide(GUI.getSplitBox());
         }
@@ -498,11 +498,11 @@ export namespace BoxVisibility {
         else if (selectedArmy instanceof Fleet) {
             hide(GUI.getSplitFleetBox());
         }
-        let selectedPos = GameState.armies[selectedArmyIndex].getPosition();
+        let selectedPos = GameState.armies[Controls.selectedArmyIndex].getPosition();
         let possibleTargets = [];
-        let targetOwner = GameState.armies[selectedArmyIndex].owner;
+        let targetOwner = GameState.armies[Controls.selectedArmyIndex].owner;
         for (let i = 0; i < GameState.armies.length; i++) {
-            if (i != selectedArmyIndex) {
+            if (i != Controls.selectedArmyIndex) {
                 if (GameState.armies[i].owner === targetOwner &&
                     GameState.armies[i].getPosition()[0] === selectedPos[0] &&
                     GameState.armies[i].getPosition()[1] === selectedPos[1] &&
@@ -545,14 +545,14 @@ export namespace BoxVisibility {
     export function backToSplitBox(): void {
         hide(GUI.getMergeBox());
         hide(GUI.getTransmuteBox());
-        if (GameState.armies[selectedArmyIndex] instanceof FootArmy) {
+        if (GameState.armies[Controls.selectedArmyIndex] instanceof FootArmy) {
             show(GUI.getSplitBox());
             GUI.getSplitBox().style.display = "";
         }
-        else if (GameState.armies[selectedArmyIndex] instanceof RiderArmy) {
+        else if (GameState.armies[Controls.selectedArmyIndex] instanceof RiderArmy) {
             show(GUI.getSplitMountedBox());
         }
-        else if (GameState.armies[selectedArmyIndex] instanceof Fleet) {
+        else if (GameState.armies[Controls.selectedArmyIndex] instanceof Fleet) {
             show(GUI.getSplitFleetBox());
         }
     }
