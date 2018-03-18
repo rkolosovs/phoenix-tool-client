@@ -200,13 +200,13 @@ export namespace MouseFunctions{
                         for (let j = 0; j < GameState.armies.length; j++) {
                             if (GameState.armies[j].getErkenfaraID() === parseInt(idToSearchFor) &&
                                 GameState.armies[j].owner.tag === ownerToSearchFor) {
-                                selectedArmyIndex = j;
+                                Controls.selectedArmyIndex = j;
                             }
                         }
                         updateInfoBox();
                         restoreInfoBox();
-                        if (selectedArmyIndex !== undefined) {
-                            GameState.armies[selectedArmyIndex].clickedMoves();
+                        if (Controls.selectedArmyIndex !== undefined) {
+                            GameState.armies[Controls.selectedArmyIndex].clickedMoves();
                         }
                         Drawing.drawStuff();
                     });
@@ -215,8 +215,8 @@ export namespace MouseFunctions{
                 GUI.getButtonsBox().appendChild(x);
             }
             updateInfoBox();
-            if (selectedArmyIndex !== undefined) {
-                GameState.armies[selectedArmyIndex].clickedMoves();
+            if (Controls.selectedArmyIndex !== undefined) {
+                GameState.armies[Controls.selectedArmyIndex].clickedMoves();
             }
         }
     }
@@ -251,18 +251,18 @@ export namespace MouseFunctions{
             //for shooting the bastards
             Controls.shootingTarget = clickedField;
         } else {
-            if(selectedArmyIndex === undefined){
+            if(Controls.selectedArmyIndex === undefined){
                 console.log("Can't move with no army selected");
             } else {
-                let clickedArmy: [number, number] = [GameState.armies[selectedArmyIndex].getPosition()[0],
-                    GameState.armies[selectedArmyIndex].getPosition()[1]];
+                let clickedArmy: [number, number] = [GameState.armies[Controls.selectedArmyIndex].getPosition()[0],
+                    GameState.armies[Controls.selectedArmyIndex].getPosition()[1]];
                 let localNeighbors = HexFunction.neighbors(clickedArmy);
                 for (let i = 0; i < localNeighbors.length; i++){
                     if(localNeighbors[i][0] === clickedField[0] && localNeighbors[i][1] === clickedField[1]){
                         let moveSuccessfull: boolean = true;
-                        if (GameState.armies[selectedArmyIndex].owner.tag === login || login === "sl") {
+                        if (GameState.armies[Controls.selectedArmyIndex].owner.tag === GameState.login || GameState.login === "sl") {
                             try{
-                                GameState.armies[selectedArmyIndex].move(i);
+                                GameState.armies[Controls.selectedArmyIndex].move(i);
                             } catch (e){
                                 console.log(e);
                                 moveSuccessfull = false;
@@ -273,11 +273,11 @@ export namespace MouseFunctions{
                         if (moveSuccessfull) {
                             preparedEvents.push({
                                 type: "move", content: {
-                                    armyId: GameState.armies[selectedArmyIndex].getErkenfaraID(),
-                                    realm: GameState.armies[selectedArmyIndex].owner.tag,
+                                    armyId: GameState.armies[Controls.selectedArmyIndex].getErkenfaraID(),
+                                    realm: GameState.armies[Controls.selectedArmyIndex].owner.tag,
                                     fromX: clickedArmy[0], fromY: clickedArmy[1],
-                                    toX: GameState.armies[selectedArmyIndex].getPosition()[0],
-                                    toY: GameState.armies[selectedArmyIndex].getPosition()[1]
+                                    toX: GameState.armies[Controls.selectedArmyIndex].getPosition()[0],
+                                    toY: GameState.armies[Controls.selectedArmyIndex].getPosition()[1]
                                 }
                             });
 
@@ -286,12 +286,12 @@ export namespace MouseFunctions{
 
                             for (let j = 0; j < GameState.armies.length; j++) {
                                 let someArmy = GameState.armies[j];
-                                if (someArmy.getPosition()[0] === GameState.armies[selectedArmyIndex].getPosition()[0] &&
-                                    someArmy.getPosition()[1] === GameState.armies[selectedArmyIndex].getPosition()[1]
-                                    && someArmy !== GameState.armies[selectedArmyIndex]) {
+                                if (someArmy.getPosition()[0] === GameState.armies[Controls.selectedArmyIndex].getPosition()[0] &&
+                                    someArmy.getPosition()[1] === GameState.armies[Controls.selectedArmyIndex].getPosition()[1]
+                                    && someArmy !== GameState.armies[Controls.selectedArmyIndex]) {
                                     participants.push({ armyId: someArmy.getErkenfaraID(), realm: someArmy.owner.tag });
                                     //in case they are enemies
-                                    if (someArmy.owner !== GameState.armies[selectedArmyIndex].owner) {
+                                    if (someArmy.owner !== GameState.armies[Controls.selectedArmyIndex].owner) {
                                         battlePossible = true;
                                     }
                                     //MultipleArmies - even if not friendly
@@ -307,13 +307,13 @@ export namespace MouseFunctions{
                             if (battlePossible) {
                                 let inserted = false;
                                 participants.push({
-                                    armyId: GameState.armies[selectedArmyIndex].getErkenfaraID(),
-                                    realm: GameState.armies[selectedArmyIndex].owner.tag
+                                    armyId: GameState.armies[Controls.selectedArmyIndex].getErkenfaraID(),
+                                    realm: GameState.armies[Controls.selectedArmyIndex].owner.tag
                                 });
                                 for (let j = 0; j < preparedEvents.length; j++) {
                                     if (preparedEvents[j].type === "battle" &&
-                                        preparedEvents[j].content.x === GameState.armies[selectedArmyIndex].getPosition()[0] &&
-                                        preparedEvents[j].content.y === GameState.armies[selectedArmyIndex].getPosition()[1]) {
+                                        preparedEvents[j].content.x === GameState.armies[Controls.selectedArmyIndex].getPosition()[0] &&
+                                        preparedEvents[j].content.y === GameState.armies[Controls.selectedArmyIndex].getPosition()[1]) {
                                         preparedEvents[j].content.participants = participants;
                                         inserted = true;
                                     }
@@ -322,13 +322,13 @@ export namespace MouseFunctions{
                                     preparedEvents.push({
                                         type: "battle", content: {
                                             participants: participants,
-                                            x: GameState.armies[selectedArmyIndex].getPosition()[0],
-                                            y: GameState.armies[selectedArmyIndex].getPosition()[1]
+                                            x: GameState.armies[Controls.selectedArmyIndex].getPosition()[0],
+                                            y: GameState.armies[Controls.selectedArmyIndex].getPosition()[1]
                                         }
                                     });
                                 }
                             } else { //no battle -> conquer land (TODO: diplomacy goes here)
-                                GameState.armies[selectedArmyIndex].conquer();
+                                GameState.armies[Controls.selectedArmyIndex].conquer();
                             }
                         }
                     }

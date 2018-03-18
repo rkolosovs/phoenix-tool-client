@@ -417,7 +417,7 @@ export namespace Drawing {
 	//drawing all possible moves to neighboring fields if army was selected
 	function drawPossibleMoves(screenPos: [number, number], scale: number, selectedArmyIndex: number): void {
 		if (selectedArmyIndex != undefined) {
-			let moves = GameState.armies[selectedArmyIndex].possibleMoves;
+			let moves = GameState.armies[Controls.selectedArmyIndex].possibleMoves;
 			for (let i = 0; i < moves.length; i++) {
 				GUI.getContext().lineWidth = scale / 6;
 				GUI.getContext().strokeStyle = '#00FF00';

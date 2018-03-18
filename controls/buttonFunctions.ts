@@ -38,13 +38,13 @@ export namespace ButtonFunctions{
     }
 
     export function activateSplitbox(): void {
-        if (GameState.armies[selectedArmyIndex] instanceof FootArmy) {
+        if (GameState.armies[Controls.selectedArmyIndex] instanceof FootArmy) {
             show(GUI.getSplitBox());
         }
-        else if (GameState.armies[selectedArmyIndex] instanceof RiderArmy) {
+        else if (GameState.armies[Controls.selectedArmyIndex] instanceof RiderArmy) {
             show(GUI.getSplitMountedBox());
         }
-        else if (GameState.armies[selectedArmyIndex] instanceof Fleet) {
+        else if (GameState.armies[Controls.selectedArmyIndex] instanceof Fleet) {
             show(GUI.getSplitFleetBox());
         }
         hide(GUI.getInfoBox().getSelf());
@@ -56,7 +56,7 @@ export namespace ButtonFunctions{
             message = "Do you want to end the pre-turn phase?";
         } else if (GameState.currentTurn.status === 'fi') {
             message = "Do you want to end processing the turn of " + GameState.currentTurn.realm + "?";
-        } else if (login === 'sl') {
+        } else if (GameState.login === 'sl') {
             message = "Do you want to end the turn of " + GameState.currentTurn.realm + "?";
         } else {
             message = "Do you want to end your turn?";
@@ -70,7 +70,7 @@ export namespace ButtonFunctions{
     // the splitArmy funtion of the split box
     export function splitSelectedArmy(): void {
         let selectedArmy: Army = GameState.armies[Controls.selectedArmyIndex];
-        if (login === 'sl' || login === selectedArmy.owner.tag) {
+        if (GameState.login === 'sl' || GameState.login === selectedArmy.owner.tag) {
             try {
                 let troopsToSplit: number = parseInt(GUI.getSplitInput().value);
                 let leadersToSplit: number = parseInt(GUI.getSplitLeadersInput().value);
