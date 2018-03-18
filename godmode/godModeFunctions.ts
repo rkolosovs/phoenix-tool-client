@@ -371,7 +371,7 @@ export namespace GodFunctions {
 	// used to delete the selected army
 	export function godDeleteSelectedArmy(): void {
 		if (confirm('Are you sure you want to delete your currently selected army?')) {
-			GameState.armies[selectedArmyIndex] = GameState.armies[GameState.armies.length - 1];
+			GameState.armies[Controls.selectedArmyIndex] = GameState.armies[GameState.armies.length - 1];
 			GameState.armies.pop()
 		} else {
 			// Do nothing!
@@ -383,29 +383,29 @@ export namespace GodFunctions {
 	export function changeArmyInfo(): void {
 		for (let i = 0; i < GameState.armies.length; i++) {
 			let infoChangeBox: InfoChangeBox = GUI.getInfoChangeBox();
-			if (i != selectedArmyIndex && GameState.armies[i].owner.tag === infoChangeBox.getOwnerChangeInput().value &&
+			if (i != Controls.selectedArmyIndex && GameState.armies[i].owner.tag === infoChangeBox.getOwnerChangeInput().value &&
 				GameState.armies[i].getErkenfaraID() === parseInt(infoChangeBox.getArmyIdChangeInput().value)) {
 				window.alert("Diese Armee-Id ist in diesem Reich bereits vergeben.");
 			} else {
-				GameState.armies[selectedArmyIndex].isGuard = infoChangeBox.getGuardChangeInput().checked;
+				GameState.armies[Controls.selectedArmyIndex].isGuard = infoChangeBox.getGuardChangeInput().checked;
 				for(let i = 0; i>GameState.realms.length; i++){
 					// check for the realm tag, not the Name
 					if(infoChangeBox.getOwnerChangeInput().value === GameState.realms[i].tag){
-						GameState.armies[selectedArmyIndex].owner = GameState.realms[i];
+						GameState.armies[Controls.selectedArmyIndex].owner = GameState.realms[i];
 					}
 				}
-				GameState.armies[selectedArmyIndex].setID(Number(infoChangeBox.getArmyIdChangeInput().value));
-				GameState.armies[selectedArmyIndex].setTroopCount(Number(infoChangeBox.getCountChangeInput().value));
-				GameState.armies[selectedArmyIndex].setOfficerCount(Number(infoChangeBox.getLeadersChangeInput().value));
-				if (GameState.armies[selectedArmyIndex] instanceof FootArmy) {
-					let armyToChange: FootArmy = GameState.armies[selectedArmyIndex] as FootArmy;
+				GameState.armies[Controls.selectedArmyIndex].setID(Number(infoChangeBox.getArmyIdChangeInput().value));
+				GameState.armies[Controls.selectedArmyIndex].setTroopCount(Number(infoChangeBox.getCountChangeInput().value));
+				GameState.armies[Controls.selectedArmyIndex].setOfficerCount(Number(infoChangeBox.getLeadersChangeInput().value));
+				if (GameState.armies[Controls.selectedArmyIndex] instanceof FootArmy) {
+					let armyToChange: FootArmy = GameState.armies[Controls.selectedArmyIndex] as FootArmy;
 					armyToChange.setMountCount(Number(infoChangeBox.getMountsChangeInput().value));
 				}
-				GameState.armies[selectedArmyIndex].setLightCatapultCount(Number(infoChangeBox.getLKPChangeInput().value));
-				GameState.armies[selectedArmyIndex].setHeavyCatapultCount(Number(infoChangeBox.getSKPChangeInput().value));
-				GameState.armies[selectedArmyIndex].setMovePoints(
+				GameState.armies[Controls.selectedArmyIndex].setLightCatapultCount(Number(infoChangeBox.getLKPChangeInput().value));
+				GameState.armies[Controls.selectedArmyIndex].setHeavyCatapultCount(Number(infoChangeBox.getSKPChangeInput().value));
+				GameState.armies[Controls.selectedArmyIndex].setMovePoints(
 					Number(infoChangeBox.getMovePointsChangeInput().value));
-				GameState.armies[selectedArmyIndex].setHeightPoints(
+				GameState.armies[Controls.selectedArmyIndex].setHeightPoints(
 					Number(infoChangeBox.getHeightPointsChangeInput().value));
 			}
 		}
