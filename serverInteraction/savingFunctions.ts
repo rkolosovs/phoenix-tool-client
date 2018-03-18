@@ -439,7 +439,7 @@ export namespace Saving{
 	// TODO: If we have multiple "clean-up functions" like this, they should have their own file/folder.
     export function untagHitArmys(){
         for(let i = 0; i < GameState.armies.length; i++){
-            if (GameState.armies[i].owner.tag === login || login === "sl"){
+            if (GameState.armies[i].owner.tag === GameState.login || GameState.login === "sl"){
                 GameState.armies[i].wasShotAt = false;
             }
         }

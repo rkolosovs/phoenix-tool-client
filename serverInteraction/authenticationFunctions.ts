@@ -33,9 +33,9 @@ export namespace Authentication{
 			success: (data: any) => {
 				// saving the authenticationToken
 				authenticationToken = data.token;
-				login = data.group;
+				GameState.login = data.group;
 				// if the user is a GM, godmode possibility is displayed
-				if (login === 'sl') {
+				if (GameState.login === 'sl') {
 					GUI.getToggleGMBarButton().style.display = "";
 					if (GameState.currentTurn.status === 'fi') {
 						let btnToShow = document.getElementById("eventTabsButton");
@@ -72,7 +72,7 @@ export namespace Authentication{
 			url: url + "/databaseLink/logout/"
 		});
 		// turning off godmode Box, and changing infoBox to Login Box
-		login = 'guest';
+		GameState.login = 'guest';
         BoxVisibility.switchBtnBoxTo(GUI.getButtonsBox());
         BoxVisibility.switchModeTo("none");
 		// Hide gm functionalities
