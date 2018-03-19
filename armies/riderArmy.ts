@@ -275,7 +275,7 @@ export class RiderArmy extends LandArmy{
                 // deleteFromMultifield(this);
             }
             //in GameState.events pushen
-            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Undetermined,
+            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Checked,
                 this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, 
                 [this.position[0], this.position[1]]) 
             GameState.newEvents.push(eventToPush);
@@ -308,7 +308,7 @@ export class RiderArmy extends LandArmy{
                 // deleteFromMultifield(this);
             }
             //in GameState.events pushen
-            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Undetermined,
+            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Checked,
                 this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, 
                 [this.position[0], this.position[1]]) 
             GameState.newEvents.push(eventToPush);

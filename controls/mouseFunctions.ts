@@ -280,21 +280,21 @@ export namespace MouseFunctions {
                         }
                         if (moveSuccessfull) {
                             GameState.newEvents.push(
-                                new MoveEvent(GameState.newEvents.length, EventStatus.Undetermined,
+                                new MoveEvent(GameState.newEvents.length, EventStatus.Checked,
                                     GameState.armies[Controls.selectedArmyIndex].owner,
                                     GameState.armies[Controls.selectedArmyIndex].getErkenfaraID(), clickedArmy,
                                     GameState.armies[Controls.selectedArmyIndex].getPosition())
                             );
 
                             let battlePossible = false;
-                            let participants = [];
+                            let participants :{'id': number, 'realm': string}[] = [];
 
                             for (let j = 0; j < GameState.armies.length; j++) {
                                 let someArmy = GameState.armies[j];
                                 if (someArmy.getPosition()[0] === GameState.armies[Controls.selectedArmyIndex].getPosition()[0] &&
                                     someArmy.getPosition()[1] === GameState.armies[Controls.selectedArmyIndex].getPosition()[1]
                                     && someArmy !== GameState.armies[Controls.selectedArmyIndex]) {
-                                    participants.push({ armyId: someArmy.getErkenfaraID(), realm: someArmy.owner.tag });
+                                    participants.push({ id: someArmy.getErkenfaraID() , realm: someArmy.owner.tag });
                                     //in case they are enemies
                                     if (someArmy.owner !== GameState.armies[Controls.selectedArmyIndex].owner) {
                                         battlePossible = true;
@@ -311,10 +311,8 @@ export namespace MouseFunctions {
 
                             if (battlePossible) {
                                 let inserted = false;
-                                participants.push({
-                                    armyId: GameState.armies[Controls.selectedArmyIndex].getErkenfaraID(),
-                                    realm: GameState.armies[Controls.selectedArmyIndex].owner.tag
-                                });
+                                participants.push({ id: GameState.armies[Controls.selectedArmyIndex].getErkenfaraID(),
+                                    realm: GameState.armies[Controls.selectedArmyIndex].owner.tag });
                                 for (let j = 0; j < GameState.newEvents.length; j++) {
                                     let newEvent = GameState.newEvents[j] as BattleEvent;
                                     if (GameState.newEvents[j] instanceof BattleEvent &&
@@ -328,7 +326,7 @@ export namespace MouseFunctions {
                                 }
                                 if (!inserted) {
                                     GameState.newEvents.push(
-                                        new BattleEvent(GameState.newEvents.length, EventStatus.Undetermined, participants,
+                                        new BattleEvent(GameState.newEvents.length, EventStatus.Checked, participants,
                                             GameState.armies[Controls.selectedArmyIndex].getPosition())
                                     );
                                 }

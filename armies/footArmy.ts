@@ -434,7 +434,7 @@ export class FootArmy extends LandArmy{
             // in GameState.armies einfügen und alte Armee löschen, ist dann automatisch armyIndex
             GameState.armies.push(newArmy);
             //in GameState.events pushen
-            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Undetermined, 
+            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Checked, 
                 this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, 
                 [this.position[0], this.position[1]]) 
             GameState.newEvents.push(eventToPush);
@@ -468,7 +468,7 @@ export class FootArmy extends LandArmy{
             // in GameState.armies einfügen
             GameState.armies.push(newArmy);
             //in GameState.events pushen
-            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Undetermined, 
+            let eventToPush: MountEvent = new MountEvent(GameState.newEvents.length, EventStatus.Checked, 
                 this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, 
                 [this.position[0], this.position[1]]) 
             GameState.newEvents.push(eventToPush);
