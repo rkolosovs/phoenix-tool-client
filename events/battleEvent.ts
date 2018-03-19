@@ -34,6 +34,10 @@ export class BattleEvent extends PhoenixEvent{
         return this.participants;
     }
 
+    addParticipants(id: number, realm: string): void {
+        this.participants.push({id, realm});
+    }
+
     protected validGameState(): boolean{
         //Every participating army exists and is located at the position of the battle.
         return this.participants.every(participant => GameState.armies.some(army =>

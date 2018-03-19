@@ -319,19 +319,18 @@ export namespace MouseFunctions {
                                     let newEvent = GameState.newEvents[j] as BattleEvent;
                                     if (GameState.newEvents[j] instanceof BattleEvent &&
                                         newEvent.getPosition() === GameState.armies[Controls.selectedArmyIndex].getPosition()
-                                ) {
-                                        GameState.newEvents[j].content.participants = participants;
+                                    ) {
+                                        newEvent.addParticipants(
+                                            GameState.armies[Controls.selectedArmyIndex].getErkenfaraID(),
+                                            GameState.armies[Controls.selectedArmyIndex].owner.tag);
                                         inserted = true;
                                     }
                                 }
                                 if (!inserted) {
-                                    GameState.newEvents.push({
-                                        type: "battle", content: {
-                                            participants: participants,
-                                            x: GameState.armies[Controls.selectedArmyIndex].getPosition()[0],
-                                            y: GameState.armies[Controls.selectedArmyIndex].getPosition()[1]
-                                        }
-                                    });
+                                    GameState.newEvents.push(
+                                        new BattleEvent(GameState.newEvents.length, EventStatus.Undetermined, participants,
+                                            GameState.armies[Controls.selectedArmyIndex].getPosition())
+                                    );
                                 }
                             } else { //no battle -> conquer land (TODO: diplomacy goes here)
                                 GameState.armies[Controls.selectedArmyIndex].conquer();
