@@ -484,7 +484,7 @@ class FootArmy extends landArmy_1.LandArmy {
             // in GameState.armies einfügen und alte Armee löschen, ist dann automatisch armyIndex
             gameState_1.GameState.armies.push(newArmy);
             //in GameState.events pushen
-            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 5 /* Undetermined */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, [this.position[0], this.position[1]]);
+            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, [this.position[0], this.position[1]]);
             gameState_1.GameState.newEvents.push(eventToPush);
             armyFunctions_1.ArmyFunctions.deleteArmy(this);
             boxVisibilty_1.BoxVisibility.restoreInfoBox();
@@ -516,7 +516,7 @@ class FootArmy extends landArmy_1.LandArmy {
             // in GameState.armies einfügen
             gameState_1.GameState.armies.push(newArmy);
             //in GameState.events pushen
-            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 5 /* Undetermined */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, [this.position[0], this.position[1]]);
+            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, [this.position[0], this.position[1]]);
             gameState_1.GameState.newEvents.push(eventToPush);
             // Controls.selectedArmyIndex zeigt auf neues Heer
             controlVariables_1.Controls.selectedArmyIndex = gameState_1.GameState.armies.length - 1;

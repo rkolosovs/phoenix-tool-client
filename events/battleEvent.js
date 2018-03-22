@@ -24,6 +24,9 @@ class BattleEvent extends event_1.PhoenixEvent {
     getParticipants() {
         return this.participants;
     }
+    addParticipants(id, realm) {
+        this.participants.push({ id, realm });
+    }
     validGameState() {
         //Every participating army exists and is located at the position of the battle.
         return this.participants.every(participant => gameState_1.GameState.armies.some(army => army.getErkenfaraID() === participant.id &&

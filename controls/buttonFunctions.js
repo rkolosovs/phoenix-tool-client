@@ -36,13 +36,13 @@ var ButtonFunctions;
     }
     ButtonFunctions.toggleShootingMode = toggleShootingMode;
     function activateSplitbox() {
-        if (gameState_1.GameState.armies[selectedArmyIndex] instanceof footArmy_1.FootArmy) {
+        if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof footArmy_1.FootArmy) {
             show(gui_1.GUI.getSplitBox());
         }
-        else if (gameState_1.GameState.armies[selectedArmyIndex] instanceof riderArmy_1.RiderArmy) {
+        else if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof riderArmy_1.RiderArmy) {
             show(gui_1.GUI.getSplitMountedBox());
         }
-        else if (gameState_1.GameState.armies[selectedArmyIndex] instanceof fleet_1.Fleet) {
+        else if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof fleet_1.Fleet) {
             show(gui_1.GUI.getSplitFleetBox());
         }
         hide(gui_1.GUI.getInfoBox().getSelf());
@@ -56,7 +56,7 @@ var ButtonFunctions;
         else if (gameState_1.GameState.currentTurn.status === 'fi') {
             message = "Do you want to end processing the turn of " + gameState_1.GameState.currentTurn.realm + "?";
         }
-        else if (login === 'sl') {
+        else if (gameState_1.GameState.login === 'sl') {
             message = "Do you want to end the turn of " + gameState_1.GameState.currentTurn.realm + "?";
         }
         else {
@@ -70,7 +70,7 @@ var ButtonFunctions;
     // the splitArmy funtion of the split box
     function splitSelectedArmy() {
         let selectedArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
-        if (login === 'sl' || login === selectedArmy.owner.tag) {
+        if (gameState_1.GameState.login === 'sl' || gameState_1.GameState.login === selectedArmy.owner.tag) {
             try {
                 let troopsToSplit = parseInt(gui_1.GUI.getSplitInput().value);
                 let leadersToSplit = parseInt(gui_1.GUI.getSplitLeadersInput().value);
@@ -263,24 +263,25 @@ var ButtonFunctions;
             window.alert("Wählen Sie ein Feld auf das Sie schießen wollen.");
             return;
         }
+        let shootingTarget = controlVariables_1.Controls.shootingTarget;
         if (selectedArmy.targetList.length < 1) {
             window.alert("No available targets.");
             return;
         }
         else if (!selectedArmy.targetList.some(field => field[0] ===
-            controlVariables_1.Controls.shootingTarget[0] && field[1] === controlVariables_1.Controls.shootingTarget[1])) {
+            shootingTarget[0] && field[1] === shootingTarget[1])) {
             window.alert("Ungültiges Ziel.");
             return;
         }
         //TODO: Shoot at things other than the field (mainly the wall).
         let target = 0 /* OnField */;
         try {
-            selectedArmy.shootAt(controlVariables_1.Controls.shootingTarget, target, lkpToShootCount, skpToShootCount);
+            selectedArmy.shootAt(shootingTarget, target, lkpToShootCount, skpToShootCount);
         }
         catch (e) {
             window.alert(e.message);
         }
-        gameState_1.GameState.newEvents.push(new shootEvent_1.ShootEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getID(), controlVariables_1.Controls.shootingTarget, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition(), lkpToShootCount, skpToShootCount, target));
+        gameState_1.GameState.newEvents.push(new shootEvent_1.ShootEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getID(), shootingTarget, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition(), lkpToShootCount, skpToShootCount, target));
         boxVisibilty_1.BoxVisibility.updateInfoBox();
         window.alert("Die Geschosse sind unterwegs. Warte auf die Zugauswertung, um das Ergebnis zu erfahren!");
         drawingFunctions_1.Drawing.drawStuff();

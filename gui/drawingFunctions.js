@@ -47,9 +47,9 @@ var Drawing;
         drawMap(pos, Drawing.scale);
         drawFieldSelection(pos, Drawing.scale);
         drawArmies(pos, Drawing.scale);
-        drawArmySelection(pos, Drawing.scale, selectedArmyIndex);
-        drawPossibleMoves(pos, Drawing.scale, selectedArmyIndex);
-        drawPossibleShootingTargets(pos, Drawing.scale, gameState_1.GameState.armies[selectedArmyIndex]);
+        drawArmySelection(pos, Drawing.scale, controlVariables_1.Controls.selectedArmyIndex);
+        drawPossibleMoves(pos, Drawing.scale, controlVariables_1.Controls.selectedArmyIndex);
+        drawPossibleShootingTargets(pos, Drawing.scale, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex]);
         drawShootingTargetSelection(pos, Drawing.scale);
         writeFieldInfo();
     }
@@ -581,7 +581,7 @@ var Drawing;
     //drawing all possible moves to neighboring fields if army was selected
     function drawPossibleMoves(screenPos, scale, selectedArmyIndex) {
         if (selectedArmyIndex != undefined) {
-            let moves = gameState_1.GameState.armies[selectedArmyIndex].possibleMoves;
+            let moves = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].possibleMoves;
             for (let i = 0; i < moves.length; i++) {
                 gui_1.GUI.getContext().lineWidth = scale / 6;
                 gui_1.GUI.getContext().strokeStyle = '#00FF00';
@@ -653,7 +653,7 @@ var Drawing;
                     gui_1.GUI.getContext().drawImage(images_1.Images.boats, pos[0], pos[1], (scale * constants_1.Constants.SIN60), scale);
                 }
             }
-            if (armyData.owner.tag === login || login === "sl") {
+            if (armyData.owner.tag === gameState_1.GameState.login || gameState_1.GameState.login === "sl") {
                 if (armyData.possibleMoves.length > 0) {
                     drawRemainingMovement(pos, scale);
                 }
@@ -712,9 +712,9 @@ var Drawing;
         gui_1.GUI.getContext().stroke();
     }
     function drawPossibleShootingTargets(screenPos, scale, selectedArmy) {
-        if (selectedArmy != undefined && gameState_1.GameState.armies[selectedArmyIndex].possibleTargets.length > 0 &&
+        if (selectedArmy != undefined && gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].possibleTargets.length > 0 &&
             boxVisibilty_1.BoxVisibility.shootingModeOn) {
-            let targets = gameState_1.GameState.armies[selectedArmyIndex].possibleTargets;
+            let targets = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].possibleTargets;
             for (let i = 0; i < targets.length; i++) {
                 gui_1.GUI.getContext().lineWidth = scale / 10;
                 gui_1.GUI.getContext().strokeStyle = '#FF0000';
@@ -807,20 +807,24 @@ var Drawing;
                     }
                     message += ("Do you want to end processing the turn of " + gameState_1.GameState.currentTurn.realm + "?");
                 }
-                else if (login === 'sl') {
+                else if (gameState_1.GameState.login === 'sl') {
                     message = "Do you want to end the turn of " + gameState_1.GameState.currentTurn.realm + "?";
                 }
                 else {
                     message = "Do you want to end your turn?";
                 }
                 if (confirm(message)) {
-                    if (login === 'sl' && gameState_1.GameState.currentTurn.status === 'fi') {
+                    if (gameState_1.GameState.login === 'sl' && gameState_1.GameState.currentTurn.status === 'fi') {
                         gameState_1.GameState.loadedEvents.forEach(function (event) {
                             if (event.getStatus() === 0 /* Checked */) {
-                                savingFunctions_1.Saving.sendCheckEvent(event.getPK(), event.getType());
+                                if (event.getDatabasePrimaryKey() !== undefined) {
+                                    savingFunctions_1.Saving.sendCheckEvent(event.getDatabasePrimaryKey(), event.typeAsString());
+                                }
                             }
                             else if (event.getStatus() === 1 /* Deleted */) {
-                                savingFunctions_1.Saving.sendDeleteEvent(event.getPK(), event.getType());
+                                if (event.getDatabasePrimaryKey() !== undefined) {
+                                    savingFunctions_1.Saving.sendDeleteEvent(event.getDatabasePrimaryKey(), event.typeAsString());
+                                }
                             }
                         }, this);
                         savingFunctions_1.Saving.saveBuildings();
@@ -845,15 +849,15 @@ var Drawing;
             stepBtn.id = "stepButton";
             stepBtn.style.backgroundImage = "url(images/step_button.svg)";
             stepBtn.addEventListener('click', function () {
-                if (login === 'sl') {
+                if (gameState_1.GameState.login === 'sl') {
                     if (confirm("Do you want to save the events handled so far without ending the turn?" +
                         " Once saved the progress can't be reverted anymore.")) {
                         gameState_1.GameState.newEvents.forEach(function (event) {
                             if (event.getStatus() === 0 /* Checked */) {
-                                savingFunctions_1.Saving.sendCheckEvent(event.getPK(), event.getType());
+                                savingFunctions_1.Saving.sendCheckEvent(event.getDatabasePrimaryKey(), event.typeAsString());
                             }
                             else if (event.getStatus() === 1 /* Deleted */) {
-                                savingFunctions_1.Saving.sendDeleteEvent(event.getPK(), event.getType());
+                                savingFunctions_1.Saving.sendDeleteEvent(event.getDatabasePrimaryKey(), event.typeAsString());
                             }
                         }, this);
                         gameState_1.GameState.newEvents = [];
@@ -889,8 +893,8 @@ var Drawing;
                 }
             });
         }
-        if (login !== 'sl' && (gameState_1.GameState.currentTurn.realm == undefined || gameState_1.GameState.currentTurn.status === 'fi' ||
-            login !== gameState_1.GameState.currentTurn.realm)) {
+        if (gameState_1.GameState.login !== 'sl' && (gameState_1.GameState.currentTurn.realm == undefined || gameState_1.GameState.currentTurn.status === 'fi' ||
+            gameState_1.GameState.login !== gameState_1.GameState.currentTurn.realm)) {
             // if not logged in as the current realm or SL
             nextTurnBtn.disabled = true;
             nextTurnBtn.style.cursor = "not-allowed";
@@ -909,7 +913,7 @@ var Drawing;
             revertBtn.disabled = false;
             revertBtn.style.cursor = "initial";
         }
-        if (login === 'sl' && gameState_1.GameState.currentTurn.status === 'fi') {
+        if (gameState_1.GameState.login === 'sl' && gameState_1.GameState.currentTurn.status === 'fi') {
             loadingDataFunctions_1.Loading.loadPendingEvents();
             boxVisibilty_1.BoxVisibility.show(gui_1.GUI.getBigBox().getEventTabsButton());
         }

@@ -44,11 +44,13 @@ export namespace Loading{
 
 	export function loadPendingEvents() {
 		$.getJSON(url + "/databaseLink/getevents/",
-            (json: {'pk': number, 'type': string, 'content': any, prerequisiteEvents: number[]}[]) => {
+            (json: {'pk': number, 'type': string, 'content': any, 'prerequisiteEvents': number[],
+                'turn': {'turnNumber': number, 'turnOrder': number, 'realm': string}}[]) => {
 			let pendingEvents = json;
 			GameState.loadedEvents =[];
 			pendingEvents.forEach(
-			    (item: {'pk': number, 'type': string, 'content': any, prerequisiteEvents: number[]},
+			    (item: {'pk': number, 'type': string, 'content': any, 'prerequisiteEvents': number[],
+                     'turn': {'turnNumber': number, 'turnOrder': number, 'realm': string}},
                  index: number) => {
 				let content = item.content;
 				let realm: Realm|undefined;

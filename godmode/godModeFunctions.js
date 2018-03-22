@@ -361,7 +361,7 @@ var GodFunctions;
     // used to delete the selected army
     function godDeleteSelectedArmy() {
         if (confirm('Are you sure you want to delete your currently selected army?')) {
-            gameState_1.GameState.armies[selectedArmyIndex] = gameState_1.GameState.armies[gameState_1.GameState.armies.length - 1];
+            gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] = gameState_1.GameState.armies[gameState_1.GameState.armies.length - 1];
             gameState_1.GameState.armies.pop();
         }
         else {
@@ -374,29 +374,29 @@ var GodFunctions;
     function changeArmyInfo() {
         for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
             let infoChangeBox = gui_1.GUI.getInfoChangeBox();
-            if (i != selectedArmyIndex && gameState_1.GameState.armies[i].owner.tag === infoChangeBox.getOwnerChangeInput().value &&
+            if (i != controlVariables_1.Controls.selectedArmyIndex && gameState_1.GameState.armies[i].owner.tag === infoChangeBox.getOwnerChangeInput().value &&
                 gameState_1.GameState.armies[i].getErkenfaraID() === parseInt(infoChangeBox.getArmyIdChangeInput().value)) {
                 window.alert("Diese Armee-Id ist in diesem Reich bereits vergeben.");
             }
             else {
-                gameState_1.GameState.armies[selectedArmyIndex].isGuard = infoChangeBox.getGuardChangeInput().checked;
+                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].isGuard = infoChangeBox.getGuardChangeInput().checked;
                 for (let i = 0; i > gameState_1.GameState.realms.length; i++) {
                     // check for the realm tag, not the Name
                     if (infoChangeBox.getOwnerChangeInput().value === gameState_1.GameState.realms[i].tag) {
-                        gameState_1.GameState.armies[selectedArmyIndex].owner = gameState_1.GameState.realms[i];
+                        gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner = gameState_1.GameState.realms[i];
                     }
                 }
-                gameState_1.GameState.armies[selectedArmyIndex].setID(Number(infoChangeBox.getArmyIdChangeInput().value));
-                gameState_1.GameState.armies[selectedArmyIndex].setTroopCount(Number(infoChangeBox.getCountChangeInput().value));
-                gameState_1.GameState.armies[selectedArmyIndex].setOfficerCount(Number(infoChangeBox.getLeadersChangeInput().value));
-                if (gameState_1.GameState.armies[selectedArmyIndex] instanceof footArmy_1.FootArmy) {
-                    let armyToChange = gameState_1.GameState.armies[selectedArmyIndex];
+                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setID(Number(infoChangeBox.getArmyIdChangeInput().value));
+                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setTroopCount(Number(infoChangeBox.getCountChangeInput().value));
+                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setOfficerCount(Number(infoChangeBox.getLeadersChangeInput().value));
+                if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof footArmy_1.FootArmy) {
+                    let armyToChange = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
                     armyToChange.setMountCount(Number(infoChangeBox.getMountsChangeInput().value));
                 }
-                gameState_1.GameState.armies[selectedArmyIndex].setLightCatapultCount(Number(infoChangeBox.getLKPChangeInput().value));
-                gameState_1.GameState.armies[selectedArmyIndex].setHeavyCatapultCount(Number(infoChangeBox.getSKPChangeInput().value));
-                gameState_1.GameState.armies[selectedArmyIndex].setMovePoints(Number(infoChangeBox.getMovePointsChangeInput().value));
-                gameState_1.GameState.armies[selectedArmyIndex].setHeightPoints(Number(infoChangeBox.getHeightPointsChangeInput().value));
+                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setLightCatapultCount(Number(infoChangeBox.getLKPChangeInput().value));
+                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setHeavyCatapultCount(Number(infoChangeBox.getSKPChangeInput().value));
+                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setMovePoints(Number(infoChangeBox.getMovePointsChangeInput().value));
+                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setHeightPoints(Number(infoChangeBox.getHeightPointsChangeInput().value));
             }
         }
         drawingFunctions_1.Drawing.resizeCanvas();

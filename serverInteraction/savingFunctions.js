@@ -442,7 +442,7 @@ var Saving;
     // TODO: If we have multiple "clean-up functions" like this, they should have their own file/folder.
     function untagHitArmys() {
         for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-            if (gameState_1.GameState.armies[i].owner.tag === login || login === "sl") {
+            if (gameState_1.GameState.armies[i].owner.tag === gameState_1.GameState.login || gameState_1.GameState.login === "sl") {
                 gameState_1.GameState.armies[i].wasShotAt = false;
             }
         }

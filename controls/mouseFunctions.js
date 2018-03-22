@@ -9,17 +9,13 @@ const riderArmy_1 = require("../armies/riderArmy");
 const hexFunctions_1 = require("../libraries/hexFunctions");
 const footArmy_1 = require("../armies/footArmy");
 const fleet_1 = require("../armies/fleet");
+const field_1 = require("../map/field");
+const moveEvent_1 = require("../events/moveEvent");
+const battleEvent_1 = require("../events/battleEvent");
 var MouseFunctions;
 (function (MouseFunctions) {
-    var skpBuffer = boxVisibilty_1.BoxVisibility.skpBuffer;
-    var leaderBuffer = boxVisibilty_1.BoxVisibility.leaderBuffer;
-    var countBuffer = boxVisibilty_1.BoxVisibility.countBuffer;
     var armyIdBuffer = boxVisibilty_1.BoxVisibility.armyIdBuffer;
-    var guardBuffer = boxVisibilty_1.BoxVisibility.guardBuffer;
-    var lkpBuffer = boxVisibilty_1.BoxVisibility.lkpBuffer;
-    var ownerBuffer = boxVisibilty_1.BoxVisibility.ownerBuffer;
     var armyWithNextClick = boxVisibilty_1.BoxVisibility.armyWithNextClick;
-    var mountsBuffer = boxVisibilty_1.BoxVisibility.mountsBuffer;
     var switchBtnBoxTo = boxVisibilty_1.BoxVisibility.switchBtnBoxTo;
     var switchModeTo = boxVisibilty_1.BoxVisibility.switchModeTo;
     var worldCreationModeOnClick = boxVisibilty_1.BoxVisibility.worldCreationModeOnClick;
@@ -108,33 +104,33 @@ var MouseFunctions;
         let clickedField = getClickedField(); // get selected field
         // If mount or unmount is activated, cancel it.
         if (armyWithNextClick) {
-            let owner = gameState_1.GameState.realms.find(realm => realm.tag === ownerBuffer);
+            let owner = gameState_1.GameState.realms.find(realm => realm.tag === boxVisibilty_1.BoxVisibility.ownerBuffer);
             if (owner == undefined) {
                 throw new Error("Realm not found.");
             }
             switch (Math.floor(armyIdBuffer / 100)) {
                 case 3:
-                    gameState_1.GameState.armies.push(new fleet_1.Fleet(armyIdBuffer, owner, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, clickedField, fleet_1.Fleet.MAX_MOVE_POINTS, guardBuffer));
+                    gameState_1.GameState.armies.push(new fleet_1.Fleet(boxVisibilty_1.BoxVisibility.armyIdBuffer, owner, boxVisibilty_1.BoxVisibility.countBuffer, boxVisibilty_1.BoxVisibility.leaderBuffer, boxVisibilty_1.BoxVisibility.lkpBuffer, boxVisibilty_1.BoxVisibility.skpBuffer, clickedField, fleet_1.Fleet.MAX_MOVE_POINTS, boxVisibilty_1.BoxVisibility.guardBuffer));
                     break;
                 case 2:
-                    gameState_1.GameState.armies.push(new riderArmy_1.RiderArmy(armyIdBuffer, owner, countBuffer, leaderBuffer, clickedField, riderArmy_1.RiderArmy.MAX_MOVE_POINTS, riderArmy_1.RiderArmy.MAX_HEIGHT_POINTS, guardBuffer));
+                    gameState_1.GameState.armies.push(new riderArmy_1.RiderArmy(boxVisibilty_1.BoxVisibility.armyIdBuffer, owner, boxVisibilty_1.BoxVisibility.countBuffer, boxVisibilty_1.BoxVisibility.leaderBuffer, clickedField, riderArmy_1.RiderArmy.MAX_MOVE_POINTS, riderArmy_1.RiderArmy.MAX_HEIGHT_POINTS, boxVisibilty_1.BoxVisibility.guardBuffer));
                     break;
                 case 1:
-                    gameState_1.GameState.armies.push(new footArmy_1.FootArmy(armyIdBuffer, owner, countBuffer, leaderBuffer, lkpBuffer, skpBuffer, clickedField, footArmy_1.FootArmy.MAX_MOVE_POINTS, footArmy_1.FootArmy.MAX_HEIGHT_POINTS, guardBuffer));
+                    gameState_1.GameState.armies.push(new footArmy_1.FootArmy(boxVisibilty_1.BoxVisibility.armyIdBuffer, owner, boxVisibilty_1.BoxVisibility.countBuffer, boxVisibilty_1.BoxVisibility.leaderBuffer, boxVisibilty_1.BoxVisibility.lkpBuffer, boxVisibilty_1.BoxVisibility.skpBuffer, boxVisibilty_1.BoxVisibility.mountsBuffer, clickedField, footArmy_1.FootArmy.MAX_MOVE_POINTS, footArmy_1.FootArmy.MAX_HEIGHT_POINTS, boxVisibilty_1.BoxVisibility.guardBuffer));
                     break;
             }
-            ownerBuffer = gui_1.GUI.getArmyGeneratorBox().getOwnerField().value;
-            armyIdBuffer = 0;
+            boxVisibilty_1.BoxVisibility.ownerBuffer = gui_1.GUI.getArmyGeneratorBox().getOwnerField().value;
+            boxVisibilty_1.BoxVisibility.armyIdBuffer = 0;
             gui_1.GUI.getArmyGeneratorBox().getArmyNumberField().value = "0";
-            countBuffer = 0;
+            boxVisibilty_1.BoxVisibility.countBuffer = 0;
             gui_1.GUI.getArmyGeneratorBox().getCountField().value = "0";
-            leaderBuffer = 0;
+            boxVisibilty_1.BoxVisibility.leaderBuffer = 0;
             gui_1.GUI.getArmyGeneratorBox().getLeaderField().value = "0";
-            mountsBuffer = 0;
+            boxVisibilty_1.BoxVisibility.mountsBuffer = 0;
             gui_1.GUI.getArmyGeneratorBox().getMountsField().value = "0";
-            lkpBuffer = 0;
+            boxVisibilty_1.BoxVisibility.lkpBuffer = 0;
             gui_1.GUI.getArmyGeneratorBox().getLKPField().value = "0";
-            skpBuffer = 0;
+            boxVisibilty_1.BoxVisibility.skpBuffer = 0;
             gui_1.GUI.getArmyGeneratorBox().getSKPField().value = "0";
             switchBtnBoxTo(gui_1.GUI.getButtonsBox());
             switchModeTo("none");
@@ -155,17 +151,15 @@ var MouseFunctions;
                 gameState_1.GameState.fields[posi].type = changeFieldToType;
             }
             let found = false;
-            for (let i = 0; i < changedFields.length; i++) {
-                if ((changedFields[i].x === gameState_1.GameState.fields[posi].coordinates[0]) &&
-                    (changedFields[i].y === gameState_1.GameState.fields[posi].coordinates[1])) {
-                    changedFields[i].type = gameState_1.GameState.fields[posi].type;
+            for (let i = 0; i < controlVariables_1.Controls.changedFields.length; i++) {
+                if ((controlVariables_1.Controls.changedFields[i].coordinates[0] === gameState_1.GameState.fields[posi].coordinates[0]) &&
+                    (controlVariables_1.Controls.changedFields[i].coordinates[1] === gameState_1.GameState.fields[posi].coordinates[1])) {
+                    controlVariables_1.Controls.changedFields[i].type = gameState_1.GameState.fields[posi].type;
                     found = true;
                 }
             }
             if (!found) {
-                changedFields.push({ "type": gameState_1.GameState.fields[posi].type,
-                    "x": gameState_1.GameState.fields[posi].coordinates[0],
-                    "y": gameState_1.GameState.fields[posi].coordinates[1] });
+                controlVariables_1.Controls.changedFields.push(new field_1.Field(gameState_1.GameState.fields[posi].coordinates, gameState_1.GameState.fields[posi].type));
             }
         }
         else {
@@ -185,7 +179,7 @@ var MouseFunctions;
             gameState_1.GameState.armies.forEach((army, index) => {
                 if (army.getPosition()[0] === clickedField[0] && army.getPosition()[1] === clickedField[1]) {
                     possibleSelections.push(index);
-                    selectedArmyIndex = index;
+                    controlVariables_1.Controls.selectedArmyIndex = index;
                 }
             });
             if (document.getElementById("btnSection") != undefined) {
@@ -208,13 +202,13 @@ var MouseFunctions;
                         for (let j = 0; j < gameState_1.GameState.armies.length; j++) {
                             if (gameState_1.GameState.armies[j].getErkenfaraID() === parseInt(idToSearchFor) &&
                                 gameState_1.GameState.armies[j].owner.tag === ownerToSearchFor) {
-                                selectedArmyIndex = j;
+                                controlVariables_1.Controls.selectedArmyIndex = j;
                             }
                         }
                         updateInfoBox();
                         restoreInfoBox();
-                        if (selectedArmyIndex !== undefined) {
-                            gameState_1.GameState.armies[selectedArmyIndex].clickedMoves();
+                        if (controlVariables_1.Controls.selectedArmyIndex !== undefined) {
+                            gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].clickedMoves();
                         }
                         drawingFunctions_1.Drawing.drawStuff();
                     });
@@ -223,8 +217,8 @@ var MouseFunctions;
                 gui_1.GUI.getButtonsBox().appendChild(x);
             }
             updateInfoBox();
-            if (selectedArmyIndex !== undefined) {
-                gameState_1.GameState.armies[selectedArmyIndex].clickedMoves();
+            if (controlVariables_1.Controls.selectedArmyIndex !== undefined) {
+                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].clickedMoves();
             }
         }
     }
@@ -242,17 +236,15 @@ var MouseFunctions;
                     gameState_1.GameState.fields[posi].type--;
                 }
                 let found = false;
-                for (let i = 0; i < changedFields.length; i++) {
-                    if ((changedFields[i].x == gameState_1.GameState.fields[posi].coordinates[0]) &&
-                        (changedFields[i].y == gameState_1.GameState.fields[posi].coordinates[1])) {
-                        changedFields[i].type = gameState_1.GameState.fields[posi].type;
+                for (let i = 0; i < controlVariables_1.Controls.changedFields.length; i++) {
+                    if ((controlVariables_1.Controls.changedFields[i].coordinates[0] == gameState_1.GameState.fields[posi].coordinates[0]) &&
+                        (controlVariables_1.Controls.changedFields[i].coordinates[1] == gameState_1.GameState.fields[posi].coordinates[1])) {
+                        controlVariables_1.Controls.changedFields[i].type = gameState_1.GameState.fields[posi].type;
                         found = true;
                     }
                 }
                 if (!found) {
-                    changedFields.push({ "type": gameState_1.GameState.fields[posi].type,
-                        "x": gameState_1.GameState.fields[posi].coordinates[0],
-                        "y": gameState_1.GameState.fields[posi].coordinates[1] });
+                    controlVariables_1.Controls.changedFields.push(new field_1.Field(gameState_1.GameState.fields[posi].coordinates, gameState_1.GameState.fields[posi].type));
                 }
             }
         }
@@ -261,19 +253,19 @@ var MouseFunctions;
             controlVariables_1.Controls.shootingTarget = clickedField;
         }
         else {
-            if (selectedArmyIndex === undefined) {
+            if (controlVariables_1.Controls.selectedArmyIndex === undefined) {
                 console.log("Can't move with no army selected");
             }
             else {
-                let clickedArmy = [gameState_1.GameState.armies[selectedArmyIndex].getPosition()[0],
-                    gameState_1.GameState.armies[selectedArmyIndex].getPosition()[1]];
+                let clickedArmy = [gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition()[0],
+                    gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition()[1]];
                 let localNeighbors = hexFunctions_1.HexFunction.neighbors(clickedArmy);
                 for (let i = 0; i < localNeighbors.length; i++) {
                     if (localNeighbors[i][0] === clickedField[0] && localNeighbors[i][1] === clickedField[1]) {
                         let moveSuccessfull = true;
-                        if (gameState_1.GameState.armies[selectedArmyIndex].owner.tag === login || login === "sl") {
+                        if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner.tag === gameState_1.GameState.login || gameState_1.GameState.login === "sl") {
                             try {
-                                gameState_1.GameState.armies[selectedArmyIndex].move(i);
+                                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].move(i);
                             }
                             catch (e) {
                                 console.log(e);
@@ -284,25 +276,17 @@ var MouseFunctions;
                             console.log("Can only move your own armies.");
                         }
                         if (moveSuccessfull) {
-                            preparedEvents.push({
-                                type: "move", content: {
-                                    armyId: gameState_1.GameState.armies[selectedArmyIndex].getErkenfaraID(),
-                                    realm: gameState_1.GameState.armies[selectedArmyIndex].owner.tag,
-                                    fromX: clickedArmy[0], fromY: clickedArmy[1],
-                                    toX: gameState_1.GameState.armies[selectedArmyIndex].getPosition()[0],
-                                    toY: gameState_1.GameState.armies[selectedArmyIndex].getPosition()[1]
-                                }
-                            });
+                            gameState_1.GameState.newEvents.push(new moveEvent_1.MoveEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getErkenfaraID(), clickedArmy, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition()));
                             let battlePossible = false;
                             let participants = [];
                             for (let j = 0; j < gameState_1.GameState.armies.length; j++) {
                                 let someArmy = gameState_1.GameState.armies[j];
-                                if (someArmy.getPosition()[0] === gameState_1.GameState.armies[selectedArmyIndex].getPosition()[0] &&
-                                    someArmy.getPosition()[1] === gameState_1.GameState.armies[selectedArmyIndex].getPosition()[1]
-                                    && someArmy !== gameState_1.GameState.armies[selectedArmyIndex]) {
-                                    participants.push({ armyId: someArmy.getErkenfaraID(), realm: someArmy.owner.tag });
+                                if (someArmy.getPosition()[0] === gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition()[0] &&
+                                    someArmy.getPosition()[1] === gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition()[1]
+                                    && someArmy !== gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex]) {
+                                    participants.push({ id: someArmy.getErkenfaraID(), realm: someArmy.owner.tag });
                                     //in case they are enemies
-                                    if (someArmy.owner !== gameState_1.GameState.armies[selectedArmyIndex].owner) {
+                                    if (someArmy.owner !== gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner) {
                                         battlePossible = true;
                                     }
                                     //MultipleArmies - even if not friendly
@@ -316,30 +300,22 @@ var MouseFunctions;
                             }
                             if (battlePossible) {
                                 let inserted = false;
-                                participants.push({
-                                    armyId: gameState_1.GameState.armies[selectedArmyIndex].getErkenfaraID(),
-                                    realm: gameState_1.GameState.armies[selectedArmyIndex].owner.tag
-                                });
-                                for (let j = 0; j < preparedEvents.length; j++) {
-                                    if (preparedEvents[j].type === "battle" &&
-                                        preparedEvents[j].content.x === gameState_1.GameState.armies[selectedArmyIndex].getPosition()[0] &&
-                                        preparedEvents[j].content.y === gameState_1.GameState.armies[selectedArmyIndex].getPosition()[1]) {
-                                        preparedEvents[j].content.participants = participants;
+                                participants.push({ id: gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getErkenfaraID(),
+                                    realm: gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner.tag });
+                                for (let j = 0; j < gameState_1.GameState.newEvents.length; j++) {
+                                    let newEvent = gameState_1.GameState.newEvents[j];
+                                    if (gameState_1.GameState.newEvents[j] instanceof battleEvent_1.BattleEvent &&
+                                        newEvent.getPosition() === gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition()) {
+                                        newEvent.addParticipants(gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getErkenfaraID(), gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner.tag);
                                         inserted = true;
                                     }
                                 }
                                 if (!inserted) {
-                                    preparedEvents.push({
-                                        type: "battle", content: {
-                                            participants: participants,
-                                            x: gameState_1.GameState.armies[selectedArmyIndex].getPosition()[0],
-                                            y: gameState_1.GameState.armies[selectedArmyIndex].getPosition()[1]
-                                        }
-                                    });
+                                    gameState_1.GameState.newEvents.push(new battleEvent_1.BattleEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, participants, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition()));
                                 }
                             }
                             else {
-                                gameState_1.GameState.armies[selectedArmyIndex].conquer();
+                                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].conquer();
                             }
                         }
                     }
