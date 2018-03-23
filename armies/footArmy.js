@@ -430,7 +430,6 @@ class FootArmy extends landArmy_1.LandArmy {
         }
     }
     // mounting with parameters
-    //TODO: If the army has moved, set the new mounted army's move points to the apropriate, non-max value.
     mount(toMount, leadersToMount, newArmyId) {
         // generiere armyId falls keine vorhanden
         if (newArmyId == undefined) {

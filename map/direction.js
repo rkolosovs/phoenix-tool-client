@@ -8,7 +8,7 @@ function stringToDirection(dir) {
         case "se": return 3 /* SE */;
         case "sw": return 4 /* SW */;
         case "w": return 5 /* W */;
-        default: return -1; //TODO: Throw error here.
+        default: throw new Error("Invalid direction.");
     }
 }
 exports.stringToDirection = stringToDirection;
@@ -20,7 +20,19 @@ function directionToString(dir) {
         case 3 /* SE */: return "se";
         case 4 /* SW */: return "sw";
         case 5 /* W */: return "w";
-        default: return ""; //TODO: Throw error here.
+        default: throw new Error("Invalid direction.");
     }
 }
 exports.directionToString = directionToString;
+function reverseDirection(direction) {
+    switch (direction) {
+        case 0 /* NW */: return 3 /* SE */;
+        case 1 /* NE */: return 4 /* SW */;
+        case 2 /* E */: return 5 /* W */;
+        case 3 /* SE */: return 0 /* NW */;
+        case 4 /* SW */: return 1 /* NE */;
+        case 5 /* W */: return 2 /* E */;
+        default: throw new Error("Invalid direction.");
+    }
+}
+exports.reverseDirection = reverseDirection;

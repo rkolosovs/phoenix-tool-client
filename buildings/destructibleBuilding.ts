@@ -3,11 +3,9 @@ import {Realm} from "../realm";
 import {Constants} from "../constants";
 
 export abstract class DestructibleBuilding extends Building{
-    //TODO: know own BP
 
     constructor(type: BuildingType, position: [number, number], owner: Realm, protected buildPoints: number){
         super(type, position, owner);
-        //TODO: set own BP
     }
 
     getMaxBP(): number{
@@ -28,6 +26,4 @@ export abstract class DestructibleBuilding extends Building{
     getBuildPoints(): number{
         return this.buildPoints;
     }
-
-    //TODO: setter and getter for BP, getter for own maxBP
 }

@@ -380,7 +380,6 @@ export class FootArmy extends LandArmy{
     }
 
     // mounting with parameters
-    //TODO: If the army has moved, set the new mounted army's move points to the apropriate, non-max value.
     mount(toMount: number, leadersToMount: number, newArmyId?: number): boolean {
         // generiere armyId falls keine vorhanden
         if (newArmyId == undefined) {

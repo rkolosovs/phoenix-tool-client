@@ -229,7 +229,6 @@ export class RiderArmy extends LandArmy{
     }
 
     // the unMount function of the unMount box
-    //TODO: If the mounted army has moved, set the new foot army's move points to the apropriate, non-max value.
     dismount(toUnMount: number, leadersToUnMount: number, newArmyId?: number) {
         // generiere armyId falls keine vorhanden
         if (newArmyId == undefined) {

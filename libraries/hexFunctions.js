@@ -194,18 +194,6 @@ var HexFunction;
         return result;
     }
     HexFunction.bridges = bridges;
-    function reverseDirection(direction) {
-        switch (direction) {
-            case 0 /* NW */: return 3 /* SE */;
-            case 1 /* NE */: return 4 /* SW */;
-            case 2 /* E */: return 5 /* W */;
-            case 3 /* SE */: return 0 /* NW */;
-            case 4 /* SW */: return 1 /* NE */;
-            case 5 /* W */: return 2 /* E */;
-            default: return 3 /* SE */; //TODO: Shouldn't this throw an error?
-        }
-    }
-    HexFunction.reverseDirection = reverseDirection;
     //computes a fields position (upper left corner of inscribing rectangle)
     function computePosition(orig, curr, scale) {
         //get the current field's x position

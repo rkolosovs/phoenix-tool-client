@@ -33,8 +33,7 @@ class LandArmy extends army_1.Army {
                 let fleetsOnDestination = gameState_1.GameState.armies.filter(army => army instanceof fleet_1.Fleet && army.getPosition()[0] === move.destination[0] &&
                     army.getPosition()[1] === move.destination[1]).map(army => army);
                 if (fleetsOnDestination.length === 0) {
-                    // TODO: throw error
-                    // return "You can't walk on Water.";
+                    throw new Error("You can't walk on Water.");
                 }
                 else if (fleetsOnDestination.length === 1) {
                     fleetsOnDestination[0].loadArmy(this);
@@ -43,15 +42,12 @@ class LandArmy extends army_1.Army {
                     let fleetString = fleetsOnDestination.reduce((accumulator, fleet) => accumulator += " " + fleet.getErkenfaraID(), "");
                     let chosenFleet = prompt("Mögliche Flotten sind: " + fleetString);
                     if (chosenFleet == undefined) {
-                        // TODO: throw error
-                        // return "Embarkation canceled."
+                        throw new Error("Embarkation canceled.");
                     }
                     else if (chosenFleet != undefined && chosenFleet !== '') {
                         let foundFleet = fleetsOnDestination.find(fleet => fleet.getErkenfaraID() === parseInt(chosenFleet));
                         if (foundFleet != undefined) {
-                            let loadString = foundFleet.loadArmy(this);
-                            // TODO: throw error
-                            // return (loadString);
+                            foundFleet.loadArmy(this);
                         }
                         else {
                             window.alert("Bitte wähle eine der angegebenen Flotten aus.");
@@ -66,10 +62,9 @@ class LandArmy extends army_1.Army {
             this.setMovePoints(this.getMovePoints() - move.movePoints);
             this.setHeightPoints(this.getHeightPoints() - move.heightPoints);
         }
-        // TODO: Throw errors. Compute new possible moves.
-        // //to see and return the error why you cant move
-        // clickedMoves(army);
-        // return moveToList(army, direction);
+        else {
+            throw new Error("Move not possible.");
+        }
     }
     checkForPossibleMove(direction) {
         let neighborCoords = hexFunctions_1.HexFunction.neighbors(this.position);

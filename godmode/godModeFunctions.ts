@@ -336,7 +336,6 @@ export namespace GodFunctions {
 		BoxVisibility.mountsBuffer = Number(armyMakerBox.getMountsField().value);
 		BoxVisibility.lkpBuffer = Number(armyMakerBox.getLKPField().value);
 		BoxVisibility.skpBuffer = Number(armyMakerBox.getSKPField().value);
-		// TODO be able to generate guard armies
 		BoxVisibility.guardBuffer = false;
 		if (BoxVisibility.armyIdBuffer < 101 || BoxVisibility.armyIdBuffer > 399) {
 			window.alert("Die Armee-Id muss zwischen 101 und 399 liegen.");

@@ -15,7 +15,7 @@ export function stringToDirection(dir: string): Direction{
         case "se": return Direction.SE;
         case "sw": return Direction.SW;
         case "w": return Direction.W;
-        default: return -1; //TODO: Throw error here.
+        default: throw new Error("Invalid direction.");
     }
 }
 
@@ -27,6 +27,18 @@ export function directionToString(dir: Direction): string{
         case Direction.SE: return "se";
         case Direction.SW: return "sw";
         case Direction.W: return "w";
-        default: return ""; //TODO: Throw error here.
+        default: throw new Error("Invalid direction.");
+    }
+}
+
+export function reverseDirection(direction: Direction): Direction {
+    switch(direction){
+        case Direction.NW: return Direction.SE;
+        case Direction.NE: return Direction.SW;
+        case Direction.E: return Direction.W;
+        case Direction.SE: return Direction.NW;
+        case Direction.SW: return Direction.NE;
+        case Direction.W: return Direction.E;
+        default: throw new Error("Invalid direction.");
     }
 }

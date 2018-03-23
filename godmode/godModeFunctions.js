@@ -325,7 +325,6 @@ var GodFunctions;
         boxVisibilty_1.BoxVisibility.mountsBuffer = Number(armyMakerBox.getMountsField().value);
         boxVisibilty_1.BoxVisibility.lkpBuffer = Number(armyMakerBox.getLKPField().value);
         boxVisibilty_1.BoxVisibility.skpBuffer = Number(armyMakerBox.getSKPField().value);
-        // TODO be able to generate guard armies
         boxVisibilty_1.BoxVisibility.guardBuffer = false;
         if (boxVisibilty_1.BoxVisibility.armyIdBuffer < 101 || boxVisibilty_1.BoxVisibility.armyIdBuffer > 399) {
             window.alert("Die Armee-Id muss zwischen 101 und 399 liegen.");

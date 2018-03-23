@@ -60,10 +60,9 @@ class Fleet extends army_1.Army {
             this.setMovePoints(this.getMovePoints() - move.movePoints);
             this.transportedArmies.forEach(transportedArmy => transportedArmy.changePosition(move.destination));
         }
-        // TODO: Throw errors. Compute new possible moves.
-        // //to see and return the error why you cant move
-        // clickedMoves(army);
-        // return moveToList(army, direction);
+        else {
+            throw new Error("Move not possible.");
+        }
     }
     checkForPossibleMove(direction) {
         let neighborCoords = hexFunctions_1.HexFunction.neighbors(this.position);

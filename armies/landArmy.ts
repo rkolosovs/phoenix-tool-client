@@ -49,8 +49,7 @@ export abstract class LandArmy extends Army{
                         army.getPosition()[1] === (move as Move).destination[1]).map(
                     army => army as Fleet);
                 if(fleetsOnDestination.length === 0){
-                    // TODO: throw error
-                    // return "You can't walk on Water.";
+                    throw new Error("You can't walk on Water.");
                 } else if(fleetsOnDestination.length === 1){
                     fleetsOnDestination[0].loadArmy(this);
                 } else {
@@ -58,15 +57,12 @@ export abstract class LandArmy extends Army{
                         (accumulator, fleet) => accumulator += " " + fleet.getErkenfaraID(), "");
                     let chosenFleet = prompt("Mögliche Flotten sind: " + fleetString);
                     if (chosenFleet == undefined) {
-                        // TODO: throw error
-                        // return "Embarkation canceled."
+                        throw new Error("Embarkation canceled.");
                     } else if (chosenFleet != undefined && chosenFleet !== '') {
                         let foundFleet = fleetsOnDestination.find(
                             fleet => fleet.getErkenfaraID() === parseInt((chosenFleet as string)));
                         if (foundFleet != undefined) {
-                            let loadString = foundFleet.loadArmy(this);
-                            // TODO: throw error
-                            // return (loadString);
+                            foundFleet.loadArmy(this);
                         } else {
                             window.alert("Bitte wähle eine der angegebenen Flotten aus.");
                         }
@@ -79,11 +75,9 @@ export abstract class LandArmy extends Army{
             this.position[1] = move.destination[1];
             this.setMovePoints(this.getMovePoints() - move.movePoints);
             this.setHeightPoints(this.getHeightPoints() - move.heightPoints);
+        } else {
+            throw new Error("Move not possible.");
         }
-        // TODO: Throw errors. Compute new possible moves.
-        // //to see and return the error why you cant move
-        // clickedMoves(army);
-        // return moveToList(army, direction);
     }
 
     checkForPossibleMove(direction: Direction): Move {

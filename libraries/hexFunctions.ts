@@ -190,18 +190,6 @@ export namespace HexFunction {
         return result;
     }
 
-    export function reverseDirection(direction: Direction): Direction {
-        switch(direction){
-            case Direction.NW: return Direction.SE;
-            case Direction.NE: return Direction.SW;
-            case Direction.E: return Direction.W;
-            case Direction.SE: return Direction.NW;
-            case Direction.SW: return Direction.NE;
-            case Direction.W: return Direction.E;
-            default: return Direction.SE; //TODO: Shouldn't this throw an error?
-        }
-    }
-
     //computes a fields position (upper left corner of inscribing rectangle)
     export function computePosition(orig: [number, number], curr: [number, number], scale: number): [number,  number] {
         //get the current field's x position

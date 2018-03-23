@@ -75,11 +75,9 @@ export class Fleet extends Army{
             this.setMovePoints(this.getMovePoints() - move.movePoints);
             this.transportedArmies.forEach(transportedArmy =>
                 transportedArmy.changePosition((move as Move).destination));
+        } else {
+            throw new Error("Move not possible.");
         }
-        // TODO: Throw errors. Compute new possible moves.
-        // //to see and return the error why you cant move
-        // clickedMoves(army);
-        // return moveToList(army, direction);
     }
 
     checkForPossibleMove(direction: Direction): Move {

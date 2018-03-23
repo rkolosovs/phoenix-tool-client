@@ -211,8 +211,7 @@ var Loading;
                         case 2:
                         case 3:
                         case 4:
-                            // TODO Name to data from server
-                            return new productionBuilding_1.ProductionBuilding(building.type, "", [building.firstX, building.firstY], owner, building.buildPoints);
+                            return new productionBuilding_1.ProductionBuilding(building.type, building.name, [building.firstX, building.firstY], owner, building.buildPoints);
                         case 5:
                             return new wall_1.Wall(building.type, [building.firstX, building.firstY], owner, building.buildPoints, direction_1.stringToDirection(building.direction), building.guardCount);
                         case 6:
