@@ -1,3 +1,12 @@
+import {Army} from "../armies/army";
+import {QUnit} from "qunit";
+import {resultsTests} from "./shootingTests/resultsTests";
+import {conditionsTests} from "./shootingTests/conditionsTests";
+
+export let defenderArmies: Army[] = [];
+export let attackerArmies: Army[] = [];
+
+const { module } = QUnit;
 
 module( "Shooting" , function() {
 	module( "Results", {
@@ -13,32 +22,6 @@ module( "Shooting" , function() {
 			borders = [];
 			buildings = [];
 			fieldTypes = [];
-		}}, function() {
-		test( "Light catas shooting.", function(t) {
-        });
-        test( "Heavy catas shooting.", function(t) {
-        });
-        test( "Mixed catas shooting.", function(t) {
-        });
-        test( "Light warships shooting.", function(t) {
-        });
-        test( "Heavy warships shooting.", function(t) {
-        });
-        test( "Mixed warships shooting.", function(t) {
-        });
-	});
-	module( "Conditions", function() {
-		test( "Light catas conditions.", function(t) {
-        });
-        test( "Heavy catas conditions.", function(t) {
-        });
-        test( "Mixed catas conditions.", function(t) {
-        });
-        test( "Light warships conditions.", function(t) {
-        });
-        test( "Heavy warships conditions.", function(t) {
-        });
-        test( "Mixed warships conditions.", function(t) {
-        });
-	});
+		}}, resultsTests);
+	module( "Conditions", conditionsTests);
 });
