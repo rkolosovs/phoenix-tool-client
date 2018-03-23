@@ -3,6 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const riderArmy_1 = require("../../armies/riderArmy");
 const gameState_1 = require("../../gameState");
 const fleet_1 = require("../../armies/fleet");
+const qunit_1 = require("qunit");
+const { test } = qunit_1.QUnit;
 function riderMovementTests() {
     test("Lowlands -> lowlands", function (t) {
         let army = new riderArmy_1.RiderArmy(211, 1000, 1, false, 0, 0, 1);

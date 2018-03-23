@@ -1,5 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const qunit_1 = require("qunit");
+const { test } = qunit_1.QUnit;
+const { module } = qunit_1.QUnit;
 function takingFireTests() {
     module("Regular", function () {
         test("Foot army decimation", function (t) {

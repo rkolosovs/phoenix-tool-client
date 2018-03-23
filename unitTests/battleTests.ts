@@ -9,6 +9,24 @@ import {directionalTerrainBattleTests} from "./battleTests/directionalTerrainTes
 import {guardBattleTests} from "./battleTests/guardBattleTests";
 import {navalBattleTests} from "./battleTests/navalBattleTests";
 import {landBattleTests} from "./battleTests/landBattleTests";
+import {River} from "../map/river";
+import {ProductionBuilding} from "../buildings/productionBuilding";
+import {BuildingType} from "../buildings/building";
+import {Constants} from "../constants";
+import CASTLE_BP = Constants.CASTLE_BP;
+import CITY_BP = Constants.CITY_BP;
+import FORTRESS_BP = Constants.FORTRESS_BP;
+import CAPITAL_BP = Constants.CAPITAL_BP;
+import CAPITAL_FORTRESS_BP = Constants.CAPITAL_FORTRESS_BP;
+import {Wall} from "../buildings/wall";
+import WALL_BP = Constants.WALL_BP;
+import {Direction} from "../map/direction";
+import WALL_MAX_GUARD = Constants.WALL_MAX_GUARD;
+import {NonDestructibleBuilding} from "../buildings/nonDestructibleBuilding";
+import {FieldType, Field} from "../map/field";
+import {FootArmy} from "../armies/footArmy";
+import {RiderArmy} from "../armies/riderArmy";
+import {Fleet} from "../armies/fleet";
 
 const { module } = QUnit;
 
@@ -38,53 +56,91 @@ export let attackerArmies: Army[] = [];
 
 module( "Battle" , {
     before: function () {
-        //arrays to hold prepared armies for test
-        defenderArmies= [
-            new heer(111, 1000, 1, 0, 0, 0, false, 0, 0, 1),//0
-            new heer(112, 1000, 5, 0, 0, 0, false, 0, 0, 1),//1
-            new heer(115, 15000, 15, 0, 0, 0, false, 0, 0, 1),//2
-            new heer(116, 1000, 36, 0, 0, 0, false, 0, 0, 1),//3
-            new heer(117, 1500, 10, 0, 0, 0, false, 0, 0, 1),//4
-            new heer(118, 10000, 10, 0, 0, 0, false, 0, 0, 1),//5
-            new heer(119, 1200, 12, 0, 0, 0, false, 0, 0, 1),//6
-            new reiterHeer(211, 5000, 5, false, 0, 0, 1),//7
-            new reiterHeer(214, 10000, 5, false, 0, 0, 1),//8
-            new reiterHeer(215, 1500, 10, false, 0, 0, 1),//9
-            new reiterHeer(219, 1200, 12, false, 0, 0, 1),//10
-            new seeHeer(311, 20, 5, 0, 0, false, 0, 0, 1),//11
-            new seeHeer(312, 10, 5, 5, 0, false, 0, 0, 1),//12
-            new seeHeer(313, 10, 5, 0, 5, false, 0, 0, 1),//13
-            new seeHeer(314, 10, 5, 3, 2, false, 0, 0, 1),//14
-            new seeHeer(315, 12, 2, 3, 1, false, 0, 0, 1),//15
-            new seeHeer(316, 100, 10, 0, 0, false, 0, 0, 1),//16
-            new seeHeer(317, 1000, 10, 0, 0, false, 0, 0, 1),//17
-            new heer(199, 1000, 10, 0, 0, 0, false, 0, 0, 1)//18
-        ];
-        attackerArmies = [
-            new heer(121, 1000, 1, 0, 0, 0, false, 0, 0, 2),//0
-            new heer(123, 10000, 5, 0, 0, 0, false, 0, 0, 2),//1
-            new heer(124, 5000, 5, 0, 0, 0, false, 0, 0, 2),//2
-            new heer(126, 1200, 4, 0, 0, 0, false, 0, 0, 2),//3
-            new heer(127, 1000, 10, 0, 0, 0, true, 0, 0, 2),//4
-            new heer(128, 1000, 100, 0, 0, 0, true, 0, 0, 2),//5
-            new heer(129, 1000, 10, 0, 0, 0, false, 0, 0, 2),//6
-            new reiterHeer(224, 15000, 15, false, 0, 0, 2),//7
-            new reiterHeer(227, 1000, 10, true, 0, 0, 2),//8
-            new reiterHeer(228, 1000, 10, false, 0, 0, 2),//9
-            new seeHeer(321, 10, 5, 0, 0, false, 0, 0, 2),//10
-            new seeHeer(322, 10, 5, 5, 0, false, 0, 0, 2),//11
-            new seeHeer(323, 10, 5, 0, 5, false, 0, 0, 2),//12
-            new seeHeer(324, 20, 5, 0, 0, false, 0, 0, 2),//13
-            new seeHeer(325, 10, 5, 3, 2, false, 0, 0, 2),//14
-            new seeHeer(326, 35, 40, 7, 6, false, 0, 0, 2),//15
-            new seeHeer(327, 40, 35, 0, 0, true, 0, 0, 2),//16
-            new seeHeer(328, 100, 100, 0, 0, true, 0, 0, 2),//17
-            new heer(199, 1000, 10, 0, 0, 0, false, 0, 0, 2)//18
-        ];
         GameState.reset();
         GameState.realms.push(new Realm("Pink Realm", "r01", "213,038,181", 9, true));
         GameState.realms.push(new Realm("Realm 2", "r02", "000,000,000", 9, true));
         GameState.realms.push(new Realm("Realm 3", "r03", "000,000,000", 9, true));
+        //arrays to hold prepared armies for test
+        defenderArmies= [
+            new FootArmy(111, GameState.realms[1], 1000, 1, 0,
+            0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS), //0
+            new FootArmy(112, GameState.realms[1], 1000, 5, 0,
+            0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS), //1
+            new FootArmy(115, GameState.realms[1], 15000, 15, 0,
+                0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS), //2
+            new FootArmy(116, GameState.realms[1], 1000, 36, 0,
+                0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS), //3
+            new FootArmy(117, GameState.realms[1], 1500, 10, 0,
+                0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS), //4
+            new FootArmy(118, GameState.realms[1], 10000, 10, 0,
+                0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS), //5
+            new FootArmy(119, GameState.realms[1], 1200, 12, 0,
+                0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS), //6
+            new RiderArmy(211, GameState.realms[1], 5000, 5, [0, 0], //7
+                RiderArmy.MAX_MOVE_POINTS, RiderArmy.MAX_HEIGHT_POINTS),
+            new RiderArmy(214, GameState.realms[1], 10000, 5, [0, 0], //8
+                RiderArmy.MAX_MOVE_POINTS, RiderArmy.MAX_HEIGHT_POINTS),
+            new RiderArmy(215, GameState.realms[1], 1500, 10, [0, 0], //9
+                RiderArmy.MAX_MOVE_POINTS, RiderArmy.MAX_HEIGHT_POINTS),
+            new RiderArmy(219, GameState.realms[1], 1200, 12, [0, 0], //10
+                RiderArmy.MAX_MOVE_POINTS, RiderArmy.MAX_HEIGHT_POINTS),
+            new Fleet(311, GameState.realms[1], 20, 5, 0, 0,
+                [0, 0], Fleet.MAX_MOVE_POINTS), //11
+            new Fleet(312, GameState.realms[1], 10, 5, 5, 0,
+                [0, 0], Fleet.MAX_MOVE_POINTS), //12
+            new Fleet(313, GameState.realms[1], 10, 5, 0, 5,
+                [0, 0], Fleet.MAX_MOVE_POINTS), //13
+            new Fleet(314, GameState.realms[1], 10, 5, 3, 2,
+                [0, 0], Fleet.MAX_MOVE_POINTS), //14
+            new Fleet(315, GameState.realms[1], 12, 2, 3, 1,
+                [0, 0], Fleet.MAX_MOVE_POINTS), //15
+            new Fleet(316, GameState.realms[1], 100, 10, 0, 0,
+                [0, 0], Fleet.MAX_MOVE_POINTS), //16
+            new Fleet(317, GameState.realms[1], 1000, 10, 0, 0,
+                [0, 0], Fleet.MAX_MOVE_POINTS), //17
+            new FootArmy(199, GameState.realms[1], 1000, 10, 0,
+                0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS) //18
+        ];
+        attackerArmies = [
+            new FootArmy(121, GameState.realms[0], 1000, 1, 0,
+                0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS), //0
+            new FootArmy(123, GameState.realms[0], 10000, 5, 0,
+                0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS), //1
+            new FootArmy(124, GameState.realms[0], 5000, 5, 0,
+                0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS), //2
+            new FootArmy(126, GameState.realms[0], 1200, 4, 0,
+                0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS), //3
+            new FootArmy(127, GameState.realms[0], 1000, 10, 0,
+                0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, true), //4
+            new FootArmy(128, GameState.realms[0], 1000, 100, 0,
+                0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, true), //5
+            new FootArmy(129, GameState.realms[0], 1000, 10, 0,
+                0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS), //6
+            new RiderArmy(224, GameState.realms[0], 15000, 15, [0, 0],
+                RiderArmy.MAX_MOVE_POINTS, RiderArmy.MAX_HEIGHT_POINTS), //7
+            new RiderArmy(227, GameState.realms[0], 1000, 10, [0, 0],
+                RiderArmy.MAX_MOVE_POINTS, RiderArmy.MAX_HEIGHT_POINTS, true), //8
+            new RiderArmy(228, GameState.realms[0], 1000, 10, [0, 0],
+                RiderArmy.MAX_MOVE_POINTS, RiderArmy.MAX_HEIGHT_POINTS), //9
+            new Fleet(321, GameState.realms[0], 10, 5, 0, 0,
+                [0, 0], Fleet.MAX_MOVE_POINTS), //10
+            new Fleet(322, GameState.realms[0], 10, 5, 5, 0,
+                [0, 0], Fleet.MAX_MOVE_POINTS), //11
+            new Fleet(323, GameState.realms[0], 10, 5, 0, 5,
+                [0, 0], Fleet.MAX_MOVE_POINTS), //12
+            new Fleet(324, GameState.realms[0], 20, 5, 0, 0,
+                [0, 0], Fleet.MAX_MOVE_POINTS), //13
+            new Fleet(325, GameState.realms[0], 10, 5, 3, 2,
+                [0, 0], Fleet.MAX_MOVE_POINTS), //14
+            new Fleet(326, GameState.realms[0], 35, 40, 7, 6,
+                [0, 0], Fleet.MAX_MOVE_POINTS), //15
+            new Fleet(327, GameState.realms[0], 40, 35, 0, 0,
+                [0, 0], Fleet.MAX_MOVE_POINTS, true), //16
+            new Fleet(328, GameState.realms[0], 100, 100, 0, 0,
+                [0, 0], Fleet.MAX_MOVE_POINTS, true), //17
+            new FootArmy(199, GameState.realms[0], 1000, 10, 0,
+                0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS) //18
+        ];
     },
     beforeEach: function () {
         GameState.fields = [];
@@ -97,74 +153,97 @@ module( "Battle" , {
     }}, function() {
 	module( "Results", {
 		before: function() {
-			borders = [{'tag': 'r01', 'land': [[0, 0], [1, 1], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 8],
-			    [9, 9], [10, 10], [11, 11]]}];
-			rivers = [ [[8,8],[8,7]], [[8,8],[9,7]] ];
-			buildings = [{'realm': 1, 'name': "", 'type': 0, 'x': 3, 'y': 3, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
-			    {'realm': 1, 'name': "", 'type': 1, 'x': 4, 'y': 4, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
-			    {'realm': 1, 'name': "", 'type': 2, 'x': 5, 'y': 5, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
-			    {'realm': 1, 'name': "", 'type': 3, 'x': 6, 'y': 6, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
-			    {'realm': 1, 'name': "", 'type': 4, 'x': 7, 'y': 7, 'direction': null, 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
-			    {'realm': 1, 'name': "", 'type': 5, 'x': 8, 'y': 8, 'direction': "w", 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
-			    {'realm': 1, 'name': "", 'type': 7, 'x': 8, 'y': 8, 'direction': "nw", 'firstX': null, 'firstY': null, 'secondX': null, 'secondY': null},
-			    {'realm': 1, 'name': "", 'type': 8, 'x': null, 'y': null, 'direction': null, 'firstX': 9, 'firstY': 8, 'secondX': 10, 'secondY': 8}];
-			fields = [{'x':-1, 'y':0, 'type':2}, {'x':0, 'y':0, 'type':2}, {'x':0, 'y':1, 'type':2}, {'x':1, 'y':1, 'type':3},
-			    {'x':1, 'y':2, 'type':0}, {'x':2, 'y':2, 'type':0}, {'x':2, 'y':3, 'type':2}, {'x':3, 'y':3, 'type':2},
-			    {'x':3, 'y':4, 'type':2}, {'x':4, 'y':4, 'type':2}, {'x':4, 'y':5, 'type':2}, {'x':5, 'y':5, 'type':2},
-			    {'x':5, 'y':6, 'type':2}, {'x':6, 'y':6, 'type':2}, {'x':6, 'y':7, 'type':2}, {'x':7, 'y':7, 'type':2},
-			    {'x':8, 'y':7, 'type':5}, {'x':9, 'y':7, 'type':5}, {'x':7, 'y':8, 'type':5}, {'x':8, 'y':8, 'type':5},
-			    {'x':9, 'y':8, 'type':5}, {'x':8, 'y':9, 'type':4}, {'x':9, 'y':9, 'type':3}, {'x':10, 'y':9, 'type':3},
-			    {'x':9, 'y':10, 'type':2}, {'x':10, 'y':10, 'type':8}, {'x':10, 'y':11, 'type':2}, {'x':11, 'y':11, 'type':7}];
+			GameState.rivers = [ new River([8,8],[8,7]), new River([8,8],[9,7]) ];
+			GameState.buildings = [
+			    new ProductionBuilding(BuildingType.CASTLE, "", [3, 3], GameState.realms[1], CASTLE_BP),
+                new ProductionBuilding(BuildingType.CITY, "", [4, 4], GameState.realms[1], CITY_BP),
+                new ProductionBuilding(BuildingType.FORTRESS, "", [5, 5], GameState.realms[1], FORTRESS_BP),
+                new ProductionBuilding(BuildingType.CAPITAL, "", [6, 6], GameState.realms[1], CAPITAL_BP),
+                new ProductionBuilding(BuildingType.CAPITAL_FORT, "", [7, 7], GameState.realms[1], CAPITAL_FORTRESS_BP),
+                new Wall(BuildingType.WALL, [8, 8], GameState.realms[1], WALL_BP, Direction.W, WALL_MAX_GUARD),
+                new NonDestructibleBuilding(BuildingType.BRIDGE, [8, 8], [8, 7], GameState.realms[1]),
+                new NonDestructibleBuilding(BuildingType.STREET, [9, 8], [10, 8], GameState.realms[1])
+            ];
+			GameState.fields = [new Field([-1, 0], FieldType.LOWLANDS),
+                new Field([0, 0], FieldType.LOWLANDS), new Field([0, 1], FieldType.LOWLANDS),
+                new Field([1, 1], FieldType.WOODS), new Field([1, 2], FieldType.SHALLOWS),
+                new Field([2, 2], FieldType.SHALLOWS), new Field([2, 3], FieldType.LOWLANDS),
+                new Field([3, 3], FieldType.LOWLANDS), new Field([3, 4], FieldType.LOWLANDS),
+                new Field([4, 4], FieldType.LOWLANDS), new Field([4, 5], FieldType.LOWLANDS),
+                new Field([5, 5], FieldType.LOWLANDS), new Field([5, 6], FieldType.LOWLANDS),
+                new Field([6, 6], FieldType.LOWLANDS), new Field([6, 7], FieldType.LOWLANDS),
+                new Field([7, 7], FieldType.LOWLANDS), new Field([8, 7], FieldType.HIGHLANDS),
+                new Field([9, 7], FieldType.HIGHLANDS), new Field([7, 8], FieldType.HIGHLANDS),
+                new Field([8, 8], FieldType.HIGHLANDS), new Field([9, 8], FieldType.HIGHLANDS),
+                new Field([8, 9], FieldType.HILLS), new Field([9, 9], FieldType.WOODS),
+                new Field([10, 9], FieldType.WOODS), new Field([9, 10], FieldType.LOWLANDS),
+                new Field([10, 10], FieldType.SWAMP), new Field([10, 11], FieldType.LOWLANDS),
+                new Field([11, 11], FieldType.DESERT)];
 		},
 		beforeEach: function() {
-		    realms = [{active: true, color: '000,000,000', homeTurf: 9, name: "Realm 1", tag: 'r01'},
-                {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 2", tag: 'r02'},
-                {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 3", tag: 'r03'}];
+		    GameState.realms[1].territory = GameState.fields.filter(field =>
+                (field.coordinates[0] === 0 && field.coordinates[1] === 0) ||
+                (field.coordinates[0] === 1 && field.coordinates[1] === 1) ||
+                (field.coordinates[0] === 3 && field.coordinates[1] === 3) ||
+                (field.coordinates[0] === 4 && field.coordinates[1] === 4) ||
+                (field.coordinates[0] === 5 && field.coordinates[1] === 5) ||
+                (field.coordinates[0] === 6 && field.coordinates[1] === 6) ||
+                (field.coordinates[0] === 7 && field.coordinates[1] === 7) ||
+                (field.coordinates[0] === 8 && field.coordinates[1] === 8) ||
+                (field.coordinates[0] === 9 && field.coordinates[1] === 8) ||
+                (field.coordinates[0] === 9 && field.coordinates[1] === 9) ||
+                (field.coordinates[0] === 10 && field.coordinates[1] === 10) ||
+                (field.coordinates[0] === 11 && field.coordinates[1] === 11));
 		},
 		after: function() {
 			defenderArmies = [];
 			attackerArmies = [];
-			borders = [];
-			buildings = [];
-			fields = [];
-			realms = [];
+			GameState.buildings = [];
+			GameState.fields = [];
+			GameState.realms = [];
 		}}, function() {
 		module( "Land Battles", landBattleTests);
 		module( "Naval Battles", navalBattleTests);
 		module( "Guard Battles", guardBattleTests);
-		module( "Directional Terrain Bonuses", {
-		    beforeEach: function() {
-		        realms = [{active: true, color: '000,000,000', homeTurf: 9, name: "Realm 1", tag: 'r01'},
-                    {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 2", tag: 'r02'},
-                    {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 3", tag: 'r03'}];
-                defenderArmies[18].owner = 1;
-		    }}, directionalTerrainBattleTests);
+		module( "Directional Terrain Bonuses", directionalTerrainBattleTests);
 		module( "Complex Battles", );
 	});
 	module( "Overrun", {
 		before: function() {
-		    realms = [{active: true, color: '000,000,000', homeTurf: 9, name: "Realm 1", tag: 'r01'},
-                {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 2", tag: 'r02'},
-                {active: true, color: '000,000,000', homeTurf: 9, name: "Realm 3", tag: 'r03'}];
 			defenderArmies = [
-				new heer(111, 1500, 10, 0, 0, 0, false, 0, 0, 1),//0
-				new heer(112, 1000, 10, 0, 0, 0, false, 0, 0, 1),//1
-				new heer(113, 1000, 10, 0, 0, 0, true, 0, 0, 1),//2
-				new reiterHeer(211, 1000, 15, false, 0, 0, 1),//3
-				new seeHeer(311, 20, 5, 0, 0, false, 0, 0, 1),//4
-				new seeHeer(314, 10, 5, 3, 2, false, 0, 0, 1),//5
-				new seeHeer(315, 10, 5, 0, 0, true, 0, 0, 1)//6
-			];
+                new FootArmy(111, GameState.realms[1], 1500, 10, 0,
+                    0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS), //0
+                new FootArmy(112, GameState.realms[1], 1000, 10, 0,
+                    0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS), //1
+                new FootArmy(113, GameState.realms[1], 1000, 10, 0,
+                    0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, true), //2
+                new RiderArmy(221, GameState.realms[1], 1000, 15, [0, 0],
+                    RiderArmy.MAX_MOVE_POINTS, RiderArmy.MAX_HEIGHT_POINTS), //3
+                new Fleet(311, GameState.realms[1], 20, 5, 0, 0,
+                    [0, 0], Fleet.MAX_MOVE_POINTS), //4
+                new Fleet(314, GameState.realms[1], 10, 5, 3, 2,
+                    [0, 0], Fleet.MAX_MOVE_POINTS), //5
+                new Fleet(315, GameState.realms[1], 10, 5, 0, 0,
+                    [0, 0], Fleet.MAX_MOVE_POINTS, true) //6
+            ];
 			attackerArmies = [
-				new heer(123, 15000, 1, 0, 0, 0, false, 0, 0, 2),//0
-				new heer(124, 10000, 1, 0, 0, 0, true, 0, 0, 2),//1
-				new reiterHeer(224, 10000, 1, false, 0, 0, 2),//2
-				new seeHeer(321, 200, 5, 0, 0, false, 0, 0, 2),//3
-				new seeHeer(322, 100, 5, 0, 0, false, 0, 0, 2),//4
-				new seeHeer(325, 99, 5, 3, 2, false, 0, 0, 2),//5
-				new seeHeer(326, 200, 5, 0, 0, true, 0, 0, 2)//6
-			];
-			fields = [{'x':0, 'y':0, 'type':2}, {'x':1, 'y':1, 'type':0}];//plains, water
+                new FootArmy(123, GameState.realms[0], 15000, 1, 0,
+                    0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS), //0
+                new FootArmy(124, GameState.realms[0], 10000, 1, 0,
+                    0, 0, [0, 0], FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, true), //1
+                new RiderArmy(224, GameState.realms[0], 10000, 1, [0, 0],
+                    RiderArmy.MAX_MOVE_POINTS, RiderArmy.MAX_HEIGHT_POINTS), //2
+                new Fleet(321, GameState.realms[0], 200, 5, 0, 0,
+                    [0, 0], Fleet.MAX_MOVE_POINTS), //3
+                new Fleet(322, GameState.realms[0], 100, 5, 0, 0,
+                    [0, 0], Fleet.MAX_MOVE_POINTS), //4
+                new Fleet(325, GameState.realms[0], 99, 5, 3, 2,
+                    [0, 0], Fleet.MAX_MOVE_POINTS), //5
+                new Fleet(326, GameState.realms[0], 200, 5, 0, 0,
+                    [0, 0], Fleet.MAX_MOVE_POINTS, true) //6
+            ];
+			GameState.fields = [new Field([0, 0], FieldType.LOWLANDS),
+                new Field([1, 1], FieldType.SHALLOWS)];
 		},
 		after: function() {
 			defenderArmies = [];

@@ -4,6 +4,9 @@ const realm_1 = require("../../realm");
 const footArmy_1 = require("../../armies/footArmy");
 const riderArmy_1 = require("../../armies/riderArmy");
 const fleet_1 = require("../../armies/fleet");
+const qunit_1 = require("qunit");
+const { test } = qunit_1.QUnit;
+const { module } = qunit_1.QUnit;
 function dataStructureTests() {
     module("Maximum MP and HP", function () {
         test("Foot army respects MP maximum", function (t) {

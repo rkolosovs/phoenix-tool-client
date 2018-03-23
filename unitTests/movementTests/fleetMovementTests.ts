@@ -1,5 +1,8 @@
 import {Fleet} from "../../armies/fleet";
 import {GameState} from "../../gameState";
+import {QUnit} from "qunit";
+
+const { test } = QUnit;
 
 export function fleetMovementTests() {
     test( "Shallows -> lowlands", function(t: any) {

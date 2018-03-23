@@ -1,3 +1,8 @@
+import {QUnit} from "qunit";
+
+const { test } = QUnit;
+const { module } = QUnit;
+
 export function takingFireTests() {
     module( "Regular" , function() {
         test( "Foot army decimation", function(t: any){

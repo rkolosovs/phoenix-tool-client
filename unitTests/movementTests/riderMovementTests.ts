@@ -1,6 +1,9 @@
 import {RiderArmy} from "../../armies/riderArmy";
 import {GameState} from "../../gameState";
 import {Fleet} from "../../armies/fleet";
+import {QUnit} from "qunit";
+
+const { test } = QUnit;
 
 export function riderMovementTests() {
     test( "Lowlands -> lowlands", function(t: any) {

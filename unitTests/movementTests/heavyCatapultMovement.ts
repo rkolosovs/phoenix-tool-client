@@ -1,6 +1,9 @@
 import {FootArmy} from "../../armies/footArmy";
 import {Fleet} from "../../armies/fleet";
 import {GameState} from "../../gameState";
+import {QUnit} from "qunit";
+
+const { test } = QUnit;
 
 export function heavyCatapultMovementTests() {
     test( "Lowlands -> lowlands", function(t: any) {

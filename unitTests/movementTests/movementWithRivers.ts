@@ -1,6 +1,9 @@
 import {FootArmy} from "../../armies/footArmy";
 import {RiderArmy} from "../../armies/riderArmy";
 import {GameState} from "../../gameState";
+import {QUnit} from "qunit";
+
+const { test } = QUnit;
 
 export function movementWithRiversTests() {
     test( "Foot lowlands -> lowlands over a river", function(t: any) {

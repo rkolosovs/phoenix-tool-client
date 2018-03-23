@@ -4,6 +4,9 @@ const footArmy_1 = require("../../armies/footArmy");
 const riderArmy_1 = require("../../armies/riderArmy");
 const fleet_1 = require("../../armies/fleet");
 const gameState_1 = require("../../gameState");
+const qunit_1 = require("qunit");
+const { test } = qunit_1.QUnit;
+const { module } = qunit_1.QUnit;
 function decimationTests() {
     module("Regular", function () {
         test("Foot army decimation", function (t) {

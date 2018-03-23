@@ -3,6 +3,10 @@ import {FieldType} from "../../map/field";
 import {FootArmy} from "../../armies/footArmy";
 import {RiderArmy} from "../../armies/riderArmy";
 import {Fleet} from "../../armies/fleet";
+import {QUnit} from "qunit";
+
+const { test } = QUnit;
+const { module } = QUnit;
 
 export function dataStructureTests() {
     module( "Maximum MP and HP" , function() {

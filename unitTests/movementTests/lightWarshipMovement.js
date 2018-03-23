@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const fleet_1 = require("../../armies/fleet");
 const gameState_1 = require("../../gameState");
+const qunit_1 = require("qunit");
+const { test } = qunit_1.QUnit;
 function lightWarshipMovementTests() {
     test("Shallows -> lowlands", function (t) {
         let fleet = new fleet_1.Fleet(311, 21, 1, 1, 0, false, 0, 0, 1);

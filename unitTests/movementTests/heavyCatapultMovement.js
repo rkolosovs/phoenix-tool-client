@@ -3,6 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const footArmy_1 = require("../../armies/footArmy");
 const fleet_1 = require("../../armies/fleet");
 const gameState_1 = require("../../gameState");
+const qunit_1 = require("qunit");
+const { test } = qunit_1.QUnit;
 function heavyCatapultMovementTests() {
     test("Lowlands -> lowlands", function (t) {
         let army = new footArmy_1.FootArmy(111, 1000, 1, 0, 1, 0, false, 0, 0, 1);

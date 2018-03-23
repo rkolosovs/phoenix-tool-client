@@ -6,6 +6,8 @@ const field_1 = require("../../map/field");
 const move_1 = require("../../armies/move");
 const nonDestructibleBuilding_1 = require("../../buildings/nonDestructibleBuilding");
 const fleet_1 = require("../../armies/fleet");
+const qunit_1 = require("qunit");
+const { test } = qunit_1.QUnit;
 function footMovementTests() {
     test("Lowlands -> lowlands (nw direction)", function (t) {
         let army = new footArmy_1.FootArmy(111, gameState_1.GameState.realms[0], 1000, 1, 0, 0, 0, [0, 0], footArmy_1.FootArmy.MAX_MOVE_POINTS, 2);
