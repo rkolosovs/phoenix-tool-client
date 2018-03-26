@@ -9,6 +9,7 @@ const directionalTerrainTests_1 = require("./battleTests/directionalTerrainTests
 const guardBattleTests_1 = require("./battleTests/guardBattleTests");
 const navalBattleTests_1 = require("./battleTests/navalBattleTests");
 const landBattleTests_1 = require("./battleTests/landBattleTests");
+const complexBattleTests_1 = require("./battleTests/complexBattleTests");
 const river_1 = require("../map/river");
 const productionBuilding_1 = require("../buildings/productionBuilding");
 const constants_1 = require("../constants");
@@ -168,7 +169,7 @@ module("Battle", {
         module("Naval Battles", navalBattleTests_1.navalBattleTests);
         module("Guard Battles", guardBattleTests_1.guardBattleTests);
         module("Directional Terrain Bonuses", directionalTerrainTests_1.directionalTerrainBattleTests);
-        module("Complex Battles");
+        module("Complex Battles", complexBattleTests_1.complexBattleTest);
     });
     module("Overrun", {
         before: function () {

@@ -9,6 +9,7 @@ import {directionalTerrainBattleTests} from "./battleTests/directionalTerrainTes
 import {guardBattleTests} from "./battleTests/guardBattleTests";
 import {navalBattleTests} from "./battleTests/navalBattleTests";
 import {landBattleTests} from "./battleTests/landBattleTests";
+import {complexBattleTest} from "./battleTests/complexBattleTests";
 import {River} from "../map/river";
 import {ProductionBuilding} from "../buildings/productionBuilding";
 import {BuildingType} from "../buildings/building";
@@ -206,7 +207,7 @@ module( "Battle" , {
 		module( "Naval Battles", navalBattleTests);
 		module( "Guard Battles", guardBattleTests);
 		module( "Directional Terrain Bonuses", directionalTerrainBattleTests);
-		module( "Complex Battles", );
+		module( "Complex Battles", complexBattleTest);
 	});
 	module( "Overrun", {
 		before: function() {
