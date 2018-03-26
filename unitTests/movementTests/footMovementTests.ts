@@ -354,7 +354,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.LOWLANDS), new Field([0, -1], FieldType.HIGHLANDS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 }); TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Lowlands -> mountains", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -367,7 +367,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.LOWLANDS), new Field([0, -1], FieldType.MOUNTAINS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 }); TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Lowlands -> shallows", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -766,7 +766,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.DESERT), new Field([0, -1], FieldType.HIGHLANDS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO 
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Desert -> mountains", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -779,7 +779,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.DESERT), new Field([0, -1], FieldType.MOUNTAINS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Desert -> shallows", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1174,7 +1174,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.WOODS), new Field([0, -1], FieldType.HIGHLANDS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Woods -> mountains", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1187,7 +1187,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.WOODS), new Field([0, -1], FieldType.MOUNTAINS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Woods -> shallows", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1582,7 +1582,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.SWAMP), new Field([0, -1], FieldType.HIGHLANDS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Swamp -> mountains", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -1595,7 +1595,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.SWAMP), new Field([0, -1], FieldType.MOUNTAINS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Swamp -> shallows", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2052,7 +2052,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.HILLS), new Field([0, -1], FieldType.MOUNTAINS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Hills -> shallows", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2069,7 +2069,7 @@ export function footMovementTests() {
         GameState.armies = [army, fleet];
         GameState.fields = [new Field([0, 0], FieldType.HILLS), new Field([0, -1], FieldType.SHALLOWS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Hills -> deepsea", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2086,7 +2086,7 @@ export function footMovementTests() {
         GameState.armies = [army, fleet];
         GameState.fields = [new Field([0, 0], FieldType.HILLS), new Field([0, -1], FieldType.DEEPSEA)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Highlands -> lowlands", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2099,7 +2099,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.LOWLANDS), new Field([0, -1], FieldType.LOWLANDS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Highlands -> desert", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2112,7 +2112,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.LOWLANDS), new Field([0, -1], FieldType.DESERT)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Highlands -> woods", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2125,7 +2125,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.LOWLANDS), new Field([0, -1], FieldType.WOODS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Highlands -> swamp", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2138,7 +2138,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.LOWLANDS), new Field([0, -1], FieldType.SWAMP)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Highlands -> hills", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2341,7 +2341,7 @@ export function footMovementTests() {
         GameState.armies = [army, fleet];
         GameState.fields = [new Field([0, 0], FieldType.LOWLANDS), new Field([0, -1], FieldType.SHALLOWS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Highlands -> deepsea", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2358,7 +2358,7 @@ export function footMovementTests() {
         GameState.armies = [army, fleet];
         GameState.fields = [new Field([0, 0], FieldType.LOWLANDS), new Field([0, -1], FieldType.DEEPSEA)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Mountains -> lowlands", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2371,7 +2371,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.MOUNTAINS), new Field([0, -1], FieldType.LOWLANDS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Mountains -> desert", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2384,7 +2384,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.MOUNTAINS), new Field([0, -1], FieldType.DESERT)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Mountains -> woods", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2397,7 +2397,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.MOUNTAINS), new Field([0, -1], FieldType.WOODS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Mountains -> swamp", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2410,7 +2410,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.MOUNTAINS), new Field([0, -1], FieldType.SWAMP)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Mountains -> hills", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2423,7 +2423,7 @@ export function footMovementTests() {
             FootArmy.MAX_MOVE_POINTS, FootArmy.MAX_HEIGHT_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.MOUNTAINS), new Field([0, -1], FieldType.HILLS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Mountains -> highlands", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2564,7 +2564,7 @@ export function footMovementTests() {
         GameState.armies = [army, fleet];
         GameState.fields = [new Field([0, 0], FieldType.MOUNTAINS), new Field([0, -1], FieldType.SHALLOWS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Mountains -> deepsea", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2581,7 +2581,7 @@ export function footMovementTests() {
         GameState.armies = [army, fleet];
         GameState.fields = [new Field([0, 0], FieldType.MOUNTAINS), new Field([0, -1], FieldType.DEEPSEA)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Shallows -> lowlands", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2944,7 +2944,7 @@ export function footMovementTests() {
         fleet.loadArmy(army);
         GameState.fields = [new Field([0, 0], FieldType.SHALLOWS), new Field([0, -1], FieldType.HILLS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Shallows -> highlands", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2963,7 +2963,7 @@ export function footMovementTests() {
         fleet.loadArmy(army);
         GameState.fields = [new Field([0, 0], FieldType.SHALLOWS), new Field([0, -1], FieldType.HIGHLANDS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Shallows -> mountains", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -2982,7 +2982,7 @@ export function footMovementTests() {
         fleet.loadArmy(army);
         GameState.fields = [new Field([0, 0], FieldType.SHALLOWS), new Field([0, -1], FieldType.MOUNTAINS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Shallows -> shallows", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -3003,7 +3003,7 @@ export function footMovementTests() {
         fleet.loadArmy(army);
         GameState.fields = [new Field([0, 0], FieldType.SHALLOWS), new Field([0, -1], FieldType.SHALLOWS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Shallows -> deepsea", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -3024,7 +3024,7 @@ export function footMovementTests() {
         fleet.loadArmy(army);
         GameState.fields = [new Field([0, 0], FieldType.SHALLOWS), new Field([0, -1], FieldType.DEEPSEA)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Deepsea -> lowlands", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -3387,7 +3387,7 @@ export function footMovementTests() {
         fleet.loadArmy(army);
         GameState.fields = [new Field([0, 0], FieldType.DEEPSEA), new Field([0, -1], FieldType.HILLS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Deepsea -> highlands", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -3406,7 +3406,7 @@ export function footMovementTests() {
         fleet.loadArmy(army);
         GameState.fields = [new Field([0, 0], FieldType.DEEPSEA), new Field([0, -1], FieldType.HIGHLANDS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Deepsea -> mountains", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -3425,7 +3425,7 @@ export function footMovementTests() {
         fleet.loadArmy(army);
         GameState.fields = [new Field([0, 0], FieldType.DEEPSEA), new Field([0, -1], FieldType.MOUNTAINS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Deepsea -> shallows", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -3446,7 +3446,7 @@ export function footMovementTests() {
         fleet.loadArmy(army);
         GameState.fields = [new Field([0, 0], FieldType.DEEPSEA), new Field([0, -1], FieldType.SHALLOWS)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
     /* test("Deepsea -> deepsea", function (t: any) {
         let army = new FootArmy(111, 1000, 1, 0, 0, 0, false, 0, 0, 1);
@@ -3467,6 +3467,6 @@ export function footMovementTests() {
         fleet.loadArmy(army);
         GameState.fields = [new Field([0, 0], FieldType.DEEPSEA), new Field([0, -1], FieldType.DEEPSEA)];
         army.clickedMoves();
-        t.moveImpossible(army.possibleMoves, { dir: 0, x: 0, y: -1 });  TODO
+        t.moveImpossible(army.possibleMoves, new Move(0, 0, false, false, [0, -1], Direction.NW));
     });
 };

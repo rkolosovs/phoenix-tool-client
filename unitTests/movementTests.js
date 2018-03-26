@@ -30,11 +30,7 @@ qunit_1.QUnit.assert.movePossible = function (actual, expected) {
     }
 };
 qunit_1.QUnit.assert.moveImpossible = function (actual, expected) {
-    if (actual.some(possibleMove => possibleMove.heightPoints === expected.heightPoints &&
-        possibleMove.movePoints === expected.movePoints &&
-        possibleMove.direction === expected.direction &&
-        possibleMove.loading === expected.loading &&
-        possibleMove.unloading === expected.unloading &&
+    if (actual.some(possibleMove => possibleMove.direction === expected.direction &&
         possibleMove.destination[0] === expected.destination[0] &&
         possibleMove.destination[1] === expected.destination[1])) {
         this.pushResult({ result: false, actual: actual, expected: expected,
