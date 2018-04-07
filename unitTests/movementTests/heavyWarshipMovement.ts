@@ -61,7 +61,7 @@ export function heavyWarshipMovementTests() {
     test( "Shallows -> shallows on coast", function(t: any) {
         let fleet = new Fleet(311, GameState.realms[0], 21, 1, 0, 1, [0, 1], Fleet.MAX_MOVE_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.SHALLOWS), new Field([0, -1], FieldType.SHALLOWS), new Field([1, -1], FieldType.LOWLANDS)];
-        GameState.realms[0].territory = GameState.fields.filter(field => field.coordinates[0] === 0 && field.coordinates[1] === -1);
+        GameState.realms[0].territory = GameState.fields.filter(field => field.coordinates[0] === 1 && field.coordinates[1] === -1);
         fleet.clickedMoves();
         t.movePossible( fleet.possibleMoves, new Move(7, 0, false, false, [0, -1], Direction.NW));
     });
@@ -74,7 +74,7 @@ export function heavyWarshipMovementTests() {
     test( "Shallows -> deepsea on coast", function(t: any) {
         let fleet = new Fleet(311, GameState.realms[0], 21, 1, 0, 1, [0, 1], Fleet.MAX_MOVE_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.SHALLOWS), new Field([0, -1], FieldType.DEEPSEA), new Field([1, -1], FieldType.LOWLANDS)];
-        GameState.realms[0].territory = GameState.fields.filter(field => field.coordinates[0] === 0 && field.coordinates[1] === -1);
+        GameState.realms[0].territory = GameState.fields.filter(field => field.coordinates[0] === 1 && field.coordinates[1] === -1);
         fleet.clickedMoves();
         t.movePossible( fleet.possibleMoves, new Move(14, 0, false, false, [0, -1], Direction.NW));
     });
@@ -129,7 +129,7 @@ export function heavyWarshipMovementTests() {
     test( "Deepsea -> shallows on coast", function(t: any) {
         let fleet = new Fleet(311, GameState.realms[0], 21, 1, 0, 1, [0, 1], Fleet.MAX_MOVE_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.DEEPSEA), new Field([0, -1], FieldType.SHALLOWS), new Field([1, -1], FieldType.LOWLANDS)];
-        GameState.realms[0].territory = GameState.fields.filter(field => field.coordinates[0] === 0 && field.coordinates[1] === -1);
+        GameState.realms[0].territory = GameState.fields.filter(field => field.coordinates[0] === 1 && field.coordinates[1] === -1);
         fleet.clickedMoves();
         t.movePossible( fleet.possibleMoves, new Move(7, 0, false, false, [0, -1], Direction.NW));
     });
@@ -142,7 +142,7 @@ export function heavyWarshipMovementTests() {
     test( "Deepsea -> deepsea on coast", function(t: any) {
         let fleet = new Fleet(311, GameState.realms[0], 21, 1, 0, 1, [0, 1], Fleet.MAX_MOVE_POINTS, false);
         GameState.fields = [new Field([0, 0], FieldType.DEEPSEA), new Field([0, -1], FieldType.DEEPSEA), new Field([1, -1], FieldType.LOWLANDS)];
-        GameState.realms[0].territory = GameState.fields.filter(field => field.coordinates[0] === 0 && field.coordinates[1] === -1);
+        GameState.realms[0].territory = GameState.fields.filter(field => field.coordinates[0] === 1 && field.coordinates[1] === -1);
         fleet.clickedMoves();
         t.movePossible( fleet.possibleMoves, new Move(14, 0, false, false, [0, -1], Direction.NW));
     });
