@@ -165,7 +165,7 @@ function lightCatapultMovementTests() {
         let army = new footArmy_1.FootArmy(111, gameState_1.GameState.realms[0], 1000, 1, 1, 0, 0, [0, 0], footArmy_1.FootArmy.MAX_MOVE_POINTS, 2);
         let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 0, [0, -1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
         gameState_1.GameState.armies = [army, fleet];
-        gameState_1.GameState.fields = [new field_1.Field([0, 0], 8 /* SWAMP */), new field_1.Field([0, -1], 0 /* SHALLOWS */)];
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 2 /* LOWLANDS */), new field_1.Field([0, -1], 0 /* SHALLOWS */)];
         army.clickedMoves();
         t.moveImpossible(army.possibleMoves, new move_1.Move(0, 2, true, false, [0, -1], 0 /* NW */));
     });
@@ -173,7 +173,7 @@ function lightCatapultMovementTests() {
         let army = new footArmy_1.FootArmy(111, gameState_1.GameState.realms[0], 1000, 1, 1, 0, 0, [0, 0], footArmy_1.FootArmy.MAX_MOVE_POINTS, 2);
         let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 0, [0, -1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
         gameState_1.GameState.armies = [army, fleet];
-        gameState_1.GameState.fields = [new field_1.Field([0, 0], 8 /* SWAMP */), new field_1.Field([0, -1], 0 /* SHALLOWS */)];
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 2 /* LOWLANDS */), new field_1.Field([0, -1], 0 /* SHALLOWS */)];
         gameState_1.GameState.buildings = [new nonDestructibleBuilding_1.NonDestructibleBuilding(6 /* HARBOR */, [0, 0], [0, -1], gameState_1.GameState.realms[0])];
         army.clickedMoves();
         t.movePossible(army.possibleMoves, new move_1.Move(0, 2, true, false, [0, -1], 0 /* NW */));
@@ -182,7 +182,7 @@ function lightCatapultMovementTests() {
         let army = new footArmy_1.FootArmy(111, gameState_1.GameState.realms[0], 1000, 1, 1, 0, 0, [0, 0], footArmy_1.FootArmy.MAX_MOVE_POINTS, 2);
         let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 0, [0, -1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
         gameState_1.GameState.armies = [army, fleet];
-        gameState_1.GameState.fields = [new field_1.Field([0, 0], 8 /* SWAMP */), new field_1.Field([0, -1], 1 /* DEEPSEA */)];
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 2 /* LOWLANDS */), new field_1.Field([0, -1], 1 /* DEEPSEA */)];
         army.clickedMoves();
         t.moveImpossible(army.possibleMoves, new move_1.Move(0, 2, true, false, [0, -1], 0 /* NW */));
     });
@@ -190,7 +190,7 @@ function lightCatapultMovementTests() {
         let army = new footArmy_1.FootArmy(111, gameState_1.GameState.realms[0], 1000, 1, 1, 0, 0, [0, 0], footArmy_1.FootArmy.MAX_MOVE_POINTS, 2);
         let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 0, [0, -1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
         gameState_1.GameState.armies = [army, fleet];
-        gameState_1.GameState.fields = [new field_1.Field([0, 0], 8 /* SWAMP */), new field_1.Field([0, -1], 1 /* DEEPSEA */)];
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 2 /* LOWLANDS */), new field_1.Field([0, -1], 1 /* DEEPSEA */)];
         gameState_1.GameState.buildings = [new nonDestructibleBuilding_1.NonDestructibleBuilding(6 /* HARBOR */, [0, 0], [0, -1], gameState_1.GameState.realms[0])];
         army.clickedMoves();
         t.movePossible(army.possibleMoves, new move_1.Move(0, 2, true, false, [0, -1], 0 /* NW */));
