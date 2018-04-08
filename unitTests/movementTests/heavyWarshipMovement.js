@@ -2,144 +2,146 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const fleet_1 = require("../../armies/fleet");
 const gameState_1 = require("../../gameState");
+const field_1 = require("../../map/field");
+const move_1 = require("../../armies/move");
 const qunit_1 = require("qunit");
 const { test } = qunit_1.QUnit;
 function heavyWarshipMovementTests() {
     test("Shallows -> lowlands", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 0 }, { 'x': 0, 'y': -1, 'type': 2 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 0 /* SHALLOWS */), new field_1.Field([0, -1], 2 /* LOWLANDS */)];
         fleet.clickedMoves();
-        t.moveImpossible(fleet.possibleMoves, { dir: 0, x: 0, y: -1 });
+        t.moveImpossible(fleet.possibleMoves, new move_1.Move(0, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Shallows -> desert", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 0 }, { 'x': 0, 'y': -1, 'type': 7 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 0 /* SHALLOWS */), new field_1.Field([0, -1], 7 /* DESERT */)];
         fleet.clickedMoves();
-        t.moveImpossible(fleet.possibleMoves, { dir: 0, x: 0, y: -1 });
+        t.moveImpossible(fleet.possibleMoves, new move_1.Move(0, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Shallows -> woods", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 0 }, { 'x': 0, 'y': -1, 'type': 3 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 0 /* SHALLOWS */), new field_1.Field([0, -1], 3 /* WOODS */)];
         fleet.clickedMoves();
-        t.moveImpossible(fleet.possibleMoves, { dir: 0, x: 0, y: -1 });
+        t.moveImpossible(fleet.possibleMoves, new move_1.Move(0, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Shallows -> swamp", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 0 }, { 'x': 0, 'y': -1, 'type': 8 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 0 /* SHALLOWS */), new field_1.Field([0, -1], 8 /* SWAMP */)];
         fleet.clickedMoves();
-        t.moveImpossible(fleet.possibleMoves, { dir: 0, x: 0, y: -1 });
+        t.moveImpossible(fleet.possibleMoves, new move_1.Move(0, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Shallows -> hills", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 0 }, { 'x': 0, 'y': -1, 'type': 4 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 0 /* SHALLOWS */), new field_1.Field([0, -1], 4 /* HILLS */)];
         fleet.clickedMoves();
-        t.moveImpossible(fleet.possibleMoves, { dir: 0, x: 0, y: -1 });
+        t.moveImpossible(fleet.possibleMoves, new move_1.Move(0, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Shallows -> highlands", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 0 }, { 'x': 0, 'y': -1, 'type': 5 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 0 /* SHALLOWS */), new field_1.Field([0, -1], 5 /* HIGHLANDS */)];
         fleet.clickedMoves();
-        t.moveImpossible(fleet.possibleMoves, { dir: 0, x: 0, y: -1 });
+        t.moveImpossible(fleet.possibleMoves, new move_1.Move(0, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Shallows -> mountains", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 0 }, { 'x': 0, 'y': -1, 'type': 6 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 0 /* SHALLOWS */), new field_1.Field([0, -1], 6 /* MOUNTAINS */)];
         fleet.clickedMoves();
-        t.moveImpossible(fleet.possibleMoves, { dir: 0, x: 0, y: -1 });
+        t.moveImpossible(fleet.possibleMoves, new move_1.Move(0, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Shallows -> shallows", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 0 }, { 'x': 0, 'y': -1, 'type': 0 }, { 'x': 1, 'y': -1, 'type': 2 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 0 /* SHALLOWS */), new field_1.Field([0, -1], 0 /* SHALLOWS */), new field_1.Field([1, -1], 2 /* LOWLANDS */)];
         fleet.clickedMoves();
-        t.movePossible(fleet.possibleMoves, { changHeight: false, dir: 0, movepoints: 10, height: 2, landunit: false, x: 0, y: -1 });
+        t.movePossible(fleet.possibleMoves, new move_1.Move(10, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Shallows -> shallows on coast", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 0 }, { 'x': 0, 'y': -1, 'type': 0 }, { 'x': 1, 'y': -1, 'type': 2 }];
-        borders = [{ 'tag': 'r01', 'land': [[1, -1]] }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 0 /* SHALLOWS */), new field_1.Field([0, -1], 0 /* SHALLOWS */), new field_1.Field([1, -1], 2 /* LOWLANDS */)];
+        gameState_1.GameState.realms[0].territory = gameState_1.GameState.fields.filter(field => field.coordinates[0] === 1 && field.coordinates[1] === -1);
         fleet.clickedMoves();
-        t.movePossible(fleet.possibleMoves, { changHeight: false, dir: 0, movepoints: 7, height: 2, landunit: false, x: 0, y: -1 });
+        t.movePossible(fleet.possibleMoves, new move_1.Move(7, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Shallows -> deepsea", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 0 }, { 'x': 0, 'y': -1, 'type': 1 }, { 'x': 1, 'y': -1, 'type': 2 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 0 /* SHALLOWS */), new field_1.Field([0, -1], 1 /* DEEPSEA */), new field_1.Field([1, -1], 2 /* LOWLANDS */)];
         fleet.clickedMoves();
-        t.movePossible(fleet.possibleMoves, { changHeight: false, dir: 0, movepoints: 21, height: 2, landunit: false, x: 0, y: -1 });
+        t.movePossible(fleet.possibleMoves, new move_1.Move(21, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Shallows -> deepsea on coast", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 0 }, { 'x': 0, 'y': -1, 'type': 1 }, { 'x': 1, 'y': -1, 'type': 2 }];
-        borders = [{ 'tag': 'r01', 'land': [[1, -1]] }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 0 /* SHALLOWS */), new field_1.Field([0, -1], 1 /* DEEPSEA */), new field_1.Field([1, -1], 2 /* LOWLANDS */)];
+        gameState_1.GameState.realms[0].territory = gameState_1.GameState.fields.filter(field => field.coordinates[0] === 1 && field.coordinates[1] === -1);
         fleet.clickedMoves();
-        t.movePossible(fleet.possibleMoves, { changHeight: false, dir: 0, movepoints: 14, height: 2, landunit: false, x: 0, y: -1 });
+        t.movePossible(fleet.possibleMoves, new move_1.Move(14, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Deepsea -> lowlands", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 1 }, { 'x': 0, 'y': -1, 'type': 2 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 1 /* DEEPSEA */), new field_1.Field([0, -1], 2 /* LOWLANDS */)];
         fleet.clickedMoves();
-        t.moveImpossible(fleet.possibleMoves, { dir: 0, x: 0, y: -1 });
+        t.moveImpossible(fleet.possibleMoves, new move_1.Move(0, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Deepsea -> desert", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 1 }, { 'x': 0, 'y': -1, 'type': 7 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 1 /* DEEPSEA */), new field_1.Field([0, -1], 7 /* DESERT */)];
         fleet.clickedMoves();
-        t.moveImpossible(fleet.possibleMoves, { dir: 0, x: 0, y: -1 });
+        t.moveImpossible(fleet.possibleMoves, new move_1.Move(0, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Deepsea -> woods", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 1 }, { 'x': 0, 'y': -1, 'type': 3 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 1 /* DEEPSEA */), new field_1.Field([0, -1], 3 /* WOODS */)];
         fleet.clickedMoves();
-        t.moveImpossible(fleet.possibleMoves, { dir: 0, x: 0, y: -1 });
+        t.moveImpossible(fleet.possibleMoves, new move_1.Move(0, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Deepsea -> swamp", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 1 }, { 'x': 0, 'y': -1, 'type': 8 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 1 /* DEEPSEA */), new field_1.Field([0, -1], 8 /* SWAMP */)];
         fleet.clickedMoves();
-        t.moveImpossible(fleet.possibleMoves, { dir: 0, x: 0, y: -1 });
+        t.moveImpossible(fleet.possibleMoves, new move_1.Move(0, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Deepsea -> hills", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 1 }, { 'x': 0, 'y': -1, 'type': 4 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 1 /* DEEPSEA */), new field_1.Field([0, -1], 4 /* HILLS */)];
         fleet.clickedMoves();
-        t.moveImpossible(fleet.possibleMoves, { dir: 0, x: 0, y: -1 });
+        t.moveImpossible(fleet.possibleMoves, new move_1.Move(0, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Deepsea -> highlands", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 1 }, { 'x': 0, 'y': -1, 'type': 5 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 1 /* DEEPSEA */), new field_1.Field([0, -1], 5 /* HIGHLANDS */)];
         fleet.clickedMoves();
-        t.moveImpossible(fleet.possibleMoves, { dir: 0, x: 0, y: -1 });
+        t.moveImpossible(fleet.possibleMoves, new move_1.Move(0, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Deepsea -> mountains", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 1 }, { 'x': 0, 'y': -1, 'type': 6 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 1 /* DEEPSEA */), new field_1.Field([0, -1], 6 /* MOUNTAINS */)];
         fleet.clickedMoves();
-        t.moveImpossible(fleet.possibleMoves, { dir: 0, x: 0, y: -1 });
+        t.moveImpossible(fleet.possibleMoves, new move_1.Move(0, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Deepsea -> shallows", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 1 }, { 'x': 0, 'y': -1, 'type': 0 }, { 'x': 1, 'y': -1, 'type': 2 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 1 /* DEEPSEA */), new field_1.Field([0, -1], 0 /* SHALLOWS */), new field_1.Field([1, -1], 2 /* LOWLANDS */)];
         fleet.clickedMoves();
-        t.movePossible(fleet.possibleMoves, { changHeight: false, dir: 0, movepoints: 10, height: 2, landunit: false, x: 0, y: -1 });
+        t.movePossible(fleet.possibleMoves, new move_1.Move(10, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Deepsea -> shallows on coast", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 1 }, { 'x': 0, 'y': -1, 'type': 0 }, { 'x': 1, 'y': -1, 'type': 2 }];
-        borders = [{ 'tag': 'r01', 'land': [[1, -1]] }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 1 /* DEEPSEA */), new field_1.Field([0, -1], 0 /* SHALLOWS */), new field_1.Field([1, -1], 2 /* LOWLANDS */)];
+        gameState_1.GameState.realms[0].territory = gameState_1.GameState.fields.filter(field => field.coordinates[0] === 1 && field.coordinates[1] === -1);
         fleet.clickedMoves();
-        t.movePossible(fleet.possibleMoves, { changHeight: false, dir: 0, movepoints: 7, height: 2, landunit: false, x: 0, y: -1 });
+        t.movePossible(fleet.possibleMoves, new move_1.Move(7, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Deepsea -> deepsea", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 1 }, { 'x': 0, 'y': -1, 'type': 1 }, { 'x': 1, 'y': -1, 'type': 2 }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 1 /* DEEPSEA */), new field_1.Field([0, -1], 1 /* DEEPSEA */), new field_1.Field([1, -1], 2 /* LOWLANDS */)];
         fleet.clickedMoves();
-        t.movePossible(fleet.possibleMoves, { changHeight: false, dir: 0, movepoints: 21, height: 2, landunit: false, x: 0, y: -1 });
+        t.movePossible(fleet.possibleMoves, new move_1.Move(21, 0, false, false, [0, -1], 0 /* NW */));
     });
     test("Deepsea -> deepsea on coast", function (t) {
-        let fleet = new fleet_1.Fleet(311, 21, 1, 0, 1, false, 0, 0, 1);
-        gameState_1.GameState.fields = [{ 'x': 0, 'y': 0, 'type': 1 }, { 'x': 0, 'y': -1, 'type': 1 }, { 'x': 1, 'y': -1, 'type': 2 }];
-        borders = [{ 'tag': 'r01', 'land': [[1, -1]] }];
+        let fleet = new fleet_1.Fleet(311, gameState_1.GameState.realms[0], 21, 1, 0, 1, [0, 1], fleet_1.Fleet.MAX_MOVE_POINTS, false);
+        gameState_1.GameState.fields = [new field_1.Field([0, 0], 1 /* DEEPSEA */), new field_1.Field([0, -1], 1 /* DEEPSEA */), new field_1.Field([1, -1], 2 /* LOWLANDS */)];
+        gameState_1.GameState.realms[0].territory = gameState_1.GameState.fields.filter(field => field.coordinates[0] === 1 && field.coordinates[1] === -1);
         fleet.clickedMoves();
-        t.movePossible(fleet.possibleMoves, { changHeight: false, dir: 0, movepoints: 14, height: 2, landunit: false, x: 0, y: -1 });
+        t.movePossible(fleet.possibleMoves, new move_1.Move(14, 0, false, false, [0, -1], 0 /* NW */));
     });
 }
 exports.heavyWarshipMovementTests = heavyWarshipMovementTests;
