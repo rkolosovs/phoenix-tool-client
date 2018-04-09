@@ -8,7 +8,7 @@ import {GameState} from "../../gameState";
 const { test } = QUnit;
 
 export function directionalTerrainBattleTests() {
-    test( "Attack onto a street.", function(t) {
+    test( "Attack onto a street.", function(t:any) {
         attackerArmies[18].changePosition([9, 7]);
         attackerArmies[18].setMovePoints(attackerArmies[18].getMaxMovePoints());
         attackerArmies[18].checkForPossibleMove(Direction.SE);
@@ -19,7 +19,7 @@ export function directionalTerrainBattleTests() {
             [], [], [9, 8], 10, 10),
             new BattleResult(Result.ATTACKER_VICTORY, [818.18], [1100]));
     });
-    test( "Attack out of a forest.", function(t) {
+    test( "Attack out of a forest.", function(t:any) {
         attackerArmies[18].changePosition([10, 9]);
         attackerArmies[18].setMovePoints(attackerArmies[18].getMaxMovePoints());
         attackerArmies[18].checkForPossibleMove(Direction.W);
@@ -30,7 +30,7 @@ export function directionalTerrainBattleTests() {
             [], [], [9, 9], 10, 10),
             new BattleResult(Result.ATTACKER_VICTORY, [818.18], [1100]));
     });
-    test( "Attack into a swamp.", function(t) {
+    test( "Attack into a swamp.", function(t:any) {
         attackerArmies[18].changePosition([9, 10]);
         attackerArmies[18].setMovePoints(attackerArmies[18].getMaxMovePoints());
         attackerArmies[18].checkForPossibleMove(Direction.E);
@@ -41,7 +41,7 @@ export function directionalTerrainBattleTests() {
             [], [], [10, 10], 10, 10),
             new BattleResult(Result.ATTACKER_VICTORY, [818.18], [1100]));
     });
-    test( "Attack into a desert.", function(t) {
+    test( "Attack into a desert.", function(t:any) {
         attackerArmies[18].changePosition([10, 11]);
         attackerArmies[18].setMovePoints(attackerArmies[18].getMaxMovePoints());
         attackerArmies[18].checkForPossibleMove(Direction.E);
@@ -52,7 +52,7 @@ export function directionalTerrainBattleTests() {
             [], [], [11, 11], 10, 10),
             new BattleResult(Result.ATTACKER_VICTORY, [818.18], [1100]));
     });
-    test( "Attack downhill.", function(t) {
+    test( "Attack downhill.", function(t:any) {
         attackerArmies[18].changePosition([8, 9]);
         attackerArmies[18].setMovePoints(attackerArmies[18].getMaxMovePoints());
         attackerArmies[18].checkForPossibleMove(Direction.W);
@@ -63,7 +63,7 @@ export function directionalTerrainBattleTests() {
             [], [], [9, 9], 10, 10),
             new BattleResult(Result.ATTACKER_VICTORY, [818.18], [1100]));
     });
-    test( "Defense downhill (attack uphill).", function(t) {
+    test( "Defense downhill (attack uphill).", function(t:any) {
         attackerArmies[18].changePosition([8, 9]);
         attackerArmies[18].setMovePoints(attackerArmies[18].getMaxMovePoints());
         attackerArmies[18].checkForPossibleMove(Direction.SW);
@@ -74,7 +74,7 @@ export function directionalTerrainBattleTests() {
             [], [], [8, 8], 10, 10),
             new BattleResult(Result.DEFENDER_VICTORY, [1100], [818.18]));
     });
-    test( "Defense behind a river.", function(t) {
+    test( "Defense behind a river.", function(t:any) {
         attackerArmies[18].changePosition([9, 7]);
         attackerArmies[18].setMovePoints(attackerArmies[18].getMaxMovePoints());
         attackerArmies[18].checkForPossibleMove(Direction.SW);
@@ -85,7 +85,7 @@ export function directionalTerrainBattleTests() {
             [], [], [8, 8], 10, 10),
             new BattleResult(Result.DEFENDER_VICTORY, [1250], [720]));
     });
-    test( "Defense behind a bridge.", function(t) {
+    test( "Defense behind a bridge.", function(t:any) {
         attackerArmies[18].changePosition([8, 7]);
         attackerArmies[18].setMovePoints(attackerArmies[18].getMaxMovePoints());
         attackerArmies[18].checkForPossibleMove(Direction.SE);
@@ -96,7 +96,7 @@ export function directionalTerrainBattleTests() {
             [], [], [8, 8], 10, 10),
             new BattleResult(Result.DEFENDER_VICTORY, [1150], [782.61]));
     });
-    test( "Defense behind a wall.", function(t) {
+    test( "Defense behind a wall.", function(t:any) {
         attackerArmies[18].changePosition([7, 8]);
         attackerArmies[18].setMovePoints(attackerArmies[18].getMaxMovePoints());
         attackerArmies[18].checkForPossibleMove(Direction.E);
@@ -107,7 +107,7 @@ export function directionalTerrainBattleTests() {
             [], [], [8, 8], 10, 10),
             new BattleResult(Result.DEFENDER_VICTORY, [1250], [720]));
     });
-    test( "Defense in own caste.", function(t) {
+    test( "Defense in own caste.", function(t:any) {
         attackerArmies[18].changePosition([2, 3]);
         attackerArmies[18].setMovePoints(attackerArmies[18].getMaxMovePoints());
         attackerArmies[18].checkForPossibleMove(Direction.E);
@@ -118,7 +118,7 @@ export function directionalTerrainBattleTests() {
             [], [], [3, 3], 10, 10),
             new BattleResult(Result.DEFENDER_VICTORY, [1500], [600]));
     });
-    test( "Defense in own city.", function(t) {
+    test( "Defense in own city.", function(t:any) {
         attackerArmies[18].changePosition([3, 4]);
         attackerArmies[18].setMovePoints(attackerArmies[18].getMaxMovePoints());
         attackerArmies[18].checkForPossibleMove(Direction.E);
@@ -129,7 +129,7 @@ export function directionalTerrainBattleTests() {
             [], [], [4, 4], 10, 10),
             new BattleResult(Result.DEFENDER_VICTORY, [2000], [450]));
     });
-    test( "Defense in own fortress.", function(t) {
+    test( "Defense in own fortress.", function(t:any) {
         attackerArmies[18].changePosition([4, 5]);
         attackerArmies[18].setMovePoints(attackerArmies[18].getMaxMovePoints());
         attackerArmies[18].checkForPossibleMove(Direction.E);
@@ -140,7 +140,7 @@ export function directionalTerrainBattleTests() {
             [], [], [5, 5], 10, 10),
             new BattleResult(Result.DEFENDER_VICTORY, [2500], [360]));
     });
-    test( "Defense in own capital.", function(t) {
+    test( "Defense in own capital.", function(t:any) {
         attackerArmies[18].changePosition([5, 6]);
         attackerArmies[18].setMovePoints(attackerArmies[18].getMaxMovePoints());
         attackerArmies[18].checkForPossibleMove(Direction.E);
@@ -151,7 +151,7 @@ export function directionalTerrainBattleTests() {
             [], [], [6, 6], 10, 10),
             new BattleResult(Result.DEFENDER_VICTORY, [3000], [300]));
     });
-    test( "Defense in own capital fortress.", function(t) {
+    test( "Defense in own capital fortress.", function(t:any) {
         attackerArmies[18].changePosition([6, 7]);
         attackerArmies[18].setMovePoints(attackerArmies[18].getMaxMovePoints());
         attackerArmies[18].checkForPossibleMove(Direction.E);
@@ -162,7 +162,7 @@ export function directionalTerrainBattleTests() {
             [], [], [7, 7], 10, 10),
             new BattleResult(Result.DEFENDER_VICTORY, [3500], [257.14]));
     });
-    test( "Defense in foreign production building.", function(t) {
+    test( "Defense in foreign production building.", function(t:any) {
         attackerArmies[18].changePosition([3, 4]);
         attackerArmies[18].setMovePoints(attackerArmies[18].getMaxMovePoints());
         attackerArmies[18].checkForPossibleMove(Direction.E);

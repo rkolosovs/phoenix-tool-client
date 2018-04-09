@@ -9,7 +9,7 @@ import {Fleet} from "../../armies/fleet";
 const { test } = QUnit;
 
 export function complexBattleTest() {
-    test( "Large land battle at the defenders castle.", function(t) {
+    test( "Large land battle at the defenders castle.", function(t:any) {
         let attackingArmies = [
             new FootArmy(121, GameState.realms[1], 12000, 40, 0,
                 0, 0, [3, 3], 0, 0, true), //army of attacker realm
@@ -31,7 +31,7 @@ export function complexBattleTest() {
                 [5192.2, 37638.48, 18819.24], [29575.49, 14385.3, 4196.45]));
         //TODO Defender not completely wiped out. Check in with the SL to see what is to be done about it.
     });
-    test( "Large naval battle.", function(t) {
+    test( "Large naval battle.", function(t:any) {
         let attackingArmies = [
             new Fleet(321, GameState.realms[0], 120, 40, 0, 0,
                 [2, 2], 0, true), //army of attacker realm
