@@ -75,7 +75,7 @@ class BattleHandler {
     }
     static terrainGP(army, attacker, fieldType, location) {
         let buildingsOnTheField = gameState_1.GameState.buildings.filter(current => (current.getPosition()[0] === location[0] && current.getPosition()[1] === location[1] && current.type <= 4));
-        if (buildingsOnTheField.length > 0) {
+        if (buildingsOnTheField.length > 0) { //production buildings on field negate usual terrain bonus
             if (attacker) {
                 return 0;
             }
@@ -91,7 +91,7 @@ class BattleHandler {
                 default: return 0;
             }
         }
-        else {
+        else { //usual terrain bonus applies
             let terrainGPBonus = 0;
             let findRealm = gameState_1.GameState.realms.find(realm => (realm === army.owner));
             let homeTurf = 0 /* SHALLOWS */;
@@ -99,12 +99,12 @@ class BattleHandler {
                 homeTurf = findRealm.homeTurf;
             }
             if (homeTurf === fieldType || (homeTurf === 5 /* HIGHLANDS */ && fieldType === 6 /* MOUNTAINS */) ||
-                (homeTurf === 6 /* MOUNTAINS */ && fieldType === 5 /* HIGHLANDS */)) {
+                (homeTurf === 6 /* MOUNTAINS */ && fieldType === 5 /* HIGHLANDS */)) { //home terrain bonus applies
                 terrainGPBonus += 50;
             }
             if ((army instanceof footArmy_1.FootArmy && (fieldType === 3 /* WOODS */ || fieldType === 8 /* SWAMP */)) ||
                 (army instanceof riderArmy_1.RiderArmy && (fieldType === 2 /* LOWLANDS */ || fieldType === 4 /* HILLS */ ||
-                    fieldType === 7 /* DESERT */))) {
+                    fieldType === 7 /* DESERT */))) { //footmen/rider terrain bonus
                 terrainGPBonus += 140;
             }
             return terrainGPBonus;

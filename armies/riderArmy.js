@@ -36,7 +36,7 @@ class RiderArmy extends landArmy_1.LandArmy {
     computeMoveCost(thereIsAStreet, thereIsAHarbor, thereIsARiver, thereIsABridge, rightOfPassage, target) {
         switch (hexFunctions_1.HexFunction.fieldType(target)) {
             case 0 /* SHALLOWS */:
-            case 1 /* DEEPSEA */://watter
+            case 1 /* DEEPSEA */: //watter
                 //already embarked
                 if (this.transportingFleet != undefined) {
                     throw new Error("You are already embarked on a Fleet.");
@@ -52,7 +52,7 @@ class RiderArmy extends landArmy_1.LandArmy {
                 }
             case 2 /* LOWLANDS */:
             case 4 /* HILLS */:
-            case 7 /* DESERT */: if (thereIsARiver && !thereIsABridge) {
+            case 7 /* DESERT */: if (thereIsARiver && !thereIsABridge) { //plains, hills, desert
                 if (this.movePoints >= this.getMaxMovePoints()) {
                     return this.getMaxMovePoints();
                 }
@@ -60,27 +60,27 @@ class RiderArmy extends landArmy_1.LandArmy {
                     throw new Error("You need you full movement to cross a river.");
                 }
             }
-            else if (thereIsAStreet) {
-                if (rightOfPassage && this.movePoints >= 3) {
+            else if (thereIsAStreet) { //street
+                if (rightOfPassage && this.movePoints >= 3) { //street & right of passage
                     return 3;
                 }
-                else if (this.movePoints >= 4) {
+                else if (this.movePoints >= 4) { //street & no right of passage
                     return 4;
                 }
                 else {
                     throw new Error("You don't have enough movement Points.");
                 }
             }
-            else if (rightOfPassage && this.movePoints >= 4) {
+            else if (rightOfPassage && this.movePoints >= 4) { //no street & right of passage
                 return 4;
             }
-            else if (this.movePoints >= 7) {
+            else if (this.movePoints >= 7) { //no street & no right of passage
                 return 7;
             }
             else {
                 throw new Error("You don't have enough movement Points.");
             }
-            case 5 /* HIGHLANDS */: if (thereIsARiver && !thereIsABridge) {
+            case 5 /* HIGHLANDS */: if (thereIsARiver && !thereIsABridge) { //highlands
                 if (this.movePoints >= this.getMaxMovePoints()) {
                     return this.getMaxMovePoints();
                 }
@@ -89,20 +89,20 @@ class RiderArmy extends landArmy_1.LandArmy {
                 }
             }
             else if (thereIsAStreet) {
-                if (rightOfPassage && this.movePoints >= 4) {
+                if (rightOfPassage && this.movePoints >= 4) { //street & right of passage
                     return 4;
                 }
-                else if (this.movePoints >= 7) {
+                else if (this.movePoints >= 7) { //street & no right of passage
                     return 7;
                 }
                 else {
                     throw new Error("You don't have enough movement Points.");
                 }
             }
-            else if (rightOfPassage && this.movePoints >= 7) {
+            else if (rightOfPassage && this.movePoints >= 7) { //no street & right of passage
                 return 7;
             }
-            else if (this.movePoints >= 21) {
+            else if (this.movePoints >= 21) { //no street & no right of passage
                 return 21;
             }
             else {
@@ -110,7 +110,7 @@ class RiderArmy extends landArmy_1.LandArmy {
             }
             case 6 /* MOUNTAINS */: throw new Error("Cavalry can not move through the mountains."); //mountains
             case 3 /* WOODS */:
-            case 8 /* SWAMP */: if (thereIsARiver && !thereIsABridge) {
+            case 8 /* SWAMP */: if (thereIsARiver && !thereIsABridge) { //forest, swamp
                 if (this.movePoints >= this.getMaxMovePoints()) {
                     return this.getMaxMovePoints();
                 }
@@ -119,20 +119,20 @@ class RiderArmy extends landArmy_1.LandArmy {
                 }
             }
             else if (thereIsAStreet) {
-                if (rightOfPassage && this.getMovePoints() >= 3) {
+                if (rightOfPassage && this.getMovePoints() >= 3) { //street & right of passage
                     return 3;
                 }
-                else if (this.getMovePoints() >= 5) {
+                else if (this.getMovePoints() >= 5) { //street & no right of passage
                     return 5;
                 }
                 else {
                     throw new Error("You don't have enough movement Points.");
                 }
             }
-            else if (rightOfPassage && this.getMovePoints() >= 5) {
+            else if (rightOfPassage && this.getMovePoints() >= 5) { //no street && right of passage
                 return 5;
             }
-            else if (this.getMovePoints() >= 10) {
+            else if (this.getMovePoints() >= 10) { //no street & no right of passage
                 return 10;
             }
             else {

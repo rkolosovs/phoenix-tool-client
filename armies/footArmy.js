@@ -50,7 +50,7 @@ class FootArmy extends landArmy_1.LandArmy {
     computeMoveCost(thereIsAStreet, thereIsAHarbor, thereIsARiver, thereIsABridge, rightOfPassage, target) {
         switch (hexFunctions_1.HexFunction.fieldType(target)) {
             case 0 /* SHALLOWS */:
-            case 1 /* DEEPSEA */://watter
+            case 1 /* DEEPSEA */: //watter
                 //already embarked
                 if (this.transportingFleet != undefined) {
                     throw new Error("You are already embarked on a Fleet.");
@@ -66,7 +66,7 @@ class FootArmy extends landArmy_1.LandArmy {
                 }
             case 2 /* LOWLANDS */:
             case 4 /* HILLS */:
-            case 7 /* DESERT */: if (thereIsARiver && !thereIsABridge) {
+            case 7 /* DESERT */: if (thereIsARiver && !thereIsABridge) { //plains, hills, desert
                 if (this.movePoints >= this.getMaxMovePoints()) {
                     return this.getMaxMovePoints();
                 }
@@ -74,45 +74,45 @@ class FootArmy extends landArmy_1.LandArmy {
                     throw new Error("You need you full movement to cross a river.");
                 }
             }
-            else if (thereIsAStreet) {
-                if (rightOfPassage) {
-                    if (this.heavyCatapultCount + this.lightCatapultCount > 0 && this.movePoints >= 4) {
+            else if (thereIsAStreet) { //street
+                if (rightOfPassage) { //right of passage
+                    if (this.heavyCatapultCount + this.lightCatapultCount > 0 && this.movePoints >= 4) { //catapults, street & right of passage
                         return 4;
                     }
-                    else if (this.movePoints >= 3) {
+                    else if (this.movePoints >= 3) { //no catapults, street & right of passage
                         return 3;
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
                     }
                 }
-                else if (this.movePoints >= 4) {
+                else if (this.movePoints >= 4) { //street & no right of passage
                     return 4;
                 }
                 else {
                     throw new Error("You don't have enough movement Points.");
                 }
             }
-            else {
-                if (rightOfPassage) {
-                    if (this.heavyCatapultCount + this.lightCatapultCount > 0 && this.movePoints >= 7) {
+            else { //no street
+                if (rightOfPassage) { //right of passage
+                    if (this.heavyCatapultCount + this.lightCatapultCount > 0 && this.movePoints >= 7) { //catapults, no street & right of passage
                         return 7;
                     }
-                    else if (this.movePoints >= 4) {
+                    else if (this.movePoints >= 4) { //no catapults, no street & right of passage
                         return 4;
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
                     }
                 }
-                else if (this.movePoints >= 7) {
+                else if (this.movePoints >= 7) { //no street & no right of passage
                     return 7;
                 }
                 else {
                     throw new Error("You don't have enough movement Points.");
                 }
             }
-            case 5 /* HIGHLANDS */: if (thereIsARiver && !thereIsABridge) {
+            case 5 /* HIGHLANDS */: if (thereIsARiver && !thereIsABridge) { //highlands
                 if (this.movePoints >= this.getMaxMovePoints()) {
                     return 9;
                 }
@@ -120,23 +120,23 @@ class FootArmy extends landArmy_1.LandArmy {
                     throw new Error("You need you full movement to cross a river.");
                 }
             }
-            else if (thereIsAStreet) {
-                if (rightOfPassage) {
-                    if (this.heavyCatapultCount > 0 && this.movePoints >= 7) {
+            else if (thereIsAStreet) { //street
+                if (rightOfPassage) { //street & right of passage
+                    if (this.heavyCatapultCount > 0 && this.movePoints >= 7) { //heavy catas, street & right of passage
                         return 7;
                     }
-                    else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 4) {
+                    else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 4) { //light catas, street & right of passage
                         return 4;
                     }
-                    else if (this.lightCatapultCount + this.heavyCatapultCount <= 0 && this.movePoints >= 3) {
+                    else if (this.lightCatapultCount + this.heavyCatapultCount <= 0 && this.movePoints >= 3) { //no catas, street & right of passage
                         return 3;
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
                     }
                 }
-                else {
-                    if (this.heavyCatapultCount > 0) {
+                else { //street & no right of passage
+                    if (this.heavyCatapultCount > 0) { //heavy catas, street & no right of passage
                         if (this.movePoints >= 7) {
                             return 7;
                         }
@@ -144,7 +144,7 @@ class FootArmy extends landArmy_1.LandArmy {
                             throw new Error("You don't have enough movement Points.");
                         }
                     }
-                    else if (this.movePoints >= 4) {
+                    else if (this.movePoints >= 4) { //light or no catas, street & no right of passage
                         return 4;
                     }
                     else {
@@ -152,26 +152,26 @@ class FootArmy extends landArmy_1.LandArmy {
                     }
                 }
             }
-            else {
-                if (rightOfPassage) {
-                    if (this.heavyCatapultCount > 0) {
+            else { //no street
+                if (rightOfPassage) { //no street & right of passage
+                    if (this.heavyCatapultCount > 0) { //heavy catas, no street & right of passage
                         throw new Error("You need a street to move into the highlands with heavy catapults.");
                     }
-                    else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 7) {
+                    else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 7) { //light catas, no street & right of passage
                         return 7;
                     }
-                    else if (this.heavyCatapultCount + this.lightCatapultCount <= 0 && this.movePoints >= 4) {
+                    else if (this.heavyCatapultCount + this.lightCatapultCount <= 0 && this.movePoints >= 4) { //no catas, no street & right of passage
                         return 4;
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
                     }
                 }
-                else {
-                    if (this.heavyCatapultCount > 0) {
+                else { //no street & no right of passage
+                    if (this.heavyCatapultCount > 0) { //heavy catas, no street & no right of passage
                         throw new Error("You need a street to move into the highlands with heavy catapults.");
                     }
-                    else if (this.heavyCatapultCount <= 0 && this.movePoints >= 7) {
+                    else if (this.heavyCatapultCount <= 0 && this.movePoints >= 7) { //light or no catas, no street & no right of passage
                         return 7;
                     }
                     else {
@@ -179,7 +179,7 @@ class FootArmy extends landArmy_1.LandArmy {
                     }
                 }
             }
-            case 6 /* MOUNTAINS */: if (thereIsARiver && !thereIsABridge) {
+            case 6 /* MOUNTAINS */: if (thereIsARiver && !thereIsABridge) { //mountains
                 if (this.movePoints >= this.getMaxMovePoints()) {
                     return 9;
                 }
@@ -187,29 +187,29 @@ class FootArmy extends landArmy_1.LandArmy {
                     throw new Error("You need you full movement to cross a river.");
                 }
             }
-            else if (thereIsAStreet) {
-                if (rightOfPassage) {
-                    if (this.heavyCatapultCount > 0) {
+            else if (thereIsAStreet) { //street
+                if (rightOfPassage) { //street & right of passage
+                    if (this.heavyCatapultCount > 0) { //heavy catas, street & right of passage
                         throw new Error("You can't move into the mountains with heavy catapults.");
                     }
-                    else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 4) {
+                    else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 4) { //light catas, street & right of passage
                         return 4;
                     }
-                    else if (this.heavyCatapultCount + this.lightCatapultCount <= 0 && this.movePoints >= 3) {
+                    else if (this.heavyCatapultCount + this.lightCatapultCount <= 0 && this.movePoints >= 3) { //no catas, street & right of passage
                         return 3;
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
                     }
                 }
-                else {
-                    if (this.heavyCatapultCount > 0) {
+                else { //street & no right of passage
+                    if (this.heavyCatapultCount > 0) { //heavy catas, street & no right of passage
                         throw new Error("You can't move into the mountains with heavy catapults.");
                     }
-                    else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 7) {
+                    else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 7) { //light catas, street & no right of passage
                         return 7;
                     }
-                    else if (this.heavyCatapultCount + this.lightCatapultCount <= 0 && this.movePoints >= 4) {
+                    else if (this.heavyCatapultCount + this.lightCatapultCount <= 0 && this.movePoints >= 4) { //no catas, street & no right of passage
                         return 4;
                     }
                     else {
@@ -217,15 +217,15 @@ class FootArmy extends landArmy_1.LandArmy {
                     }
                 }
             }
-            else {
-                if (this.heavyCatapultCount + this.lightCatapultCount > 0) {
+            else { //no street
+                if (this.heavyCatapultCount + this.lightCatapultCount > 0) { //light or heavy catas, no street
                     throw new Error("You need a street to move into the mountains with catapults.");
                 }
-                else {
-                    if (rightOfPassage && this.movePoints >= 4) {
+                else { //no catas, no street
+                    if (rightOfPassage && this.movePoints >= 4) { //no catas, no street & right of passage
                         return 4;
                     }
-                    else if (this.movePoints >= 7) {
+                    else if (this.movePoints >= 7) { //no catas, no street & no right of passage
                         return 7;
                     }
                     else {
@@ -234,7 +234,7 @@ class FootArmy extends landArmy_1.LandArmy {
                 }
             }
             case 3 /* WOODS */:
-            case 8 /* SWAMP */: if (thereIsARiver && !thereIsABridge) {
+            case 8 /* SWAMP */: if (thereIsARiver && !thereIsABridge) { //forest, swamp
                 if (this.movePoints >= this.getMaxMovePoints()) {
                     return 9;
                 }
@@ -242,26 +242,26 @@ class FootArmy extends landArmy_1.LandArmy {
                     throw new Error("You need you full movement to cross a river.");
                 }
             }
-            else if (thereIsAStreet) {
-                if (rightOfPassage) {
-                    if (this.heavyCatapultCount > 0 && this.movePoints >= 7) {
+            else if (thereIsAStreet) { //street
+                if (rightOfPassage) { //street & right of passage
+                    if (this.heavyCatapultCount > 0 && this.movePoints >= 7) { //heavy catas, street & right of passage
                         return 7;
                     }
-                    else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 4) {
+                    else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 4) { //light catas, street & right of passage
                         return 4;
                     }
-                    else if (this.heavyCatapultCount + this.lightCatapultCount <= 0 && this.movePoints >= 3) {
+                    else if (this.heavyCatapultCount + this.lightCatapultCount <= 0 && this.movePoints >= 3) { //no catas, street & right of passage
                         return 3;
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
                     }
                 }
-                else {
-                    if (this.heavyCatapultCount > 0 && this.movePoints >= 7) {
+                else { //street & no right of passage
+                    if (this.heavyCatapultCount > 0 && this.movePoints >= 7) { //heavy catas, street & no right of passage
                         return 7;
                     }
-                    else if (this.heavyCatapultCount <= 0 && this.movePoints >= 4) {
+                    else if (this.heavyCatapultCount <= 0 && this.movePoints >= 4) { //light or no catas, street & no right of passage
                         return 4;
                     }
                     else {
@@ -269,26 +269,26 @@ class FootArmy extends landArmy_1.LandArmy {
                     }
                 }
             }
-            else {
-                if (rightOfPassage) {
-                    if (this.heavyCatapultCount > 0) {
+            else { //no street
+                if (rightOfPassage) { //no street & right of passage
+                    if (this.heavyCatapultCount > 0) { //heavy catas, no street & right of passage
                         throw new Error("You need a street to move into forest or swamp with heavy catapults.");
                     }
-                    else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 7) {
+                    else if (this.lightCatapultCount > 0 && this.heavyCatapultCount <= 0 && this.movePoints >= 7) { //light catas, no street & right of passage
                         return 7;
                     }
-                    else if (this.heavyCatapultCount + this.lightCatapultCount <= 0 && this.movePoints >= 4) {
+                    else if (this.heavyCatapultCount + this.lightCatapultCount <= 0 && this.movePoints >= 4) { //no catas, no street & right of passage
                         return 4;
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
                     }
                 }
-                else {
-                    if (this.heavyCatapultCount > 0) {
+                else { //no street & no right of passage
+                    if (this.heavyCatapultCount > 0) { //heavy catas, no street & no right of passage
                         throw new Error("You need a street to move into forest or swamp with heavy catapults.");
                     }
-                    else if (this.heavyCatapultCount <= 0 && this.movePoints >= 7) {
+                    else if (this.heavyCatapultCount <= 0 && this.movePoints >= 7) { //light or no catas, no street & no right of passage
                         return 7;
                     }
                     else {

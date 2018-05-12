@@ -87,7 +87,7 @@ class BattleBox {
         this.defenseGuardShips = 0;
         let ctx = this;
         this.battleHandler.attackerArmies.forEach(function (item) {
-            if (item instanceof footArmy_1.FootArmy) {
+            if (item instanceof footArmy_1.FootArmy) { //footman army
                 if (item.isGuard) {
                     ctx.attackGuardSoldiers += item.getTroopCount();
                 }
@@ -95,7 +95,7 @@ class BattleBox {
                     ctx.attackSoldiers += item.getTroopCount();
                 }
             }
-            else if (item instanceof riderArmy_1.RiderArmy) {
+            else if (item instanceof riderArmy_1.RiderArmy) { //rider army
                 if (item.isGuard) {
                     ctx.attackGuardRiders += item.getTroopCount();
                 }
@@ -103,7 +103,7 @@ class BattleBox {
                     ctx.attackRiders += item.getTroopCount();
                 }
             }
-            else if (item instanceof fleet_1.Fleet) {
+            else if (item instanceof fleet_1.Fleet) { //navy
                 if (item.isGuard) {
                     ctx.attackGuardShips += item.getTroopCount();
                 }
@@ -116,7 +116,7 @@ class BattleBox {
             ctx.attackOfficers += item.getOfficerCount();
         });
         this.battleHandler.defenderArmies.forEach(function (item) {
-            if (item instanceof footArmy_1.FootArmy) {
+            if (item instanceof footArmy_1.FootArmy) { //footman army
                 if (item.isGuard) {
                     ctx.defenseGuardSoldiers += item.getTroopCount();
                 }
@@ -124,7 +124,7 @@ class BattleBox {
                     ctx.defenseSoldiers += item.getTroopCount();
                 }
             }
-            else if (item instanceof riderArmy_1.RiderArmy) {
+            else if (item instanceof riderArmy_1.RiderArmy) { //rider army
                 if (item.isGuard) {
                     ctx.defenseGuardRiders += item.getTroopCount();
                 }
@@ -132,7 +132,7 @@ class BattleBox {
                     ctx.defenseRiders += item.getTroopCount();
                 }
             }
-            else if (item instanceof fleet_1.Fleet) {
+            else if (item instanceof fleet_1.Fleet) { //navy
                 if (item.isGuard) {
                     ctx.defenseGuardShips += item.getTroopCount();
                 }

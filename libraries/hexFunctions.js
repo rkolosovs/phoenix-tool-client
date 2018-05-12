@@ -181,8 +181,8 @@ var HexFunction;
         let result = [false, false, false, false, false, false];
         let neighbor = neighbors(hex);
         gameState_1.GameState.buildings.forEach(elem => {
-            if (elem.type === 7 /* BRIDGE */) {
-                if (elem.getPosition()[0] === hex[0] && elem.getPosition()[1] === hex[1]) {
+            if (elem.type === 7 /* BRIDGE */) { //bridge type
+                if (elem.getPosition()[0] === hex[0] && elem.getPosition()[1] === hex[1]) { //bridge on this field
                     result[neighbor.indexOf(elem.getSecondPosition())] = true;
                 }
                 else if (elem.getSecondPosition()[0] === hex[0] &&
@@ -225,14 +225,14 @@ var HexFunction;
         else if (HexFunction.distance(from, to) === 2) {
             if (dir % 1 === 0) {
                 let commonNeig = HexFunction.findCommonNeighbor(from, to);
-                if (getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dir) !== -1) {
+                if (getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dir) !== -1) { //case back facing wall on common neighbor
                     foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dir));
                 }
                 dir = (dir + 3) % 6;
-                if (getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dir) !== -1) {
+                if (getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dir) !== -1) { //case front facing wall on common neighbor
                     foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dir));
                 }
-                if (getWallIndexOnFieldInDirection(to, dir) !== -1) {
+                if (getWallIndexOnFieldInDirection(to, dir) !== -1) { //case front wall on target
                     foundWallsIndeces.push(getWallIndexOnFieldInDirection(to, dir));
                 }
             }
@@ -240,27 +240,27 @@ var HexFunction;
                 let commonNeig = HexFunction.findCommonNeighbor(from, to);
                 dir = Math.floor(dir);
                 let dirCommon1 = (dir + 3) % 6;
-                if (getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dirCommon1) !== -1) {
+                if (getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dirCommon1) !== -1) { //case front facing wall on common neighbor 1
                     foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dirCommon1));
                 }
                 dirCommon1 = (dir + 1) % 6;
-                if (getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dirCommon1) !== -1) {
+                if (getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dirCommon1) !== -1) { //case back facing wall on common neighbor 1
                     foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[0][0], commonNeig[0][1]], dirCommon1));
                 }
                 let dirCommon2 = (dir + 4) % 6;
-                if (getWallIndexOnFieldInDirection([commonNeig[1][0], commonNeig[1][1]], dirCommon2) !== -1) {
+                if (getWallIndexOnFieldInDirection([commonNeig[1][0], commonNeig[1][1]], dirCommon2) !== -1) { //case front facing wall on common neighbor 2
                     foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[1][0], commonNeig[1][1]], dirCommon2));
                 }
                 dirCommon2 = dir;
-                if (getWallIndexOnFieldInDirection([commonNeig[1][0], commonNeig[1][1]], dirCommon2) !== -1) {
+                if (getWallIndexOnFieldInDirection([commonNeig[1][0], commonNeig[1][1]], dirCommon2) !== -1) { //case back facing wall on common neighbor 2
                     foundWallsIndeces.push(getWallIndexOnFieldInDirection([commonNeig[1][0], commonNeig[1][1]], dirCommon2));
                 }
                 let dirTarget = (dir + 3) % 6;
-                if (getWallIndexOnFieldInDirection(to, dirTarget) !== -1) {
+                if (getWallIndexOnFieldInDirection(to, dirTarget) !== -1) { //case front facing wall on target
                     foundWallsIndeces.push(getWallIndexOnFieldInDirection(to, dirTarget));
                 }
                 dirTarget = (dir + 4) % 6;
-                if (getWallIndexOnFieldInDirection(to, dirTarget) !== -1) {
+                if (getWallIndexOnFieldInDirection(to, dirTarget) !== -1) { //case front facing wall on target
                     foundWallsIndeces.push(getWallIndexOnFieldInDirection(to, dirTarget));
                 }
             }

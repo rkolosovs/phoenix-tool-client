@@ -25,7 +25,7 @@ var ArmyFunctions;
     // returns the next armyId not yet assigned for the caller
     function generateArmyId(type, owner) {
         let ownedArmies = gameState_1.GameState.armies.filter(army => army.owner === owner);
-        if (type === 1) {
+        if (type === 1) { //foot armies
             let ownedFootArmies = ownedArmies.filter(army => army instanceof footArmy_1.FootArmy);
             for (let result = 101; result < 200; result++) {
                 if (!ownedFootArmies.some(army => army.getErkenfaraID() === result)) {
@@ -34,7 +34,7 @@ var ArmyFunctions;
             }
             throw new Error("Du hast die maximale Anzahl an Fußheeren erreicht.");
         }
-        else if (type === 2) {
+        else if (type === 2) { //rider armies
             let ownedRiderArmies = ownedArmies.filter(army => army instanceof riderArmy_1.RiderArmy);
             for (let result = 201; result < 300; result++) {
                 if (!ownedRiderArmies.some(army => army.getErkenfaraID() === result)) {
@@ -43,7 +43,7 @@ var ArmyFunctions;
             }
             throw new Error("Du hast die maximale Anzahl an Reiterheeren erreicht.");
         }
-        else if (type === 3) {
+        else if (type === 3) { //fleets
             let ownedFleets = ownedArmies.filter(army => army instanceof fleet_1.Fleet);
             for (let result = 301; result < 400; result++) {
                 if (!ownedFleets.some(army => army.getErkenfaraID() === result)) {

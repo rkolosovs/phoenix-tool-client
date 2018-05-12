@@ -73,7 +73,7 @@ var Drawing;
                 let point = hexFunctions_1.HexFunction.computePosition(pos, hex.coordinates, scale);
                 let neighbours = hexFunctions_1.HexFunction.getAdjacency(hex.coordinates, land.map(field => field.coordinates));
                 let start;
-                if (neighbours[0]) {
+                if (neighbours[0]) { //determine start in the top corner
                     if (neighbours[1]) {
                         start = [(point[0] + 0.5 * Drawing.gW), point[1]];
                     }
@@ -91,7 +91,7 @@ var Drawing;
                 }
                 gui_1.GUI.getContext().beginPath(); //begin border drawing
                 gui_1.GUI.getContext().moveTo(start[0], start[1]);
-                if (neighbours[1]) {
+                if (neighbours[1]) { //go to upper right corner
                     if (neighbours[2]) {
                         gui_1.GUI.getContext().moveTo((point[0] + Drawing.gW), (point[1] + Drawing.c));
                     }
@@ -107,7 +107,7 @@ var Drawing;
                         gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - constants_1.Constants.SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
                     }
                 }
-                if (neighbours[2]) {
+                if (neighbours[2]) { //go to lower right corner
                     if (neighbours[3]) {
                         gui_1.GUI.getContext().moveTo((point[0] + Drawing.gW), (point[1] + Drawing.gH));
                     }
@@ -123,7 +123,7 @@ var Drawing;
                         gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - constants_1.Constants.SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
                     }
                 }
-                if (neighbours[3]) {
+                if (neighbours[3]) { //go to bottom corner
                     if (neighbours[4]) {
                         gui_1.GUI.getContext().moveTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale));
                     }
@@ -139,7 +139,7 @@ var Drawing;
                         gui_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale - offset));
                     }
                 }
-                if (neighbours[4]) {
+                if (neighbours[4]) { //go to lower left corner
                     if (neighbours[5]) {
                         gui_1.GUI.getContext().moveTo(point[0], (point[1] + Drawing.gH));
                     }
@@ -155,7 +155,7 @@ var Drawing;
                         gui_1.GUI.getContext().lineTo((point[0] + constants_1.Constants.SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
                     }
                 }
-                if (neighbours[5]) {
+                if (neighbours[5]) { //go to upper left corner
                     if (neighbours[0]) {
                         gui_1.GUI.getContext().moveTo(point[0], (point[1] + Drawing.c));
                     }
@@ -180,7 +180,7 @@ var Drawing;
                 gui_1.GUI.getContext().stroke();
                 gui_1.GUI.getContext().beginPath(); //begin area filling
                 gui_1.GUI.getContext().moveTo(start[0], start[1]);
-                if (neighbours[1]) {
+                if (neighbours[1]) { //go to upper right corner
                     if (neighbours[2]) {
                         gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.c));
                     }
@@ -196,7 +196,7 @@ var Drawing;
                         gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - constants_1.Constants.SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
                     }
                 }
-                if (neighbours[2]) {
+                if (neighbours[2]) { //go to lower right corner
                     if (neighbours[3]) {
                         gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.gH));
                     }
@@ -212,7 +212,7 @@ var Drawing;
                         gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - constants_1.Constants.SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
                     }
                 }
-                if (neighbours[3]) {
+                if (neighbours[3]) { //go to bottom corner
                     if (neighbours[4]) {
                         gui_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale));
                     }
@@ -228,7 +228,7 @@ var Drawing;
                         gui_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale - offset));
                     }
                 }
-                if (neighbours[4]) {
+                if (neighbours[4]) { //go to lower left corner
                     if (neighbours[5]) {
                         gui_1.GUI.getContext().lineTo(point[0], (point[1] + Drawing.gH));
                     }
@@ -244,7 +244,7 @@ var Drawing;
                         gui_1.GUI.getContext().lineTo((point[0] + constants_1.Constants.SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
                     }
                 }
-                if (neighbours[5]) {
+                if (neighbours[5]) { //go to upper left corner
                     if (neighbours[0]) {
                         gui_1.GUI.getContext().lineTo(point[0], (point[1] + Drawing.c));
                     }
@@ -281,7 +281,7 @@ var Drawing;
                 buildingPos = hexFunctions_1.HexFunction.computePosition(screenPos, building.getPosition(), scale);
             }
             let tileImg; //declare the tile image variable
-            switch (building.type) {
+            switch (building.type) { //set the tileImg to match the building type
                 case 0 /* CASTLE */:
                     tileImg = images_1.Images.castle;
                     break;
@@ -378,16 +378,16 @@ var Drawing;
                     tileImg = images_1.Images.default;
                     break;
             }
-            if (building.type <= 4 && buildingPos !== undefined) {
+            if (building.type <= 4 && buildingPos !== undefined) { //regular one tile buildings excluding walls
                 gui_1.GUI.getContext().drawImage(tileImg, buildingPos[0], buildingPos[1], scale * constants_1.Constants.SIN60, scale); //draw the image
             }
-            else if (building.type === 5 && buildingPos !== undefined) {
+            else if (building.type === 5 && buildingPos !== undefined) { //walls - one tile buildings handled differently from cities
                 gui_1.GUI.getContext().drawImage(tileImg, buildingPos[0], buildingPos[1], scale * constants_1.Constants.SIN60, scale); //draw the image
             }
-            else if (building.type <= 7 && buildingPos !== undefined) {
+            else if (building.type <= 7 && buildingPos !== undefined) { //harbors and bridges - "oversized" buildings
                 gui_1.GUI.getContext().drawImage(tileImg, buildingPos[0] - Drawing.gW, buildingPos[1] - (0.5 * scale), 3 * Drawing.gW, 2 * scale); //draw the image
             }
-            else if (building.type === 8) {
+            else if (building.type === 8) { //streets - currently drawn as simple lines
                 let posFirst = hexFunctions_1.HexFunction.computePosition(screenPos, building.getPosition(), scale);
                 let posSecond = hexFunctions_1.HexFunction.computePosition(screenPos, building.getPosition(), scale);
                 gui_1.GUI.getContext().beginPath();
@@ -405,29 +405,29 @@ var Drawing;
             let pos = hexFunctions_1.HexFunction.computePosition(screenPos, river.leftBank, scale);
             let points = [pos, pos];
             let rowOdd = (((river.leftBank[1]) % 2) !== 0);
-            if ((river.leftBank[1]) === (river.rightBank[1])) {
-                if ((river.leftBank[0]) > (river.rightBank[0])) {
+            if ((river.leftBank[1]) === (river.rightBank[1])) { //same row (w/e)
+                if ((river.leftBank[0]) > (river.rightBank[0])) { //second field left (w)
                     points = [[(pos[0]), (pos[1] + Drawing.c)], [(pos[0]), (pos[1] + Drawing.gH)]];
                 }
-                else {
+                else { //second field right (e)
                     points = [[(pos[0] + Drawing.gW), (pos[1] + Drawing.c)], [(pos[0] + Drawing.gW), (pos[1] + Drawing.gH)]];
                 }
             }
-            else if ((river.leftBank[1]) > (river.rightBank[1])) {
+            else if ((river.leftBank[1]) > (river.rightBank[1])) { //second field above (nw/ne)
                 //second field right (ne)
                 if ((rowOdd && (river.leftBank[0]) === (river.rightBank[0])) || (!rowOdd && (river.leftBank[0]) < (river.rightBank[0]))) {
                     points = [[(pos[0] + 0.5 * Drawing.gW), (pos[1])], [(pos[0] + Drawing.gW), (pos[1] + Drawing.c)]];
                 }
-                else {
+                else { //second field left (nw)
                     points = [[(pos[0]), (pos[1] + Drawing.c)], [(pos[0] + 0.5 * Drawing.gW), (pos[1])]];
                 }
             }
-            else {
+            else { //second field below (sw/se)
                 //second field right (se)
                 if ((rowOdd && (river.leftBank[0]) === (river.rightBank[0])) || (!rowOdd && (river.leftBank[0]) < (river.rightBank[0]))) {
                     points = [[(pos[0] + 0.5 * Drawing.gW), (pos[1] + scale)], [(pos[0] + Drawing.gW), (pos[1] + Drawing.gH)]];
                 }
-                else {
+                else { //second field left (sw)
                     points = [[(pos[0]), (pos[1] + Drawing.gH)], [(pos[0] + 0.5 * Drawing.gW), (pos[1] + scale)]];
                 }
             }
@@ -451,7 +451,7 @@ var Drawing;
         let sortedFields = [[], [], [], [], [], [], [], [], [], []];
         gameState_1.GameState.fields.forEach(field => {
             let hexPosition = hexFunctions_1.HexFunction.computePosition(screenPos, field.coordinates, scale);
-            switch (field.type) {
+            switch (field.type) { //set the tileImg to match the field type
                 case 0 /* SHALLOWS */:
                     sortedFields[0].push(hexPosition);
                     break;
@@ -673,8 +673,8 @@ var Drawing;
             }
         }
         //drawing the multifield armies
-        for (let j = 0; j < Drawing.listOfMultiArmyFields.length; j++) {
-            for (let i = 0; i < Drawing.listOfMultiArmyFields[j].length; i++) {
+        for (let j = 0; j < Drawing.listOfMultiArmyFields.length; j++) { //for every field
+            for (let i = 0; i < Drawing.listOfMultiArmyFields[j].length; i++) { //for every army on that field
                 let armyData = Drawing.listOfMultiArmyFields[j][i]; // get army coordinates
                 let pos = hexFunctions_1.HexFunction.computePosition(screenPos, Drawing.listOfMultiArmyFields[j][i].getPosition(), scale);
                 let circleScale = (scale * constants_1.Constants.SIN60) / Drawing.listOfMultiArmyFields[j].length;
@@ -814,7 +814,7 @@ var Drawing;
                     message = "Do you want to end your turn?";
                 }
                 if (confirm(message)) {
-                    if (gameState_1.GameState.login === 'sl' && gameState_1.GameState.currentTurn.status === 'fi') {
+                    if (gameState_1.GameState.login === 'sl' && gameState_1.GameState.currentTurn.status === 'fi') { //SL sends DB change requests
                         gameState_1.GameState.loadedEvents.forEach(function (event) {
                             if (event.getStatus() === 0 /* Checked */) {
                                 if (event.getDatabasePrimaryKey() !== undefined) {
@@ -831,7 +831,7 @@ var Drawing;
                         savingFunctions_1.Saving.saveFactionsTerritories();
                         savingFunctions_1.Saving.saveArmies();
                     }
-                    else {
+                    else { //Players and SL during player's turn send events
                         savingFunctions_1.Saving.sendEventlistInOrder(0);
                     }
                     savingFunctions_1.Saving.sendNextTurn();
@@ -930,7 +930,7 @@ var Drawing;
             // GM's turn
             date.innerHTML += "SL) ";
         }
-        else {
+        else { // a realm's turn
             date.innerHTML += gameState_1.GameState.currentTurn.realm + ") ";
         }
         date.setAttribute("width", "340px");

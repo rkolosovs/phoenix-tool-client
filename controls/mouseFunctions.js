@@ -43,7 +43,7 @@ var MouseFunctions;
     MouseFunctions.mouseDown = mouseDown;
     function mouseUp(event) {
         if (controlVariables_1.Controls.leftMousePressed && event.button === 0) {
-            if (controlVariables_1.Controls.isDragging) {
+            if (controlVariables_1.Controls.isDragging) { // mouse was dragged; run panning finish routine
                 // add the x offset from dragged mouse to the current x origin for drawing
                 controlVariables_1.Controls.origin[0] += controlVariables_1.Controls.move[0];
                 // add the y offset from dragged mouse to the current y origin for drawing
@@ -86,7 +86,7 @@ var MouseFunctions;
         // get the tile the mouse is currently in (and the position in the tile)
         let pos = [(mouse[0] - controlVariables_1.Controls.origin[0]) / drawingFunctions_1.Drawing.scale,
             (mouse[1] - controlVariables_1.Controls.origin[1]) / drawingFunctions_1.Drawing.scale];
-        if (deltaY < 0) {
+        if (deltaY < 0) { // do the actuall scrolling
             drawingFunctions_1.Drawing.scale *= 1 + controlVariables_1.Controls.scrollSpeed;
         }
         else {
@@ -314,7 +314,7 @@ var MouseFunctions;
                                     gameState_1.GameState.newEvents.push(new battleEvent_1.BattleEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, participants, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition()));
                                 }
                             }
-                            else {
+                            else { //no battle -> conquer land (TODO: diplomacy goes here)
                                 gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].conquer();
                             }
                         }
@@ -334,13 +334,13 @@ var MouseFunctions;
         let relY = y - (row * drawingFunctions_1.Drawing.gH); // compute relative position of the click in
         // respect to the rectangle
         let relX = rowIsOdd ? ((x + 0.5 * drawingFunctions_1.Drawing.gW) - (column * drawingFunctions_1.Drawing.gW)) : (x - (column * drawingFunctions_1.Drawing.gW));
-        if (relY < (-m) * relX + drawingFunctions_1.Drawing.c) {
+        if (relY < (-m) * relX + drawingFunctions_1.Drawing.c) { // click is in upper left corner
             row--;
             if (rowIsOdd) {
                 column--;
             }
         }
-        else if (relY < m * relX - drawingFunctions_1.Drawing.c) {
+        else if (relY < m * relX - drawingFunctions_1.Drawing.c) { // click is in upper right corner
             row--;
             if (!rowIsOdd) {
                 column++;

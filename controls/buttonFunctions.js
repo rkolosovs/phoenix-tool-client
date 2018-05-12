@@ -292,7 +292,7 @@ var ButtonFunctions;
         let shooter = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === shootEvent.getShooterId() && army.owner === shootEvent.getRealm());
         let lkpRolls = [];
         let skpRolls = [];
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 10; i++) { //creating the dice roll array
             let currentRollLKP = parseInt(shootBox.getLKPInputs()[i].value, 10);
             let currentRollSKP = parseInt(shootBox.getSKPInputs()[i].value, 10);
             if (!isNaN(currentRollLKP) && currentRollLKP !== 0) {

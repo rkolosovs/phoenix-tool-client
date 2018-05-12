@@ -40,7 +40,7 @@ class MountEvent extends event_1.PhoenixEvent {
             army.getErkenfaraID() === this.newArmyId)) {
             return false;
         }
-        if (fromArmy instanceof footArmy_1.FootArmy) {
+        if (fromArmy instanceof footArmy_1.FootArmy) { //Mount case
             //There are enough troops, officers and mounts. No check for viability of the remaining army is made since
             //abandoning a few stragglers or the catapults is not prohibited by the rules.
             if (fromArmy.getTroopCount() < this.troops ||
@@ -49,7 +49,7 @@ class MountEvent extends event_1.PhoenixEvent {
                 return false;
             }
         }
-        else {
+        else { //Dismount case
             //There are enough troops and officers. No check for viability of the remaining army is made since
             //abandoning a few stragglers in not prohibited by the rules.
             if (fromArmy.getTroopCount() < this.troops || fromArmy.getOfficerCount() < this.leaders) {

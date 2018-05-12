@@ -102,10 +102,10 @@ class Army extends mobileEntity_1.MobileEntity {
     findShootingTargets() {
         this.targetList = [];
         let tilesInRange = [];
-        if (this.heavyCatapultCount - this.heavyCatapultsShot > 0) {
+        if (this.heavyCatapultCount - this.heavyCatapultsShot > 0) { //in a 2 tile range
             tilesInRange = hexFunctions_1.HexFunction.neighborInRange(this.position, 2);
         }
-        else if (this.lightCatapultCount - this.lightCatapultsShot > 0) {
+        else if (this.lightCatapultCount - this.lightCatapultsShot > 0) { //one tile range
             tilesInRange = hexFunctions_1.HexFunction.neighborInRange(this.position, 1);
         }
         this.targetList = this.checkAllShootingConditions(tilesInRange);
@@ -146,8 +146,8 @@ class Army extends mobileEntity_1.MobileEntity {
     checkShootingCondition(target, skpShot) {
         let condition = 5 /* Impossible */;
         let range = hexFunctions_1.HexFunction.distance(this.position, target);
-        if (skpShot) {
-            if (range === 1) {
+        if (skpShot) { //skp shooting
+            if (range === 1) { //for range of 1
                 if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) <= 2) {
                     condition = 3 /* High */;
                 }
@@ -159,7 +159,7 @@ class Army extends mobileEntity_1.MobileEntity {
                     condition = 3 /* High */;
                 }
             }
-            else if (range === 2) {
+            else if (range === 2) { //for range of 2
                 if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) <= 1) {
                     condition = 2 /* FarAndHigh */;
                 }
@@ -190,7 +190,7 @@ class Army extends mobileEntity_1.MobileEntity {
                 }
             }
         }
-        else {
+        else { //for lkp shooting
             if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) <= 1) {
                 condition = 6 /* LightCatapults */;
             }
