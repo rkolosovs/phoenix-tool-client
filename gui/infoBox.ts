@@ -1,3 +1,7 @@
+import { ButtonFunctions } from "../controls/buttonFunctions";
+import { BoxVisibility } from "./boxVisibilty";
+import { Authentication } from "../app";
+
 export class InfoBox{
     private self: HTMLDivElement;
     private armySelectBtns: HTMLDivElement;
@@ -96,6 +100,7 @@ export class InfoBox{
     getMountButton(): HTMLButtonElement{
         if(this.mount == undefined){
             this.mount = document.getElementById("mount") as HTMLButtonElement;
+            this.mount.onclick = function(){BoxVisibility.activateMountBox();};
         }
         return this.mount;
     }
@@ -103,6 +108,7 @@ export class InfoBox{
     getUnMountButton(): HTMLButtonElement{
         if(this.unMount == undefined){
             this.unMount = document.getElementById("unMount") as HTMLButtonElement;
+            this.unMount.onclick = function(){BoxVisibility.activateUnMountBox();};
         }
         return this.unMount;
     }
@@ -110,6 +116,7 @@ export class InfoBox{
     getSplitButton(): HTMLButtonElement{
         if(this.splitBtn == undefined){
             this.splitBtn = document.getElementById("splitBtn") as HTMLButtonElement;
+            this.splitBtn.onclick = function(){ButtonFunctions.activateSplitbox();};
         }
         return this.splitBtn;
     }
@@ -117,6 +124,7 @@ export class InfoBox{
     getShootButton(): HTMLButtonElement{
         if(this.shoot == undefined){
             this.shoot = document.getElementById("shoot") as HTMLButtonElement;
+            this.shoot.onclick = function(){ButtonFunctions.toggleShootingMode();};
         }
         return this.shoot;
     }
@@ -124,6 +132,7 @@ export class InfoBox{
     getLogoutButton(): HTMLButtonElement{
         if(this.logoutBtn == undefined){
             this.logoutBtn = document.getElementById("logoutBtn") as HTMLButtonElement;
+            this.logoutBtn.onclick = function(){Authentication.logoutFromServer();};
         }
         return this.logoutBtn;
     }

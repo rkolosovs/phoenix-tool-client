@@ -12,6 +12,9 @@ import {HarborCreationBox} from "./harborCreationBox";
 import {BridgeCreationBox} from "./bridgeCreationBox";
 import {StreetCreationBox} from "./streetCreationBox";
 import {InfoChangeBox} from "./infoChangeBox";
+import { BoxVisibility } from "../gui/boxVisibilty";
+import {ButtonFunctions} from "../controls/buttonFunctions";
+import {Authentication} from "../serverInteraction/authenticationFunctions";
 
 export class GUI{
     //this holds all our UI elements and getter (with on-demand generation) for them
@@ -101,6 +104,7 @@ export class GUI{
     static getToggleGMBarButton(): HTMLButtonElement{
         if(GUI.toggleGMBarButton == undefined){
             GUI.toggleGMBarButton = document.getElementById("ToggleGodModeBar") as HTMLButtonElement;
+            GUI.toggleGMBarButton.onclick = function(){BoxVisibility.toggleGodModeBar()};
         }
         return GUI.toggleGMBarButton;
     }
@@ -122,6 +126,7 @@ export class GUI{
     static getMainButton(): HTMLButtonElement{
         if(GUI.mainButton == undefined){
             GUI.mainButton = document.getElementById("mainButton") as HTMLButtonElement;
+            GUI.mainButton.onclick = function(){ButtonFunctions.mainButton();};
         }
         return GUI.mainButton;
     }
@@ -164,6 +169,7 @@ export class GUI{
     static getBackToSplitBox(): HTMLButtonElement{
         if(GUI.backToSplitBox == undefined){
             GUI.backToSplitBox = document.getElementById("backToSplitBox") as HTMLButtonElement;
+            GUI.backToSplitBox.onclick = function(){BoxVisibility.backToSplitBox();};
         }
         return GUI.backToSplitBox;
     }
@@ -171,6 +177,7 @@ export class GUI{
     static getRestoreInfoBox(): HTMLButtonElement{
         if(GUI.restoreInfoBox == undefined){
             GUI.restoreInfoBox = document.getElementById("restoreInfoBox") as HTMLButtonElement;
+            GUI.restoreInfoBox.onclick = function(){BoxVisibility.restoreInfoBox();};
         }
         return GUI.restoreInfoBox;
     }
@@ -227,6 +234,7 @@ export class GUI{
     static getSplitSelectedArmy(): HTMLButtonElement{
         if(GUI.splitSelectedArmy == undefined){
             GUI.splitSelectedArmy = document.getElementById("splitSelectedArmy") as HTMLButtonElement;
+            GUI.splitSelectedArmy.onclick = function(){ButtonFunctions.splitSelectedArmy();};
         }
         return GUI.splitSelectedArmy;
     }
@@ -234,6 +242,7 @@ export class GUI{
     static getActivateTransmuteBox(): HTMLButtonElement{
         if(GUI.activateTransmuteBox == undefined){
             GUI.activateTransmuteBox = document.getElementById("activateTransmuteBox") as HTMLButtonElement;
+            GUI.activateTransmuteBox.onclick = function(){BoxVisibility.activateTransmuteBox();};
         }
         return GUI.activateTransmuteBox;
     }
@@ -241,6 +250,7 @@ export class GUI{
     static getActivateMergeBox(): HTMLButtonElement{
         if(GUI.activateMergeBox == undefined){
             GUI.activateMergeBox = document.getElementById("activateMergeBox") as HTMLButtonElement;
+            GUI.activateMergeBox.onclick = function(){BoxVisibility.activateMergeBox();};
         }
         return GUI.activateMergeBox;
     }
@@ -325,6 +335,7 @@ export class GUI{
     static getMountButton(): HTMLButtonElement{
         if(GUI.mount == undefined){
             GUI.mount = document.getElementById("mount") as HTMLButtonElement;
+            GUI.mount.onclick = function(){ButtonFunctions.mountSelected();};
         }
         return GUI.mount;
     }
@@ -332,6 +343,7 @@ export class GUI{
     static getAllMountButton(): HTMLButtonElement{
         if(GUI.allMount == undefined){
             GUI.allMount = document.getElementById("allMount") as HTMLButtonElement;
+            GUI.allMount.onclick = function(){ButtonFunctions.allMountSelected();};
         }
         return GUI.allMount;
     }
@@ -360,6 +372,7 @@ export class GUI{
     static getUnMountButton(): HTMLButtonElement{
         if(GUI.unMount == undefined){
             GUI.unMount = document.getElementById("unMount") as HTMLButtonElement;
+            GUI.unMount.onclick = function(){ButtonFunctions.unMountSelected;};
         }
         return GUI.unMount;
     }
@@ -367,6 +380,7 @@ export class GUI{
     static getAllUnMountButton(): HTMLButtonElement{
         if(GUI.allUnMount == undefined){
             GUI.allUnMount = document.getElementById("allUnMount") as HTMLButtonElement;
+            GUI.allUnMount.onclick = function(){ButtonFunctions.allUnMountSelected;};
         }
         return GUI.allUnMount;
     }
@@ -395,6 +409,7 @@ export class GUI{
     static getFireButton(): HTMLButtonElement{
         if(GUI.fire == undefined){
             GUI.fire = document.getElementById("fire") as HTMLButtonElement;
+            GUI.fire.onclick = function(){ButtonFunctions.shootWithSelectedArmy();};
         }
         return GUI.fire;
     }
@@ -430,6 +445,7 @@ export class GUI{
     static getLoginButton(): HTMLButtonElement{
         if(GUI.loginBtn == undefined){
             GUI.loginBtn = document.getElementById("loginBtn") as HTMLButtonElement;
+            GUI.loginBtn.onclick = function(){Authentication.loginToServer();};
         }
         return GUI.loginBtn;
     }

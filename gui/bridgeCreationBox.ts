@@ -1,3 +1,7 @@
+import { GodFunctions } from "../godmode/godModeFunctions";
+import { Direction } from "../map/direction";
+import { Saving } from "../app";
+
 export class BridgeCreationBox {
     private self: HTMLDivElement;
     private buildBridge: HTMLTableSectionElement;
@@ -33,6 +37,7 @@ export class BridgeCreationBox {
     getAddBridgeNW(): HTMLButtonElement {
         if (this.addBridgeNW == undefined) {
             this.addBridgeNW = document.getElementById("addBridgeNW") as HTMLButtonElement;
+            this.addBridgeNW.onclick = function(){GodFunctions.manipulateBorderBuilding(7, Direction.NW, true);};
         }
         return this.addBridgeNW;
     }
@@ -40,6 +45,7 @@ export class BridgeCreationBox {
     getAddBridgeNE(): HTMLButtonElement {
         if (this.addBridgeNE == undefined) {
             this.addBridgeNE = document.getElementById("addBridgeNE") as HTMLButtonElement;
+            this.addBridgeNE.onclick = function(){GodFunctions.manipulateBorderBuilding(7, Direction.NE, true);};
         }
         return this.addBridgeNE;
     }
@@ -47,6 +53,7 @@ export class BridgeCreationBox {
     getAddBridgeE(): HTMLButtonElement {
         if (this.addBridgeE == undefined) {
             this.addBridgeE = document.getElementById("addBridgeE") as HTMLButtonElement;
+            this.addBridgeE.onclick = function(){GodFunctions.manipulateBorderBuilding(7, Direction.E, true);};
         }
         return this.addBridgeE;
     }
@@ -54,6 +61,7 @@ export class BridgeCreationBox {
     getAddBridgeSE(): HTMLButtonElement {
         if (this.addBridgeSE == undefined) {
             this.addBridgeSE = document.getElementById("addBridgeSE") as HTMLButtonElement;
+            this.addBridgeSE.onclick = function(){GodFunctions.manipulateBorderBuilding(7, Direction.SE, true);};
         }
         return this.addBridgeSE;
     }
@@ -61,6 +69,7 @@ export class BridgeCreationBox {
     getAddBridgeSW(): HTMLButtonElement {
         if (this.addBridgeSW == undefined) {
             this.addBridgeSW = document.getElementById("addBridgeSW") as HTMLButtonElement;
+            this.addBridgeSW.onclick = function(){GodFunctions.manipulateBorderBuilding(7, Direction.SW, true);};
         }
         return this.addBridgeSW;
     }
@@ -68,6 +77,7 @@ export class BridgeCreationBox {
     getAddBridgeW(): HTMLButtonElement {
         if (this.addBridgeW == undefined) {
             this.addBridgeW = document.getElementById("addBridgeW") as HTMLButtonElement;
+            this.addBridgeW.onclick = function(){GodFunctions.manipulateBorderBuilding(7, Direction.W, true);};
         }
         return this.addBridgeW;
     }
@@ -82,6 +92,7 @@ export class BridgeCreationBox {
     getRemoveBridgeNW(): HTMLButtonElement {
         if (this.removeBridgeNW == undefined) {
             this.removeBridgeNW = document.getElementById("removeBridgeNW") as HTMLButtonElement;
+            this.removeBridgeNW.onclick = function(){GodFunctions.manipulateBorderBuilding(7, Direction.NW, false);};
         }
         return this.removeBridgeNW;
     }
@@ -89,6 +100,7 @@ export class BridgeCreationBox {
     getRemoveBridgeNE(): HTMLButtonElement {
         if (this.removeBridgeNE == undefined) {
             this.removeBridgeNE = document.getElementById("removeBridgeNE") as HTMLButtonElement;
+            this.removeBridgeNE.onclick = function(){GodFunctions.manipulateBorderBuilding(7, Direction.NE, false);};
         }
         return this.removeBridgeNE;
     }
@@ -96,6 +108,7 @@ export class BridgeCreationBox {
     getRemoveBridgeE(): HTMLButtonElement {
         if (this.removeBridgeE == undefined) {
             this.removeBridgeE = document.getElementById("removeBridgeE") as HTMLButtonElement;
+            this.removeBridgeE.onclick = function(){GodFunctions.manipulateBorderBuilding(7, Direction.E, false);};
         }
         return this.removeBridgeE;
     }
@@ -103,6 +116,7 @@ export class BridgeCreationBox {
     getRemoveBridgeSE(): HTMLButtonElement {
         if (this.removeBridgeSE == undefined) {
             this.removeBridgeSE = document.getElementById("removeBridgeSE") as HTMLButtonElement;
+            this.removeBridgeSE.onclick = function(){GodFunctions.manipulateBorderBuilding(7, Direction.SE, false);};
         }
         return this.removeBridgeSE;
     }
@@ -110,6 +124,7 @@ export class BridgeCreationBox {
     getRemoveBridgeSW(): HTMLButtonElement {
         if (this.removeBridgeSW == undefined) {
             this.removeBridgeSW = document.getElementById("removeBridgeSW") as HTMLButtonElement;
+            this.removeBridgeSW.onclick = function(){GodFunctions.manipulateBorderBuilding(7, Direction.SW, false);};
         }
         return this.removeBridgeSW;
     }
@@ -117,6 +132,7 @@ export class BridgeCreationBox {
     getRemoveBridgeW(): HTMLButtonElement {
         if (this.removeBridgeW == undefined) {
             this.removeBridgeW = document.getElementById("removeBridgeW") as HTMLButtonElement;
+            this.removeBridgeW.onclick = function(){GodFunctions.manipulateBorderBuilding(7, Direction.W, false);};
         }
         return this.removeBridgeW;
     }
@@ -124,6 +140,7 @@ export class BridgeCreationBox {
     getSaveBuildings(): HTMLButtonElement {
         if (this.saveBuildings == undefined) {
             this.saveBuildings = document.getElementById("SaveBuildings") as HTMLButtonElement;
+            this.saveBuildings.onclick = function(){Saving.saveBuildings();};
         }
         return this.saveBuildings;
     }

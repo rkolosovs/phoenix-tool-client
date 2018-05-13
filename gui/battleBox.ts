@@ -465,6 +465,7 @@ export class BattleBox {
     getCloseBattleButton(): HTMLButtonElement{
         if(this.closeBattleButton == undefined){
             this.closeBattleButton = document.getElementById("closeBattleButton") as HTMLButtonElement;
+            // onclick gets set in battleevents
         }
         return this.closeBattleButton;
     }
@@ -535,6 +536,7 @@ export class BattleBox {
     getBattleButton(): HTMLButtonElement{
         if(this.battleButton == undefined){
             this.battleButton = document.getElementById("battleButton") as HTMLButtonElement;
+            // onclick gets set in battle events or shoot events
         }
         return this.battleButton;
     }

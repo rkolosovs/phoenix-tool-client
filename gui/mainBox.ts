@@ -16,6 +16,7 @@ export class MainBox{
     getEventTabsButton(): HTMLButtonElement{
         if(this.eventTabsButton == undefined){
             this.eventTabsButton = document.getElementById("eventTabsButton") as HTMLButtonElement;
+            // TODO couldnt figure out, what this button is exactly supposed to do
         }
         return this.eventTabsButton;
     }

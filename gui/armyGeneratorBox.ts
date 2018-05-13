@@ -1,3 +1,5 @@
+import { GodFunctions } from "../godmode/godModeFunctions";
+
 export class ArmyGeneratorBox{
     private self: HTMLDivElement;
     private ownerField: HTMLInputElement;
@@ -76,6 +78,7 @@ export class ArmyGeneratorBox{
     getGenerateArmyBtn(): HTMLButtonElement{
         if(this.generateArmyBtn == undefined){
             this.generateArmyBtn = document.getElementById("GenerateArmyBtn") as HTMLButtonElement;
+            this.generateArmyBtn.onclick = function (){GodFunctions.generateArmyBtn();}
         }
         return this.generateArmyBtn;
     }

@@ -432,7 +432,7 @@ export namespace BoxVisibility {
             }
         }
         let selectedPos = GameState.armies[Controls.selectedArmyIndex].getPosition();
-        let possibleTargets = [];
+        let possibleTargets: number[] = [];
         let targetOwner = GameState.armies[Controls.selectedArmyIndex].owner;
         for (let i = 0; i < GameState.armies.length; i++) {
             if (i != Controls.selectedArmyIndex) {
@@ -499,7 +499,7 @@ export namespace BoxVisibility {
             hide(GUI.getSplitFleetBox());
         }
         let selectedPos = GameState.armies[Controls.selectedArmyIndex].getPosition();
-        let possibleTargets = [];
+        let possibleTargets: number[] = [];
         let targetOwner = GameState.armies[Controls.selectedArmyIndex].owner;
         for (let i = 0; i < GameState.armies.length; i++) {
             if (i != Controls.selectedArmyIndex) {

@@ -1,3 +1,6 @@
+import { GodFunctions } from "../godmode/godModeFunctions";
+import { Direction } from "../map/direction";
+import { Saving } from "../app";
 export class HarborCreationBox{
     private self: HTMLDivElement;
     private buildHarbor: HTMLTableSectionElement;
@@ -33,6 +36,7 @@ export class HarborCreationBox{
     getAddHarborNW(): HTMLButtonElement{
         if(this.addHarborNW == undefined){
             this.addHarborNW = document.getElementById("addHarborNW") as HTMLButtonElement;
+            this.addHarborNW.onclick = function(){GodFunctions.manipulateBorderBuilding(6, Direction.NW, true)}
         }
         return this.addHarborNW;
     }
@@ -40,6 +44,7 @@ export class HarborCreationBox{
     getAddHarborNE(): HTMLButtonElement{
         if(this.addHarborNE == undefined){
             this.addHarborNE = document.getElementById("addHarborNE") as HTMLButtonElement;
+            this.addHarborNE.onclick = function(){GodFunctions.manipulateBorderBuilding(6, Direction.NE, true)}
         }
         return this.addHarborNE;
     }
@@ -47,6 +52,7 @@ export class HarborCreationBox{
     getAddHarborE(): HTMLButtonElement{
         if(this.addHarborE == undefined){
             this.addHarborE = document.getElementById("addHarborE") as HTMLButtonElement;
+            this.addHarborE.onclick = function(){GodFunctions.manipulateBorderBuilding(6, Direction.E, true)}
         }
         return this.addHarborE;
     }
@@ -54,6 +60,7 @@ export class HarborCreationBox{
     getAddHarborSE(): HTMLButtonElement{
         if(this.addHarborSE == undefined){
             this.addHarborSE = document.getElementById("addHarborSE") as HTMLButtonElement;
+            this.addHarborSE.onclick = function(){GodFunctions.manipulateBorderBuilding(6, Direction.SE, true)}
         }
         return this.addHarborSE;
     }
@@ -61,6 +68,7 @@ export class HarborCreationBox{
     getAddHarborSW(): HTMLButtonElement{
         if(this.addHarborSW == undefined){
             this.addHarborSW = document.getElementById("addHarborSW") as HTMLButtonElement;
+            this.addHarborSW.onclick = function(){GodFunctions.manipulateBorderBuilding(6, Direction.SW, true)}
         }
         return this.addHarborSW;
     }
@@ -68,6 +76,7 @@ export class HarborCreationBox{
     getAddHarborW(): HTMLButtonElement{
         if(this.addHarborW == undefined){
             this.addHarborW = document.getElementById("addHarborW") as HTMLButtonElement;
+            this.addHarborW.onclick = function(){GodFunctions.manipulateBorderBuilding(6, Direction.W, true)}
         }
         return this.addHarborW;
     }
@@ -82,6 +91,7 @@ export class HarborCreationBox{
     getRemoveHarborNW(): HTMLButtonElement{
         if(this.removeHarborNW == undefined){
             this.removeHarborNW = document.getElementById("removeHarborNW") as HTMLButtonElement;
+            this.removeHarborNW.onclick = function(){GodFunctions.manipulateBorderBuilding(6, Direction.NW, false)}
         }
         return this.removeHarborNW;
     }
@@ -89,6 +99,7 @@ export class HarborCreationBox{
     getRemoveHarborNE(): HTMLButtonElement{
         if(this.removeHarborNE == undefined){
             this.removeHarborNE = document.getElementById("removeHarborNE") as HTMLButtonElement;
+            this.removeHarborNE.onclick = function(){GodFunctions.manipulateBorderBuilding(6, Direction.NE, false)}
         }
         return this.removeHarborNE;
     }
@@ -96,6 +107,7 @@ export class HarborCreationBox{
     getRemoveHarborE(): HTMLButtonElement{
         if(this.removeHarborE == undefined){
             this.removeHarborE = document.getElementById("removeHarborE") as HTMLButtonElement;
+            this.removeHarborE.onclick = function(){GodFunctions.manipulateBorderBuilding(6, Direction.E, false)}
         }
         return this.removeHarborE;
     }
@@ -103,6 +115,7 @@ export class HarborCreationBox{
     getRemoveHarborSE(): HTMLButtonElement{
         if(this.removeHarborSE == undefined){
             this.removeHarborSE = document.getElementById("removeHarborSE") as HTMLButtonElement;
+            this.removeHarborSE.onclick = function(){GodFunctions.manipulateBorderBuilding(6, Direction.SE, false)}
         }
         return this.removeHarborSE;
     }
@@ -110,6 +123,7 @@ export class HarborCreationBox{
     getRemoveHarborSW(): HTMLButtonElement{
         if(this.removeHarborSW == undefined){
             this.removeHarborSW = document.getElementById("removeHarborSW") as HTMLButtonElement;
+            this.removeHarborSW.onclick = function(){GodFunctions.manipulateBorderBuilding(6, Direction.SW, false)}
         }
         return this.removeHarborSW;
     }
@@ -117,6 +131,7 @@ export class HarborCreationBox{
     getRemoveHarborW(): HTMLButtonElement{
         if(this.removeHarborW == undefined){
             this.removeHarborW = document.getElementById("removeHarborW") as HTMLButtonElement;
+            this.removeHarborW.onclick = function(){GodFunctions.manipulateBorderBuilding(6, Direction.W, false)}
         }
         return this.removeHarborW;
     }
@@ -124,6 +139,7 @@ export class HarborCreationBox{
     getSaveBuildings(): HTMLButtonElement{
         if(this.saveBuildings == undefined){
             this.saveBuildings = document.getElementById("SaveBuildings") as HTMLButtonElement;
+            this.saveBuildings.onclick = function(){Saving.saveBuildings()}
         }
         return this.saveBuildings;
     }

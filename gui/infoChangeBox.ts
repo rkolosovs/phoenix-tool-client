@@ -1,3 +1,6 @@
+import { GodFunctions } from "../godmode/godModeFunctions";
+import { Authentication } from "../app";
+
 export class InfoChangeBox{
     private self: HTMLDivElement;
     private guardChangeInput: HTMLInputElement;
@@ -165,6 +168,7 @@ export class InfoChangeBox{
     getChangeArmyInfoButton(): HTMLButtonElement{
         if(this.changeArmyInfo == undefined){
             this.changeArmyInfo = document.getElementById("changeArmyInfo") as HTMLButtonElement;
+            this.changeArmyInfo.onclick = function(){GodFunctions.changeArmyInfo();};
         }
         return this.changeArmyInfo;
     }
@@ -172,6 +176,7 @@ export class InfoChangeBox{
     getLogoutButton(): HTMLButtonElement{
         if(this.logoutBtnChange == undefined){
             this.logoutBtnChange = document.getElementById("logoutBtnChange") as HTMLButtonElement;
+            this.logoutBtnChange.onclick = function(){Authentication.logoutFromServer();};
         }
         return this.logoutBtnChange;
     }
