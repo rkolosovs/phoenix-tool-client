@@ -24,6 +24,7 @@ export class ShootingBigBox{
     getCloseRangedBattleButton(): HTMLButtonElement{
         if(this.closeRangedBattleButton == undefined){
             this.closeRangedBattleButton = document.getElementById("closeRangedBattleButton") as HTMLButtonElement;
+            // onclick gets set in shootEvent.ts
         }
         return this.closeRangedBattleButton;
     }
@@ -126,6 +127,7 @@ export class ShootingBigBox{
     getRangedBattleButton(): HTMLButtonElement{
         if(this.rangedBattleButton == undefined){
             this.rangedBattleButton = document.getElementById("rangedBattleButton") as HTMLButtonElement;
+            // onclick gets set in shootEvent.ts
         }
         return this.rangedBattleButton;
     }

@@ -152,7 +152,7 @@ export namespace Loading{
 
 	export function loadCSRFToken() {
 		$.getJSON(url +"/databaseLink/gettoken/",
-            (json: any) => {// Doesn't wor. TODO: Make it work!
+            (json: any) => {// Doesn't work. TODO: Make it work!
             Authentication.currentCSRFToken = json;
 		});
 	}

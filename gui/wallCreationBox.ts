@@ -1,3 +1,7 @@
+import { GodFunctions } from "../godmode/godModeFunctions";
+import { Direction } from "../map/direction";
+import { Saving } from "../app";
+
 export class WallCreationBox{
     private self: HTMLDivElement;
     private buildWall: HTMLTableSectionElement;
@@ -33,6 +37,7 @@ export class WallCreationBox{
     getAddWallNW(): HTMLButtonElement{
         if(this.addWallNW == undefined){
             this.addWallNW = document.getElementById("addWallNW") as HTMLButtonElement;
+            this.addWallNW.onclick = function(){GodFunctions.manipulateBorderBuilding(5, Direction.NW, true);};
         }
         return this.addWallNW;
     }
@@ -40,6 +45,7 @@ export class WallCreationBox{
     getAddWallNE(): HTMLButtonElement{
         if(this.addWallNE == undefined){
             this.addWallNE = document.getElementById("addWallNE") as HTMLButtonElement;
+            this.addWallNE.onclick = function(){GodFunctions.manipulateBorderBuilding(5, Direction.NE, true);};
         }
         return this.addWallNE;
     }
@@ -47,6 +53,7 @@ export class WallCreationBox{
     getAddWallE(): HTMLButtonElement{
         if(this.addWallE == undefined){
             this.addWallE = document.getElementById("addWallE") as HTMLButtonElement;
+            this.addWallE.onclick = function(){GodFunctions.manipulateBorderBuilding(5, Direction.E, true);};
         }
         return this.addWallE;
     }
@@ -54,6 +61,7 @@ export class WallCreationBox{
     getAddWallSE(): HTMLButtonElement{
         if(this.addWallSE == undefined){
             this.addWallSE = document.getElementById("addWallSE") as HTMLButtonElement;
+            this.addWallSE.onclick = function(){GodFunctions.manipulateBorderBuilding(5, Direction.SE, true);};
         }
         return this.addWallSE;
     }
@@ -61,6 +69,7 @@ export class WallCreationBox{
     getAddWallSW(): HTMLButtonElement{
         if(this.addWallSW == undefined){
             this.addWallSW = document.getElementById("addWallSW") as HTMLButtonElement;
+            this.addWallSW.onclick = function(){GodFunctions.manipulateBorderBuilding(5, Direction.SW, true);};
         }
         return this.addWallSW;
     }
@@ -68,6 +77,7 @@ export class WallCreationBox{
     getAddWallW(): HTMLButtonElement{
         if(this.addWallW == undefined){
             this.addWallW = document.getElementById("addWallW") as HTMLButtonElement;
+            this.addWallW.onclick = function(){GodFunctions.manipulateBorderBuilding(5, Direction.W, true);};
         }
         return this.addWallW;
     }
@@ -82,6 +92,7 @@ export class WallCreationBox{
     getRemoveWallNW(): HTMLButtonElement{
         if(this.removeWallNW == undefined){
             this.removeWallNW = document.getElementById("removeWallNW") as HTMLButtonElement;
+            this.removeWallNW.onclick = function(){GodFunctions.manipulateBorderBuilding(5, Direction.NW, false);};
         }
         return this.removeWallNW;
     }
@@ -89,6 +100,7 @@ export class WallCreationBox{
     getRemoveWallNE(): HTMLButtonElement{
         if(this.removeWallNE == undefined){
             this.removeWallNE = document.getElementById("removeWallNE") as HTMLButtonElement;
+            this.removeWallNE.onclick = function(){GodFunctions.manipulateBorderBuilding(5, Direction.NE, false);};
         }
         return this.removeWallNE;
     }
@@ -96,6 +108,7 @@ export class WallCreationBox{
     getRemoveWallE(): HTMLButtonElement{
         if(this.removeWallE == undefined){
             this.removeWallE = document.getElementById("removeWallE") as HTMLButtonElement;
+            this.removeWallE.onclick = function(){GodFunctions.manipulateBorderBuilding(5, Direction.E, false);};
         }
         return this.removeWallE;
     }
@@ -103,6 +116,7 @@ export class WallCreationBox{
     getRemoveWallSE(): HTMLButtonElement{
         if(this.removeWallSE == undefined){
             this.removeWallSE = document.getElementById("removeWallSE") as HTMLButtonElement;
+            this.removeWallSE.onclick = function(){GodFunctions.manipulateBorderBuilding(5, Direction.SE, false);};
         }
         return this.removeWallSE;
     }
@@ -110,6 +124,7 @@ export class WallCreationBox{
     getRemoveWallSW(): HTMLButtonElement{
         if(this.removeWallSW == undefined){
             this.removeWallSW = document.getElementById("removeWallSW") as HTMLButtonElement;
+            this.removeWallSW.onclick = function(){GodFunctions.manipulateBorderBuilding(5, Direction.SW, false);};
         }
         return this.removeWallSW;
     }
@@ -117,6 +132,7 @@ export class WallCreationBox{
     getRemoveWallW(): HTMLButtonElement{
         if(this.removeWallW == undefined){
             this.removeWallW = document.getElementById("removeWallW") as HTMLButtonElement;
+            this.removeWallW.onclick = function(){GodFunctions.manipulateBorderBuilding(5, Direction.W, false);};
         }
         return this.removeWallW;
     }
@@ -124,6 +140,7 @@ export class WallCreationBox{
     getSaveBuildings(): HTMLButtonElement{
         if(this.saveBuildings == undefined){
             this.saveBuildings = document.getElementById("SaveBuildings") as HTMLButtonElement;
+            this.saveBuildings.onclick = function(){Saving.saveBuildings();};
         }
         return this.saveBuildings;
     }

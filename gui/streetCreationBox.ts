@@ -1,3 +1,7 @@
+import { GodFunctions } from "../godmode/godModeFunctions";
+import { Direction } from "../map/direction";
+import { Saving } from "../app";
+
 export class StreetCreationBox{
     private self: HTMLDivElement;
     private buildStreet: HTMLTableSectionElement;
@@ -33,6 +37,7 @@ export class StreetCreationBox{
     getAddStreetNW(): HTMLButtonElement {
         if (this.addStreetNW == undefined) {
             this.addStreetNW = document.getElementById("addStreetNW") as HTMLButtonElement;
+            this.addStreetNW.onclick = function(){GodFunctions.addStreet(Direction.NW);};
         }
         return this.addStreetNW;
     }
@@ -40,6 +45,7 @@ export class StreetCreationBox{
     getAddStreetNE(): HTMLButtonElement {
         if (this.addStreetNE == undefined) {
             this.addStreetNE = document.getElementById("addStreetNE") as HTMLButtonElement;
+            this.addStreetNE.onclick = function(){GodFunctions.addStreet(Direction.NE);};
         }
         return this.addStreetNE;
     }
@@ -47,6 +53,7 @@ export class StreetCreationBox{
     getAddStreetE(): HTMLButtonElement {
         if (this.addStreetE == undefined) {
             this.addStreetE = document.getElementById("addStreetE") as HTMLButtonElement;
+            this.addStreetE.onclick = function(){GodFunctions.addStreet(Direction.E);};
         }
         return this.addStreetE;
     }
@@ -54,6 +61,7 @@ export class StreetCreationBox{
     getAddStreetSE(): HTMLButtonElement {
         if (this.addStreetSE == undefined) {
             this.addStreetSE = document.getElementById("addStreetSE") as HTMLButtonElement;
+            this.addStreetSE.onclick = function(){GodFunctions.addStreet(Direction.SE);};
         }
         return this.addStreetSE;
     }
@@ -61,6 +69,7 @@ export class StreetCreationBox{
     getAddStreetSW(): HTMLButtonElement {
         if (this.addStreetSW == undefined) {
             this.addStreetSW = document.getElementById("addStreetSW") as HTMLButtonElement;
+            this.addStreetSW.onclick = function(){GodFunctions.addStreet(Direction.SW);};
         }
         return this.addStreetSW;
     }
@@ -68,6 +77,7 @@ export class StreetCreationBox{
     getAddStreetW(): HTMLButtonElement {
         if (this.addStreetW == undefined) {
             this.addStreetW = document.getElementById("addStreetW") as HTMLButtonElement;
+            this.addStreetW.onclick = function(){GodFunctions.addStreet(Direction.W);};
         }
         return this.addStreetW;
     }
@@ -82,6 +92,7 @@ export class StreetCreationBox{
     getRemoveStreetNW(): HTMLButtonElement {
         if (this.removeStreetNW == undefined) {
             this.removeStreetNW = document.getElementById("removeStreetNW") as HTMLButtonElement;
+            this.removeStreetNW.onclick = function(){GodFunctions.removeStreet(Direction.NW);};
         }
         return this.removeStreetNW;
     }
@@ -89,6 +100,7 @@ export class StreetCreationBox{
     getRemoveStreetNE(): HTMLButtonElement {
         if (this.removeStreetNE == undefined) {
             this.removeStreetNE = document.getElementById("removeStreetNE") as HTMLButtonElement;
+            this.removeStreetNE.onclick = function(){GodFunctions.removeStreet(Direction.NE);};
         }
         return this.removeStreetNE;
     }
@@ -96,6 +108,7 @@ export class StreetCreationBox{
     getRemoveStreetE(): HTMLButtonElement {
         if (this.removeStreetE == undefined) {
             this.removeStreetE = document.getElementById("removeStreetE") as HTMLButtonElement;
+            this.removeStreetE.onclick = function(){GodFunctions.removeStreet(Direction.E);};
         }
         return this.removeStreetE;
     }
@@ -103,6 +116,7 @@ export class StreetCreationBox{
     getRemoveStreetSE(): HTMLButtonElement {
         if (this.removeStreetSE == undefined) {
             this.removeStreetSE = document.getElementById("removeStreetSE") as HTMLButtonElement;
+            this.removeStreetSE.onclick = function(){GodFunctions.removeStreet(Direction.SE);};
         }
         return this.removeStreetSE;
     }
@@ -110,6 +124,7 @@ export class StreetCreationBox{
     getRemoveStreetSW(): HTMLButtonElement {
         if (this.removeStreetSW == undefined) {
             this.removeStreetSW = document.getElementById("removeStreetSW") as HTMLButtonElement;
+            this.removeStreetSW.onclick = function(){GodFunctions.removeStreet(Direction.SW);};
         }
         return this.removeStreetSW;
     }
@@ -117,6 +132,7 @@ export class StreetCreationBox{
     getRemoveStreetW(): HTMLButtonElement {
         if (this.removeStreetW == undefined) {
             this.removeStreetW = document.getElementById("removeStreetW") as HTMLButtonElement;
+            this.removeStreetW.onclick = function(){GodFunctions.removeStreet(Direction.W);};
         }
         return this.removeStreetW;
     }
@@ -124,6 +140,7 @@ export class StreetCreationBox{
     getSaveBuildings(): HTMLButtonElement {
         if (this.saveBuildings == undefined) {
             this.saveBuildings = document.getElementById("SaveBuildings") as HTMLButtonElement;
+            this.saveBuildings.onclick = function(){Saving.saveBuildings();};
         }
         return this.saveBuildings;
     }
