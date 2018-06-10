@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const godModeFunctions_1 = require("../godmode/godModeFunctions");
-const app_1 = require("../app");
+const savingFunctions_1 = require("../serverInteraction/savingFunctions");
 class WorldBenderBox {
     getSelf() {
         if (this.self == undefined) {
@@ -40,7 +40,7 @@ class WorldBenderBox {
     getSaveFields() {
         if (this.saveFields == undefined) {
             this.saveFields = document.getElementById("SaveFields");
-            this.saveFields.onclick = function () { app_1.Saving.saveFields(); };
+            this.saveFields.onclick = function () { savingFunctions_1.Saving.saveFields(); };
         }
         return this.saveFields;
     }

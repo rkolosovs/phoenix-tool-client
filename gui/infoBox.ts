@@ -16,7 +16,7 @@ along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import { ButtonFunctions } from "../controls/buttonFunctions";
 import { BoxVisibility } from "./boxVisibilty";
-import { Authentication } from "../app";
+import { Authentication } from "../serverInteraction/authenticationFunctions";
 
 export class InfoBox{
     private self: HTMLDivElement|undefined;

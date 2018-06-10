@@ -1,5 +1,20 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const gameState_1 = require("../gameState");
 const hexFunctions_1 = require("../libraries/hexFunctions");
@@ -243,8 +258,23 @@ class Army extends mobileEntity_1.MobileEntity {
 }
 exports.Army = Army;
 
-},{"../constants":16,"../gameState":28,"../libraries/hexFunctions":49,"./mobileEntity":7}],2:[function(require,module,exports){
+},{"../constants":16,"../gameState":28,"../libraries/hexFunctions":50,"./mobileEntity":7}],2:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const gameState_1 = require("../gameState");
 const hexFunctions_1 = require("../libraries/hexFunctions");
@@ -504,8 +534,23 @@ class BattleHandler {
 }
 exports.BattleHandler = BattleHandler;
 
-},{"../gameState":28,"../libraries/armyFunctions":48,"../libraries/hexFunctions":49,"./battleResult":3,"./fleet":4,"./footArmy":5,"./landArmy":6,"./riderArmy":9}],3:[function(require,module,exports){
+},{"../gameState":28,"../libraries/armyFunctions":49,"../libraries/hexFunctions":50,"./battleResult":3,"./fleet":4,"./footArmy":5,"./landArmy":6,"./riderArmy":9}],3:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 class BattleResult {
     constructor(result, attackerLosses, defenderLosses) {
@@ -518,6 +563,21 @@ exports.BattleResult = BattleResult;
 
 },{}],4:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const army_1 = require("./army");
 const constants_1 = require("../constants");
@@ -837,8 +897,23 @@ class Fleet extends army_1.Army {
 Fleet.MAX_HEIGHT_POINTS = 0;
 exports.Fleet = Fleet;
 
-},{"../constants":16,"../gameState":28,"../libraries/armyFunctions":48,"../libraries/hexFunctions":49,"./army":1,"./footArmy":5,"./move":8}],5:[function(require,module,exports){
+},{"../constants":16,"../gameState":28,"../libraries/armyFunctions":49,"../libraries/hexFunctions":50,"./army":1,"./footArmy":5,"./move":8}],5:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const hexFunctions_1 = require("../libraries/hexFunctions");
 const landArmy_1 = require("./landArmy");
@@ -1369,8 +1444,23 @@ class FootArmy extends landArmy_1.LandArmy {
 FootArmy.MAX_MOVE_POINTS = 9;
 exports.FootArmy = FootArmy;
 
-},{"../constants":16,"../controls/controlVariables":18,"../events/mountEvent":23,"../gameState":28,"../gui/boxVisibilty":31,"../gui/drawingFunctions":34,"../libraries/armyFunctions":48,"../libraries/hexFunctions":49,"./fleet":4,"./landArmy":6,"./riderArmy":9}],6:[function(require,module,exports){
+},{"../constants":16,"../controls/controlVariables":18,"../events/mountEvent":23,"../gameState":28,"../gui/boxVisibilty":32,"../gui/drawingFunctions":35,"../libraries/armyFunctions":49,"../libraries/hexFunctions":50,"./fleet":4,"./landArmy":6,"./riderArmy":9}],6:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const gameState_1 = require("../gameState");
 const army_1 = require("./army");
@@ -1495,8 +1585,23 @@ class LandArmy extends army_1.Army {
 }
 exports.LandArmy = LandArmy;
 
-},{"../gameState":28,"../libraries/hexFunctions":49,"./army":1,"./fleet":4,"./move":8}],7:[function(require,module,exports){
+},{"../gameState":28,"../libraries/hexFunctions":50,"./army":1,"./fleet":4,"./move":8}],7:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const mapEntity_1 = require("../map/mapEntity");
 const gameState_1 = require("../gameState");
@@ -1566,8 +1671,23 @@ MobileEntity.MAX_MOVE_POINTS = 42;
 MobileEntity.MAX_HEIGHT_POINTS = 2;
 exports.MobileEntity = MobileEntity;
 
-},{"../gameState":28,"../map/mapEntity":52}],8:[function(require,module,exports){
+},{"../gameState":28,"../map/mapEntity":53}],8:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 class Move {
     constructor(movePoints, heightPoints, loading, unloading, destination, direction) {
@@ -1583,6 +1703,21 @@ exports.Move = Move;
 
 },{}],9:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const hexFunctions_1 = require("../libraries/hexFunctions");
 const landArmy_1 = require("./landArmy");
@@ -1902,8 +2037,23 @@ class RiderArmy extends landArmy_1.LandArmy {
 RiderArmy.MAX_MOVE_POINTS = 21;
 exports.RiderArmy = RiderArmy;
 
-},{"../constants":16,"../controls/controlVariables":18,"../events/mountEvent":23,"../gameState":28,"../gui/boxVisibilty":31,"../gui/drawingFunctions":34,"../gui/multifieldFunctions":42,"../libraries/armyFunctions":48,"../libraries/hexFunctions":49,"./fleet":4,"./footArmy":5,"./landArmy":6}],10:[function(require,module,exports){
+},{"../constants":16,"../controls/controlVariables":18,"../events/mountEvent":23,"../gameState":28,"../gui/boxVisibilty":32,"../gui/drawingFunctions":35,"../gui/multifieldFunctions":43,"../libraries/armyFunctions":49,"../libraries/hexFunctions":50,"./fleet":4,"./footArmy":5,"./landArmy":6}],10:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const gameState_1 = require("../gameState");
 const armyFunctions_1 = require("../libraries/armyFunctions");
@@ -1950,8 +2100,23 @@ var ShootingFunctions;
     ShootingFunctions.inflictRangedDamage = inflictRangedDamage;
 })(ShootingFunctions = exports.ShootingFunctions || (exports.ShootingFunctions = {}));
 
-},{"../gameState":28,"../libraries/armyFunctions":48}],11:[function(require,module,exports){
+},{"../gameState":28,"../libraries/armyFunctions":49}],11:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const mapEntity_1 = require("../map/mapEntity");
 class Building extends mapEntity_1.MapEntity {
@@ -1962,8 +2127,23 @@ class Building extends mapEntity_1.MapEntity {
 }
 exports.Building = Building;
 
-},{"../map/mapEntity":52}],12:[function(require,module,exports){
+},{"../map/mapEntity":53}],12:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const building_1 = require("./building");
 const constants_1 = require("../constants");
@@ -1993,6 +2173,21 @@ exports.DestructibleBuilding = DestructibleBuilding;
 
 },{"../constants":16,"./building":11}],13:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const building_1 = require("./building");
 class NonDestructibleBuilding extends building_1.Building {
@@ -2015,6 +2210,21 @@ exports.NonDestructibleBuilding = NonDestructibleBuilding;
 
 },{"./building":11}],14:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const destructibleBuilding_1 = require("./destructibleBuilding");
 class ProductionBuilding extends destructibleBuilding_1.DestructibleBuilding {
@@ -2038,6 +2248,21 @@ exports.ProductionBuilding = ProductionBuilding;
 
 },{"./destructibleBuilding":12}],15:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const direction_1 = require("../map/direction");
 const destructibleBuilding_1 = require("./destructibleBuilding");
@@ -2069,8 +2294,23 @@ class Wall extends destructibleBuilding_1.DestructibleBuilding {
 }
 exports.Wall = Wall;
 
-},{"../constants":16,"../gameState":28,"../map/direction":50,"./destructibleBuilding":12}],16:[function(require,module,exports){
+},{"../constants":16,"../gameState":28,"../map/direction":51,"./destructibleBuilding":12}],16:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 //This collects all the rule based "magic numbers" in addition to some useful mathematical constants.
 var Constants;
@@ -2117,6 +2357,21 @@ var Constants;
 
 },{}],17:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const gui_1 = require("../gui/gui");
 const boxVisibilty_1 = require("../gui/boxVisibilty");
@@ -2459,8 +2714,23 @@ var ButtonFunctions;
     ButtonFunctions.shootButtonLogic = shootButtonLogic;
 })(ButtonFunctions = exports.ButtonFunctions || (exports.ButtonFunctions = {}));
 
-},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9,"../armies/shootingFunctions":10,"../events/mergeEvent":22,"../events/shootEvent":25,"../events/splitEvent":26,"../events/transferEvent":27,"../gameState":28,"../gui/boxVisibilty":31,"../gui/drawingFunctions":34,"../gui/gui":36,"../libraries/armyFunctions":48,"../serverInteraction/savingFunctions":58,"./controlVariables":18}],18:[function(require,module,exports){
+},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9,"../armies/shootingFunctions":10,"../events/mergeEvent":22,"../events/shootEvent":25,"../events/splitEvent":26,"../events/transferEvent":27,"../gameState":28,"../gui/boxVisibilty":32,"../gui/drawingFunctions":35,"../gui/gui":37,"../libraries/armyFunctions":49,"../serverInteraction/savingFunctions":59,"./controlVariables":18}],18:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 class Controls {
 }
@@ -2483,6 +2753,21 @@ exports.Controls = Controls;
 
 },{}],19:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const controlVariables_1 = require("./controlVariables");
 const gameState_1 = require("../gameState");
@@ -2834,8 +3119,23 @@ var MouseFunctions;
     }
 })(MouseFunctions = exports.MouseFunctions || (exports.MouseFunctions = {}));
 
-},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9,"../events/battleEvent":20,"../events/moveEvent":24,"../gameState":28,"../gui/boxVisibilty":31,"../gui/drawingFunctions":34,"../gui/gui":36,"../libraries/hexFunctions":49,"../map/field":51,"./controlVariables":18}],20:[function(require,module,exports){
+},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9,"../events/battleEvent":20,"../events/moveEvent":24,"../gameState":28,"../gui/boxVisibilty":32,"../gui/drawingFunctions":35,"../gui/gui":37,"../libraries/hexFunctions":50,"../map/field":52,"./controlVariables":18}],20:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const gui_1 = require("../gui/gui");
 const boxVisibilty_1 = require("../gui/boxVisibilty");
@@ -2904,17 +3204,37 @@ class BattleEvent extends event_1.PhoenixEvent {
         return result;
     }
     battleButtonLogic(battleBox) {
-        battleBox.battleHandler.resolve(parseInt(battleBox.getAttackDiceRoll().value), parseInt(battleBox.getDefenseDiceRoll().value));
-        boxVisibilty_1.BoxVisibility.hide(battleBox.getSelf());
-        this.status = 0 /* Checked */;
-        gui_1.GUI.getBigBox().fillEventList();
-        drawingFunctions_1.Drawing.drawStuff();
+        if (battleBox.battleHandler != undefined) {
+            battleBox.battleHandler.resolve(parseInt(battleBox.getAttackDiceRoll().value), parseInt(battleBox.getDefenseDiceRoll().value));
+            boxVisibilty_1.BoxVisibility.hide(battleBox.getSelf());
+            this.status = 0 /* Checked */;
+            gui_1.GUI.getBigBox().fillEventList();
+            drawingFunctions_1.Drawing.drawStuff();
+        }
+        else {
+            throw new Error("BattleHandler is not instantiated prior to use.");
+        }
     }
 }
 exports.BattleEvent = BattleEvent;
 
-},{"../gameState":28,"../gui/boxVisibilty":31,"../gui/drawingFunctions":34,"../gui/gui":36,"./event":21}],21:[function(require,module,exports){
+},{"../gameState":28,"../gui/boxVisibilty":32,"../gui/drawingFunctions":35,"../gui/gui":37,"./event":21}],21:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const gameState_1 = require("../gameState");
 const gui_1 = require("../gui/gui");
@@ -3012,8 +3332,23 @@ class PhoenixEvent {
 }
 exports.PhoenixEvent = PhoenixEvent;
 
-},{"../gameState":28,"../gui/gui":36}],22:[function(require,module,exports){
+},{"../gameState":28,"../gui/gui":37}],22:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const event_1 = require("./event");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
@@ -3062,8 +3397,23 @@ class MergeEvent extends event_1.PhoenixEvent {
 }
 exports.MergeEvent = MergeEvent;
 
-},{"../gameState":28,"../gui/drawingFunctions":34,"../gui/gui":36,"./event":21}],23:[function(require,module,exports){
+},{"../gameState":28,"../gui/drawingFunctions":35,"../gui/gui":37,"./event":21}],23:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const event_1 = require("./event");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
@@ -3154,8 +3504,23 @@ class MountEvent extends event_1.PhoenixEvent {
 }
 exports.MountEvent = MountEvent;
 
-},{"../armies/footArmy":5,"../armies/riderArmy":9,"../gameState":28,"../gui/drawingFunctions":34,"../gui/gui":36,"../libraries/armyFunctions":48,"./event":21}],24:[function(require,module,exports){
+},{"../armies/footArmy":5,"../armies/riderArmy":9,"../gameState":28,"../gui/drawingFunctions":35,"../gui/gui":37,"../libraries/armyFunctions":49,"./event":21}],24:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const hexFunctions_1 = require("../libraries/hexFunctions");
 const event_1 = require("./event");
@@ -3226,8 +3591,23 @@ class MoveEvent extends event_1.PhoenixEvent {
 }
 exports.MoveEvent = MoveEvent;
 
-},{"../gameState":28,"../gui/drawingFunctions":34,"../gui/gui":36,"../libraries/hexFunctions":49,"./battleEvent":20,"./event":21}],25:[function(require,module,exports){
+},{"../gameState":28,"../gui/drawingFunctions":35,"../gui/gui":37,"../libraries/hexFunctions":50,"./battleEvent":20,"./event":21}],25:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const gui_1 = require("../gui/gui");
 const boxVisibilty_1 = require("../gui/boxVisibilty");
@@ -3316,8 +3696,23 @@ class ShootEvent extends event_1.PhoenixEvent {
 }
 exports.ShootEvent = ShootEvent;
 
-},{"../controls/buttonFunctions":17,"../gameState":28,"../gui/boxVisibilty":31,"../gui/drawingFunctions":34,"../gui/gui":36,"./event":21}],26:[function(require,module,exports){
+},{"../controls/buttonFunctions":17,"../gameState":28,"../gui/boxVisibilty":32,"../gui/drawingFunctions":35,"../gui/gui":37,"./event":21}],26:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const event_1 = require("./event");
 const gameState_1 = require("../gameState");
@@ -3413,8 +3808,23 @@ class SplitEvent extends event_1.PhoenixEvent {
 }
 exports.SplitEvent = SplitEvent;
 
-},{"../armies/footArmy":5,"../gameState":28,"../gui/drawingFunctions":34,"../gui/gui":36,"../libraries/armyFunctions":48,"./event":21}],27:[function(require,module,exports){
+},{"../armies/footArmy":5,"../gameState":28,"../gui/drawingFunctions":35,"../gui/gui":37,"../libraries/armyFunctions":49,"./event":21}],27:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const event_1 = require("./event");
 const gameState_1 = require("../gameState");
@@ -3506,8 +3916,23 @@ class TransferEvent extends event_1.PhoenixEvent {
 }
 exports.TransferEvent = TransferEvent;
 
-},{"../armies/footArmy":5,"../gameState":28,"../gui/drawingFunctions":34,"../gui/gui":36,"../libraries/armyFunctions":48,"./event":21}],28:[function(require,module,exports){
+},{"../armies/footArmy":5,"../gameState":28,"../gui/drawingFunctions":35,"../gui/gui":37,"../libraries/armyFunctions":49,"./event":21}],28:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 class GameState {
     static reset() {
@@ -3536,7 +3961,444 @@ exports.GameState = GameState;
 
 },{}],29:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
+const gameState_1 = require("../gameState");
+const gui_1 = require("../gui/gui");
+const boxVisibilty_1 = require("../gui/boxVisibilty");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const productionBuilding_1 = require("../buildings/productionBuilding");
+const hexFunctions_1 = require("../libraries/hexFunctions");
+const river_1 = require("../map/river");
+const controlVariables_1 = require("../controls/controlVariables");
+const nonDestructibleBuilding_1 = require("../buildings/nonDestructibleBuilding");
+const wall_1 = require("../buildings/wall");
+const footArmy_1 = require("../armies/footArmy");
+const constants_1 = require("../constants");
+var GodFunctions;
+(function (GodFunctions) {
+    var changeFieldToType = boxVisibilty_1.BoxVisibility.changeFieldToType;
+    var hide = boxVisibilty_1.BoxVisibility.hide;
+    var show = boxVisibilty_1.BoxVisibility.show;
+    var switchModeTo = boxVisibilty_1.BoxVisibility.switchModeTo;
+    let changedBuildings = controlVariables_1.Controls.changedBuildings;
+    let factionToCreateBuildingsFor = gameState_1.GameState.realms[0];
+    function setFactionToCreateBuildingsFor(faction) {
+        factionToCreateBuildingsFor = faction;
+    }
+    GodFunctions.setFactionToCreateBuildingsFor = setFactionToCreateBuildingsFor;
+    function toggleOnClickWorldCreationMode() {
+        if (boxVisibilty_1.BoxVisibility.worldCreationModeOnClick && (changeFieldToType == -1)) {
+            boxVisibilty_1.BoxVisibility.worldCreationModeOnClick = false;
+            hide(gui_1.GUI.getWorldBenderBox().getCreationWarning());
+        }
+        else if (!boxVisibilty_1.BoxVisibility.worldCreationModeOnClick || (boxVisibilty_1.BoxVisibility.worldCreationModeOnClick &&
+            (changeFieldToType != -1))) {
+            boxVisibilty_1.BoxVisibility.changeFieldToType = -1;
+            boxVisibilty_1.BoxVisibility.worldCreationModeOnClick = true;
+            show(gui_1.GUI.getWorldBenderBox().getCreationWarning());
+        }
+        drawingFunctions_1.Drawing.resizeCanvas();
+    }
+    GodFunctions.toggleOnClickWorldCreationMode = toggleOnClickWorldCreationMode;
+    function changeFieldClickedTo(number) {
+        if (changeFieldToType != number) {
+            switchModeTo("worldCreationModeOnClick");
+            boxVisibilty_1.BoxVisibility.changeFieldToType = number;
+            show(gui_1.GUI.getWorldBenderBox().getCreationWarning());
+        }
+        else {
+            boxVisibilty_1.BoxVisibility.changeFieldToType = -1;
+            switchModeTo("worldCreationModeOn");
+            hide(gui_1.GUI.getWorldBenderBox().getCreationWarning());
+        }
+        drawingFunctions_1.Drawing.resizeCanvas();
+    }
+    GodFunctions.changeFieldClickedTo = changeFieldClickedTo;
+    function addProductionBuilding(type, position, realm) {
+        let maxBP = 0;
+        switch (type) {
+            case 0 /* CASTLE */:
+                maxBP = constants_1.Constants.CASTLE_BP;
+                break;
+            case 1 /* CITY */:
+                maxBP = constants_1.Constants.CITY_BP;
+                break;
+            case 2 /* FORTRESS */:
+                maxBP = constants_1.Constants.FORTRESS_BP;
+                break;
+            case 3 /* CAPITAL */:
+                maxBP = constants_1.Constants.CAPITAL_BP;
+                break;
+            case 4 /* CAPITAL_FORT */:
+                maxBP = constants_1.Constants.CAPITAL_FORTRESS_BP;
+                break;
+            default: break;
+        }
+        //make sure the right thing is contained in the changedBuildings
+        let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1] instanceof productionBuilding_1.ProductionBuilding &&
+            entry[1].getPosition()[0] === position[0] &&
+            entry[1].getPosition()[1] === position[1]);
+        if (entryInChangedBuildings == undefined) {
+            controlVariables_1.Controls.changedBuildings.push([true, new productionBuilding_1.ProductionBuilding(type, "", position, realm, maxBP)]);
+        }
+        else if (!entryInChangedBuildings[0]) {
+            entryInChangedBuildings[0] = true;
+        }
+        else if (entryInChangedBuildings[1].type !== type) {
+            entryInChangedBuildings[1].type = type;
+        }
+        //make sure the right thing is contained in the GameState.buildings
+        let entryInActualBuildings = gameState_1.GameState.buildings.find(building => building instanceof productionBuilding_1.ProductionBuilding &&
+            building.getPosition()[0] === position[0] &&
+            building.getPosition()[1] === position[1]);
+        if (entryInActualBuildings == undefined) {
+            gameState_1.GameState.buildings.push(new productionBuilding_1.ProductionBuilding(type, "", position, realm, maxBP));
+        }
+        else if (entryInActualBuildings.type !== type) {
+            entryInActualBuildings.type = type;
+        }
+        drawingFunctions_1.Drawing.drawStuff();
+    }
+    // add a castle in the selectedField
+    function addCastle() {
+        addProductionBuilding(0 /* CASTLE */, controlVariables_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
+    }
+    GodFunctions.addCastle = addCastle;
+    // add a city in the selectedField
+    function addCity() {
+        addProductionBuilding(1 /* CITY */, controlVariables_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
+    }
+    GodFunctions.addCity = addCity;
+    // add a fortress in the selectedField
+    function addFortress() {
+        addProductionBuilding(2 /* FORTRESS */, controlVariables_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
+    }
+    GodFunctions.addFortress = addFortress;
+    // add a capital city in the selectedField
+    function addCapital() {
+        addProductionBuilding(3 /* CAPITAL */, controlVariables_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
+    }
+    GodFunctions.addCapital = addCapital;
+    // add a capital fortress in the selectedField
+    function addCapitalFortress() {
+        addProductionBuilding(4 /* CAPITAL_FORT */, controlVariables_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
+    }
+    GodFunctions.addCapitalFortress = addCapitalFortress;
+    function deleteProductionBuildingOnField(position) {
+        let buildingToDelete = gameState_1.GameState.buildings.find(building => building instanceof productionBuilding_1.ProductionBuilding &&
+            building.getPosition()[0] === position[0] &&
+            building.getPosition()[1] === position[1]);
+        if (buildingToDelete != undefined) {
+            //make sure the right thing is in changedBuildings
+            let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1].type === buildingToDelete.type &&
+                entry[1].getPosition()[0] === position[0] &&
+                entry[1].getPosition()[1] === position[1]);
+            if (entryInChangedBuildings == undefined) {
+                controlVariables_1.Controls.changedBuildings.push([false, buildingToDelete]);
+            }
+            else if (entryInChangedBuildings[0]) {
+                entryInChangedBuildings[0] = false;
+            }
+            //remove the building from GameState.buildings
+            gameState_1.GameState.buildings.splice(gameState_1.GameState.buildings.findIndex(building => building === buildingToDelete), 1);
+        }
+        drawingFunctions_1.Drawing.drawStuff();
+    }
+    // delete the production building in the selectedField
+    function deleteSelectedProductionBuilding() {
+        deleteProductionBuildingOnField(controlVariables_1.Controls.selectedFields[0]);
+    }
+    GodFunctions.deleteSelectedProductionBuilding = deleteSelectedProductionBuilding;
+    function addNonDestructibleBuilding(type, position, secondPosition, realm) {
+        //make sure the right thing is contained in the changedBuildings
+        let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1].type === type &&
+            entry[1].getPosition()[0] === position[0] &&
+            entry[1].getPosition()[1] === position[1] &&
+            entry[1].getSecondPosition()[0] === secondPosition[0] &&
+            entry[1].getSecondPosition()[1] === secondPosition[1]);
+        if (entryInChangedBuildings == undefined) {
+            controlVariables_1.Controls.changedBuildings.push([true, new nonDestructibleBuilding_1.NonDestructibleBuilding(type, position, secondPosition, realm)]);
+        }
+        else if (!entryInChangedBuildings[0]) {
+            entryInChangedBuildings[0] = true;
+        }
+        //make sure the right thing is contained in the GameState.buildings
+        let entryInActualBuildings = gameState_1.GameState.buildings.find(building => building.type === type &&
+            building.getPosition()[0] === position[0] &&
+            building.getPosition()[1] === position[1] &&
+            building.getSecondPosition()[0] === secondPosition[0] &&
+            building.getSecondPosition()[1] === secondPosition[1]);
+        if (entryInActualBuildings == undefined) {
+            gameState_1.GameState.buildings.push(new nonDestructibleBuilding_1.NonDestructibleBuilding(type, position, secondPosition, realm));
+        }
+        drawingFunctions_1.Drawing.drawStuff();
+    }
+    function deleteNonDestructibleBuilding(type, position, secondPosition) {
+        let buildingToDelete = gameState_1.GameState.buildings.find(building => building.type === type &&
+            building.getPosition()[0] === position[0] &&
+            building.getPosition()[1] === position[1] &&
+            building.getSecondPosition()[0] === secondPosition[0] &&
+            building.getSecondPosition()[1] === secondPosition[1]);
+        if (buildingToDelete != undefined) {
+            //make sure the right thing is in changedBuildings
+            let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1].type === buildingToDelete.type &&
+                entry[1].getPosition()[0] === position[0] &&
+                entry[1].getPosition()[1] === position[1] &&
+                entry[1].getSecondPosition()[0] === secondPosition[0] &&
+                entry[1].getSecondPosition()[1] === secondPosition[1]);
+            if (entryInChangedBuildings == undefined) {
+                controlVariables_1.Controls.changedBuildings.push([false, buildingToDelete]);
+            }
+            else if (entryInChangedBuildings[0]) {
+                entryInChangedBuildings[0] = false;
+            }
+            //remove the building from GameState.buildings
+            gameState_1.GameState.buildings.splice(gameState_1.GameState.buildings.findIndex(building => building === buildingToDelete), 1);
+        }
+        drawingFunctions_1.Drawing.drawStuff();
+    }
+    // adds a street in the target direction
+    function addStreet(direction) {
+        let targets = hexFunctions_1.HexFunction.neighbors(controlVariables_1.Controls.selectedFields[0]);
+        let target = targets[direction];
+        addNonDestructibleBuilding(8 /* STREET */, controlVariables_1.Controls.selectedFields[0], target, factionToCreateBuildingsFor);
+        controlVariables_1.Controls.selectedFields[0] = [target[0], target[1]];
+        drawingFunctions_1.Drawing.drawStuff();
+    }
+    GodFunctions.addStreet = addStreet;
+    // removes a street in the target direction
+    function removeStreet(direction) {
+        let targets = hexFunctions_1.HexFunction.neighbors(controlVariables_1.Controls.selectedFields[0]);
+        let target = targets[direction];
+        deleteNonDestructibleBuilding(8 /* STREET */, controlVariables_1.Controls.selectedFields[0], target);
+        controlVariables_1.Controls.selectedFields[0] = [target[0], target[1]];
+        drawingFunctions_1.Drawing.resizeCanvas();
+    }
+    GodFunctions.removeStreet = removeStreet;
+    // adds a river in the target direction
+    function addRiver(direction) {
+        let targets = hexFunctions_1.HexFunction.neighbors(controlVariables_1.Controls.selectedFields[0]);
+        let target = targets[direction];
+        if (!gameState_1.GameState.rivers.some(river => (river.rightBank[0] === controlVariables_1.Controls.selectedFields[0][0] &&
+            river.rightBank[1] === controlVariables_1.Controls.selectedFields[0][1] &&
+            river.leftBank[0] === target[0] &&
+            river.leftBank[1] === target[1]) ||
+            (river.leftBank[0] === controlVariables_1.Controls.selectedFields[0][0] &&
+                river.leftBank[1] === controlVariables_1.Controls.selectedFields[0][1] &&
+                river.rightBank[0] === target[0] &&
+                river.rightBank[1] === target[1]))) {
+            gameState_1.GameState.rivers.push(new river_1.River(controlVariables_1.Controls.selectedFields[0], target));
+        }
+        drawingFunctions_1.Drawing.drawStuff();
+    }
+    GodFunctions.addRiver = addRiver;
+    // removes a river in the target direction
+    function removeRiver(direction) {
+        let sf = controlVariables_1.Controls.selectedFields[0];
+        let targets = hexFunctions_1.HexFunction.neighbors(sf);
+        let target = targets[direction];
+        let indexToDelete = gameState_1.GameState.rivers.findIndex(river => (river.rightBank[0] === controlVariables_1.Controls.selectedFields[0][0] &&
+            river.rightBank[1] === controlVariables_1.Controls.selectedFields[0][1] &&
+            river.leftBank[0] === target[0] &&
+            river.leftBank[1] === target[1]) ||
+            (river.leftBank[0] === controlVariables_1.Controls.selectedFields[0][0] &&
+                river.leftBank[1] === controlVariables_1.Controls.selectedFields[0][1] &&
+                river.rightBank[0] === target[0] &&
+                river.rightBank[1] === target[1]));
+        if (indexToDelete != undefined) {
+            gameState_1.GameState.rivers.splice(indexToDelete, 1);
+        }
+        drawingFunctions_1.Drawing.drawStuff();
+    }
+    GodFunctions.removeRiver = removeRiver;
+    function addWall(type, position, direction, realm) {
+        //make sure the right thing is contained in the changedBuildings
+        let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1].type === type &&
+            entry[1].getPosition()[0] === position[0] &&
+            entry[1].getPosition()[1] === position[1] &&
+            entry[1].facing === direction);
+        if (entryInChangedBuildings == undefined) {
+            controlVariables_1.Controls.changedBuildings.push([true, new wall_1.Wall(type, position, realm, constants_1.Constants.WALL_BP, direction, constants_1.Constants.WALL_MAX_GUARD)]);
+        }
+        else if (!entryInChangedBuildings[0]) {
+            entryInChangedBuildings[0] = true;
+        }
+        //make sure the right thing is contained in the GameState.buildings
+        let entryInActualBuildings = gameState_1.GameState.buildings.find(building => building.type === type &&
+            building.getPosition()[0] === position[0] &&
+            building.getPosition()[1] === position[1] &&
+            building.facing === direction);
+        if (entryInActualBuildings == undefined) {
+            gameState_1.GameState.buildings.push(new wall_1.Wall(type, position, realm, constants_1.Constants.WALL_BP, direction, constants_1.Constants.WALL_MAX_GUARD));
+        }
+        drawingFunctions_1.Drawing.drawStuff();
+    }
+    function deleteWall(type, position, direction) {
+        let buildingToDelete = gameState_1.GameState.buildings.find(building => building.type === type &&
+            building.getPosition()[0] === position[0] &&
+            building.getPosition()[1] === position[1] &&
+            building.facing === direction);
+        if (buildingToDelete != undefined) {
+            //make sure the right thing is in changedBuildings
+            let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1].type === buildingToDelete.type &&
+                entry[1].getPosition()[0] === position[0] &&
+                entry[1].getPosition()[1] === position[1] &&
+                entry[1].facing === direction);
+            if (entryInChangedBuildings == undefined) {
+                controlVariables_1.Controls.changedBuildings.push([false, buildingToDelete]);
+            }
+            else if (entryInChangedBuildings[0]) {
+                entryInChangedBuildings[0] = false;
+            }
+            //remove the building from GameState.buildings
+            gameState_1.GameState.buildings.splice(gameState_1.GameState.buildings.findIndex(building => building === buildingToDelete), 1);
+        }
+        drawingFunctions_1.Drawing.drawStuff();
+    }
+    //add = true means add a building, else remove it.
+    function manipulateBorderBuilding(type, direction, add) {
+        let targets = hexFunctions_1.HexFunction.neighbors(controlVariables_1.Controls.selectedFields[0]);
+        let target = targets[direction];
+        if (add) {
+            if (type === 5 /* WALL */) {
+                addWall(type, controlVariables_1.Controls.selectedFields[0], direction, factionToCreateBuildingsFor);
+            }
+            else {
+                addNonDestructibleBuilding(type, controlVariables_1.Controls.selectedFields[0], target, factionToCreateBuildingsFor);
+            }
+        }
+        else {
+            if (type === 5 /* WALL */) {
+                deleteWall(type, controlVariables_1.Controls.selectedFields[0], direction);
+            }
+            else {
+                deleteNonDestructibleBuilding(type, controlVariables_1.Controls.selectedFields[0], target);
+            }
+        }
+    }
+    GodFunctions.manipulateBorderBuilding = manipulateBorderBuilding;
+    // the function for the Gm posibility to make an army out of nothing
+    function generateArmyBtn() {
+        let armyMakerBox = gui_1.GUI.getArmyGeneratorBox();
+        boxVisibilty_1.BoxVisibility.ownerBuffer = armyMakerBox.getOwnerField().value;
+        boxVisibilty_1.BoxVisibility.armyIdBuffer = Number(armyMakerBox.getArmyNumberField().value);
+        boxVisibilty_1.BoxVisibility.countBuffer = Number(armyMakerBox.getCountField().value);
+        boxVisibilty_1.BoxVisibility.leaderBuffer = Number(armyMakerBox.getLeaderField().value);
+        boxVisibilty_1.BoxVisibility.mountsBuffer = Number(armyMakerBox.getMountsField().value);
+        boxVisibilty_1.BoxVisibility.lkpBuffer = Number(armyMakerBox.getLKPField().value);
+        boxVisibilty_1.BoxVisibility.skpBuffer = Number(armyMakerBox.getSKPField().value);
+        boxVisibilty_1.BoxVisibility.guardBuffer = false;
+        if (boxVisibilty_1.BoxVisibility.armyIdBuffer < 101 || boxVisibilty_1.BoxVisibility.armyIdBuffer > 399) {
+            window.alert("Die Armee-Id muss zwischen 101 und 399 liegen.");
+            return false;
+        }
+        // check for any other armies with the same armyId
+        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
+            if (gameState_1.GameState.armies[i].getErkenfaraID() == boxVisibilty_1.BoxVisibility.armyIdBuffer &&
+                gameState_1.GameState.armies[i].owner.tag === boxVisibilty_1.BoxVisibility.ownerBuffer) {
+                window.alert("Ein Heer mit dieser Nummer existiert bereits in diesem Königreich.");
+                return false;
+            }
+        }
+        // check for catabults in a rider army, and for mounts in a rider army, or fleet
+        if (Math.floor(boxVisibilty_1.BoxVisibility.armyIdBuffer / 100) == 2) {
+            if (boxVisibilty_1.BoxVisibility.mountsBuffer > 0 || boxVisibilty_1.BoxVisibility.lkpBuffer > 0 || boxVisibilty_1.BoxVisibility.skpBuffer > 0) {
+                window.alert("In einem Reiterheer sollten weder einzelne Reittiere, noch Katapulte sein. " +
+                    "Wenn das Heer ein Fußheer sein sollte gib, ihm eine Nummer zwischen 100 und 199.");
+                return false;
+            }
+        }
+        else if (Math.floor(boxVisibilty_1.BoxVisibility.armyIdBuffer / 100) == 3) {
+            if (boxVisibilty_1.BoxVisibility.mountsBuffer > 0) {
+                window.alert("In einer Flotte sollten keine Reittiere enthalten sein. Wenn das Heer ein Fußheer sein " +
+                    "sollte, gib ihm eine Nummer zwischen 100 und 199.");
+                return false;
+            }
+        }
+        switchModeTo("armyWithNextClick");
+        return true;
+    }
+    GodFunctions.generateArmyBtn = generateArmyBtn;
+    // used to delete the selected army
+    function godDeleteSelectedArmy() {
+        if (confirm('Are you sure you want to delete your currently selected army?')) {
+            gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] = gameState_1.GameState.armies[gameState_1.GameState.armies.length - 1];
+            gameState_1.GameState.armies.pop();
+        }
+        else {
+            // Do nothing!
+        }
+        drawingFunctions_1.Drawing.resizeCanvas();
+    }
+    GodFunctions.godDeleteSelectedArmy = godDeleteSelectedArmy;
+    // This is used by the infoChangeBox to manipulate an armies Stats.
+    function changeArmyInfo() {
+        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
+            let infoChangeBox = gui_1.GUI.getInfoChangeBox();
+            if (i != controlVariables_1.Controls.selectedArmyIndex && gameState_1.GameState.armies[i].owner.tag === infoChangeBox.getOwnerChangeInput().value &&
+                gameState_1.GameState.armies[i].getErkenfaraID() === parseInt(infoChangeBox.getArmyIdChangeInput().value)) {
+                window.alert("Diese Armee-Id ist in diesem Reich bereits vergeben.");
+            }
+            else {
+                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].isGuard = infoChangeBox.getGuardChangeInput().checked;
+                for (let i = 0; i > gameState_1.GameState.realms.length; i++) {
+                    // check for the realm tag, not the Name
+                    if (infoChangeBox.getOwnerChangeInput().value === gameState_1.GameState.realms[i].tag) {
+                        gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner = gameState_1.GameState.realms[i];
+                    }
+                }
+                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setID(Number(infoChangeBox.getArmyIdChangeInput().value));
+                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setTroopCount(Number(infoChangeBox.getCountChangeInput().value));
+                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setOfficerCount(Number(infoChangeBox.getLeadersChangeInput().value));
+                if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof footArmy_1.FootArmy) {
+                    let armyToChange = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
+                    armyToChange.setMountCount(Number(infoChangeBox.getMountsChangeInput().value));
+                }
+                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setLightCatapultCount(Number(infoChangeBox.getLKPChangeInput().value));
+                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setHeavyCatapultCount(Number(infoChangeBox.getSKPChangeInput().value));
+                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setMovePoints(Number(infoChangeBox.getMovePointsChangeInput().value));
+                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setHeightPoints(Number(infoChangeBox.getHeightPointsChangeInput().value));
+            }
+        }
+        drawingFunctions_1.Drawing.resizeCanvas();
+    }
+    GodFunctions.changeArmyInfo = changeArmyInfo;
+})(GodFunctions = exports.GodFunctions || (exports.GodFunctions = {}));
+
+},{"../armies/footArmy":5,"../buildings/nonDestructibleBuilding":13,"../buildings/productionBuilding":14,"../buildings/wall":15,"../constants":16,"../controls/controlVariables":18,"../gameState":28,"../gui/boxVisibilty":32,"../gui/drawingFunctions":35,"../gui/gui":37,"../libraries/hexFunctions":50,"../map/river":54}],30:[function(require,module,exports){
+"use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
+Object.defineProperty(exports, "__esModule", { value: true });
+const godModeFunctions_1 = require("../godmode/godModeFunctions");
 class ArmyGeneratorBox {
     getSelf() {
         if (this.self == undefined) {
@@ -3595,19 +4457,36 @@ class ArmyGeneratorBox {
     getGenerateArmyBtn() {
         if (this.generateArmyBtn == undefined) {
             this.generateArmyBtn = document.getElementById("GenerateArmyBtn");
+            this.generateArmyBtn.onclick = function () { godModeFunctions_1.GodFunctions.generateArmyBtn(); };
         }
         return this.generateArmyBtn;
     }
 }
 exports.ArmyGeneratorBox = ArmyGeneratorBox;
 
-},{}],30:[function(require,module,exports){
+},{"../godmode/godModeFunctions":29}],31:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const battleHandler_1 = require("../armies/battleHandler");
 const footArmy_1 = require("../armies/footArmy");
 const riderArmy_1 = require("../armies/riderArmy");
 const fleet_1 = require("../armies/fleet");
+const battleResult_1 = require("../armies/battleResult");
 class BattleBox {
     constructor() {
         this.attackSoldiers = 0;
@@ -3637,37 +4516,57 @@ class BattleBox {
     moveToAttack(i) {
         let ctx = this;
         return function () {
-            let t = ctx.battleHandler.unsortedArmies.splice(i, 1);
-            ctx.battleHandler.attackerArmies.push(t[0]);
-            ctx.updateTroopCounts();
-            ctx.updateDisplay();
+            if (ctx.battleHandler != undefined) {
+                let t = ctx.battleHandler.unsortedArmies.splice(i, 1);
+                ctx.battleHandler.attackerArmies.push(t[0]);
+                ctx.updateTroopCounts();
+                ctx.updateDisplay();
+            }
+            else {
+                throw new Error("BattleHandler is not initialized before being used.");
+            }
         };
     }
     moveToDefense(i) {
         let ctx = this;
         return function () {
-            let t = ctx.battleHandler.unsortedArmies.splice(i, 1);
-            ctx.battleHandler.defenderArmies.push(t[0]);
-            ctx.updateTroopCounts();
-            ctx.updateDisplay();
+            if (ctx.battleHandler != undefined) {
+                let t = ctx.battleHandler.unsortedArmies.splice(i, 1);
+                ctx.battleHandler.defenderArmies.push(t[0]);
+                ctx.updateTroopCounts();
+                ctx.updateDisplay();
+            }
+            else {
+                throw new Error("BattleHandler is not initialized before being used.");
+            }
         };
     }
     removeFromDefense(i) {
         let ctx = this;
         return function () {
-            let t = ctx.battleHandler.defenderArmies.splice(i, 1);
-            ctx.battleHandler.unsortedArmies.push(t[0]);
-            ctx.updateTroopCounts();
-            ctx.updateDisplay();
+            if (ctx.battleHandler != undefined) {
+                let t = ctx.battleHandler.defenderArmies.splice(i, 1);
+                ctx.battleHandler.unsortedArmies.push(t[0]);
+                ctx.updateTroopCounts();
+                ctx.updateDisplay();
+            }
+            else {
+                throw new Error("BattleHandler is not initialized before being used.");
+            }
         };
     }
     removeFromAttack(i) {
         let ctx = this;
         return function () {
-            let t = ctx.battleHandler.attackerArmies.splice(i, 1);
-            ctx.battleHandler.unsortedArmies.push(t[0]);
-            ctx.updateTroopCounts();
-            ctx.updateDisplay();
+            if (ctx.battleHandler != undefined) {
+                let t = ctx.battleHandler.attackerArmies.splice(i, 1);
+                ctx.battleHandler.unsortedArmies.push(t[0]);
+                ctx.updateTroopCounts();
+                ctx.updateDisplay();
+            }
+            else {
+                throw new Error("BattleHandler is not initialized before being used.");
+            }
         };
     }
     updateTroopCounts() {
@@ -3690,74 +4589,84 @@ class BattleBox {
         this.defenseHeavyWarships = 0;
         this.defenseGuardShips = 0;
         let ctx = this;
-        this.battleHandler.attackerArmies.forEach(function (item) {
-            if (item instanceof footArmy_1.FootArmy) { //footman army
-                if (item.isGuard) {
-                    ctx.attackGuardSoldiers += item.getTroopCount();
+        if (this.battleHandler != undefined) {
+            this.battleHandler.attackerArmies.forEach(function (item) {
+                if (item instanceof footArmy_1.FootArmy) { //footman army
+                    if (item.isGuard) {
+                        ctx.attackGuardSoldiers += item.getTroopCount();
+                    }
+                    else {
+                        ctx.attackSoldiers += item.getTroopCount();
+                    }
                 }
-                else {
-                    ctx.attackSoldiers += item.getTroopCount();
+                else if (item instanceof riderArmy_1.RiderArmy) { //rider army
+                    if (item.isGuard) {
+                        ctx.attackGuardRiders += item.getTroopCount();
+                    }
+                    else {
+                        ctx.attackRiders += item.getTroopCount();
+                    }
                 }
-            }
-            else if (item instanceof riderArmy_1.RiderArmy) { //rider army
-                if (item.isGuard) {
-                    ctx.attackGuardRiders += item.getTroopCount();
+                else if (item instanceof fleet_1.Fleet) { //navy
+                    if (item.isGuard) {
+                        ctx.attackGuardShips += item.getTroopCount();
+                    }
+                    else {
+                        ctx.attackShips += item.getTroopCount();
+                    }
+                    ctx.attackLightWarships += item.getLightCatapultCount();
+                    ctx.attackHeavyWarships += item.getHeavyCatapultCount();
                 }
-                else {
-                    ctx.attackRiders += item.getTroopCount();
+                ctx.attackOfficers += item.getOfficerCount();
+            });
+            this.battleHandler.defenderArmies.forEach(function (item) {
+                if (item instanceof footArmy_1.FootArmy) { //footman army
+                    if (item.isGuard) {
+                        ctx.defenseGuardSoldiers += item.getTroopCount();
+                    }
+                    else {
+                        ctx.defenseSoldiers += item.getTroopCount();
+                    }
                 }
-            }
-            else if (item instanceof fleet_1.Fleet) { //navy
-                if (item.isGuard) {
-                    ctx.attackGuardShips += item.getTroopCount();
+                else if (item instanceof riderArmy_1.RiderArmy) { //rider army
+                    if (item.isGuard) {
+                        ctx.defenseGuardRiders += item.getTroopCount();
+                    }
+                    else {
+                        ctx.defenseRiders += item.getTroopCount();
+                    }
                 }
-                else {
-                    ctx.attackShips += item.getTroopCount();
+                else if (item instanceof fleet_1.Fleet) { //navy
+                    if (item.isGuard) {
+                        ctx.defenseGuardShips += item.getTroopCount();
+                    }
+                    else {
+                        ctx.defenseShips += item.getTroopCount();
+                    }
+                    ctx.defenseLightWarships += item.getLightCatapultCount();
+                    ctx.defenseHeavyWarships += item.getHeavyCatapultCount();
                 }
-                ctx.attackLightWarships += item.getLightCatapultCount();
-                ctx.attackHeavyWarships += item.getHeavyCatapultCount();
-            }
-            ctx.attackOfficers += item.getOfficerCount();
-        });
-        this.battleHandler.defenderArmies.forEach(function (item) {
-            if (item instanceof footArmy_1.FootArmy) { //footman army
-                if (item.isGuard) {
-                    ctx.defenseGuardSoldiers += item.getTroopCount();
-                }
-                else {
-                    ctx.defenseSoldiers += item.getTroopCount();
-                }
-            }
-            else if (item instanceof riderArmy_1.RiderArmy) { //rider army
-                if (item.isGuard) {
-                    ctx.defenseGuardRiders += item.getTroopCount();
-                }
-                else {
-                    ctx.defenseRiders += item.getTroopCount();
-                }
-            }
-            else if (item instanceof fleet_1.Fleet) { //navy
-                if (item.isGuard) {
-                    ctx.defenseGuardShips += item.getTroopCount();
-                }
-                else {
-                    ctx.defenseShips += item.getTroopCount();
-                }
-                ctx.defenseLightWarships += item.getLightCatapultCount();
-                ctx.defenseHeavyWarships += item.getHeavyCatapultCount();
-            }
-            ctx.defenseOfficers += item.getOfficerCount();
-        });
+                ctx.defenseOfficers += item.getOfficerCount();
+            });
+        }
+        else {
+            throw new Error("BattleHandler is not initialized before being used.");
+        }
     }
     updateDisplay() {
         //enable / disable the battle button
-        if (this.battleHandler.attackerArmies.length === 0 || this.battleHandler.defenderArmies.length === 0) {
-            this.getBattleButton().disabled = true;
-            this.getBattleButton().style.cursor = "not-allowed";
+        if (this.battleHandler != undefined) {
+            if (this.battleHandler.attackerArmies.length === 0 || this.battleHandler.defenderArmies.length === 0) {
+                this.getBattleButton().disabled = true;
+                this.getBattleButton().style.cursor = "not-allowed";
+            }
+            else {
+                this.getBattleButton().disabled = false;
+                this.getBattleButton().style.cursor = "initial";
+            }
         }
         else {
-            this.getBattleButton().disabled = false;
-            this.getBattleButton().style.cursor = "initial";
+            throw new Error("BattleHandler is not initialized before being used.");
         }
         this.updateArmyLists();
         this.updateTroopSummaries();
@@ -3766,20 +4675,25 @@ class BattleBox {
     updateArmyLists() {
         //fill the sortable lists of armies
         this.getAttackArmiesBox().innerHTML = "";
-        this.battleHandler.attackerArmies.forEach((item, index) => {
-            let listItem = document.createElement("DIV");
-            this.getAttackArmiesBox().appendChild(listItem);
-            listItem.classList.add("armyListItem");
-            let div = document.createElement("DIV");
-            div.classList.add("center");
-            div.innerHTML = item.owner + " " + item.getErkenfaraID();
-            listItem.appendChild(div);
-            let moveBtn = document.createElement("BUTTON");
-            moveBtn.classList.add("armyListButton");
-            moveBtn.classList.add("moveRightButton");
-            moveBtn.onclick = this.removeFromAttack(index);
-            listItem.appendChild(moveBtn);
-        }, this);
+        if (this.battleHandler != undefined) {
+            this.battleHandler.attackerArmies.forEach((item, index) => {
+                let listItem = document.createElement("DIV");
+                this.getAttackArmiesBox().appendChild(listItem);
+                listItem.classList.add("armyListItem");
+                let div = document.createElement("DIV");
+                div.classList.add("center");
+                div.innerHTML = item.owner + " " + item.getErkenfaraID();
+                listItem.appendChild(div);
+                let moveBtn = document.createElement("BUTTON");
+                moveBtn.classList.add("armyListButton");
+                moveBtn.classList.add("moveRightButton");
+                moveBtn.onclick = this.removeFromAttack(index);
+                listItem.appendChild(moveBtn);
+            }, this);
+        }
+        else {
+            throw new Error("BattleHandler is not initialized before being used.");
+        }
         this.getUnsortedArmiesBox().innerHTML = "";
         this.battleHandler.unsortedArmies.forEach((item, index) => {
             let listItem = document.createElement("DIV");
@@ -3880,9 +4794,15 @@ class BattleBox {
     }
     updateResultPreview() {
         //Instant result preview (remove if not desired)
-        let battleResult = this.battleHandler.calculateResult(this.battleHandler.attackerArmies.map((val) => (val)), this.battleHandler.defenderArmies.map((val) => (val)), [], [], this.battleHandler.location, parseInt(this.getAttackDiceRoll().value), parseInt(this.getDefenseDiceRoll().value));
+        let battleResult = new battleResult_1.BattleResult(4 /* TIE */, [0], [0]);
+        if (this.battleHandler != undefined) {
+            let battleResult = this.battleHandler.calculateResult(this.battleHandler.attackerArmies.map((val) => (val)), this.battleHandler.defenderArmies.map((val) => (val)), [], [], this.battleHandler.location, parseInt(this.getAttackDiceRoll().value), parseInt(this.getDefenseDiceRoll().value));
+        }
+        else {
+            throw new Error("BattleHandler is not initialized before being used.");
+        }
         let attackFootLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof footArmy_1.FootArmy && !this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof footArmy_1.FootArmy && !this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -3890,7 +4810,7 @@ class BattleBox {
             }
         }, 0);
         let attackCavLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof riderArmy_1.RiderArmy && !this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof riderArmy_1.RiderArmy && !this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -3898,7 +4818,7 @@ class BattleBox {
             }
         }, 0);
         let attackFleetLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof fleet_1.Fleet && !this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof fleet_1.Fleet && !this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -3906,7 +4826,7 @@ class BattleBox {
             }
         }, 0);
         let attackGuardFootLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof footArmy_1.FootArmy && this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof footArmy_1.FootArmy && this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -3914,7 +4834,7 @@ class BattleBox {
             }
         }, 0);
         let attackGuardCavLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof riderArmy_1.RiderArmy && this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof riderArmy_1.RiderArmy && this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -3922,7 +4842,7 @@ class BattleBox {
             }
         }, 0);
         let attackGuardFleetLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof fleet_1.Fleet && this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof fleet_1.Fleet && this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -3930,7 +4850,7 @@ class BattleBox {
             }
         }, 0);
         let defenseFootLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof footArmy_1.FootArmy && !this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof footArmy_1.FootArmy && !this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -3938,7 +4858,7 @@ class BattleBox {
             }
         }, 0);
         let defenseCavLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof riderArmy_1.RiderArmy && !this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof riderArmy_1.RiderArmy && !this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -3946,7 +4866,7 @@ class BattleBox {
             }
         }, 0);
         let defenseFleetLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof fleet_1.Fleet && !this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof fleet_1.Fleet && !this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -3954,7 +4874,7 @@ class BattleBox {
             }
         }, 0);
         let defenseGuardFootLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof footArmy_1.FootArmy && this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof footArmy_1.FootArmy && this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -3962,7 +4882,7 @@ class BattleBox {
             }
         }, 0);
         let defenseGuardCavLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof riderArmy_1.RiderArmy && this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof riderArmy_1.RiderArmy && this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -3970,7 +4890,7 @@ class BattleBox {
             }
         }, 0);
         let defenseGuardFleetLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof fleet_1.Fleet && this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof fleet_1.Fleet && this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4101,6 +5021,7 @@ class BattleBox {
     getCloseBattleButton() {
         if (this.closeBattleButton == undefined) {
             this.closeBattleButton = document.getElementById("closeBattleButton");
+            // onclick gets set in battleevents
         }
         return this.closeBattleButton;
     }
@@ -4161,14 +5082,30 @@ class BattleBox {
     getBattleButton() {
         if (this.battleButton == undefined) {
             this.battleButton = document.getElementById("battleButton");
+            // onclick gets set in battle events or shoot events
         }
         return this.battleButton;
     }
 }
 exports.BattleBox = BattleBox;
 
-},{"../armies/battleHandler":2,"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9}],31:[function(require,module,exports){
+},{"../armies/battleHandler":2,"../armies/battleResult":3,"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9}],32:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const gui_1 = require("./gui");
 const gameState_1 = require("../gameState");
@@ -4777,9 +5714,26 @@ var BoxVisibility;
     BoxVisibility.restoreInfoBox = restoreInfoBox;
 })(BoxVisibility = exports.BoxVisibility || (exports.BoxVisibility = {}));
 
-},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9,"../controls/buttonFunctions":17,"../controls/controlVariables":18,"../gameState":28,"./drawingFunctions":34,"./gui":36}],32:[function(require,module,exports){
+},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9,"../controls/buttonFunctions":17,"../controls/controlVariables":18,"../gameState":28,"./drawingFunctions":35,"./gui":37}],33:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
+const godModeFunctions_1 = require("../godmode/godModeFunctions");
+const savingFunctions_1 = require("../serverInteraction/savingFunctions");
 class BridgeCreationBox {
     getSelf() {
         if (this.self == undefined) {
@@ -4796,36 +5750,42 @@ class BridgeCreationBox {
     getAddBridgeNW() {
         if (this.addBridgeNW == undefined) {
             this.addBridgeNW = document.getElementById("addBridgeNW");
+            this.addBridgeNW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 0 /* NW */, true); };
         }
         return this.addBridgeNW;
     }
     getAddBridgeNE() {
         if (this.addBridgeNE == undefined) {
             this.addBridgeNE = document.getElementById("addBridgeNE");
+            this.addBridgeNE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 1 /* NE */, true); };
         }
         return this.addBridgeNE;
     }
     getAddBridgeE() {
         if (this.addBridgeE == undefined) {
             this.addBridgeE = document.getElementById("addBridgeE");
+            this.addBridgeE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 2 /* E */, true); };
         }
         return this.addBridgeE;
     }
     getAddBridgeSE() {
         if (this.addBridgeSE == undefined) {
             this.addBridgeSE = document.getElementById("addBridgeSE");
+            this.addBridgeSE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 3 /* SE */, true); };
         }
         return this.addBridgeSE;
     }
     getAddBridgeSW() {
         if (this.addBridgeSW == undefined) {
             this.addBridgeSW = document.getElementById("addBridgeSW");
+            this.addBridgeSW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 4 /* SW */, true); };
         }
         return this.addBridgeSW;
     }
     getAddBridgeW() {
         if (this.addBridgeW == undefined) {
             this.addBridgeW = document.getElementById("addBridgeW");
+            this.addBridgeW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 5 /* W */, true); };
         }
         return this.addBridgeW;
     }
@@ -4838,51 +5798,75 @@ class BridgeCreationBox {
     getRemoveBridgeNW() {
         if (this.removeBridgeNW == undefined) {
             this.removeBridgeNW = document.getElementById("removeBridgeNW");
+            this.removeBridgeNW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 0 /* NW */, false); };
         }
         return this.removeBridgeNW;
     }
     getRemoveBridgeNE() {
         if (this.removeBridgeNE == undefined) {
             this.removeBridgeNE = document.getElementById("removeBridgeNE");
+            this.removeBridgeNE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 1 /* NE */, false); };
         }
         return this.removeBridgeNE;
     }
     getRemoveBridgeE() {
         if (this.removeBridgeE == undefined) {
             this.removeBridgeE = document.getElementById("removeBridgeE");
+            this.removeBridgeE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 2 /* E */, false); };
         }
         return this.removeBridgeE;
     }
     getRemoveBridgeSE() {
         if (this.removeBridgeSE == undefined) {
             this.removeBridgeSE = document.getElementById("removeBridgeSE");
+            this.removeBridgeSE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 3 /* SE */, false); };
         }
         return this.removeBridgeSE;
     }
     getRemoveBridgeSW() {
         if (this.removeBridgeSW == undefined) {
             this.removeBridgeSW = document.getElementById("removeBridgeSW");
+            this.removeBridgeSW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 4 /* SW */, false); };
         }
         return this.removeBridgeSW;
     }
     getRemoveBridgeW() {
         if (this.removeBridgeW == undefined) {
             this.removeBridgeW = document.getElementById("removeBridgeW");
+            this.removeBridgeW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 5 /* W */, false); };
         }
         return this.removeBridgeW;
     }
     getSaveBuildings() {
         if (this.saveBuildings == undefined) {
             this.saveBuildings = document.getElementById("SaveBuildings");
+            this.saveBuildings.onclick = function () { savingFunctions_1.Saving.saveBuildings(); };
         }
         return this.saveBuildings;
     }
 }
 exports.BridgeCreationBox = BridgeCreationBox;
 
-},{}],33:[function(require,module,exports){
+},{"../godmode/godModeFunctions":29,"../serverInteraction/savingFunctions":59}],34:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
+const godModeFunctions_1 = require("../godmode/godModeFunctions");
+const savingFunctions_1 = require("../serverInteraction/savingFunctions");
 class BuildingCreationBox {
     getSelf() {
         if (this.self == undefined) {
@@ -4893,50 +5877,72 @@ class BuildingCreationBox {
     getAddCastle() {
         if (this.addCastle == undefined) {
             this.addCastle = document.getElementById("addCastle");
+            this.addCastle.onclick = function () { godModeFunctions_1.GodFunctions.addCastle(); };
         }
         return this.addCastle;
     }
     getAddCity() {
         if (this.addCity == undefined) {
             this.addCity = document.getElementById("addCity");
+            this.addCity.onclick = function () { godModeFunctions_1.GodFunctions.addCity(); };
         }
         return this.addCity;
     }
     getAddFortress() {
         if (this.addFortress == undefined) {
             this.addFortress = document.getElementById("addFortress");
+            this.addFortress.onclick = function () { godModeFunctions_1.GodFunctions.addFortress(); };
         }
         return this.addFortress;
     }
     getAddCapital() {
         if (this.addCapital == undefined) {
             this.addCapital = document.getElementById("addCapital");
+            this.addCapital.onclick = function () { godModeFunctions_1.GodFunctions.addCapital(); };
         }
         return this.addCapital;
     }
     getAddCapitalFortress() {
         if (this.addCapitalFortress == undefined) {
             this.addCapitalFortress = document.getElementById("addCapitalFortress");
+            this.addCapitalFortress.onclick = function () { godModeFunctions_1.GodFunctions.addCapitalFortress(); };
         }
         return this.addCapitalFortress;
     }
     getDeleteBuilding() {
         if (this.deleteBuilding == undefined) {
             this.deleteBuilding = document.getElementById("deleteBuilding");
+            this.deleteBuilding.onclick = function () { godModeFunctions_1.GodFunctions.deleteSelectedProductionBuilding(); };
         }
         return this.deleteBuilding;
     }
     getSaveBuildings() {
         if (this.saveBuildings == undefined) {
             this.saveBuildings = document.getElementById("SaveBuildings");
+            this.saveBuildings.onclick = function () { savingFunctions_1.Saving.saveBuildings(); };
         }
         return this.saveBuildings;
     }
 }
 exports.BuildingCreationBox = BuildingCreationBox;
 
-},{}],34:[function(require,module,exports){
+},{"../godmode/godModeFunctions":29,"../serverInteraction/savingFunctions":59}],35:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const constants_1 = require("../constants");
 const gui_1 = require("./gui");
@@ -5899,9 +6905,27 @@ var Drawing;
     Drawing.writeTurnNumber = writeTurnNumber;
 })(Drawing = exports.Drawing || (exports.Drawing = {}));
 
-},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9,"../constants":16,"../controls/controlVariables":18,"../gameState":28,"../libraries/hexFunctions":49,"../serverInteraction/loadingDataFunctions":57,"../serverInteraction/savingFunctions":58,"./boxVisibilty":31,"./gui":36,"./images":38,"./multifieldFunctions":42}],35:[function(require,module,exports){
+},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9,"../constants":16,"../controls/controlVariables":18,"../gameState":28,"../libraries/hexFunctions":50,"../serverInteraction/loadingDataFunctions":58,"../serverInteraction/savingFunctions":59,"./boxVisibilty":32,"./gui":37,"./images":39,"./multifieldFunctions":43}],36:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
+const boxVisibilty_1 = require("./boxVisibilty");
+const savingFunctions_1 = require("../serverInteraction/savingFunctions");
+const godModeFunctions_1 = require("../godmode/godModeFunctions");
 class GodModeBox {
     getSelf() {
         if (this.self == undefined) {
@@ -5912,66 +6936,77 @@ class GodModeBox {
     getToggleWorldCreationMode() {
         if (this.toggleWorldCreationMode == undefined) {
             this.toggleWorldCreationMode = document.getElementById("ToggleWorldCreationMode");
+            this.toggleWorldCreationMode.onclick = function () { boxVisibilty_1.BoxVisibility.toggleWorldCreationMode(); };
         }
         return this.toggleWorldCreationMode;
     }
     getToggleRiverCreationMode() {
         if (this.toggleRiverCreationMode == undefined) {
             this.toggleRiverCreationMode = document.getElementById("ToggleRiverCreationMode");
+            this.toggleRiverCreationMode.onclick = function () { boxVisibilty_1.BoxVisibility.toggleRiverCreationMode(); };
         }
         return this.toggleRiverCreationMode;
     }
     getToggleBuildingCreationMode() {
         if (this.toggleBuildingCreationMode == undefined) {
             this.toggleBuildingCreationMode = document.getElementById("ToggleBuildingCreationMode");
+            this.toggleBuildingCreationMode.onclick = function () { boxVisibilty_1.BoxVisibility.toggleBuildingCreationMode(); };
         }
         return this.toggleBuildingCreationMode;
     }
     getToggleStreetBuildingMode() {
         if (this.toggleStreetBuildingMode == undefined) {
             this.toggleStreetBuildingMode = document.getElementById("ToggleStreetBuildingMode");
+            this.toggleStreetBuildingMode.onclick = function () { boxVisibilty_1.BoxVisibility.toggleStreetBuildingMode(); };
         }
         return this.toggleStreetBuildingMode;
     }
     getToggleWallBuildingMode() {
         if (this.toggleWallBuildingMode == undefined) {
             this.toggleWallBuildingMode = document.getElementById("ToggleWallBuildingMode");
+            this.toggleWallBuildingMode.onclick = function () { boxVisibilty_1.BoxVisibility.toggleWallBuildingMode(); };
         }
         return this.toggleWallBuildingMode;
     }
     getToggleHarborBuildingMode() {
         if (this.toggleHarborBuildingMode == undefined) {
             this.toggleHarborBuildingMode = document.getElementById("ToggleHarborBuildingMode");
+            this.toggleHarborBuildingMode.onclick = function () { boxVisibilty_1.BoxVisibility.toggleHarborBuildingMode(); };
         }
         return this.toggleHarborBuildingMode;
     }
     getToggleBridgeBuildingMode() {
         if (this.toggleBridgeBuildingMode == undefined) {
             this.toggleBridgeBuildingMode = document.getElementById("ToggleBridgeBuildingMode");
+            this.toggleBridgeBuildingMode.onclick = function () { boxVisibilty_1.BoxVisibility.toggleBridgeBuildingMode(); };
         }
         return this.toggleBridgeBuildingMode;
     }
     getSaveArmies() {
         if (this.saveArmies == undefined) {
             this.saveArmies = document.getElementById("SaveArmies");
+            this.saveArmies.onclick = function () { savingFunctions_1.Saving.saveArmies(); };
         }
         return this.saveArmies;
     }
     getSaveFactionsTerritories() {
         if (this.saveFactionsTerritories == undefined) {
             this.saveFactionsTerritories = document.getElementById("SaveFactionsTerritories");
+            this.saveFactionsTerritories.onclick = function () { savingFunctions_1.Saving.saveFactionsTerritories(); };
         }
         return this.saveFactionsTerritories;
     }
     getToggleArmyCreationMode() {
         if (this.toggleArmyCreationMode == undefined) {
             this.toggleArmyCreationMode = document.getElementById("ToggleArmyCreationMode");
+            this.toggleArmyCreationMode.onclick = function () { boxVisibilty_1.BoxVisibility.toggleArmyCreationMode(); };
         }
         return this.toggleArmyCreationMode;
     }
     getGodDeleteSelectedArmy() {
         if (this.godDeleteSelectedArmy == undefined) {
             this.godDeleteSelectedArmy = document.getElementById("GodDeleteSelectedArmy");
+            this.godDeleteSelectedArmy.onclick = function () { godModeFunctions_1.GodFunctions.godDeleteSelectedArmy(); };
         }
         return this.godDeleteSelectedArmy;
     }
@@ -5984,8 +7019,23 @@ class GodModeBox {
 }
 exports.GodModeBox = GodModeBox;
 
-},{}],36:[function(require,module,exports){
+},{"../godmode/godModeFunctions":29,"../serverInteraction/savingFunctions":59,"./boxVisibilty":32}],37:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const mainBox_1 = require("./mainBox");
 const battleBox_1 = require("./battleBox");
@@ -6001,6 +7051,9 @@ const harborCreationBox_1 = require("./harborCreationBox");
 const bridgeCreationBox_1 = require("./bridgeCreationBox");
 const streetCreationBox_1 = require("./streetCreationBox");
 const infoChangeBox_1 = require("./infoChangeBox");
+const boxVisibilty_1 = require("./boxVisibilty");
+const buttonFunctions_1 = require("../controls/buttonFunctions");
+const authenticationFunctions_1 = require("../serverInteraction/authenticationFunctions");
 class GUI {
     static getCanvas() {
         if (GUI.canvas == undefined) {
@@ -6023,6 +7076,7 @@ class GUI {
     static getToggleGMBarButton() {
         if (GUI.toggleGMBarButton == undefined) {
             GUI.toggleGMBarButton = document.getElementById("ToggleGodModeBar");
+            GUI.toggleGMBarButton.onclick = function () { boxVisibilty_1.BoxVisibility.toggleGodModeBar(); };
         }
         return GUI.toggleGMBarButton;
     }
@@ -6041,6 +7095,7 @@ class GUI {
     static getMainButton() {
         if (GUI.mainButton == undefined) {
             GUI.mainButton = document.getElementById("mainButton");
+            GUI.mainButton.onclick = function () { buttonFunctions_1.ButtonFunctions.mainButton(); };
         }
         return GUI.mainButton;
     }
@@ -6077,12 +7132,14 @@ class GUI {
     static getBackToSplitBox() {
         if (GUI.backToSplitBox == undefined) {
             GUI.backToSplitBox = document.getElementById("backToSplitBox");
+            GUI.backToSplitBox.onclick = function () { boxVisibilty_1.BoxVisibility.backToSplitBox(); };
         }
         return GUI.backToSplitBox;
     }
     static getRestoreInfoBox() {
         if (GUI.restoreInfoBox == undefined) {
             GUI.restoreInfoBox = document.getElementById("restoreInfoBox");
+            GUI.restoreInfoBox.onclick = function () { boxVisibilty_1.BoxVisibility.restoreInfoBox(); };
         }
         return GUI.restoreInfoBox;
     }
@@ -6131,18 +7188,21 @@ class GUI {
     static getSplitSelectedArmy() {
         if (GUI.splitSelectedArmy == undefined) {
             GUI.splitSelectedArmy = document.getElementById("splitSelectedArmy");
+            GUI.splitSelectedArmy.onclick = function () { buttonFunctions_1.ButtonFunctions.splitSelectedArmy(); };
         }
         return GUI.splitSelectedArmy;
     }
     static getActivateTransmuteBox() {
         if (GUI.activateTransmuteBox == undefined) {
             GUI.activateTransmuteBox = document.getElementById("activateTransmuteBox");
+            GUI.activateTransmuteBox.onclick = function () { boxVisibilty_1.BoxVisibility.activateTransmuteBox(); };
         }
         return GUI.activateTransmuteBox;
     }
     static getActivateMergeBox() {
         if (GUI.activateMergeBox == undefined) {
             GUI.activateMergeBox = document.getElementById("activateMergeBox");
+            GUI.activateMergeBox.onclick = function () { boxVisibilty_1.BoxVisibility.activateMergeBox(); };
         }
         return GUI.activateMergeBox;
     }
@@ -6215,12 +7275,14 @@ class GUI {
     static getMountButton() {
         if (GUI.mount == undefined) {
             GUI.mount = document.getElementById("mount");
+            GUI.mount.onclick = function () { buttonFunctions_1.ButtonFunctions.mountSelected(); };
         }
         return GUI.mount;
     }
     static getAllMountButton() {
         if (GUI.allMount == undefined) {
             GUI.allMount = document.getElementById("allMount");
+            GUI.allMount.onclick = function () { buttonFunctions_1.ButtonFunctions.allMountSelected(); };
         }
         return GUI.allMount;
     }
@@ -6245,12 +7307,14 @@ class GUI {
     static getUnMountButton() {
         if (GUI.unMount == undefined) {
             GUI.unMount = document.getElementById("unMount");
+            GUI.unMount.onclick = function () { buttonFunctions_1.ButtonFunctions.unMountSelected; };
         }
         return GUI.unMount;
     }
     static getAllUnMountButton() {
         if (GUI.allUnMount == undefined) {
             GUI.allUnMount = document.getElementById("allUnMount");
+            GUI.allUnMount.onclick = function () { buttonFunctions_1.ButtonFunctions.allUnMountSelected; };
         }
         return GUI.allUnMount;
     }
@@ -6275,6 +7339,7 @@ class GUI {
     static getFireButton() {
         if (GUI.fire == undefined) {
             GUI.fire = document.getElementById("fire");
+            GUI.fire.onclick = function () { buttonFunctions_1.ButtonFunctions.shootWithSelectedArmy(); };
         }
         return GUI.fire;
     }
@@ -6305,6 +7370,7 @@ class GUI {
     static getLoginButton() {
         if (GUI.loginBtn == undefined) {
             GUI.loginBtn = document.getElementById("loginBtn");
+            GUI.loginBtn.onclick = function () { authenticationFunctions_1.Authentication.loginToServer(); };
         }
         return GUI.loginBtn;
     }
@@ -6371,9 +7437,26 @@ class GUI {
 }
 exports.GUI = GUI;
 
-},{"./armyGeneratorBox":29,"./battleBox":30,"./bridgeCreationBox":32,"./buildingCreationBox":33,"./godModeBox":35,"./harborCreationBox":37,"./infoBox":39,"./infoChangeBox":40,"./mainBox":41,"./riverBenderBox":43,"./shootingBigBox":44,"./streetCreationBox":45,"./wallCreationBox":46,"./worldBenderBox":47}],37:[function(require,module,exports){
+},{"../controls/buttonFunctions":17,"../serverInteraction/authenticationFunctions":57,"./armyGeneratorBox":30,"./battleBox":31,"./boxVisibilty":32,"./bridgeCreationBox":33,"./buildingCreationBox":34,"./godModeBox":36,"./harborCreationBox":38,"./infoBox":40,"./infoChangeBox":41,"./mainBox":42,"./riverBenderBox":44,"./shootingBigBox":45,"./streetCreationBox":46,"./wallCreationBox":47,"./worldBenderBox":48}],38:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
+const godModeFunctions_1 = require("../godmode/godModeFunctions");
+const savingFunctions_1 = require("../serverInteraction/savingFunctions");
 class HarborCreationBox {
     getSelf() {
         if (this.self == undefined) {
@@ -6390,36 +7473,42 @@ class HarborCreationBox {
     getAddHarborNW() {
         if (this.addHarborNW == undefined) {
             this.addHarborNW = document.getElementById("addHarborNW");
+            this.addHarborNW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 0 /* NW */, true); };
         }
         return this.addHarborNW;
     }
     getAddHarborNE() {
         if (this.addHarborNE == undefined) {
             this.addHarborNE = document.getElementById("addHarborNE");
+            this.addHarborNE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 1 /* NE */, true); };
         }
         return this.addHarborNE;
     }
     getAddHarborE() {
         if (this.addHarborE == undefined) {
             this.addHarborE = document.getElementById("addHarborE");
+            this.addHarborE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 2 /* E */, true); };
         }
         return this.addHarborE;
     }
     getAddHarborSE() {
         if (this.addHarborSE == undefined) {
             this.addHarborSE = document.getElementById("addHarborSE");
+            this.addHarborSE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 3 /* SE */, true); };
         }
         return this.addHarborSE;
     }
     getAddHarborSW() {
         if (this.addHarborSW == undefined) {
             this.addHarborSW = document.getElementById("addHarborSW");
+            this.addHarborSW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 4 /* SW */, true); };
         }
         return this.addHarborSW;
     }
     getAddHarborW() {
         if (this.addHarborW == undefined) {
             this.addHarborW = document.getElementById("addHarborW");
+            this.addHarborW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 5 /* W */, true); };
         }
         return this.addHarborW;
     }
@@ -6432,50 +7521,72 @@ class HarborCreationBox {
     getRemoveHarborNW() {
         if (this.removeHarborNW == undefined) {
             this.removeHarborNW = document.getElementById("removeHarborNW");
+            this.removeHarborNW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 0 /* NW */, false); };
         }
         return this.removeHarborNW;
     }
     getRemoveHarborNE() {
         if (this.removeHarborNE == undefined) {
             this.removeHarborNE = document.getElementById("removeHarborNE");
+            this.removeHarborNE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 1 /* NE */, false); };
         }
         return this.removeHarborNE;
     }
     getRemoveHarborE() {
         if (this.removeHarborE == undefined) {
             this.removeHarborE = document.getElementById("removeHarborE");
+            this.removeHarborE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 2 /* E */, false); };
         }
         return this.removeHarborE;
     }
     getRemoveHarborSE() {
         if (this.removeHarborSE == undefined) {
             this.removeHarborSE = document.getElementById("removeHarborSE");
+            this.removeHarborSE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 3 /* SE */, false); };
         }
         return this.removeHarborSE;
     }
     getRemoveHarborSW() {
         if (this.removeHarborSW == undefined) {
             this.removeHarborSW = document.getElementById("removeHarborSW");
+            this.removeHarborSW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 4 /* SW */, false); };
         }
         return this.removeHarborSW;
     }
     getRemoveHarborW() {
         if (this.removeHarborW == undefined) {
             this.removeHarborW = document.getElementById("removeHarborW");
+            this.removeHarborW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 5 /* W */, false); };
         }
         return this.removeHarborW;
     }
     getSaveBuildings() {
         if (this.saveBuildings == undefined) {
             this.saveBuildings = document.getElementById("SaveBuildings");
+            this.saveBuildings.onclick = function () { savingFunctions_1.Saving.saveBuildings(); };
         }
         return this.saveBuildings;
     }
 }
 exports.HarborCreationBox = HarborCreationBox;
 
-},{}],38:[function(require,module,exports){
+},{"../godmode/godModeFunctions":29,"../serverInteraction/savingFunctions":59}],39:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 class Images {
 }
@@ -6517,9 +7628,27 @@ Images.bridgeSE = new Image();
 Images.bridgeNE = new Image();
 exports.Images = Images;
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
+const buttonFunctions_1 = require("../controls/buttonFunctions");
+const boxVisibilty_1 = require("./boxVisibilty");
+const authenticationFunctions_1 = require("../serverInteraction/authenticationFunctions");
 class InfoBox {
     getSelf() {
         if (this.self == undefined) {
@@ -6590,39 +7719,61 @@ class InfoBox {
     getMountButton() {
         if (this.mount == undefined) {
             this.mount = document.getElementById("mount");
+            this.mount.onclick = function () { boxVisibilty_1.BoxVisibility.activateMountBox(); };
         }
         return this.mount;
     }
     getUnMountButton() {
         if (this.unMount == undefined) {
             this.unMount = document.getElementById("unMount");
+            this.unMount.onclick = function () { boxVisibilty_1.BoxVisibility.activateUnMountBox(); };
         }
         return this.unMount;
     }
     getSplitButton() {
         if (this.splitBtn == undefined) {
             this.splitBtn = document.getElementById("splitBtn");
+            this.splitBtn.onclick = function () { buttonFunctions_1.ButtonFunctions.activateSplitbox(); };
         }
         return this.splitBtn;
     }
     getShootButton() {
         if (this.shoot == undefined) {
             this.shoot = document.getElementById("shoot");
+            this.shoot.onclick = function () { buttonFunctions_1.ButtonFunctions.toggleShootingMode(); };
         }
         return this.shoot;
     }
     getLogoutButton() {
         if (this.logoutBtn == undefined) {
             this.logoutBtn = document.getElementById("logoutBtn");
+            this.logoutBtn.onclick = function () { authenticationFunctions_1.Authentication.logoutFromServer(); };
         }
         return this.logoutBtn;
     }
 }
 exports.InfoBox = InfoBox;
 
-},{}],40:[function(require,module,exports){
+},{"../controls/buttonFunctions":17,"../serverInteraction/authenticationFunctions":57,"./boxVisibilty":32}],41:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
+const godModeFunctions_1 = require("../godmode/godModeFunctions");
+const authenticationFunctions_1 = require("../serverInteraction/authenticationFunctions");
 class InfoChangeBox {
     getSelf() {
         if (this.self == undefined) {
@@ -6747,20 +7898,37 @@ class InfoChangeBox {
     getChangeArmyInfoButton() {
         if (this.changeArmyInfo == undefined) {
             this.changeArmyInfo = document.getElementById("changeArmyInfo");
+            this.changeArmyInfo.onclick = function () { godModeFunctions_1.GodFunctions.changeArmyInfo(); };
         }
         return this.changeArmyInfo;
     }
     getLogoutButton() {
         if (this.logoutBtnChange == undefined) {
             this.logoutBtnChange = document.getElementById("logoutBtnChange");
+            this.logoutBtnChange.onclick = function () { authenticationFunctions_1.Authentication.logoutFromServer(); };
         }
         return this.logoutBtnChange;
     }
 }
 exports.InfoChangeBox = InfoChangeBox;
 
-},{}],41:[function(require,module,exports){
+},{"../godmode/godModeFunctions":29,"../serverInteraction/authenticationFunctions":57}],42:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const gameState_1 = require("../gameState");
 const boxVisibilty_1 = require("./boxVisibilty");
@@ -6774,6 +7942,7 @@ class MainBox {
     getEventTabsButton() {
         if (this.eventTabsButton == undefined) {
             this.eventTabsButton = document.getElementById("eventTabsButton");
+            // TODO couldnt figure out, what this button is exactly supposed to do
         }
         return this.eventTabsButton;
     }
@@ -6814,8 +7983,23 @@ class MainBox {
 }
 exports.MainBox = MainBox;
 
-},{"../gameState":28,"./boxVisibilty":31}],42:[function(require,module,exports){
+},{"../gameState":28,"./boxVisibilty":32}],43:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const gameState_1 = require("../gameState");
 const drawingFunctions_1 = require("./drawingFunctions");
@@ -6863,9 +8047,26 @@ var MultiFieldFunctions;
     MultiFieldFunctions.addToMultifield = addToMultifield;
 })(MultiFieldFunctions = exports.MultiFieldFunctions || (exports.MultiFieldFunctions = {}));
 
-},{"../gameState":28,"./drawingFunctions":34}],43:[function(require,module,exports){
+},{"../gameState":28,"./drawingFunctions":35}],44:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
+const godModeFunctions_1 = require("../godmode/godModeFunctions");
+const savingFunctions_1 = require("../serverInteraction/savingFunctions");
 class RiverBenderBox {
     getSelf() {
         if (this.self == undefined) {
@@ -6882,36 +8083,42 @@ class RiverBenderBox {
     getAddRiverNW() {
         if (this.addRiverNW == undefined) {
             this.addRiverNW = document.getElementById("addRiverNW");
+            this.addRiverNW.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(0 /* NW */); };
         }
         return this.addRiverNW;
     }
     getAddRiverNE() {
         if (this.addRiverNE == undefined) {
             this.addRiverNE = document.getElementById("addRiverNE");
+            this.addRiverNE.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(1 /* NE */); };
         }
         return this.addRiverNE;
     }
     getAddRiverE() {
         if (this.addRiverE == undefined) {
             this.addRiverE = document.getElementById("addRiverE");
+            this.addRiverE.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(2 /* E */); };
         }
         return this.addRiverE;
     }
     getAddRiverSE() {
         if (this.addRiverSE == undefined) {
             this.addRiverSE = document.getElementById("addRiverSE");
+            this.addRiverSE.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(3 /* SE */); };
         }
         return this.addRiverSE;
     }
     getAddRiverSW() {
         if (this.addRiverSW == undefined) {
             this.addRiverSW = document.getElementById("addRiverSW");
+            this.addRiverSW.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(4 /* SW */); };
         }
         return this.addRiverSW;
     }
     getAddRiverW() {
         if (this.addRiverW == undefined) {
             this.addRiverW = document.getElementById("addRiverW");
+            this.addRiverW.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(5 /* W */); };
         }
         return this.addRiverW;
     }
@@ -6924,50 +8131,72 @@ class RiverBenderBox {
     getRemoveRiverNW() {
         if (this.removeRiverNW == undefined) {
             this.removeRiverNW = document.getElementById("removeRiverNW");
+            this.removeRiverNW.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(0 /* NW */); };
         }
         return this.removeRiverNW;
     }
     getRemoveRiverNE() {
         if (this.removeRiverNE == undefined) {
             this.removeRiverNE = document.getElementById("removeRiverNE");
+            this.removeRiverNE.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(1 /* NE */); };
         }
         return this.removeRiverNE;
     }
     getRemoveRiverE() {
         if (this.removeRiverE == undefined) {
             this.removeRiverE = document.getElementById("removeRiverE");
+            this.removeRiverE.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(2 /* E */); };
         }
         return this.removeRiverE;
     }
     getRemoveRiverSE() {
         if (this.removeRiverSE == undefined) {
             this.removeRiverSE = document.getElementById("removeRiverSE");
+            this.removeRiverSE.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(3 /* SE */); };
         }
         return this.removeRiverSE;
     }
     getRemoveRiverSW() {
         if (this.removeRiverSW == undefined) {
             this.removeRiverSW = document.getElementById("removeRiverSW");
+            this.removeRiverSW.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(4 /* SW */); };
         }
         return this.removeRiverSW;
     }
     getRemoveRiverW() {
         if (this.removeRiverW == undefined) {
             this.removeRiverW = document.getElementById("removeRiverW");
+            this.removeRiverW.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(5 /* W */); };
         }
         return this.removeRiverW;
     }
     getSaveRivers() {
         if (this.saveRivers == undefined) {
             this.saveRivers = document.getElementById("SaveRivers");
+            this.saveRivers.onclick = function () { savingFunctions_1.Saving.saveRivers(); };
         }
         return this.saveRivers;
     }
 }
 exports.RiverBenderBox = RiverBenderBox;
 
-},{}],44:[function(require,module,exports){
+},{"../godmode/godModeFunctions":29,"../serverInteraction/savingFunctions":59}],45:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 class ShootingBigBox {
     getSelf() {
@@ -6979,6 +8208,7 @@ class ShootingBigBox {
     getCloseRangedBattleButton() {
         if (this.closeRangedBattleButton == undefined) {
             this.closeRangedBattleButton = document.getElementById("closeRangedBattleButton");
+            // onclick gets set in shootEvent.ts
         }
         return this.closeRangedBattleButton;
     }
@@ -7069,15 +8299,33 @@ class ShootingBigBox {
     getRangedBattleButton() {
         if (this.rangedBattleButton == undefined) {
             this.rangedBattleButton = document.getElementById("rangedBattleButton");
+            // onclick gets set in shootEvent.ts
         }
         return this.rangedBattleButton;
     }
 }
 exports.ShootingBigBox = ShootingBigBox;
 
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
+const godModeFunctions_1 = require("../godmode/godModeFunctions");
+const savingFunctions_1 = require("../serverInteraction/savingFunctions");
 class StreetCreationBox {
     getSelf() {
         if (this.self == undefined) {
@@ -7094,36 +8342,42 @@ class StreetCreationBox {
     getAddStreetNW() {
         if (this.addStreetNW == undefined) {
             this.addStreetNW = document.getElementById("addStreetNW");
+            this.addStreetNW.onclick = function () { godModeFunctions_1.GodFunctions.addStreet(0 /* NW */); };
         }
         return this.addStreetNW;
     }
     getAddStreetNE() {
         if (this.addStreetNE == undefined) {
             this.addStreetNE = document.getElementById("addStreetNE");
+            this.addStreetNE.onclick = function () { godModeFunctions_1.GodFunctions.addStreet(1 /* NE */); };
         }
         return this.addStreetNE;
     }
     getAddStreetE() {
         if (this.addStreetE == undefined) {
             this.addStreetE = document.getElementById("addStreetE");
+            this.addStreetE.onclick = function () { godModeFunctions_1.GodFunctions.addStreet(2 /* E */); };
         }
         return this.addStreetE;
     }
     getAddStreetSE() {
         if (this.addStreetSE == undefined) {
             this.addStreetSE = document.getElementById("addStreetSE");
+            this.addStreetSE.onclick = function () { godModeFunctions_1.GodFunctions.addStreet(3 /* SE */); };
         }
         return this.addStreetSE;
     }
     getAddStreetSW() {
         if (this.addStreetSW == undefined) {
             this.addStreetSW = document.getElementById("addStreetSW");
+            this.addStreetSW.onclick = function () { godModeFunctions_1.GodFunctions.addStreet(4 /* SW */); };
         }
         return this.addStreetSW;
     }
     getAddStreetW() {
         if (this.addStreetW == undefined) {
             this.addStreetW = document.getElementById("addStreetW");
+            this.addStreetW.onclick = function () { godModeFunctions_1.GodFunctions.addStreet(5 /* W */); };
         }
         return this.addStreetW;
     }
@@ -7136,51 +8390,75 @@ class StreetCreationBox {
     getRemoveStreetNW() {
         if (this.removeStreetNW == undefined) {
             this.removeStreetNW = document.getElementById("removeStreetNW");
+            this.removeStreetNW.onclick = function () { godModeFunctions_1.GodFunctions.removeStreet(0 /* NW */); };
         }
         return this.removeStreetNW;
     }
     getRemoveStreetNE() {
         if (this.removeStreetNE == undefined) {
             this.removeStreetNE = document.getElementById("removeStreetNE");
+            this.removeStreetNE.onclick = function () { godModeFunctions_1.GodFunctions.removeStreet(1 /* NE */); };
         }
         return this.removeStreetNE;
     }
     getRemoveStreetE() {
         if (this.removeStreetE == undefined) {
             this.removeStreetE = document.getElementById("removeStreetE");
+            this.removeStreetE.onclick = function () { godModeFunctions_1.GodFunctions.removeStreet(2 /* E */); };
         }
         return this.removeStreetE;
     }
     getRemoveStreetSE() {
         if (this.removeStreetSE == undefined) {
             this.removeStreetSE = document.getElementById("removeStreetSE");
+            this.removeStreetSE.onclick = function () { godModeFunctions_1.GodFunctions.removeStreet(3 /* SE */); };
         }
         return this.removeStreetSE;
     }
     getRemoveStreetSW() {
         if (this.removeStreetSW == undefined) {
             this.removeStreetSW = document.getElementById("removeStreetSW");
+            this.removeStreetSW.onclick = function () { godModeFunctions_1.GodFunctions.removeStreet(4 /* SW */); };
         }
         return this.removeStreetSW;
     }
     getRemoveStreetW() {
         if (this.removeStreetW == undefined) {
             this.removeStreetW = document.getElementById("removeStreetW");
+            this.removeStreetW.onclick = function () { godModeFunctions_1.GodFunctions.removeStreet(5 /* W */); };
         }
         return this.removeStreetW;
     }
     getSaveBuildings() {
         if (this.saveBuildings == undefined) {
             this.saveBuildings = document.getElementById("SaveBuildings");
+            this.saveBuildings.onclick = function () { savingFunctions_1.Saving.saveBuildings(); };
         }
         return this.saveBuildings;
     }
 }
 exports.StreetCreationBox = StreetCreationBox;
 
-},{}],46:[function(require,module,exports){
+},{"../godmode/godModeFunctions":29,"../serverInteraction/savingFunctions":59}],47:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
+const godModeFunctions_1 = require("../godmode/godModeFunctions");
+const savingFunctions_1 = require("../serverInteraction/savingFunctions");
 class WallCreationBox {
     getSelf() {
         if (this.self == undefined) {
@@ -7197,36 +8475,42 @@ class WallCreationBox {
     getAddWallNW() {
         if (this.addWallNW == undefined) {
             this.addWallNW = document.getElementById("addWallNW");
+            this.addWallNW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 0 /* NW */, true); };
         }
         return this.addWallNW;
     }
     getAddWallNE() {
         if (this.addWallNE == undefined) {
             this.addWallNE = document.getElementById("addWallNE");
+            this.addWallNE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 1 /* NE */, true); };
         }
         return this.addWallNE;
     }
     getAddWallE() {
         if (this.addWallE == undefined) {
             this.addWallE = document.getElementById("addWallE");
+            this.addWallE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 2 /* E */, true); };
         }
         return this.addWallE;
     }
     getAddWallSE() {
         if (this.addWallSE == undefined) {
             this.addWallSE = document.getElementById("addWallSE");
+            this.addWallSE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 3 /* SE */, true); };
         }
         return this.addWallSE;
     }
     getAddWallSW() {
         if (this.addWallSW == undefined) {
             this.addWallSW = document.getElementById("addWallSW");
+            this.addWallSW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 4 /* SW */, true); };
         }
         return this.addWallSW;
     }
     getAddWallW() {
         if (this.addWallW == undefined) {
             this.addWallW = document.getElementById("addWallW");
+            this.addWallW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 5 /* W */, true); };
         }
         return this.addWallW;
     }
@@ -7239,51 +8523,75 @@ class WallCreationBox {
     getRemoveWallNW() {
         if (this.removeWallNW == undefined) {
             this.removeWallNW = document.getElementById("removeWallNW");
+            this.removeWallNW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 0 /* NW */, false); };
         }
         return this.removeWallNW;
     }
     getRemoveWallNE() {
         if (this.removeWallNE == undefined) {
             this.removeWallNE = document.getElementById("removeWallNE");
+            this.removeWallNE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 1 /* NE */, false); };
         }
         return this.removeWallNE;
     }
     getRemoveWallE() {
         if (this.removeWallE == undefined) {
             this.removeWallE = document.getElementById("removeWallE");
+            this.removeWallE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 2 /* E */, false); };
         }
         return this.removeWallE;
     }
     getRemoveWallSE() {
         if (this.removeWallSE == undefined) {
             this.removeWallSE = document.getElementById("removeWallSE");
+            this.removeWallSE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 3 /* SE */, false); };
         }
         return this.removeWallSE;
     }
     getRemoveWallSW() {
         if (this.removeWallSW == undefined) {
             this.removeWallSW = document.getElementById("removeWallSW");
+            this.removeWallSW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 4 /* SW */, false); };
         }
         return this.removeWallSW;
     }
     getRemoveWallW() {
         if (this.removeWallW == undefined) {
             this.removeWallW = document.getElementById("removeWallW");
+            this.removeWallW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 5 /* W */, false); };
         }
         return this.removeWallW;
     }
     getSaveBuildings() {
         if (this.saveBuildings == undefined) {
             this.saveBuildings = document.getElementById("SaveBuildings");
+            this.saveBuildings.onclick = function () { savingFunctions_1.Saving.saveBuildings(); };
         }
         return this.saveBuildings;
     }
 }
 exports.WallCreationBox = WallCreationBox;
 
-},{}],47:[function(require,module,exports){
+},{"../godmode/godModeFunctions":29,"../serverInteraction/savingFunctions":59}],48:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
+const godModeFunctions_1 = require("../godmode/godModeFunctions");
+const savingFunctions_1 = require("../serverInteraction/savingFunctions");
 class WorldBenderBox {
     getSelf() {
         if (this.self == undefined) {
@@ -7300,12 +8608,14 @@ class WorldBenderBox {
     getToggleOnClickWorldCreationMode() {
         if (this.toggleOnClickWorldCreationMode == undefined) {
             this.toggleOnClickWorldCreationMode = document.getElementById("ToggleOnClickWorldCreationMode");
+            this.toggleOnClickWorldCreationMode.onclick = function () { godModeFunctions_1.GodFunctions.toggleOnClickWorldCreationMode(); };
         }
         return this.toggleOnClickWorldCreationMode;
     }
     getSaveFields() {
         if (this.saveFields == undefined) {
             this.saveFields = document.getElementById("SaveFields");
+            this.saveFields.onclick = function () { savingFunctions_1.Saving.saveFields(); };
         }
         return this.saveFields;
     }
@@ -7318,68 +8628,93 @@ class WorldBenderBox {
     getChangeFieldClickedTo0() {
         if (this.changeFieldClickedTo0 == undefined) {
             this.changeFieldClickedTo0 = document.getElementById("ChangeFieldClickedTo0");
+            this.changeFieldClickedTo0.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(0); };
         }
         return this.changeFieldClickedTo0;
     }
     getChangeFieldClickedTo1() {
         if (this.changeFieldClickedTo1 == undefined) {
             this.changeFieldClickedTo1 = document.getElementById("ChangeFieldClickedTo1");
+            this.changeFieldClickedTo1.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(1); };
         }
         return this.changeFieldClickedTo1;
     }
     getChangeFieldClickedTo2() {
         if (this.changeFieldClickedTo2 == undefined) {
             this.changeFieldClickedTo2 = document.getElementById("ChangeFieldClickedTo2");
+            this.changeFieldClickedTo2.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(2); };
         }
         return this.changeFieldClickedTo2;
     }
     getChangeFieldClickedTo3() {
         if (this.changeFieldClickedTo3 == undefined) {
             this.changeFieldClickedTo3 = document.getElementById("ChangeFieldClickedTo3");
+            this.changeFieldClickedTo3.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(3); };
         }
         return this.changeFieldClickedTo3;
     }
     getChangeFieldClickedTo4() {
         if (this.changeFieldClickedTo4 == undefined) {
             this.changeFieldClickedTo4 = document.getElementById("ChangeFieldClickedTo4");
+            this.changeFieldClickedTo4.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(4); };
         }
         return this.changeFieldClickedTo4;
     }
     getChangeFieldClickedTo5() {
         if (this.changeFieldClickedTo5 == undefined) {
             this.changeFieldClickedTo5 = document.getElementById("ChangeFieldClickedTo5");
+            this.changeFieldClickedTo5.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(5); };
         }
         return this.changeFieldClickedTo5;
     }
     getChangeFieldClickedTo6() {
         if (this.changeFieldClickedTo6 == undefined) {
             this.changeFieldClickedTo6 = document.getElementById("ChangeFieldClickedTo6");
+            this.changeFieldClickedTo6.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(6); };
         }
         return this.changeFieldClickedTo6;
     }
     getChangeFieldClickedTo7() {
         if (this.changeFieldClickedTo7 == undefined) {
             this.changeFieldClickedTo7 = document.getElementById("ChangeFieldClickedTo7");
+            this.changeFieldClickedTo7.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(7); };
         }
         return this.changeFieldClickedTo7;
     }
     getChangeFieldClickedTo8() {
         if (this.changeFieldClickedTo8 == undefined) {
             this.changeFieldClickedTo8 = document.getElementById("ChangeFieldClickedTo8");
+            this.changeFieldClickedTo8.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(8); };
         }
         return this.changeFieldClickedTo8;
     }
     getChangeFieldClickedTo9() {
         if (this.changeFieldClickedTo9 == undefined) {
             this.changeFieldClickedTo9 = document.getElementById("ChangeFieldClickedTo9");
+            this.changeFieldClickedTo9.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(9); };
         }
         return this.changeFieldClickedTo9;
     }
 }
 exports.WorldBenderBox = WorldBenderBox;
 
-},{}],48:[function(require,module,exports){
+},{"../godmode/godModeFunctions":29,"../serverInteraction/savingFunctions":59}],49:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const controlVariables_1 = require("../controls/controlVariables");
 const gameState_1 = require("../gameState");
@@ -7447,9 +8782,23 @@ var ArmyFunctions;
     ArmyFunctions.checkArmiesForLiveliness = checkArmiesForLiveliness;
 })(ArmyFunctions = exports.ArmyFunctions || (exports.ArmyFunctions = {}));
 
-},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/landArmy":6,"../armies/riderArmy":9,"../controls/controlVariables":18,"../gameState":28}],49:[function(require,module,exports){
+},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/landArmy":6,"../armies/riderArmy":9,"../controls/controlVariables":18,"../gameState":28}],50:[function(require,module,exports){
 "use strict";
-// contains helper functions to get information about a field out of the fields array with just its coordinates.
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const gameState_1 = require("../gameState");
 const wall_1 = require("../buildings/wall");
@@ -7733,8 +9082,23 @@ var HexFunction;
     }
 })(HexFunction = exports.HexFunction || (exports.HexFunction = {}));
 
-},{"../buildings/wall":15,"../constants":16,"../gameState":28,"../gui/drawingFunctions":34}],50:[function(require,module,exports){
+},{"../buildings/wall":15,"../constants":16,"../gameState":28,"../gui/drawingFunctions":35}],51:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 function stringToDirection(dir) {
     switch (dir) {
@@ -7773,8 +9137,23 @@ function reverseDirection(direction) {
 }
 exports.reverseDirection = reverseDirection;
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 class Field {
     constructor(coordinates, type) {
@@ -7798,8 +9177,23 @@ class Field {
 }
 exports.Field = Field;
 
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 class MapEntity {
     constructor(position, owner) {
@@ -7815,8 +9209,23 @@ class MapEntity {
 }
 exports.MapEntity = MapEntity;
 
-},{}],53:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 class River {
     constructor(leftBank, rightBank) {
@@ -7826,8 +9235,23 @@ class River {
 }
 exports.River = River;
 
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const mouseFunctions_1 = require("./controls/mouseFunctions");
 const drawingFunctions_1 = require("./gui/drawingFunctions");
@@ -7847,8 +9271,23 @@ drawingFunctions_1.Drawing.setHexParts(drawingFunctions_1.Drawing.scale);
 // activating periodic reloading of data from server
 setInterval(loadingDataFunctions_1.Loading.getNewDataFromServer, 30000);
 
-},{"./controls/mouseFunctions":19,"./gui/drawingFunctions":34,"./gui/gui":36,"./serverInteraction/loadingDataFunctions":57}],55:[function(require,module,exports){
+},{"./controls/mouseFunctions":19,"./gui/drawingFunctions":35,"./gui/gui":37,"./serverInteraction/loadingDataFunctions":58}],56:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 class Realm {
     constructor(name, tag, color, homeTurf, active) {
@@ -7869,8 +9308,23 @@ class Realm {
 }
 exports.Realm = Realm;
 
-},{}],56:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const gui_1 = require("../gui/gui");
 const boxVisibilty_1 = require("../gui/boxVisibilty");
@@ -7965,8 +9419,23 @@ var Authentication;
     Authentication.logoutFromServer = logoutFromServer;
 })(Authentication = exports.Authentication || (exports.Authentication = {}));
 
-},{"../gameState":28,"../gui/boxVisibilty":31,"../gui/drawingFunctions":34,"../gui/gui":36,"./loadingDataFunctions":57}],57:[function(require,module,exports){
+},{"../gameState":28,"../gui/boxVisibilty":32,"../gui/drawingFunctions":35,"../gui/gui":37,"./loadingDataFunctions":58}],58:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const drawingFunctions_1 = require("../gui/drawingFunctions");
 const authenticationFunctions_1 = require("./authenticationFunctions");
@@ -8255,8 +9724,23 @@ var Loading;
     Loading.loadImages = loadImages;
 })(Loading = exports.Loading || (exports.Loading = {}));
 
-},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9,"../buildings/nonDestructibleBuilding":13,"../buildings/productionBuilding":14,"../buildings/wall":15,"../events/battleEvent":20,"../events/mergeEvent":22,"../events/mountEvent":23,"../events/moveEvent":24,"../events/shootEvent":25,"../events/splitEvent":26,"../events/transferEvent":27,"../gameState":28,"../gui/drawingFunctions":34,"../gui/gui":36,"../gui/images":38,"../map/direction":50,"../map/field":51,"../map/river":53,"../realm":55,"./authenticationFunctions":56}],58:[function(require,module,exports){
+},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9,"../buildings/nonDestructibleBuilding":13,"../buildings/productionBuilding":14,"../buildings/wall":15,"../events/battleEvent":20,"../events/mergeEvent":22,"../events/mountEvent":23,"../events/moveEvent":24,"../events/shootEvent":25,"../events/splitEvent":26,"../events/transferEvent":27,"../gameState":28,"../gui/drawingFunctions":35,"../gui/gui":37,"../gui/images":39,"../map/direction":51,"../map/field":52,"../map/river":54,"../realm":56,"./authenticationFunctions":57}],59:[function(require,module,exports){
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const gameState_1 = require("../gameState");
 const drawingFunctions_1 = require("../gui/drawingFunctions");
@@ -8708,4 +10192,4 @@ var Saving;
     Saving.untagHitArmys = untagHitArmys;
 })(Saving = exports.Saving || (exports.Saving = {}));
 
-},{"../armies/footArmy":5,"../armies/landArmy":6,"../controls/controlVariables":18,"../events/battleEvent":20,"../events/mergeEvent":22,"../events/mountEvent":23,"../events/moveEvent":24,"../events/shootEvent":25,"../events/splitEvent":26,"../events/transferEvent":27,"../gameState":28,"../gui/drawingFunctions":34,"./authenticationFunctions":56}]},{},[54]);
+},{"../armies/footArmy":5,"../armies/landArmy":6,"../controls/controlVariables":18,"../events/battleEvent":20,"../events/mergeEvent":22,"../events/mountEvent":23,"../events/moveEvent":24,"../events/shootEvent":25,"../events/splitEvent":26,"../events/transferEvent":27,"../gameState":28,"../gui/drawingFunctions":35,"./authenticationFunctions":57}]},{},[55]);

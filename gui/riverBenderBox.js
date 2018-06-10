@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const godModeFunctions_1 = require("../godmode/godModeFunctions");
-const app_1 = require("../app");
+const savingFunctions_1 = require("../serverInteraction/savingFunctions");
 class RiverBenderBox {
     getSelf() {
         if (this.self == undefined) {
@@ -123,7 +123,7 @@ class RiverBenderBox {
     getSaveRivers() {
         if (this.saveRivers == undefined) {
             this.saveRivers = document.getElementById("SaveRivers");
-            this.saveRivers.onclick = function () { app_1.Saving.saveRivers(); };
+            this.saveRivers.onclick = function () { savingFunctions_1.Saving.saveRivers(); };
         }
         return this.saveRivers;
     }

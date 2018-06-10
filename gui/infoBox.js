@@ -17,7 +17,7 @@ along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const buttonFunctions_1 = require("../controls/buttonFunctions");
 const boxVisibilty_1 = require("./boxVisibilty");
-const app_1 = require("../app");
+const authenticationFunctions_1 = require("../serverInteraction/authenticationFunctions");
 class InfoBox {
     getSelf() {
         if (this.self == undefined) {
@@ -116,7 +116,7 @@ class InfoBox {
     getLogoutButton() {
         if (this.logoutBtn == undefined) {
             this.logoutBtn = document.getElementById("logoutBtn");
-            this.logoutBtn.onclick = function () { app_1.Authentication.logoutFromServer(); };
+            this.logoutBtn.onclick = function () { authenticationFunctions_1.Authentication.logoutFromServer(); };
         }
         return this.logoutBtn;
     }

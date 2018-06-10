@@ -30,7 +30,7 @@ import { BuildingType, Building } from "../buildings/building";
 import { NonDestructibleBuilding } from "../buildings/nonDestructibleBuilding";
 import { Wall } from "../buildings/wall";
 import { FootArmy } from "../armies/footArmy";
-import {Constants} from "../constants";
+import { Constants } from "../constants";
 
 export namespace GodFunctions {
 	import worldCreationModeOnClick = BoxVisibility.worldCreationModeOnClick;

@@ -35,8 +35,8 @@ import {Controls} from "../controls/controlVariables";
 import {BoxVisibility} from "../gui/boxVisibilty";
 import {Drawing} from "../gui/drawingFunctions";
 import {ArmyFunctions} from "../libraries/armyFunctions";
-import { MountEvent } from "../events/mountEvent";
-import { EventStatus } from "../events/eventStatus";
+import {MountEvent} from "../events/mountEvent";
+import {EventStatus} from "../events/eventStatus";
 import {Army} from "./army";
 import {ShootingCondition} from "./shootingFunctions";
 

@@ -68,40 +68,56 @@ export class BattleBox {
     moveToAttack(i: number): (() => void) {
         let ctx = this;
         return function () {
-            let t = ctx.battleHandler.unsortedArmies.splice(i, 1);
-            ctx.battleHandler.attackerArmies.push(t[0]);
-            ctx.updateTroopCounts();
-            ctx.updateDisplay();
+            if(ctx.battleHandler != undefined) {
+                let t = ctx.battleHandler.unsortedArmies.splice(i, 1);
+                ctx.battleHandler.attackerArmies.push(t[0]);
+                ctx.updateTroopCounts();
+                ctx.updateDisplay();
+            } else {
+                throw new Error("BattleHandler is not initialized before being used.");
+            }
         }
     }
 
     moveToDefense(i: number): (() => void) {
         let ctx = this;
         return function () {
-            let t = ctx.battleHandler.unsortedArmies.splice(i, 1);
-            ctx.battleHandler.defenderArmies.push(t[0]);
-            ctx.updateTroopCounts();
-            ctx.updateDisplay();
+            if(ctx.battleHandler != undefined) {
+                let t = ctx.battleHandler.unsortedArmies.splice(i, 1);
+                ctx.battleHandler.defenderArmies.push(t[0]);
+                ctx.updateTroopCounts();
+                ctx.updateDisplay();
+            } else {
+                throw new Error("BattleHandler is not initialized before being used.");
+            }
         }
     }
 
     removeFromDefense(i: number): (() => void) {
         let ctx = this;
         return function () {
-            let t = ctx.battleHandler.defenderArmies.splice(i, 1);
-            ctx.battleHandler.unsortedArmies.push(t[0]);
-            ctx.updateTroopCounts();
-            ctx.updateDisplay();
+            if(ctx.battleHandler != undefined) {
+                let t = ctx.battleHandler.defenderArmies.splice(i, 1);
+                ctx.battleHandler.unsortedArmies.push(t[0]);
+                ctx.updateTroopCounts();
+                ctx.updateDisplay();
+            } else {
+                throw new Error("BattleHandler is not initialized before being used.");
+            }
         }
     }
 
     removeFromAttack(i: number): (() => void) {
         let ctx = this;
         return function () {
-            let t = ctx.battleHandler.attackerArmies.splice(i, 1);
-            ctx.battleHandler.unsortedArmies.push(t[0]);
-            ctx.updateTroopCounts();
-            ctx.updateDisplay();
+            if(ctx.battleHandler != undefined) {
+                let t = ctx.battleHandler.attackerArmies.splice(i, 1);
+                ctx.battleHandler.unsortedArmies.push(t[0]);
+                ctx.updateTroopCounts();
+                ctx.updateDisplay();
+            } else {
+                throw new Error("BattleHandler is not initialized before being used.");
+            }
         }
     }
 
@@ -129,64 +145,72 @@ export class BattleBox {
         this.defenseGuardShips = 0;
         let ctx = this;
 
-        this.battleHandler.attackerArmies.forEach(function (item) {
-            if (item instanceof FootArmy) {//footman army
-                if (item.isGuard) {
-                    ctx.attackGuardSoldiers += item.getTroopCount();
-                } else {
-                    ctx.attackSoldiers += item.getTroopCount();
+        if(this.battleHandler != undefined) {
+            this.battleHandler.attackerArmies.forEach(function (item) {
+                if (item instanceof FootArmy) {//footman army
+                    if (item.isGuard) {
+                        ctx.attackGuardSoldiers += item.getTroopCount();
+                    } else {
+                        ctx.attackSoldiers += item.getTroopCount();
+                    }
+                } else if (item instanceof RiderArmy) {//rider army
+                    if (item.isGuard) {
+                        ctx.attackGuardRiders += item.getTroopCount();
+                    } else {
+                        ctx.attackRiders += item.getTroopCount();
+                    }
+                } else if (item instanceof Fleet) {//navy
+                    if (item.isGuard) {
+                        ctx.attackGuardShips += item.getTroopCount();
+                    } else {
+                        ctx.attackShips += item.getTroopCount();
+                    }
+                    ctx.attackLightWarships += item.getLightCatapultCount();
+                    ctx.attackHeavyWarships += item.getHeavyCatapultCount();
                 }
-            } else if (item instanceof RiderArmy) {//rider army
-                if (item.isGuard) {
-                    ctx.attackGuardRiders += item.getTroopCount();
-                } else {
-                    ctx.attackRiders += item.getTroopCount();
+                ctx.attackOfficers += (item as Army).getOfficerCount();
+            });
+            this.battleHandler.defenderArmies.forEach(function (item) {
+                if (item instanceof FootArmy) {//footman army
+                    if (item.isGuard) {
+                        ctx.defenseGuardSoldiers += item.getTroopCount();
+                    } else {
+                        ctx.defenseSoldiers += item.getTroopCount();
+                    }
+                } else if (item instanceof RiderArmy) {//rider army
+                    if (item.isGuard) {
+                        ctx.defenseGuardRiders += item.getTroopCount();
+                    } else {
+                        ctx.defenseRiders += item.getTroopCount();
+                    }
+                } else if (item instanceof Fleet) {//navy
+                    if (item.isGuard) {
+                        ctx.defenseGuardShips += item.getTroopCount();
+                    } else {
+                        ctx.defenseShips += item.getTroopCount();
+                    }
+                    ctx.defenseLightWarships += item.getLightCatapultCount();
+                    ctx.defenseHeavyWarships += item.getHeavyCatapultCount();
                 }
-            } else if (item instanceof Fleet) {//navy
-                if (item.isGuard) {
-                    ctx.attackGuardShips += item.getTroopCount();
-                } else {
-                    ctx.attackShips += item.getTroopCount();
-                }
-                ctx.attackLightWarships += item.getLightCatapultCount();
-                ctx.attackHeavyWarships += item.getHeavyCatapultCount();
-            }
-            ctx.attackOfficers += (item as Army).getOfficerCount();
-        });
-        this.battleHandler.defenderArmies.forEach(function (item) {
-            if (item instanceof FootArmy) {//footman army
-                if (item.isGuard) {
-                    ctx.defenseGuardSoldiers += item.getTroopCount();
-                } else {
-                    ctx.defenseSoldiers += item.getTroopCount();
-                }
-            } else if (item instanceof RiderArmy) {//rider army
-                if (item.isGuard) {
-                    ctx.defenseGuardRiders += item.getTroopCount();
-                } else {
-                    ctx.defenseRiders += item.getTroopCount();
-                }
-            } else if (item instanceof Fleet) {//navy
-                if (item.isGuard) {
-                    ctx.defenseGuardShips += item.getTroopCount();
-                } else {
-                    ctx.defenseShips += item.getTroopCount();
-                }
-                ctx.defenseLightWarships += item.getLightCatapultCount();
-                ctx.defenseHeavyWarships += item.getHeavyCatapultCount();
-            }
-            ctx.defenseOfficers += (item as Army).getOfficerCount();
-        });
+                ctx.defenseOfficers += (item as Army).getOfficerCount();
+            });
+        } else {
+            throw new Error("BattleHandler is not initialized before being used.");
+        }
     }
 
     updateDisplay(): void {
         //enable / disable the battle button
-        if (this.battleHandler.attackerArmies.length === 0 || this.battleHandler.defenderArmies.length === 0) {
-            this.getBattleButton().disabled = true;
-            this.getBattleButton().style.cursor = "not-allowed";
+        if(this.battleHandler != undefined) {
+            if (this.battleHandler.attackerArmies.length === 0 || this.battleHandler.defenderArmies.length === 0) {
+                this.getBattleButton().disabled = true;
+                this.getBattleButton().style.cursor = "not-allowed";
+            } else {
+                this.getBattleButton().disabled = false;
+                this.getBattleButton().style.cursor = "initial";
+            }
         } else {
-            this.getBattleButton().disabled = false;
-            this.getBattleButton().style.cursor = "initial";
+            throw new Error("BattleHandler is not initialized before being used.");
         }
 
         this.updateArmyLists();
@@ -199,22 +223,26 @@ export class BattleBox {
     private updateArmyLists(): void {
         //fill the sortable lists of armies
         this.getAttackArmiesBox().innerHTML = "";
-        this.battleHandler.attackerArmies.forEach((item, index) => {
-            let listItem = document.createElement("DIV");
-            this.getAttackArmiesBox().appendChild(listItem);
-            listItem.classList.add("armyListItem");
+        if(this.battleHandler != undefined) {
+            this.battleHandler.attackerArmies.forEach((item, index) => {
+                let listItem = document.createElement("DIV");
+                this.getAttackArmiesBox().appendChild(listItem);
+                listItem.classList.add("armyListItem");
 
-            let div = document.createElement("DIV");
-            div.classList.add("center");
-            div.innerHTML = item.owner + " " + item.getErkenfaraID();
-            listItem.appendChild(div);
+                let div = document.createElement("DIV");
+                div.classList.add("center");
+                div.innerHTML = item.owner + " " + item.getErkenfaraID();
+                listItem.appendChild(div);
 
-            let moveBtn = document.createElement("BUTTON");
-            moveBtn.classList.add("armyListButton");
-            moveBtn.classList.add("moveRightButton");
-            moveBtn.onclick = this.removeFromAttack(index);
-            listItem.appendChild(moveBtn);
-        }, this);
+                let moveBtn = document.createElement("BUTTON");
+                moveBtn.classList.add("armyListButton");
+                moveBtn.classList.add("moveRightButton");
+                moveBtn.onclick = this.removeFromAttack(index);
+                listItem.appendChild(moveBtn);
+            }, this);
+        } else {
+            throw new Error("BattleHandler is not initialized before being used.");
+        }
 
         this.getUnsortedArmiesBox().innerHTML = "";
         this.battleHandler.unsortedArmies.forEach((item, index) => {
@@ -294,68 +322,73 @@ export class BattleBox {
 
     private updateResultPreview(): void {
         //Instant result preview (remove if not desired)
-        let battleResult: BattleResult = this.battleHandler.calculateResult(this.battleHandler.attackerArmies.map((val) => (val)),
-            this.battleHandler.defenderArmies.map((val) => (val)), [], [], this.battleHandler.location,
-            parseInt(this.getAttackDiceRoll().value), parseInt(this.getDefenseDiceRoll().value));
+        let battleResult: BattleResult = new BattleResult(Result.TIE, [0], [0]);
+        if(this.battleHandler != undefined) {
+            let battleResult: BattleResult = this.battleHandler.calculateResult(this.battleHandler.attackerArmies.map((val) => (val)),
+                this.battleHandler.defenderArmies.map((val) => (val)), [], [], this.battleHandler.location,
+                parseInt(this.getAttackDiceRoll().value), parseInt(this.getDefenseDiceRoll().value));
+        } else {
+            throw new Error("BattleHandler is not initialized before being used.");
+        }
 
         let attackFootLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof FootArmy && !this.battleHandler.attackerArmies[index].isGuard)
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof FootArmy && !this.battleHandler.attackerArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let attackCavLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof RiderArmy && !this.battleHandler.attackerArmies[index].isGuard)
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof RiderArmy && !this.battleHandler.attackerArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let attackFleetLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof Fleet && !this.battleHandler.attackerArmies[index].isGuard)
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof Fleet && !this.battleHandler.attackerArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let attackGuardFootLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof FootArmy && this.battleHandler.attackerArmies[index].isGuard)
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof FootArmy && this.battleHandler.attackerArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let attackGuardCavLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof RiderArmy && this.battleHandler.attackerArmies[index].isGuard)
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof RiderArmy && this.battleHandler.attackerArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let attackGuardFleetLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof Fleet && this.battleHandler.attackerArmies[index].isGuard)
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof Fleet && this.battleHandler.attackerArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
 
         let defenseFootLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof FootArmy && !this.battleHandler.defenderArmies[index].isGuard)
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof FootArmy && !this.battleHandler.defenderArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let defenseCavLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof RiderArmy && !this.battleHandler.defenderArmies[index].isGuard)
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof RiderArmy && !this.battleHandler.defenderArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let defenseFleetLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof Fleet && !this.battleHandler.defenderArmies[index].isGuard)
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof Fleet && !this.battleHandler.defenderArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let defenseGuardFootLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof FootArmy && this.battleHandler.defenderArmies[index].isGuard)
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof FootArmy && this.battleHandler.defenderArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let defenseGuardCavLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof RiderArmy && this.battleHandler.defenderArmies[index].isGuard)
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof RiderArmy && this.battleHandler.defenderArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let defenseGuardFleetLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof Fleet && this.battleHandler.defenderArmies[index].isGuard)
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof Fleet && this.battleHandler.defenderArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);

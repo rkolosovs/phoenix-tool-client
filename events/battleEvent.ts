@@ -22,7 +22,6 @@ import {GameState} from "../gameState";
 import {BattleBox} from "../gui/battleBox";
 import {PhoenixEvent} from "./event";
 import {EventStatus} from "./eventStatus";
-import {BattleHandler} from "../armies/battleHandler";
 
 export class BattleEvent extends PhoenixEvent{
     
