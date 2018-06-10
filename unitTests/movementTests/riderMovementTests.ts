@@ -21,7 +21,6 @@ import { Move } from "../../armies/move";
 import { Direction } from "../../map/direction";
 import { NonDestructibleBuilding } from "../../buildings/nonDestructibleBuilding";
 import { BuildingType } from "../../buildings/building";
-import { River } from "../../map/river"
 import {Fleet} from "../../armies/fleet";
 import {QUnit} from "qunit";
 

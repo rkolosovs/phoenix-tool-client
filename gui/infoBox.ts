@@ -19,22 +19,22 @@ import { BoxVisibility } from "./boxVisibilty";
 import { Authentication } from "../app";
 
 export class InfoBox{
-    private self: HTMLDivElement;
-    private armySelectBtns: HTMLDivElement;
-    private armyId: HTMLHeadingElement;
-    private guard: HTMLParagraphElement;
-    private count: HTMLParagraphElement;
-    private leaders: HTMLParagraphElement;
-    private mounts: HTMLParagraphElement;
-    private lkp: HTMLParagraphElement;
-    private skp: HTMLParagraphElement;
-    private movePoints: HTMLParagraphElement;
-    private heightPoints: HTMLParagraphElement;
-    private mount: HTMLButtonElement;
-    private unMount: HTMLButtonElement;
-    private splitBtn: HTMLButtonElement;
-    private shoot: HTMLButtonElement;
-    private logoutBtn: HTMLButtonElement;
+    private self: HTMLDivElement|undefined;
+    private armySelectBtns: HTMLDivElement|undefined;
+    private armyId: HTMLHeadingElement|undefined;
+    private guard: HTMLParagraphElement|undefined;
+    private count: HTMLParagraphElement|undefined;
+    private leaders: HTMLParagraphElement|undefined;
+    private mounts: HTMLParagraphElement|undefined;
+    private lkp: HTMLParagraphElement|undefined;
+    private skp: HTMLParagraphElement|undefined;
+    private movePoints: HTMLParagraphElement|undefined;
+    private heightPoints: HTMLParagraphElement|undefined;
+    private mount: HTMLButtonElement|undefined;
+    private unMount: HTMLButtonElement|undefined;
+    private splitBtn: HTMLButtonElement|undefined;
+    private shoot: HTMLButtonElement|undefined;
+    private logoutBtn: HTMLButtonElement|undefined;
 
     getSelf(): HTMLDivElement{
         if(this.self == undefined){

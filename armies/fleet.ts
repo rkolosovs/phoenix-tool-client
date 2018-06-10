@@ -33,7 +33,7 @@ import SHIP_TRANSPORT_CAPACITY = Constants.SHIP_TRANSPORT_CAPACITY;
 import {GameState} from "../gameState";
 import {ArmyFunctions} from "../libraries/armyFunctions";
 import {FootArmy} from "./footArmy";
-import {ShootingCondition, ShootingTarget} from "./shootingFunctions";
+import {ShootingCondition} from "./shootingFunctions";
 
 export class Fleet extends Army{
     static readonly MAX_HEIGHT_POINTS: number = 0;

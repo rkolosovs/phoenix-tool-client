@@ -19,22 +19,22 @@ import { Direction } from "../map/direction";
 import { Saving } from "../app";
 
 export class RiverBenderBox{
-    private self: HTMLDivElement;
-    private buildRiverSection: HTMLTableSectionElement;
-    private addRiverNW: HTMLButtonElement;
-    private addRiverNE: HTMLButtonElement;
-    private addRiverE: HTMLButtonElement;
-    private addRiverSE: HTMLButtonElement;
-    private addRiverSW: HTMLButtonElement;
-    private addRiverW: HTMLButtonElement;
-    private removeRiverSection: HTMLTableSectionElement;
-    private removeRiverNW: HTMLButtonElement;
-    private removeRiverNE: HTMLButtonElement;
-    private removeRiverE: HTMLButtonElement;
-    private removeRiverSE: HTMLButtonElement;
-    private removeRiverSW: HTMLButtonElement;
-    private removeRiverW: HTMLButtonElement;
-    private saveRivers: HTMLButtonElement;
+    private self: HTMLDivElement|undefined;
+    private buildRiverSection: HTMLTableSectionElement|undefined;
+    private addRiverNW: HTMLButtonElement|undefined;
+    private addRiverNE: HTMLButtonElement|undefined;
+    private addRiverE: HTMLButtonElement|undefined;
+    private addRiverSE: HTMLButtonElement|undefined;
+    private addRiverSW: HTMLButtonElement|undefined;
+    private addRiverW: HTMLButtonElement|undefined;
+    private removeRiverSection: HTMLTableSectionElement|undefined;
+    private removeRiverNW: HTMLButtonElement|undefined;
+    private removeRiverNE: HTMLButtonElement|undefined;
+    private removeRiverE: HTMLButtonElement|undefined;
+    private removeRiverSE: HTMLButtonElement|undefined;
+    private removeRiverSW: HTMLButtonElement|undefined;
+    private removeRiverW: HTMLButtonElement|undefined;
+    private saveRivers: HTMLButtonElement|undefined;
 
     getSelf(): HTMLDivElement{
         if(this.self == undefined){

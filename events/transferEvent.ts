@@ -20,7 +20,6 @@ import {Realm} from "../realm";
 import {GameState} from "../gameState";
 import {FootArmy} from "../armies/footArmy";
 import {Drawing} from "../gui/drawingFunctions";
-import {Fleet} from "../armies/fleet";
 import {GUI} from "../gui/gui";
 import {EventStatus} from "./eventStatus";
 import {ArmyFunctions} from "../libraries/armyFunctions";

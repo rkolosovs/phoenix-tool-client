@@ -18,9 +18,9 @@ import {GameState} from "../gameState";
 import {BoxVisibility} from "./boxVisibilty";
 
 export class MainBox{
-    private self: HTMLDivElement;
-    private eventTabsButton: HTMLButtonElement;
-    private eventsTab: HTMLDivElement;
+    private self: HTMLDivElement|undefined;
+    private eventTabsButton: HTMLButtonElement|undefined;
+    private eventsTab: HTMLDivElement|undefined;
 
     getSelf(): HTMLDivElement{
         if(this.self == undefined){

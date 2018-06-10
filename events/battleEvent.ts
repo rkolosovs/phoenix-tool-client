@@ -22,6 +22,7 @@ import {GameState} from "../gameState";
 import {BattleBox} from "../gui/battleBox";
 import {PhoenixEvent} from "./event";
 import {EventStatus} from "./eventStatus";
+import {BattleHandler} from "../armies/battleHandler";
 
 export class BattleEvent extends PhoenixEvent{
     
@@ -99,12 +100,16 @@ export class BattleEvent extends PhoenixEvent{
     }
 
     private battleButtonLogic(battleBox: BattleBox): void {
-        battleBox.battleHandler.resolve(parseInt(battleBox.getAttackDiceRoll().value),
-            parseInt(battleBox.getDefenseDiceRoll().value));
-        BoxVisibility.hide(battleBox.getSelf());
-        this.status = EventStatus.Checked;
-        GUI.getBigBox().fillEventList();
-        Drawing.drawStuff();
+        if(battleBox.battleHandler != undefined){
+            battleBox.battleHandler.resolve(parseInt(battleBox.getAttackDiceRoll().value),
+                parseInt(battleBox.getDefenseDiceRoll().value));
+            BoxVisibility.hide(battleBox.getSelf());
+            this.status = EventStatus.Checked;
+            GUI.getBigBox().fillEventList();
+            Drawing.drawStuff();
+        } else {
+            throw new Error("BattleHandler is not instantiated prior to use.");
+        }
     }
 
 }

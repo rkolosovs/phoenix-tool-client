@@ -17,10 +17,7 @@ along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 import {GameState} from "../gameState";
 import {Drawing} from "../gui/drawingFunctions";
 import {Controls} from "../controls/controlVariables";
-import {directionToString} from "../map/direction";
-import {HexFunction} from "../libraries/hexFunctions";
 import {Authentication} from "./authenticationFunctions";
-import {NonDestructibleBuilding} from "../buildings/nonDestructibleBuilding";
 import {FootArmy} from "../armies/footArmy";
 import {LandArmy} from "../armies/landArmy";
 import {EventStatus} from "../events/eventStatus";
@@ -31,7 +28,6 @@ import {TransferEvent} from "../events/transferEvent";
 import {SplitEvent} from "../events/splitEvent";
 import {MountEvent} from "../events/mountEvent";
 import {ShootEvent} from "../events/shootEvent";
-import {Building} from "../buildings/building";
 
 export namespace Saving{
 

@@ -18,14 +18,14 @@ import { GodFunctions } from "../godmode/godModeFunctions";
 import { Saving } from "../app";
 
 export class BuildingCreationBox{
-    private self: HTMLDivElement;
-    private addCastle: HTMLButtonElement;
-    private addCity: HTMLButtonElement;
-    private addFortress: HTMLButtonElement;
-    private addCapital: HTMLButtonElement;
-    private addCapitalFortress: HTMLButtonElement;
-    private deleteBuilding: HTMLButtonElement;
-    private saveBuildings: HTMLButtonElement;
+    private self: HTMLDivElement|undefined;
+    private addCastle: HTMLButtonElement|undefined;
+    private addCity: HTMLButtonElement|undefined;
+    private addFortress: HTMLButtonElement|undefined;
+    private addCapital: HTMLButtonElement|undefined;
+    private addCapitalFortress: HTMLButtonElement|undefined;
+    private deleteBuilding: HTMLButtonElement|undefined;
+    private saveBuildings: HTMLButtonElement|undefined;
 
     getSelf(): HTMLDivElement{
         if(this.self == undefined){

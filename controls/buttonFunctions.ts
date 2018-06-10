@@ -306,8 +306,8 @@ export namespace ButtonFunctions{
         let shootBox: ShootingBigBox = GUI.getShootingBigBox();
         let shooter: Army|undefined = GameState.armies.find(
             army => army.getErkenfaraID() === shootEvent.getShooterId() && army.owner === shootEvent.getRealm());
-        let lkpRolls = [];
-        let skpRolls = [];
+        let lkpRolls: number[] = [];
+        let skpRolls: number[] = [];
         for(let i = 0; i < 10; i++){//creating the dice roll array
             let currentRollLKP = parseInt(shootBox.getLKPInputs()[i].value, 10);
             let currentRollSKP = parseInt(shootBox.getSKPInputs()[i].value, 10);

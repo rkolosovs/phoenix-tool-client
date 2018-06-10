@@ -19,22 +19,22 @@ import { Direction } from "../map/direction";
 import { Saving } from "../app";
 
 export class StreetCreationBox{
-    private self: HTMLDivElement;
-    private buildStreet: HTMLTableSectionElement;
-    private addStreetNW: HTMLButtonElement;
-    private addStreetNE: HTMLButtonElement;
-    private addStreetE: HTMLButtonElement;
-    private addStreetSE: HTMLButtonElement;
-    private addStreetSW: HTMLButtonElement;
-    private addStreetW: HTMLButtonElement;
-    private removeStreet: HTMLTableSectionElement;
-    private removeStreetNW: HTMLButtonElement;
-    private removeStreetNE: HTMLButtonElement;
-    private removeStreetE: HTMLButtonElement;
-    private removeStreetSE: HTMLButtonElement;
-    private removeStreetSW: HTMLButtonElement;
-    private removeStreetW: HTMLButtonElement;
-    private saveBuildings: HTMLButtonElement;
+    private self: HTMLDivElement|undefined;
+    private buildStreet: HTMLTableSectionElement|undefined;
+    private addStreetNW: HTMLButtonElement|undefined;
+    private addStreetNE: HTMLButtonElement|undefined;
+    private addStreetE: HTMLButtonElement|undefined;
+    private addStreetSE: HTMLButtonElement|undefined;
+    private addStreetSW: HTMLButtonElement|undefined;
+    private addStreetW: HTMLButtonElement|undefined;
+    private removeStreet: HTMLTableSectionElement|undefined;
+    private removeStreetNW: HTMLButtonElement|undefined;
+    private removeStreetNE: HTMLButtonElement|undefined;
+    private removeStreetE: HTMLButtonElement|undefined;
+    private removeStreetSE: HTMLButtonElement|undefined;
+    private removeStreetSW: HTMLButtonElement|undefined;
+    private removeStreetW: HTMLButtonElement|undefined;
+    private saveBuildings: HTMLButtonElement|undefined;
 
     getSelf(): HTMLDivElement {
         if (this.self == undefined) {

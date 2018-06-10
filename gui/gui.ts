@@ -28,7 +28,7 @@ import {HarborCreationBox} from "./harborCreationBox";
 import {BridgeCreationBox} from "./bridgeCreationBox";
 import {StreetCreationBox} from "./streetCreationBox";
 import {InfoChangeBox} from "./infoChangeBox";
-import { BoxVisibility } from "../gui/boxVisibilty";
+import { BoxVisibility } from "./boxVisibilty";
 import {ButtonFunctions} from "../controls/buttonFunctions";
 import {Authentication} from "../serverInteraction/authenticationFunctions";
 

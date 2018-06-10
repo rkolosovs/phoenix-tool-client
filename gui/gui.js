@@ -29,7 +29,7 @@ const harborCreationBox_1 = require("./harborCreationBox");
 const bridgeCreationBox_1 = require("./bridgeCreationBox");
 const streetCreationBox_1 = require("./streetCreationBox");
 const infoChangeBox_1 = require("./infoChangeBox");
-const boxVisibilty_1 = require("../gui/boxVisibilty");
+const boxVisibilty_1 = require("./boxVisibilty");
 const buttonFunctions_1 = require("../controls/buttonFunctions");
 const authenticationFunctions_1 = require("../serverInteraction/authenticationFunctions");
 class GUI {

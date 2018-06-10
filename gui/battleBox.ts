@@ -22,20 +22,20 @@ import {Fleet} from "../armies/fleet";
 import {BattleResult, Result} from "../armies/battleResult";
 
 export class BattleBox {
-    private self: HTMLDivElement;
-    private closeBattleButton: HTMLButtonElement;
-    private attackersTitleText: HTMLDivElement;
-    private defendersTitleText: HTMLDivElement;
-    private attackArmiesBox: HTMLDivElement;
-    private unsortedArmiesBox: HTMLDivElement;
-    private defenseArmiesBox: HTMLDivElement;
-    private attackBattleSide: HTMLDivElement;
-    private attackDiceRoll: HTMLSelectElement;
-    private defenseDiceRoll: HTMLSelectElement;
-    private defenseBattleSide: HTMLDivElement;
-    private battleButton: HTMLButtonElement;
+    private self: HTMLDivElement|undefined;
+    private closeBattleButton: HTMLButtonElement|undefined;
+    private attackersTitleText: HTMLDivElement|undefined;
+    private defendersTitleText: HTMLDivElement|undefined;
+    private attackArmiesBox: HTMLDivElement|undefined;
+    private unsortedArmiesBox: HTMLDivElement|undefined;
+    private defenseArmiesBox: HTMLDivElement|undefined;
+    private attackBattleSide: HTMLDivElement|undefined;
+    private attackDiceRoll: HTMLSelectElement|undefined;
+    private defenseDiceRoll: HTMLSelectElement|undefined;
+    private defenseBattleSide: HTMLDivElement|undefined;
+    private battleButton: HTMLButtonElement|undefined;
 
-    battleHandler: BattleHandler;
+    battleHandler: BattleHandler|undefined;
 
     private attackSoldiers = 0;
     private attackOfficers = 0;

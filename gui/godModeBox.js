@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const boxVisibilty_1 = require("../gui/boxVisibilty");
+const boxVisibilty_1 = require("./boxVisibilty");
 const savingFunctions_1 = require("../serverInteraction/savingFunctions");
 const godModeFunctions_1 = require("../godmode/godModeFunctions");
 class GodModeBox {

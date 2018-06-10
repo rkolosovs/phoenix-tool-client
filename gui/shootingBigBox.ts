@@ -15,20 +15,20 @@ You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
 export class ShootingBigBox{
-    private self: HTMLDivElement;
-    private closeRangedBattleButton: HTMLButtonElement;
-    private shootingInfo: HTMLDivElement;
-    private shooterTitleText: HTMLDivElement;
-    private attackersLKPText: HTMLDivElement;
-    private attackersSKPText: HTMLDivElement;
-    private targetText: HTMLDivElement;
-    private xTargetText: HTMLDivElement;
-    private yTargetText: HTMLDivElement;
-    private attackLKPBox: HTMLDivElement;
-    private lkpInputs: HTMLInputElement[];
-    private attackSKPBox: HTMLDivElement;
-    private skpInputs: HTMLInputElement[];
-    private rangedBattleButton: HTMLButtonElement;
+    private self: HTMLDivElement|undefined;
+    private closeRangedBattleButton: HTMLButtonElement|undefined;
+    private shootingInfo: HTMLDivElement|undefined;
+    private shooterTitleText: HTMLDivElement|undefined;
+    private attackersLKPText: HTMLDivElement|undefined;
+    private attackersSKPText: HTMLDivElement|undefined;
+    private targetText: HTMLDivElement|undefined;
+    private xTargetText: HTMLDivElement|undefined;
+    private yTargetText: HTMLDivElement|undefined;
+    private attackLKPBox: HTMLDivElement|undefined;
+    private lkpInputs: HTMLInputElement[]|undefined;
+    private attackSKPBox: HTMLDivElement|undefined;
+    private skpInputs: HTMLInputElement[]|undefined;
+    private rangedBattleButton: HTMLButtonElement|undefined;
 
     getSelf(): HTMLDivElement{
         if(this.self == undefined){

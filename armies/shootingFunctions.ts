@@ -46,7 +46,7 @@ export namespace ShootingFunctions{
 
         let damage = shooter.getLightCatapultDamage(diceRollsLight, shooter.checkShootingCondition(targetField, false)) +
             shooter.getHeavyCatapultDamage(diceRollsHeavy, shooter.checkShootingCondition(targetField, true));
-        let allTargets = [];
+        let allTargets: Army[] = [];
         let sumAllBP = 0;
         if (target === ShootingTarget.OnField) {
             for (let i = 0; i < GameState.buildings.length; i++) {

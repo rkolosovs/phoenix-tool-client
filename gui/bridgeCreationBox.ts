@@ -19,22 +19,22 @@ import { Direction } from "../map/direction";
 import { Saving } from "../app";
 
 export class BridgeCreationBox {
-    private self: HTMLDivElement;
-    private buildBridge: HTMLTableSectionElement;
-    private addBridgeNW: HTMLButtonElement;
-    private addBridgeNE: HTMLButtonElement;
-    private addBridgeE: HTMLButtonElement;
-    private addBridgeSE: HTMLButtonElement;
-    private addBridgeSW: HTMLButtonElement;
-    private addBridgeW: HTMLButtonElement;
-    private removeBridge: HTMLTableSectionElement;
-    private removeBridgeNW: HTMLButtonElement;
-    private removeBridgeNE: HTMLButtonElement;
-    private removeBridgeE: HTMLButtonElement;
-    private removeBridgeSE: HTMLButtonElement;
-    private removeBridgeSW: HTMLButtonElement;
-    private removeBridgeW: HTMLButtonElement;
-    private saveBuildings: HTMLButtonElement;
+    private self: HTMLDivElement|undefined;
+    private buildBridge: HTMLTableSectionElement|undefined;
+    private addBridgeNW: HTMLButtonElement|undefined;
+    private addBridgeNE: HTMLButtonElement|undefined;
+    private addBridgeE: HTMLButtonElement|undefined;
+    private addBridgeSE: HTMLButtonElement|undefined;
+    private addBridgeSW: HTMLButtonElement|undefined;
+    private addBridgeW: HTMLButtonElement|undefined;
+    private removeBridge: HTMLTableSectionElement|undefined;
+    private removeBridgeNW: HTMLButtonElement|undefined;
+    private removeBridgeNE: HTMLButtonElement|undefined;
+    private removeBridgeE: HTMLButtonElement|undefined;
+    private removeBridgeSE: HTMLButtonElement|undefined;
+    private removeBridgeSW: HTMLButtonElement|undefined;
+    private removeBridgeW: HTMLButtonElement|undefined;
+    private saveBuildings: HTMLButtonElement|undefined;
 
     getSelf(): HTMLDivElement {
         if (this.self == undefined) {

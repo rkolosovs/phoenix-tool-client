@@ -19,22 +19,22 @@ import { Direction } from "../map/direction";
 import { Saving } from "../app";
 
 export class WallCreationBox{
-    private self: HTMLDivElement;
-    private buildWall: HTMLTableSectionElement;
-    private addWallNW: HTMLButtonElement;
-    private addWallNE: HTMLButtonElement;
-    private addWallE: HTMLButtonElement;
-    private addWallSE: HTMLButtonElement;
-    private addWallSW: HTMLButtonElement;
-    private addWallW: HTMLButtonElement;
-    private removeWall: HTMLTableSectionElement;
-    private removeWallNW: HTMLButtonElement;
-    private removeWallNE: HTMLButtonElement;
-    private removeWallE: HTMLButtonElement;
-    private removeWallSE: HTMLButtonElement;
-    private removeWallSW: HTMLButtonElement;
-    private removeWallW: HTMLButtonElement;
-    private saveBuildings: HTMLButtonElement;
+    private self: HTMLDivElement|undefined;
+    private buildWall: HTMLTableSectionElement|undefined;
+    private addWallNW: HTMLButtonElement|undefined;
+    private addWallNE: HTMLButtonElement|undefined;
+    private addWallE: HTMLButtonElement|undefined;
+    private addWallSE: HTMLButtonElement|undefined;
+    private addWallSW: HTMLButtonElement|undefined;
+    private addWallW: HTMLButtonElement|undefined;
+    private removeWall: HTMLTableSectionElement|undefined;
+    private removeWallNW: HTMLButtonElement|undefined;
+    private removeWallNE: HTMLButtonElement|undefined;
+    private removeWallE: HTMLButtonElement|undefined;
+    private removeWallSE: HTMLButtonElement|undefined;
+    private removeWallSW: HTMLButtonElement|undefined;
+    private removeWallW: HTMLButtonElement|undefined;
+    private saveBuildings: HTMLButtonElement|undefined;
 
     getSelf(): HTMLDivElement{
         if(this.self == undefined){

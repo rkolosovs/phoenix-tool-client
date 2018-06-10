@@ -226,13 +226,13 @@ export namespace HexFunction {
     }
 
     export function findWallInWay(from: [number, number], to: [number, number]) {
-        let foundWallsIndeces = [];
+        let foundWallsIndeces: number[] = [];
         let dir = HexFunction.getDirectionToNeighbor(from, to);
         if (HexFunction.distance(from, to) === 1) {
             dir = (dir + 3) % 6;
             let wallIndex = getWallIndexOnFieldInDirection(to, dir);
             if (wallIndex != -1) {
-                foundWallsIndeces.push(wallIndex)
+                foundWallsIndeces.push(wallIndex);
                 return foundWallsIndeces;
             }
         } else if (HexFunction.distance(from, to) === 2) {

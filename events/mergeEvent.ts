@@ -18,9 +18,7 @@ import {PhoenixEvent} from "./event";
 import {Drawing} from "../gui/drawingFunctions";
 import {Realm} from "../realm";
 import {GameState} from "../gameState";
-import {ButtonFunctions} from "../controls/buttonFunctions";
 import {GUI} from "../gui/gui";
-import {Controls} from "../controls/controlVariables";
 import {EventStatus} from "./eventStatus";
 import {Army} from "../armies/army";
 

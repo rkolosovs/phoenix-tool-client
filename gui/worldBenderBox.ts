@@ -18,21 +18,21 @@ import { GodFunctions } from "../godmode/godModeFunctions";
 import { Saving } from "../app";
 
 export class WorldBenderBox{
-    private self: HTMLDivElement;
-    private creationWarning: HTMLHeadingElement;
-    private toggleOnClickWorldCreationMode: HTMLButtonElement;
-    private saveFields: HTMLButtonElement;
-    private changeFieldSection: HTMLTableSectionElement;
-    private changeFieldClickedTo0: HTMLButtonElement;
-    private changeFieldClickedTo1: HTMLButtonElement;
-    private changeFieldClickedTo2: HTMLButtonElement;
-    private changeFieldClickedTo3: HTMLButtonElement;
-    private changeFieldClickedTo4: HTMLButtonElement;
-    private changeFieldClickedTo5: HTMLButtonElement;
-    private changeFieldClickedTo6: HTMLButtonElement;
-    private changeFieldClickedTo7: HTMLButtonElement;
-    private changeFieldClickedTo8: HTMLButtonElement;
-    private changeFieldClickedTo9: HTMLButtonElement;
+    private self: HTMLDivElement|undefined;
+    private creationWarning: HTMLHeadingElement|undefined;
+    private toggleOnClickWorldCreationMode: HTMLButtonElement|undefined;
+    private saveFields: HTMLButtonElement|undefined;
+    private changeFieldSection: HTMLTableSectionElement|undefined;
+    private changeFieldClickedTo0: HTMLButtonElement|undefined;
+    private changeFieldClickedTo1: HTMLButtonElement|undefined;
+    private changeFieldClickedTo2: HTMLButtonElement|undefined;
+    private changeFieldClickedTo3: HTMLButtonElement|undefined;
+    private changeFieldClickedTo4: HTMLButtonElement|undefined;
+    private changeFieldClickedTo5: HTMLButtonElement|undefined;
+    private changeFieldClickedTo6: HTMLButtonElement|undefined;
+    private changeFieldClickedTo7: HTMLButtonElement|undefined;
+    private changeFieldClickedTo8: HTMLButtonElement|undefined;
+    private changeFieldClickedTo9: HTMLButtonElement|undefined;
 
     getSelf(): HTMLDivElement{
         if(this.self == undefined){

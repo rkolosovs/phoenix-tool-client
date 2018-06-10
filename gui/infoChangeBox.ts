@@ -18,28 +18,28 @@ import { GodFunctions } from "../godmode/godModeFunctions";
 import { Authentication } from "../app";
 
 export class InfoChangeBox{
-    private self: HTMLDivElement;
-    private guardChangeInput: HTMLInputElement;
-    private ownerChange: HTMLParagraphElement;
-    private ownerChangeInput: HTMLInputElement;
-    private armyIdChange: HTMLParagraphElement;
-    private armyIdChangeInput: HTMLInputElement;
-    private countChange: HTMLParagraphElement;
-    private countChangeInput: HTMLInputElement;
-    private leadersChange: HTMLParagraphElement;
-    private leadersChangeInput: HTMLInputElement;
-    private mountsChange: HTMLParagraphElement;
-    private mountsChangeInput: HTMLInputElement;
-    private lkpChange: HTMLParagraphElement;
-    private lkpChangeInput: HTMLInputElement;
-    private skpChange: HTMLParagraphElement;
-    private skpChangeInput: HTMLInputElement;
-    private movePointsChange: HTMLParagraphElement;
-    private movePointsChangeInput: HTMLInputElement;
-    private heightPointsChange: HTMLParagraphElement;
-    private heightPointsChangeInput: HTMLInputElement;
-    private changeArmyInfo: HTMLButtonElement;
-    private logoutBtnChange: HTMLButtonElement;
+    private self: HTMLDivElement|undefined;
+    private guardChangeInput: HTMLInputElement|undefined;
+    private ownerChange: HTMLParagraphElement|undefined;
+    private ownerChangeInput: HTMLInputElement|undefined;
+    private armyIdChange: HTMLParagraphElement|undefined;
+    private armyIdChangeInput: HTMLInputElement|undefined;
+    private countChange: HTMLParagraphElement|undefined;
+    private countChangeInput: HTMLInputElement|undefined;
+    private leadersChange: HTMLParagraphElement|undefined;
+    private leadersChangeInput: HTMLInputElement|undefined;
+    private mountsChange: HTMLParagraphElement|undefined;
+    private mountsChangeInput: HTMLInputElement|undefined;
+    private lkpChange: HTMLParagraphElement|undefined;
+    private lkpChangeInput: HTMLInputElement|undefined;
+    private skpChange: HTMLParagraphElement|undefined;
+    private skpChangeInput: HTMLInputElement|undefined;
+    private movePointsChange: HTMLParagraphElement|undefined;
+    private movePointsChangeInput: HTMLInputElement|undefined;
+    private heightPointsChange: HTMLParagraphElement|undefined;
+    private heightPointsChangeInput: HTMLInputElement|undefined;
+    private changeArmyInfo: HTMLButtonElement|undefined;
+    private logoutBtnChange: HTMLButtonElement|undefined;
 
     getSelf(): HTMLDivElement{
         if(this.self == undefined){

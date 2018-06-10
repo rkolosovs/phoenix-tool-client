@@ -18,22 +18,22 @@ import { GodFunctions } from "../godmode/godModeFunctions";
 import { Direction } from "../map/direction";
 import { Saving } from "../app";
 export class HarborCreationBox{
-    private self: HTMLDivElement;
-    private buildHarbor: HTMLTableSectionElement;
-    private addHarborNW: HTMLButtonElement;
-    private addHarborNE: HTMLButtonElement;
-    private addHarborE: HTMLButtonElement;
-    private addHarborSE: HTMLButtonElement;
-    private addHarborSW: HTMLButtonElement;
-    private addHarborW: HTMLButtonElement;
-    private removeHarbor: HTMLTableSectionElement;
-    private removeHarborNW: HTMLButtonElement;
-    private removeHarborNE: HTMLButtonElement;
-    private removeHarborE: HTMLButtonElement;
-    private removeHarborSE: HTMLButtonElement;
-    private removeHarborSW: HTMLButtonElement;
-    private removeHarborW: HTMLButtonElement;
-    private saveBuildings: HTMLButtonElement;
+    private self: HTMLDivElement|undefined;
+    private buildHarbor: HTMLTableSectionElement|undefined;
+    private addHarborNW: HTMLButtonElement|undefined;
+    private addHarborNE: HTMLButtonElement|undefined;
+    private addHarborE: HTMLButtonElement|undefined;
+    private addHarborSE: HTMLButtonElement|undefined;
+    private addHarborSW: HTMLButtonElement|undefined;
+    private addHarborW: HTMLButtonElement|undefined;
+    private removeHarbor: HTMLTableSectionElement|undefined;
+    private removeHarborNW: HTMLButtonElement|undefined;
+    private removeHarborNE: HTMLButtonElement|undefined;
+    private removeHarborE: HTMLButtonElement|undefined;
+    private removeHarborSE: HTMLButtonElement|undefined;
+    private removeHarborSW: HTMLButtonElement|undefined;
+    private removeHarborW: HTMLButtonElement|undefined;
+    private saveBuildings: HTMLButtonElement|undefined;
 
     getSelf(): HTMLDivElement{
         if(this.self == undefined){

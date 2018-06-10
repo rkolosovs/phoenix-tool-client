@@ -17,16 +17,16 @@ along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 import { GodFunctions } from "../godmode/godModeFunctions";
 
 export class ArmyGeneratorBox{
-    private self: HTMLDivElement;
-    private ownerField: HTMLInputElement;
-    private armyNumberField: HTMLInputElement;
-    private countField: HTMLInputElement;
-    private leaderField: HTMLInputElement;
-    private mountsField: HTMLInputElement;
-    private lkpField: HTMLInputElement;
-    private skpField: HTMLInputElement;
-    private guardField: HTMLInputElement;
-    private generateArmyBtn: HTMLButtonElement;
+    private self: HTMLDivElement|undefined;
+    private ownerField: HTMLInputElement|undefined;
+    private armyNumberField: HTMLInputElement|undefined;
+    private countField: HTMLInputElement|undefined;
+    private leaderField: HTMLInputElement|undefined;
+    private mountsField: HTMLInputElement|undefined;
+    private lkpField: HTMLInputElement|undefined;
+    private skpField: HTMLInputElement|undefined;
+    private guardField: HTMLInputElement|undefined;
+    private generateArmyBtn: HTMLButtonElement|undefined;
 
     getSelf(): HTMLDivElement{
         if(this.self == undefined){

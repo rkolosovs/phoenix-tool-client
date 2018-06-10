@@ -14,24 +14,24 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {BoxVisibility} from "../gui/boxVisibilty";
+import {BoxVisibility} from "./boxVisibilty";
 import {Saving} from "../serverInteraction/savingFunctions";
 import { GodFunctions } from "../godmode/godModeFunctions";
 
 export class GodModeBox{
-    private self: HTMLDivElement;
-    private toggleWorldCreationMode: HTMLButtonElement;
-    private toggleRiverCreationMode: HTMLButtonElement;
-    private toggleBuildingCreationMode: HTMLButtonElement;
-    private toggleStreetBuildingMode: HTMLButtonElement;
-    private toggleWallBuildingMode: HTMLButtonElement;
-    private toggleHarborBuildingMode: HTMLButtonElement;
-    private toggleBridgeBuildingMode: HTMLButtonElement;
-    private saveArmies: HTMLButtonElement;
-    private saveFactionsTerritories: HTMLButtonElement;
-    private toggleArmyCreationMode: HTMLButtonElement;
-    private godDeleteSelectedArmy: HTMLButtonElement;
-    private factionToCreateBuildingsFor: HTMLSelectElement;
+    private self: HTMLDivElement|undefined;
+    private toggleWorldCreationMode: HTMLButtonElement|undefined;
+    private toggleRiverCreationMode: HTMLButtonElement|undefined;
+    private toggleBuildingCreationMode: HTMLButtonElement|undefined;
+    private toggleStreetBuildingMode: HTMLButtonElement|undefined;
+    private toggleWallBuildingMode: HTMLButtonElement|undefined;
+    private toggleHarborBuildingMode: HTMLButtonElement|undefined;
+    private toggleBridgeBuildingMode: HTMLButtonElement|undefined;
+    private saveArmies: HTMLButtonElement|undefined;
+    private saveFactionsTerritories: HTMLButtonElement|undefined;
+    private toggleArmyCreationMode: HTMLButtonElement|undefined;
+    private godDeleteSelectedArmy: HTMLButtonElement|undefined;
+    private factionToCreateBuildingsFor: HTMLSelectElement|undefined;
 
     getSelf(): HTMLDivElement{
         if(this.self == undefined){

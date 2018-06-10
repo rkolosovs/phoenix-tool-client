@@ -30,15 +30,8 @@ import { EventStatus } from "../events/eventStatus";
 import { BattleEvent } from "../events/battleEvent";
 
 export namespace MouseFunctions {
-    import skpBuffer = BoxVisibility.skpBuffer;
-    import leaderBuffer = BoxVisibility.leaderBuffer;
-    import countBuffer = BoxVisibility.countBuffer;
     import armyIdBuffer = BoxVisibility.armyIdBuffer;
-    import guardBuffer = BoxVisibility.guardBuffer;
-    import lkpBuffer = BoxVisibility.lkpBuffer;
-    import ownerBuffer = BoxVisibility.ownerBuffer;
     import armyWithNextClick = BoxVisibility.armyWithNextClick;
-    import mountsBuffer = BoxVisibility.mountsBuffer;
     import switchBtnBoxTo = BoxVisibility.switchBtnBoxTo;
     import switchModeTo = BoxVisibility.switchModeTo;
     import worldCreationModeOnClick = BoxVisibility.worldCreationModeOnClick;

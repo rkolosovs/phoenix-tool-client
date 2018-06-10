@@ -82,11 +82,16 @@ class BattleEvent extends event_1.PhoenixEvent {
         return result;
     }
     battleButtonLogic(battleBox) {
-        battleBox.battleHandler.resolve(parseInt(battleBox.getAttackDiceRoll().value), parseInt(battleBox.getDefenseDiceRoll().value));
-        boxVisibilty_1.BoxVisibility.hide(battleBox.getSelf());
-        this.status = 0 /* Checked */;
-        gui_1.GUI.getBigBox().fillEventList();
-        drawingFunctions_1.Drawing.drawStuff();
+        if (battleBox.battleHandler != undefined) {
+            battleBox.battleHandler.resolve(parseInt(battleBox.getAttackDiceRoll().value), parseInt(battleBox.getDefenseDiceRoll().value));
+            boxVisibilty_1.BoxVisibility.hide(battleBox.getSelf());
+            this.status = 0 /* Checked */;
+            gui_1.GUI.getBigBox().fillEventList();
+            drawingFunctions_1.Drawing.drawStuff();
+        }
+        else {
+            throw new Error("BattleHandler is not instantiated prior to use.");
+        }
     }
 }
 exports.BattleEvent = BattleEvent;
