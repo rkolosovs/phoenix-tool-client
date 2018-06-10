@@ -1,4 +1,19 @@
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const mainBox_1 = require("./mainBox");
 const battleBox_1 = require("./battleBox");
@@ -14,6 +29,9 @@ const harborCreationBox_1 = require("./harborCreationBox");
 const bridgeCreationBox_1 = require("./bridgeCreationBox");
 const streetCreationBox_1 = require("./streetCreationBox");
 const infoChangeBox_1 = require("./infoChangeBox");
+const boxVisibilty_1 = require("../gui/boxVisibilty");
+const buttonFunctions_1 = require("../controls/buttonFunctions");
+const authenticationFunctions_1 = require("../serverInteraction/authenticationFunctions");
 class GUI {
     static getCanvas() {
         if (GUI.canvas == undefined) {
@@ -36,6 +54,7 @@ class GUI {
     static getToggleGMBarButton() {
         if (GUI.toggleGMBarButton == undefined) {
             GUI.toggleGMBarButton = document.getElementById("ToggleGodModeBar");
+            GUI.toggleGMBarButton.onclick = function () { boxVisibilty_1.BoxVisibility.toggleGodModeBar(); };
         }
         return GUI.toggleGMBarButton;
     }
@@ -54,6 +73,7 @@ class GUI {
     static getMainButton() {
         if (GUI.mainButton == undefined) {
             GUI.mainButton = document.getElementById("mainButton");
+            GUI.mainButton.onclick = function () { buttonFunctions_1.ButtonFunctions.mainButton(); };
         }
         return GUI.mainButton;
     }
@@ -90,12 +110,14 @@ class GUI {
     static getBackToSplitBox() {
         if (GUI.backToSplitBox == undefined) {
             GUI.backToSplitBox = document.getElementById("backToSplitBox");
+            GUI.backToSplitBox.onclick = function () { boxVisibilty_1.BoxVisibility.backToSplitBox(); };
         }
         return GUI.backToSplitBox;
     }
     static getRestoreInfoBox() {
         if (GUI.restoreInfoBox == undefined) {
             GUI.restoreInfoBox = document.getElementById("restoreInfoBox");
+            GUI.restoreInfoBox.onclick = function () { boxVisibilty_1.BoxVisibility.restoreInfoBox(); };
         }
         return GUI.restoreInfoBox;
     }
@@ -144,18 +166,21 @@ class GUI {
     static getSplitSelectedArmy() {
         if (GUI.splitSelectedArmy == undefined) {
             GUI.splitSelectedArmy = document.getElementById("splitSelectedArmy");
+            GUI.splitSelectedArmy.onclick = function () { buttonFunctions_1.ButtonFunctions.splitSelectedArmy(); };
         }
         return GUI.splitSelectedArmy;
     }
     static getActivateTransmuteBox() {
         if (GUI.activateTransmuteBox == undefined) {
             GUI.activateTransmuteBox = document.getElementById("activateTransmuteBox");
+            GUI.activateTransmuteBox.onclick = function () { boxVisibilty_1.BoxVisibility.activateTransmuteBox(); };
         }
         return GUI.activateTransmuteBox;
     }
     static getActivateMergeBox() {
         if (GUI.activateMergeBox == undefined) {
             GUI.activateMergeBox = document.getElementById("activateMergeBox");
+            GUI.activateMergeBox.onclick = function () { boxVisibilty_1.BoxVisibility.activateMergeBox(); };
         }
         return GUI.activateMergeBox;
     }
@@ -228,12 +253,14 @@ class GUI {
     static getMountButton() {
         if (GUI.mount == undefined) {
             GUI.mount = document.getElementById("mount");
+            GUI.mount.onclick = function () { buttonFunctions_1.ButtonFunctions.mountSelected(); };
         }
         return GUI.mount;
     }
     static getAllMountButton() {
         if (GUI.allMount == undefined) {
             GUI.allMount = document.getElementById("allMount");
+            GUI.allMount.onclick = function () { buttonFunctions_1.ButtonFunctions.allMountSelected(); };
         }
         return GUI.allMount;
     }
@@ -258,12 +285,14 @@ class GUI {
     static getUnMountButton() {
         if (GUI.unMount == undefined) {
             GUI.unMount = document.getElementById("unMount");
+            GUI.unMount.onclick = function () { buttonFunctions_1.ButtonFunctions.unMountSelected; };
         }
         return GUI.unMount;
     }
     static getAllUnMountButton() {
         if (GUI.allUnMount == undefined) {
             GUI.allUnMount = document.getElementById("allUnMount");
+            GUI.allUnMount.onclick = function () { buttonFunctions_1.ButtonFunctions.allUnMountSelected; };
         }
         return GUI.allUnMount;
     }
@@ -288,6 +317,7 @@ class GUI {
     static getFireButton() {
         if (GUI.fire == undefined) {
             GUI.fire = document.getElementById("fire");
+            GUI.fire.onclick = function () { buttonFunctions_1.ButtonFunctions.shootWithSelectedArmy(); };
         }
         return GUI.fire;
     }
@@ -318,6 +348,7 @@ class GUI {
     static getLoginButton() {
         if (GUI.loginBtn == undefined) {
             GUI.loginBtn = document.getElementById("loginBtn");
+            GUI.loginBtn.onclick = function () { authenticationFunctions_1.Authentication.loginToServer(); };
         }
         return GUI.loginBtn;
     }
@@ -383,3 +414,4 @@ class GUI {
     }
 }
 exports.GUI = GUI;
+//# sourceMappingURL=gui.js.map

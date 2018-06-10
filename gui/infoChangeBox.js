@@ -1,5 +1,22 @@
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
+const godModeFunctions_1 = require("../godmode/godModeFunctions");
+const app_1 = require("../app");
 class InfoChangeBox {
     getSelf() {
         if (this.self == undefined) {
@@ -124,14 +141,17 @@ class InfoChangeBox {
     getChangeArmyInfoButton() {
         if (this.changeArmyInfo == undefined) {
             this.changeArmyInfo = document.getElementById("changeArmyInfo");
+            this.changeArmyInfo.onclick = function () { godModeFunctions_1.GodFunctions.changeArmyInfo(); };
         }
         return this.changeArmyInfo;
     }
     getLogoutButton() {
         if (this.logoutBtnChange == undefined) {
             this.logoutBtnChange = document.getElementById("logoutBtnChange");
+            this.logoutBtnChange.onclick = function () { app_1.Authentication.logoutFromServer(); };
         }
         return this.logoutBtnChange;
     }
 }
 exports.InfoChangeBox = InfoChangeBox;
+//# sourceMappingURL=infoChangeBox.js.map

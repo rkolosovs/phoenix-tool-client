@@ -1,5 +1,23 @@
 "use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
+const buttonFunctions_1 = require("../controls/buttonFunctions");
+const boxVisibilty_1 = require("./boxVisibilty");
+const app_1 = require("../app");
 class InfoBox {
     getSelf() {
         if (this.self == undefined) {
@@ -70,32 +88,38 @@ class InfoBox {
     getMountButton() {
         if (this.mount == undefined) {
             this.mount = document.getElementById("mount");
+            this.mount.onclick = function () { boxVisibilty_1.BoxVisibility.activateMountBox(); };
         }
         return this.mount;
     }
     getUnMountButton() {
         if (this.unMount == undefined) {
             this.unMount = document.getElementById("unMount");
+            this.unMount.onclick = function () { boxVisibilty_1.BoxVisibility.activateUnMountBox(); };
         }
         return this.unMount;
     }
     getSplitButton() {
         if (this.splitBtn == undefined) {
             this.splitBtn = document.getElementById("splitBtn");
+            this.splitBtn.onclick = function () { buttonFunctions_1.ButtonFunctions.activateSplitbox(); };
         }
         return this.splitBtn;
     }
     getShootButton() {
         if (this.shoot == undefined) {
             this.shoot = document.getElementById("shoot");
+            this.shoot.onclick = function () { buttonFunctions_1.ButtonFunctions.toggleShootingMode(); };
         }
         return this.shoot;
     }
     getLogoutButton() {
         if (this.logoutBtn == undefined) {
             this.logoutBtn = document.getElementById("logoutBtn");
+            this.logoutBtn.onclick = function () { app_1.Authentication.logoutFromServer(); };
         }
         return this.logoutBtn;
     }
 }
 exports.InfoBox = InfoBox;
+//# sourceMappingURL=infoBox.js.map
