@@ -15,8 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gameState_1 = require("../gameState");
-const gui_1 = require("../gui/gui");
+const types_1 = require("../types");
 class PhoenixEvent {
     constructor(listPosition, status, prerequisiteEvents, databasePrimaryKey) {
         this.listPosition = listPosition;
@@ -31,12 +30,12 @@ class PhoenixEvent {
         return JSON.parse(this.asStringifiedJSON());
     }
     determineEventStatus() {
-        if (this.validGameState() && this.prerequisiteEvents.every(prereqEvent => gameState_1.GameState.loadedEvents.some(event => event.getDatabasePrimaryKey() === prereqEvent &&
+        if (this.validGameState() && this.prerequisiteEvents.every(prereqEvent => types_1.GameState.loadedEvents.some(event => event.getDatabasePrimaryKey() === prereqEvent &&
             (event.getStatus() === 0 /* Checked */ || event.getStatus() === 1 /* Deleted */)))) {
             //The event is available if the GM has attended to all prerequisite events and the board state allows it.
             this.status = 4 /* Available */;
         }
-        else if (!this.validGameState() && this.prerequisiteEvents.every(prereqEvent => gameState_1.GameState.loadedEvents.some(event => event.getDatabasePrimaryKey() === prereqEvent &&
+        else if (!this.validGameState() && this.prerequisiteEvents.every(prereqEvent => types_1.GameState.loadedEvents.some(event => event.getDatabasePrimaryKey() === prereqEvent &&
             (event.getStatus() === 0 /* Checked */ || event.getStatus() === 1 /* Deleted */)))) {
             //The event is not available because the board state doesn't allow it and it won't become available in the
             //future because all prerequisite events have been attended to by the GM. The GM has to manually fix the
@@ -91,7 +90,7 @@ class PhoenixEvent {
     }
     deleteEvent() {
         this.status = 1 /* Deleted */;
-        gui_1.GUI.getBigBox().fillEventList();
+        types_1.GUI.getBigBox().fillEventList();
     }
     getListPosition() {
         return this.listPosition;

@@ -14,24 +14,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {GUI} from "../gui/gui";
-import {BoxVisibility} from "../gui/boxVisibilty";
-import {Saving} from "../serverInteraction/savingFunctions";
-import {GameState} from "../gameState";
-import {Controls} from "./controlVariables";
-import {RiderArmy} from "../armies/riderArmy";
-import {FootArmy} from "../armies/footArmy";
-import {Army} from "../armies/army";
-import {ArmyFunctions} from "../libraries/armyFunctions";
-import {Fleet} from "../armies/fleet";
-import {EventStatus} from "../events/eventStatus";
-import {Drawing} from "../gui/drawingFunctions";
-import {ShootingFunctions, ShootingTarget} from "../armies/shootingFunctions";
-import {ShootingBigBox} from "../gui/shootingBigBox";
-import {ShootEvent} from "../events/shootEvent";
-import {MergeEvent} from "../events/mergeEvent";
-import {SplitEvent} from "../events/splitEvent";
-import {TransferEvent} from "../events/transferEvent";
+import {GUI, BoxVisibility, Saving, GameState, Controls, RiderArmy, 
+    FootArmy, Army, ArmyFunctions, Fleet, EventStatus, Drawing, 
+    ShootingFunctions, ShootingTarget, ShootingBigBox, ShootEvent, 
+    MergeEvent, SplitEvent, TransferEvent} from "../types";
 
 export namespace ButtonFunctions{
 

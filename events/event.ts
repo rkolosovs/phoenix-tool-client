@@ -14,9 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {GameState} from "../gameState";
-import {GUI} from "../gui/gui";
-import {EventStatus} from "./eventStatus";
+import {GameState, GUI, EventStatus} from "../types";
 
 export abstract class PhoenixEvent{
 

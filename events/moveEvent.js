@@ -15,13 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const hexFunctions_1 = require("../libraries/hexFunctions");
-const event_1 = require("./event");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const gameState_1 = require("../gameState");
-const gui_1 = require("../gui/gui");
-const battleEvent_1 = require("./battleEvent");
-class MoveEvent extends event_1.PhoenixEvent {
+const types_1 = require("../types");
+class MoveEvent extends types_1.PhoenixEvent {
     constructor(listPosition, status, realm, armyId, from, to, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.realm = realm;
@@ -39,11 +34,11 @@ class MoveEvent extends event_1.PhoenixEvent {
     }
     validGameState() {
         //The army exists, is positioned on the from-field and the army can move to the to-field.
-        let army = gameState_1.GameState.armies.find(army => army.owner === this.realm &&
+        let army = types_1.GameState.armies.find(army => army.owner === this.realm &&
             this.armyId === army.getErkenfaraID());
         if (army != undefined) {
             try {
-                army.checkForPossibleMove(hexFunctions_1.HexFunction.getDirectionToNeighbor(this.from, this.to));
+                army.checkForPossibleMove(types_1.HexFunction.getDirectionToNeighbor(this.from, this.to));
             }
             catch (e) {
                 return false;
@@ -55,13 +50,13 @@ class MoveEvent extends event_1.PhoenixEvent {
         }
     }
     checkEvent() {
-        let army = gameState_1.GameState.armies.find(army => army.owner === this.realm &&
+        let army = types_1.GameState.armies.find(army => army.owner === this.realm &&
             this.armyId === army.getErkenfaraID());
         if (army != undefined) {
-            let direction = hexFunctions_1.HexFunction.getDirectionToNeighbor(this.from, this.to);
+            let direction = types_1.HexFunction.getDirectionToNeighbor(this.from, this.to);
             army.checkForPossibleMove(direction);
             army.move(direction);
-            if (!gameState_1.GameState.loadedEvents.some(event => (event instanceof battleEvent_1.BattleEvent) &&
+            if (!types_1.GameState.loadedEvents.some(event => (event instanceof types_1.BattleEvent) &&
                 !(event.getStatus() === 0 /* Checked */ || event.getStatus() === 1 /* Deleted */) &&
                 event.getPosition()[0] === this.to[0] &&
                 event.getPosition()[1] === this.to[1] &&
@@ -70,8 +65,8 @@ class MoveEvent extends event_1.PhoenixEvent {
                 army.conquer();
             }
             this.status = 0 /* Checked */;
-            gui_1.GUI.getBigBox().fillEventList();
-            drawingFunctions_1.Drawing.drawStuff();
+            types_1.GUI.getBigBox().fillEventList();
+            types_1.Drawing.drawStuff();
         }
         else {
             window.alert("Army not found.");

@@ -15,8 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const destructibleBuilding_1 = require("./destructibleBuilding");
-class ProductionBuilding extends destructibleBuilding_1.DestructibleBuilding {
+const types_1 = require("../types");
+class ProductionBuilding extends types_1.DestructibleBuilding {
     constructor(type, name, position, owner, buildPoints) {
         super(type, position, owner, buildPoints);
         this.name = name;

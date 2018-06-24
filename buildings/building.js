@@ -15,8 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const mapEntity_1 = require("../map/mapEntity");
-class Building extends mapEntity_1.MapEntity {
+const types_1 = require("../types");
+class Building extends types_1.MapEntity {
     constructor(type, position, owner) {
         super(position, owner);
         this.type = type;

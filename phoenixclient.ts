@@ -14,10 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {MouseFunctions} from "./controls/mouseFunctions";
-import {Drawing} from "./gui/drawingFunctions";
-import {GUI} from "./gui/gui";
-import {Loading} from "./serverInteraction/loadingDataFunctions";
+import {MouseFunctions, Drawing, GUI, Loading} from "./types";
 
 // attach handlers to mouse events and canvas resizing
 window.addEventListener('resize', Drawing.resizeCanvas, false);

@@ -14,8 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import { GodFunctions } from "../godmode/godModeFunctions";
-import { Authentication } from "../serverInteraction/authenticationFunctions";
+import {GodFunctions, Authentication} from "../types";
 
 export class InfoChangeBox{
     private self: HTMLDivElement|undefined;

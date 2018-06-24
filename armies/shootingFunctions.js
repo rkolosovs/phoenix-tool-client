@@ -15,8 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gameState_1 = require("../gameState");
-const armyFunctions_1 = require("../libraries/armyFunctions");
+const types_1 = require("../types");
 var ShootingFunctions;
 (function (ShootingFunctions) {
     function inflictRangedDamage(diceRollsLight, diceRollsHeavy, shooter, target, targetField, chars) {
@@ -32,20 +31,20 @@ var ShootingFunctions;
         let allTargets = [];
         let sumAllBP = 0;
         if (target === 0 /* OnField */) {
-            for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
-                if (gameState_1.GameState.buildings[i].getPosition()[0] === targetField[0] &&
-                    gameState_1.GameState.buildings[i].getPosition()[1] === targetField[1] &&
-                    gameState_1.GameState.buildings[i].type < 5) {
+            for (let i = 0; i < types_1.GameState.buildings.length; i++) {
+                if (types_1.GameState.buildings[i].getPosition()[0] === targetField[0] &&
+                    types_1.GameState.buildings[i].getPosition()[1] === targetField[1] &&
+                    types_1.GameState.buildings[i].type < 5) {
                     //TODO building takes 2/3 damage
                     //building[i].takeFire(damage * (2/3));
                     damage = damage * (1 / 3);
                 }
             }
-            for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-                if (gameState_1.GameState.armies[i].getPosition()[0] === targetField[0] &&
-                    gameState_1.GameState.armies[i].getPosition()[1] === targetField[1]) {
-                    allTargets.push(gameState_1.GameState.armies[i]);
-                    sumAllBP += gameState_1.GameState.armies[i].totalBP();
+            for (let i = 0; i < types_1.GameState.armies.length; i++) {
+                if (types_1.GameState.armies[i].getPosition()[0] === targetField[0] &&
+                    types_1.GameState.armies[i].getPosition()[1] === targetField[1]) {
+                    allTargets.push(types_1.GameState.armies[i]);
+                    sumAllBP += types_1.GameState.armies[i].totalBP();
                 }
             }
             for (let i = 0; i < allTargets.length; i++) {
@@ -55,7 +54,7 @@ var ShootingFunctions;
             }
         }
         //TODO Wall Damage
-        armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
+        types_1.ArmyFunctions.checkArmiesForLiveliness();
     }
     ShootingFunctions.inflictRangedDamage = inflictRangedDamage;
 })(ShootingFunctions = exports.ShootingFunctions || (exports.ShootingFunctions = {}));

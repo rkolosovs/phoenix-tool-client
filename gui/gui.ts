@@ -14,23 +14,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {MainBox} from "./mainBox";
-import {BattleBox} from "./battleBox";
-import {ShootingBigBox} from "./shootingBigBox";
-import {InfoBox} from "./infoBox";
-import {GodModeBox} from "./godModeBox";
-import {ArmyGeneratorBox} from "./armyGeneratorBox";
-import {WorldBenderBox} from "./worldBenderBox";
-import {RiverBenderBox} from "./riverBenderBox";
-import {BuildingCreationBox} from "./buildingCreationBox";
-import {WallCreationBox} from "./wallCreationBox";
-import {HarborCreationBox} from "./harborCreationBox";
-import {BridgeCreationBox} from "./bridgeCreationBox";
-import {StreetCreationBox} from "./streetCreationBox";
-import {InfoChangeBox} from "./infoChangeBox";
-import { BoxVisibility } from "./boxVisibilty";
-import {ButtonFunctions} from "../controls/buttonFunctions";
-import {Authentication} from "../serverInteraction/authenticationFunctions";
+import {MainBox, BattleBox, ShootingBigBox, InfoBox, GodModeBox, 
+    ArmyGeneratorBox, WorldBenderBox, RiverBenderBox, BuildingCreationBox, 
+    WallCreationBox, HarborCreationBox, BridgeCreationBox, StreetCreationBox, 
+    InfoChangeBox, BoxVisibility, ButtonFunctions, Authentication} from "../types";
 
 export class GUI{
     //this holds all our UI elements and getter (with on-demand generation) for them

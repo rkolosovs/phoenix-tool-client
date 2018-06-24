@@ -14,23 +14,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import { GameState } from "../gameState";
-import { GUI } from "../gui/gui";
-import { BoxVisibility } from "../gui/boxVisibilty";
-import { Drawing } from "../gui/drawingFunctions";
-import { Realm } from "../realm";
-import { ProductionBuilding } from "../buildings/productionBuilding";
-import { HexFunction } from "../libraries/hexFunctions";
-import { River } from "../map/river";
-import { ArmyGeneratorBox } from "../gui/armyGeneratorBox";
-import { InfoChangeBox } from "../gui/infoChangeBox";
-import { Controls } from "../controls/controlVariables";
-import { Direction } from "../map/direction";
-import { BuildingType, Building } from "../buildings/building";
-import { NonDestructibleBuilding } from "../buildings/nonDestructibleBuilding";
-import { Wall } from "../buildings/wall";
-import { FootArmy } from "../armies/footArmy";
-import { Constants } from "../constants";
+import {GameState, GUI, BoxVisibility, Drawing, Realm, ProductionBuilding, 
+    HexFunction, River, ArmyGeneratorBox, InfoChangeBox, Controls, Direction, 
+    BuildingType, Building, NonDestructibleBuilding, Wall, FootArmy, 
+    Constants} from "../types";
 
 export namespace GodFunctions {
 	import worldCreationModeOnClick = BoxVisibility.worldCreationModeOnClick;

@@ -14,14 +14,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {Controls} from "../controls/controlVariables";
-import {GameState} from "../gameState";
-import {Realm} from "../realm";
-import {Army} from "../armies/army";
-import {LandArmy} from "../armies/landArmy";
-import {Fleet} from "../armies/fleet";
-import {FootArmy} from "../armies/footArmy";
-import {RiderArmy} from "../armies/riderArmy";
+import {Controls, GameState, Realm, Army, LandArmy, Fleet, 
+    FootArmy, RiderArmy} from "../types";
 
 export namespace ArmyFunctions{
 

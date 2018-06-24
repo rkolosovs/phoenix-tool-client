@@ -15,22 +15,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const army_1 = require("./army");
-const constants_1 = require("../constants");
-var SHIP_RP = constants_1.Constants.SHIP_RP;
-var GUARD_RP_MULT = constants_1.Constants.GUARD_RP_MULT;
-var LIGHT_WS_RP = constants_1.Constants.LIGHT_WS_RP;
-var HEAVY_WS_RP = constants_1.Constants.HEAVY_WS_RP;
-const hexFunctions_1 = require("../libraries/hexFunctions");
-const move_1 = require("./move");
-var SHIP_BP = constants_1.Constants.SHIP_BP;
-var HEAVY_WS_BP = constants_1.Constants.HEAVY_WS_BP;
-var LIGHT_WS_BP = constants_1.Constants.LIGHT_WS_BP;
-var SHIP_TRANSPORT_CAPACITY = constants_1.Constants.SHIP_TRANSPORT_CAPACITY;
-const gameState_1 = require("../gameState");
-const armyFunctions_1 = require("../libraries/armyFunctions");
-const footArmy_1 = require("./footArmy");
-class Fleet extends army_1.Army {
+const types_1 = require("../types");
+var SHIP_RP = types_1.Constants.SHIP_RP;
+var GUARD_RP_MULT = types_1.Constants.GUARD_RP_MULT;
+var LIGHT_WS_RP = types_1.Constants.LIGHT_WS_RP;
+var HEAVY_WS_RP = types_1.Constants.HEAVY_WS_RP;
+var SHIP_BP = types_1.Constants.SHIP_BP;
+var HEAVY_WS_BP = types_1.Constants.HEAVY_WS_BP;
+var LIGHT_WS_BP = types_1.Constants.LIGHT_WS_BP;
+var SHIP_TRANSPORT_CAPACITY = types_1.Constants.SHIP_TRANSPORT_CAPACITY;
+class Fleet extends types_1.Army {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, isGuard) {
         if (isGuard != undefined) {
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, 0, isGuard);
@@ -80,22 +74,22 @@ class Fleet extends army_1.Army {
         }
     }
     checkForPossibleMove(direction) {
-        let neighborCoords = hexFunctions_1.HexFunction.neighbors(this.position);
+        let neighborCoords = types_1.HexFunction.neighbors(this.position);
         let target = neighborCoords[direction];
-        let neighborsOfNeighbors = hexFunctions_1.HexFunction.neighbors(target).
-            map((neighbor) => hexFunctions_1.HexFunction.neighbors(neighbor)).
+        let neighborsOfNeighbors = types_1.HexFunction.neighbors(target).
+            map((neighbor) => types_1.HexFunction.neighbors(neighbor)).
             reduce((total, current) => (total.concat(current)), []);
         // TODO: Effects of diplomacy go here.
         let coastalSailing = this.owner.territory.some(field => neighborsOfNeighbors.some(neighbor => field.coordinates[0] === neighbor[0] &&
             field.coordinates[1] === neighbor[1]));
-        switch (hexFunctions_1.HexFunction.fieldType(target)) {
+        switch (types_1.HexFunction.fieldType(target)) {
             case 0 /* SHALLOWS */: //shallow sea
                 if (this.lightCatapultCount + this.heavyCatapultCount <= 0) { //shallow sea & no warships
                     if (coastalSailing && this.movePoints >= 5) { //shallow sea, coast & no warships
-                        return new move_1.Move(5, 0, false, false, target, direction);
+                        return new types_1.Move(5, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 7) { //shallow sea, no coast & no warships
-                        return new move_1.Move(7, 0, false, false, target, direction);
+                        return new types_1.Move(7, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
@@ -103,10 +97,10 @@ class Fleet extends army_1.Army {
                 }
                 else if (this.heavyCatapultCount > 0) { //shallow sea & heavy warships
                     if (coastalSailing && this.movePoints >= 7) { //shallow sea, coast & heavy warships
-                        return new move_1.Move(7, 0, false, false, target, direction);
+                        return new types_1.Move(7, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 10) { //shallow sea, no coast & heavy warships
-                        return new move_1.Move(10, 0, false, false, target, direction);
+                        return new types_1.Move(10, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
@@ -114,10 +108,10 @@ class Fleet extends army_1.Army {
                 }
                 else if (this.lightCatapultCount > 0) { //shallow sea & light warships
                     if (coastalSailing && this.movePoints >= 6) { //shallow sea, coast & light warships
-                        return new move_1.Move(6, 0, false, false, target, direction);
+                        return new types_1.Move(6, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 8) { //shallow sea, no coast & light warships
-                        return new move_1.Move(8, 0, false, false, target, direction);
+                        return new types_1.Move(8, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
@@ -126,10 +120,10 @@ class Fleet extends army_1.Army {
             case 1 /* DEEPSEA */: //deep sea
                 if (this.lightCatapultCount + this.heavyCatapultCount <= 0) { //deep sea & no warships
                     if (coastalSailing && this.movePoints >= 8) { //deep sea, coast & no warships
-                        return new move_1.Move(8, 0, false, false, target, direction);
+                        return new types_1.Move(8, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 12) { //deep sea, no coast & no warships
-                        return new move_1.Move(12, 0, false, false, target, direction);
+                        return new types_1.Move(12, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
@@ -137,10 +131,10 @@ class Fleet extends army_1.Army {
                 }
                 else if (this.heavyCatapultCount > 0) { //deep sea & heavy warships
                     if (coastalSailing && this.movePoints >= 14) { //deep sea, coast & heavy warships
-                        return new move_1.Move(14, 0, false, false, target, direction);
+                        return new types_1.Move(14, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 21) { //deep sea, no coast & heavy warships
-                        return new move_1.Move(21, 0, false, false, target, direction);
+                        return new types_1.Move(21, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
@@ -148,10 +142,10 @@ class Fleet extends army_1.Army {
                 }
                 else if (this.lightCatapultCount > 0) { //deep sea & light warships
                     if (coastalSailing && this.movePoints >= 14) { //deep sea, coast & light warships
-                        return new move_1.Move(14, 0, false, false, target, direction);
+                        return new types_1.Move(14, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 21) { //deep sea, no coast & light warships
-                        return new move_1.Move(21, 0, false, false, target, direction);
+                        return new types_1.Move(21, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
@@ -209,7 +203,7 @@ class Fleet extends army_1.Army {
         if (leadersToSplit > this.officerCount) {
             throw new Error("Not enough officers.");
         }
-        if (troopsToSplit * constants_1.Constants.SHIP_TRANSPORT_CAPACITY > this.freeTransportCapacity()) {
+        if (troopsToSplit * types_1.Constants.SHIP_TRANSPORT_CAPACITY > this.freeTransportCapacity()) {
             throw new Error("Du kannst keine beladenen Schiffe abspalten.");
         }
         if (lightCatapultsToSplit > this.lightCatapultCount) {
@@ -228,7 +222,7 @@ class Fleet extends army_1.Army {
                 throw new Error("Aborted by the user.");
             }
         }
-        gameState_1.GameState.armies.push(new footArmy_1.FootArmy(newArmyId, this.owner, troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, 0, this.getPosition(), this.movePoints, this.heightPoints));
+        types_1.GameState.armies.push(new types_1.FootArmy(newArmyId, this.owner, troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, 0, this.getPosition(), this.movePoints, this.heightPoints));
         this.troopCount -= troopsToSplit;
         this.officerCount -= leadersToSplit;
         this.lightCatapultCount -= lightCatapultsToSplit;
@@ -248,7 +242,7 @@ class Fleet extends army_1.Army {
         if (fromArmy.getHeightPoints() < this.getHeightPoints()) {
             this.setHeightPoints(fromArmy.getHeightPoints());
         }
-        armyFunctions_1.ArmyFunctions.deleteArmy(fromArmy);
+        types_1.ArmyFunctions.deleteArmy(fromArmy);
         let discardedArmies = 0;
         fromArmy.transportedArmies.forEach(transportedArmy => {
             fromArmy.unloadArmy(transportedArmy);
@@ -265,7 +259,7 @@ class Fleet extends army_1.Army {
     }
     getLightCatapultDamage(diceRolls, conditions) {
         if (conditions === 6 /* LightCatapults */) {
-            return diceRolls.map(roll => constants_1.Constants.LIGHT_WS_DAMAGE[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => types_1.Constants.LIGHT_WS_DAMAGE[roll]).reduce((total, current) => total + current, 0);
         }
         else {
             return 0;
@@ -273,16 +267,16 @@ class Fleet extends army_1.Army {
     }
     getHeavyCatapultDamage(diceRolls, conditions) {
         if (conditions === 1 /* Near */) {
-            return diceRolls.map(roll => constants_1.Constants.HEAVY_WS_DAMAGE_NEAR[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => types_1.Constants.HEAVY_WS_DAMAGE_NEAR[roll]).reduce((total, current) => total + current, 0);
         }
         else if (conditions === 3 /* High */) {
-            return diceRolls.map(roll => constants_1.Constants.HEAVY_WS_DAMAGE_HIGH[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => types_1.Constants.HEAVY_WS_DAMAGE_HIGH[roll]).reduce((total, current) => total + current, 0);
         }
         else if (conditions === 2 /* FarAndHigh */) {
-            return diceRolls.map(roll => constants_1.Constants.HEAVY_WS_DAMAGE_FARANDHIGH[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => types_1.Constants.HEAVY_WS_DAMAGE_FARANDHIGH[roll]).reduce((total, current) => total + current, 0);
         }
         else if (conditions === 0 /* Far */) {
-            return diceRolls.map(roll => constants_1.Constants.HEAVY_WS_DAMAGE_FAR[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => types_1.Constants.HEAVY_WS_DAMAGE_FAR[roll]).reduce((total, current) => total + current, 0);
         }
         else {
             return 0;

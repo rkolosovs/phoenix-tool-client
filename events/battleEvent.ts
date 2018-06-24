@@ -14,14 +14,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {GUI} from "../gui/gui";
-import {Army} from "../armies/army";
-import {BoxVisibility} from "../gui/boxVisibilty";
-import {Drawing} from "../gui/drawingFunctions";
-import {GameState} from "../gameState";
-import {BattleBox} from "../gui/battleBox";
-import {PhoenixEvent} from "./event";
-import {EventStatus} from "./eventStatus";
+import {GUI, Army, BoxVisibility, Drawing, GameState, BattleBox, 
+    PhoenixEvent, EventStatus} from "../types";
 
 export class BattleEvent extends PhoenixEvent{
     

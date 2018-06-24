@@ -15,9 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const mapEntity_1 = require("../map/mapEntity");
-const gameState_1 = require("../gameState");
-class MobileEntity extends mapEntity_1.MapEntity {
+const types_1 = require("../types");
+class MobileEntity extends types_1.MapEntity {
     constructor(id, owner, position, movePoints, heightPoints) {
         super(position, owner);
         this.oldPosition = [0, 0];
@@ -34,7 +33,7 @@ class MobileEntity extends mapEntity_1.MapEntity {
         this.setHeightPoints(heightPoints);
     }
     clickedMoves() {
-        if (this.owner.tag === gameState_1.GameState.login || gameState_1.GameState.login === "sl") {
+        if (this.owner.tag === types_1.GameState.login || types_1.GameState.login === "sl") {
             this.possibleMoves = [];
             //goes through all neighbors to see if the army can move there
             this.possibleMoves.push(this.checkForPossibleMove(0 /* NW */));

@@ -15,8 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gameState_1 = require("../gameState");
-const boxVisibilty_1 = require("./boxVisibilty");
+const types_1 = require("../types");
 class MainBox {
     getSelf() {
         if (this.self == undefined) {
@@ -41,7 +40,7 @@ class MainBox {
         // Get all elements with class="tabcontent" and hide them
         let tabcontent = document.getElementsByClassName("tabcontent");
         for (let i = 0; i < tabcontent.length; i++) {
-            boxVisibilty_1.BoxVisibility.hide(tabcontent[i]);
+            types_1.BoxVisibility.hide(tabcontent[i]);
         }
         // Get all elements with class="tablinks" and remove the class "active"
         let tablinks = document.getElementsByClassName("tablinks");
@@ -53,16 +52,16 @@ class MainBox {
         this.closeAllTabs();
         // Show the current tab, and add an "active" class to the button that opened the tab
         if (event != undefined && tab != undefined) {
-            boxVisibilty_1.BoxVisibility.show(tab);
+            types_1.BoxVisibility.show(tab);
             event.currentTarget.className += " active";
         }
     }
     fillEventList() {
         let eventList = this.getEventsTab();
         eventList.innerHTML = "";
-        for (let i = 0; i < gameState_1.GameState.loadedEvents.length; i++) {
-            gameState_1.GameState.loadedEvents[i].determineEventStatus();
-            eventList.appendChild(gameState_1.GameState.loadedEvents[i].makeEventListItem());
+        for (let i = 0; i < types_1.GameState.loadedEvents.length; i++) {
+            types_1.GameState.loadedEvents[i].determineEventStatus();
+            eventList.appendChild(types_1.GameState.loadedEvents[i].makeEventListItem());
         }
     }
 }

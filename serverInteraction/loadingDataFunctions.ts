@@ -14,32 +14,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {Drawing} from "../gui/drawingFunctions";
-import {Authentication} from "./authenticationFunctions";
-import {GameState} from "../gameState";
-import {MoveEvent} from "../events/moveEvent";
-import {BattleEvent} from "../events/battleEvent";
-import {ShootEvent} from "../events/shootEvent";
-import {MergeEvent} from "../events/mergeEvent";
-import {MountEvent} from "../events/mountEvent";
-import {TransferEvent} from "../events/transferEvent";
-import {SplitEvent} from "../events/splitEvent";
-import {Realm} from "../realm";
-import {RiderArmy} from "../armies/riderArmy";
-import {River} from "../map/river";
-import {Field} from "../map/field";
-import {LandArmy} from "../armies/landArmy";
-import {FootArmy} from "../armies/footArmy";
-import {Fleet} from "../armies/fleet";
-import {stringToDirection} from "../map/direction";
-import {Wall} from "../buildings/wall";
-import {ProductionBuilding} from "../buildings/productionBuilding";
-import {NonDestructibleBuilding} from "../buildings/nonDestructibleBuilding";
-import {Images} from "../gui/images";
-import {GUI} from "../gui/gui";
-import {EventStatus} from "../events/eventStatus";
-import {Army} from "../armies/army";
-import {Building} from "../buildings/building";
+import {Drawing, Authentication, GameState, MoveEvent, BattleEvent, 
+    ShootEvent, MergeEvent, MountEvent, TransferEvent, SplitEvent, 
+    Realm, RiderArmy, River, Field, LandArmy, FootArmy, Fleet, stringToDirection, 
+    Wall, ProductionBuilding, NonDestructibleBuilding, Images, GUI, EventStatus, 
+    Army, Building} from "../types";
 
 export namespace Loading{
 	// help function to fetch current data from the server

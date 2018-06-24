@@ -14,26 +14,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {HexFunction} from "../libraries/hexFunctions";
-import {FieldType} from "../map/field";
-import {Realm} from "../realm";
-import {LandArmy} from "./landArmy";
-import {GameState} from "../gameState";
-import {Fleet} from "./fleet";
-import {Constants} from "../constants";
+import {HexFunction, FieldType, Realm, LandArmy, GameState, Fleet, 
+    Constants, Controls, MultiFieldFunctions, BoxVisibility, FootArmy, 
+    Drawing, ArmyFunctions, MountEvent, EventStatus, Army, ShootingCondition, 
+    ShootingTarget} from "../types";
 import RIDER_RP = Constants.RIDER_RP;
 import OFFICER_RP = Constants.OFFICER_RP;
 import RIDER_BP = Constants.RIDER_BP;
-import {Controls} from "../controls/controlVariables";
-import {MultiFieldFunctions} from "../gui/multifieldFunctions";
-import {BoxVisibility} from "../gui/boxVisibilty";
-import {FootArmy} from "./footArmy";
-import {Drawing} from "../gui/drawingFunctions";
-import {ArmyFunctions} from "../libraries/armyFunctions";
-import { MountEvent } from "../events/mountEvent";
-import { EventStatus } from "../events/eventStatus";
-import {Army} from "./army";
-import {ShootingCondition, ShootingTarget} from "./shootingFunctions";
 
 export class RiderArmy extends LandArmy{
     static readonly MAX_MOVE_POINTS = 21;

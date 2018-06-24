@@ -16,11 +16,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gameState_1 = require("../gameState");
-const hexFunctions_1 = require("../libraries/hexFunctions");
-const constants_1 = require("../constants");
-const mobileEntity_1 = require("./mobileEntity");
-class Army extends mobileEntity_1.MobileEntity {
+const types_1 = require("../types");
+class Army extends types_1.MobileEntity {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
         super(id, owner, position, movePoints, heightPoints);
         this.lightCatapultCount = 0;
@@ -119,10 +116,10 @@ class Army extends mobileEntity_1.MobileEntity {
         this.targetList = [];
         let tilesInRange = [];
         if (this.heavyCatapultCount - this.heavyCatapultsShot > 0) { //in a 2 tile range
-            tilesInRange = hexFunctions_1.HexFunction.neighborInRange(this.position, 2);
+            tilesInRange = types_1.HexFunction.neighborInRange(this.position, 2);
         }
         else if (this.lightCatapultCount - this.lightCatapultsShot > 0) { //one tile range
-            tilesInRange = hexFunctions_1.HexFunction.neighborInRange(this.position, 1);
+            tilesInRange = types_1.HexFunction.neighborInRange(this.position, 1);
         }
         this.targetList = this.checkAllShootingConditions(tilesInRange);
     }
@@ -161,53 +158,53 @@ class Army extends mobileEntity_1.MobileEntity {
     }
     checkShootingCondition(target, skpShot) {
         let condition = 5 /* Impossible */;
-        let range = hexFunctions_1.HexFunction.distance(this.position, target);
+        let range = types_1.HexFunction.distance(this.position, target);
         if (skpShot) { //skp shooting
             if (range === 1) { //for range of 1
-                if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) <= 2) {
+                if (types_1.HexFunction.height(target) - types_1.HexFunction.height(this.position) <= 2) {
                     condition = 3 /* High */;
                 }
-                if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) <= 1) {
+                if (types_1.HexFunction.height(target) - types_1.HexFunction.height(this.position) <= 1) {
                     condition = 1 /* Near */;
                 }
-                if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) === 1 &&
-                    hexFunctions_1.HexFunction.findWallInWay(this.position, target).length > 0) {
+                if (types_1.HexFunction.height(target) - types_1.HexFunction.height(this.position) === 1 &&
+                    types_1.HexFunction.findWallInWay(this.position, target).length > 0) {
                     condition = 3 /* High */;
                 }
             }
             else if (range === 2) { //for range of 2
-                if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) <= 1) {
+                if (types_1.HexFunction.height(target) - types_1.HexFunction.height(this.position) <= 1) {
                     condition = 2 /* FarAndHigh */;
                 }
-                if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) < 1) {
+                if (types_1.HexFunction.height(target) - types_1.HexFunction.height(this.position) < 1) {
                     condition = 0 /* Far */;
                 }
-                if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) === 0 &&
-                    hexFunctions_1.HexFunction.findWallInWay(this.position, target).length > 0) {
+                if (types_1.HexFunction.height(target) - types_1.HexFunction.height(this.position) === 0 &&
+                    types_1.HexFunction.findWallInWay(this.position, target).length > 0) {
                     condition = 2 /* FarAndHigh */;
                 }
                 //if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
-                let commonNeig = hexFunctions_1.HexFunction.findCommonNeighbor(this.position, target);
-                let walls = hexFunctions_1.HexFunction.findWallInWay(this.position, target);
+                let commonNeig = types_1.HexFunction.findCommonNeighbor(this.position, target);
+                let walls = types_1.HexFunction.findWallInWay(this.position, target);
                 for (let i = 0; i < commonNeig.length; i++) {
                     if (walls.length > 0) {
                         for (let j = 0; j < walls.length; j++) {
-                            if (((hexFunctions_1.HexFunction.height([commonNeig[i][0], commonNeig[i][1]]) -
-                                hexFunctions_1.HexFunction.height(this.position) === 1)
-                                && gameState_1.GameState.buildings[walls[j]].getPosition()[0] === commonNeig[i][0] &&
-                                gameState_1.GameState.buildings[walls[j]].getPosition()[1] === commonNeig[i][1])) {
+                            if (((types_1.HexFunction.height([commonNeig[i][0], commonNeig[i][1]]) -
+                                types_1.HexFunction.height(this.position) === 1)
+                                && types_1.GameState.buildings[walls[j]].getPosition()[0] === commonNeig[i][0] &&
+                                types_1.GameState.buildings[walls[j]].getPosition()[1] === commonNeig[i][1])) {
                                 condition = 5 /* Impossible */;
                             }
                         }
                     }
-                    if (hexFunctions_1.HexFunction.height(commonNeig[i]) - hexFunctions_1.HexFunction.height(this.position) > 1) {
+                    if (types_1.HexFunction.height(commonNeig[i]) - types_1.HexFunction.height(this.position) > 1) {
                         condition = 5 /* Impossible */;
                     }
                 }
             }
         }
         else { //for lkp shooting
-            if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) <= 1) {
+            if (types_1.HexFunction.height(target) - types_1.HexFunction.height(this.position) <= 1) {
                 condition = 6 /* LightCatapults */;
             }
         }
@@ -215,8 +212,8 @@ class Army extends mobileEntity_1.MobileEntity {
     }
     conquer() {
         if (this.canConquer()) {
-            let field = gameState_1.GameState.fields[hexFunctions_1.HexFunction.positionInList(this.position)];
-            gameState_1.GameState.realms.forEach(realm => {
+            let field = types_1.GameState.fields[types_1.HexFunction.positionInList(this.position)];
+            types_1.GameState.realms.forEach(realm => {
                 let index = realm.territory.indexOf(field);
                 if (index !== -1) {
                     realm.territory.splice(index, 1);
@@ -233,7 +230,7 @@ class Army extends mobileEntity_1.MobileEntity {
         this.setHeavyCatapultCount(this.heavyCatapultCount - Math.floor(this.heavyCatapultCount * factor));
     }
     getRoomPoints() {
-        return this.getRoomPointsSansOfficers() + this.officerCount * constants_1.Constants.OFFICER_RP;
+        return this.getRoomPointsSansOfficers() + this.officerCount * types_1.Constants.OFFICER_RP;
     }
     leaderGp() {
         let gp = 0;
@@ -258,7 +255,7 @@ class Army extends mobileEntity_1.MobileEntity {
 }
 exports.Army = Army;
 
-},{"../constants":16,"../gameState":28,"../libraries/hexFunctions":50,"./mobileEntity":7}],2:[function(require,module,exports){
+},{"../types":60}],2:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -276,14 +273,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gameState_1 = require("../gameState");
-const hexFunctions_1 = require("../libraries/hexFunctions");
-const battleResult_1 = require("./battleResult");
-const landArmy_1 = require("./landArmy");
-const fleet_1 = require("./fleet");
-const riderArmy_1 = require("./riderArmy");
-const footArmy_1 = require("./footArmy");
-const armyFunctions_1 = require("../libraries/armyFunctions");
+const types_1 = require("../types");
 class BattleHandler {
     constructor(participants, location) {
         this.attackerArmies = [];
@@ -343,14 +333,14 @@ class BattleHandler {
                 console.log("Battle resolution error.");
             }
         }
-        armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
+        types_1.ArmyFunctions.checkArmiesForLiveliness();
     }
     static armyArrayCount(armyArray, fieldType) {
-        return armyArray.filter((val) => ((val instanceof fleet_1.Fleet && fieldType <= 1) || (fieldType >= 2 && val instanceof landArmy_1.LandArmy)), this).
+        return armyArray.filter((val) => ((val instanceof types_1.Fleet && fieldType <= 1) || (fieldType >= 2 && val instanceof types_1.LandArmy)), this).
             reduce((total, elem) => (elem.getTroopCount() + total), 0);
     }
     static terrainGP(army, attacker, fieldType, location) {
-        let buildingsOnTheField = gameState_1.GameState.buildings.filter(current => (current.getPosition()[0] === location[0] && current.getPosition()[1] === location[1] && current.type <= 4));
+        let buildingsOnTheField = types_1.GameState.buildings.filter(current => (current.getPosition()[0] === location[0] && current.getPosition()[1] === location[1] && current.type <= 4));
         if (buildingsOnTheField.length > 0) { //production buildings on field negate usual terrain bonus
             if (attacker) {
                 return 0;
@@ -369,7 +359,7 @@ class BattleHandler {
         }
         else { //usual terrain bonus applies
             let terrainGPBonus = 0;
-            let findRealm = gameState_1.GameState.realms.find(realm => (realm === army.owner));
+            let findRealm = types_1.GameState.realms.find(realm => (realm === army.owner));
             let homeTurf = 0 /* SHALLOWS */;
             if (findRealm != undefined) {
                 homeTurf = findRealm.homeTurf;
@@ -378,8 +368,8 @@ class BattleHandler {
                 (homeTurf === 6 /* MOUNTAINS */ && fieldType === 5 /* HIGHLANDS */)) { //home terrain bonus applies
                 terrainGPBonus += 50;
             }
-            if ((army instanceof footArmy_1.FootArmy && (fieldType === 3 /* WOODS */ || fieldType === 8 /* SWAMP */)) ||
-                (army instanceof riderArmy_1.RiderArmy && (fieldType === 2 /* LOWLANDS */ || fieldType === 4 /* HILLS */ ||
+            if ((army instanceof types_1.FootArmy && (fieldType === 3 /* WOODS */ || fieldType === 8 /* SWAMP */)) ||
+                (army instanceof types_1.RiderArmy && (fieldType === 2 /* LOWLANDS */ || fieldType === 4 /* HILLS */ ||
                     fieldType === 7 /* DESERT */))) { //footmen/rider terrain bonus
                 terrainGPBonus += 140;
             }
@@ -396,32 +386,32 @@ class BattleHandler {
         let armyPosition = army.getPosition();
         let oldArmyPosition = army.getOldPosition();
         if (attacker) {
-            if (hexFunctions_1.HexFunction.height(oldArmyPosition) >
-                hexFunctions_1.HexFunction.height(armyPosition)) {
+            if (types_1.HexFunction.height(oldArmyPosition) >
+                types_1.HexFunction.height(armyPosition)) {
                 result += 20;
             } //fighting downhill
-            if (hexFunctions_1.HexFunction.fieldType(armyPosition) === 7 /* DESERT */ ||
-                hexFunctions_1.HexFunction.fieldType(armyPosition) === 8 /* SWAMP */) {
+            if (types_1.HexFunction.fieldType(armyPosition) === 7 /* DESERT */ ||
+                types_1.HexFunction.fieldType(armyPosition) === 8 /* SWAMP */) {
                 result += 20;
             } //attacking into swamp or desert
-            if (hexFunctions_1.HexFunction.fieldType(oldArmyPosition) === 3 /* WOODS */) {
+            if (types_1.HexFunction.fieldType(oldArmyPosition) === 3 /* WOODS */) {
                 result += 20;
             } //attacking out of a forest
-            if (hexFunctions_1.HexFunction.hasStreet(armyPosition)) {
+            if (types_1.HexFunction.hasStreet(armyPosition)) {
                 result += 20;
             } //attacking onto a street
         }
         else {
-            let adjacentWalls = hexFunctions_1.HexFunction.walls(armyPosition);
-            let adjacentRivers = hexFunctions_1.HexFunction.fluesse(armyPosition);
-            let adjacentBridges = hexFunctions_1.HexFunction.bridges(armyPosition);
-            let neighbor = hexFunctions_1.HexFunction.neighbors(armyPosition);
+            let adjacentWalls = types_1.HexFunction.walls(armyPosition);
+            let adjacentRivers = types_1.HexFunction.fluesse(armyPosition);
+            let adjacentBridges = types_1.HexFunction.bridges(armyPosition);
+            let neighbor = types_1.HexFunction.neighbors(armyPosition);
             let downhillBonus = false;
             let wallBonus = false;
             let bridgeBonus = false;
             let riverBonus = false;
             attackingArmies.forEach((attackingArmy) => {
-                if (hexFunctions_1.HexFunction.height(oldArmyPosition) < hexFunctions_1.HexFunction.height(armyPosition)) {
+                if (types_1.HexFunction.height(oldArmyPosition) < types_1.HexFunction.height(armyPosition)) {
                     downhillBonus = true;
                 }
                 neighbor.forEach((neighbor, index) => {
@@ -470,7 +460,7 @@ class BattleHandler {
         return (lossesWithGP / totalStrength) * armyStrength;
     }
     calculateResult(armiesAttack, armiesDefense, charsAttack, charsDefense, location, attackDieRoll, defenseDieRoll) {
-        let fieldType = hexFunctions_1.HexFunction.fieldType(location);
+        let fieldType = types_1.HexFunction.fieldType(location);
         let overrunAttack = BattleHandler.armyArrayCount(armiesAttack, fieldType) >=
             10 * BattleHandler.armyArrayCount(armiesDefense, fieldType) &&
             armiesDefense.filter((elem) => (elem.isGuard)).length === 0 &&
@@ -481,7 +471,7 @@ class BattleHandler {
             BattleHandler.armyArrayCount(armiesDefense, fieldType) > 0;
         let totalStrengthAttackerArmy = armiesAttack.map((elem) => (elem.getTroopCount()));
         let totalStrengthDefenderArmy = armiesDefense.map((elem) => {
-            if (elem instanceof fleet_1.Fleet) {
+            if (elem instanceof types_1.Fleet) {
                 return elem.getTroopCount() + elem.getLightCatapultCount() * 5 + elem.getHeavyCatapultCount() * 10;
             }
             else {
@@ -529,12 +519,12 @@ class BattleHandler {
         let defenderGPDiffArmy = totalDefenderArmyGP.map((elem) => ((elem / 200) - (attackerMeanGP / 100)));
         let finalLossesAttackerArmy = baseLossesAttackerArmy.map((elem, index) => (BattleHandler.computeFinalLosses(elem, attackerGPDiffArmy[index], totalStrengthAttackerArmy[index], totalStrengthAttackerArmy[index])));
         let finalLossesDefenderArmy = baseLossesDefenderArmy.map((elem, index) => (BattleHandler.computeFinalLosses(elem, defenderGPDiffArmy[index], armiesDefense[index].getTroopCount(), totalStrengthDefenderArmy[index])));
-        return new battleResult_1.BattleResult(result, finalLossesAttackerArmy, finalLossesDefenderArmy);
+        return new types_1.BattleResult(result, finalLossesAttackerArmy, finalLossesDefenderArmy);
     }
 }
 exports.BattleHandler = BattleHandler;
 
-},{"../gameState":28,"../libraries/armyFunctions":49,"../libraries/hexFunctions":50,"./battleResult":3,"./fleet":4,"./footArmy":5,"./landArmy":6,"./riderArmy":9}],3:[function(require,module,exports){
+},{"../types":60}],3:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -579,22 +569,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const army_1 = require("./army");
-const constants_1 = require("../constants");
-var SHIP_RP = constants_1.Constants.SHIP_RP;
-var GUARD_RP_MULT = constants_1.Constants.GUARD_RP_MULT;
-var LIGHT_WS_RP = constants_1.Constants.LIGHT_WS_RP;
-var HEAVY_WS_RP = constants_1.Constants.HEAVY_WS_RP;
-const hexFunctions_1 = require("../libraries/hexFunctions");
-const move_1 = require("./move");
-var SHIP_BP = constants_1.Constants.SHIP_BP;
-var HEAVY_WS_BP = constants_1.Constants.HEAVY_WS_BP;
-var LIGHT_WS_BP = constants_1.Constants.LIGHT_WS_BP;
-var SHIP_TRANSPORT_CAPACITY = constants_1.Constants.SHIP_TRANSPORT_CAPACITY;
-const gameState_1 = require("../gameState");
-const armyFunctions_1 = require("../libraries/armyFunctions");
-const footArmy_1 = require("./footArmy");
-class Fleet extends army_1.Army {
+const types_1 = require("../types");
+var SHIP_RP = types_1.Constants.SHIP_RP;
+var GUARD_RP_MULT = types_1.Constants.GUARD_RP_MULT;
+var LIGHT_WS_RP = types_1.Constants.LIGHT_WS_RP;
+var HEAVY_WS_RP = types_1.Constants.HEAVY_WS_RP;
+var SHIP_BP = types_1.Constants.SHIP_BP;
+var HEAVY_WS_BP = types_1.Constants.HEAVY_WS_BP;
+var LIGHT_WS_BP = types_1.Constants.LIGHT_WS_BP;
+var SHIP_TRANSPORT_CAPACITY = types_1.Constants.SHIP_TRANSPORT_CAPACITY;
+class Fleet extends types_1.Army {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, isGuard) {
         if (isGuard != undefined) {
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, 0, isGuard);
@@ -644,22 +628,22 @@ class Fleet extends army_1.Army {
         }
     }
     checkForPossibleMove(direction) {
-        let neighborCoords = hexFunctions_1.HexFunction.neighbors(this.position);
+        let neighborCoords = types_1.HexFunction.neighbors(this.position);
         let target = neighborCoords[direction];
-        let neighborsOfNeighbors = hexFunctions_1.HexFunction.neighbors(target).
-            map((neighbor) => hexFunctions_1.HexFunction.neighbors(neighbor)).
+        let neighborsOfNeighbors = types_1.HexFunction.neighbors(target).
+            map((neighbor) => types_1.HexFunction.neighbors(neighbor)).
             reduce((total, current) => (total.concat(current)), []);
         // TODO: Effects of diplomacy go here.
         let coastalSailing = this.owner.territory.some(field => neighborsOfNeighbors.some(neighbor => field.coordinates[0] === neighbor[0] &&
             field.coordinates[1] === neighbor[1]));
-        switch (hexFunctions_1.HexFunction.fieldType(target)) {
+        switch (types_1.HexFunction.fieldType(target)) {
             case 0 /* SHALLOWS */: //shallow sea
                 if (this.lightCatapultCount + this.heavyCatapultCount <= 0) { //shallow sea & no warships
                     if (coastalSailing && this.movePoints >= 5) { //shallow sea, coast & no warships
-                        return new move_1.Move(5, 0, false, false, target, direction);
+                        return new types_1.Move(5, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 7) { //shallow sea, no coast & no warships
-                        return new move_1.Move(7, 0, false, false, target, direction);
+                        return new types_1.Move(7, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
@@ -667,10 +651,10 @@ class Fleet extends army_1.Army {
                 }
                 else if (this.heavyCatapultCount > 0) { //shallow sea & heavy warships
                     if (coastalSailing && this.movePoints >= 7) { //shallow sea, coast & heavy warships
-                        return new move_1.Move(7, 0, false, false, target, direction);
+                        return new types_1.Move(7, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 10) { //shallow sea, no coast & heavy warships
-                        return new move_1.Move(10, 0, false, false, target, direction);
+                        return new types_1.Move(10, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
@@ -678,10 +662,10 @@ class Fleet extends army_1.Army {
                 }
                 else if (this.lightCatapultCount > 0) { //shallow sea & light warships
                     if (coastalSailing && this.movePoints >= 6) { //shallow sea, coast & light warships
-                        return new move_1.Move(6, 0, false, false, target, direction);
+                        return new types_1.Move(6, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 8) { //shallow sea, no coast & light warships
-                        return new move_1.Move(8, 0, false, false, target, direction);
+                        return new types_1.Move(8, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
@@ -690,10 +674,10 @@ class Fleet extends army_1.Army {
             case 1 /* DEEPSEA */: //deep sea
                 if (this.lightCatapultCount + this.heavyCatapultCount <= 0) { //deep sea & no warships
                     if (coastalSailing && this.movePoints >= 8) { //deep sea, coast & no warships
-                        return new move_1.Move(8, 0, false, false, target, direction);
+                        return new types_1.Move(8, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 12) { //deep sea, no coast & no warships
-                        return new move_1.Move(12, 0, false, false, target, direction);
+                        return new types_1.Move(12, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
@@ -701,10 +685,10 @@ class Fleet extends army_1.Army {
                 }
                 else if (this.heavyCatapultCount > 0) { //deep sea & heavy warships
                     if (coastalSailing && this.movePoints >= 14) { //deep sea, coast & heavy warships
-                        return new move_1.Move(14, 0, false, false, target, direction);
+                        return new types_1.Move(14, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 21) { //deep sea, no coast & heavy warships
-                        return new move_1.Move(21, 0, false, false, target, direction);
+                        return new types_1.Move(21, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
@@ -712,10 +696,10 @@ class Fleet extends army_1.Army {
                 }
                 else if (this.lightCatapultCount > 0) { //deep sea & light warships
                     if (coastalSailing && this.movePoints >= 14) { //deep sea, coast & light warships
-                        return new move_1.Move(14, 0, false, false, target, direction);
+                        return new types_1.Move(14, 0, false, false, target, direction);
                     }
                     else if (this.movePoints >= 21) { //deep sea, no coast & light warships
-                        return new move_1.Move(21, 0, false, false, target, direction);
+                        return new types_1.Move(21, 0, false, false, target, direction);
                     }
                     else {
                         throw new Error("You don't have enough movement Points.");
@@ -773,7 +757,7 @@ class Fleet extends army_1.Army {
         if (leadersToSplit > this.officerCount) {
             throw new Error("Not enough officers.");
         }
-        if (troopsToSplit * constants_1.Constants.SHIP_TRANSPORT_CAPACITY > this.freeTransportCapacity()) {
+        if (troopsToSplit * types_1.Constants.SHIP_TRANSPORT_CAPACITY > this.freeTransportCapacity()) {
             throw new Error("Du kannst keine beladenen Schiffe abspalten.");
         }
         if (lightCatapultsToSplit > this.lightCatapultCount) {
@@ -792,7 +776,7 @@ class Fleet extends army_1.Army {
                 throw new Error("Aborted by the user.");
             }
         }
-        gameState_1.GameState.armies.push(new footArmy_1.FootArmy(newArmyId, this.owner, troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, 0, this.getPosition(), this.movePoints, this.heightPoints));
+        types_1.GameState.armies.push(new types_1.FootArmy(newArmyId, this.owner, troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, 0, this.getPosition(), this.movePoints, this.heightPoints));
         this.troopCount -= troopsToSplit;
         this.officerCount -= leadersToSplit;
         this.lightCatapultCount -= lightCatapultsToSplit;
@@ -812,7 +796,7 @@ class Fleet extends army_1.Army {
         if (fromArmy.getHeightPoints() < this.getHeightPoints()) {
             this.setHeightPoints(fromArmy.getHeightPoints());
         }
-        armyFunctions_1.ArmyFunctions.deleteArmy(fromArmy);
+        types_1.ArmyFunctions.deleteArmy(fromArmy);
         let discardedArmies = 0;
         fromArmy.transportedArmies.forEach(transportedArmy => {
             fromArmy.unloadArmy(transportedArmy);
@@ -829,7 +813,7 @@ class Fleet extends army_1.Army {
     }
     getLightCatapultDamage(diceRolls, conditions) {
         if (conditions === 6 /* LightCatapults */) {
-            return diceRolls.map(roll => constants_1.Constants.LIGHT_WS_DAMAGE[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => types_1.Constants.LIGHT_WS_DAMAGE[roll]).reduce((total, current) => total + current, 0);
         }
         else {
             return 0;
@@ -837,16 +821,16 @@ class Fleet extends army_1.Army {
     }
     getHeavyCatapultDamage(diceRolls, conditions) {
         if (conditions === 1 /* Near */) {
-            return diceRolls.map(roll => constants_1.Constants.HEAVY_WS_DAMAGE_NEAR[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => types_1.Constants.HEAVY_WS_DAMAGE_NEAR[roll]).reduce((total, current) => total + current, 0);
         }
         else if (conditions === 3 /* High */) {
-            return diceRolls.map(roll => constants_1.Constants.HEAVY_WS_DAMAGE_HIGH[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => types_1.Constants.HEAVY_WS_DAMAGE_HIGH[roll]).reduce((total, current) => total + current, 0);
         }
         else if (conditions === 2 /* FarAndHigh */) {
-            return diceRolls.map(roll => constants_1.Constants.HEAVY_WS_DAMAGE_FARANDHIGH[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => types_1.Constants.HEAVY_WS_DAMAGE_FARANDHIGH[roll]).reduce((total, current) => total + current, 0);
         }
         else if (conditions === 0 /* Far */) {
-            return diceRolls.map(roll => constants_1.Constants.HEAVY_WS_DAMAGE_FAR[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => types_1.Constants.HEAVY_WS_DAMAGE_FAR[roll]).reduce((total, current) => total + current, 0);
         }
         else {
             return 0;
@@ -897,7 +881,7 @@ class Fleet extends army_1.Army {
 Fleet.MAX_HEIGHT_POINTS = 0;
 exports.Fleet = Fleet;
 
-},{"../constants":16,"../gameState":28,"../libraries/armyFunctions":49,"../libraries/hexFunctions":50,"./army":1,"./footArmy":5,"./move":8}],5:[function(require,module,exports){
+},{"../types":60}],5:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -915,27 +899,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const hexFunctions_1 = require("../libraries/hexFunctions");
-const landArmy_1 = require("./landArmy");
-const gameState_1 = require("../gameState");
-const fleet_1 = require("./fleet");
-const constants_1 = require("../constants");
-var FOOTMAN_RP = constants_1.Constants.FOOTMAN_RP;
-var LIGHT_CATA_RP = constants_1.Constants.LIGHT_CATA_RP;
-var HEAVY_CATA_RP = constants_1.Constants.HEAVY_CATA_RP;
-var MOUNT_RP = constants_1.Constants.MOUNT_RP;
-var FOOTMAN_BP = constants_1.Constants.FOOTMAN_BP;
-var MOUNT_BP = constants_1.Constants.MOUNT_BP;
-var LIGHT_CATA_BP = constants_1.Constants.LIGHT_CATA_BP;
-var HEAVY_CATA_BP = constants_1.Constants.HEAVY_CATA_BP;
-var OFFICER_RP = constants_1.Constants.OFFICER_RP;
-const riderArmy_1 = require("./riderArmy");
-const controlVariables_1 = require("../controls/controlVariables");
-const boxVisibilty_1 = require("../gui/boxVisibilty");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const armyFunctions_1 = require("../libraries/armyFunctions");
-const mountEvent_1 = require("../events/mountEvent");
-class FootArmy extends landArmy_1.LandArmy {
+const types_1 = require("../types");
+var FOOTMAN_RP = types_1.Constants.FOOTMAN_RP;
+var LIGHT_CATA_RP = types_1.Constants.LIGHT_CATA_RP;
+var HEAVY_CATA_RP = types_1.Constants.HEAVY_CATA_RP;
+var MOUNT_RP = types_1.Constants.MOUNT_RP;
+var FOOTMAN_BP = types_1.Constants.FOOTMAN_BP;
+var MOUNT_BP = types_1.Constants.MOUNT_BP;
+var LIGHT_CATA_BP = types_1.Constants.LIGHT_CATA_BP;
+var HEAVY_CATA_BP = types_1.Constants.HEAVY_CATA_BP;
+var OFFICER_RP = types_1.Constants.OFFICER_RP;
+class FootArmy extends types_1.LandArmy {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, mountCount, position, movePoints, heightPoints, isGuard) {
         if (isGuard != undefined) {
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard);
@@ -963,7 +937,7 @@ class FootArmy extends landArmy_1.LandArmy {
         }
     }
     computeMoveCost(thereIsAStreet, thereIsAHarbor, thereIsARiver, thereIsABridge, rightOfPassage, target) {
-        switch (hexFunctions_1.HexFunction.fieldType(target)) {
+        switch (types_1.HexFunction.fieldType(target)) {
             case 0 /* SHALLOWS */:
             case 1 /* DEEPSEA */: //watter
                 //already embarked
@@ -971,7 +945,7 @@ class FootArmy extends landArmy_1.LandArmy {
                     throw new Error("You are already embarked on a Fleet.");
                     // there are no viable fleets on destination
                 }
-                else if (gameState_1.GameState.armies.filter(army => army instanceof fleet_1.Fleet && army.getPosition()[0] === target[0] &&
+                else if (types_1.GameState.armies.filter(army => army instanceof types_1.Fleet && army.getPosition()[0] === target[0] &&
                     army.getPosition()[1] === target[1] && army.owner === this.owner && army.canLoad(this)).length === 0) {
                     throw new Error("You can't walk on Water.");
                     // at least one fleet on destination
@@ -1295,7 +1269,7 @@ class FootArmy extends landArmy_1.LandArmy {
         if (heavyCatapultsToSplit > this.heavyCatapultCount) {
             throw new Error("Not enough heavy catapults.");
         }
-        gameState_1.GameState.armies.push(new FootArmy(newArmyId, this.owner, troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, mountsToSplit, this.getPosition(), this.movePoints, this.heightPoints));
+        types_1.GameState.armies.push(new FootArmy(newArmyId, this.owner, troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, mountsToSplit, this.getPosition(), this.movePoints, this.heightPoints));
         this.troopCount -= troopsToSplit;
         this.officerCount -= leadersToSplit;
         this.mountCount -= mountsToSplit;
@@ -1317,11 +1291,11 @@ class FootArmy extends landArmy_1.LandArmy {
         if (fromArmy.getHeightPoints() < this.getHeightPoints()) {
             this.setHeightPoints(fromArmy.getHeightPoints());
         }
-        armyFunctions_1.ArmyFunctions.deleteArmy(fromArmy);
+        types_1.ArmyFunctions.deleteArmy(fromArmy);
     }
     getLightCatapultDamage(diceRolls, conditions) {
         if (conditions === 6 /* LightCatapults */) {
-            return diceRolls.map(roll => constants_1.Constants.LIGHT_CATA_DAMAGE[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => types_1.Constants.LIGHT_CATA_DAMAGE[roll]).reduce((total, current) => total + current, 0);
         }
         else {
             return 0;
@@ -1329,16 +1303,16 @@ class FootArmy extends landArmy_1.LandArmy {
     }
     getHeavyCatapultDamage(diceRolls, conditions) {
         if (conditions === 1 /* Near */) {
-            return diceRolls.map(roll => constants_1.Constants.HEAVY_CATA_DAMAGE_NEAR[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => types_1.Constants.HEAVY_CATA_DAMAGE_NEAR[roll]).reduce((total, current) => total + current, 0);
         }
         else if (conditions === 3 /* High */) {
-            return diceRolls.map(roll => constants_1.Constants.HEAVY_CATA_DAMAGE_HIGH[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => types_1.Constants.HEAVY_CATA_DAMAGE_HIGH[roll]).reduce((total, current) => total + current, 0);
         }
         else if (conditions === 2 /* FarAndHigh */) {
-            return diceRolls.map(roll => constants_1.Constants.HEAVY_CATA_DAMAGE_FARANDHIGH[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => types_1.Constants.HEAVY_CATA_DAMAGE_FARANDHIGH[roll]).reduce((total, current) => total + current, 0);
         }
         else if (conditions === 0 /* Far */) {
-            return diceRolls.map(roll => constants_1.Constants.HEAVY_CATA_DAMAGE_FAR[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => types_1.Constants.HEAVY_CATA_DAMAGE_FAR[roll]).reduce((total, current) => total + current, 0);
         }
         else {
             return 0;
@@ -1348,7 +1322,7 @@ class FootArmy extends landArmy_1.LandArmy {
     mount(toMount, leadersToMount, newArmyId) {
         // generiere armyId falls keine vorhanden
         if (newArmyId == undefined) {
-            newArmyId = armyFunctions_1.ArmyFunctions.generateArmyId(2, this.owner);
+            newArmyId = types_1.ArmyFunctions.generateArmyId(2, this.owner);
         }
         // sitzen genug Truppen auf?
         if (toMount < 50) {
@@ -1384,7 +1358,7 @@ class FootArmy extends landArmy_1.LandArmy {
         }
         else if (toMount === this.troopCount) {
             // neues Reiterheer mit generierter Id an selben Koordinaten
-            let newArmy = new riderArmy_1.RiderArmy(newArmyId, this.owner, toMount, this.officerCount, this.getPosition(), 0, this.heightPoints, this.isGuard);
+            let newArmy = new types_1.RiderArmy(newArmyId, this.owner, toMount, this.officerCount, this.getPosition(), 0, this.heightPoints, this.isGuard);
             if (this.movePoints !== this.getMaxMovePoints()) {
                 newArmy.setMovePoints(0);
             }
@@ -1396,14 +1370,14 @@ class FootArmy extends landArmy_1.LandArmy {
                 window.alert("Da kein Fußheer mehr bestehen bleibt, wurden die Katapulte zerstört.");
             }
             // in GameState.armies einfügen und alte Armee löschen, ist dann automatisch armyIndex
-            gameState_1.GameState.armies.push(newArmy);
+            types_1.GameState.armies.push(newArmy);
             //in GameState.events pushen
-            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, [this.position[0], this.position[1]]);
-            gameState_1.GameState.newEvents.push(eventToPush);
-            armyFunctions_1.ArmyFunctions.deleteArmy(this);
-            boxVisibilty_1.BoxVisibility.restoreInfoBox();
-            drawingFunctions_1.Drawing.drawStuff();
-            boxVisibilty_1.BoxVisibility.updateInfoBox();
+            let eventToPush = new types_1.MountEvent(types_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, [this.position[0], this.position[1]]);
+            types_1.GameState.newEvents.push(eventToPush);
+            types_1.ArmyFunctions.deleteArmy(this);
+            types_1.BoxVisibility.restoreInfoBox();
+            types_1.Drawing.drawStuff();
+            types_1.BoxVisibility.updateInfoBox();
             return true;
         }
         else if (leadersToMount >= this.officerCount) {
@@ -1416,7 +1390,7 @@ class FootArmy extends landArmy_1.LandArmy {
         }
         else {
             // neues Reiterheer mit generierter Id an selben Koordinaten
-            let newArmy = new riderArmy_1.RiderArmy(newArmyId, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner, toMount, leadersToMount, this.getPosition(), 0, this.heightPoints, false);
+            let newArmy = new types_1.RiderArmy(newArmyId, types_1.GameState.armies[types_1.Controls.selectedArmyIndex].owner, toMount, leadersToMount, this.getPosition(), 0, this.heightPoints, false);
             if (this.movePoints !== this.getMaxMovePoints()) {
                 newArmy.setMovePoints(0);
             }
@@ -1428,15 +1402,15 @@ class FootArmy extends landArmy_1.LandArmy {
             this.setOfficerCount(this.officerCount - leadersToMount);
             this.setMountCount(this.mountCount - toMount);
             // in GameState.armies einfügen
-            gameState_1.GameState.armies.push(newArmy);
+            types_1.GameState.armies.push(newArmy);
             //in GameState.events pushen
-            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, [this.position[0], this.position[1]]);
-            gameState_1.GameState.newEvents.push(eventToPush);
+            let eventToPush = new types_1.MountEvent(types_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, [this.position[0], this.position[1]]);
+            types_1.GameState.newEvents.push(eventToPush);
             // Controls.selectedArmyIndex zeigt auf neues Heer
-            controlVariables_1.Controls.selectedArmyIndex = gameState_1.GameState.armies.length - 1;
-            drawingFunctions_1.Drawing.drawStuff();
-            boxVisibilty_1.BoxVisibility.restoreInfoBox();
-            boxVisibilty_1.BoxVisibility.updateInfoBox();
+            types_1.Controls.selectedArmyIndex = types_1.GameState.armies.length - 1;
+            types_1.Drawing.drawStuff();
+            types_1.BoxVisibility.restoreInfoBox();
+            types_1.BoxVisibility.updateInfoBox();
             return true;
         }
     }
@@ -1444,7 +1418,7 @@ class FootArmy extends landArmy_1.LandArmy {
 FootArmy.MAX_MOVE_POINTS = 9;
 exports.FootArmy = FootArmy;
 
-},{"../constants":16,"../controls/controlVariables":18,"../events/mountEvent":23,"../gameState":28,"../gui/boxVisibilty":32,"../gui/drawingFunctions":35,"../libraries/armyFunctions":49,"../libraries/hexFunctions":50,"./fleet":4,"./landArmy":6,"./riderArmy":9}],6:[function(require,module,exports){
+},{"../types":60}],6:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -1462,12 +1436,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gameState_1 = require("../gameState");
-const army_1 = require("./army");
-const move_1 = require("./move");
-const fleet_1 = require("./fleet");
-const hexFunctions_1 = require("../libraries/hexFunctions");
-class LandArmy extends army_1.Army {
+const types_1 = require("../types");
+class LandArmy extends types_1.Army {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
         if (isGuard != undefined) {
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard);
@@ -1492,7 +1462,7 @@ class LandArmy extends army_1.Army {
                 this.transportingFleet.unloadArmy(this);
             }
             else if (move.loading && !this.isTransported()) {
-                let fleetsOnDestination = gameState_1.GameState.armies.filter(army => army instanceof fleet_1.Fleet && army.getPosition()[0] === move.destination[0] &&
+                let fleetsOnDestination = types_1.GameState.armies.filter(army => army instanceof types_1.Fleet && army.getPosition()[0] === move.destination[0] &&
                     army.getPosition()[1] === move.destination[1]).map(army => army);
                 if (fleetsOnDestination.length === 0) {
                     throw new Error("You can't walk on Water.");
@@ -1529,18 +1499,18 @@ class LandArmy extends army_1.Army {
         }
     }
     checkForPossibleMove(direction) {
-        let neighborCoords = hexFunctions_1.HexFunction.neighbors(this.position);
+        let neighborCoords = types_1.HexFunction.neighbors(this.position);
         let target = neighborCoords[direction];
         let heightCost = 0;
         let thereIsAStreet = false;
         let thereIsABridge = false;
         let thereIsAHarbor = false;
         // TODO: effects of diplomacy go here
-        let rightOfPassage = gameState_1.GameState.realms.some((realm) => (realm === this.owner && realm.territory.some((field) => (target[0] === field.coordinates[0] && target[1] === field.coordinates[1]))));
-        let thereIsARiver = gameState_1.GameState.rivers.some((river) => (river.leftBank[0] === this.position[0] && river.leftBank[1] === this.position[1] && river.rightBank[0] === target[0] && river.rightBank[1] === target[1]) ||
+        let rightOfPassage = types_1.GameState.realms.some((realm) => (realm === this.owner && realm.territory.some((field) => (target[0] === field.coordinates[0] && target[1] === field.coordinates[1]))));
+        let thereIsARiver = types_1.GameState.rivers.some((river) => (river.leftBank[0] === this.position[0] && river.leftBank[1] === this.position[1] && river.rightBank[0] === target[0] && river.rightBank[1] === target[1]) ||
             (river.leftBank[0] === target[0] && river.leftBank[1] === target[1] && river.rightBank[0] === this.position[0] && river.rightBank[1] === this.position[1]));
         // check if there is a steet, a harbor or a bridge on the route
-        gameState_1.GameState.buildings.forEach(building => {
+        types_1.GameState.buildings.forEach(building => {
             if (building.type === 8 /* STREET */ &&
                 ((building.getPosition() === this.position && building.getSecondPosition() === target) ||
                     (building.getSecondPosition() === this.position && building.getPosition() === target))) {
@@ -1559,8 +1529,8 @@ class LandArmy extends army_1.Army {
             //TODO: Walls!
         });
         // check if there is a change in height on the route
-        if (hexFunctions_1.HexFunction.height(this.position) != hexFunctions_1.HexFunction.height(target)) {
-            if (Math.abs(hexFunctions_1.HexFunction.height(this.position) - hexFunctions_1.HexFunction.height(target)) >= 2) {
+        if (types_1.HexFunction.height(this.position) != types_1.HexFunction.height(target)) {
+            if (Math.abs(types_1.HexFunction.height(this.position) - types_1.HexFunction.height(target)) >= 2) {
                 throw new Error("The height difference is too big.");
             }
             else if ((this.heightPoints < 2 && (!thereIsAStreet || !thereIsAHarbor)) || this.heightPoints < 1) {
@@ -1574,9 +1544,9 @@ class LandArmy extends army_1.Army {
             }
         }
         let moveCost = this.computeMoveCost(thereIsAStreet, thereIsAHarbor, thereIsARiver, thereIsABridge, rightOfPassage, target);
-        return new move_1.Move(moveCost, heightCost, (hexFunctions_1.HexFunction.fieldType(target) === 0 /* SHALLOWS */ ||
-            hexFunctions_1.HexFunction.fieldType(target) === 1 /* DEEPSEA */), (hexFunctions_1.HexFunction.fieldType(this.position) === 0 /* SHALLOWS */ ||
-            hexFunctions_1.HexFunction.fieldType(this.position) === 1 /* DEEPSEA */), target, direction);
+        return new types_1.Move(moveCost, heightCost, (types_1.HexFunction.fieldType(target) === 0 /* SHALLOWS */ ||
+            types_1.HexFunction.fieldType(target) === 1 /* DEEPSEA */), (types_1.HexFunction.fieldType(this.position) === 0 /* SHALLOWS */ ||
+            types_1.HexFunction.fieldType(this.position) === 1 /* DEEPSEA */), target, direction);
     }
     canConquer() {
         return this.getRoomPointsSansOfficers() >= 1000 && this.officerCount >= 1;
@@ -1585,7 +1555,7 @@ class LandArmy extends army_1.Army {
 }
 exports.LandArmy = LandArmy;
 
-},{"../gameState":28,"../libraries/hexFunctions":50,"./army":1,"./fleet":4,"./move":8}],7:[function(require,module,exports){
+},{"../types":60}],7:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -1603,9 +1573,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const mapEntity_1 = require("../map/mapEntity");
-const gameState_1 = require("../gameState");
-class MobileEntity extends mapEntity_1.MapEntity {
+const types_1 = require("../types");
+class MobileEntity extends types_1.MapEntity {
     constructor(id, owner, position, movePoints, heightPoints) {
         super(position, owner);
         this.oldPosition = [0, 0];
@@ -1622,7 +1591,7 @@ class MobileEntity extends mapEntity_1.MapEntity {
         this.setHeightPoints(heightPoints);
     }
     clickedMoves() {
-        if (this.owner.tag === gameState_1.GameState.login || gameState_1.GameState.login === "sl") {
+        if (this.owner.tag === types_1.GameState.login || types_1.GameState.login === "sl") {
             this.possibleMoves = [];
             //goes through all neighbors to see if the army can move there
             this.possibleMoves.push(this.checkForPossibleMove(0 /* NW */));
@@ -1671,7 +1640,7 @@ MobileEntity.MAX_MOVE_POINTS = 42;
 MobileEntity.MAX_HEIGHT_POINTS = 2;
 exports.MobileEntity = MobileEntity;
 
-},{"../gameState":28,"../map/mapEntity":53}],8:[function(require,module,exports){
+},{"../types":60}],8:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -1719,22 +1688,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const hexFunctions_1 = require("../libraries/hexFunctions");
-const landArmy_1 = require("./landArmy");
-const gameState_1 = require("../gameState");
-const fleet_1 = require("./fleet");
-const constants_1 = require("../constants");
-var RIDER_RP = constants_1.Constants.RIDER_RP;
-var OFFICER_RP = constants_1.Constants.OFFICER_RP;
-var RIDER_BP = constants_1.Constants.RIDER_BP;
-const controlVariables_1 = require("../controls/controlVariables");
-const multifieldFunctions_1 = require("../gui/multifieldFunctions");
-const boxVisibilty_1 = require("../gui/boxVisibilty");
-const footArmy_1 = require("./footArmy");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const armyFunctions_1 = require("../libraries/armyFunctions");
-const mountEvent_1 = require("../events/mountEvent");
-class RiderArmy extends landArmy_1.LandArmy {
+const types_1 = require("../types");
+var RIDER_RP = types_1.Constants.RIDER_RP;
+var OFFICER_RP = types_1.Constants.OFFICER_RP;
+var RIDER_BP = types_1.Constants.RIDER_BP;
+class RiderArmy extends types_1.LandArmy {
     constructor(id, owner, troopCount, officerCount, position, movePoints, heightPoints, isGuard) {
         if (isGuard != undefined) {
             super(id, owner, troopCount, officerCount, 0, 0, position, movePoints, heightPoints, isGuard);
@@ -1753,7 +1711,7 @@ class RiderArmy extends landArmy_1.LandArmy {
         return RiderArmy.MAX_HEIGHT_POINTS;
     }
     computeMoveCost(thereIsAStreet, thereIsAHarbor, thereIsARiver, thereIsABridge, rightOfPassage, target) {
-        switch (hexFunctions_1.HexFunction.fieldType(target)) {
+        switch (types_1.HexFunction.fieldType(target)) {
             case 0 /* SHALLOWS */:
             case 1 /* DEEPSEA */: //watter
                 //already embarked
@@ -1761,7 +1719,7 @@ class RiderArmy extends landArmy_1.LandArmy {
                     throw new Error("You are already embarked on a Fleet.");
                     // there are no viable fleets on destination
                 }
-                else if (gameState_1.GameState.armies.filter(army => army instanceof fleet_1.Fleet && army.getPosition()[0] === target[0] &&
+                else if (types_1.GameState.armies.filter(army => army instanceof types_1.Fleet && army.getPosition()[0] === target[0] &&
                     army.getPosition()[1] === target[1] && army.owner === this.owner && army.canLoad(this)).length === 0) {
                     throw new Error("You can't walk on Water.");
                     // at least one fleet on destination
@@ -1914,7 +1872,7 @@ class RiderArmy extends landArmy_1.LandArmy {
         if (leadersToSplit < 1) {
             throw new Error("New army must have at least 1 officer.");
         }
-        gameState_1.GameState.armies.push(new footArmy_1.FootArmy(newArmyId, this.owner, troopsToSplit, leadersToSplit, 0, 0, 0, this.getPosition(), this.movePoints, this.heightPoints));
+        types_1.GameState.armies.push(new types_1.FootArmy(newArmyId, this.owner, troopsToSplit, leadersToSplit, 0, 0, 0, this.getPosition(), this.movePoints, this.heightPoints));
         this.troopCount -= troopsToSplit;
         this.officerCount -= leadersToSplit;
     }
@@ -1930,7 +1888,7 @@ class RiderArmy extends landArmy_1.LandArmy {
         if (fromArmy.getHeightPoints() < this.getHeightPoints()) {
             this.setHeightPoints(fromArmy.getHeightPoints());
         }
-        armyFunctions_1.ArmyFunctions.deleteArmy(fromArmy);
+        types_1.ArmyFunctions.deleteArmy(fromArmy);
     }
     shootAt(targetCoordinate, target, lkpToShootCount, skpToShootCount) {
         throw new Error("Riders can't have catapults.");
@@ -1945,7 +1903,7 @@ class RiderArmy extends landArmy_1.LandArmy {
     dismount(toUnMount, leadersToUnMount, newArmyId) {
         // generiere armyId falls keine vorhanden
         if (newArmyId == undefined) {
-            newArmyId = armyFunctions_1.ArmyFunctions.generateArmyId(1, this.owner);
+            newArmyId = types_1.ArmyFunctions.generateArmyId(1, this.owner);
         }
         // sitzen genug Truppen ab?
         if (toUnMount < 100) {
@@ -1975,25 +1933,25 @@ class RiderArmy extends landArmy_1.LandArmy {
         }
         else if ((toUnMount == this.troopCount)) {
             // neues Heer mit generierter Id an selben Koordinaten
-            let newArmy = new footArmy_1.FootArmy(newArmyId, this.owner, toUnMount, this.officerCount, 0, 0, toUnMount, this.position, 0, this.heightPoints, this.isGuard);
+            let newArmy = new types_1.FootArmy(newArmyId, this.owner, toUnMount, this.officerCount, 0, 0, toUnMount, this.position, 0, this.heightPoints, this.isGuard);
             if (this.movePoints !== this.getMaxMovePoints()) {
                 newArmy.setMovePoints(0);
             }
             else
                 newArmy.setMovePoints(newArmy.getMaxMovePoints());
             // in GameState.armies einfügen und alte Armee löschen, ist dann automatisch armyIndex
-            gameState_1.GameState.armies.push(newArmy);
+            types_1.GameState.armies.push(newArmy);
             if (this.multiArmyField === true) {
-                multifieldFunctions_1.MultiFieldFunctions.addToMultifield(this, newArmy);
+                types_1.MultiFieldFunctions.addToMultifield(this, newArmy);
                 // deleteFromMultifield(this);
             }
             //in GameState.events pushen
-            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, [this.position[0], this.position[1]]);
-            gameState_1.GameState.newEvents.push(eventToPush);
-            armyFunctions_1.ArmyFunctions.deleteArmy(this);
-            drawingFunctions_1.Drawing.drawStuff();
-            boxVisibilty_1.BoxVisibility.restoreInfoBox();
-            boxVisibilty_1.BoxVisibility.updateInfoBox();
+            let eventToPush = new types_1.MountEvent(types_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, [this.position[0], this.position[1]]);
+            types_1.GameState.newEvents.push(eventToPush);
+            types_1.ArmyFunctions.deleteArmy(this);
+            types_1.Drawing.drawStuff();
+            types_1.BoxVisibility.restoreInfoBox();
+            types_1.BoxVisibility.updateInfoBox();
             return true;
             // genug Heerführer?
         }
@@ -2007,7 +1965,7 @@ class RiderArmy extends landArmy_1.LandArmy {
         }
         else {
             // neues Heer mit generierter Id an selben Koordinaten
-            let newArmy = new footArmy_1.FootArmy(newArmyId, this.owner, toUnMount, leadersToUnMount, 0, 0, toUnMount, this.position, 0, this.heightPoints, false);
+            let newArmy = new types_1.FootArmy(newArmyId, this.owner, toUnMount, leadersToUnMount, 0, 0, toUnMount, this.position, 0, this.heightPoints, false);
             if (this.getMovePoints() !== this.getMaxMovePoints()) {
                 newArmy.setMovePoints(0);
             }
@@ -2017,19 +1975,19 @@ class RiderArmy extends landArmy_1.LandArmy {
             this.setTroopCount(this.troopCount - toUnMount);
             this.setOfficerCount(this.officerCount - leadersToUnMount);
             // in GameState.armies einfügen
-            gameState_1.GameState.armies.push(newArmy);
+            types_1.GameState.armies.push(newArmy);
             if (this.multiArmyField === true) {
-                multifieldFunctions_1.MultiFieldFunctions.addToMultifield(this, newArmy);
+                types_1.MultiFieldFunctions.addToMultifield(this, newArmy);
                 // deleteFromMultifield(this);
             }
             //in GameState.events pushen
-            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, [this.position[0], this.position[1]]);
-            gameState_1.GameState.newEvents.push(eventToPush);
+            let eventToPush = new types_1.MountEvent(types_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, [this.position[0], this.position[1]]);
+            types_1.GameState.newEvents.push(eventToPush);
             // armyIndex zeigt auf neues Heer
-            controlVariables_1.Controls.selectedArmyIndex = gameState_1.GameState.armies.length - 1;
-            drawingFunctions_1.Drawing.drawStuff();
-            boxVisibilty_1.BoxVisibility.restoreInfoBox();
-            boxVisibilty_1.BoxVisibility.updateInfoBox();
+            types_1.Controls.selectedArmyIndex = types_1.GameState.armies.length - 1;
+            types_1.Drawing.drawStuff();
+            types_1.BoxVisibility.restoreInfoBox();
+            types_1.BoxVisibility.updateInfoBox();
             return true;
         }
     }
@@ -2037,7 +1995,7 @@ class RiderArmy extends landArmy_1.LandArmy {
 RiderArmy.MAX_MOVE_POINTS = 21;
 exports.RiderArmy = RiderArmy;
 
-},{"../constants":16,"../controls/controlVariables":18,"../events/mountEvent":23,"../gameState":28,"../gui/boxVisibilty":32,"../gui/drawingFunctions":35,"../gui/multifieldFunctions":43,"../libraries/armyFunctions":49,"../libraries/hexFunctions":50,"./fleet":4,"./footArmy":5,"./landArmy":6}],10:[function(require,module,exports){
+},{"../types":60}],10:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -2055,8 +2013,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gameState_1 = require("../gameState");
-const armyFunctions_1 = require("../libraries/armyFunctions");
+const types_1 = require("../types");
 var ShootingFunctions;
 (function (ShootingFunctions) {
     function inflictRangedDamage(diceRollsLight, diceRollsHeavy, shooter, target, targetField, chars) {
@@ -2072,20 +2029,20 @@ var ShootingFunctions;
         let allTargets = [];
         let sumAllBP = 0;
         if (target === 0 /* OnField */) {
-            for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
-                if (gameState_1.GameState.buildings[i].getPosition()[0] === targetField[0] &&
-                    gameState_1.GameState.buildings[i].getPosition()[1] === targetField[1] &&
-                    gameState_1.GameState.buildings[i].type < 5) {
+            for (let i = 0; i < types_1.GameState.buildings.length; i++) {
+                if (types_1.GameState.buildings[i].getPosition()[0] === targetField[0] &&
+                    types_1.GameState.buildings[i].getPosition()[1] === targetField[1] &&
+                    types_1.GameState.buildings[i].type < 5) {
                     //TODO building takes 2/3 damage
                     //building[i].takeFire(damage * (2/3));
                     damage = damage * (1 / 3);
                 }
             }
-            for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-                if (gameState_1.GameState.armies[i].getPosition()[0] === targetField[0] &&
-                    gameState_1.GameState.armies[i].getPosition()[1] === targetField[1]) {
-                    allTargets.push(gameState_1.GameState.armies[i]);
-                    sumAllBP += gameState_1.GameState.armies[i].totalBP();
+            for (let i = 0; i < types_1.GameState.armies.length; i++) {
+                if (types_1.GameState.armies[i].getPosition()[0] === targetField[0] &&
+                    types_1.GameState.armies[i].getPosition()[1] === targetField[1]) {
+                    allTargets.push(types_1.GameState.armies[i]);
+                    sumAllBP += types_1.GameState.armies[i].totalBP();
                 }
             }
             for (let i = 0; i < allTargets.length; i++) {
@@ -2095,12 +2052,12 @@ var ShootingFunctions;
             }
         }
         //TODO Wall Damage
-        armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
+        types_1.ArmyFunctions.checkArmiesForLiveliness();
     }
     ShootingFunctions.inflictRangedDamage = inflictRangedDamage;
 })(ShootingFunctions = exports.ShootingFunctions || (exports.ShootingFunctions = {}));
 
-},{"../gameState":28,"../libraries/armyFunctions":49}],11:[function(require,module,exports){
+},{"../types":60}],11:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -2118,8 +2075,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const mapEntity_1 = require("../map/mapEntity");
-class Building extends mapEntity_1.MapEntity {
+const types_1 = require("../types");
+class Building extends types_1.MapEntity {
     constructor(type, position, owner) {
         super(position, owner);
         this.type = type;
@@ -2127,7 +2084,7 @@ class Building extends mapEntity_1.MapEntity {
 }
 exports.Building = Building;
 
-},{"../map/mapEntity":53}],12:[function(require,module,exports){
+},{"../types":60}],12:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -2145,20 +2102,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const building_1 = require("./building");
-const constants_1 = require("../constants");
-class DestructibleBuilding extends building_1.Building {
+const types_1 = require("../types");
+class DestructibleBuilding extends types_1.Building {
     constructor(type, position, owner, buildPoints) {
         super(type, position, owner);
         this.buildPoints = buildPoints;
     }
     getMaxBP() {
         switch (this.type) {
-            case 0 /* CASTLE */: return constants_1.Constants.CASTLE_BP;
-            case 1 /* CITY */: return constants_1.Constants.CITY_BP;
-            case 2 /* FORTRESS */: return constants_1.Constants.FORTRESS_BP;
-            case 3 /* CAPITAL */: return constants_1.Constants.CAPITAL_BP;
-            case 4 /* CAPITAL_FORT */: return constants_1.Constants.CAPITAL_FORTRESS_BP;
+            case 0 /* CASTLE */: return types_1.Constants.CASTLE_BP;
+            case 1 /* CITY */: return types_1.Constants.CITY_BP;
+            case 2 /* FORTRESS */: return types_1.Constants.FORTRESS_BP;
+            case 3 /* CAPITAL */: return types_1.Constants.CAPITAL_BP;
+            case 4 /* CAPITAL_FORT */: return types_1.Constants.CAPITAL_FORTRESS_BP;
             default: return 0;
         }
     }
@@ -2171,7 +2127,7 @@ class DestructibleBuilding extends building_1.Building {
 }
 exports.DestructibleBuilding = DestructibleBuilding;
 
-},{"../constants":16,"./building":11}],13:[function(require,module,exports){
+},{"../types":60}],13:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -2189,8 +2145,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const building_1 = require("./building");
-class NonDestructibleBuilding extends building_1.Building {
+const types_1 = require("../types");
+class NonDestructibleBuilding extends types_1.Building {
     constructor(type, position, secondPosition, owner) {
         super(type, position, owner);
         //as per Erkenfara rules all non-destructible buildings go over two fields
@@ -2208,7 +2164,7 @@ class NonDestructibleBuilding extends building_1.Building {
 }
 exports.NonDestructibleBuilding = NonDestructibleBuilding;
 
-},{"./building":11}],14:[function(require,module,exports){
+},{"../types":60}],14:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -2226,8 +2182,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const destructibleBuilding_1 = require("./destructibleBuilding");
-class ProductionBuilding extends destructibleBuilding_1.DestructibleBuilding {
+const types_1 = require("../types");
+class ProductionBuilding extends types_1.DestructibleBuilding {
     constructor(type, name, position, owner, buildPoints) {
         super(type, position, owner, buildPoints);
         this.name = name;
@@ -2246,7 +2202,7 @@ class ProductionBuilding extends destructibleBuilding_1.DestructibleBuilding {
 }
 exports.ProductionBuilding = ProductionBuilding;
 
-},{"./destructibleBuilding":12}],15:[function(require,module,exports){
+},{"../types":60}],15:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -2264,37 +2220,34 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const direction_1 = require("../map/direction");
-const destructibleBuilding_1 = require("./destructibleBuilding");
-const constants_1 = require("../constants");
-const gameState_1 = require("../gameState");
-class Wall extends destructibleBuilding_1.DestructibleBuilding {
+const types_1 = require("../types");
+class Wall extends types_1.DestructibleBuilding {
     constructor(type, position, owner, buildPoints, facing, guardCount) {
         super(type, position, owner, buildPoints);
         this.facing = facing;
         this.guardCount = guardCount;
     }
     getMaxBP() {
-        return constants_1.Constants.WALL_BP;
+        return types_1.Constants.WALL_BP;
     }
     getGuardCount() {
         return this.guardCount;
     }
     setGuardCount(newCount) {
-        this.guardCount = Math.min(Math.max(0, newCount), constants_1.Constants.WALL_MAX_GUARD);
+        this.guardCount = Math.min(Math.max(0, newCount), types_1.Constants.WALL_MAX_GUARD);
         if (this.guardCount === 0) {
-            gameState_1.GameState.buildings.splice(gameState_1.GameState.buildings.findIndex(building => building === this), 1);
+            types_1.GameState.buildings.splice(types_1.GameState.buildings.findIndex(building => building === this), 1);
         }
     }
     buildingAsJSON() {
         return { 'realm': this.owner.tag, 'name': "", 'type': this.type, 'firstX': this.position[0],
             'firstY': this.position[1], 'secondX': undefined, 'secondY': undefined,
-            'direction': direction_1.directionToString(this.facing), 'guardCount': this.guardCount, 'buildPoints': this.buildPoints };
+            'direction': types_1.directionToString(this.facing), 'guardCount': this.guardCount, 'buildPoints': this.buildPoints };
     }
 }
 exports.Wall = Wall;
 
-},{"../constants":16,"../gameState":28,"../map/direction":51,"./destructibleBuilding":12}],16:[function(require,module,exports){
+},{"../types":60}],16:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -2373,109 +2326,95 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gui_1 = require("../gui/gui");
-const boxVisibilty_1 = require("../gui/boxVisibilty");
-const savingFunctions_1 = require("../serverInteraction/savingFunctions");
-const gameState_1 = require("../gameState");
-const controlVariables_1 = require("./controlVariables");
-const riderArmy_1 = require("../armies/riderArmy");
-const footArmy_1 = require("../armies/footArmy");
-const armyFunctions_1 = require("../libraries/armyFunctions");
-const fleet_1 = require("../armies/fleet");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const shootingFunctions_1 = require("../armies/shootingFunctions");
-const shootEvent_1 = require("../events/shootEvent");
-const mergeEvent_1 = require("../events/mergeEvent");
-const splitEvent_1 = require("../events/splitEvent");
-const transferEvent_1 = require("../events/transferEvent");
+const types_1 = require("../types");
 var ButtonFunctions;
 (function (ButtonFunctions) {
-    var show = boxVisibilty_1.BoxVisibility.show;
-    var hide = boxVisibilty_1.BoxVisibility.hide;
+    var show = types_1.BoxVisibility.show;
+    var hide = types_1.BoxVisibility.hide;
     function mainButton() {
-        boxVisibilty_1.BoxVisibility.toggleVisibility(gui_1.GUI.getBigBox().getSelf());
+        types_1.BoxVisibility.toggleVisibility(types_1.GUI.getBigBox().getSelf());
     }
     ButtonFunctions.mainButton = mainButton;
     function toggleShootingMode() {
-        if (boxVisibilty_1.BoxVisibility.shootingModeOn) {
-            boxVisibilty_1.BoxVisibility.closeShootBox();
+        if (types_1.BoxVisibility.shootingModeOn) {
+            types_1.BoxVisibility.closeShootBox();
         }
-        else if (!boxVisibilty_1.BoxVisibility.shootingModeOn) {
-            boxVisibilty_1.BoxVisibility.switchModeTo("shootingModeOn");
-            show(gui_1.GUI.getShootBox());
-            gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].findShootingTargets();
-            drawingFunctions_1.Drawing.drawStuff();
+        else if (!types_1.BoxVisibility.shootingModeOn) {
+            types_1.BoxVisibility.switchModeTo("shootingModeOn");
+            show(types_1.GUI.getShootBox());
+            types_1.GameState.armies[types_1.Controls.selectedArmyIndex].findShootingTargets();
+            types_1.Drawing.drawStuff();
         }
     }
     ButtonFunctions.toggleShootingMode = toggleShootingMode;
     function activateSplitbox() {
-        if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof footArmy_1.FootArmy) {
-            show(gui_1.GUI.getSplitBox());
+        if (types_1.GameState.armies[types_1.Controls.selectedArmyIndex] instanceof types_1.FootArmy) {
+            show(types_1.GUI.getSplitBox());
         }
-        else if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof riderArmy_1.RiderArmy) {
-            show(gui_1.GUI.getSplitMountedBox());
+        else if (types_1.GameState.armies[types_1.Controls.selectedArmyIndex] instanceof types_1.RiderArmy) {
+            show(types_1.GUI.getSplitMountedBox());
         }
-        else if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof fleet_1.Fleet) {
-            show(gui_1.GUI.getSplitFleetBox());
+        else if (types_1.GameState.armies[types_1.Controls.selectedArmyIndex] instanceof types_1.Fleet) {
+            show(types_1.GUI.getSplitFleetBox());
         }
-        hide(gui_1.GUI.getInfoBox().getSelf());
+        hide(types_1.GUI.getInfoBox().getSelf());
     }
     ButtonFunctions.activateSplitbox = activateSplitbox;
     function nextTurn() {
         let message = "";
-        if (gameState_1.GameState.currentTurn.realm == undefined) {
+        if (types_1.GameState.currentTurn.realm == undefined) {
             message = "Do you want to end the pre-turn phase?";
         }
-        else if (gameState_1.GameState.currentTurn.status === 'fi') {
-            message = "Do you want to end processing the turn of " + gameState_1.GameState.currentTurn.realm + "?";
+        else if (types_1.GameState.currentTurn.status === 'fi') {
+            message = "Do you want to end processing the turn of " + types_1.GameState.currentTurn.realm + "?";
         }
-        else if (gameState_1.GameState.login === 'sl') {
-            message = "Do you want to end the turn of " + gameState_1.GameState.currentTurn.realm + "?";
+        else if (types_1.GameState.login === 'sl') {
+            message = "Do you want to end the turn of " + types_1.GameState.currentTurn.realm + "?";
         }
         else {
             message = "Do you want to end your turn?";
         }
         if (confirm(message)) {
-            savingFunctions_1.Saving.sendEvents();
+            types_1.Saving.sendEvents();
         }
     }
     ButtonFunctions.nextTurn = nextTurn;
     // the splitArmy funtion of the split box
     function splitSelectedArmy() {
-        let selectedArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
-        if (gameState_1.GameState.login === 'sl' || gameState_1.GameState.login === selectedArmy.owner.tag) {
+        let selectedArmy = types_1.GameState.armies[types_1.Controls.selectedArmyIndex];
+        if (types_1.GameState.login === 'sl' || types_1.GameState.login === selectedArmy.owner.tag) {
             try {
-                let troopsToSplit = parseInt(gui_1.GUI.getSplitInput().value);
-                let leadersToSplit = parseInt(gui_1.GUI.getSplitLeadersInput().value);
-                let mountsToSplit = parseInt(gui_1.GUI.getSplitMountsInput().value);
-                let lightCatapultsToSplit = parseInt(gui_1.GUI.getSplitLkpInput().value);
-                let heavyCatapultsToSplit = parseInt(gui_1.GUI.getSplitSkpInput().value);
+                let troopsToSplit = parseInt(types_1.GUI.getSplitInput().value);
+                let leadersToSplit = parseInt(types_1.GUI.getSplitLeadersInput().value);
+                let mountsToSplit = parseInt(types_1.GUI.getSplitMountsInput().value);
+                let lightCatapultsToSplit = parseInt(types_1.GUI.getSplitLkpInput().value);
+                let heavyCatapultsToSplit = parseInt(types_1.GUI.getSplitSkpInput().value);
                 let newArmyId = -1;
-                if (selectedArmy instanceof footArmy_1.FootArmy) {
+                if (selectedArmy instanceof types_1.FootArmy) {
                     if (!(isNaN(troopsToSplit) || isNaN(leadersToSplit) || isNaN(mountsToSplit) ||
                         isNaN(lightCatapultsToSplit) || isNaN(heavyCatapultsToSplit))) {
-                        newArmyId = armyFunctions_1.ArmyFunctions.generateArmyId(1, selectedArmy.owner);
+                        newArmyId = types_1.ArmyFunctions.generateArmyId(1, selectedArmy.owner);
                     }
                     else {
                         throw new Error("All values have to be a valid number.");
                     }
                 }
-                else if (selectedArmy instanceof riderArmy_1.RiderArmy) {
+                else if (selectedArmy instanceof types_1.RiderArmy) {
                     if (!(isNaN(troopsToSplit) || isNaN(leadersToSplit))) {
                         lightCatapultsToSplit = 0;
                         heavyCatapultsToSplit = 0;
                         mountsToSplit = 0;
-                        newArmyId = armyFunctions_1.ArmyFunctions.generateArmyId(2, selectedArmy.owner);
+                        newArmyId = types_1.ArmyFunctions.generateArmyId(2, selectedArmy.owner);
                     }
                     else {
                         throw new Error("Troops and leaders have to be a valid number.");
                     }
                 }
-                else if (selectedArmy instanceof fleet_1.Fleet) {
+                else if (selectedArmy instanceof types_1.Fleet) {
                     if (!(isNaN(troopsToSplit) || isNaN(leadersToSplit) ||
                         isNaN(lightCatapultsToSplit) || isNaN(heavyCatapultsToSplit))) {
                         mountsToSplit = 0;
-                        newArmyId = armyFunctions_1.ArmyFunctions.generateArmyId(3, selectedArmy.owner);
+                        newArmyId = types_1.ArmyFunctions.generateArmyId(3, selectedArmy.owner);
                     }
                     else {
                         throw new Error("All values have to be a valid number.");
@@ -2485,7 +2424,7 @@ var ButtonFunctions;
                     throw new Error("Unknown army type.");
                 }
                 selectedArmy.split(troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, mountsToSplit, newArmyId);
-                gameState_1.GameState.newEvents.push(new splitEvent_1.SplitEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, selectedArmy.getErkenfaraID(), newArmyId, selectedArmy.owner, troopsToSplit, leadersToSplit, mountsToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, selectedArmy.getPosition()));
+                types_1.GameState.newEvents.push(new types_1.SplitEvent(types_1.GameState.newEvents.length, 0 /* Checked */, selectedArmy.getErkenfaraID(), newArmyId, selectedArmy.owner, troopsToSplit, leadersToSplit, mountsToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, selectedArmy.getPosition()));
             }
             catch (e) {
                 window.alert(e.message);
@@ -2494,66 +2433,66 @@ var ButtonFunctions;
         else {
             window.alert("Man muss eingeloggt sein, um Armeen aufzusplaten.");
         }
-        armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
-        boxVisibilty_1.BoxVisibility.restoreInfoBox();
-        boxVisibilty_1.BoxVisibility.updateInfoBox();
-        drawingFunctions_1.Drawing.drawStuff();
+        types_1.ArmyFunctions.checkArmiesForLiveliness();
+        types_1.BoxVisibility.restoreInfoBox();
+        types_1.BoxVisibility.updateInfoBox();
+        types_1.Drawing.drawStuff();
     }
     ButtonFunctions.splitSelectedArmy = splitSelectedArmy;
     // the mount function of the mount box
     function mountSelected() {
-        if (gui_1.GUI.getMountInput().value === "" || gui_1.GUI.getMountLeaderInput().value === "" ||
-            gui_1.GUI.getMountInput().value == undefined || gui_1.GUI.getMountLeaderInput().value == undefined) {
+        if (types_1.GUI.getMountInput().value === "" || types_1.GUI.getMountLeaderInput().value === "" ||
+            types_1.GUI.getMountInput().value == undefined || types_1.GUI.getMountLeaderInput().value == undefined) {
             throw new Error("Alle felder müssen ausgefüllt sein");
         }
-        let toMount = parseInt(gui_1.GUI.getMountInput().value);
-        let leadersToMount = parseInt(gui_1.GUI.getMountLeaderInput().value);
+        let toMount = parseInt(types_1.GUI.getMountInput().value);
+        let leadersToMount = parseInt(types_1.GUI.getMountLeaderInput().value);
         if (isNaN(toMount) || isNaN(leadersToMount)) {
             throw new Error("Tragen sie Zahlen für Truppen und Heerführer ein.");
         }
-        gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].mount(toMount, leadersToMount);
+        types_1.GameState.armies[types_1.Controls.selectedArmyIndex].mount(toMount, leadersToMount);
     }
     ButtonFunctions.mountSelected = mountSelected;
     // the unMount function of the unMount box
     function unMountSelected() {
-        if (gui_1.GUI.getUnMountInput().value === "" || gui_1.GUI.getMountLeaderInput().value === "" ||
-            gui_1.GUI.getUnMountLeaderInput().value == undefined || gui_1.GUI.getMountLeaderInput().value == undefined) {
+        if (types_1.GUI.getUnMountInput().value === "" || types_1.GUI.getMountLeaderInput().value === "" ||
+            types_1.GUI.getUnMountLeaderInput().value == undefined || types_1.GUI.getMountLeaderInput().value == undefined) {
             throw new Error("Alle felder müssen ausgefüllt sein");
         }
-        let toUnMount = parseInt(gui_1.GUI.getUnMountInput().value);
-        let leadersToUnMount = parseInt(gui_1.GUI.getUnMountLeaderInput().value);
+        let toUnMount = parseInt(types_1.GUI.getUnMountInput().value);
+        let leadersToUnMount = parseInt(types_1.GUI.getUnMountLeaderInput().value);
         if (isNaN(toUnMount) || isNaN(leadersToUnMount)) {
             throw new Error("Tragen sie Zahlen für Truppen und Heerführer ein.");
         }
-        gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].dismount(toUnMount, leadersToUnMount);
+        types_1.GameState.armies[types_1.Controls.selectedArmyIndex].dismount(toUnMount, leadersToUnMount);
     }
     ButtonFunctions.unMountSelected = unMountSelected;
     function allMountSelected() {
-        let selectedArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
+        let selectedArmy = types_1.GameState.armies[types_1.Controls.selectedArmyIndex];
         selectedArmy.mount(selectedArmy.getTroopCount(), selectedArmy.getOfficerCount());
     }
     ButtonFunctions.allMountSelected = allMountSelected;
     function allUnMountSelected() {
-        let selectedArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
+        let selectedArmy = types_1.GameState.armies[types_1.Controls.selectedArmyIndex];
         selectedArmy.dismount(selectedArmy.getTroopCount(), selectedArmy.getOfficerCount());
     }
     ButtonFunctions.allUnMountSelected = allUnMountSelected;
     // move troops or leaders from Controls.selectedArmyIndex to the army at position mergeId in GameState.armies
     function transferTroopsFromSelectedArmy(transferToId) {
-        let selectedArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
-        let armyToTransferTo = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === transferToId && army.owner === selectedArmy.owner);
+        let selectedArmy = types_1.GameState.armies[types_1.Controls.selectedArmyIndex];
+        let armyToTransferTo = types_1.GameState.armies.find(army => army.getErkenfaraID() === transferToId && army.owner === selectedArmy.owner);
         if (armyToTransferTo != undefined) {
-            let troopsToTransfer = parseInt(gui_1.GUI.getSplitInput().value);
-            let leadersToTransfer = parseInt(gui_1.GUI.getSplitLeadersInput().value);
-            let mountsToTransfer = parseInt(gui_1.GUI.getSplitMountsInput().value);
-            let lkpToTransfer = parseInt(gui_1.GUI.getSplitLkpInput().value);
-            let skpToTransfer = parseInt(gui_1.GUI.getSplitSkpInput().value);
+            let troopsToTransfer = parseInt(types_1.GUI.getSplitInput().value);
+            let leadersToTransfer = parseInt(types_1.GUI.getSplitLeadersInput().value);
+            let mountsToTransfer = parseInt(types_1.GUI.getSplitMountsInput().value);
+            let lkpToTransfer = parseInt(types_1.GUI.getSplitLkpInput().value);
+            let skpToTransfer = parseInt(types_1.GUI.getSplitSkpInput().value);
             if (isNaN(troopsToTransfer) || isNaN(leadersToTransfer)) {
                 window.alert("Give a proper number of troops and officers to be transferred.");
                 return;
             }
             else {
-                if (selectedArmy instanceof riderArmy_1.RiderArmy || armyToTransferTo instanceof riderArmy_1.RiderArmy) {
+                if (selectedArmy instanceof types_1.RiderArmy || armyToTransferTo instanceof types_1.RiderArmy) {
                     mountsToTransfer = 0;
                     lkpToTransfer = 0;
                     skpToTransfer = 0;
@@ -2564,7 +2503,7 @@ var ButtonFunctions;
                         return;
                     }
                     else {
-                        if (selectedArmy instanceof fleet_1.Fleet || armyToTransferTo instanceof fleet_1.Fleet) {
+                        if (selectedArmy instanceof types_1.Fleet || armyToTransferTo instanceof types_1.Fleet) {
                             mountsToTransfer = 0;
                         }
                         else if (isNaN(mountsToTransfer)) {
@@ -2577,7 +2516,7 @@ var ButtonFunctions;
             //All relevant input values are valid. Executing the actual transfer now.
             try {
                 selectedArmy.transferTo(armyToTransferTo, troopsToTransfer, leadersToTransfer, lkpToTransfer, skpToTransfer, mountsToTransfer);
-                gameState_1.GameState.newEvents.push(new transferEvent_1.TransferEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, selectedArmy.getErkenfaraID(), armyToTransferTo.getErkenfaraID(), selectedArmy.owner, troopsToTransfer, leadersToTransfer, mountsToTransfer, lkpToTransfer, skpToTransfer, selectedArmy.getPosition()));
+                types_1.GameState.newEvents.push(new types_1.TransferEvent(types_1.GameState.newEvents.length, 0 /* Checked */, selectedArmy.getErkenfaraID(), armyToTransferTo.getErkenfaraID(), selectedArmy.owner, troopsToTransfer, leadersToTransfer, mountsToTransfer, lkpToTransfer, skpToTransfer, selectedArmy.getPosition()));
             }
             catch (e) {
                 window.alert(e.message);
@@ -2590,19 +2529,19 @@ var ButtonFunctions;
     ButtonFunctions.transferTroopsFromSelectedArmy = transferTroopsFromSelectedArmy;
     // merges selectedArmy with the army at position mergeId in GameState.armies
     function mergeSelectedArmy(fromArmyId) {
-        let toArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
-        let fromArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === fromArmyId && army.owner === toArmy.owner);
+        let toArmy = types_1.GameState.armies[types_1.Controls.selectedArmyIndex];
+        let fromArmy = types_1.GameState.armies.find(army => army.getErkenfaraID() === fromArmyId && army.owner === toArmy.owner);
         if (fromArmy != undefined) {
             try {
                 toArmy.merge(fromArmy);
-                gameState_1.GameState.newEvents.push(new mergeEvent_1.MergeEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, fromArmy.getErkenfaraID(), toArmy.getErkenfaraID(), toArmy.owner, toArmy.getPosition()));
+                types_1.GameState.newEvents.push(new types_1.MergeEvent(types_1.GameState.newEvents.length, 0 /* Checked */, fromArmy.getErkenfaraID(), toArmy.getErkenfaraID(), toArmy.owner, toArmy.getPosition()));
             }
             catch (e) {
                 window.alert(e.message);
             }
-            boxVisibilty_1.BoxVisibility.updateInfoBox();
-            boxVisibilty_1.BoxVisibility.restoreInfoBox();
-            drawingFunctions_1.Drawing.drawStuff();
+            types_1.BoxVisibility.updateInfoBox();
+            types_1.BoxVisibility.restoreInfoBox();
+            types_1.Drawing.drawStuff();
         }
         else {
             window.alert("Army to be merged into selected army doesn't exist.");
@@ -2611,17 +2550,17 @@ var ButtonFunctions;
     ButtonFunctions.mergeSelectedArmy = mergeSelectedArmy;
     //read the proper inputs, check validity and construct a shoot event
     function shootWithSelectedArmy() {
-        let selectedArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
-        if (gameState_1.GameState.login === 'guest') {
+        let selectedArmy = types_1.GameState.armies[types_1.Controls.selectedArmyIndex];
+        if (types_1.GameState.login === 'guest') {
             window.alert("Du musst eingeloggt sein um das zu tun.");
             return;
         }
-        else if (gameState_1.GameState.login !== 'sl' && gameState_1.GameState.login !== selectedArmy.owner.tag) {
+        else if (types_1.GameState.login !== 'sl' && types_1.GameState.login !== selectedArmy.owner.tag) {
             window.alert("Du kannst nur mit deinen eigenen Armeen schießen.");
             return;
         }
-        let lkpToShootCount = parseInt(gui_1.GUI.getShootingLKPInput().value);
-        let skpToShootCount = parseInt(gui_1.GUI.getShootingSKPInput().value);
+        let lkpToShootCount = parseInt(types_1.GUI.getShootingLKPInput().value);
+        let skpToShootCount = parseInt(types_1.GUI.getShootingSKPInput().value);
         if (isNaN(lkpToShootCount)) {
             lkpToShootCount = 0;
         }
@@ -2632,11 +2571,11 @@ var ButtonFunctions;
             window.alert("Du muss mit mindestens einem Katapult schießen.");
             return;
         }
-        if (controlVariables_1.Controls.selectedFields.length < 2) {
+        if (types_1.Controls.selectedFields.length < 2) {
             window.alert("Wählen Sie ein Feld auf das Sie schießen wollen.");
             return;
         }
-        let shootingTarget = controlVariables_1.Controls.shootingTarget;
+        let shootingTarget = types_1.Controls.shootingTarget;
         if (selectedArmy.targetList.length < 1) {
             window.alert("No available targets.");
             return;
@@ -2654,15 +2593,15 @@ var ButtonFunctions;
         catch (e) {
             window.alert(e.message);
         }
-        gameState_1.GameState.newEvents.push(new shootEvent_1.ShootEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getID(), shootingTarget, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition(), lkpToShootCount, skpToShootCount, target));
-        boxVisibilty_1.BoxVisibility.updateInfoBox();
+        types_1.GameState.newEvents.push(new types_1.ShootEvent(types_1.GameState.newEvents.length, 0 /* Checked */, types_1.GameState.armies[types_1.Controls.selectedArmyIndex].owner, types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getID(), shootingTarget, types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getPosition(), lkpToShootCount, skpToShootCount, target));
+        types_1.BoxVisibility.updateInfoBox();
         window.alert("Die Geschosse sind unterwegs. Warte auf die Zugauswertung, um das Ergebnis zu erfahren!");
-        drawingFunctions_1.Drawing.drawStuff();
+        types_1.Drawing.drawStuff();
     }
     ButtonFunctions.shootWithSelectedArmy = shootWithSelectedArmy;
     function shootButtonLogic(shootEvent) {
-        let shootBox = gui_1.GUI.getShootingBigBox();
-        let shooter = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === shootEvent.getShooterId() && army.owner === shootEvent.getRealm());
+        let shootBox = types_1.GUI.getShootingBigBox();
+        let shooter = types_1.GameState.armies.find(army => army.getErkenfaraID() === shootEvent.getShooterId() && army.owner === shootEvent.getRealm());
         let lkpRolls = [];
         let skpRolls = [];
         for (let i = 0; i < 10; i++) { //creating the dice roll array
@@ -2701,20 +2640,20 @@ var ButtonFunctions;
             return;
         }
         else {
-            shootingFunctions_1.ShootingFunctions.inflictRangedDamage(lkpRolls, skpRolls, shooter, shootEvent.getTarget(), shootEvent.getTo(), null);
+            types_1.ShootingFunctions.inflictRangedDamage(lkpRolls, skpRolls, shooter, shootEvent.getTarget(), shootEvent.getTo(), null);
             shooter.shootAt(shootEvent.getTo(), shootEvent.getTarget(), shootEvent.getLightCatapultCount(), shootEvent.getHeavyCatapultCount());
             // TODO chars
-            boxVisibilty_1.BoxVisibility.hide(shootBox.getSelf());
+            types_1.BoxVisibility.hide(shootBox.getSelf());
             shootEvent.setStatus(0 /* Checked */);
-            gui_1.GUI.getBigBox().fillEventList();
-            drawingFunctions_1.Drawing.drawStuff();
+            types_1.GUI.getBigBox().fillEventList();
+            types_1.Drawing.drawStuff();
             return;
         }
     }
     ButtonFunctions.shootButtonLogic = shootButtonLogic;
 })(ButtonFunctions = exports.ButtonFunctions || (exports.ButtonFunctions = {}));
 
-},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9,"../armies/shootingFunctions":10,"../events/mergeEvent":22,"../events/shootEvent":25,"../events/splitEvent":26,"../events/transferEvent":27,"../gameState":28,"../gui/boxVisibilty":32,"../gui/drawingFunctions":35,"../gui/gui":37,"../libraries/armyFunctions":49,"../serverInteraction/savingFunctions":59,"./controlVariables":18}],18:[function(require,module,exports){
+},{"../types":60}],18:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -2769,83 +2708,72 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const controlVariables_1 = require("./controlVariables");
-const gameState_1 = require("../gameState");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const gui_1 = require("../gui/gui");
-const boxVisibilty_1 = require("../gui/boxVisibilty");
-const riderArmy_1 = require("../armies/riderArmy");
-const hexFunctions_1 = require("../libraries/hexFunctions");
-const footArmy_1 = require("../armies/footArmy");
-const fleet_1 = require("../armies/fleet");
-const field_1 = require("../map/field");
-const moveEvent_1 = require("../events/moveEvent");
-const battleEvent_1 = require("../events/battleEvent");
+const types_1 = require("../types");
 var MouseFunctions;
 (function (MouseFunctions) {
-    var armyIdBuffer = boxVisibilty_1.BoxVisibility.armyIdBuffer;
-    var armyWithNextClick = boxVisibilty_1.BoxVisibility.armyWithNextClick;
-    var switchBtnBoxTo = boxVisibilty_1.BoxVisibility.switchBtnBoxTo;
-    var switchModeTo = boxVisibilty_1.BoxVisibility.switchModeTo;
-    var worldCreationModeOnClick = boxVisibilty_1.BoxVisibility.worldCreationModeOnClick;
-    var changeFieldToType = boxVisibilty_1.BoxVisibility.changeFieldToType;
-    var shootingModeOn = boxVisibilty_1.BoxVisibility.shootingModeOn;
-    var restoreInfoBox = boxVisibilty_1.BoxVisibility.restoreInfoBox;
-    var updateInfoBox = boxVisibilty_1.BoxVisibility.updateInfoBox;
+    var armyIdBuffer = types_1.BoxVisibility.armyIdBuffer;
+    var armyWithNextClick = types_1.BoxVisibility.armyWithNextClick;
+    var switchBtnBoxTo = types_1.BoxVisibility.switchBtnBoxTo;
+    var switchModeTo = types_1.BoxVisibility.switchModeTo;
+    var worldCreationModeOnClick = types_1.BoxVisibility.worldCreationModeOnClick;
+    var changeFieldToType = types_1.BoxVisibility.changeFieldToType;
+    var shootingModeOn = types_1.BoxVisibility.shootingModeOn;
+    var restoreInfoBox = types_1.BoxVisibility.restoreInfoBox;
+    var updateInfoBox = types_1.BoxVisibility.updateInfoBox;
     function mouseDown(event) {
         if (event.button === 0) {
-            controlVariables_1.Controls.leftMousePressed = true;
+            types_1.Controls.leftMousePressed = true;
             // record the x coordinate of the mouse when it was clicked
-            controlVariables_1.Controls.click[0] = event.pageX;
+            types_1.Controls.click[0] = event.pageX;
             // record the y coordinate of the mouse when it was clicked
-            controlVariables_1.Controls.click[1] = event.pageY;
+            types_1.Controls.click[1] = event.pageY;
         }
         else if (event.button === 2) {
-            controlVariables_1.Controls.rightMousePressed = true;
+            types_1.Controls.rightMousePressed = true;
             // record the x coordinate of the mouse when it was clicked
-            controlVariables_1.Controls.click[0] = event.pageX;
+            types_1.Controls.click[0] = event.pageX;
             // record the y coordinate of the mouse when it was clicked
-            controlVariables_1.Controls.click[1] = event.pageY;
+            types_1.Controls.click[1] = event.pageY;
         }
-        drawingFunctions_1.Drawing.drawStuff();
+        types_1.Drawing.drawStuff();
     }
     MouseFunctions.mouseDown = mouseDown;
     function mouseUp(event) {
-        if (controlVariables_1.Controls.leftMousePressed && event.button === 0) {
-            if (controlVariables_1.Controls.isDragging) { // mouse was dragged; run panning finish routine
+        if (types_1.Controls.leftMousePressed && event.button === 0) {
+            if (types_1.Controls.isDragging) { // mouse was dragged; run panning finish routine
                 // add the x offset from dragged mouse to the current x origin for drawing
-                controlVariables_1.Controls.origin[0] += controlVariables_1.Controls.move[0];
+                types_1.Controls.origin[0] += types_1.Controls.move[0];
                 // add the y offset from dragged mouse to the current y origin for drawing
-                controlVariables_1.Controls.origin[1] += controlVariables_1.Controls.move[1];
+                types_1.Controls.origin[1] += types_1.Controls.move[1];
             }
             else {
                 registerLeftClick(); // do whatever has to be done on leftclick
             }
             // reset mouse click parameters
-            controlVariables_1.Controls.leftMousePressed = false; // mouse is no longer pressed
-            controlVariables_1.Controls.isDragging = false; // mouse is no longer being dragged
-            controlVariables_1.Controls.click = [0, 0]; // reset click registration
-            controlVariables_1.Controls.move = [0, 0]; // reset move registration
+            types_1.Controls.leftMousePressed = false; // mouse is no longer pressed
+            types_1.Controls.isDragging = false; // mouse is no longer being dragged
+            types_1.Controls.click = [0, 0]; // reset click registration
+            types_1.Controls.move = [0, 0]; // reset move registration
         }
-        else if (controlVariables_1.Controls.rightMousePressed && event.button === 2) {
-            if (!controlVariables_1.Controls.isDragging) {
+        else if (types_1.Controls.rightMousePressed && event.button === 2) {
+            if (!types_1.Controls.isDragging) {
                 registerRightClick();
             }
             // reset mouse click parameters
-            controlVariables_1.Controls.rightMousePressed = false; // mouse is no longer pressed
-            controlVariables_1.Controls.isDragging = false; // mouse is no longer being dragged
-            controlVariables_1.Controls.click = [0, 0]; // reset click registration
-            controlVariables_1.Controls.move = [0, 0]; // reset move registration
+            types_1.Controls.rightMousePressed = false; // mouse is no longer pressed
+            types_1.Controls.isDragging = false; // mouse is no longer being dragged
+            types_1.Controls.click = [0, 0]; // reset click registration
+            types_1.Controls.move = [0, 0]; // reset move registration
         }
-        drawingFunctions_1.Drawing.drawStuff();
+        types_1.Drawing.drawStuff();
     }
     MouseFunctions.mouseUp = mouseUp;
     function mouseMove(event) {
-        if (controlVariables_1.Controls.leftMousePressed === true) {
-            controlVariables_1.Controls.isDragging = true; // for later click detection; no click if mouse was previously dragged
-            controlVariables_1.Controls.move[0] = event.pageX - controlVariables_1.Controls.click[0]; // compute the x offset from dragged mouse
-            controlVariables_1.Controls.move[1] = event.pageY - controlVariables_1.Controls.click[1]; // compute the y offset from dragged mouse
-            drawingFunctions_1.Drawing.drawStuff();
+        if (types_1.Controls.leftMousePressed === true) {
+            types_1.Controls.isDragging = true; // for later click detection; no click if mouse was previously dragged
+            types_1.Controls.move[0] = event.pageX - types_1.Controls.click[0]; // compute the x offset from dragged mouse
+            types_1.Controls.move[1] = event.pageY - types_1.Controls.click[1]; // compute the y offset from dragged mouse
+            types_1.Drawing.drawStuff();
         }
     }
     MouseFunctions.mouseMove = mouseMove;
@@ -2853,106 +2781,106 @@ var MouseFunctions;
         let deltaY = event.deltaY; // get amount scrolled
         let mouse = [event.pageX, event.pageY]; // get current mouse position
         // get the tile the mouse is currently in (and the position in the tile)
-        let pos = [(mouse[0] - controlVariables_1.Controls.origin[0]) / drawingFunctions_1.Drawing.scale,
-            (mouse[1] - controlVariables_1.Controls.origin[1]) / drawingFunctions_1.Drawing.scale];
+        let pos = [(mouse[0] - types_1.Controls.origin[0]) / types_1.Drawing.scale,
+            (mouse[1] - types_1.Controls.origin[1]) / types_1.Drawing.scale];
         if (deltaY < 0) { // do the actuall scrolling
-            drawingFunctions_1.Drawing.scale *= 1 + controlVariables_1.Controls.scrollSpeed;
+            types_1.Drawing.scale *= 1 + types_1.Controls.scrollSpeed;
         }
         else {
-            drawingFunctions_1.Drawing.scale *= 1 - controlVariables_1.Controls.scrollSpeed;
+            types_1.Drawing.scale *= 1 - types_1.Controls.scrollSpeed;
         }
-        drawingFunctions_1.Drawing.setHexParts(drawingFunctions_1.Drawing.scale); // compute the scale dependant values used for map drawing
+        types_1.Drawing.setHexParts(types_1.Drawing.scale); // compute the scale dependant values used for map drawing
         // compute the new distance of mouse from origin
-        let newPos = [pos[0] * drawingFunctions_1.Drawing.scale, pos[1] * drawingFunctions_1.Drawing.scale];
+        let newPos = [pos[0] * types_1.Drawing.scale, pos[1] * types_1.Drawing.scale];
         // move origin so that the tile stays the same  with the new scaling
-        controlVariables_1.Controls.origin = [mouse[0] - newPos[0], mouse[1] - newPos[1]];
-        drawingFunctions_1.Drawing.drawStuff();
+        types_1.Controls.origin = [mouse[0] - newPos[0], mouse[1] - newPos[1]];
+        types_1.Drawing.drawStuff();
     }
     MouseFunctions.mouseWheel = mouseWheel;
     function registerLeftClick() {
         let clickedField = getClickedField(); // get selected field
         // If mount or unmount is activated, cancel it.
         if (armyWithNextClick) {
-            let owner = gameState_1.GameState.realms.find(realm => realm.tag === boxVisibilty_1.BoxVisibility.ownerBuffer);
+            let owner = types_1.GameState.realms.find(realm => realm.tag === types_1.BoxVisibility.ownerBuffer);
             if (owner == undefined) {
                 throw new Error("Realm not found.");
             }
             switch (Math.floor(armyIdBuffer / 100)) {
                 case 3:
-                    gameState_1.GameState.armies.push(new fleet_1.Fleet(boxVisibilty_1.BoxVisibility.armyIdBuffer, owner, boxVisibilty_1.BoxVisibility.countBuffer, boxVisibilty_1.BoxVisibility.leaderBuffer, boxVisibilty_1.BoxVisibility.lkpBuffer, boxVisibilty_1.BoxVisibility.skpBuffer, clickedField, fleet_1.Fleet.MAX_MOVE_POINTS, boxVisibilty_1.BoxVisibility.guardBuffer));
+                    types_1.GameState.armies.push(new types_1.Fleet(types_1.BoxVisibility.armyIdBuffer, owner, types_1.BoxVisibility.countBuffer, types_1.BoxVisibility.leaderBuffer, types_1.BoxVisibility.lkpBuffer, types_1.BoxVisibility.skpBuffer, clickedField, types_1.Fleet.MAX_MOVE_POINTS, types_1.BoxVisibility.guardBuffer));
                     break;
                 case 2:
-                    gameState_1.GameState.armies.push(new riderArmy_1.RiderArmy(boxVisibilty_1.BoxVisibility.armyIdBuffer, owner, boxVisibilty_1.BoxVisibility.countBuffer, boxVisibilty_1.BoxVisibility.leaderBuffer, clickedField, riderArmy_1.RiderArmy.MAX_MOVE_POINTS, riderArmy_1.RiderArmy.MAX_HEIGHT_POINTS, boxVisibilty_1.BoxVisibility.guardBuffer));
+                    types_1.GameState.armies.push(new types_1.RiderArmy(types_1.BoxVisibility.armyIdBuffer, owner, types_1.BoxVisibility.countBuffer, types_1.BoxVisibility.leaderBuffer, clickedField, types_1.RiderArmy.MAX_MOVE_POINTS, types_1.RiderArmy.MAX_HEIGHT_POINTS, types_1.BoxVisibility.guardBuffer));
                     break;
                 case 1:
-                    gameState_1.GameState.armies.push(new footArmy_1.FootArmy(boxVisibilty_1.BoxVisibility.armyIdBuffer, owner, boxVisibilty_1.BoxVisibility.countBuffer, boxVisibilty_1.BoxVisibility.leaderBuffer, boxVisibilty_1.BoxVisibility.lkpBuffer, boxVisibilty_1.BoxVisibility.skpBuffer, boxVisibilty_1.BoxVisibility.mountsBuffer, clickedField, footArmy_1.FootArmy.MAX_MOVE_POINTS, footArmy_1.FootArmy.MAX_HEIGHT_POINTS, boxVisibilty_1.BoxVisibility.guardBuffer));
+                    types_1.GameState.armies.push(new types_1.FootArmy(types_1.BoxVisibility.armyIdBuffer, owner, types_1.BoxVisibility.countBuffer, types_1.BoxVisibility.leaderBuffer, types_1.BoxVisibility.lkpBuffer, types_1.BoxVisibility.skpBuffer, types_1.BoxVisibility.mountsBuffer, clickedField, types_1.FootArmy.MAX_MOVE_POINTS, types_1.FootArmy.MAX_HEIGHT_POINTS, types_1.BoxVisibility.guardBuffer));
                     break;
             }
-            boxVisibilty_1.BoxVisibility.ownerBuffer = gui_1.GUI.getArmyGeneratorBox().getOwnerField().value;
-            boxVisibilty_1.BoxVisibility.armyIdBuffer = 0;
-            gui_1.GUI.getArmyGeneratorBox().getArmyNumberField().value = "0";
-            boxVisibilty_1.BoxVisibility.countBuffer = 0;
-            gui_1.GUI.getArmyGeneratorBox().getCountField().value = "0";
-            boxVisibilty_1.BoxVisibility.leaderBuffer = 0;
-            gui_1.GUI.getArmyGeneratorBox().getLeaderField().value = "0";
-            boxVisibilty_1.BoxVisibility.mountsBuffer = 0;
-            gui_1.GUI.getArmyGeneratorBox().getMountsField().value = "0";
-            boxVisibilty_1.BoxVisibility.lkpBuffer = 0;
-            gui_1.GUI.getArmyGeneratorBox().getLKPField().value = "0";
-            boxVisibilty_1.BoxVisibility.skpBuffer = 0;
-            gui_1.GUI.getArmyGeneratorBox().getSKPField().value = "0";
-            switchBtnBoxTo(gui_1.GUI.getButtonsBox());
+            types_1.BoxVisibility.ownerBuffer = types_1.GUI.getArmyGeneratorBox().getOwnerField().value;
+            types_1.BoxVisibility.armyIdBuffer = 0;
+            types_1.GUI.getArmyGeneratorBox().getArmyNumberField().value = "0";
+            types_1.BoxVisibility.countBuffer = 0;
+            types_1.GUI.getArmyGeneratorBox().getCountField().value = "0";
+            types_1.BoxVisibility.leaderBuffer = 0;
+            types_1.GUI.getArmyGeneratorBox().getLeaderField().value = "0";
+            types_1.BoxVisibility.mountsBuffer = 0;
+            types_1.GUI.getArmyGeneratorBox().getMountsField().value = "0";
+            types_1.BoxVisibility.lkpBuffer = 0;
+            types_1.GUI.getArmyGeneratorBox().getLKPField().value = "0";
+            types_1.BoxVisibility.skpBuffer = 0;
+            types_1.GUI.getArmyGeneratorBox().getSKPField().value = "0";
+            switchBtnBoxTo(types_1.GUI.getButtonsBox());
             switchModeTo("none");
         }
         else if (worldCreationModeOnClick) {
-            let posi = hexFunctions_1.HexFunction.positionInList(clickedField);
+            let posi = types_1.HexFunction.positionInList(clickedField);
             if (changeFieldToType === -1) {
                 // checks if Field should be changed to a specific type, if not use
                 // normal world creation mode on click
-                if (gameState_1.GameState.fields[posi].type === 8 || gameState_1.GameState.fields[posi].type === 9) {
-                    gameState_1.GameState.fields[posi].type = 0;
+                if (types_1.GameState.fields[posi].type === 8 || types_1.GameState.fields[posi].type === 9) {
+                    types_1.GameState.fields[posi].type = 0;
                 }
                 else {
-                    gameState_1.GameState.fields[posi].type++;
+                    types_1.GameState.fields[posi].type++;
                 }
             }
             else if ((changeFieldToType <= 9) && (changeFieldToType >= 0)) {
-                gameState_1.GameState.fields[posi].type = changeFieldToType;
+                types_1.GameState.fields[posi].type = changeFieldToType;
             }
             let found = false;
-            for (let i = 0; i < controlVariables_1.Controls.changedFields.length; i++) {
-                if ((controlVariables_1.Controls.changedFields[i].coordinates[0] === gameState_1.GameState.fields[posi].coordinates[0]) &&
-                    (controlVariables_1.Controls.changedFields[i].coordinates[1] === gameState_1.GameState.fields[posi].coordinates[1])) {
-                    controlVariables_1.Controls.changedFields[i].type = gameState_1.GameState.fields[posi].type;
+            for (let i = 0; i < types_1.Controls.changedFields.length; i++) {
+                if ((types_1.Controls.changedFields[i].coordinates[0] === types_1.GameState.fields[posi].coordinates[0]) &&
+                    (types_1.Controls.changedFields[i].coordinates[1] === types_1.GameState.fields[posi].coordinates[1])) {
+                    types_1.Controls.changedFields[i].type = types_1.GameState.fields[posi].type;
                     found = true;
                 }
             }
             if (!found) {
-                controlVariables_1.Controls.changedFields.push(new field_1.Field(gameState_1.GameState.fields[posi].coordinates, gameState_1.GameState.fields[posi].type));
+                types_1.Controls.changedFields.push(new types_1.Field(types_1.GameState.fields[posi].coordinates, types_1.GameState.fields[posi].type));
             }
         }
         else {
             // Feldauswahl
             let index = -1;
-            let sf = controlVariables_1.Controls.selectedFields[0];
+            let sf = types_1.Controls.selectedFields[0];
             if (sf != undefined && (sf[0] === clickedField[0]) && (sf[1] === clickedField[1])) {
-                controlVariables_1.Controls.selectedFields = [];
+                types_1.Controls.selectedFields = [];
             }
             else {
-                controlVariables_1.Controls.selectedFields[0] = clickedField;
+                types_1.Controls.selectedFields[0] = clickedField;
             }
             // Armeeauswahl
             restoreInfoBox();
-            controlVariables_1.Controls.selectedArmyIndex = -1;
+            types_1.Controls.selectedArmyIndex = -1;
             let possibleSelections = [];
-            gameState_1.GameState.armies.forEach((army, index) => {
+            types_1.GameState.armies.forEach((army, index) => {
                 if (army.getPosition()[0] === clickedField[0] && army.getPosition()[1] === clickedField[1]) {
                     possibleSelections.push(index);
-                    controlVariables_1.Controls.selectedArmyIndex = index;
+                    types_1.Controls.selectedArmyIndex = index;
                 }
             });
             if (document.getElementById("btnSection") != undefined) {
-                let d = gui_1.GUI.getButtonsBox();
+                let d = types_1.GUI.getButtonsBox();
                 d.removeChild(document.getElementById("btnSection"));
             }
             if (possibleSelections.length !== 0) {
@@ -2961,80 +2889,80 @@ var MouseFunctions;
                 for (let i = 0; i < possibleSelections.length; i++) {
                     let btn = document.createElement("BUTTON");
                     btn.setAttribute("class", "fixedPrettyButton");
-                    btn.name = gameState_1.GameState.armies[possibleSelections[i]].getErkenfaraID() + " " +
-                        gameState_1.GameState.armies[possibleSelections[i]].owner.tag;
-                    let t = document.createTextNode("" + gameState_1.GameState.armies[possibleSelections[i]].getErkenfaraID());
+                    btn.name = types_1.GameState.armies[possibleSelections[i]].getErkenfaraID() + " " +
+                        types_1.GameState.armies[possibleSelections[i]].owner.tag;
+                    let t = document.createTextNode("" + types_1.GameState.armies[possibleSelections[i]].getErkenfaraID());
                     btn.appendChild(t);
                     btn.addEventListener('click', function (event) {
                         let idToSearchFor = this.name.split(" ")[0];
                         let ownerToSearchFor = this.name.split(" ")[1];
-                        for (let j = 0; j < gameState_1.GameState.armies.length; j++) {
-                            if (gameState_1.GameState.armies[j].getErkenfaraID() === parseInt(idToSearchFor) &&
-                                gameState_1.GameState.armies[j].owner.tag === ownerToSearchFor) {
-                                controlVariables_1.Controls.selectedArmyIndex = j;
+                        for (let j = 0; j < types_1.GameState.armies.length; j++) {
+                            if (types_1.GameState.armies[j].getErkenfaraID() === parseInt(idToSearchFor) &&
+                                types_1.GameState.armies[j].owner.tag === ownerToSearchFor) {
+                                types_1.Controls.selectedArmyIndex = j;
                             }
                         }
                         updateInfoBox();
                         restoreInfoBox();
-                        if (controlVariables_1.Controls.selectedArmyIndex !== undefined) {
-                            gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].clickedMoves();
+                        if (types_1.Controls.selectedArmyIndex !== undefined) {
+                            types_1.GameState.armies[types_1.Controls.selectedArmyIndex].clickedMoves();
                         }
-                        drawingFunctions_1.Drawing.drawStuff();
+                        types_1.Drawing.drawStuff();
                     });
                     x.appendChild(btn);
                 }
-                gui_1.GUI.getButtonsBox().appendChild(x);
+                types_1.GUI.getButtonsBox().appendChild(x);
             }
             updateInfoBox();
-            if (controlVariables_1.Controls.selectedArmyIndex !== undefined) {
-                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].clickedMoves();
+            if (types_1.Controls.selectedArmyIndex !== undefined) {
+                types_1.GameState.armies[types_1.Controls.selectedArmyIndex].clickedMoves();
             }
         }
     }
     function registerRightClick() {
         let clickedField = getClickedField();
         if (worldCreationModeOnClick) {
-            let posi = hexFunctions_1.HexFunction.positionInList(clickedField);
+            let posi = types_1.HexFunction.positionInList(clickedField);
             if (changeFieldToType == -1) {
                 // checks if Field should be changed to a specific type (then
                 // rightclick is disabled)
-                if (gameState_1.GameState.fields[posi].type === 0 || gameState_1.GameState.fields[posi].type === 9) {
-                    gameState_1.GameState.fields[posi].type = 8;
+                if (types_1.GameState.fields[posi].type === 0 || types_1.GameState.fields[posi].type === 9) {
+                    types_1.GameState.fields[posi].type = 8;
                 }
                 else {
-                    gameState_1.GameState.fields[posi].type--;
+                    types_1.GameState.fields[posi].type--;
                 }
                 let found = false;
-                for (let i = 0; i < controlVariables_1.Controls.changedFields.length; i++) {
-                    if ((controlVariables_1.Controls.changedFields[i].coordinates[0] == gameState_1.GameState.fields[posi].coordinates[0]) &&
-                        (controlVariables_1.Controls.changedFields[i].coordinates[1] == gameState_1.GameState.fields[posi].coordinates[1])) {
-                        controlVariables_1.Controls.changedFields[i].type = gameState_1.GameState.fields[posi].type;
+                for (let i = 0; i < types_1.Controls.changedFields.length; i++) {
+                    if ((types_1.Controls.changedFields[i].coordinates[0] == types_1.GameState.fields[posi].coordinates[0]) &&
+                        (types_1.Controls.changedFields[i].coordinates[1] == types_1.GameState.fields[posi].coordinates[1])) {
+                        types_1.Controls.changedFields[i].type = types_1.GameState.fields[posi].type;
                         found = true;
                     }
                 }
                 if (!found) {
-                    controlVariables_1.Controls.changedFields.push(new field_1.Field(gameState_1.GameState.fields[posi].coordinates, gameState_1.GameState.fields[posi].type));
+                    types_1.Controls.changedFields.push(new types_1.Field(types_1.GameState.fields[posi].coordinates, types_1.GameState.fields[posi].type));
                 }
             }
         }
         else if (shootingModeOn) {
             //for shooting the bastards
-            controlVariables_1.Controls.shootingTarget = clickedField;
+            types_1.Controls.shootingTarget = clickedField;
         }
         else {
-            if (controlVariables_1.Controls.selectedArmyIndex === undefined) {
+            if (types_1.Controls.selectedArmyIndex === undefined) {
                 console.log("Can't move with no army selected");
             }
             else {
-                let clickedArmy = [gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition()[0],
-                    gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition()[1]];
-                let localNeighbors = hexFunctions_1.HexFunction.neighbors(clickedArmy);
+                let clickedArmy = [types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getPosition()[0],
+                    types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getPosition()[1]];
+                let localNeighbors = types_1.HexFunction.neighbors(clickedArmy);
                 for (let i = 0; i < localNeighbors.length; i++) {
                     if (localNeighbors[i][0] === clickedField[0] && localNeighbors[i][1] === clickedField[1]) {
                         let moveSuccessfull = true;
-                        if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner.tag === gameState_1.GameState.login || gameState_1.GameState.login === "sl") {
+                        if (types_1.GameState.armies[types_1.Controls.selectedArmyIndex].owner.tag === types_1.GameState.login || types_1.GameState.login === "sl") {
                             try {
-                                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].move(i);
+                                types_1.GameState.armies[types_1.Controls.selectedArmyIndex].move(i);
                             }
                             catch (e) {
                                 console.log(e);
@@ -3045,17 +2973,17 @@ var MouseFunctions;
                             console.log("Can only move your own armies.");
                         }
                         if (moveSuccessfull) {
-                            gameState_1.GameState.newEvents.push(new moveEvent_1.MoveEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getErkenfaraID(), clickedArmy, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition()));
+                            types_1.GameState.newEvents.push(new types_1.MoveEvent(types_1.GameState.newEvents.length, 0 /* Checked */, types_1.GameState.armies[types_1.Controls.selectedArmyIndex].owner, types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getErkenfaraID(), clickedArmy, types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getPosition()));
                             let battlePossible = false;
                             let participants = [];
-                            for (let j = 0; j < gameState_1.GameState.armies.length; j++) {
-                                let someArmy = gameState_1.GameState.armies[j];
-                                if (someArmy.getPosition()[0] === gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition()[0] &&
-                                    someArmy.getPosition()[1] === gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition()[1]
-                                    && someArmy !== gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex]) {
+                            for (let j = 0; j < types_1.GameState.armies.length; j++) {
+                                let someArmy = types_1.GameState.armies[j];
+                                if (someArmy.getPosition()[0] === types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getPosition()[0] &&
+                                    someArmy.getPosition()[1] === types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getPosition()[1]
+                                    && someArmy !== types_1.GameState.armies[types_1.Controls.selectedArmyIndex]) {
                                     participants.push({ id: someArmy.getErkenfaraID(), realm: someArmy.owner.tag });
                                     //in case they are enemies
-                                    if (someArmy.owner !== gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner) {
+                                    if (someArmy.owner !== types_1.GameState.armies[types_1.Controls.selectedArmyIndex].owner) {
                                         battlePossible = true;
                                     }
                                     //MultipleArmies - even if not friendly
@@ -3069,22 +2997,22 @@ var MouseFunctions;
                             }
                             if (battlePossible) {
                                 let inserted = false;
-                                participants.push({ id: gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getErkenfaraID(),
-                                    realm: gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner.tag });
-                                for (let j = 0; j < gameState_1.GameState.newEvents.length; j++) {
-                                    let newEvent = gameState_1.GameState.newEvents[j];
-                                    if (gameState_1.GameState.newEvents[j] instanceof battleEvent_1.BattleEvent &&
-                                        newEvent.getPosition() === gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition()) {
-                                        newEvent.addParticipants(gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getErkenfaraID(), gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner.tag);
+                                participants.push({ id: types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getErkenfaraID(),
+                                    realm: types_1.GameState.armies[types_1.Controls.selectedArmyIndex].owner.tag });
+                                for (let j = 0; j < types_1.GameState.newEvents.length; j++) {
+                                    let newEvent = types_1.GameState.newEvents[j];
+                                    if (types_1.GameState.newEvents[j] instanceof types_1.BattleEvent &&
+                                        newEvent.getPosition() === types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getPosition()) {
+                                        newEvent.addParticipants(types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getErkenfaraID(), types_1.GameState.armies[types_1.Controls.selectedArmyIndex].owner.tag);
                                         inserted = true;
                                     }
                                 }
                                 if (!inserted) {
-                                    gameState_1.GameState.newEvents.push(new battleEvent_1.BattleEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, participants, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition()));
+                                    types_1.GameState.newEvents.push(new types_1.BattleEvent(types_1.GameState.newEvents.length, 0 /* Checked */, participants, types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getPosition()));
                                 }
                             }
                             else { //no battle -> conquer land (TODO: diplomacy goes here)
-                                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].conquer();
+                                types_1.GameState.armies[types_1.Controls.selectedArmyIndex].conquer();
                             }
                         }
                     }
@@ -3094,22 +3022,22 @@ var MouseFunctions;
         }
     }
     function getClickedField() {
-        let x = controlVariables_1.Controls.click[0] - controlVariables_1.Controls.origin[0]; // reverse our x/y origin offset
-        let y = controlVariables_1.Controls.click[1] - controlVariables_1.Controls.origin[1];
-        let m = drawingFunctions_1.Drawing.c / (drawingFunctions_1.Drawing.gW * 0.5); // the inclination of the hexes upper triangle side
-        let row = Math.floor(y / drawingFunctions_1.Drawing.gH); // get the rectangle clicked in
+        let x = types_1.Controls.click[0] - types_1.Controls.origin[0]; // reverse our x/y origin offset
+        let y = types_1.Controls.click[1] - types_1.Controls.origin[1];
+        let m = types_1.Drawing.c / (types_1.Drawing.gW * 0.5); // the inclination of the hexes upper triangle side
+        let row = Math.floor(y / types_1.Drawing.gH); // get the rectangle clicked in
         let rowIsOdd = (row % 2 !== 0);
-        let column = Math.floor((rowIsOdd ? ((x + 0.5 * drawingFunctions_1.Drawing.gW) / drawingFunctions_1.Drawing.gW) : (x / drawingFunctions_1.Drawing.gW)));
-        let relY = y - (row * drawingFunctions_1.Drawing.gH); // compute relative position of the click in
+        let column = Math.floor((rowIsOdd ? ((x + 0.5 * types_1.Drawing.gW) / types_1.Drawing.gW) : (x / types_1.Drawing.gW)));
+        let relY = y - (row * types_1.Drawing.gH); // compute relative position of the click in
         // respect to the rectangle
-        let relX = rowIsOdd ? ((x + 0.5 * drawingFunctions_1.Drawing.gW) - (column * drawingFunctions_1.Drawing.gW)) : (x - (column * drawingFunctions_1.Drawing.gW));
-        if (relY < (-m) * relX + drawingFunctions_1.Drawing.c) { // click is in upper left corner
+        let relX = rowIsOdd ? ((x + 0.5 * types_1.Drawing.gW) - (column * types_1.Drawing.gW)) : (x - (column * types_1.Drawing.gW));
+        if (relY < (-m) * relX + types_1.Drawing.c) { // click is in upper left corner
             row--;
             if (rowIsOdd) {
                 column--;
             }
         }
-        else if (relY < m * relX - drawingFunctions_1.Drawing.c) { // click is in upper right corner
+        else if (relY < m * relX - types_1.Drawing.c) { // click is in upper right corner
             row--;
             if (!rowIsOdd) {
                 column++;
@@ -3119,7 +3047,7 @@ var MouseFunctions;
     }
 })(MouseFunctions = exports.MouseFunctions || (exports.MouseFunctions = {}));
 
-},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9,"../events/battleEvent":20,"../events/moveEvent":24,"../gameState":28,"../gui/boxVisibilty":32,"../gui/drawingFunctions":35,"../gui/gui":37,"../libraries/hexFunctions":50,"../map/field":52,"./controlVariables":18}],20:[function(require,module,exports){
+},{"../types":60}],20:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -3137,12 +3065,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gui_1 = require("../gui/gui");
-const boxVisibilty_1 = require("../gui/boxVisibilty");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const gameState_1 = require("../gameState");
-const event_1 = require("./event");
-class BattleEvent extends event_1.PhoenixEvent {
+const types_1 = require("../types");
+class BattleEvent extends types_1.PhoenixEvent {
     constructor(listPosition, status, participants, position, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.participants = participants;
@@ -3166,16 +3090,16 @@ class BattleEvent extends event_1.PhoenixEvent {
     }
     validGameState() {
         //Every participating army exists and is located at the position of the battle.
-        return this.participants.every(participant => gameState_1.GameState.armies.some(army => army.getErkenfaraID() === participant.id &&
+        return this.participants.every(participant => types_1.GameState.armies.some(army => army.getErkenfaraID() === participant.id &&
             army.owner.tag === participant.realm &&
             army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]));
     }
     checkEvent() {
-        let battleBox = gui_1.GUI.getBattleBox();
-        boxVisibilty_1.BoxVisibility.show(battleBox.getSelf());
+        let battleBox = types_1.GUI.getBattleBox();
+        types_1.BoxVisibility.show(battleBox.getSelf());
         let participatingArmies = [];
         this.participants.forEach(participant => {
-            let army = gameState_1.GameState.armies.find(candidate => {
+            let army = types_1.GameState.armies.find(candidate => {
                 return (participant.realm === candidate.owner.tag && (participant.id === candidate.getErkenfaraID()));
             });
             if (army != undefined) {
@@ -3188,12 +3112,12 @@ class BattleEvent extends event_1.PhoenixEvent {
         battleBox.newBattle(participatingArmies, this.position);
         battleBox.getAttackDiceRoll().onchange = function () { battleBox.updateDisplay(); };
         battleBox.getDefenseDiceRoll().onchange = function () { battleBox.updateDisplay(); };
-        let battleButton = gui_1.GUI.getBattleBox().getBattleButton();
+        let battleButton = types_1.GUI.getBattleBox().getBattleButton();
         battleButton.addEventListener("click", (e) => this.battleButtonLogic(battleBox));
         battleButton.disabled = true;
         battleButton.style.cursor = "not-allowed";
-        gui_1.GUI.getBattleBox().getCloseBattleButton().onclick = function () {
-            boxVisibilty_1.BoxVisibility.hide(battleBox.getSelf());
+        types_1.GUI.getBattleBox().getCloseBattleButton().onclick = function () {
+            types_1.BoxVisibility.hide(battleBox.getSelf());
         };
     }
     makeEventListItemText() {
@@ -3206,10 +3130,10 @@ class BattleEvent extends event_1.PhoenixEvent {
     battleButtonLogic(battleBox) {
         if (battleBox.battleHandler != undefined) {
             battleBox.battleHandler.resolve(parseInt(battleBox.getAttackDiceRoll().value), parseInt(battleBox.getDefenseDiceRoll().value));
-            boxVisibilty_1.BoxVisibility.hide(battleBox.getSelf());
+            types_1.BoxVisibility.hide(battleBox.getSelf());
             this.status = 0 /* Checked */;
-            gui_1.GUI.getBigBox().fillEventList();
-            drawingFunctions_1.Drawing.drawStuff();
+            types_1.GUI.getBigBox().fillEventList();
+            types_1.Drawing.drawStuff();
         }
         else {
             throw new Error("BattleHandler is not instantiated prior to use.");
@@ -3218,7 +3142,7 @@ class BattleEvent extends event_1.PhoenixEvent {
 }
 exports.BattleEvent = BattleEvent;
 
-},{"../gameState":28,"../gui/boxVisibilty":32,"../gui/drawingFunctions":35,"../gui/gui":37,"./event":21}],21:[function(require,module,exports){
+},{"../types":60}],21:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -3236,8 +3160,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gameState_1 = require("../gameState");
-const gui_1 = require("../gui/gui");
+const types_1 = require("../types");
 class PhoenixEvent {
     constructor(listPosition, status, prerequisiteEvents, databasePrimaryKey) {
         this.listPosition = listPosition;
@@ -3252,12 +3175,12 @@ class PhoenixEvent {
         return JSON.parse(this.asStringifiedJSON());
     }
     determineEventStatus() {
-        if (this.validGameState() && this.prerequisiteEvents.every(prereqEvent => gameState_1.GameState.loadedEvents.some(event => event.getDatabasePrimaryKey() === prereqEvent &&
+        if (this.validGameState() && this.prerequisiteEvents.every(prereqEvent => types_1.GameState.loadedEvents.some(event => event.getDatabasePrimaryKey() === prereqEvent &&
             (event.getStatus() === 0 /* Checked */ || event.getStatus() === 1 /* Deleted */)))) {
             //The event is available if the GM has attended to all prerequisite events and the board state allows it.
             this.status = 4 /* Available */;
         }
-        else if (!this.validGameState() && this.prerequisiteEvents.every(prereqEvent => gameState_1.GameState.loadedEvents.some(event => event.getDatabasePrimaryKey() === prereqEvent &&
+        else if (!this.validGameState() && this.prerequisiteEvents.every(prereqEvent => types_1.GameState.loadedEvents.some(event => event.getDatabasePrimaryKey() === prereqEvent &&
             (event.getStatus() === 0 /* Checked */ || event.getStatus() === 1 /* Deleted */)))) {
             //The event is not available because the board state doesn't allow it and it won't become available in the
             //future because all prerequisite events have been attended to by the GM. The GM has to manually fix the
@@ -3312,7 +3235,7 @@ class PhoenixEvent {
     }
     deleteEvent() {
         this.status = 1 /* Deleted */;
-        gui_1.GUI.getBigBox().fillEventList();
+        types_1.GUI.getBigBox().fillEventList();
     }
     getListPosition() {
         return this.listPosition;
@@ -3332,7 +3255,7 @@ class PhoenixEvent {
 }
 exports.PhoenixEvent = PhoenixEvent;
 
-},{"../gameState":28,"../gui/gui":37}],22:[function(require,module,exports){
+},{"../types":60}],22:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -3350,11 +3273,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const event_1 = require("./event");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const gameState_1 = require("../gameState");
-const gui_1 = require("../gui/gui");
-class MergeEvent extends event_1.PhoenixEvent {
+const types_1 = require("../types");
+class MergeEvent extends types_1.PhoenixEvent {
     constructor(listPosition, status, fromArmyId, toArmyId, realm, position, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.fromArmyId = fromArmyId;
@@ -3371,15 +3291,15 @@ class MergeEvent extends event_1.PhoenixEvent {
     }
     validGameState() {
         //Both armies exist and are in position.
-        let ownArmiesOnCorrectField = gameState_1.GameState.armies.filter(army => army.owner === this.realm &&
+        let ownArmiesOnCorrectField = types_1.GameState.armies.filter(army => army.owner === this.realm &&
             army.getPosition()[0] === this.position[0] &&
             army.getPosition()[1] === this.position[1]);
         return ownArmiesOnCorrectField.some(army => army.getErkenfaraID() === this.fromArmyId) &&
             ownArmiesOnCorrectField.some(army => army.getErkenfaraID() === this.toArmyId);
     }
     checkEvent() {
-        let fromArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId && army.owner === this.realm);
-        let toArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.toArmyId && army.owner === this.realm);
+        let fromArmy = types_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId && army.owner === this.realm);
+        let toArmy = types_1.GameState.armies.find(army => army.getErkenfaraID() === this.toArmyId && army.owner === this.realm);
         if (fromArmy != undefined && toArmy != undefined) {
             toArmy.merge(fromArmy);
         }
@@ -3387,8 +3307,8 @@ class MergeEvent extends event_1.PhoenixEvent {
             throw new Error("One of the armies to be merged does not exist.");
         }
         this.status = 0 /* Checked */;
-        gui_1.GUI.getBigBox().fillEventList();
-        drawingFunctions_1.Drawing.drawStuff();
+        types_1.GUI.getBigBox().fillEventList();
+        types_1.Drawing.drawStuff();
     }
     makeEventListItemText() {
         return "" + this.realm.tag + "'s army " + this.fromArmyId + " merges with army " + this.toArmyId + " in (" +
@@ -3397,7 +3317,7 @@ class MergeEvent extends event_1.PhoenixEvent {
 }
 exports.MergeEvent = MergeEvent;
 
-},{"../gameState":28,"../gui/drawingFunctions":35,"../gui/gui":37,"./event":21}],23:[function(require,module,exports){
+},{"../types":60}],23:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -3415,14 +3335,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const event_1 = require("./event");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const gameState_1 = require("../gameState");
-const riderArmy_1 = require("../armies/riderArmy");
-const footArmy_1 = require("../armies/footArmy");
-const gui_1 = require("../gui/gui");
-const armyFunctions_1 = require("../libraries/armyFunctions");
-class MountEvent extends event_1.PhoenixEvent {
+const types_1 = require("../types");
+class MountEvent extends types_1.PhoenixEvent {
     constructor(listPosition, status, fromArmyId, newArmyId, realm, troops, leaders, position, prerequisiteEvents, databasePrimaryKey) {
         //protected mounts: number, protected lkp: number, protected skp: number,
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
@@ -3443,7 +3357,7 @@ class MountEvent extends event_1.PhoenixEvent {
     }
     validGameState() {
         //The from-army exists and is in position.
-        let fromArmy = gameState_1.GameState.armies.find(army => army.owner === this.realm &&
+        let fromArmy = types_1.GameState.armies.find(army => army.owner === this.realm &&
             army.getErkenfaraID() === this.fromArmyId &&
             army.getPosition()[0] === this.position[0] &&
             army.getPosition()[1] === this.position[1]);
@@ -3451,11 +3365,11 @@ class MountEvent extends event_1.PhoenixEvent {
             return false;
         }
         //The new army doesn't yet exist.
-        if (gameState_1.GameState.armies.some(army => army.owner === this.realm &&
+        if (types_1.GameState.armies.some(army => army.owner === this.realm &&
             army.getErkenfaraID() === this.newArmyId)) {
             return false;
         }
-        if (fromArmy instanceof footArmy_1.FootArmy) { //Mount case
+        if (fromArmy instanceof types_1.FootArmy) { //Mount case
             //There are enough troops, officers and mounts. No check for viability of the remaining army is made since
             //abandoning a few stragglers or the catapults is not prohibited by the rules.
             if (fromArmy.getTroopCount() < this.troops ||
@@ -3474,24 +3388,24 @@ class MountEvent extends event_1.PhoenixEvent {
         return true;
     }
     checkEvent() {
-        let fromArmy = gameState_1.GameState.armies.find(army => army.owner === this.realm &&
+        let fromArmy = types_1.GameState.armies.find(army => army.owner === this.realm &&
             army.getErkenfaraID() === this.fromArmyId &&
             army.getPosition()[0] === this.position[0] &&
             army.getPosition()[1] === this.position[1]);
         if (fromArmy != undefined) {
-            if (fromArmy instanceof footArmy_1.FootArmy) {
+            if (fromArmy instanceof types_1.FootArmy) {
                 fromArmy.mount(this.troops, this.leaders, this.newArmyId);
             }
-            else if (fromArmy instanceof riderArmy_1.RiderArmy) {
+            else if (fromArmy instanceof types_1.RiderArmy) {
                 fromArmy.dismount(this.troops, this.leaders, this.newArmyId);
             }
             else {
                 throw new Error("Army to mount/dismount from was neither a foot army nor a rider army.");
             }
             this.status = 0 /* Checked */;
-            armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
-            gui_1.GUI.getBigBox().fillEventList();
-            drawingFunctions_1.Drawing.drawStuff();
+            types_1.ArmyFunctions.checkArmiesForLiveliness();
+            types_1.GUI.getBigBox().fillEventList();
+            types_1.Drawing.drawStuff();
         }
         else {
             throw new Error("Army to mount/dismount from does not exist or isn't in position.");
@@ -3504,7 +3418,7 @@ class MountEvent extends event_1.PhoenixEvent {
 }
 exports.MountEvent = MountEvent;
 
-},{"../armies/footArmy":5,"../armies/riderArmy":9,"../gameState":28,"../gui/drawingFunctions":35,"../gui/gui":37,"../libraries/armyFunctions":49,"./event":21}],24:[function(require,module,exports){
+},{"../types":60}],24:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -3522,13 +3436,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const hexFunctions_1 = require("../libraries/hexFunctions");
-const event_1 = require("./event");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const gameState_1 = require("../gameState");
-const gui_1 = require("../gui/gui");
-const battleEvent_1 = require("./battleEvent");
-class MoveEvent extends event_1.PhoenixEvent {
+const types_1 = require("../types");
+class MoveEvent extends types_1.PhoenixEvent {
     constructor(listPosition, status, realm, armyId, from, to, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.realm = realm;
@@ -3546,11 +3455,11 @@ class MoveEvent extends event_1.PhoenixEvent {
     }
     validGameState() {
         //The army exists, is positioned on the from-field and the army can move to the to-field.
-        let army = gameState_1.GameState.armies.find(army => army.owner === this.realm &&
+        let army = types_1.GameState.armies.find(army => army.owner === this.realm &&
             this.armyId === army.getErkenfaraID());
         if (army != undefined) {
             try {
-                army.checkForPossibleMove(hexFunctions_1.HexFunction.getDirectionToNeighbor(this.from, this.to));
+                army.checkForPossibleMove(types_1.HexFunction.getDirectionToNeighbor(this.from, this.to));
             }
             catch (e) {
                 return false;
@@ -3562,13 +3471,13 @@ class MoveEvent extends event_1.PhoenixEvent {
         }
     }
     checkEvent() {
-        let army = gameState_1.GameState.armies.find(army => army.owner === this.realm &&
+        let army = types_1.GameState.armies.find(army => army.owner === this.realm &&
             this.armyId === army.getErkenfaraID());
         if (army != undefined) {
-            let direction = hexFunctions_1.HexFunction.getDirectionToNeighbor(this.from, this.to);
+            let direction = types_1.HexFunction.getDirectionToNeighbor(this.from, this.to);
             army.checkForPossibleMove(direction);
             army.move(direction);
-            if (!gameState_1.GameState.loadedEvents.some(event => (event instanceof battleEvent_1.BattleEvent) &&
+            if (!types_1.GameState.loadedEvents.some(event => (event instanceof types_1.BattleEvent) &&
                 !(event.getStatus() === 0 /* Checked */ || event.getStatus() === 1 /* Deleted */) &&
                 event.getPosition()[0] === this.to[0] &&
                 event.getPosition()[1] === this.to[1] &&
@@ -3577,8 +3486,8 @@ class MoveEvent extends event_1.PhoenixEvent {
                 army.conquer();
             }
             this.status = 0 /* Checked */;
-            gui_1.GUI.getBigBox().fillEventList();
-            drawingFunctions_1.Drawing.drawStuff();
+            types_1.GUI.getBigBox().fillEventList();
+            types_1.Drawing.drawStuff();
         }
         else {
             window.alert("Army not found.");
@@ -3591,7 +3500,7 @@ class MoveEvent extends event_1.PhoenixEvent {
 }
 exports.MoveEvent = MoveEvent;
 
-},{"../gameState":28,"../gui/drawingFunctions":35,"../gui/gui":37,"../libraries/hexFunctions":50,"./battleEvent":20,"./event":21}],25:[function(require,module,exports){
+},{"../types":60}],25:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -3609,13 +3518,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gui_1 = require("../gui/gui");
-const boxVisibilty_1 = require("../gui/boxVisibilty");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const gameState_1 = require("../gameState");
-const event_1 = require("./event");
-const buttonFunctions_1 = require("../controls/buttonFunctions");
-class ShootEvent extends event_1.PhoenixEvent {
+const types_1 = require("../types");
+class ShootEvent extends types_1.PhoenixEvent {
     constructor(listPosition, status, realm, shooterId, to, from, lkpCount, skpCount, target, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.realm = realm;
@@ -3638,7 +3542,7 @@ class ShootEvent extends event_1.PhoenixEvent {
     }
     validGameState() {
         //Shooter exists, is positioned on the from-field, has enough catapults and the target is valid
-        let shooter = gameState_1.GameState.armies.find(army => army.owner === this.realm &&
+        let shooter = types_1.GameState.armies.find(army => army.owner === this.realm &&
             army.getErkenfaraID() === this.shooterId &&
             army.getPosition()[0] === this.from[0] &&
             army.getPosition()[1] === this.from[1]);
@@ -3671,8 +3575,8 @@ class ShootEvent extends event_1.PhoenixEvent {
         return this.realm;
     }
     checkEvent() {
-        let shootBox = gui_1.GUI.getShootingBigBox();
-        boxVisibilty_1.BoxVisibility.show(shootBox.getSelf());
+        let shootBox = types_1.GUI.getShootingBigBox();
+        types_1.BoxVisibility.show(shootBox.getSelf());
         shootBox.getShooterTitleText().innerHTML = this.shooterId + ", " + this.realm.tag;
         ;
         shootBox.getAttackersLKPText().innerHTML = this.lkpCount.toString();
@@ -3681,13 +3585,13 @@ class ShootEvent extends event_1.PhoenixEvent {
         shootBox.getXTargetText().innerHTML = this.to[0].toString();
         shootBox.getYTargetText().innerHTML = this.to[1].toString();
         let shootButton = shootBox.getRangedBattleButton();
-        shootButton.addEventListener("click", (e) => buttonFunctions_1.ButtonFunctions.shootButtonLogic(this));
+        shootButton.addEventListener("click", (e) => types_1.ButtonFunctions.shootButtonLogic(this));
         shootBox.getCloseRangedBattleButton().onclick = function () {
-            boxVisibilty_1.BoxVisibility.hide(shootBox.getSelf());
+            types_1.BoxVisibility.hide(shootBox.getSelf());
         };
-        gui_1.GUI.getBigBox().fillEventList();
+        types_1.GUI.getBigBox().fillEventList();
         //sendCheckEvent(event.pk, event.type);
-        drawingFunctions_1.Drawing.drawStuff();
+        types_1.Drawing.drawStuff();
     }
     makeEventListItemText() {
         return "" + this.realm.tag + "'s army " + this.shooterId + " shoots a Field (" + this.to[0] + ", " + this.to[1] + ") with " +
@@ -3696,7 +3600,7 @@ class ShootEvent extends event_1.PhoenixEvent {
 }
 exports.ShootEvent = ShootEvent;
 
-},{"../controls/buttonFunctions":17,"../gameState":28,"../gui/boxVisibilty":32,"../gui/drawingFunctions":35,"../gui/gui":37,"./event":21}],26:[function(require,module,exports){
+},{"../types":60}],26:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -3714,13 +3618,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const event_1 = require("./event");
-const gameState_1 = require("../gameState");
-const footArmy_1 = require("../armies/footArmy");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const gui_1 = require("../gui/gui");
-const armyFunctions_1 = require("../libraries/armyFunctions");
-class SplitEvent extends event_1.PhoenixEvent {
+const types_1 = require("../types");
+class SplitEvent extends types_1.PhoenixEvent {
     constructor(listPosition, status, fromArmyId, newArmyId, realm, troops, leaders, mounts, lkp, skp, position, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.fromArmyId = fromArmyId;
@@ -3744,7 +3643,7 @@ class SplitEvent extends event_1.PhoenixEvent {
     }
     validGameState() {
         //The from-army exists and is in position.
-        let fromArmy = gameState_1.GameState.armies.find(army => army.owner === this.realm &&
+        let fromArmy = types_1.GameState.armies.find(army => army.owner === this.realm &&
             army.getErkenfaraID() === this.fromArmyId &&
             army.getPosition()[0] === this.position[0] &&
             army.getPosition()[1] === this.position[1]);
@@ -3752,7 +3651,7 @@ class SplitEvent extends event_1.PhoenixEvent {
             return false;
         }
         //The new army doesn't yet exist.
-        if (gameState_1.GameState.armies.some(army => army.owner === this.realm &&
+        if (types_1.GameState.armies.some(army => army.owner === this.realm &&
             army.getErkenfaraID() === this.newArmyId)) {
             return false;
         }
@@ -3763,11 +3662,11 @@ class SplitEvent extends event_1.PhoenixEvent {
             this.leaders <= fromArmy.getOfficerCount() &&
             this.lkp <= fromArmy.getLightCatapultCount() &&
             this.skp <= fromArmy.getHeavyCatapultCount() &&
-            ((this.mounts > 0 && fromArmy instanceof footArmy_1.FootArmy && this.mounts <= fromArmy.getMountCount()) ||
+            ((this.mounts > 0 && fromArmy instanceof types_1.FootArmy && this.mounts <= fromArmy.getMountCount()) ||
                 this.mounts <= 0);
     }
     checkEvent() {
-        let armyToSplitFrom = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId &&
+        let armyToSplitFrom = types_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId &&
             army.owner === this.realm &&
             army.getPosition()[0] === this.position[0] &&
             army.getPosition()[1] === this.position[1]);
@@ -3780,9 +3679,9 @@ class SplitEvent extends event_1.PhoenixEvent {
                 window.alert(e.message);
             }
         }
-        armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
-        gui_1.GUI.getBigBox().fillEventList();
-        drawingFunctions_1.Drawing.drawStuff();
+        types_1.ArmyFunctions.checkArmiesForLiveliness();
+        types_1.GUI.getBigBox().fillEventList();
+        types_1.Drawing.drawStuff();
     }
     makeEventListItemText() {
         // TODO: detailed explanation
@@ -3808,7 +3707,7 @@ class SplitEvent extends event_1.PhoenixEvent {
 }
 exports.SplitEvent = SplitEvent;
 
-},{"../armies/footArmy":5,"../gameState":28,"../gui/drawingFunctions":35,"../gui/gui":37,"../libraries/armyFunctions":49,"./event":21}],27:[function(require,module,exports){
+},{"../types":60}],27:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -3826,13 +3725,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const event_1 = require("./event");
-const gameState_1 = require("../gameState");
-const footArmy_1 = require("../armies/footArmy");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const gui_1 = require("../gui/gui");
-const armyFunctions_1 = require("../libraries/armyFunctions");
-class TransferEvent extends event_1.PhoenixEvent {
+const types_1 = require("../types");
+class TransferEvent extends types_1.PhoenixEvent {
     constructor(listPosition, status, fromArmyId, toArmyId, realm, troops, leaders, mounts, lkp, skp, position, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.fromArmyId = fromArmyId;
@@ -3855,9 +3749,9 @@ class TransferEvent extends event_1.PhoenixEvent {
             ", 'x': " + this.position[0] + ", 'y': " + this.position[1] + "}";
     }
     validGameState() {
-        let fromArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId && army.owner === this.realm &&
+        let fromArmy = types_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId && army.owner === this.realm &&
             army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]);
-        let toArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.toArmyId && army.owner === this.realm &&
+        let toArmy = types_1.GameState.armies.find(army => army.getErkenfaraID() === this.toArmyId && army.owner === this.realm &&
             army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]);
         //Both armies exist, are in position and have the same type.
         //There are enough troops, officers, catapults and if at least one mount has to be split, there are enough
@@ -3870,21 +3764,21 @@ class TransferEvent extends event_1.PhoenixEvent {
             this.leaders <= fromArmy.getOfficerCount() &&
             this.lkp <= fromArmy.getLightCatapultCount() &&
             this.skp <= fromArmy.getHeavyCatapultCount() &&
-            ((this.mounts > 0 && fromArmy instanceof footArmy_1.FootArmy && this.mounts <= fromArmy.getMountCount()) ||
+            ((this.mounts > 0 && fromArmy instanceof types_1.FootArmy && this.mounts <= fromArmy.getMountCount()) ||
                 this.mounts <= 0);
     }
     checkEvent() {
-        let fromArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId && army.owner === this.realm &&
+        let fromArmy = types_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId && army.owner === this.realm &&
             army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]);
-        let toArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.toArmyId && army.owner === this.realm &&
+        let toArmy = types_1.GameState.armies.find(army => army.getErkenfaraID() === this.toArmyId && army.owner === this.realm &&
             army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]);
         if (fromArmy != undefined && toArmy != undefined) {
             try {
                 fromArmy.transferTo(toArmy, this.troops, this.leaders, this.lkp, this.skp, this.mounts);
                 this.status = 0 /* Checked */;
-                armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
-                gui_1.GUI.getBigBox().fillEventList();
-                drawingFunctions_1.Drawing.drawStuff();
+                types_1.ArmyFunctions.checkArmiesForLiveliness();
+                types_1.GUI.getBigBox().fillEventList();
+                types_1.Drawing.drawStuff();
             }
             catch (e) {
                 window.alert(e.message);
@@ -3916,7 +3810,7 @@ class TransferEvent extends event_1.PhoenixEvent {
 }
 exports.TransferEvent = TransferEvent;
 
-},{"../armies/footArmy":5,"../gameState":28,"../gui/drawingFunctions":35,"../gui/gui":37,"../libraries/armyFunctions":49,"./event":21}],28:[function(require,module,exports){
+},{"../types":60}],28:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -3977,84 +3871,73 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gameState_1 = require("../gameState");
-const gui_1 = require("../gui/gui");
-const boxVisibilty_1 = require("../gui/boxVisibilty");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const productionBuilding_1 = require("../buildings/productionBuilding");
-const hexFunctions_1 = require("../libraries/hexFunctions");
-const river_1 = require("../map/river");
-const controlVariables_1 = require("../controls/controlVariables");
-const nonDestructibleBuilding_1 = require("../buildings/nonDestructibleBuilding");
-const wall_1 = require("../buildings/wall");
-const footArmy_1 = require("../armies/footArmy");
-const constants_1 = require("../constants");
+const types_1 = require("../types");
 var GodFunctions;
 (function (GodFunctions) {
-    var changeFieldToType = boxVisibilty_1.BoxVisibility.changeFieldToType;
-    var hide = boxVisibilty_1.BoxVisibility.hide;
-    var show = boxVisibilty_1.BoxVisibility.show;
-    var switchModeTo = boxVisibilty_1.BoxVisibility.switchModeTo;
-    let changedBuildings = controlVariables_1.Controls.changedBuildings;
-    let factionToCreateBuildingsFor = gameState_1.GameState.realms[0];
+    var changeFieldToType = types_1.BoxVisibility.changeFieldToType;
+    var hide = types_1.BoxVisibility.hide;
+    var show = types_1.BoxVisibility.show;
+    var switchModeTo = types_1.BoxVisibility.switchModeTo;
+    let changedBuildings = types_1.Controls.changedBuildings;
+    let factionToCreateBuildingsFor = types_1.GameState.realms[0];
     function setFactionToCreateBuildingsFor(faction) {
         factionToCreateBuildingsFor = faction;
     }
     GodFunctions.setFactionToCreateBuildingsFor = setFactionToCreateBuildingsFor;
     function toggleOnClickWorldCreationMode() {
-        if (boxVisibilty_1.BoxVisibility.worldCreationModeOnClick && (changeFieldToType == -1)) {
-            boxVisibilty_1.BoxVisibility.worldCreationModeOnClick = false;
-            hide(gui_1.GUI.getWorldBenderBox().getCreationWarning());
+        if (types_1.BoxVisibility.worldCreationModeOnClick && (changeFieldToType == -1)) {
+            types_1.BoxVisibility.worldCreationModeOnClick = false;
+            hide(types_1.GUI.getWorldBenderBox().getCreationWarning());
         }
-        else if (!boxVisibilty_1.BoxVisibility.worldCreationModeOnClick || (boxVisibilty_1.BoxVisibility.worldCreationModeOnClick &&
+        else if (!types_1.BoxVisibility.worldCreationModeOnClick || (types_1.BoxVisibility.worldCreationModeOnClick &&
             (changeFieldToType != -1))) {
-            boxVisibilty_1.BoxVisibility.changeFieldToType = -1;
-            boxVisibilty_1.BoxVisibility.worldCreationModeOnClick = true;
-            show(gui_1.GUI.getWorldBenderBox().getCreationWarning());
+            types_1.BoxVisibility.changeFieldToType = -1;
+            types_1.BoxVisibility.worldCreationModeOnClick = true;
+            show(types_1.GUI.getWorldBenderBox().getCreationWarning());
         }
-        drawingFunctions_1.Drawing.resizeCanvas();
+        types_1.Drawing.resizeCanvas();
     }
     GodFunctions.toggleOnClickWorldCreationMode = toggleOnClickWorldCreationMode;
     function changeFieldClickedTo(number) {
         if (changeFieldToType != number) {
             switchModeTo("worldCreationModeOnClick");
-            boxVisibilty_1.BoxVisibility.changeFieldToType = number;
-            show(gui_1.GUI.getWorldBenderBox().getCreationWarning());
+            types_1.BoxVisibility.changeFieldToType = number;
+            show(types_1.GUI.getWorldBenderBox().getCreationWarning());
         }
         else {
-            boxVisibilty_1.BoxVisibility.changeFieldToType = -1;
+            types_1.BoxVisibility.changeFieldToType = -1;
             switchModeTo("worldCreationModeOn");
-            hide(gui_1.GUI.getWorldBenderBox().getCreationWarning());
+            hide(types_1.GUI.getWorldBenderBox().getCreationWarning());
         }
-        drawingFunctions_1.Drawing.resizeCanvas();
+        types_1.Drawing.resizeCanvas();
     }
     GodFunctions.changeFieldClickedTo = changeFieldClickedTo;
     function addProductionBuilding(type, position, realm) {
         let maxBP = 0;
         switch (type) {
             case 0 /* CASTLE */:
-                maxBP = constants_1.Constants.CASTLE_BP;
+                maxBP = types_1.Constants.CASTLE_BP;
                 break;
             case 1 /* CITY */:
-                maxBP = constants_1.Constants.CITY_BP;
+                maxBP = types_1.Constants.CITY_BP;
                 break;
             case 2 /* FORTRESS */:
-                maxBP = constants_1.Constants.FORTRESS_BP;
+                maxBP = types_1.Constants.FORTRESS_BP;
                 break;
             case 3 /* CAPITAL */:
-                maxBP = constants_1.Constants.CAPITAL_BP;
+                maxBP = types_1.Constants.CAPITAL_BP;
                 break;
             case 4 /* CAPITAL_FORT */:
-                maxBP = constants_1.Constants.CAPITAL_FORTRESS_BP;
+                maxBP = types_1.Constants.CAPITAL_FORTRESS_BP;
                 break;
             default: break;
         }
         //make sure the right thing is contained in the changedBuildings
-        let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1] instanceof productionBuilding_1.ProductionBuilding &&
+        let entryInChangedBuildings = types_1.Controls.changedBuildings.find(entry => entry[1] instanceof types_1.ProductionBuilding &&
             entry[1].getPosition()[0] === position[0] &&
             entry[1].getPosition()[1] === position[1]);
         if (entryInChangedBuildings == undefined) {
-            controlVariables_1.Controls.changedBuildings.push([true, new productionBuilding_1.ProductionBuilding(type, "", position, realm, maxBP)]);
+            types_1.Controls.changedBuildings.push([true, new types_1.ProductionBuilding(type, "", position, realm, maxBP)]);
         }
         else if (!entryInChangedBuildings[0]) {
             entryInChangedBuildings[0] = true;
@@ -4063,268 +3946,268 @@ var GodFunctions;
             entryInChangedBuildings[1].type = type;
         }
         //make sure the right thing is contained in the GameState.buildings
-        let entryInActualBuildings = gameState_1.GameState.buildings.find(building => building instanceof productionBuilding_1.ProductionBuilding &&
+        let entryInActualBuildings = types_1.GameState.buildings.find(building => building instanceof types_1.ProductionBuilding &&
             building.getPosition()[0] === position[0] &&
             building.getPosition()[1] === position[1]);
         if (entryInActualBuildings == undefined) {
-            gameState_1.GameState.buildings.push(new productionBuilding_1.ProductionBuilding(type, "", position, realm, maxBP));
+            types_1.GameState.buildings.push(new types_1.ProductionBuilding(type, "", position, realm, maxBP));
         }
         else if (entryInActualBuildings.type !== type) {
             entryInActualBuildings.type = type;
         }
-        drawingFunctions_1.Drawing.drawStuff();
+        types_1.Drawing.drawStuff();
     }
     // add a castle in the selectedField
     function addCastle() {
-        addProductionBuilding(0 /* CASTLE */, controlVariables_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
+        addProductionBuilding(0 /* CASTLE */, types_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
     }
     GodFunctions.addCastle = addCastle;
     // add a city in the selectedField
     function addCity() {
-        addProductionBuilding(1 /* CITY */, controlVariables_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
+        addProductionBuilding(1 /* CITY */, types_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
     }
     GodFunctions.addCity = addCity;
     // add a fortress in the selectedField
     function addFortress() {
-        addProductionBuilding(2 /* FORTRESS */, controlVariables_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
+        addProductionBuilding(2 /* FORTRESS */, types_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
     }
     GodFunctions.addFortress = addFortress;
     // add a capital city in the selectedField
     function addCapital() {
-        addProductionBuilding(3 /* CAPITAL */, controlVariables_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
+        addProductionBuilding(3 /* CAPITAL */, types_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
     }
     GodFunctions.addCapital = addCapital;
     // add a capital fortress in the selectedField
     function addCapitalFortress() {
-        addProductionBuilding(4 /* CAPITAL_FORT */, controlVariables_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
+        addProductionBuilding(4 /* CAPITAL_FORT */, types_1.Controls.selectedFields[0], factionToCreateBuildingsFor);
     }
     GodFunctions.addCapitalFortress = addCapitalFortress;
     function deleteProductionBuildingOnField(position) {
-        let buildingToDelete = gameState_1.GameState.buildings.find(building => building instanceof productionBuilding_1.ProductionBuilding &&
+        let buildingToDelete = types_1.GameState.buildings.find(building => building instanceof types_1.ProductionBuilding &&
             building.getPosition()[0] === position[0] &&
             building.getPosition()[1] === position[1]);
         if (buildingToDelete != undefined) {
             //make sure the right thing is in changedBuildings
-            let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1].type === buildingToDelete.type &&
+            let entryInChangedBuildings = types_1.Controls.changedBuildings.find(entry => entry[1].type === buildingToDelete.type &&
                 entry[1].getPosition()[0] === position[0] &&
                 entry[1].getPosition()[1] === position[1]);
             if (entryInChangedBuildings == undefined) {
-                controlVariables_1.Controls.changedBuildings.push([false, buildingToDelete]);
+                types_1.Controls.changedBuildings.push([false, buildingToDelete]);
             }
             else if (entryInChangedBuildings[0]) {
                 entryInChangedBuildings[0] = false;
             }
             //remove the building from GameState.buildings
-            gameState_1.GameState.buildings.splice(gameState_1.GameState.buildings.findIndex(building => building === buildingToDelete), 1);
+            types_1.GameState.buildings.splice(types_1.GameState.buildings.findIndex(building => building === buildingToDelete), 1);
         }
-        drawingFunctions_1.Drawing.drawStuff();
+        types_1.Drawing.drawStuff();
     }
     // delete the production building in the selectedField
     function deleteSelectedProductionBuilding() {
-        deleteProductionBuildingOnField(controlVariables_1.Controls.selectedFields[0]);
+        deleteProductionBuildingOnField(types_1.Controls.selectedFields[0]);
     }
     GodFunctions.deleteSelectedProductionBuilding = deleteSelectedProductionBuilding;
     function addNonDestructibleBuilding(type, position, secondPosition, realm) {
         //make sure the right thing is contained in the changedBuildings
-        let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1].type === type &&
+        let entryInChangedBuildings = types_1.Controls.changedBuildings.find(entry => entry[1].type === type &&
             entry[1].getPosition()[0] === position[0] &&
             entry[1].getPosition()[1] === position[1] &&
             entry[1].getSecondPosition()[0] === secondPosition[0] &&
             entry[1].getSecondPosition()[1] === secondPosition[1]);
         if (entryInChangedBuildings == undefined) {
-            controlVariables_1.Controls.changedBuildings.push([true, new nonDestructibleBuilding_1.NonDestructibleBuilding(type, position, secondPosition, realm)]);
+            types_1.Controls.changedBuildings.push([true, new types_1.NonDestructibleBuilding(type, position, secondPosition, realm)]);
         }
         else if (!entryInChangedBuildings[0]) {
             entryInChangedBuildings[0] = true;
         }
         //make sure the right thing is contained in the GameState.buildings
-        let entryInActualBuildings = gameState_1.GameState.buildings.find(building => building.type === type &&
+        let entryInActualBuildings = types_1.GameState.buildings.find(building => building.type === type &&
             building.getPosition()[0] === position[0] &&
             building.getPosition()[1] === position[1] &&
             building.getSecondPosition()[0] === secondPosition[0] &&
             building.getSecondPosition()[1] === secondPosition[1]);
         if (entryInActualBuildings == undefined) {
-            gameState_1.GameState.buildings.push(new nonDestructibleBuilding_1.NonDestructibleBuilding(type, position, secondPosition, realm));
+            types_1.GameState.buildings.push(new types_1.NonDestructibleBuilding(type, position, secondPosition, realm));
         }
-        drawingFunctions_1.Drawing.drawStuff();
+        types_1.Drawing.drawStuff();
     }
     function deleteNonDestructibleBuilding(type, position, secondPosition) {
-        let buildingToDelete = gameState_1.GameState.buildings.find(building => building.type === type &&
+        let buildingToDelete = types_1.GameState.buildings.find(building => building.type === type &&
             building.getPosition()[0] === position[0] &&
             building.getPosition()[1] === position[1] &&
             building.getSecondPosition()[0] === secondPosition[0] &&
             building.getSecondPosition()[1] === secondPosition[1]);
         if (buildingToDelete != undefined) {
             //make sure the right thing is in changedBuildings
-            let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1].type === buildingToDelete.type &&
+            let entryInChangedBuildings = types_1.Controls.changedBuildings.find(entry => entry[1].type === buildingToDelete.type &&
                 entry[1].getPosition()[0] === position[0] &&
                 entry[1].getPosition()[1] === position[1] &&
                 entry[1].getSecondPosition()[0] === secondPosition[0] &&
                 entry[1].getSecondPosition()[1] === secondPosition[1]);
             if (entryInChangedBuildings == undefined) {
-                controlVariables_1.Controls.changedBuildings.push([false, buildingToDelete]);
+                types_1.Controls.changedBuildings.push([false, buildingToDelete]);
             }
             else if (entryInChangedBuildings[0]) {
                 entryInChangedBuildings[0] = false;
             }
             //remove the building from GameState.buildings
-            gameState_1.GameState.buildings.splice(gameState_1.GameState.buildings.findIndex(building => building === buildingToDelete), 1);
+            types_1.GameState.buildings.splice(types_1.GameState.buildings.findIndex(building => building === buildingToDelete), 1);
         }
-        drawingFunctions_1.Drawing.drawStuff();
+        types_1.Drawing.drawStuff();
     }
     // adds a street in the target direction
     function addStreet(direction) {
-        let targets = hexFunctions_1.HexFunction.neighbors(controlVariables_1.Controls.selectedFields[0]);
+        let targets = types_1.HexFunction.neighbors(types_1.Controls.selectedFields[0]);
         let target = targets[direction];
-        addNonDestructibleBuilding(8 /* STREET */, controlVariables_1.Controls.selectedFields[0], target, factionToCreateBuildingsFor);
-        controlVariables_1.Controls.selectedFields[0] = [target[0], target[1]];
-        drawingFunctions_1.Drawing.drawStuff();
+        addNonDestructibleBuilding(8 /* STREET */, types_1.Controls.selectedFields[0], target, factionToCreateBuildingsFor);
+        types_1.Controls.selectedFields[0] = [target[0], target[1]];
+        types_1.Drawing.drawStuff();
     }
     GodFunctions.addStreet = addStreet;
     // removes a street in the target direction
     function removeStreet(direction) {
-        let targets = hexFunctions_1.HexFunction.neighbors(controlVariables_1.Controls.selectedFields[0]);
+        let targets = types_1.HexFunction.neighbors(types_1.Controls.selectedFields[0]);
         let target = targets[direction];
-        deleteNonDestructibleBuilding(8 /* STREET */, controlVariables_1.Controls.selectedFields[0], target);
-        controlVariables_1.Controls.selectedFields[0] = [target[0], target[1]];
-        drawingFunctions_1.Drawing.resizeCanvas();
+        deleteNonDestructibleBuilding(8 /* STREET */, types_1.Controls.selectedFields[0], target);
+        types_1.Controls.selectedFields[0] = [target[0], target[1]];
+        types_1.Drawing.resizeCanvas();
     }
     GodFunctions.removeStreet = removeStreet;
     // adds a river in the target direction
     function addRiver(direction) {
-        let targets = hexFunctions_1.HexFunction.neighbors(controlVariables_1.Controls.selectedFields[0]);
+        let targets = types_1.HexFunction.neighbors(types_1.Controls.selectedFields[0]);
         let target = targets[direction];
-        if (!gameState_1.GameState.rivers.some(river => (river.rightBank[0] === controlVariables_1.Controls.selectedFields[0][0] &&
-            river.rightBank[1] === controlVariables_1.Controls.selectedFields[0][1] &&
+        if (!types_1.GameState.rivers.some(river => (river.rightBank[0] === types_1.Controls.selectedFields[0][0] &&
+            river.rightBank[1] === types_1.Controls.selectedFields[0][1] &&
             river.leftBank[0] === target[0] &&
             river.leftBank[1] === target[1]) ||
-            (river.leftBank[0] === controlVariables_1.Controls.selectedFields[0][0] &&
-                river.leftBank[1] === controlVariables_1.Controls.selectedFields[0][1] &&
+            (river.leftBank[0] === types_1.Controls.selectedFields[0][0] &&
+                river.leftBank[1] === types_1.Controls.selectedFields[0][1] &&
                 river.rightBank[0] === target[0] &&
                 river.rightBank[1] === target[1]))) {
-            gameState_1.GameState.rivers.push(new river_1.River(controlVariables_1.Controls.selectedFields[0], target));
+            types_1.GameState.rivers.push(new types_1.River(types_1.Controls.selectedFields[0], target));
         }
-        drawingFunctions_1.Drawing.drawStuff();
+        types_1.Drawing.drawStuff();
     }
     GodFunctions.addRiver = addRiver;
     // removes a river in the target direction
     function removeRiver(direction) {
-        let sf = controlVariables_1.Controls.selectedFields[0];
-        let targets = hexFunctions_1.HexFunction.neighbors(sf);
+        let sf = types_1.Controls.selectedFields[0];
+        let targets = types_1.HexFunction.neighbors(sf);
         let target = targets[direction];
-        let indexToDelete = gameState_1.GameState.rivers.findIndex(river => (river.rightBank[0] === controlVariables_1.Controls.selectedFields[0][0] &&
-            river.rightBank[1] === controlVariables_1.Controls.selectedFields[0][1] &&
+        let indexToDelete = types_1.GameState.rivers.findIndex(river => (river.rightBank[0] === types_1.Controls.selectedFields[0][0] &&
+            river.rightBank[1] === types_1.Controls.selectedFields[0][1] &&
             river.leftBank[0] === target[0] &&
             river.leftBank[1] === target[1]) ||
-            (river.leftBank[0] === controlVariables_1.Controls.selectedFields[0][0] &&
-                river.leftBank[1] === controlVariables_1.Controls.selectedFields[0][1] &&
+            (river.leftBank[0] === types_1.Controls.selectedFields[0][0] &&
+                river.leftBank[1] === types_1.Controls.selectedFields[0][1] &&
                 river.rightBank[0] === target[0] &&
                 river.rightBank[1] === target[1]));
         if (indexToDelete != undefined) {
-            gameState_1.GameState.rivers.splice(indexToDelete, 1);
+            types_1.GameState.rivers.splice(indexToDelete, 1);
         }
-        drawingFunctions_1.Drawing.drawStuff();
+        types_1.Drawing.drawStuff();
     }
     GodFunctions.removeRiver = removeRiver;
     function addWall(type, position, direction, realm) {
         //make sure the right thing is contained in the changedBuildings
-        let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1].type === type &&
+        let entryInChangedBuildings = types_1.Controls.changedBuildings.find(entry => entry[1].type === type &&
             entry[1].getPosition()[0] === position[0] &&
             entry[1].getPosition()[1] === position[1] &&
             entry[1].facing === direction);
         if (entryInChangedBuildings == undefined) {
-            controlVariables_1.Controls.changedBuildings.push([true, new wall_1.Wall(type, position, realm, constants_1.Constants.WALL_BP, direction, constants_1.Constants.WALL_MAX_GUARD)]);
+            types_1.Controls.changedBuildings.push([true, new types_1.Wall(type, position, realm, types_1.Constants.WALL_BP, direction, types_1.Constants.WALL_MAX_GUARD)]);
         }
         else if (!entryInChangedBuildings[0]) {
             entryInChangedBuildings[0] = true;
         }
         //make sure the right thing is contained in the GameState.buildings
-        let entryInActualBuildings = gameState_1.GameState.buildings.find(building => building.type === type &&
+        let entryInActualBuildings = types_1.GameState.buildings.find(building => building.type === type &&
             building.getPosition()[0] === position[0] &&
             building.getPosition()[1] === position[1] &&
             building.facing === direction);
         if (entryInActualBuildings == undefined) {
-            gameState_1.GameState.buildings.push(new wall_1.Wall(type, position, realm, constants_1.Constants.WALL_BP, direction, constants_1.Constants.WALL_MAX_GUARD));
+            types_1.GameState.buildings.push(new types_1.Wall(type, position, realm, types_1.Constants.WALL_BP, direction, types_1.Constants.WALL_MAX_GUARD));
         }
-        drawingFunctions_1.Drawing.drawStuff();
+        types_1.Drawing.drawStuff();
     }
     function deleteWall(type, position, direction) {
-        let buildingToDelete = gameState_1.GameState.buildings.find(building => building.type === type &&
+        let buildingToDelete = types_1.GameState.buildings.find(building => building.type === type &&
             building.getPosition()[0] === position[0] &&
             building.getPosition()[1] === position[1] &&
             building.facing === direction);
         if (buildingToDelete != undefined) {
             //make sure the right thing is in changedBuildings
-            let entryInChangedBuildings = controlVariables_1.Controls.changedBuildings.find(entry => entry[1].type === buildingToDelete.type &&
+            let entryInChangedBuildings = types_1.Controls.changedBuildings.find(entry => entry[1].type === buildingToDelete.type &&
                 entry[1].getPosition()[0] === position[0] &&
                 entry[1].getPosition()[1] === position[1] &&
                 entry[1].facing === direction);
             if (entryInChangedBuildings == undefined) {
-                controlVariables_1.Controls.changedBuildings.push([false, buildingToDelete]);
+                types_1.Controls.changedBuildings.push([false, buildingToDelete]);
             }
             else if (entryInChangedBuildings[0]) {
                 entryInChangedBuildings[0] = false;
             }
             //remove the building from GameState.buildings
-            gameState_1.GameState.buildings.splice(gameState_1.GameState.buildings.findIndex(building => building === buildingToDelete), 1);
+            types_1.GameState.buildings.splice(types_1.GameState.buildings.findIndex(building => building === buildingToDelete), 1);
         }
-        drawingFunctions_1.Drawing.drawStuff();
+        types_1.Drawing.drawStuff();
     }
     //add = true means add a building, else remove it.
     function manipulateBorderBuilding(type, direction, add) {
-        let targets = hexFunctions_1.HexFunction.neighbors(controlVariables_1.Controls.selectedFields[0]);
+        let targets = types_1.HexFunction.neighbors(types_1.Controls.selectedFields[0]);
         let target = targets[direction];
         if (add) {
             if (type === 5 /* WALL */) {
-                addWall(type, controlVariables_1.Controls.selectedFields[0], direction, factionToCreateBuildingsFor);
+                addWall(type, types_1.Controls.selectedFields[0], direction, factionToCreateBuildingsFor);
             }
             else {
-                addNonDestructibleBuilding(type, controlVariables_1.Controls.selectedFields[0], target, factionToCreateBuildingsFor);
+                addNonDestructibleBuilding(type, types_1.Controls.selectedFields[0], target, factionToCreateBuildingsFor);
             }
         }
         else {
             if (type === 5 /* WALL */) {
-                deleteWall(type, controlVariables_1.Controls.selectedFields[0], direction);
+                deleteWall(type, types_1.Controls.selectedFields[0], direction);
             }
             else {
-                deleteNonDestructibleBuilding(type, controlVariables_1.Controls.selectedFields[0], target);
+                deleteNonDestructibleBuilding(type, types_1.Controls.selectedFields[0], target);
             }
         }
     }
     GodFunctions.manipulateBorderBuilding = manipulateBorderBuilding;
     // the function for the Gm posibility to make an army out of nothing
     function generateArmyBtn() {
-        let armyMakerBox = gui_1.GUI.getArmyGeneratorBox();
-        boxVisibilty_1.BoxVisibility.ownerBuffer = armyMakerBox.getOwnerField().value;
-        boxVisibilty_1.BoxVisibility.armyIdBuffer = Number(armyMakerBox.getArmyNumberField().value);
-        boxVisibilty_1.BoxVisibility.countBuffer = Number(armyMakerBox.getCountField().value);
-        boxVisibilty_1.BoxVisibility.leaderBuffer = Number(armyMakerBox.getLeaderField().value);
-        boxVisibilty_1.BoxVisibility.mountsBuffer = Number(armyMakerBox.getMountsField().value);
-        boxVisibilty_1.BoxVisibility.lkpBuffer = Number(armyMakerBox.getLKPField().value);
-        boxVisibilty_1.BoxVisibility.skpBuffer = Number(armyMakerBox.getSKPField().value);
-        boxVisibilty_1.BoxVisibility.guardBuffer = false;
-        if (boxVisibilty_1.BoxVisibility.armyIdBuffer < 101 || boxVisibilty_1.BoxVisibility.armyIdBuffer > 399) {
+        let armyMakerBox = types_1.GUI.getArmyGeneratorBox();
+        types_1.BoxVisibility.ownerBuffer = armyMakerBox.getOwnerField().value;
+        types_1.BoxVisibility.armyIdBuffer = Number(armyMakerBox.getArmyNumberField().value);
+        types_1.BoxVisibility.countBuffer = Number(armyMakerBox.getCountField().value);
+        types_1.BoxVisibility.leaderBuffer = Number(armyMakerBox.getLeaderField().value);
+        types_1.BoxVisibility.mountsBuffer = Number(armyMakerBox.getMountsField().value);
+        types_1.BoxVisibility.lkpBuffer = Number(armyMakerBox.getLKPField().value);
+        types_1.BoxVisibility.skpBuffer = Number(armyMakerBox.getSKPField().value);
+        types_1.BoxVisibility.guardBuffer = false;
+        if (types_1.BoxVisibility.armyIdBuffer < 101 || types_1.BoxVisibility.armyIdBuffer > 399) {
             window.alert("Die Armee-Id muss zwischen 101 und 399 liegen.");
             return false;
         }
         // check for any other armies with the same armyId
-        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-            if (gameState_1.GameState.armies[i].getErkenfaraID() == boxVisibilty_1.BoxVisibility.armyIdBuffer &&
-                gameState_1.GameState.armies[i].owner.tag === boxVisibilty_1.BoxVisibility.ownerBuffer) {
+        for (let i = 0; i < types_1.GameState.armies.length; i++) {
+            if (types_1.GameState.armies[i].getErkenfaraID() == types_1.BoxVisibility.armyIdBuffer &&
+                types_1.GameState.armies[i].owner.tag === types_1.BoxVisibility.ownerBuffer) {
                 window.alert("Ein Heer mit dieser Nummer existiert bereits in diesem Königreich.");
                 return false;
             }
         }
         // check for catabults in a rider army, and for mounts in a rider army, or fleet
-        if (Math.floor(boxVisibilty_1.BoxVisibility.armyIdBuffer / 100) == 2) {
-            if (boxVisibilty_1.BoxVisibility.mountsBuffer > 0 || boxVisibilty_1.BoxVisibility.lkpBuffer > 0 || boxVisibilty_1.BoxVisibility.skpBuffer > 0) {
+        if (Math.floor(types_1.BoxVisibility.armyIdBuffer / 100) == 2) {
+            if (types_1.BoxVisibility.mountsBuffer > 0 || types_1.BoxVisibility.lkpBuffer > 0 || types_1.BoxVisibility.skpBuffer > 0) {
                 window.alert("In einem Reiterheer sollten weder einzelne Reittiere, noch Katapulte sein. " +
                     "Wenn das Heer ein Fußheer sein sollte gib, ihm eine Nummer zwischen 100 und 199.");
                 return false;
             }
         }
-        else if (Math.floor(boxVisibilty_1.BoxVisibility.armyIdBuffer / 100) == 3) {
-            if (boxVisibilty_1.BoxVisibility.mountsBuffer > 0) {
+        else if (Math.floor(types_1.BoxVisibility.armyIdBuffer / 100) == 3) {
+            if (types_1.BoxVisibility.mountsBuffer > 0) {
                 window.alert("In einer Flotte sollten keine Reittiere enthalten sein. Wenn das Heer ein Fußheer sein " +
                     "sollte, gib ihm eine Nummer zwischen 100 und 199.");
                 return false;
@@ -4337,50 +4220,50 @@ var GodFunctions;
     // used to delete the selected army
     function godDeleteSelectedArmy() {
         if (confirm('Are you sure you want to delete your currently selected army?')) {
-            gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] = gameState_1.GameState.armies[gameState_1.GameState.armies.length - 1];
-            gameState_1.GameState.armies.pop();
+            types_1.GameState.armies[types_1.Controls.selectedArmyIndex] = types_1.GameState.armies[types_1.GameState.armies.length - 1];
+            types_1.GameState.armies.pop();
         }
         else {
             // Do nothing!
         }
-        drawingFunctions_1.Drawing.resizeCanvas();
+        types_1.Drawing.resizeCanvas();
     }
     GodFunctions.godDeleteSelectedArmy = godDeleteSelectedArmy;
     // This is used by the infoChangeBox to manipulate an armies Stats.
     function changeArmyInfo() {
-        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-            let infoChangeBox = gui_1.GUI.getInfoChangeBox();
-            if (i != controlVariables_1.Controls.selectedArmyIndex && gameState_1.GameState.armies[i].owner.tag === infoChangeBox.getOwnerChangeInput().value &&
-                gameState_1.GameState.armies[i].getErkenfaraID() === parseInt(infoChangeBox.getArmyIdChangeInput().value)) {
+        for (let i = 0; i < types_1.GameState.armies.length; i++) {
+            let infoChangeBox = types_1.GUI.getInfoChangeBox();
+            if (i != types_1.Controls.selectedArmyIndex && types_1.GameState.armies[i].owner.tag === infoChangeBox.getOwnerChangeInput().value &&
+                types_1.GameState.armies[i].getErkenfaraID() === parseInt(infoChangeBox.getArmyIdChangeInput().value)) {
                 window.alert("Diese Armee-Id ist in diesem Reich bereits vergeben.");
             }
             else {
-                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].isGuard = infoChangeBox.getGuardChangeInput().checked;
-                for (let i = 0; i > gameState_1.GameState.realms.length; i++) {
+                types_1.GameState.armies[types_1.Controls.selectedArmyIndex].isGuard = infoChangeBox.getGuardChangeInput().checked;
+                for (let i = 0; i > types_1.GameState.realms.length; i++) {
                     // check for the realm tag, not the Name
-                    if (infoChangeBox.getOwnerChangeInput().value === gameState_1.GameState.realms[i].tag) {
-                        gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner = gameState_1.GameState.realms[i];
+                    if (infoChangeBox.getOwnerChangeInput().value === types_1.GameState.realms[i].tag) {
+                        types_1.GameState.armies[types_1.Controls.selectedArmyIndex].owner = types_1.GameState.realms[i];
                     }
                 }
-                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setID(Number(infoChangeBox.getArmyIdChangeInput().value));
-                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setTroopCount(Number(infoChangeBox.getCountChangeInput().value));
-                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setOfficerCount(Number(infoChangeBox.getLeadersChangeInput().value));
-                if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof footArmy_1.FootArmy) {
-                    let armyToChange = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
+                types_1.GameState.armies[types_1.Controls.selectedArmyIndex].setID(Number(infoChangeBox.getArmyIdChangeInput().value));
+                types_1.GameState.armies[types_1.Controls.selectedArmyIndex].setTroopCount(Number(infoChangeBox.getCountChangeInput().value));
+                types_1.GameState.armies[types_1.Controls.selectedArmyIndex].setOfficerCount(Number(infoChangeBox.getLeadersChangeInput().value));
+                if (types_1.GameState.armies[types_1.Controls.selectedArmyIndex] instanceof types_1.FootArmy) {
+                    let armyToChange = types_1.GameState.armies[types_1.Controls.selectedArmyIndex];
                     armyToChange.setMountCount(Number(infoChangeBox.getMountsChangeInput().value));
                 }
-                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setLightCatapultCount(Number(infoChangeBox.getLKPChangeInput().value));
-                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setHeavyCatapultCount(Number(infoChangeBox.getSKPChangeInput().value));
-                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setMovePoints(Number(infoChangeBox.getMovePointsChangeInput().value));
-                gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].setHeightPoints(Number(infoChangeBox.getHeightPointsChangeInput().value));
+                types_1.GameState.armies[types_1.Controls.selectedArmyIndex].setLightCatapultCount(Number(infoChangeBox.getLKPChangeInput().value));
+                types_1.GameState.armies[types_1.Controls.selectedArmyIndex].setHeavyCatapultCount(Number(infoChangeBox.getSKPChangeInput().value));
+                types_1.GameState.armies[types_1.Controls.selectedArmyIndex].setMovePoints(Number(infoChangeBox.getMovePointsChangeInput().value));
+                types_1.GameState.armies[types_1.Controls.selectedArmyIndex].setHeightPoints(Number(infoChangeBox.getHeightPointsChangeInput().value));
             }
         }
-        drawingFunctions_1.Drawing.resizeCanvas();
+        types_1.Drawing.resizeCanvas();
     }
     GodFunctions.changeArmyInfo = changeArmyInfo;
 })(GodFunctions = exports.GodFunctions || (exports.GodFunctions = {}));
 
-},{"../armies/footArmy":5,"../buildings/nonDestructibleBuilding":13,"../buildings/productionBuilding":14,"../buildings/wall":15,"../constants":16,"../controls/controlVariables":18,"../gameState":28,"../gui/boxVisibilty":32,"../gui/drawingFunctions":35,"../gui/gui":37,"../libraries/hexFunctions":50,"../map/river":54}],30:[function(require,module,exports){
+},{"../types":60}],30:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -4398,7 +4281,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const godModeFunctions_1 = require("../godmode/godModeFunctions");
+const types_1 = require("../types");
 class ArmyGeneratorBox {
     getSelf() {
         if (this.self == undefined) {
@@ -4457,14 +4340,14 @@ class ArmyGeneratorBox {
     getGenerateArmyBtn() {
         if (this.generateArmyBtn == undefined) {
             this.generateArmyBtn = document.getElementById("GenerateArmyBtn");
-            this.generateArmyBtn.onclick = function () { godModeFunctions_1.GodFunctions.generateArmyBtn(); };
+            this.generateArmyBtn.onclick = function () { types_1.GodFunctions.generateArmyBtn(); };
         }
         return this.generateArmyBtn;
     }
 }
 exports.ArmyGeneratorBox = ArmyGeneratorBox;
 
-},{"../godmode/godModeFunctions":29}],31:[function(require,module,exports){
+},{"../types":60}],31:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -4482,11 +4365,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const battleHandler_1 = require("../armies/battleHandler");
-const footArmy_1 = require("../armies/footArmy");
-const riderArmy_1 = require("../armies/riderArmy");
-const fleet_1 = require("../armies/fleet");
-const battleResult_1 = require("../armies/battleResult");
+const types_1 = require("../types");
 class BattleBox {
     constructor() {
         this.attackSoldiers = 0;
@@ -4509,7 +4388,7 @@ class BattleBox {
         this.defenseGuardShips = 0;
     }
     newBattle(participants, location) {
-        this.battleHandler = new battleHandler_1.BattleHandler(participants, location);
+        this.battleHandler = new types_1.BattleHandler(participants, location);
         this.updateTroopCounts();
         this.updateDisplay();
     }
@@ -4591,7 +4470,7 @@ class BattleBox {
         let ctx = this;
         if (this.battleHandler != undefined) {
             this.battleHandler.attackerArmies.forEach(function (item) {
-                if (item instanceof footArmy_1.FootArmy) { //footman army
+                if (item instanceof types_1.FootArmy) { //footman army
                     if (item.isGuard) {
                         ctx.attackGuardSoldiers += item.getTroopCount();
                     }
@@ -4599,7 +4478,7 @@ class BattleBox {
                         ctx.attackSoldiers += item.getTroopCount();
                     }
                 }
-                else if (item instanceof riderArmy_1.RiderArmy) { //rider army
+                else if (item instanceof types_1.RiderArmy) { //rider army
                     if (item.isGuard) {
                         ctx.attackGuardRiders += item.getTroopCount();
                     }
@@ -4607,7 +4486,7 @@ class BattleBox {
                         ctx.attackRiders += item.getTroopCount();
                     }
                 }
-                else if (item instanceof fleet_1.Fleet) { //navy
+                else if (item instanceof types_1.Fleet) { //navy
                     if (item.isGuard) {
                         ctx.attackGuardShips += item.getTroopCount();
                     }
@@ -4620,7 +4499,7 @@ class BattleBox {
                 ctx.attackOfficers += item.getOfficerCount();
             });
             this.battleHandler.defenderArmies.forEach(function (item) {
-                if (item instanceof footArmy_1.FootArmy) { //footman army
+                if (item instanceof types_1.FootArmy) { //footman army
                     if (item.isGuard) {
                         ctx.defenseGuardSoldiers += item.getTroopCount();
                     }
@@ -4628,7 +4507,7 @@ class BattleBox {
                         ctx.defenseSoldiers += item.getTroopCount();
                     }
                 }
-                else if (item instanceof riderArmy_1.RiderArmy) { //rider army
+                else if (item instanceof types_1.RiderArmy) { //rider army
                     if (item.isGuard) {
                         ctx.defenseGuardRiders += item.getTroopCount();
                     }
@@ -4636,7 +4515,7 @@ class BattleBox {
                         ctx.defenseRiders += item.getTroopCount();
                     }
                 }
-                else if (item instanceof fleet_1.Fleet) { //navy
+                else if (item instanceof types_1.Fleet) { //navy
                     if (item.isGuard) {
                         ctx.defenseGuardShips += item.getTroopCount();
                     }
@@ -4794,7 +4673,7 @@ class BattleBox {
     }
     updateResultPreview() {
         //Instant result preview (remove if not desired)
-        let battleResult = new battleResult_1.BattleResult(4 /* TIE */, [0], [0]);
+        let battleResult = new types_1.BattleResult(4 /* TIE */, [0], [0]);
         if (this.battleHandler != undefined) {
             let battleResult = this.battleHandler.calculateResult(this.battleHandler.attackerArmies.map((val) => (val)), this.battleHandler.defenderArmies.map((val) => (val)), [], [], this.battleHandler.location, parseInt(this.getAttackDiceRoll().value), parseInt(this.getDefenseDiceRoll().value));
         }
@@ -4802,7 +4681,7 @@ class BattleBox {
             throw new Error("BattleHandler is not initialized before being used.");
         }
         let attackFootLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof footArmy_1.FootArmy && !this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.FootArmy && !this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4810,7 +4689,7 @@ class BattleBox {
             }
         }, 0);
         let attackCavLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof riderArmy_1.RiderArmy && !this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.RiderArmy && !this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4818,7 +4697,7 @@ class BattleBox {
             }
         }, 0);
         let attackFleetLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof fleet_1.Fleet && !this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.Fleet && !this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4826,7 +4705,7 @@ class BattleBox {
             }
         }, 0);
         let attackGuardFootLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof footArmy_1.FootArmy && this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.FootArmy && this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4834,7 +4713,7 @@ class BattleBox {
             }
         }, 0);
         let attackGuardCavLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof riderArmy_1.RiderArmy && this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.RiderArmy && this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4842,7 +4721,7 @@ class BattleBox {
             }
         }, 0);
         let attackGuardFleetLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof fleet_1.Fleet && this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.Fleet && this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4850,7 +4729,7 @@ class BattleBox {
             }
         }, 0);
         let defenseFootLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof footArmy_1.FootArmy && !this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.FootArmy && !this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4858,7 +4737,7 @@ class BattleBox {
             }
         }, 0);
         let defenseCavLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof riderArmy_1.RiderArmy && !this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.RiderArmy && !this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4866,7 +4745,7 @@ class BattleBox {
             }
         }, 0);
         let defenseFleetLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof fleet_1.Fleet && !this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.Fleet && !this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4874,7 +4753,7 @@ class BattleBox {
             }
         }, 0);
         let defenseGuardFootLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof footArmy_1.FootArmy && this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.FootArmy && this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4882,7 +4761,7 @@ class BattleBox {
             }
         }, 0);
         let defenseGuardCavLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof riderArmy_1.RiderArmy && this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.RiderArmy && this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4890,7 +4769,7 @@ class BattleBox {
             }
         }, 0);
         let defenseGuardFleetLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof fleet_1.Fleet && this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.Fleet && this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -5089,7 +4968,7 @@ class BattleBox {
 }
 exports.BattleBox = BattleBox;
 
-},{"../armies/battleHandler":2,"../armies/battleResult":3,"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9}],32:[function(require,module,exports){
+},{"../types":60}],32:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -5107,14 +4986,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gui_1 = require("./gui");
-const gameState_1 = require("../gameState");
-const drawingFunctions_1 = require("./drawingFunctions");
-const controlVariables_1 = require("../controls/controlVariables");
-const footArmy_1 = require("../armies/footArmy");
-const riderArmy_1 = require("../armies/riderArmy");
-const fleet_1 = require("../armies/fleet");
-const buttonFunctions_1 = require("../controls/buttonFunctions");
+const types_1 = require("../types");
 var BoxVisibility;
 (function (BoxVisibility) {
     BoxVisibility.worldCreationModeOn = false;
@@ -5163,16 +5035,16 @@ var BoxVisibility;
     BoxVisibility.hide = hide;
     // switches bunttonBoxContent.style.visibility to "" and all others to "none"
     function switchBtnBoxTo(buttonBoxContent) {
-        hide(gui_1.GUI.getWorldBenderBox().getSelf());
-        hide(gui_1.GUI.getRiverBenderBox().getSelf());
-        hide(gui_1.GUI.getWorldBenderBox().getCreationWarning());
-        hide(gui_1.GUI.getBuildingCreationBox().getSelf());
-        hide(gui_1.GUI.getStreetCreationBox().getSelf());
-        hide(gui_1.GUI.getHarborCreationBox().getSelf());
-        hide(gui_1.GUI.getBridgeCreationBox().getSelf());
-        hide(gui_1.GUI.getWallCreationBox().getSelf());
-        hide(gui_1.GUI.getButtonsBox());
-        hide(gui_1.GUI.getArmyGeneratorBox().getSelf());
+        hide(types_1.GUI.getWorldBenderBox().getSelf());
+        hide(types_1.GUI.getRiverBenderBox().getSelf());
+        hide(types_1.GUI.getWorldBenderBox().getCreationWarning());
+        hide(types_1.GUI.getBuildingCreationBox().getSelf());
+        hide(types_1.GUI.getStreetCreationBox().getSelf());
+        hide(types_1.GUI.getHarborCreationBox().getSelf());
+        hide(types_1.GUI.getBridgeCreationBox().getSelf());
+        hide(types_1.GUI.getWallCreationBox().getSelf());
+        hide(types_1.GUI.getButtonsBox());
+        hide(types_1.GUI.getArmyGeneratorBox().getSelf());
         show(buttonBoxContent);
     }
     BoxVisibility.switchBtnBoxTo = switchBtnBoxTo;
@@ -5230,43 +5102,43 @@ var BoxVisibility;
     function toggleArmyCreationMode() {
         if (BoxVisibility.armyCreationModeOn) {
             switchModeTo("none");
-            switchBtnBoxTo(gui_1.GUI.getButtonsBox());
+            switchBtnBoxTo(types_1.GUI.getButtonsBox());
         }
         else if (!BoxVisibility.armyCreationModeOn) {
             switchModeTo("armyCreationModeOn");
-            switchBtnBoxTo(gui_1.GUI.getArmyGeneratorBox().getSelf());
+            switchBtnBoxTo(types_1.GUI.getArmyGeneratorBox().getSelf());
         }
     }
     BoxVisibility.toggleArmyCreationMode = toggleArmyCreationMode;
     function toggleWorldCreationMode() {
         if (BoxVisibility.worldCreationModeOn) {
             switchModeTo("none");
-            switchBtnBoxTo(gui_1.GUI.getButtonsBox());
+            switchBtnBoxTo(types_1.GUI.getButtonsBox());
         }
         else if (!BoxVisibility.worldCreationModeOn) {
             switchModeTo("worldCreationModeOn");
-            switchBtnBoxTo(gui_1.GUI.getWorldBenderBox().getSelf());
+            switchBtnBoxTo(types_1.GUI.getWorldBenderBox().getSelf());
         }
     }
     BoxVisibility.toggleWorldCreationMode = toggleWorldCreationMode;
     function toggleRiverCreationMode() {
         if (BoxVisibility.riverCreationModeOn) {
             switchModeTo("none");
-            switchBtnBoxTo(gui_1.GUI.getButtonsBox());
+            switchBtnBoxTo(types_1.GUI.getButtonsBox());
         }
         else if (!BoxVisibility.riverCreationModeOn) {
             switchModeTo("riverCreationModeOn");
-            switchBtnBoxTo(gui_1.GUI.getRiverBenderBox().getSelf());
+            switchBtnBoxTo(types_1.GUI.getRiverBenderBox().getSelf());
         }
     }
     BoxVisibility.toggleRiverCreationMode = toggleRiverCreationMode;
     function toggleBuildingCreationMode() {
         if (BoxVisibility.buildingCreationModeOn) {
             switchModeTo("none");
-            switchBtnBoxTo(gui_1.GUI.getButtonsBox());
+            switchBtnBoxTo(types_1.GUI.getButtonsBox());
         }
         else if (!BoxVisibility.buildingCreationModeOn) {
-            switchBtnBoxTo(gui_1.GUI.getBuildingCreationBox().getSelf());
+            switchBtnBoxTo(types_1.GUI.getBuildingCreationBox().getSelf());
             switchModeTo("buildingCreationModeOn");
         }
     }
@@ -5274,67 +5146,67 @@ var BoxVisibility;
     function toggleStreetBuildingMode() {
         if (BoxVisibility.streetBuildingModeOn) {
             switchModeTo("none");
-            switchBtnBoxTo(gui_1.GUI.getButtonsBox());
+            switchBtnBoxTo(types_1.GUI.getButtonsBox());
         }
         else if (!BoxVisibility.streetBuildingModeOn) {
             switchModeTo("streetBuildingModeOn");
-            switchBtnBoxTo(gui_1.GUI.getStreetCreationBox().getSelf());
+            switchBtnBoxTo(types_1.GUI.getStreetCreationBox().getSelf());
         }
     }
     BoxVisibility.toggleStreetBuildingMode = toggleStreetBuildingMode;
     function toggleHarborBuildingMode() {
         if (BoxVisibility.harborBuildingModeOn) {
             switchModeTo("none");
-            switchBtnBoxTo(gui_1.GUI.getButtonsBox());
+            switchBtnBoxTo(types_1.GUI.getButtonsBox());
         }
         else if (!BoxVisibility.harborBuildingModeOn) {
             switchModeTo("harborBuildingModeOn");
-            switchBtnBoxTo(gui_1.GUI.getHarborCreationBox().getSelf());
+            switchBtnBoxTo(types_1.GUI.getHarborCreationBox().getSelf());
         }
     }
     BoxVisibility.toggleHarborBuildingMode = toggleHarborBuildingMode;
     function toggleBridgeBuildingMode() {
         if (BoxVisibility.bridgeBuildingModeOn) {
             switchModeTo("none");
-            switchBtnBoxTo(gui_1.GUI.getButtonsBox());
+            switchBtnBoxTo(types_1.GUI.getButtonsBox());
         }
         else if (!BoxVisibility.bridgeBuildingModeOn) {
             switchModeTo("bridgeBuildingModeOn");
-            switchBtnBoxTo(gui_1.GUI.getBridgeCreationBox().getSelf());
+            switchBtnBoxTo(types_1.GUI.getBridgeCreationBox().getSelf());
         }
     }
     BoxVisibility.toggleBridgeBuildingMode = toggleBridgeBuildingMode;
     function toggleWallBuildingMode() {
         if (BoxVisibility.wallBuildingModeOn) {
             switchModeTo("none");
-            switchBtnBoxTo(gui_1.GUI.getButtonsBox());
+            switchBtnBoxTo(types_1.GUI.getButtonsBox());
         }
         else if (!BoxVisibility.wallBuildingModeOn) {
             switchModeTo("wallBuildingModeOn");
-            switchBtnBoxTo(gui_1.GUI.getWallCreationBox().getSelf());
+            switchBtnBoxTo(types_1.GUI.getWallCreationBox().getSelf());
         }
     }
     BoxVisibility.toggleWallBuildingMode = toggleWallBuildingMode;
     function toggleGodModeBar() {
-        if (gui_1.GUI.getGodModeBox().getSelf().classList.contains("invisible")) {
+        if (types_1.GUI.getGodModeBox().getSelf().classList.contains("invisible")) {
             restoreInfoBox();
             writeRealmDropdown();
-            show(gui_1.GUI.getGodModeBox().getSelf());
-            show(gui_1.GUI.getInfoChangeBox().getSelf());
-            hide(gui_1.GUI.getInfoBox().getSelf());
+            show(types_1.GUI.getGodModeBox().getSelf());
+            show(types_1.GUI.getInfoChangeBox().getSelf());
+            hide(types_1.GUI.getInfoBox().getSelf());
         }
         else {
-            hide(gui_1.GUI.getGodModeBox().getSelf());
-            hide(gui_1.GUI.getInfoChangeBox().getSelf());
-            show(gui_1.GUI.getInfoBox().getSelf());
+            hide(types_1.GUI.getGodModeBox().getSelf());
+            hide(types_1.GUI.getInfoChangeBox().getSelf());
+            show(types_1.GUI.getInfoBox().getSelf());
             updateInfoBox();
         }
     }
     BoxVisibility.toggleGodModeBar = toggleGodModeBar;
     function writeRealmDropdown() {
-        let factionsDropdown = gui_1.GUI.getGodModeBox().getFactionToCreateBuildingsFor();
+        let factionsDropdown = types_1.GUI.getGodModeBox().getFactionToCreateBuildingsFor();
         let factionOptions = "";
-        gameState_1.GameState.realms.forEach(realm => {
+        types_1.GameState.realms.forEach(realm => {
             if (realm.active) {
                 factionOptions += "<option value=" + "'" + realm.tag + "'" + ">" + realm.name + "</option>";
             }
@@ -5344,27 +5216,27 @@ var BoxVisibility;
     BoxVisibility.writeRealmDropdown = writeRealmDropdown;
     // this is used to update the infoBox and the infoChangeBox with the currently selected Army
     function updateInfoBox() {
-        let infoBox = gui_1.GUI.getInfoBox();
-        let changeBox = gui_1.GUI.getInfoChangeBox();
-        if (controlVariables_1.Controls.selectedArmyIndex != undefined) {
+        let infoBox = types_1.GUI.getInfoBox();
+        let changeBox = types_1.GUI.getInfoChangeBox();
+        if (types_1.Controls.selectedArmyIndex != undefined) {
             // info Box
-            let infoArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
+            let infoArmy = types_1.GameState.armies[types_1.Controls.selectedArmyIndex];
             if (infoArmy.isGuard) {
                 infoBox.getGuardText().innerHTML = "Garde";
             }
             else {
                 infoBox.getGuardText().innerHTML = "";
             }
-            if (infoArmy instanceof footArmy_1.FootArmy || infoArmy instanceof riderArmy_1.RiderArmy) {
+            if (infoArmy instanceof types_1.FootArmy || infoArmy instanceof types_1.RiderArmy) {
                 infoBox.getArmyIdText().innerHTML = "Heer " + infoArmy.getErkenfaraID();
             }
-            else if (infoArmy instanceof fleet_1.Fleet) {
+            else if (infoArmy instanceof types_1.Fleet) {
                 infoBox.getArmyIdText().innerHTML = "Flotte " + infoArmy.getErkenfaraID();
             }
             infoBox.getCountText().innerHTML = "Truppen: " + infoArmy.getTroopCount();
             infoBox.getLeadersText().innerHTML = "Heerführer: " + infoArmy.getOfficerCount();
             infoBox.getMountsText().innerHTML = "mitgeführte Reittiere: " + infoArmy.getMountCount();
-            if (infoArmy instanceof riderArmy_1.RiderArmy) {
+            if (infoArmy instanceof types_1.RiderArmy) {
                 hide(infoBox.getLKPText());
                 hide(infoBox.getSKPText());
             }
@@ -5379,11 +5251,11 @@ var BoxVisibility;
             infoBox.getMovePointsText().innerHTML = "Bewegungspunkte: " + infoArmy.getMovePoints();
             infoBox.getHeightPointsText().innerHTML = "Höhenstufen: " + infoArmy.getHeightPoints();
             show(infoBox.getSplitButton());
-            if (infoArmy instanceof footArmy_1.FootArmy) {
+            if (infoArmy instanceof types_1.FootArmy) {
                 show(infoBox.getMountButton());
                 hide(infoBox.getUnMountButton());
             }
-            else if (infoArmy instanceof riderArmy_1.RiderArmy) {
+            else if (infoArmy instanceof types_1.RiderArmy) {
                 hide(infoBox.getMountButton());
                 show(infoBox.getUnMountButton());
             }
@@ -5453,22 +5325,22 @@ var BoxVisibility;
     }
     BoxVisibility.updateInfoBox = updateInfoBox;
     function activateMountBox() {
-        hide(gui_1.GUI.getInfoBox().getSelf());
-        show(gui_1.GUI.getMountBox());
+        hide(types_1.GUI.getInfoBox().getSelf());
+        show(types_1.GUI.getMountBox());
     }
     BoxVisibility.activateMountBox = activateMountBox;
     function activateUnMountBox() {
-        hide(gui_1.GUI.getInfoBox().getSelf());
-        show(gui_1.GUI.getUnMountBox());
+        hide(types_1.GUI.getInfoBox().getSelf());
+        show(types_1.GUI.getUnMountBox());
     }
     BoxVisibility.activateUnMountBox = activateUnMountBox;
     function closeShootBox() {
-        hide(gui_1.GUI.getShootBox());
+        hide(types_1.GUI.getShootBox());
         switchModeTo("none");
-        if (controlVariables_1.Controls.shootingTarget != undefined) {
-            controlVariables_1.Controls.shootingTarget = undefined;
+        if (types_1.Controls.shootingTarget != undefined) {
+            types_1.Controls.shootingTarget = undefined;
         }
-        drawingFunctions_1.Drawing.drawStuff();
+        types_1.Drawing.drawStuff();
     }
     BoxVisibility.closeShootBox = closeShootBox;
     function activateTransmuteBox() {
@@ -5478,115 +5350,115 @@ var BoxVisibility;
         let lkpToSplit = 0;
         let skpToSplit = 0;
         // depending on army type different fields are needed
-        if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof footArmy_1.FootArmy) {
-            toSplit = parseInt(gui_1.GUI.getSplitInput().value);
-            leadersToSplit = parseInt(gui_1.GUI.getSplitLeadersInput().value);
-            mountsToSplit = parseInt(gui_1.GUI.getSplitMountsInput().value);
-            lkpToSplit = parseInt(gui_1.GUI.getSplitLkpInput().value);
-            skpToSplit = parseInt(gui_1.GUI.getSplitSkpInput().value);
-            if (toSplit > (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getTroopCount() - 100)) {
+        if (types_1.GameState.armies[types_1.Controls.selectedArmyIndex] instanceof types_1.FootArmy) {
+            toSplit = parseInt(types_1.GUI.getSplitInput().value);
+            leadersToSplit = parseInt(types_1.GUI.getSplitLeadersInput().value);
+            mountsToSplit = parseInt(types_1.GUI.getSplitMountsInput().value);
+            lkpToSplit = parseInt(types_1.GUI.getSplitLkpInput().value);
+            skpToSplit = parseInt(types_1.GUI.getSplitSkpInput().value);
+            if (toSplit > (types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getTroopCount() - 100)) {
                 window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.");
                 return false;
             }
-            if (mountsToSplit > gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getMountCount()) {
+            if (mountsToSplit > types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getMountCount()) {
                 window.alert("So viele Reittiere hast du nicht.");
                 return false;
             }
-            if (lkpToSplit > gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getLightCatapultCount()) {
+            if (lkpToSplit > types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getLightCatapultCount()) {
                 window.alert("So viele leichte Katapulte hast du nicht.");
                 return false;
             }
-            if (skpToSplit > gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getHeavyCatapultCount()) {
+            if (skpToSplit > types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getHeavyCatapultCount()) {
                 window.alert("So viele schwere Katapulte hast du nicht.");
                 return false;
             }
         }
-        else if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof riderArmy_1.RiderArmy) {
-            toSplit = parseInt(gui_1.GUI.getSplitMountedInput().value);
-            leadersToSplit = parseInt(gui_1.GUI.getSplitMountedLeadersInput().value);
-            if (toSplit > (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getTroopCount() - 50)) {
+        else if (types_1.GameState.armies[types_1.Controls.selectedArmyIndex] instanceof types_1.RiderArmy) {
+            toSplit = parseInt(types_1.GUI.getSplitMountedInput().value);
+            leadersToSplit = parseInt(types_1.GUI.getSplitMountedLeadersInput().value);
+            if (toSplit > (types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getTroopCount() - 50)) {
                 window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.");
                 return false;
             }
         }
-        else if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof fleet_1.Fleet) {
-            toSplit = parseInt(gui_1.GUI.getSplitFleetInput().value);
-            leadersToSplit = parseInt(gui_1.GUI.getSplitFleetLeadersInput().value);
-            lkpToSplit = parseInt(gui_1.GUI.getSplitFleetLkpInput().value);
-            skpToSplit = parseInt(gui_1.GUI.getSplitFleetSkpInput().value);
-            if (toSplit > (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getTroopCount() - 1)) {
+        else if (types_1.GameState.armies[types_1.Controls.selectedArmyIndex] instanceof types_1.Fleet) {
+            toSplit = parseInt(types_1.GUI.getSplitFleetInput().value);
+            leadersToSplit = parseInt(types_1.GUI.getSplitFleetLeadersInput().value);
+            lkpToSplit = parseInt(types_1.GUI.getSplitFleetLkpInput().value);
+            skpToSplit = parseInt(types_1.GUI.getSplitFleetSkpInput().value);
+            if (toSplit > (types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getTroopCount() - 1)) {
                 window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.");
                 return false;
             }
-            if (toSplit * 100 > (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].freeTransportCapacity())) {
+            if (toSplit * 100 > (types_1.GameState.armies[types_1.Controls.selectedArmyIndex].freeTransportCapacity())) {
                 window.alert("Du kannst keine beladenen Schiffe verschieben.");
                 return false;
             }
-            if (lkpToSplit > gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getLightCatapultCount()) {
+            if (lkpToSplit > types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getLightCatapultCount()) {
                 window.alert("So viele leichte Kriegsschiffe hast du nicht.");
                 return false;
             }
-            if (skpToSplit > gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getHeavyCatapultCount()) {
+            if (skpToSplit > types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getHeavyCatapultCount()) {
                 window.alert("So viele schwere Kriegsschiffe hast du nicht.");
                 return false;
             }
         }
-        if (leadersToSplit > (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getOfficerCount() - 1)) {
+        if (leadersToSplit > (types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getOfficerCount() - 1)) {
             window.alert("Es muss mindestens 1 Heerführer beim Ursprungsheer verbleiben.");
             return false;
         }
-        gui_1.GUI.getTransmuteBox().style.display = "";
-        let selectedArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
-        if (selectedArmy instanceof footArmy_1.FootArmy) {
-            hide(gui_1.GUI.getSplitBox());
+        types_1.GUI.getTransmuteBox().style.display = "";
+        let selectedArmy = types_1.GameState.armies[types_1.Controls.selectedArmyIndex];
+        if (selectedArmy instanceof types_1.FootArmy) {
+            hide(types_1.GUI.getSplitBox());
         }
-        else if (selectedArmy instanceof riderArmy_1.RiderArmy) {
-            hide(gui_1.GUI.getSplitMountedBox());
+        else if (selectedArmy instanceof types_1.RiderArmy) {
+            hide(types_1.GUI.getSplitMountedBox());
         }
-        else if (selectedArmy instanceof fleet_1.Fleet) {
-            hide(gui_1.GUI.getSplitFleetBox());
+        else if (selectedArmy instanceof types_1.Fleet) {
+            hide(types_1.GUI.getSplitFleetBox());
         }
         let onlyLeaders = false;
-        if (selectedArmy instanceof footArmy_1.FootArmy) {
-            if (parseInt(gui_1.GUI.getSplitInput().value) === 0 &&
-                parseInt(gui_1.GUI.getSplitLeadersInput().value) > 0 &&
-                parseInt(gui_1.GUI.getSplitMountsInput().value) === 0 &&
-                parseInt(gui_1.GUI.getSplitLkpInput().value) === 0 &&
-                parseInt(gui_1.GUI.getSplitSkpInput().value) === 0) {
+        if (selectedArmy instanceof types_1.FootArmy) {
+            if (parseInt(types_1.GUI.getSplitInput().value) === 0 &&
+                parseInt(types_1.GUI.getSplitLeadersInput().value) > 0 &&
+                parseInt(types_1.GUI.getSplitMountsInput().value) === 0 &&
+                parseInt(types_1.GUI.getSplitLkpInput().value) === 0 &&
+                parseInt(types_1.GUI.getSplitSkpInput().value) === 0) {
                 onlyLeaders = true;
             }
         }
-        else if (selectedArmy instanceof riderArmy_1.RiderArmy) {
-            if (parseInt(gui_1.GUI.getSplitMountedInput().value) === 0 &&
-                parseInt(gui_1.GUI.getSplitMountedLeadersInput().value) > 0) {
+        else if (selectedArmy instanceof types_1.RiderArmy) {
+            if (parseInt(types_1.GUI.getSplitMountedInput().value) === 0 &&
+                parseInt(types_1.GUI.getSplitMountedLeadersInput().value) > 0) {
                 onlyLeaders = true;
             }
         }
-        else if (selectedArmy instanceof fleet_1.Fleet) {
-            if (parseInt(gui_1.GUI.getSplitFleetInput().value) === 0 &&
-                parseInt(gui_1.GUI.getSplitFleetLeadersInput().value) > 0 &&
-                parseInt(gui_1.GUI.getSplitFleetLkpInput().value) === 0 &&
-                parseInt(gui_1.GUI.getSplitFleetSkpInput().value) === 0) {
+        else if (selectedArmy instanceof types_1.Fleet) {
+            if (parseInt(types_1.GUI.getSplitFleetInput().value) === 0 &&
+                parseInt(types_1.GUI.getSplitFleetLeadersInput().value) > 0 &&
+                parseInt(types_1.GUI.getSplitFleetLkpInput().value) === 0 &&
+                parseInt(types_1.GUI.getSplitFleetSkpInput().value) === 0) {
                 onlyLeaders = true;
             }
         }
-        let selectedPos = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition();
+        let selectedPos = types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getPosition();
         let possibleTargets = [];
-        let targetOwner = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner;
-        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-            if (i != controlVariables_1.Controls.selectedArmyIndex) {
+        let targetOwner = types_1.GameState.armies[types_1.Controls.selectedArmyIndex].owner;
+        for (let i = 0; i < types_1.GameState.armies.length; i++) {
+            if (i != types_1.Controls.selectedArmyIndex) {
                 if (onlyLeaders) {
-                    if (gameState_1.GameState.armies[i].owner === targetOwner &&
-                        gameState_1.GameState.armies[i].getPosition()[0] === selectedPos[0] &&
-                        gameState_1.GameState.armies[i].getPosition()[1] === selectedPos[1]) {
+                    if (types_1.GameState.armies[i].owner === targetOwner &&
+                        types_1.GameState.armies[i].getPosition()[0] === selectedPos[0] &&
+                        types_1.GameState.armies[i].getPosition()[1] === selectedPos[1]) {
                         possibleTargets.push(i);
                     }
                 }
                 else {
-                    if (gameState_1.GameState.armies[i].owner === targetOwner &&
-                        gameState_1.GameState.armies[i].getPosition()[0] === selectedPos[0] &&
-                        gameState_1.GameState.armies[i].getPosition()[1] === selectedPos[1] &&
-                        gameState_1.GameState.armies[i].constructor === gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].constructor) {
+                    if (types_1.GameState.armies[i].owner === targetOwner &&
+                        types_1.GameState.armies[i].getPosition()[0] === selectedPos[0] &&
+                        types_1.GameState.armies[i].getPosition()[1] === selectedPos[1] &&
+                        types_1.GameState.armies[i].constructor === types_1.GameState.armies[types_1.Controls.selectedArmyIndex].constructor) {
                         possibleTargets.push(i);
                     }
                 }
@@ -5594,8 +5466,8 @@ var BoxVisibility;
         }
         if (possibleTargets != []) {
             if (document.getElementById("transmuteArmyButtonsSection") != undefined) {
-                let d = gui_1.GUI.getTransmuteArmyButtonsPartition();
-                d.removeChild(gui_1.GUI.getActivateTransmuteBox());
+                let d = types_1.GUI.getTransmuteArmyButtonsPartition();
+                d.removeChild(types_1.GUI.getActivateTransmuteBox());
             }
             if (possibleTargets.length !== 0) {
                 let x = document.createElement("SECTION");
@@ -5604,57 +5476,57 @@ var BoxVisibility;
                     let btn = document.createElement("BUTTON");
                     btn.setAttribute("class", "fixedPrettyButton");
                     btn.name = "transmuteBtn " + possibleTargets[i];
-                    let t = document.createTextNode("" + gameState_1.GameState.armies[possibleTargets[i]].getErkenfaraID());
+                    let t = document.createTextNode("" + types_1.GameState.armies[possibleTargets[i]].getErkenfaraID());
                     btn.appendChild(t);
                     btn.addEventListener('click', function (event) {
                         let posiInList = this.name.split(" ")[1];
-                        buttonFunctions_1.ButtonFunctions.transferTroopsFromSelectedArmy(parseInt(posiInList));
+                        types_1.ButtonFunctions.transferTroopsFromSelectedArmy(parseInt(posiInList));
                     });
                     x.appendChild(btn);
                 }
-                gui_1.GUI.getTransmuteArmyButtonsPartition().appendChild(x);
+                types_1.GUI.getTransmuteArmyButtonsPartition().appendChild(x);
                 return true;
             }
             return false;
         }
         else {
             if (document.getElementById("transmuteArmyButtonsSection") != undefined) {
-                let d = gui_1.GUI.getTransmuteArmyButtonsPartition();
-                d.removeChild(gui_1.GUI.getActivateTransmuteBox());
+                let d = types_1.GUI.getTransmuteArmyButtonsPartition();
+                d.removeChild(types_1.GUI.getActivateTransmuteBox());
             }
             return false;
         }
     }
     BoxVisibility.activateTransmuteBox = activateTransmuteBox;
     function activateMergeBox() {
-        show(gui_1.GUI.getMergeBox());
-        let selectedArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
-        if (selectedArmy instanceof footArmy_1.FootArmy) {
-            hide(gui_1.GUI.getSplitBox());
+        show(types_1.GUI.getMergeBox());
+        let selectedArmy = types_1.GameState.armies[types_1.Controls.selectedArmyIndex];
+        if (selectedArmy instanceof types_1.FootArmy) {
+            hide(types_1.GUI.getSplitBox());
         }
-        else if (selectedArmy instanceof riderArmy_1.RiderArmy) {
-            hide(gui_1.GUI.getSplitMountedBox());
+        else if (selectedArmy instanceof types_1.RiderArmy) {
+            hide(types_1.GUI.getSplitMountedBox());
         }
-        else if (selectedArmy instanceof fleet_1.Fleet) {
-            hide(gui_1.GUI.getSplitFleetBox());
+        else if (selectedArmy instanceof types_1.Fleet) {
+            hide(types_1.GUI.getSplitFleetBox());
         }
-        let selectedPos = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition();
+        let selectedPos = types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getPosition();
         let possibleTargets = [];
-        let targetOwner = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner;
-        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-            if (i != controlVariables_1.Controls.selectedArmyIndex) {
-                if (gameState_1.GameState.armies[i].owner === targetOwner &&
-                    gameState_1.GameState.armies[i].getPosition()[0] === selectedPos[0] &&
-                    gameState_1.GameState.armies[i].getPosition()[1] === selectedPos[1] &&
-                    gameState_1.GameState.armies[i].constructor === selectedArmy.constructor) {
+        let targetOwner = types_1.GameState.armies[types_1.Controls.selectedArmyIndex].owner;
+        for (let i = 0; i < types_1.GameState.armies.length; i++) {
+            if (i != types_1.Controls.selectedArmyIndex) {
+                if (types_1.GameState.armies[i].owner === targetOwner &&
+                    types_1.GameState.armies[i].getPosition()[0] === selectedPos[0] &&
+                    types_1.GameState.armies[i].getPosition()[1] === selectedPos[1] &&
+                    types_1.GameState.armies[i].constructor === selectedArmy.constructor) {
                     possibleTargets.push(i);
                 }
             }
         }
         if (possibleTargets != []) {
-            if (gui_1.GUI.getActivateMergeBox() != undefined) {
-                let d = gui_1.GUI.getTransmuteArmyButtonsPartition();
-                d.removeChild(gui_1.GUI.getActivateMergeBox());
+            if (types_1.GUI.getActivateMergeBox() != undefined) {
+                let d = types_1.GUI.getTransmuteArmyButtonsPartition();
+                d.removeChild(types_1.GUI.getActivateMergeBox());
             }
             if (possibleTargets.length !== 0) {
                 let x = document.createElement("SECTION");
@@ -5663,58 +5535,58 @@ var BoxVisibility;
                     let btn = document.createElement("BUTTON");
                     btn.setAttribute("class", "fixedPrettyButton");
                     btn.name = "mergeBtn " + possibleTargets[i];
-                    let t = document.createTextNode("" + gameState_1.GameState.armies[possibleTargets[i]].getErkenfaraID());
+                    let t = document.createTextNode("" + types_1.GameState.armies[possibleTargets[i]].getErkenfaraID());
                     btn.appendChild(t);
                     btn.addEventListener('click', function (event) {
                         let posiInList = this.name.split(" ")[1];
-                        buttonFunctions_1.ButtonFunctions.mergeSelectedArmy(parseInt(posiInList));
+                        types_1.ButtonFunctions.mergeSelectedArmy(parseInt(posiInList));
                     });
                     x.appendChild(btn);
                 }
-                gui_1.GUI.getTransmuteArmyButtonsPartition().appendChild(x);
+                types_1.GUI.getTransmuteArmyButtonsPartition().appendChild(x);
             }
         }
         else {
             if (document.getElementById("mergeArmyButtonsSection") != undefined) {
-                let d = gui_1.GUI.getTransmuteArmyButtonsPartition();
-                d.removeChild(gui_1.GUI.getActivateMergeBox());
+                let d = types_1.GUI.getTransmuteArmyButtonsPartition();
+                d.removeChild(types_1.GUI.getActivateMergeBox());
             }
         }
     }
     BoxVisibility.activateMergeBox = activateMergeBox;
     function backToSplitBox() {
-        hide(gui_1.GUI.getMergeBox());
-        hide(gui_1.GUI.getTransmuteBox());
-        if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof footArmy_1.FootArmy) {
-            show(gui_1.GUI.getSplitBox());
-            gui_1.GUI.getSplitBox().style.display = "";
+        hide(types_1.GUI.getMergeBox());
+        hide(types_1.GUI.getTransmuteBox());
+        if (types_1.GameState.armies[types_1.Controls.selectedArmyIndex] instanceof types_1.FootArmy) {
+            show(types_1.GUI.getSplitBox());
+            types_1.GUI.getSplitBox().style.display = "";
         }
-        else if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof riderArmy_1.RiderArmy) {
-            show(gui_1.GUI.getSplitMountedBox());
+        else if (types_1.GameState.armies[types_1.Controls.selectedArmyIndex] instanceof types_1.RiderArmy) {
+            show(types_1.GUI.getSplitMountedBox());
         }
-        else if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof fleet_1.Fleet) {
-            show(gui_1.GUI.getSplitFleetBox());
+        else if (types_1.GameState.armies[types_1.Controls.selectedArmyIndex] instanceof types_1.Fleet) {
+            show(types_1.GUI.getSplitFleetBox());
         }
     }
     BoxVisibility.backToSplitBox = backToSplitBox;
     // this is the cancel function for the mount/unmount and split boxes
     function restoreInfoBox() {
-        hide(gui_1.GUI.getMountBox());
-        hide(gui_1.GUI.getUnMountBox());
-        hide(gui_1.GUI.getSplitBox());
-        hide(gui_1.GUI.getSplitMountedBox());
-        hide(gui_1.GUI.getSplitFleetBox());
-        hide(gui_1.GUI.getTransmuteBox());
-        hide(gui_1.GUI.getMergeBox());
+        hide(types_1.GUI.getMountBox());
+        hide(types_1.GUI.getUnMountBox());
+        hide(types_1.GUI.getSplitBox());
+        hide(types_1.GUI.getSplitMountedBox());
+        hide(types_1.GUI.getSplitFleetBox());
+        hide(types_1.GUI.getTransmuteBox());
+        hide(types_1.GUI.getMergeBox());
         closeShootBox();
-        if (gui_1.GUI.getGodModeBox().getSelf().classList.contains("invisible")) {
-            show(gui_1.GUI.getInfoBox().getSelf());
+        if (types_1.GUI.getGodModeBox().getSelf().classList.contains("invisible")) {
+            show(types_1.GUI.getInfoBox().getSelf());
         }
     }
     BoxVisibility.restoreInfoBox = restoreInfoBox;
 })(BoxVisibility = exports.BoxVisibility || (exports.BoxVisibility = {}));
 
-},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9,"../controls/buttonFunctions":17,"../controls/controlVariables":18,"../gameState":28,"./drawingFunctions":35,"./gui":37}],33:[function(require,module,exports){
+},{"../types":60}],33:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -5732,8 +5604,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const godModeFunctions_1 = require("../godmode/godModeFunctions");
-const savingFunctions_1 = require("../serverInteraction/savingFunctions");
+const types_1 = require("../types");
 class BridgeCreationBox {
     getSelf() {
         if (this.self == undefined) {
@@ -5750,42 +5621,42 @@ class BridgeCreationBox {
     getAddBridgeNW() {
         if (this.addBridgeNW == undefined) {
             this.addBridgeNW = document.getElementById("addBridgeNW");
-            this.addBridgeNW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 0 /* NW */, true); };
+            this.addBridgeNW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(7, 0 /* NW */, true); };
         }
         return this.addBridgeNW;
     }
     getAddBridgeNE() {
         if (this.addBridgeNE == undefined) {
             this.addBridgeNE = document.getElementById("addBridgeNE");
-            this.addBridgeNE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 1 /* NE */, true); };
+            this.addBridgeNE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(7, 1 /* NE */, true); };
         }
         return this.addBridgeNE;
     }
     getAddBridgeE() {
         if (this.addBridgeE == undefined) {
             this.addBridgeE = document.getElementById("addBridgeE");
-            this.addBridgeE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 2 /* E */, true); };
+            this.addBridgeE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(7, 2 /* E */, true); };
         }
         return this.addBridgeE;
     }
     getAddBridgeSE() {
         if (this.addBridgeSE == undefined) {
             this.addBridgeSE = document.getElementById("addBridgeSE");
-            this.addBridgeSE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 3 /* SE */, true); };
+            this.addBridgeSE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(7, 3 /* SE */, true); };
         }
         return this.addBridgeSE;
     }
     getAddBridgeSW() {
         if (this.addBridgeSW == undefined) {
             this.addBridgeSW = document.getElementById("addBridgeSW");
-            this.addBridgeSW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 4 /* SW */, true); };
+            this.addBridgeSW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(7, 4 /* SW */, true); };
         }
         return this.addBridgeSW;
     }
     getAddBridgeW() {
         if (this.addBridgeW == undefined) {
             this.addBridgeW = document.getElementById("addBridgeW");
-            this.addBridgeW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 5 /* W */, true); };
+            this.addBridgeW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(7, 5 /* W */, true); };
         }
         return this.addBridgeW;
     }
@@ -5798,56 +5669,56 @@ class BridgeCreationBox {
     getRemoveBridgeNW() {
         if (this.removeBridgeNW == undefined) {
             this.removeBridgeNW = document.getElementById("removeBridgeNW");
-            this.removeBridgeNW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 0 /* NW */, false); };
+            this.removeBridgeNW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(7, 0 /* NW */, false); };
         }
         return this.removeBridgeNW;
     }
     getRemoveBridgeNE() {
         if (this.removeBridgeNE == undefined) {
             this.removeBridgeNE = document.getElementById("removeBridgeNE");
-            this.removeBridgeNE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 1 /* NE */, false); };
+            this.removeBridgeNE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(7, 1 /* NE */, false); };
         }
         return this.removeBridgeNE;
     }
     getRemoveBridgeE() {
         if (this.removeBridgeE == undefined) {
             this.removeBridgeE = document.getElementById("removeBridgeE");
-            this.removeBridgeE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 2 /* E */, false); };
+            this.removeBridgeE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(7, 2 /* E */, false); };
         }
         return this.removeBridgeE;
     }
     getRemoveBridgeSE() {
         if (this.removeBridgeSE == undefined) {
             this.removeBridgeSE = document.getElementById("removeBridgeSE");
-            this.removeBridgeSE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 3 /* SE */, false); };
+            this.removeBridgeSE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(7, 3 /* SE */, false); };
         }
         return this.removeBridgeSE;
     }
     getRemoveBridgeSW() {
         if (this.removeBridgeSW == undefined) {
             this.removeBridgeSW = document.getElementById("removeBridgeSW");
-            this.removeBridgeSW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 4 /* SW */, false); };
+            this.removeBridgeSW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(7, 4 /* SW */, false); };
         }
         return this.removeBridgeSW;
     }
     getRemoveBridgeW() {
         if (this.removeBridgeW == undefined) {
             this.removeBridgeW = document.getElementById("removeBridgeW");
-            this.removeBridgeW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(7, 5 /* W */, false); };
+            this.removeBridgeW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(7, 5 /* W */, false); };
         }
         return this.removeBridgeW;
     }
     getSaveBuildings() {
         if (this.saveBuildings == undefined) {
             this.saveBuildings = document.getElementById("SaveBuildings");
-            this.saveBuildings.onclick = function () { savingFunctions_1.Saving.saveBuildings(); };
+            this.saveBuildings.onclick = function () { types_1.Saving.saveBuildings(); };
         }
         return this.saveBuildings;
     }
 }
 exports.BridgeCreationBox = BridgeCreationBox;
 
-},{"../godmode/godModeFunctions":29,"../serverInteraction/savingFunctions":59}],34:[function(require,module,exports){
+},{"../types":60}],34:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -5865,8 +5736,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const godModeFunctions_1 = require("../godmode/godModeFunctions");
-const savingFunctions_1 = require("../serverInteraction/savingFunctions");
+const types_1 = require("../types");
 class BuildingCreationBox {
     getSelf() {
         if (this.self == undefined) {
@@ -5877,56 +5747,56 @@ class BuildingCreationBox {
     getAddCastle() {
         if (this.addCastle == undefined) {
             this.addCastle = document.getElementById("addCastle");
-            this.addCastle.onclick = function () { godModeFunctions_1.GodFunctions.addCastle(); };
+            this.addCastle.onclick = function () { types_1.GodFunctions.addCastle(); };
         }
         return this.addCastle;
     }
     getAddCity() {
         if (this.addCity == undefined) {
             this.addCity = document.getElementById("addCity");
-            this.addCity.onclick = function () { godModeFunctions_1.GodFunctions.addCity(); };
+            this.addCity.onclick = function () { types_1.GodFunctions.addCity(); };
         }
         return this.addCity;
     }
     getAddFortress() {
         if (this.addFortress == undefined) {
             this.addFortress = document.getElementById("addFortress");
-            this.addFortress.onclick = function () { godModeFunctions_1.GodFunctions.addFortress(); };
+            this.addFortress.onclick = function () { types_1.GodFunctions.addFortress(); };
         }
         return this.addFortress;
     }
     getAddCapital() {
         if (this.addCapital == undefined) {
             this.addCapital = document.getElementById("addCapital");
-            this.addCapital.onclick = function () { godModeFunctions_1.GodFunctions.addCapital(); };
+            this.addCapital.onclick = function () { types_1.GodFunctions.addCapital(); };
         }
         return this.addCapital;
     }
     getAddCapitalFortress() {
         if (this.addCapitalFortress == undefined) {
             this.addCapitalFortress = document.getElementById("addCapitalFortress");
-            this.addCapitalFortress.onclick = function () { godModeFunctions_1.GodFunctions.addCapitalFortress(); };
+            this.addCapitalFortress.onclick = function () { types_1.GodFunctions.addCapitalFortress(); };
         }
         return this.addCapitalFortress;
     }
     getDeleteBuilding() {
         if (this.deleteBuilding == undefined) {
             this.deleteBuilding = document.getElementById("deleteBuilding");
-            this.deleteBuilding.onclick = function () { godModeFunctions_1.GodFunctions.deleteSelectedProductionBuilding(); };
+            this.deleteBuilding.onclick = function () { types_1.GodFunctions.deleteSelectedProductionBuilding(); };
         }
         return this.deleteBuilding;
     }
     getSaveBuildings() {
         if (this.saveBuildings == undefined) {
             this.saveBuildings = document.getElementById("SaveBuildings");
-            this.saveBuildings.onclick = function () { savingFunctions_1.Saving.saveBuildings(); };
+            this.saveBuildings.onclick = function () { types_1.Saving.saveBuildings(); };
         }
         return this.saveBuildings;
     }
 }
 exports.BuildingCreationBox = BuildingCreationBox;
 
-},{"../godmode/godModeFunctions":29,"../serverInteraction/savingFunctions":59}],35:[function(require,module,exports){
+},{"../types":60}],35:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -5944,19 +5814,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const constants_1 = require("../constants");
-const gui_1 = require("./gui");
-const controlVariables_1 = require("../controls/controlVariables");
-const gameState_1 = require("../gameState");
-const boxVisibilty_1 = require("./boxVisibilty");
-const hexFunctions_1 = require("../libraries/hexFunctions");
-const images_1 = require("./images");
-const footArmy_1 = require("../armies/footArmy");
-const riderArmy_1 = require("../armies/riderArmy");
-const fleet_1 = require("../armies/fleet");
-const savingFunctions_1 = require("../serverInteraction/savingFunctions");
-const loadingDataFunctions_1 = require("../serverInteraction/loadingDataFunctions");
-const multifieldFunctions_1 = require("./multifieldFunctions");
+const types_1 = require("../types");
 var Drawing;
 (function (Drawing) {
     Drawing.c = 1;
@@ -5972,28 +5830,28 @@ var Drawing;
     function setHexParts(scale) {
         Drawing.c = 0.25 * scale;
         Drawing.gH = 0.75 * scale;
-        Drawing.gW = constants_1.Constants.SIN60 * scale;
+        Drawing.gW = types_1.Constants.SIN60 * scale;
     }
     Drawing.setHexParts = setHexParts;
     // canvas resizing method
     function resizeCanvas() {
-        gui_1.GUI.getCanvas().width = window.innerWidth;
-        gui_1.GUI.getCanvas().height = window.innerHeight;
+        types_1.GUI.getCanvas().width = window.innerWidth;
+        types_1.GUI.getCanvas().height = window.innerHeight;
         drawStuff();
     }
     Drawing.resizeCanvas = resizeCanvas;
     // all the stuff to be drawn goes in this method
     function drawStuff() {
-        gui_1.GUI.getContext().clearRect(0, 0, gui_1.GUI.getCanvas().width, gui_1.GUI.getCanvas().height); // clear
+        types_1.GUI.getContext().clearRect(0, 0, types_1.GUI.getCanvas().width, types_1.GUI.getCanvas().height); // clear
         // do all drawing/element selection in respect to these coordinates
         // current origin for drawing + offset from dragged mouse
-        let pos = [controlVariables_1.Controls.origin[0] + controlVariables_1.Controls.move[0], controlVariables_1.Controls.origin[1] + controlVariables_1.Controls.move[1]];
+        let pos = [types_1.Controls.origin[0] + types_1.Controls.move[0], types_1.Controls.origin[1] + types_1.Controls.move[1]];
         drawMap(pos, Drawing.scale);
         drawFieldSelection(pos, Drawing.scale);
         drawArmies(pos, Drawing.scale);
-        drawArmySelection(pos, Drawing.scale, controlVariables_1.Controls.selectedArmyIndex);
-        drawPossibleMoves(pos, Drawing.scale, controlVariables_1.Controls.selectedArmyIndex);
-        drawPossibleShootingTargets(pos, Drawing.scale, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex]);
+        drawArmySelection(pos, Drawing.scale, types_1.Controls.selectedArmyIndex);
+        drawPossibleMoves(pos, Drawing.scale, types_1.Controls.selectedArmyIndex);
+        drawPossibleShootingTargets(pos, Drawing.scale, types_1.GameState.armies[types_1.Controls.selectedArmyIndex]);
         drawShootingTargetSelection(pos, Drawing.scale);
         writeFieldInfo();
     }
@@ -6006,347 +5864,347 @@ var Drawing;
     }
     function drawBorders(pos, scale) {
         let offset = (scale / 13); //set offset of a border from the actual border of two hexes
-        gameState_1.GameState.realms.forEach(realm => {
+        types_1.GameState.realms.forEach(realm => {
             let color = realm.color;
-            gui_1.GUI.getContext().lineWidth = (scale / 14); //line thickness for borders
-            gui_1.GUI.getContext().strokeStyle = 'rgb(' + color + ')'; //set line color
-            gui_1.GUI.getContext().lineCap = "round";
-            gui_1.GUI.getContext().fillStyle = 'rgba(' + color + ', 0.3)'; //set fill color
+            types_1.GUI.getContext().lineWidth = (scale / 14); //line thickness for borders
+            types_1.GUI.getContext().strokeStyle = 'rgb(' + color + ')'; //set line color
+            types_1.GUI.getContext().lineCap = "round";
+            types_1.GUI.getContext().fillStyle = 'rgba(' + color + ', 0.3)'; //set fill color
             let land = realm.territory;
             land.forEach(hex => {
-                let point = hexFunctions_1.HexFunction.computePosition(pos, hex.coordinates, scale);
-                let neighbours = hexFunctions_1.HexFunction.getAdjacency(hex.coordinates, land.map(field => field.coordinates));
+                let point = types_1.HexFunction.computePosition(pos, hex.coordinates, scale);
+                let neighbours = types_1.HexFunction.getAdjacency(hex.coordinates, land.map(field => field.coordinates));
                 let start;
                 if (neighbours[0]) { //determine start in the top corner
                     if (neighbours[1]) {
                         start = [(point[0] + 0.5 * Drawing.gW), point[1]];
                     }
                     else {
-                        start = [(point[0] + 0.5 * Drawing.gW - constants_1.Constants.SIN60 * offset), (point[1] + 0.5 * offset)];
+                        start = [(point[0] + 0.5 * Drawing.gW - types_1.Constants.SIN60 * offset), (point[1] + 0.5 * offset)];
                     }
                 }
                 else {
                     if (neighbours[1]) {
-                        start = [(point[0] + 0.5 * Drawing.gW + constants_1.Constants.SIN60 * offset), (point[1] + 0.5 * offset)];
+                        start = [(point[0] + 0.5 * Drawing.gW + types_1.Constants.SIN60 * offset), (point[1] + 0.5 * offset)];
                     }
                     else {
                         start = [(point[0] + 0.5 * Drawing.gW), (point[1] + offset)];
                     }
                 }
-                gui_1.GUI.getContext().beginPath(); //begin border drawing
-                gui_1.GUI.getContext().moveTo(start[0], start[1]);
+                types_1.GUI.getContext().beginPath(); //begin border drawing
+                types_1.GUI.getContext().moveTo(start[0], start[1]);
                 if (neighbours[1]) { //go to upper right corner
                     if (neighbours[2]) {
-                        gui_1.GUI.getContext().moveTo((point[0] + Drawing.gW), (point[1] + Drawing.c));
+                        types_1.GUI.getContext().moveTo((point[0] + Drawing.gW), (point[1] + Drawing.c));
                     }
                     else {
-                        gui_1.GUI.getContext().moveTo((point[0] + Drawing.gW - constants_1.Constants.SIN60 * offset), (point[1] + Drawing.c - 0.5 * offset));
+                        types_1.GUI.getContext().moveTo((point[0] + Drawing.gW - types_1.Constants.SIN60 * offset), (point[1] + Drawing.c - 0.5 * offset));
                     }
                 }
                 else {
                     if (neighbours[2]) {
-                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.c + offset));
+                        types_1.GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.c + offset));
                     }
                     else {
-                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - constants_1.Constants.SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
+                        types_1.GUI.getContext().lineTo((point[0] + Drawing.gW - types_1.Constants.SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
                     }
                 }
                 if (neighbours[2]) { //go to lower right corner
                     if (neighbours[3]) {
-                        gui_1.GUI.getContext().moveTo((point[0] + Drawing.gW), (point[1] + Drawing.gH));
+                        types_1.GUI.getContext().moveTo((point[0] + Drawing.gW), (point[1] + Drawing.gH));
                     }
                     else {
-                        gui_1.GUI.getContext().moveTo((point[0] + Drawing.gW), (point[1] + Drawing.gH - offset));
+                        types_1.GUI.getContext().moveTo((point[0] + Drawing.gW), (point[1] + Drawing.gH - offset));
                     }
                 }
                 else {
                     if (neighbours[3]) {
-                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - constants_1.Constants.SIN60 * offset), (point[1] + Drawing.gH + 0.5 * offset));
+                        types_1.GUI.getContext().lineTo((point[0] + Drawing.gW - types_1.Constants.SIN60 * offset), (point[1] + Drawing.gH + 0.5 * offset));
                     }
                     else {
-                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - constants_1.Constants.SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
+                        types_1.GUI.getContext().lineTo((point[0] + Drawing.gW - types_1.Constants.SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
                     }
                 }
                 if (neighbours[3]) { //go to bottom corner
                     if (neighbours[4]) {
-                        gui_1.GUI.getContext().moveTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale));
+                        types_1.GUI.getContext().moveTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale));
                     }
                     else {
-                        gui_1.GUI.getContext().moveTo((point[0] + 0.5 * Drawing.gW + constants_1.Constants.SIN60 * offset), (point[1] + scale - 0.5 * offset));
+                        types_1.GUI.getContext().moveTo((point[0] + 0.5 * Drawing.gW + types_1.Constants.SIN60 * offset), (point[1] + scale - 0.5 * offset));
                     }
                 }
                 else {
                     if (neighbours[4]) {
-                        gui_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW - constants_1.Constants.SIN60 * offset), (point[1] + scale - 0.5 * offset));
+                        types_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW - types_1.Constants.SIN60 * offset), (point[1] + scale - 0.5 * offset));
                     }
                     else {
-                        gui_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale - offset));
+                        types_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale - offset));
                     }
                 }
                 if (neighbours[4]) { //go to lower left corner
                     if (neighbours[5]) {
-                        gui_1.GUI.getContext().moveTo(point[0], (point[1] + Drawing.gH));
+                        types_1.GUI.getContext().moveTo(point[0], (point[1] + Drawing.gH));
                     }
                     else {
-                        gui_1.GUI.getContext().moveTo((point[0] + constants_1.Constants.SIN60 * offset), (point[1] + Drawing.gH + 0.5 * offset));
+                        types_1.GUI.getContext().moveTo((point[0] + types_1.Constants.SIN60 * offset), (point[1] + Drawing.gH + 0.5 * offset));
                     }
                 }
                 else {
                     if (neighbours[5]) {
-                        gui_1.GUI.getContext().lineTo(point[0], (point[1] + Drawing.gH - offset));
+                        types_1.GUI.getContext().lineTo(point[0], (point[1] + Drawing.gH - offset));
                     }
                     else {
-                        gui_1.GUI.getContext().lineTo((point[0] + constants_1.Constants.SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
+                        types_1.GUI.getContext().lineTo((point[0] + types_1.Constants.SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
                     }
                 }
                 if (neighbours[5]) { //go to upper left corner
                     if (neighbours[0]) {
-                        gui_1.GUI.getContext().moveTo(point[0], (point[1] + Drawing.c));
+                        types_1.GUI.getContext().moveTo(point[0], (point[1] + Drawing.c));
                     }
                     else {
-                        gui_1.GUI.getContext().moveTo(point[0], (point[1] + Drawing.c + offset));
+                        types_1.GUI.getContext().moveTo(point[0], (point[1] + Drawing.c + offset));
                     }
                 }
                 else {
                     if (neighbours[0]) {
-                        gui_1.GUI.getContext().lineTo((point[0] + constants_1.Constants.SIN60 * offset), (point[1] + Drawing.c - 0.5 * offset));
+                        types_1.GUI.getContext().lineTo((point[0] + types_1.Constants.SIN60 * offset), (point[1] + Drawing.c - 0.5 * offset));
                     }
                     else {
-                        gui_1.GUI.getContext().lineTo((point[0] + constants_1.Constants.SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
+                        types_1.GUI.getContext().lineTo((point[0] + types_1.Constants.SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
                     }
                 }
                 if (neighbours[0]) {
-                    gui_1.GUI.getContext().moveTo(start[0], start[1]);
+                    types_1.GUI.getContext().moveTo(start[0], start[1]);
                 } //back to top corner
                 else {
-                    gui_1.GUI.getContext().lineTo(start[0], start[1]);
+                    types_1.GUI.getContext().lineTo(start[0], start[1]);
                 }
-                gui_1.GUI.getContext().stroke();
-                gui_1.GUI.getContext().beginPath(); //begin area filling
-                gui_1.GUI.getContext().moveTo(start[0], start[1]);
+                types_1.GUI.getContext().stroke();
+                types_1.GUI.getContext().beginPath(); //begin area filling
+                types_1.GUI.getContext().moveTo(start[0], start[1]);
                 if (neighbours[1]) { //go to upper right corner
                     if (neighbours[2]) {
-                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.c));
+                        types_1.GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.c));
                     }
                     else {
-                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - constants_1.Constants.SIN60 * offset), (point[1] + Drawing.c - 0.5 * offset));
+                        types_1.GUI.getContext().lineTo((point[0] + Drawing.gW - types_1.Constants.SIN60 * offset), (point[1] + Drawing.c - 0.5 * offset));
                     }
                 }
                 else {
                     if (neighbours[2]) {
-                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.c + offset));
+                        types_1.GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.c + offset));
                     }
                     else {
-                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - constants_1.Constants.SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
+                        types_1.GUI.getContext().lineTo((point[0] + Drawing.gW - types_1.Constants.SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
                     }
                 }
                 if (neighbours[2]) { //go to lower right corner
                     if (neighbours[3]) {
-                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.gH));
+                        types_1.GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.gH));
                     }
                     else {
-                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.gH - offset));
+                        types_1.GUI.getContext().lineTo((point[0] + Drawing.gW), (point[1] + Drawing.gH - offset));
                     }
                 }
                 else {
                     if (neighbours[3]) {
-                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - constants_1.Constants.SIN60 * offset), (point[1] + Drawing.gH + 0.5 * offset));
+                        types_1.GUI.getContext().lineTo((point[0] + Drawing.gW - types_1.Constants.SIN60 * offset), (point[1] + Drawing.gH + 0.5 * offset));
                     }
                     else {
-                        gui_1.GUI.getContext().lineTo((point[0] + Drawing.gW - constants_1.Constants.SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
+                        types_1.GUI.getContext().lineTo((point[0] + Drawing.gW - types_1.Constants.SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
                     }
                 }
                 if (neighbours[3]) { //go to bottom corner
                     if (neighbours[4]) {
-                        gui_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale));
+                        types_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale));
                     }
                     else {
-                        gui_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW + constants_1.Constants.SIN60 * offset), (point[1] + scale - 0.5 * offset));
+                        types_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW + types_1.Constants.SIN60 * offset), (point[1] + scale - 0.5 * offset));
                     }
                 }
                 else {
                     if (neighbours[4]) {
-                        gui_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW - constants_1.Constants.SIN60 * offset), (point[1] + scale - 0.5 * offset));
+                        types_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW - types_1.Constants.SIN60 * offset), (point[1] + scale - 0.5 * offset));
                     }
                     else {
-                        gui_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale - offset));
+                        types_1.GUI.getContext().lineTo((point[0] + 0.5 * Drawing.gW), (point[1] + scale - offset));
                     }
                 }
                 if (neighbours[4]) { //go to lower left corner
                     if (neighbours[5]) {
-                        gui_1.GUI.getContext().lineTo(point[0], (point[1] + Drawing.gH));
+                        types_1.GUI.getContext().lineTo(point[0], (point[1] + Drawing.gH));
                     }
                     else {
-                        gui_1.GUI.getContext().lineTo((point[0] + constants_1.Constants.SIN60 * offset), (point[1] + Drawing.gH + 0.5 * offset));
+                        types_1.GUI.getContext().lineTo((point[0] + types_1.Constants.SIN60 * offset), (point[1] + Drawing.gH + 0.5 * offset));
                     }
                 }
                 else {
                     if (neighbours[5]) {
-                        gui_1.GUI.getContext().lineTo(point[0], (point[1] + Drawing.gH - offset));
+                        types_1.GUI.getContext().lineTo(point[0], (point[1] + Drawing.gH - offset));
                     }
                     else {
-                        gui_1.GUI.getContext().lineTo((point[0] + constants_1.Constants.SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
+                        types_1.GUI.getContext().lineTo((point[0] + types_1.Constants.SIN60 * offset), (point[1] + Drawing.gH - 0.5 * offset));
                     }
                 }
                 if (neighbours[5]) { //go to upper left corner
                     if (neighbours[0]) {
-                        gui_1.GUI.getContext().lineTo(point[0], (point[1] + Drawing.c));
+                        types_1.GUI.getContext().lineTo(point[0], (point[1] + Drawing.c));
                     }
                     else {
-                        gui_1.GUI.getContext().lineTo(point[0], (point[1] + Drawing.c + offset));
+                        types_1.GUI.getContext().lineTo(point[0], (point[1] + Drawing.c + offset));
                     }
                 }
                 else {
                     if (neighbours[0]) {
-                        gui_1.GUI.getContext().lineTo((point[0] + constants_1.Constants.SIN60 * offset), (point[1] + Drawing.c - 0.5 * offset));
+                        types_1.GUI.getContext().lineTo((point[0] + types_1.Constants.SIN60 * offset), (point[1] + Drawing.c - 0.5 * offset));
                     }
                     else {
-                        gui_1.GUI.getContext().lineTo((point[0] + constants_1.Constants.SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
+                        types_1.GUI.getContext().lineTo((point[0] + types_1.Constants.SIN60 * offset), (point[1] + Drawing.c + 0.5 * offset));
                     }
                 }
                 if (neighbours[0]) {
-                    gui_1.GUI.getContext().lineTo(start[0], start[1]);
+                    types_1.GUI.getContext().lineTo(start[0], start[1]);
                 } //back to top corner
                 else {
-                    gui_1.GUI.getContext().lineTo(start[0], start[1]);
+                    types_1.GUI.getContext().lineTo(start[0], start[1]);
                 }
-                gui_1.GUI.getContext().fill();
+                types_1.GUI.getContext().fill();
             });
         });
     }
     function drawBuildings(screenPos, scale) {
-        gui_1.GUI.getContext().lineWidth = (scale / 8); //line style for roads
-        gui_1.GUI.getContext().strokeStyle = "#C8AB37";
-        gui_1.GUI.getContext().lineCap = "round";
-        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
-            let building = gameState_1.GameState.buildings[i];
+        types_1.GUI.getContext().lineWidth = (scale / 8); //line style for roads
+        types_1.GUI.getContext().strokeStyle = "#C8AB37";
+        types_1.GUI.getContext().lineCap = "round";
+        for (let i = 0; i < types_1.GameState.buildings.length; i++) {
+            let building = types_1.GameState.buildings[i];
             let buildingPos = undefined;
             if (building.type !== 8 /* STREET */) {
-                buildingPos = hexFunctions_1.HexFunction.computePosition(screenPos, building.getPosition(), scale);
+                buildingPos = types_1.HexFunction.computePosition(screenPos, building.getPosition(), scale);
             }
             let tileImg; //declare the tile image variable
             switch (building.type) { //set the tileImg to match the building type
                 case 0 /* CASTLE */:
-                    tileImg = images_1.Images.castle;
+                    tileImg = types_1.Images.castle;
                     break;
                 case 1 /* CITY */:
-                    tileImg = images_1.Images.city;
+                    tileImg = types_1.Images.city;
                     break;
                 case 2 /* FORTRESS */:
-                    tileImg = images_1.Images.fortress;
+                    tileImg = types_1.Images.fortress;
                     break;
                 case 3 /* CAPITAL */:
-                    tileImg = images_1.Images.capital;
+                    tileImg = types_1.Images.capital;
                     break;
                 case 4 /* CAPITAL_FORT */:
-                    tileImg = images_1.Images.capitalFort;
+                    tileImg = types_1.Images.capitalFort;
                     break;
                 case 5 /* WALL */:
                     switch (building.facing) {
                         case 0 /* NW */:
-                            tileImg = images_1.Images.wallNW;
+                            tileImg = types_1.Images.wallNW;
                             break;
                         case 1 /* NE */:
-                            tileImg = images_1.Images.wallNE;
+                            tileImg = types_1.Images.wallNE;
                             break;
                         case 2 /* E */:
-                            tileImg = images_1.Images.wallE;
+                            tileImg = types_1.Images.wallE;
                             break;
                         case 3 /* SE */:
-                            tileImg = images_1.Images.wallSE;
+                            tileImg = types_1.Images.wallSE;
                             break;
                         case 4 /* SW */:
-                            tileImg = images_1.Images.wallSW;
+                            tileImg = types_1.Images.wallSW;
                             break;
                         case 5 /* W */:
-                            tileImg = images_1.Images.wallW;
+                            tileImg = types_1.Images.wallW;
                             break;
                         default:
-                            tileImg = images_1.Images.wallNW;
+                            tileImg = types_1.Images.wallNW;
                             break;
                     }
                     break;
                 case 6 /* HARBOR */:
-                    let harborDir = hexFunctions_1.HexFunction.getDirectionToNeighbor(building.getPosition(), building.getSecondPosition());
+                    let harborDir = types_1.HexFunction.getDirectionToNeighbor(building.getPosition(), building.getSecondPosition());
                     switch (harborDir) {
                         case 0 /* NW */:
-                            tileImg = images_1.Images.harborNW;
+                            tileImg = types_1.Images.harborNW;
                             break;
                         case 1 /* NE */:
-                            tileImg = images_1.Images.harborNE;
+                            tileImg = types_1.Images.harborNE;
                             break;
                         case 2 /* E */:
-                            tileImg = images_1.Images.harborE;
+                            tileImg = types_1.Images.harborE;
                             break;
                         case 3 /* SE */:
-                            tileImg = images_1.Images.harborSE;
+                            tileImg = types_1.Images.harborSE;
                             break;
                         case 4 /* SW */:
-                            tileImg = images_1.Images.harborSW;
+                            tileImg = types_1.Images.harborSW;
                             break;
                         case 5 /* W */:
-                            tileImg = images_1.Images.harborW;
+                            tileImg = types_1.Images.harborW;
                             break;
                         default:
-                            tileImg = images_1.Images.harborNW;
+                            tileImg = types_1.Images.harborNW;
                             break;
                     }
                     break;
                 case 7 /* BRIDGE */:
-                    let bridgeDir = hexFunctions_1.HexFunction.getDirectionToNeighbor(building.getPosition(), building.getSecondPosition());
+                    let bridgeDir = types_1.HexFunction.getDirectionToNeighbor(building.getPosition(), building.getSecondPosition());
                     switch (bridgeDir) {
                         case 0 /* NW */:
-                            tileImg = images_1.Images.bridgeNW;
+                            tileImg = types_1.Images.bridgeNW;
                             break;
                         case 1 /* NE */:
-                            tileImg = images_1.Images.bridgeNE;
+                            tileImg = types_1.Images.bridgeNE;
                             break;
                         case 2 /* E */:
-                            tileImg = images_1.Images.bridgeE;
+                            tileImg = types_1.Images.bridgeE;
                             break;
                         case 3 /* SE */:
-                            tileImg = images_1.Images.bridgeSE;
+                            tileImg = types_1.Images.bridgeSE;
                             break;
                         case 4 /* SW */:
-                            tileImg = images_1.Images.bridgeSW;
+                            tileImg = types_1.Images.bridgeSW;
                             break;
                         case 5 /* W */:
-                            tileImg = images_1.Images.bridgeW;
+                            tileImg = types_1.Images.bridgeW;
                             break;
                         default:
-                            tileImg = images_1.Images.bridgeNW;
+                            tileImg = types_1.Images.bridgeNW;
                             break;
                     }
                     break;
                 default:
-                    tileImg = images_1.Images.default;
+                    tileImg = types_1.Images.default;
                     break;
             }
             if (building.type <= 4 && buildingPos !== undefined) { //regular one tile buildings excluding walls
-                gui_1.GUI.getContext().drawImage(tileImg, buildingPos[0], buildingPos[1], scale * constants_1.Constants.SIN60, scale); //draw the image
+                types_1.GUI.getContext().drawImage(tileImg, buildingPos[0], buildingPos[1], scale * types_1.Constants.SIN60, scale); //draw the image
             }
             else if (building.type === 5 && buildingPos !== undefined) { //walls - one tile buildings handled differently from cities
-                gui_1.GUI.getContext().drawImage(tileImg, buildingPos[0], buildingPos[1], scale * constants_1.Constants.SIN60, scale); //draw the image
+                types_1.GUI.getContext().drawImage(tileImg, buildingPos[0], buildingPos[1], scale * types_1.Constants.SIN60, scale); //draw the image
             }
             else if (building.type <= 7 && buildingPos !== undefined) { //harbors and bridges - "oversized" buildings
-                gui_1.GUI.getContext().drawImage(tileImg, buildingPos[0] - Drawing.gW, buildingPos[1] - (0.5 * scale), 3 * Drawing.gW, 2 * scale); //draw the image
+                types_1.GUI.getContext().drawImage(tileImg, buildingPos[0] - Drawing.gW, buildingPos[1] - (0.5 * scale), 3 * Drawing.gW, 2 * scale); //draw the image
             }
             else if (building.type === 8) { //streets - currently drawn as simple lines
-                let posFirst = hexFunctions_1.HexFunction.computePosition(screenPos, building.getPosition(), scale);
-                let posSecond = hexFunctions_1.HexFunction.computePosition(screenPos, building.getPosition(), scale);
-                gui_1.GUI.getContext().beginPath();
-                gui_1.GUI.getContext().moveTo((posFirst[0] + (0.5 * Drawing.gW)), (posFirst[1] + 2 * Drawing.c));
-                gui_1.GUI.getContext().lineTo((posSecond[0] + (0.5 * Drawing.gW)), (posSecond[1] + 2 * Drawing.c));
-                gui_1.GUI.getContext().stroke();
+                let posFirst = types_1.HexFunction.computePosition(screenPos, building.getPosition(), scale);
+                let posSecond = types_1.HexFunction.computePosition(screenPos, building.getPosition(), scale);
+                types_1.GUI.getContext().beginPath();
+                types_1.GUI.getContext().moveTo((posFirst[0] + (0.5 * Drawing.gW)), (posFirst[1] + 2 * Drawing.c));
+                types_1.GUI.getContext().lineTo((posSecond[0] + (0.5 * Drawing.gW)), (posSecond[1] + 2 * Drawing.c));
+                types_1.GUI.getContext().stroke();
             }
         }
     }
     function drawRivers(screenPos, scale) {
-        gui_1.GUI.getContext().lineWidth = (scale / 8);
-        gui_1.GUI.getContext().strokeStyle = "#0099FF";
-        gui_1.GUI.getContext().lineCap = "round";
-        gameState_1.GameState.rivers.forEach(river => {
-            let pos = hexFunctions_1.HexFunction.computePosition(screenPos, river.leftBank, scale);
+        types_1.GUI.getContext().lineWidth = (scale / 8);
+        types_1.GUI.getContext().strokeStyle = "#0099FF";
+        types_1.GUI.getContext().lineCap = "round";
+        types_1.GameState.rivers.forEach(river => {
+            let pos = types_1.HexFunction.computePosition(screenPos, river.leftBank, scale);
             let points = [pos, pos];
             let rowOdd = (((river.leftBank[1]) % 2) !== 0);
             if ((river.leftBank[1]) === (river.rightBank[1])) { //same row (w/e)
@@ -6375,10 +6233,10 @@ var Drawing;
                     points = [[(pos[0]), (pos[1] + Drawing.gH)], [(pos[0] + 0.5 * Drawing.gW), (pos[1] + scale)]];
                 }
             }
-            gui_1.GUI.getContext().beginPath();
-            gui_1.GUI.getContext().moveTo((points[0][0]), (points[0][1]));
-            gui_1.GUI.getContext().lineTo((points[1][0]), (points[1][1]));
-            gui_1.GUI.getContext().stroke();
+            types_1.GUI.getContext().beginPath();
+            types_1.GUI.getContext().moveTo((points[0][0]), (points[0][1]));
+            types_1.GUI.getContext().lineTo((points[1][0]), (points[1][1]));
+            types_1.GUI.getContext().stroke();
         });
     }
     function drawFields(screenPos, scale) {
@@ -6393,8 +6251,8 @@ var Drawing;
         let currentField;
         let tileImg; //declare the tile image variable
         let sortedFields = [[], [], [], [], [], [], [], [], [], []];
-        gameState_1.GameState.fields.forEach(field => {
-            let hexPosition = hexFunctions_1.HexFunction.computePosition(screenPos, field.coordinates, scale);
+        types_1.GameState.fields.forEach(field => {
+            let hexPosition = types_1.HexFunction.computePosition(screenPos, field.coordinates, scale);
             switch (field.type) { //set the tileImg to match the field type
                 case 0 /* SHALLOWS */:
                     sortedFields[0].push(hexPosition);
@@ -6434,40 +6292,40 @@ var Drawing;
                 currFields = sortedFields[i];
                 switch (i) {
                     case 0 /* SHALLOWS */:
-                        tileImg = images_1.Images.shallows;
+                        tileImg = types_1.Images.shallows;
                         break;
                     case 1 /* DEEPSEA */:
-                        tileImg = images_1.Images.deepsea;
+                        tileImg = types_1.Images.deepsea;
                         break;
                     case 2 /* LOWLANDS */:
-                        tileImg = images_1.Images.lowlands;
+                        tileImg = types_1.Images.lowlands;
                         break;
                     case 3 /* WOODS */:
-                        tileImg = images_1.Images.woods;
+                        tileImg = types_1.Images.woods;
                         break;
                     case 4 /* HILLS */:
-                        tileImg = images_1.Images.hills;
+                        tileImg = types_1.Images.hills;
                         break;
                     case 5 /* HIGHLANDS */:
-                        tileImg = images_1.Images.highlands;
+                        tileImg = types_1.Images.highlands;
                         break;
                     case 6 /* MOUNTAINS */:
-                        tileImg = images_1.Images.mountains;
+                        tileImg = types_1.Images.mountains;
                         break;
                     case 7 /* DESERT */:
-                        tileImg = images_1.Images.desert;
+                        tileImg = types_1.Images.desert;
                         break;
                     case 8 /* SWAMP */:
-                        tileImg = images_1.Images.swamp;
+                        tileImg = types_1.Images.swamp;
                         break;
                     default:
-                        tileImg = images_1.Images.default;
+                        tileImg = types_1.Images.default;
                         break;
                 }
                 for (let j = 0; j < currFields.length; j++) {
                     currentField = currFields[j];
                     //draw the image
-                    gui_1.GUI.getContext().drawImage(tileImg, currentField[0], currentField[1], (scale * constants_1.Constants.SIN60), scale);
+                    types_1.GUI.getContext().drawImage(tileImg, currentField[0], currentField[1], (scale * types_1.Constants.SIN60), scale);
                 }
             }
         }
@@ -6477,93 +6335,93 @@ var Drawing;
                 currFields = sortedFields[i];
                 switch (i) {
                     case 0 /* SHALLOWS */:
-                        gui_1.GUI.getContext().fillStyle = '#7dbada';
+                        types_1.GUI.getContext().fillStyle = '#7dbada';
                         break;
                     case 1 /* DEEPSEA */:
-                        gui_1.GUI.getContext().fillStyle = '#35668b';
+                        types_1.GUI.getContext().fillStyle = '#35668b';
                         break;
                     case 2 /* LOWLANDS */:
-                        gui_1.GUI.getContext().fillStyle = '#82d33d';
+                        types_1.GUI.getContext().fillStyle = '#82d33d';
                         break;
                     case 3 /* WOODS */:
-                        gui_1.GUI.getContext().fillStyle = '#266d16';
+                        types_1.GUI.getContext().fillStyle = '#266d16';
                         break;
                     case 4 /* HILLS */:
-                        gui_1.GUI.getContext().fillStyle = '#c19663';
+                        types_1.GUI.getContext().fillStyle = '#c19663';
                         break;
                     case 5 /* HIGHLANDS */:
-                        gui_1.GUI.getContext().fillStyle = '#854f36';
+                        types_1.GUI.getContext().fillStyle = '#854f36';
                         break;
                     case 6 /* MOUNTAINS */:
-                        gui_1.GUI.getContext().fillStyle = '#d3d0d0';
+                        types_1.GUI.getContext().fillStyle = '#d3d0d0';
                         break;
                     case 7 /* DESERT */:
-                        gui_1.GUI.getContext().fillStyle = '#e3a72a';
+                        types_1.GUI.getContext().fillStyle = '#e3a72a';
                         break;
                     case 8 /* SWAMP */:
-                        gui_1.GUI.getContext().fillStyle = '#7f40aa';
+                        types_1.GUI.getContext().fillStyle = '#7f40aa';
                         break;
                     default:
-                        gui_1.GUI.getContext().fillStyle = 'Black';
+                        types_1.GUI.getContext().fillStyle = 'Black';
                         break;
                 }
-                gui_1.GUI.getContext().beginPath();
+                types_1.GUI.getContext().beginPath();
                 for (let j = 0; j < currFields.length; j++) {
                     currentField = currFields[j];
-                    gui_1.GUI.getContext().moveTo((currentField[0] + 0.5 * Drawing.gW), currentField[1]);
-                    gui_1.GUI.getContext().lineTo((currentField[0] + Drawing.gW), (currentField[1] + Drawing.c));
-                    gui_1.GUI.getContext().lineTo((currentField[0] + Drawing.gW), (currentField[1] + Drawing.gH));
-                    gui_1.GUI.getContext().lineTo((currentField[0] + 0.5 * Drawing.gW), (currentField[1] + scale));
-                    gui_1.GUI.getContext().lineTo(currentField[0], (currentField[1] + Drawing.gH));
-                    gui_1.GUI.getContext().lineTo(currentField[0], (currentField[1] + Drawing.c));
-                    gui_1.GUI.getContext().lineTo((currentField[0] + 0.5 * Drawing.gW), currentField[1]);
+                    types_1.GUI.getContext().moveTo((currentField[0] + 0.5 * Drawing.gW), currentField[1]);
+                    types_1.GUI.getContext().lineTo((currentField[0] + Drawing.gW), (currentField[1] + Drawing.c));
+                    types_1.GUI.getContext().lineTo((currentField[0] + Drawing.gW), (currentField[1] + Drawing.gH));
+                    types_1.GUI.getContext().lineTo((currentField[0] + 0.5 * Drawing.gW), (currentField[1] + scale));
+                    types_1.GUI.getContext().lineTo(currentField[0], (currentField[1] + Drawing.gH));
+                    types_1.GUI.getContext().lineTo(currentField[0], (currentField[1] + Drawing.c));
+                    types_1.GUI.getContext().lineTo((currentField[0] + 0.5 * Drawing.gW), currentField[1]);
                 }
-                gui_1.GUI.getContext().fill();
+                types_1.GUI.getContext().fill();
             }
         }
     }
     //drawing all possible moves to neighboring fields if army was selected
     function drawPossibleMoves(screenPos, scale, selectedArmyIndex) {
         if (selectedArmyIndex != undefined) {
-            let moves = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].possibleMoves;
+            let moves = types_1.GameState.armies[types_1.Controls.selectedArmyIndex].possibleMoves;
             for (let i = 0; i < moves.length; i++) {
-                gui_1.GUI.getContext().lineWidth = scale / 6;
-                gui_1.GUI.getContext().strokeStyle = '#00FF00';
-                let pos = hexFunctions_1.HexFunction.computePosition(screenPos, moves[i].destination, scale); //get fields position
-                gui_1.GUI.getContext().beginPath();
-                gui_1.GUI.getContext().arc(pos[0] + (0.5 * scale * constants_1.Constants.SIN60), pos[1] + (scale * 0.5), scale / 12, 0, 2 * Math.PI, false);
-                gui_1.GUI.getContext().stroke();
+                types_1.GUI.getContext().lineWidth = scale / 6;
+                types_1.GUI.getContext().strokeStyle = '#00FF00';
+                let pos = types_1.HexFunction.computePosition(screenPos, moves[i].destination, scale); //get fields position
+                types_1.GUI.getContext().beginPath();
+                types_1.GUI.getContext().arc(pos[0] + (0.5 * scale * types_1.Constants.SIN60), pos[1] + (scale * 0.5), scale / 12, 0, 2 * Math.PI, false);
+                types_1.GUI.getContext().stroke();
             }
         }
     }
     function drawFieldSelection(screenPos, scale) {
-        gui_1.GUI.getContext().lineWidth = 5;
-        gui_1.GUI.getContext().strokeStyle = "blue";
-        for (let i = 0; i < controlVariables_1.Controls.selectedFields.length; i++) {
-            let pos = hexFunctions_1.HexFunction.computePosition(screenPos, controlVariables_1.Controls.selectedFields[i], scale);
-            gui_1.GUI.getContext().beginPath();
-            gui_1.GUI.getContext().arc(pos[0] + (0.5 * scale * constants_1.Constants.SIN60), pos[1] + (scale * 0.5), scale / 2, 0, 2 * Math.PI, false);
-            gui_1.GUI.getContext().stroke();
+        types_1.GUI.getContext().lineWidth = 5;
+        types_1.GUI.getContext().strokeStyle = "blue";
+        for (let i = 0; i < types_1.Controls.selectedFields.length; i++) {
+            let pos = types_1.HexFunction.computePosition(screenPos, types_1.Controls.selectedFields[i], scale);
+            types_1.GUI.getContext().beginPath();
+            types_1.GUI.getContext().arc(pos[0] + (0.5 * scale * types_1.Constants.SIN60), pos[1] + (scale * 0.5), scale / 2, 0, 2 * Math.PI, false);
+            types_1.GUI.getContext().stroke();
         }
     }
     function drawArmySelection(screenPos, scale, armyIndex) {
-        gui_1.GUI.getContext().lineWidth = 5;
-        gui_1.GUI.getContext().strokeStyle = "green";
+        types_1.GUI.getContext().lineWidth = 5;
+        types_1.GUI.getContext().strokeStyle = "green";
         if (armyIndex != undefined) {
-            let pos = hexFunctions_1.HexFunction.computePosition(screenPos, gameState_1.GameState.armies[armyIndex].getPosition(), scale);
-            gui_1.GUI.getContext().beginPath();
-            gui_1.GUI.getContext().arc(pos[0] + (0.5 * scale * constants_1.Constants.SIN60), pos[1] + (scale * 0.5), scale / 2.2, 0, 2 * Math.PI, false);
-            gui_1.GUI.getContext().stroke();
+            let pos = types_1.HexFunction.computePosition(screenPos, types_1.GameState.armies[armyIndex].getPosition(), scale);
+            types_1.GUI.getContext().beginPath();
+            types_1.GUI.getContext().arc(pos[0] + (0.5 * scale * types_1.Constants.SIN60), pos[1] + (scale * 0.5), scale / 2.2, 0, 2 * Math.PI, false);
+            types_1.GUI.getContext().stroke();
         }
     }
     function drawShootingTargetSelection(screenPos, scale) {
-        gui_1.GUI.getContext().lineWidth = 5;
-        gui_1.GUI.getContext().strokeStyle = "red";
-        if (controlVariables_1.Controls.shootingTarget != undefined) {
-            let pos = hexFunctions_1.HexFunction.computePosition(screenPos, controlVariables_1.Controls.shootingTarget, scale);
-            gui_1.GUI.getContext().beginPath();
-            gui_1.GUI.getContext().arc(pos[0] + (0.5 * scale * constants_1.Constants.SIN60), pos[1] + (scale * 0.5), scale / 2.2, 0, 2 * Math.PI, false);
-            gui_1.GUI.getContext().stroke();
+        types_1.GUI.getContext().lineWidth = 5;
+        types_1.GUI.getContext().strokeStyle = "red";
+        if (types_1.Controls.shootingTarget != undefined) {
+            let pos = types_1.HexFunction.computePosition(screenPos, types_1.Controls.shootingTarget, scale);
+            types_1.GUI.getContext().beginPath();
+            types_1.GUI.getContext().arc(pos[0] + (0.5 * scale * types_1.Constants.SIN60), pos[1] + (scale * 0.5), scale / 2.2, 0, 2 * Math.PI, false);
+            types_1.GUI.getContext().stroke();
         }
     }
     function drawArmies(screenPos, scale) {
@@ -6575,39 +6433,39 @@ var Drawing;
         }
         Drawing.listOfMultiArmyFields = [];
         //getting the multifield list ready
-        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-            multifieldFunctions_1.MultiFieldFunctions.createMultifield(gameState_1.GameState.armies[i]);
+        for (let i = 0; i < types_1.GameState.armies.length; i++) {
+            types_1.MultiFieldFunctions.createMultifield(types_1.GameState.armies[i]);
         }
-        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-            let armyData = gameState_1.GameState.armies[i]; // get army coordinates
-            let pos = hexFunctions_1.HexFunction.computePosition(screenPos, armyData.getPosition(), scale);
-            gui_1.GUI.getContext().fillStyle = 'black';
-            gui_1.GUI.getContext().textAlign = 'center';
-            gui_1.GUI.getContext().textBaseline = 'middle';
+        for (let i = 0; i < types_1.GameState.armies.length; i++) {
+            let armyData = types_1.GameState.armies[i]; // get army coordinates
+            let pos = types_1.HexFunction.computePosition(screenPos, armyData.getPosition(), scale);
+            types_1.GUI.getContext().fillStyle = 'black';
+            types_1.GUI.getContext().textAlign = 'center';
+            types_1.GUI.getContext().textBaseline = 'middle';
             //GUI.getContext().fillText(armyData.armyId, pos[0]+((scale * 0.866)/2), pos[1]+(scale /2));
             //check if its is on a multifield. if it is ignore
             if (!armyData.onMultifield) {
-                if (armyData instanceof footArmy_1.FootArmy) {
-                    gui_1.GUI.getContext().drawImage(images_1.Images.troops, pos[0], pos[1], (scale * constants_1.Constants.SIN60), scale);
+                if (armyData instanceof types_1.FootArmy) {
+                    types_1.GUI.getContext().drawImage(types_1.Images.troops, pos[0], pos[1], (scale * types_1.Constants.SIN60), scale);
                 }
-                else if (armyData instanceof riderArmy_1.RiderArmy) {
-                    gui_1.GUI.getContext().drawImage(images_1.Images.mounts, pos[0], pos[1], (scale * constants_1.Constants.SIN60), scale);
+                else if (armyData instanceof types_1.RiderArmy) {
+                    types_1.GUI.getContext().drawImage(types_1.Images.mounts, pos[0], pos[1], (scale * types_1.Constants.SIN60), scale);
                 }
-                else if (armyData instanceof fleet_1.Fleet) {
-                    gui_1.GUI.getContext().drawImage(images_1.Images.boats, pos[0], pos[1], (scale * constants_1.Constants.SIN60), scale);
+                else if (armyData instanceof types_1.Fleet) {
+                    types_1.GUI.getContext().drawImage(types_1.Images.boats, pos[0], pos[1], (scale * types_1.Constants.SIN60), scale);
                 }
             }
-            if (armyData.owner.tag === gameState_1.GameState.login || gameState_1.GameState.login === "sl") {
+            if (armyData.owner.tag === types_1.GameState.login || types_1.GameState.login === "sl") {
                 if (armyData.possibleMoves.length > 0) {
                     drawRemainingMovement(pos, scale);
                 }
-                else if (armyData instanceof footArmy_1.FootArmy && armyData.getMovePoints() === 9) {
+                else if (armyData instanceof types_1.FootArmy && armyData.getMovePoints() === 9) {
                     drawRemainingMovement(pos, scale);
                 }
-                else if (armyData instanceof riderArmy_1.RiderArmy && armyData.getMovePoints() === 21) {
+                else if (armyData instanceof types_1.RiderArmy && armyData.getMovePoints() === 21) {
                     drawRemainingMovement(pos, scale);
                 }
-                else if (armyData instanceof fleet_1.Fleet && armyData.getMovePoints() >= 42) {
+                else if (armyData instanceof types_1.Fleet && armyData.getMovePoints() >= 42) {
                     drawRemainingMovement(pos, scale);
                 }
                 //draw if it took fire
@@ -6620,8 +6478,8 @@ var Drawing;
         for (let j = 0; j < Drawing.listOfMultiArmyFields.length; j++) { //for every field
             for (let i = 0; i < Drawing.listOfMultiArmyFields[j].length; i++) { //for every army on that field
                 let armyData = Drawing.listOfMultiArmyFields[j][i]; // get army coordinates
-                let pos = hexFunctions_1.HexFunction.computePosition(screenPos, Drawing.listOfMultiArmyFields[j][i].getPosition(), scale);
-                let circleScale = (scale * constants_1.Constants.SIN60) / Drawing.listOfMultiArmyFields[j].length;
+                let pos = types_1.HexFunction.computePosition(screenPos, Drawing.listOfMultiArmyFields[j][i].getPosition(), scale);
+                let circleScale = (scale * types_1.Constants.SIN60) / Drawing.listOfMultiArmyFields[j].length;
                 //const double Angle = (M_PI * 2.0) / n;
                 //Für jedes i-te Objekt dann die Position des Mittelpunktes:
                 //const double MidPosX = (cos(Angle * i) * RadiusX) + CirclePosX;
@@ -6629,60 +6487,60 @@ var Drawing;
                 let angle = (Math.PI * 2.0) / Drawing.listOfMultiArmyFields[j].length; //Total armies on field
                 let xPosArmy = (Math.cos(angle * i) * scale / 4) + pos[0] + scale / 4;
                 let yPosArmy = (Math.sin(angle * i) * scale / 4) + pos[1];
-                if (armyData instanceof footArmy_1.FootArmy) {
-                    gui_1.GUI.getContext().drawImage(images_1.Images.troops, xPosArmy, yPosArmy, circleScale, scale);
+                if (armyData instanceof types_1.FootArmy) {
+                    types_1.GUI.getContext().drawImage(types_1.Images.troops, xPosArmy, yPosArmy, circleScale, scale);
                 }
-                else if (armyData instanceof riderArmy_1.RiderArmy) {
-                    gui_1.GUI.getContext().drawImage(images_1.Images.mounts, xPosArmy, yPosArmy, circleScale, scale);
+                else if (armyData instanceof types_1.RiderArmy) {
+                    types_1.GUI.getContext().drawImage(types_1.Images.mounts, xPosArmy, yPosArmy, circleScale, scale);
                 }
-                else if (armyData instanceof fleet_1.Fleet) {
-                    gui_1.GUI.getContext().drawImage(images_1.Images.boats, xPosArmy, yPosArmy, circleScale, scale);
+                else if (armyData instanceof types_1.Fleet) {
+                    types_1.GUI.getContext().drawImage(types_1.Images.boats, xPosArmy, yPosArmy, circleScale, scale);
                 }
             }
         }
     }
     function drawRemainingMovement(screenPos, scale) {
-        gui_1.GUI.getContext().lineWidth = scale / 8;
-        gui_1.GUI.getContext().strokeStyle = '#00FFFF';
-        gui_1.GUI.getContext().beginPath();
-        gui_1.GUI.getContext().arc(screenPos[0] + (0.5 * scale * constants_1.Constants.SIN60) - Drawing.c, screenPos[1] + (scale * 0.5) - Drawing.c, scale / 16, Math.PI * 1.25, Math.PI * 1.75, false);
-        gui_1.GUI.getContext().stroke();
+        types_1.GUI.getContext().lineWidth = scale / 8;
+        types_1.GUI.getContext().strokeStyle = '#00FFFF';
+        types_1.GUI.getContext().beginPath();
+        types_1.GUI.getContext().arc(screenPos[0] + (0.5 * scale * types_1.Constants.SIN60) - Drawing.c, screenPos[1] + (scale * 0.5) - Drawing.c, scale / 16, Math.PI * 1.25, Math.PI * 1.75, false);
+        types_1.GUI.getContext().stroke();
     }
     function drawTookFire(screenPos, scale) {
-        gui_1.GUI.getContext().lineWidth = scale / 8;
-        gui_1.GUI.getContext().strokeStyle = '#FF0000';
-        gui_1.GUI.getContext().beginPath();
-        gui_1.GUI.getContext().arc(screenPos[0] + (0.5 * scale * constants_1.Constants.SIN60) + Drawing.c, screenPos[1] + (scale * 0.5) + Drawing.c, scale / 16, Math.PI * 1.25, Math.PI * 1.75, false);
-        gui_1.GUI.getContext().stroke();
+        types_1.GUI.getContext().lineWidth = scale / 8;
+        types_1.GUI.getContext().strokeStyle = '#FF0000';
+        types_1.GUI.getContext().beginPath();
+        types_1.GUI.getContext().arc(screenPos[0] + (0.5 * scale * types_1.Constants.SIN60) + Drawing.c, screenPos[1] + (scale * 0.5) + Drawing.c, scale / 16, Math.PI * 1.25, Math.PI * 1.75, false);
+        types_1.GUI.getContext().stroke();
     }
     function drawPossibleShootingTargets(screenPos, scale, selectedArmy) {
-        if (selectedArmy != undefined && gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].possibleTargets.length > 0 &&
-            boxVisibilty_1.BoxVisibility.shootingModeOn) {
-            let targets = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].possibleTargets;
+        if (selectedArmy != undefined && types_1.GameState.armies[types_1.Controls.selectedArmyIndex].possibleTargets.length > 0 &&
+            types_1.BoxVisibility.shootingModeOn) {
+            let targets = types_1.GameState.armies[types_1.Controls.selectedArmyIndex].possibleTargets;
             for (let i = 0; i < targets.length; i++) {
-                gui_1.GUI.getContext().lineWidth = scale / 10;
-                gui_1.GUI.getContext().strokeStyle = '#FF0000';
-                let pos = hexFunctions_1.HexFunction.computePosition(screenPos, targets[i].coordinates, scale); //get fields position
-                gui_1.GUI.getContext().beginPath();
-                gui_1.GUI.getContext().arc(pos[0] + (0.5 * scale * constants_1.Constants.SIN60), pos[1] + (scale * 0.5), scale / 20, 0, 2 * Math.PI, false);
-                gui_1.GUI.getContext().stroke();
+                types_1.GUI.getContext().lineWidth = scale / 10;
+                types_1.GUI.getContext().strokeStyle = '#FF0000';
+                let pos = types_1.HexFunction.computePosition(screenPos, targets[i].coordinates, scale); //get fields position
+                types_1.GUI.getContext().beginPath();
+                types_1.GUI.getContext().arc(pos[0] + (0.5 * scale * types_1.Constants.SIN60), pos[1] + (scale * 0.5), scale / 20, 0, 2 * Math.PI, false);
+                types_1.GUI.getContext().stroke();
             }
         }
     }
     function writeFieldInfo() {
         let minimapBox = document.getElementById('minimapBox');
         let index = 0;
-        if (boxVisibilty_1.BoxVisibility.shootingModeOn) {
+        if (types_1.BoxVisibility.shootingModeOn) {
             index = 1;
         }
         if (minimapBox !== null) {
-            if (controlVariables_1.Controls.selectedFields[index] == undefined) {
+            if (types_1.Controls.selectedFields[index] == undefined) {
                 minimapBox.innerHTML = '';
             }
             else {
-                let fieldPositionInList = hexFunctions_1.HexFunction.positionInList(controlVariables_1.Controls.selectedFields[index]);
+                let fieldPositionInList = types_1.HexFunction.positionInList(types_1.Controls.selectedFields[index]);
                 let localfieldType = '';
-                switch (hexFunctions_1.HexFunction.fieldType(controlVariables_1.Controls.selectedFields[index])) {
+                switch (types_1.HexFunction.fieldType(types_1.Controls.selectedFields[index])) {
                     case 0:
                         localfieldType = 'Wasser';
                         break;
@@ -6714,19 +6572,19 @@ var Drawing;
                         localfieldType = 'Unbekannt';
                         break;
                 }
-                let fieldOwner = gameState_1.GameState.realms.find(realm => (realm.territory.some(field => (field.coordinates[0] === controlVariables_1.Controls.selectedFields[index][0] &&
-                    field.coordinates[1] === controlVariables_1.Controls.selectedFields[index][1]))));
+                let fieldOwner = types_1.GameState.realms.find(realm => (realm.territory.some(field => (field.coordinates[0] === types_1.Controls.selectedFields[index][0] &&
+                    field.coordinates[1] === types_1.Controls.selectedFields[index][1]))));
                 let fieldOwnerString = (fieldOwner == undefined) ? 'keiner' : fieldOwner.tag;
-                minimapBox.innerHTML = '<p>Feld: (' + controlVariables_1.Controls.selectedFields[index][0] + ', ' + controlVariables_1.Controls.selectedFields[index][1] + ')' +
+                minimapBox.innerHTML = '<p>Feld: (' + types_1.Controls.selectedFields[index][0] + ', ' + types_1.Controls.selectedFields[index][1] + ')' +
                     '</p><p>Gelände: ' + localfieldType +
-                    '</p><p>Höhe: ' + hexFunctions_1.HexFunction.height(controlVariables_1.Controls.selectedFields[index]) +
+                    '</p><p>Höhe: ' + types_1.HexFunction.height(types_1.Controls.selectedFields[index]) +
                     '</p><p>Besitzer: ' + fieldOwnerString + '</p>';
             }
         }
     }
     function writeTurnNumber() {
         // get the top bar element from the HTML document
-        let topBar = gui_1.GUI.getTopBar();
+        let topBar = types_1.GUI.getTopBar();
         let nextTurnBtn = document.getElementById('nextTurnButton');
         let stepBtn = document.getElementById('stepButton');
         let revertBtn = document.getElementById('revertButton');
@@ -6737,11 +6595,11 @@ var Drawing;
             nextTurnBtn.id = "nextTurnButton";
             nextTurnBtn.addEventListener('click', function () {
                 let message = "";
-                if (gameState_1.GameState.currentTurn.realm == undefined) {
+                if (types_1.GameState.currentTurn.realm == undefined) {
                     message = "Do you want to end the pre-turn phase?";
                 }
-                else if (gameState_1.GameState.currentTurn.status === 'fi') {
-                    let unprocessedEvents = gameState_1.GameState.loadedEvents.some(function (event) {
+                else if (types_1.GameState.currentTurn.status === 'fi') {
+                    let unprocessedEvents = types_1.GameState.loadedEvents.some(function (event) {
                         return (event.getStatus() === 4 /* Available */ ||
                             event.getStatus() === 3 /* Withheld */ ||
                             event.getStatus() === 2 /* Impossible */);
@@ -6749,36 +6607,36 @@ var Drawing;
                     if (unprocessedEvents) {
                         message = "Some events are unprocessed.";
                     }
-                    message += ("Do you want to end processing the turn of " + gameState_1.GameState.currentTurn.realm + "?");
+                    message += ("Do you want to end processing the turn of " + types_1.GameState.currentTurn.realm + "?");
                 }
-                else if (gameState_1.GameState.login === 'sl') {
-                    message = "Do you want to end the turn of " + gameState_1.GameState.currentTurn.realm + "?";
+                else if (types_1.GameState.login === 'sl') {
+                    message = "Do you want to end the turn of " + types_1.GameState.currentTurn.realm + "?";
                 }
                 else {
                     message = "Do you want to end your turn?";
                 }
                 if (confirm(message)) {
-                    if (gameState_1.GameState.login === 'sl' && gameState_1.GameState.currentTurn.status === 'fi') { //SL sends DB change requests
-                        gameState_1.GameState.loadedEvents.forEach(function (event) {
+                    if (types_1.GameState.login === 'sl' && types_1.GameState.currentTurn.status === 'fi') { //SL sends DB change requests
+                        types_1.GameState.loadedEvents.forEach(function (event) {
                             if (event.getStatus() === 0 /* Checked */) {
                                 if (event.getDatabasePrimaryKey() !== undefined) {
-                                    savingFunctions_1.Saving.sendCheckEvent(event.getDatabasePrimaryKey(), event.typeAsString());
+                                    types_1.Saving.sendCheckEvent(event.getDatabasePrimaryKey(), event.typeAsString());
                                 }
                             }
                             else if (event.getStatus() === 1 /* Deleted */) {
                                 if (event.getDatabasePrimaryKey() !== undefined) {
-                                    savingFunctions_1.Saving.sendDeleteEvent(event.getDatabasePrimaryKey(), event.typeAsString());
+                                    types_1.Saving.sendDeleteEvent(event.getDatabasePrimaryKey(), event.typeAsString());
                                 }
                             }
                         }, this);
-                        savingFunctions_1.Saving.saveBuildings();
-                        savingFunctions_1.Saving.saveFactionsTerritories();
-                        savingFunctions_1.Saving.saveArmies();
+                        types_1.Saving.saveBuildings();
+                        types_1.Saving.saveFactionsTerritories();
+                        types_1.Saving.saveArmies();
                     }
                     else { //Players and SL during player's turn send events
-                        savingFunctions_1.Saving.sendEventlistInOrder(0);
+                        types_1.Saving.sendEventlistInOrder(0);
                     }
-                    savingFunctions_1.Saving.sendNextTurn();
+                    types_1.Saving.sendNextTurn();
                 }
             });
             date = document.createElement("P");
@@ -6793,29 +6651,29 @@ var Drawing;
             stepBtn.id = "stepButton";
             stepBtn.style.backgroundImage = "url(images/step_button.svg)";
             stepBtn.addEventListener('click', function () {
-                if (gameState_1.GameState.login === 'sl') {
+                if (types_1.GameState.login === 'sl') {
                     if (confirm("Do you want to save the events handled so far without ending the turn?" +
                         " Once saved the progress can't be reverted anymore.")) {
-                        gameState_1.GameState.newEvents.forEach(function (event) {
+                        types_1.GameState.newEvents.forEach(function (event) {
                             if (event.getStatus() === 0 /* Checked */) {
-                                savingFunctions_1.Saving.sendCheckEvent(event.getDatabasePrimaryKey(), event.typeAsString());
+                                types_1.Saving.sendCheckEvent(event.getDatabasePrimaryKey(), event.typeAsString());
                             }
                             else if (event.getStatus() === 1 /* Deleted */) {
-                                savingFunctions_1.Saving.sendDeleteEvent(event.getDatabasePrimaryKey(), event.typeAsString());
+                                types_1.Saving.sendDeleteEvent(event.getDatabasePrimaryKey(), event.typeAsString());
                             }
                         }, this);
-                        gameState_1.GameState.newEvents = [];
-                        gameState_1.GameState.loadedEvents = [];
-                        savingFunctions_1.Saving.saveBuildings();
-                        savingFunctions_1.Saving.saveFactionsTerritories();
-                        savingFunctions_1.Saving.saveArmies();
+                        types_1.GameState.newEvents = [];
+                        types_1.GameState.loadedEvents = [];
+                        types_1.Saving.saveBuildings();
+                        types_1.Saving.saveFactionsTerritories();
+                        types_1.Saving.saveArmies();
                     }
                 }
                 else {
                     if (confirm("Do you want to save the events issued so far without ending the turn?" +
                         " Once saved the progress can only be reverted by the SL.")) {
                         console.log(3);
-                        savingFunctions_1.Saving.sendEventlistInOrder(0);
+                        types_1.Saving.sendEventlistInOrder(0);
                     }
                 }
             });
@@ -6826,19 +6684,19 @@ var Drawing;
             revertBtn.style.backgroundImage = "url(images/revert_button.svg)";
             revertBtn.addEventListener('click', function () {
                 if (confirm("Do you want to revert the events handled so far?")) {
-                    gameState_1.GameState.newEvents = [];
-                    gameState_1.GameState.loadedEvents = [];
-                    loadingDataFunctions_1.Loading.loadArmies();
-                    loadingDataFunctions_1.Loading.loadBuildingData();
-                    loadingDataFunctions_1.Loading.loadBorderData();
-                    loadingDataFunctions_1.Loading.loadPendingEvents();
+                    types_1.GameState.newEvents = [];
+                    types_1.GameState.loadedEvents = [];
+                    types_1.Loading.loadArmies();
+                    types_1.Loading.loadBuildingData();
+                    types_1.Loading.loadBorderData();
+                    types_1.Loading.loadPendingEvents();
                     writeTurnNumber();
                     drawStuff();
                 }
             });
         }
-        if (gameState_1.GameState.login !== 'sl' && (gameState_1.GameState.currentTurn.realm == undefined || gameState_1.GameState.currentTurn.status === 'fi' ||
-            gameState_1.GameState.login !== gameState_1.GameState.currentTurn.realm)) {
+        if (types_1.GameState.login !== 'sl' && (types_1.GameState.currentTurn.realm == undefined || types_1.GameState.currentTurn.status === 'fi' ||
+            types_1.GameState.login !== types_1.GameState.currentTurn.realm)) {
             // if not logged in as the current realm or SL
             nextTurnBtn.disabled = true;
             nextTurnBtn.style.cursor = "not-allowed";
@@ -6857,36 +6715,36 @@ var Drawing;
             revertBtn.disabled = false;
             revertBtn.style.cursor = "initial";
         }
-        if (gameState_1.GameState.login === 'sl' && gameState_1.GameState.currentTurn.status === 'fi') {
-            loadingDataFunctions_1.Loading.loadPendingEvents();
-            boxVisibilty_1.BoxVisibility.show(gui_1.GUI.getBigBox().getEventTabsButton());
+        if (types_1.GameState.login === 'sl' && types_1.GameState.currentTurn.status === 'fi') {
+            types_1.Loading.loadPendingEvents();
+            types_1.BoxVisibility.show(types_1.GUI.getBigBox().getEventTabsButton());
         }
         else {
-            boxVisibilty_1.BoxVisibility.hide(gui_1.GUI.getBigBox().getEventTabsButton());
+            types_1.BoxVisibility.hide(types_1.GUI.getBigBox().getEventTabsButton());
             stepBtn.disabled = true;
             stepBtn.style.cursor = "not-allowed";
             revertBtn.disabled = true;
             revertBtn.style.cursor = "not-allowed";
         }
-        date.innerHTML = "Monat " + Drawing.months[gameState_1.GameState.currentTurn.turn % 8] + " des Jahres " +
-            Math.ceil(gameState_1.GameState.currentTurn.turn / 8) + " (Zug " + gameState_1.GameState.currentTurn.turn + ", ";
-        if (gameState_1.GameState.currentTurn.realm == undefined || gameState_1.GameState.currentTurn.status === 'fi') {
+        date.innerHTML = "Monat " + Drawing.months[types_1.GameState.currentTurn.turn % 8] + " des Jahres " +
+            Math.ceil(types_1.GameState.currentTurn.turn / 8) + " (Zug " + types_1.GameState.currentTurn.turn + ", ";
+        if (types_1.GameState.currentTurn.realm == undefined || types_1.GameState.currentTurn.status === 'fi') {
             // GM's turn
             date.innerHTML += "SL) ";
         }
         else { // a realm's turn
-            date.innerHTML += gameState_1.GameState.currentTurn.realm + ") ";
+            date.innerHTML += types_1.GameState.currentTurn.realm + ") ";
         }
         date.setAttribute("width", "340px");
         date.setAttribute("float", "left");
         date.setAttribute("line-height", "30px");
-        if (gameState_1.GameState.currentTurn.turn % 8 === 1 || gameState_1.GameState.currentTurn.turn % 8 === 5) {
+        if (types_1.GameState.currentTurn.turn % 8 === 1 || types_1.GameState.currentTurn.turn % 8 === 5) {
             spec.innerHTML = " Rüstmonat";
             date.setAttribute("width", "100px");
             date.setAttribute("float", "left");
             date.setAttribute("line-height", "30px");
         }
-        else if (gameState_1.GameState.currentTurn.turn % 8 === 4 || gameState_1.GameState.currentTurn.turn % 8 === 0) {
+        else if (types_1.GameState.currentTurn.turn % 8 === 4 || types_1.GameState.currentTurn.turn % 8 === 0) {
             spec.innerHTML = " Einkommensmonat";
             date.setAttribute("width", "160px");
             date.setAttribute("float", "left");
@@ -6905,7 +6763,7 @@ var Drawing;
     Drawing.writeTurnNumber = writeTurnNumber;
 })(Drawing = exports.Drawing || (exports.Drawing = {}));
 
-},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9,"../constants":16,"../controls/controlVariables":18,"../gameState":28,"../libraries/hexFunctions":50,"../serverInteraction/loadingDataFunctions":58,"../serverInteraction/savingFunctions":59,"./boxVisibilty":32,"./gui":37,"./images":39,"./multifieldFunctions":43}],36:[function(require,module,exports){
+},{"../types":60}],36:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -6923,9 +6781,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const boxVisibilty_1 = require("./boxVisibilty");
-const savingFunctions_1 = require("../serverInteraction/savingFunctions");
-const godModeFunctions_1 = require("../godmode/godModeFunctions");
+const types_1 = require("../types");
 class GodModeBox {
     getSelf() {
         if (this.self == undefined) {
@@ -6936,77 +6792,77 @@ class GodModeBox {
     getToggleWorldCreationMode() {
         if (this.toggleWorldCreationMode == undefined) {
             this.toggleWorldCreationMode = document.getElementById("ToggleWorldCreationMode");
-            this.toggleWorldCreationMode.onclick = function () { boxVisibilty_1.BoxVisibility.toggleWorldCreationMode(); };
+            this.toggleWorldCreationMode.onclick = function () { types_1.BoxVisibility.toggleWorldCreationMode(); };
         }
         return this.toggleWorldCreationMode;
     }
     getToggleRiverCreationMode() {
         if (this.toggleRiverCreationMode == undefined) {
             this.toggleRiverCreationMode = document.getElementById("ToggleRiverCreationMode");
-            this.toggleRiverCreationMode.onclick = function () { boxVisibilty_1.BoxVisibility.toggleRiverCreationMode(); };
+            this.toggleRiverCreationMode.onclick = function () { types_1.BoxVisibility.toggleRiverCreationMode(); };
         }
         return this.toggleRiverCreationMode;
     }
     getToggleBuildingCreationMode() {
         if (this.toggleBuildingCreationMode == undefined) {
             this.toggleBuildingCreationMode = document.getElementById("ToggleBuildingCreationMode");
-            this.toggleBuildingCreationMode.onclick = function () { boxVisibilty_1.BoxVisibility.toggleBuildingCreationMode(); };
+            this.toggleBuildingCreationMode.onclick = function () { types_1.BoxVisibility.toggleBuildingCreationMode(); };
         }
         return this.toggleBuildingCreationMode;
     }
     getToggleStreetBuildingMode() {
         if (this.toggleStreetBuildingMode == undefined) {
             this.toggleStreetBuildingMode = document.getElementById("ToggleStreetBuildingMode");
-            this.toggleStreetBuildingMode.onclick = function () { boxVisibilty_1.BoxVisibility.toggleStreetBuildingMode(); };
+            this.toggleStreetBuildingMode.onclick = function () { types_1.BoxVisibility.toggleStreetBuildingMode(); };
         }
         return this.toggleStreetBuildingMode;
     }
     getToggleWallBuildingMode() {
         if (this.toggleWallBuildingMode == undefined) {
             this.toggleWallBuildingMode = document.getElementById("ToggleWallBuildingMode");
-            this.toggleWallBuildingMode.onclick = function () { boxVisibilty_1.BoxVisibility.toggleWallBuildingMode(); };
+            this.toggleWallBuildingMode.onclick = function () { types_1.BoxVisibility.toggleWallBuildingMode(); };
         }
         return this.toggleWallBuildingMode;
     }
     getToggleHarborBuildingMode() {
         if (this.toggleHarborBuildingMode == undefined) {
             this.toggleHarborBuildingMode = document.getElementById("ToggleHarborBuildingMode");
-            this.toggleHarborBuildingMode.onclick = function () { boxVisibilty_1.BoxVisibility.toggleHarborBuildingMode(); };
+            this.toggleHarborBuildingMode.onclick = function () { types_1.BoxVisibility.toggleHarborBuildingMode(); };
         }
         return this.toggleHarborBuildingMode;
     }
     getToggleBridgeBuildingMode() {
         if (this.toggleBridgeBuildingMode == undefined) {
             this.toggleBridgeBuildingMode = document.getElementById("ToggleBridgeBuildingMode");
-            this.toggleBridgeBuildingMode.onclick = function () { boxVisibilty_1.BoxVisibility.toggleBridgeBuildingMode(); };
+            this.toggleBridgeBuildingMode.onclick = function () { types_1.BoxVisibility.toggleBridgeBuildingMode(); };
         }
         return this.toggleBridgeBuildingMode;
     }
     getSaveArmies() {
         if (this.saveArmies == undefined) {
             this.saveArmies = document.getElementById("SaveArmies");
-            this.saveArmies.onclick = function () { savingFunctions_1.Saving.saveArmies(); };
+            this.saveArmies.onclick = function () { types_1.Saving.saveArmies(); };
         }
         return this.saveArmies;
     }
     getSaveFactionsTerritories() {
         if (this.saveFactionsTerritories == undefined) {
             this.saveFactionsTerritories = document.getElementById("SaveFactionsTerritories");
-            this.saveFactionsTerritories.onclick = function () { savingFunctions_1.Saving.saveFactionsTerritories(); };
+            this.saveFactionsTerritories.onclick = function () { types_1.Saving.saveFactionsTerritories(); };
         }
         return this.saveFactionsTerritories;
     }
     getToggleArmyCreationMode() {
         if (this.toggleArmyCreationMode == undefined) {
             this.toggleArmyCreationMode = document.getElementById("ToggleArmyCreationMode");
-            this.toggleArmyCreationMode.onclick = function () { boxVisibilty_1.BoxVisibility.toggleArmyCreationMode(); };
+            this.toggleArmyCreationMode.onclick = function () { types_1.BoxVisibility.toggleArmyCreationMode(); };
         }
         return this.toggleArmyCreationMode;
     }
     getGodDeleteSelectedArmy() {
         if (this.godDeleteSelectedArmy == undefined) {
             this.godDeleteSelectedArmy = document.getElementById("GodDeleteSelectedArmy");
-            this.godDeleteSelectedArmy.onclick = function () { godModeFunctions_1.GodFunctions.godDeleteSelectedArmy(); };
+            this.godDeleteSelectedArmy.onclick = function () { types_1.GodFunctions.godDeleteSelectedArmy(); };
         }
         return this.godDeleteSelectedArmy;
     }
@@ -7019,7 +6875,7 @@ class GodModeBox {
 }
 exports.GodModeBox = GodModeBox;
 
-},{"../godmode/godModeFunctions":29,"../serverInteraction/savingFunctions":59,"./boxVisibilty":32}],37:[function(require,module,exports){
+},{"../types":60}],37:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -7037,23 +6893,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const mainBox_1 = require("./mainBox");
-const battleBox_1 = require("./battleBox");
-const shootingBigBox_1 = require("./shootingBigBox");
-const infoBox_1 = require("./infoBox");
-const godModeBox_1 = require("./godModeBox");
-const armyGeneratorBox_1 = require("./armyGeneratorBox");
-const worldBenderBox_1 = require("./worldBenderBox");
-const riverBenderBox_1 = require("./riverBenderBox");
-const buildingCreationBox_1 = require("./buildingCreationBox");
-const wallCreationBox_1 = require("./wallCreationBox");
-const harborCreationBox_1 = require("./harborCreationBox");
-const bridgeCreationBox_1 = require("./bridgeCreationBox");
-const streetCreationBox_1 = require("./streetCreationBox");
-const infoChangeBox_1 = require("./infoChangeBox");
-const boxVisibilty_1 = require("./boxVisibilty");
-const buttonFunctions_1 = require("../controls/buttonFunctions");
-const authenticationFunctions_1 = require("../serverInteraction/authenticationFunctions");
+const types_1 = require("../types");
 class GUI {
     static getCanvas() {
         if (GUI.canvas == undefined) {
@@ -7076,7 +6916,7 @@ class GUI {
     static getToggleGMBarButton() {
         if (GUI.toggleGMBarButton == undefined) {
             GUI.toggleGMBarButton = document.getElementById("ToggleGodModeBar");
-            GUI.toggleGMBarButton.onclick = function () { boxVisibilty_1.BoxVisibility.toggleGodModeBar(); };
+            GUI.toggleGMBarButton.onclick = function () { types_1.BoxVisibility.toggleGodModeBar(); };
         }
         return GUI.toggleGMBarButton;
     }
@@ -7088,32 +6928,32 @@ class GUI {
     }
     static getBigBox() {
         if (GUI.bigBox == undefined) {
-            GUI.bigBox = new mainBox_1.MainBox();
+            GUI.bigBox = new types_1.MainBox();
         }
         return GUI.bigBox;
     }
     static getMainButton() {
         if (GUI.mainButton == undefined) {
             GUI.mainButton = document.getElementById("mainButton");
-            GUI.mainButton.onclick = function () { buttonFunctions_1.ButtonFunctions.mainButton(); };
+            GUI.mainButton.onclick = function () { types_1.ButtonFunctions.mainButton(); };
         }
         return GUI.mainButton;
     }
     static getBattleBox() {
         if (GUI.battleBox == undefined) {
-            GUI.battleBox = new battleBox_1.BattleBox();
+            GUI.battleBox = new types_1.BattleBox();
         }
         return GUI.battleBox;
     }
     static getShootingBigBox() {
         if (GUI.shootingBigBox == undefined) {
-            GUI.shootingBigBox = new shootingBigBox_1.ShootingBigBox();
+            GUI.shootingBigBox = new types_1.ShootingBigBox();
         }
         return GUI.shootingBigBox;
     }
     static getInfoBox() {
         if (GUI.infoBox == undefined) {
-            GUI.infoBox = new infoBox_1.InfoBox();
+            GUI.infoBox = new types_1.InfoBox();
         }
         return GUI.infoBox;
     }
@@ -7132,14 +6972,14 @@ class GUI {
     static getBackToSplitBox() {
         if (GUI.backToSplitBox == undefined) {
             GUI.backToSplitBox = document.getElementById("backToSplitBox");
-            GUI.backToSplitBox.onclick = function () { boxVisibilty_1.BoxVisibility.backToSplitBox(); };
+            GUI.backToSplitBox.onclick = function () { types_1.BoxVisibility.backToSplitBox(); };
         }
         return GUI.backToSplitBox;
     }
     static getRestoreInfoBox() {
         if (GUI.restoreInfoBox == undefined) {
             GUI.restoreInfoBox = document.getElementById("restoreInfoBox");
-            GUI.restoreInfoBox.onclick = function () { boxVisibilty_1.BoxVisibility.restoreInfoBox(); };
+            GUI.restoreInfoBox.onclick = function () { types_1.BoxVisibility.restoreInfoBox(); };
         }
         return GUI.restoreInfoBox;
     }
@@ -7188,21 +7028,21 @@ class GUI {
     static getSplitSelectedArmy() {
         if (GUI.splitSelectedArmy == undefined) {
             GUI.splitSelectedArmy = document.getElementById("splitSelectedArmy");
-            GUI.splitSelectedArmy.onclick = function () { buttonFunctions_1.ButtonFunctions.splitSelectedArmy(); };
+            GUI.splitSelectedArmy.onclick = function () { types_1.ButtonFunctions.splitSelectedArmy(); };
         }
         return GUI.splitSelectedArmy;
     }
     static getActivateTransmuteBox() {
         if (GUI.activateTransmuteBox == undefined) {
             GUI.activateTransmuteBox = document.getElementById("activateTransmuteBox");
-            GUI.activateTransmuteBox.onclick = function () { boxVisibilty_1.BoxVisibility.activateTransmuteBox(); };
+            GUI.activateTransmuteBox.onclick = function () { types_1.BoxVisibility.activateTransmuteBox(); };
         }
         return GUI.activateTransmuteBox;
     }
     static getActivateMergeBox() {
         if (GUI.activateMergeBox == undefined) {
             GUI.activateMergeBox = document.getElementById("activateMergeBox");
-            GUI.activateMergeBox.onclick = function () { boxVisibilty_1.BoxVisibility.activateMergeBox(); };
+            GUI.activateMergeBox.onclick = function () { types_1.BoxVisibility.activateMergeBox(); };
         }
         return GUI.activateMergeBox;
     }
@@ -7275,14 +7115,14 @@ class GUI {
     static getMountButton() {
         if (GUI.mount == undefined) {
             GUI.mount = document.getElementById("mount");
-            GUI.mount.onclick = function () { buttonFunctions_1.ButtonFunctions.mountSelected(); };
+            GUI.mount.onclick = function () { types_1.ButtonFunctions.mountSelected(); };
         }
         return GUI.mount;
     }
     static getAllMountButton() {
         if (GUI.allMount == undefined) {
             GUI.allMount = document.getElementById("allMount");
-            GUI.allMount.onclick = function () { buttonFunctions_1.ButtonFunctions.allMountSelected(); };
+            GUI.allMount.onclick = function () { types_1.ButtonFunctions.allMountSelected(); };
         }
         return GUI.allMount;
     }
@@ -7307,14 +7147,14 @@ class GUI {
     static getUnMountButton() {
         if (GUI.unMount == undefined) {
             GUI.unMount = document.getElementById("unMount");
-            GUI.unMount.onclick = function () { buttonFunctions_1.ButtonFunctions.unMountSelected; };
+            GUI.unMount.onclick = function () { types_1.ButtonFunctions.unMountSelected; };
         }
         return GUI.unMount;
     }
     static getAllUnMountButton() {
         if (GUI.allUnMount == undefined) {
             GUI.allUnMount = document.getElementById("allUnMount");
-            GUI.allUnMount.onclick = function () { buttonFunctions_1.ButtonFunctions.allUnMountSelected; };
+            GUI.allUnMount.onclick = function () { types_1.ButtonFunctions.allUnMountSelected; };
         }
         return GUI.allUnMount;
     }
@@ -7339,13 +7179,13 @@ class GUI {
     static getFireButton() {
         if (GUI.fire == undefined) {
             GUI.fire = document.getElementById("fire");
-            GUI.fire.onclick = function () { buttonFunctions_1.ButtonFunctions.shootWithSelectedArmy(); };
+            GUI.fire.onclick = function () { types_1.ButtonFunctions.shootWithSelectedArmy(); };
         }
         return GUI.fire;
     }
     static getInfoChangeBox() {
         if (GUI.infoChangeBox == undefined) {
-            GUI.infoChangeBox = new infoChangeBox_1.InfoChangeBox();
+            GUI.infoChangeBox = new types_1.InfoChangeBox();
         }
         return GUI.infoChangeBox;
     }
@@ -7370,7 +7210,7 @@ class GUI {
     static getLoginButton() {
         if (GUI.loginBtn == undefined) {
             GUI.loginBtn = document.getElementById("loginBtn");
-            GUI.loginBtn.onclick = function () { authenticationFunctions_1.Authentication.loginToServer(); };
+            GUI.loginBtn.onclick = function () { types_1.Authentication.loginToServer(); };
         }
         return GUI.loginBtn;
     }
@@ -7382,62 +7222,62 @@ class GUI {
     }
     static getGodModeBox() {
         if (GUI.godmodeBox == undefined) {
-            GUI.godmodeBox = new godModeBox_1.GodModeBox();
+            GUI.godmodeBox = new types_1.GodModeBox();
         }
         return GUI.godmodeBox;
     }
     static getArmyGeneratorBox() {
         if (GUI.armyGeneratorBox == undefined) {
-            GUI.armyGeneratorBox = new armyGeneratorBox_1.ArmyGeneratorBox();
+            GUI.armyGeneratorBox = new types_1.ArmyGeneratorBox();
         }
         return GUI.armyGeneratorBox;
     }
     static getWorldBenderBox() {
         if (GUI.worldBenderBox == undefined) {
-            GUI.worldBenderBox = new worldBenderBox_1.WorldBenderBox();
+            GUI.worldBenderBox = new types_1.WorldBenderBox();
         }
         return GUI.worldBenderBox;
     }
     static getRiverBenderBox() {
         if (GUI.riverBenderBox == undefined) {
-            GUI.riverBenderBox = new riverBenderBox_1.RiverBenderBox();
+            GUI.riverBenderBox = new types_1.RiverBenderBox();
         }
         return GUI.riverBenderBox;
     }
     static getBuildingCreationBox() {
         if (GUI.buildingCreationBox == undefined) {
-            GUI.buildingCreationBox = new buildingCreationBox_1.BuildingCreationBox();
+            GUI.buildingCreationBox = new types_1.BuildingCreationBox();
         }
         return GUI.buildingCreationBox;
     }
     static getWallCreationBox() {
         if (GUI.wallCreationBox == undefined) {
-            GUI.wallCreationBox = new wallCreationBox_1.WallCreationBox();
+            GUI.wallCreationBox = new types_1.WallCreationBox();
         }
         return GUI.wallCreationBox;
     }
     static getHarborCreationBox() {
         if (GUI.harborCreationBox == undefined) {
-            GUI.harborCreationBox = new harborCreationBox_1.HarborCreationBox();
+            GUI.harborCreationBox = new types_1.HarborCreationBox();
         }
         return GUI.harborCreationBox;
     }
     static getBridgeCreationBox() {
         if (GUI.bridgeCreationBox == undefined) {
-            GUI.bridgeCreationBox = new bridgeCreationBox_1.BridgeCreationBox();
+            GUI.bridgeCreationBox = new types_1.BridgeCreationBox();
         }
         return GUI.bridgeCreationBox;
     }
     static getStreetCreationBox() {
         if (GUI.streetCreationBox == undefined) {
-            GUI.streetCreationBox = new streetCreationBox_1.StreetCreationBox();
+            GUI.streetCreationBox = new types_1.StreetCreationBox();
         }
         return GUI.streetCreationBox;
     }
 }
 exports.GUI = GUI;
 
-},{"../controls/buttonFunctions":17,"../serverInteraction/authenticationFunctions":57,"./armyGeneratorBox":30,"./battleBox":31,"./boxVisibilty":32,"./bridgeCreationBox":33,"./buildingCreationBox":34,"./godModeBox":36,"./harborCreationBox":38,"./infoBox":40,"./infoChangeBox":41,"./mainBox":42,"./riverBenderBox":44,"./shootingBigBox":45,"./streetCreationBox":46,"./wallCreationBox":47,"./worldBenderBox":48}],38:[function(require,module,exports){
+},{"../types":60}],38:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -7455,8 +7295,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const godModeFunctions_1 = require("../godmode/godModeFunctions");
-const savingFunctions_1 = require("../serverInteraction/savingFunctions");
+const types_1 = require("../types");
 class HarborCreationBox {
     getSelf() {
         if (this.self == undefined) {
@@ -7473,42 +7312,42 @@ class HarborCreationBox {
     getAddHarborNW() {
         if (this.addHarborNW == undefined) {
             this.addHarborNW = document.getElementById("addHarborNW");
-            this.addHarborNW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 0 /* NW */, true); };
+            this.addHarborNW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 0 /* NW */, true); };
         }
         return this.addHarborNW;
     }
     getAddHarborNE() {
         if (this.addHarborNE == undefined) {
             this.addHarborNE = document.getElementById("addHarborNE");
-            this.addHarborNE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 1 /* NE */, true); };
+            this.addHarborNE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 1 /* NE */, true); };
         }
         return this.addHarborNE;
     }
     getAddHarborE() {
         if (this.addHarborE == undefined) {
             this.addHarborE = document.getElementById("addHarborE");
-            this.addHarborE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 2 /* E */, true); };
+            this.addHarborE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 2 /* E */, true); };
         }
         return this.addHarborE;
     }
     getAddHarborSE() {
         if (this.addHarborSE == undefined) {
             this.addHarborSE = document.getElementById("addHarborSE");
-            this.addHarborSE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 3 /* SE */, true); };
+            this.addHarborSE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 3 /* SE */, true); };
         }
         return this.addHarborSE;
     }
     getAddHarborSW() {
         if (this.addHarborSW == undefined) {
             this.addHarborSW = document.getElementById("addHarborSW");
-            this.addHarborSW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 4 /* SW */, true); };
+            this.addHarborSW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 4 /* SW */, true); };
         }
         return this.addHarborSW;
     }
     getAddHarborW() {
         if (this.addHarborW == undefined) {
             this.addHarborW = document.getElementById("addHarborW");
-            this.addHarborW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 5 /* W */, true); };
+            this.addHarborW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 5 /* W */, true); };
         }
         return this.addHarborW;
     }
@@ -7521,56 +7360,56 @@ class HarborCreationBox {
     getRemoveHarborNW() {
         if (this.removeHarborNW == undefined) {
             this.removeHarborNW = document.getElementById("removeHarborNW");
-            this.removeHarborNW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 0 /* NW */, false); };
+            this.removeHarborNW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 0 /* NW */, false); };
         }
         return this.removeHarborNW;
     }
     getRemoveHarborNE() {
         if (this.removeHarborNE == undefined) {
             this.removeHarborNE = document.getElementById("removeHarborNE");
-            this.removeHarborNE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 1 /* NE */, false); };
+            this.removeHarborNE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 1 /* NE */, false); };
         }
         return this.removeHarborNE;
     }
     getRemoveHarborE() {
         if (this.removeHarborE == undefined) {
             this.removeHarborE = document.getElementById("removeHarborE");
-            this.removeHarborE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 2 /* E */, false); };
+            this.removeHarborE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 2 /* E */, false); };
         }
         return this.removeHarborE;
     }
     getRemoveHarborSE() {
         if (this.removeHarborSE == undefined) {
             this.removeHarborSE = document.getElementById("removeHarborSE");
-            this.removeHarborSE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 3 /* SE */, false); };
+            this.removeHarborSE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 3 /* SE */, false); };
         }
         return this.removeHarborSE;
     }
     getRemoveHarborSW() {
         if (this.removeHarborSW == undefined) {
             this.removeHarborSW = document.getElementById("removeHarborSW");
-            this.removeHarborSW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 4 /* SW */, false); };
+            this.removeHarborSW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 4 /* SW */, false); };
         }
         return this.removeHarborSW;
     }
     getRemoveHarborW() {
         if (this.removeHarborW == undefined) {
             this.removeHarborW = document.getElementById("removeHarborW");
-            this.removeHarborW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 5 /* W */, false); };
+            this.removeHarborW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 5 /* W */, false); };
         }
         return this.removeHarborW;
     }
     getSaveBuildings() {
         if (this.saveBuildings == undefined) {
             this.saveBuildings = document.getElementById("SaveBuildings");
-            this.saveBuildings.onclick = function () { savingFunctions_1.Saving.saveBuildings(); };
+            this.saveBuildings.onclick = function () { types_1.Saving.saveBuildings(); };
         }
         return this.saveBuildings;
     }
 }
 exports.HarborCreationBox = HarborCreationBox;
 
-},{"../godmode/godModeFunctions":29,"../serverInteraction/savingFunctions":59}],39:[function(require,module,exports){
+},{"../types":60}],39:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -7646,9 +7485,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const buttonFunctions_1 = require("../controls/buttonFunctions");
-const boxVisibilty_1 = require("./boxVisibilty");
-const authenticationFunctions_1 = require("../serverInteraction/authenticationFunctions");
+const types_1 = require("../types");
 class InfoBox {
     getSelf() {
         if (this.self == undefined) {
@@ -7719,42 +7556,42 @@ class InfoBox {
     getMountButton() {
         if (this.mount == undefined) {
             this.mount = document.getElementById("mount");
-            this.mount.onclick = function () { boxVisibilty_1.BoxVisibility.activateMountBox(); };
+            this.mount.onclick = function () { types_1.BoxVisibility.activateMountBox(); };
         }
         return this.mount;
     }
     getUnMountButton() {
         if (this.unMount == undefined) {
             this.unMount = document.getElementById("unMount");
-            this.unMount.onclick = function () { boxVisibilty_1.BoxVisibility.activateUnMountBox(); };
+            this.unMount.onclick = function () { types_1.BoxVisibility.activateUnMountBox(); };
         }
         return this.unMount;
     }
     getSplitButton() {
         if (this.splitBtn == undefined) {
             this.splitBtn = document.getElementById("splitBtn");
-            this.splitBtn.onclick = function () { buttonFunctions_1.ButtonFunctions.activateSplitbox(); };
+            this.splitBtn.onclick = function () { types_1.ButtonFunctions.activateSplitbox(); };
         }
         return this.splitBtn;
     }
     getShootButton() {
         if (this.shoot == undefined) {
             this.shoot = document.getElementById("shoot");
-            this.shoot.onclick = function () { buttonFunctions_1.ButtonFunctions.toggleShootingMode(); };
+            this.shoot.onclick = function () { types_1.ButtonFunctions.toggleShootingMode(); };
         }
         return this.shoot;
     }
     getLogoutButton() {
         if (this.logoutBtn == undefined) {
             this.logoutBtn = document.getElementById("logoutBtn");
-            this.logoutBtn.onclick = function () { authenticationFunctions_1.Authentication.logoutFromServer(); };
+            this.logoutBtn.onclick = function () { types_1.Authentication.logoutFromServer(); };
         }
         return this.logoutBtn;
     }
 }
 exports.InfoBox = InfoBox;
 
-},{"../controls/buttonFunctions":17,"../serverInteraction/authenticationFunctions":57,"./boxVisibilty":32}],41:[function(require,module,exports){
+},{"../types":60}],41:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -7772,8 +7609,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const godModeFunctions_1 = require("../godmode/godModeFunctions");
-const authenticationFunctions_1 = require("../serverInteraction/authenticationFunctions");
+const types_1 = require("../types");
 class InfoChangeBox {
     getSelf() {
         if (this.self == undefined) {
@@ -7898,21 +7734,21 @@ class InfoChangeBox {
     getChangeArmyInfoButton() {
         if (this.changeArmyInfo == undefined) {
             this.changeArmyInfo = document.getElementById("changeArmyInfo");
-            this.changeArmyInfo.onclick = function () { godModeFunctions_1.GodFunctions.changeArmyInfo(); };
+            this.changeArmyInfo.onclick = function () { types_1.GodFunctions.changeArmyInfo(); };
         }
         return this.changeArmyInfo;
     }
     getLogoutButton() {
         if (this.logoutBtnChange == undefined) {
             this.logoutBtnChange = document.getElementById("logoutBtnChange");
-            this.logoutBtnChange.onclick = function () { authenticationFunctions_1.Authentication.logoutFromServer(); };
+            this.logoutBtnChange.onclick = function () { types_1.Authentication.logoutFromServer(); };
         }
         return this.logoutBtnChange;
     }
 }
 exports.InfoChangeBox = InfoChangeBox;
 
-},{"../godmode/godModeFunctions":29,"../serverInteraction/authenticationFunctions":57}],42:[function(require,module,exports){
+},{"../types":60}],42:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -7930,8 +7766,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gameState_1 = require("../gameState");
-const boxVisibilty_1 = require("./boxVisibilty");
+const types_1 = require("../types");
 class MainBox {
     getSelf() {
         if (this.self == undefined) {
@@ -7956,7 +7791,7 @@ class MainBox {
         // Get all elements with class="tabcontent" and hide them
         let tabcontent = document.getElementsByClassName("tabcontent");
         for (let i = 0; i < tabcontent.length; i++) {
-            boxVisibilty_1.BoxVisibility.hide(tabcontent[i]);
+            types_1.BoxVisibility.hide(tabcontent[i]);
         }
         // Get all elements with class="tablinks" and remove the class "active"
         let tablinks = document.getElementsByClassName("tablinks");
@@ -7968,22 +7803,22 @@ class MainBox {
         this.closeAllTabs();
         // Show the current tab, and add an "active" class to the button that opened the tab
         if (event != undefined && tab != undefined) {
-            boxVisibilty_1.BoxVisibility.show(tab);
+            types_1.BoxVisibility.show(tab);
             event.currentTarget.className += " active";
         }
     }
     fillEventList() {
         let eventList = this.getEventsTab();
         eventList.innerHTML = "";
-        for (let i = 0; i < gameState_1.GameState.loadedEvents.length; i++) {
-            gameState_1.GameState.loadedEvents[i].determineEventStatus();
-            eventList.appendChild(gameState_1.GameState.loadedEvents[i].makeEventListItem());
+        for (let i = 0; i < types_1.GameState.loadedEvents.length; i++) {
+            types_1.GameState.loadedEvents[i].determineEventStatus();
+            eventList.appendChild(types_1.GameState.loadedEvents[i].makeEventListItem());
         }
     }
 }
 exports.MainBox = MainBox;
 
-},{"../gameState":28,"./boxVisibilty":32}],43:[function(require,module,exports){
+},{"../types":60}],43:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -8001,21 +7836,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gameState_1 = require("../gameState");
-const drawingFunctions_1 = require("./drawingFunctions");
+const types_1 = require("../types");
 var MultiFieldFunctions;
 (function (MultiFieldFunctions) {
     //checks the current field for other armies and adds it accordingly
     function createMultifield(army) {
-        for (let j = 0; j < gameState_1.GameState.armies.length; j++) {
-            let someArmy = gameState_1.GameState.armies[j];
+        for (let j = 0; j < types_1.GameState.armies.length; j++) {
+            let someArmy = types_1.GameState.armies[j];
             if (someArmy.getPosition()[0] === army.getPosition()[0] && someArmy.getPosition()[1] === army.getPosition()[1] && someArmy !== army) {
                 if (someArmy.multiArmyField === true || army.multiArmyField === true) {
                     addToMultifield(someArmy, army);
                 }
                 else {
                     let templist = [someArmy, army]; //creating a list of armies to add to the list of multifieldarmies
-                    drawingFunctions_1.Drawing.listOfMultiArmyFields.push(templist);
+                    types_1.Drawing.listOfMultiArmyFields.push(templist);
                     someArmy.multiArmyField = true;
                     army.multiArmyField = true;
                 }
@@ -8025,21 +7859,21 @@ var MultiFieldFunctions;
     MultiFieldFunctions.createMultifield = createMultifield;
     //Adds an army to an existing multifield
     function addToMultifield(armyOnMultifield, armyToAdd) {
-        if (drawingFunctions_1.Drawing.listOfMultiArmyFields !== undefined) {
+        if (types_1.Drawing.listOfMultiArmyFields !== undefined) {
             let alreadyInList = false;
             let placeToAdd;
-            for (let i = 0; i < drawingFunctions_1.Drawing.listOfMultiArmyFields.length; i++) {
-                for (let j = 0; j < drawingFunctions_1.Drawing.listOfMultiArmyFields[i].length; j++) {
-                    if (drawingFunctions_1.Drawing.listOfMultiArmyFields[i][j] === armyOnMultifield) {
+            for (let i = 0; i < types_1.Drawing.listOfMultiArmyFields.length; i++) {
+                for (let j = 0; j < types_1.Drawing.listOfMultiArmyFields[i].length; j++) {
+                    if (types_1.Drawing.listOfMultiArmyFields[i][j] === armyOnMultifield) {
                         placeToAdd = i;
                     }
-                    else if (drawingFunctions_1.Drawing.listOfMultiArmyFields[i][j] === armyToAdd) {
+                    else if (types_1.Drawing.listOfMultiArmyFields[i][j] === armyToAdd) {
                         alreadyInList = true;
                     }
                 }
             }
             if (alreadyInList == false && placeToAdd !== undefined) {
-                drawingFunctions_1.Drawing.listOfMultiArmyFields[placeToAdd].push(armyToAdd);
+                types_1.Drawing.listOfMultiArmyFields[placeToAdd].push(armyToAdd);
             }
             armyToAdd.multiArmyField = true;
         }
@@ -8047,7 +7881,7 @@ var MultiFieldFunctions;
     MultiFieldFunctions.addToMultifield = addToMultifield;
 })(MultiFieldFunctions = exports.MultiFieldFunctions || (exports.MultiFieldFunctions = {}));
 
-},{"../gameState":28,"./drawingFunctions":35}],44:[function(require,module,exports){
+},{"../types":60}],44:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -8065,8 +7899,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const godModeFunctions_1 = require("../godmode/godModeFunctions");
-const savingFunctions_1 = require("../serverInteraction/savingFunctions");
+const types_1 = require("../types");
 class RiverBenderBox {
     getSelf() {
         if (this.self == undefined) {
@@ -8083,42 +7916,42 @@ class RiverBenderBox {
     getAddRiverNW() {
         if (this.addRiverNW == undefined) {
             this.addRiverNW = document.getElementById("addRiverNW");
-            this.addRiverNW.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(0 /* NW */); };
+            this.addRiverNW.onclick = function () { types_1.GodFunctions.addRiver(0 /* NW */); };
         }
         return this.addRiverNW;
     }
     getAddRiverNE() {
         if (this.addRiverNE == undefined) {
             this.addRiverNE = document.getElementById("addRiverNE");
-            this.addRiverNE.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(1 /* NE */); };
+            this.addRiverNE.onclick = function () { types_1.GodFunctions.addRiver(1 /* NE */); };
         }
         return this.addRiverNE;
     }
     getAddRiverE() {
         if (this.addRiverE == undefined) {
             this.addRiverE = document.getElementById("addRiverE");
-            this.addRiverE.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(2 /* E */); };
+            this.addRiverE.onclick = function () { types_1.GodFunctions.addRiver(2 /* E */); };
         }
         return this.addRiverE;
     }
     getAddRiverSE() {
         if (this.addRiverSE == undefined) {
             this.addRiverSE = document.getElementById("addRiverSE");
-            this.addRiverSE.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(3 /* SE */); };
+            this.addRiverSE.onclick = function () { types_1.GodFunctions.addRiver(3 /* SE */); };
         }
         return this.addRiverSE;
     }
     getAddRiverSW() {
         if (this.addRiverSW == undefined) {
             this.addRiverSW = document.getElementById("addRiverSW");
-            this.addRiverSW.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(4 /* SW */); };
+            this.addRiverSW.onclick = function () { types_1.GodFunctions.addRiver(4 /* SW */); };
         }
         return this.addRiverSW;
     }
     getAddRiverW() {
         if (this.addRiverW == undefined) {
             this.addRiverW = document.getElementById("addRiverW");
-            this.addRiverW.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(5 /* W */); };
+            this.addRiverW.onclick = function () { types_1.GodFunctions.addRiver(5 /* W */); };
         }
         return this.addRiverW;
     }
@@ -8131,56 +7964,56 @@ class RiverBenderBox {
     getRemoveRiverNW() {
         if (this.removeRiverNW == undefined) {
             this.removeRiverNW = document.getElementById("removeRiverNW");
-            this.removeRiverNW.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(0 /* NW */); };
+            this.removeRiverNW.onclick = function () { types_1.GodFunctions.removeRiver(0 /* NW */); };
         }
         return this.removeRiverNW;
     }
     getRemoveRiverNE() {
         if (this.removeRiverNE == undefined) {
             this.removeRiverNE = document.getElementById("removeRiverNE");
-            this.removeRiverNE.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(1 /* NE */); };
+            this.removeRiverNE.onclick = function () { types_1.GodFunctions.removeRiver(1 /* NE */); };
         }
         return this.removeRiverNE;
     }
     getRemoveRiverE() {
         if (this.removeRiverE == undefined) {
             this.removeRiverE = document.getElementById("removeRiverE");
-            this.removeRiverE.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(2 /* E */); };
+            this.removeRiverE.onclick = function () { types_1.GodFunctions.removeRiver(2 /* E */); };
         }
         return this.removeRiverE;
     }
     getRemoveRiverSE() {
         if (this.removeRiverSE == undefined) {
             this.removeRiverSE = document.getElementById("removeRiverSE");
-            this.removeRiverSE.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(3 /* SE */); };
+            this.removeRiverSE.onclick = function () { types_1.GodFunctions.removeRiver(3 /* SE */); };
         }
         return this.removeRiverSE;
     }
     getRemoveRiverSW() {
         if (this.removeRiverSW == undefined) {
             this.removeRiverSW = document.getElementById("removeRiverSW");
-            this.removeRiverSW.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(4 /* SW */); };
+            this.removeRiverSW.onclick = function () { types_1.GodFunctions.removeRiver(4 /* SW */); };
         }
         return this.removeRiverSW;
     }
     getRemoveRiverW() {
         if (this.removeRiverW == undefined) {
             this.removeRiverW = document.getElementById("removeRiverW");
-            this.removeRiverW.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(5 /* W */); };
+            this.removeRiverW.onclick = function () { types_1.GodFunctions.removeRiver(5 /* W */); };
         }
         return this.removeRiverW;
     }
     getSaveRivers() {
         if (this.saveRivers == undefined) {
             this.saveRivers = document.getElementById("SaveRivers");
-            this.saveRivers.onclick = function () { savingFunctions_1.Saving.saveRivers(); };
+            this.saveRivers.onclick = function () { types_1.Saving.saveRivers(); };
         }
         return this.saveRivers;
     }
 }
 exports.RiverBenderBox = RiverBenderBox;
 
-},{"../godmode/godModeFunctions":29,"../serverInteraction/savingFunctions":59}],45:[function(require,module,exports){
+},{"../types":60}],45:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -8324,8 +8157,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const godModeFunctions_1 = require("../godmode/godModeFunctions");
-const savingFunctions_1 = require("../serverInteraction/savingFunctions");
+const types_1 = require("../types");
 class StreetCreationBox {
     getSelf() {
         if (this.self == undefined) {
@@ -8342,42 +8174,42 @@ class StreetCreationBox {
     getAddStreetNW() {
         if (this.addStreetNW == undefined) {
             this.addStreetNW = document.getElementById("addStreetNW");
-            this.addStreetNW.onclick = function () { godModeFunctions_1.GodFunctions.addStreet(0 /* NW */); };
+            this.addStreetNW.onclick = function () { types_1.GodFunctions.addStreet(0 /* NW */); };
         }
         return this.addStreetNW;
     }
     getAddStreetNE() {
         if (this.addStreetNE == undefined) {
             this.addStreetNE = document.getElementById("addStreetNE");
-            this.addStreetNE.onclick = function () { godModeFunctions_1.GodFunctions.addStreet(1 /* NE */); };
+            this.addStreetNE.onclick = function () { types_1.GodFunctions.addStreet(1 /* NE */); };
         }
         return this.addStreetNE;
     }
     getAddStreetE() {
         if (this.addStreetE == undefined) {
             this.addStreetE = document.getElementById("addStreetE");
-            this.addStreetE.onclick = function () { godModeFunctions_1.GodFunctions.addStreet(2 /* E */); };
+            this.addStreetE.onclick = function () { types_1.GodFunctions.addStreet(2 /* E */); };
         }
         return this.addStreetE;
     }
     getAddStreetSE() {
         if (this.addStreetSE == undefined) {
             this.addStreetSE = document.getElementById("addStreetSE");
-            this.addStreetSE.onclick = function () { godModeFunctions_1.GodFunctions.addStreet(3 /* SE */); };
+            this.addStreetSE.onclick = function () { types_1.GodFunctions.addStreet(3 /* SE */); };
         }
         return this.addStreetSE;
     }
     getAddStreetSW() {
         if (this.addStreetSW == undefined) {
             this.addStreetSW = document.getElementById("addStreetSW");
-            this.addStreetSW.onclick = function () { godModeFunctions_1.GodFunctions.addStreet(4 /* SW */); };
+            this.addStreetSW.onclick = function () { types_1.GodFunctions.addStreet(4 /* SW */); };
         }
         return this.addStreetSW;
     }
     getAddStreetW() {
         if (this.addStreetW == undefined) {
             this.addStreetW = document.getElementById("addStreetW");
-            this.addStreetW.onclick = function () { godModeFunctions_1.GodFunctions.addStreet(5 /* W */); };
+            this.addStreetW.onclick = function () { types_1.GodFunctions.addStreet(5 /* W */); };
         }
         return this.addStreetW;
     }
@@ -8390,56 +8222,56 @@ class StreetCreationBox {
     getRemoveStreetNW() {
         if (this.removeStreetNW == undefined) {
             this.removeStreetNW = document.getElementById("removeStreetNW");
-            this.removeStreetNW.onclick = function () { godModeFunctions_1.GodFunctions.removeStreet(0 /* NW */); };
+            this.removeStreetNW.onclick = function () { types_1.GodFunctions.removeStreet(0 /* NW */); };
         }
         return this.removeStreetNW;
     }
     getRemoveStreetNE() {
         if (this.removeStreetNE == undefined) {
             this.removeStreetNE = document.getElementById("removeStreetNE");
-            this.removeStreetNE.onclick = function () { godModeFunctions_1.GodFunctions.removeStreet(1 /* NE */); };
+            this.removeStreetNE.onclick = function () { types_1.GodFunctions.removeStreet(1 /* NE */); };
         }
         return this.removeStreetNE;
     }
     getRemoveStreetE() {
         if (this.removeStreetE == undefined) {
             this.removeStreetE = document.getElementById("removeStreetE");
-            this.removeStreetE.onclick = function () { godModeFunctions_1.GodFunctions.removeStreet(2 /* E */); };
+            this.removeStreetE.onclick = function () { types_1.GodFunctions.removeStreet(2 /* E */); };
         }
         return this.removeStreetE;
     }
     getRemoveStreetSE() {
         if (this.removeStreetSE == undefined) {
             this.removeStreetSE = document.getElementById("removeStreetSE");
-            this.removeStreetSE.onclick = function () { godModeFunctions_1.GodFunctions.removeStreet(3 /* SE */); };
+            this.removeStreetSE.onclick = function () { types_1.GodFunctions.removeStreet(3 /* SE */); };
         }
         return this.removeStreetSE;
     }
     getRemoveStreetSW() {
         if (this.removeStreetSW == undefined) {
             this.removeStreetSW = document.getElementById("removeStreetSW");
-            this.removeStreetSW.onclick = function () { godModeFunctions_1.GodFunctions.removeStreet(4 /* SW */); };
+            this.removeStreetSW.onclick = function () { types_1.GodFunctions.removeStreet(4 /* SW */); };
         }
         return this.removeStreetSW;
     }
     getRemoveStreetW() {
         if (this.removeStreetW == undefined) {
             this.removeStreetW = document.getElementById("removeStreetW");
-            this.removeStreetW.onclick = function () { godModeFunctions_1.GodFunctions.removeStreet(5 /* W */); };
+            this.removeStreetW.onclick = function () { types_1.GodFunctions.removeStreet(5 /* W */); };
         }
         return this.removeStreetW;
     }
     getSaveBuildings() {
         if (this.saveBuildings == undefined) {
             this.saveBuildings = document.getElementById("SaveBuildings");
-            this.saveBuildings.onclick = function () { savingFunctions_1.Saving.saveBuildings(); };
+            this.saveBuildings.onclick = function () { types_1.Saving.saveBuildings(); };
         }
         return this.saveBuildings;
     }
 }
 exports.StreetCreationBox = StreetCreationBox;
 
-},{"../godmode/godModeFunctions":29,"../serverInteraction/savingFunctions":59}],47:[function(require,module,exports){
+},{"../types":60}],47:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -8457,8 +8289,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const godModeFunctions_1 = require("../godmode/godModeFunctions");
-const savingFunctions_1 = require("../serverInteraction/savingFunctions");
+const types_1 = require("../types");
 class WallCreationBox {
     getSelf() {
         if (this.self == undefined) {
@@ -8475,42 +8306,42 @@ class WallCreationBox {
     getAddWallNW() {
         if (this.addWallNW == undefined) {
             this.addWallNW = document.getElementById("addWallNW");
-            this.addWallNW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 0 /* NW */, true); };
+            this.addWallNW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(5, 0 /* NW */, true); };
         }
         return this.addWallNW;
     }
     getAddWallNE() {
         if (this.addWallNE == undefined) {
             this.addWallNE = document.getElementById("addWallNE");
-            this.addWallNE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 1 /* NE */, true); };
+            this.addWallNE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(5, 1 /* NE */, true); };
         }
         return this.addWallNE;
     }
     getAddWallE() {
         if (this.addWallE == undefined) {
             this.addWallE = document.getElementById("addWallE");
-            this.addWallE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 2 /* E */, true); };
+            this.addWallE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(5, 2 /* E */, true); };
         }
         return this.addWallE;
     }
     getAddWallSE() {
         if (this.addWallSE == undefined) {
             this.addWallSE = document.getElementById("addWallSE");
-            this.addWallSE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 3 /* SE */, true); };
+            this.addWallSE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(5, 3 /* SE */, true); };
         }
         return this.addWallSE;
     }
     getAddWallSW() {
         if (this.addWallSW == undefined) {
             this.addWallSW = document.getElementById("addWallSW");
-            this.addWallSW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 4 /* SW */, true); };
+            this.addWallSW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(5, 4 /* SW */, true); };
         }
         return this.addWallSW;
     }
     getAddWallW() {
         if (this.addWallW == undefined) {
             this.addWallW = document.getElementById("addWallW");
-            this.addWallW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 5 /* W */, true); };
+            this.addWallW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(5, 5 /* W */, true); };
         }
         return this.addWallW;
     }
@@ -8523,56 +8354,56 @@ class WallCreationBox {
     getRemoveWallNW() {
         if (this.removeWallNW == undefined) {
             this.removeWallNW = document.getElementById("removeWallNW");
-            this.removeWallNW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 0 /* NW */, false); };
+            this.removeWallNW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(5, 0 /* NW */, false); };
         }
         return this.removeWallNW;
     }
     getRemoveWallNE() {
         if (this.removeWallNE == undefined) {
             this.removeWallNE = document.getElementById("removeWallNE");
-            this.removeWallNE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 1 /* NE */, false); };
+            this.removeWallNE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(5, 1 /* NE */, false); };
         }
         return this.removeWallNE;
     }
     getRemoveWallE() {
         if (this.removeWallE == undefined) {
             this.removeWallE = document.getElementById("removeWallE");
-            this.removeWallE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 2 /* E */, false); };
+            this.removeWallE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(5, 2 /* E */, false); };
         }
         return this.removeWallE;
     }
     getRemoveWallSE() {
         if (this.removeWallSE == undefined) {
             this.removeWallSE = document.getElementById("removeWallSE");
-            this.removeWallSE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 3 /* SE */, false); };
+            this.removeWallSE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(5, 3 /* SE */, false); };
         }
         return this.removeWallSE;
     }
     getRemoveWallSW() {
         if (this.removeWallSW == undefined) {
             this.removeWallSW = document.getElementById("removeWallSW");
-            this.removeWallSW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 4 /* SW */, false); };
+            this.removeWallSW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(5, 4 /* SW */, false); };
         }
         return this.removeWallSW;
     }
     getRemoveWallW() {
         if (this.removeWallW == undefined) {
             this.removeWallW = document.getElementById("removeWallW");
-            this.removeWallW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(5, 5 /* W */, false); };
+            this.removeWallW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(5, 5 /* W */, false); };
         }
         return this.removeWallW;
     }
     getSaveBuildings() {
         if (this.saveBuildings == undefined) {
             this.saveBuildings = document.getElementById("SaveBuildings");
-            this.saveBuildings.onclick = function () { savingFunctions_1.Saving.saveBuildings(); };
+            this.saveBuildings.onclick = function () { types_1.Saving.saveBuildings(); };
         }
         return this.saveBuildings;
     }
 }
 exports.WallCreationBox = WallCreationBox;
 
-},{"../godmode/godModeFunctions":29,"../serverInteraction/savingFunctions":59}],48:[function(require,module,exports){
+},{"../types":60}],48:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -8590,8 +8421,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const godModeFunctions_1 = require("../godmode/godModeFunctions");
-const savingFunctions_1 = require("../serverInteraction/savingFunctions");
+const types_1 = require("../types");
 class WorldBenderBox {
     getSelf() {
         if (this.self == undefined) {
@@ -8608,14 +8438,14 @@ class WorldBenderBox {
     getToggleOnClickWorldCreationMode() {
         if (this.toggleOnClickWorldCreationMode == undefined) {
             this.toggleOnClickWorldCreationMode = document.getElementById("ToggleOnClickWorldCreationMode");
-            this.toggleOnClickWorldCreationMode.onclick = function () { godModeFunctions_1.GodFunctions.toggleOnClickWorldCreationMode(); };
+            this.toggleOnClickWorldCreationMode.onclick = function () { types_1.GodFunctions.toggleOnClickWorldCreationMode(); };
         }
         return this.toggleOnClickWorldCreationMode;
     }
     getSaveFields() {
         if (this.saveFields == undefined) {
             this.saveFields = document.getElementById("SaveFields");
-            this.saveFields.onclick = function () { savingFunctions_1.Saving.saveFields(); };
+            this.saveFields.onclick = function () { types_1.Saving.saveFields(); };
         }
         return this.saveFields;
     }
@@ -8628,77 +8458,77 @@ class WorldBenderBox {
     getChangeFieldClickedTo0() {
         if (this.changeFieldClickedTo0 == undefined) {
             this.changeFieldClickedTo0 = document.getElementById("ChangeFieldClickedTo0");
-            this.changeFieldClickedTo0.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(0); };
+            this.changeFieldClickedTo0.onclick = function () { types_1.GodFunctions.changeFieldClickedTo(0); };
         }
         return this.changeFieldClickedTo0;
     }
     getChangeFieldClickedTo1() {
         if (this.changeFieldClickedTo1 == undefined) {
             this.changeFieldClickedTo1 = document.getElementById("ChangeFieldClickedTo1");
-            this.changeFieldClickedTo1.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(1); };
+            this.changeFieldClickedTo1.onclick = function () { types_1.GodFunctions.changeFieldClickedTo(1); };
         }
         return this.changeFieldClickedTo1;
     }
     getChangeFieldClickedTo2() {
         if (this.changeFieldClickedTo2 == undefined) {
             this.changeFieldClickedTo2 = document.getElementById("ChangeFieldClickedTo2");
-            this.changeFieldClickedTo2.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(2); };
+            this.changeFieldClickedTo2.onclick = function () { types_1.GodFunctions.changeFieldClickedTo(2); };
         }
         return this.changeFieldClickedTo2;
     }
     getChangeFieldClickedTo3() {
         if (this.changeFieldClickedTo3 == undefined) {
             this.changeFieldClickedTo3 = document.getElementById("ChangeFieldClickedTo3");
-            this.changeFieldClickedTo3.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(3); };
+            this.changeFieldClickedTo3.onclick = function () { types_1.GodFunctions.changeFieldClickedTo(3); };
         }
         return this.changeFieldClickedTo3;
     }
     getChangeFieldClickedTo4() {
         if (this.changeFieldClickedTo4 == undefined) {
             this.changeFieldClickedTo4 = document.getElementById("ChangeFieldClickedTo4");
-            this.changeFieldClickedTo4.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(4); };
+            this.changeFieldClickedTo4.onclick = function () { types_1.GodFunctions.changeFieldClickedTo(4); };
         }
         return this.changeFieldClickedTo4;
     }
     getChangeFieldClickedTo5() {
         if (this.changeFieldClickedTo5 == undefined) {
             this.changeFieldClickedTo5 = document.getElementById("ChangeFieldClickedTo5");
-            this.changeFieldClickedTo5.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(5); };
+            this.changeFieldClickedTo5.onclick = function () { types_1.GodFunctions.changeFieldClickedTo(5); };
         }
         return this.changeFieldClickedTo5;
     }
     getChangeFieldClickedTo6() {
         if (this.changeFieldClickedTo6 == undefined) {
             this.changeFieldClickedTo6 = document.getElementById("ChangeFieldClickedTo6");
-            this.changeFieldClickedTo6.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(6); };
+            this.changeFieldClickedTo6.onclick = function () { types_1.GodFunctions.changeFieldClickedTo(6); };
         }
         return this.changeFieldClickedTo6;
     }
     getChangeFieldClickedTo7() {
         if (this.changeFieldClickedTo7 == undefined) {
             this.changeFieldClickedTo7 = document.getElementById("ChangeFieldClickedTo7");
-            this.changeFieldClickedTo7.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(7); };
+            this.changeFieldClickedTo7.onclick = function () { types_1.GodFunctions.changeFieldClickedTo(7); };
         }
         return this.changeFieldClickedTo7;
     }
     getChangeFieldClickedTo8() {
         if (this.changeFieldClickedTo8 == undefined) {
             this.changeFieldClickedTo8 = document.getElementById("ChangeFieldClickedTo8");
-            this.changeFieldClickedTo8.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(8); };
+            this.changeFieldClickedTo8.onclick = function () { types_1.GodFunctions.changeFieldClickedTo(8); };
         }
         return this.changeFieldClickedTo8;
     }
     getChangeFieldClickedTo9() {
         if (this.changeFieldClickedTo9 == undefined) {
             this.changeFieldClickedTo9 = document.getElementById("ChangeFieldClickedTo9");
-            this.changeFieldClickedTo9.onclick = function () { godModeFunctions_1.GodFunctions.changeFieldClickedTo(9); };
+            this.changeFieldClickedTo9.onclick = function () { types_1.GodFunctions.changeFieldClickedTo(9); };
         }
         return this.changeFieldClickedTo9;
     }
 }
 exports.WorldBenderBox = WorldBenderBox;
 
-},{"../godmode/godModeFunctions":29,"../serverInteraction/savingFunctions":59}],49:[function(require,module,exports){
+},{"../types":60}],49:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -8716,33 +8546,28 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const controlVariables_1 = require("../controls/controlVariables");
-const gameState_1 = require("../gameState");
-const landArmy_1 = require("../armies/landArmy");
-const fleet_1 = require("../armies/fleet");
-const footArmy_1 = require("../armies/footArmy");
-const riderArmy_1 = require("../armies/riderArmy");
+const types_1 = require("../types");
 var ArmyFunctions;
 (function (ArmyFunctions) {
     function deleteArmy(army) {
-        gameState_1.GameState.armies.splice(gameState_1.GameState.armies.indexOf(army), 1);
+        types_1.GameState.armies.splice(types_1.GameState.armies.indexOf(army), 1);
         //if the army is loaded in a fleet, throw it out of it
-        if (army instanceof landArmy_1.LandArmy && army.isTransported()) {
+        if (army instanceof types_1.LandArmy && army.isTransported()) {
             let transportingFleet = army.transportingFleet;
             if (transportingFleet != undefined) {
                 transportingFleet.unloadArmy(army);
             }
         }
-        if (controlVariables_1.Controls.selectedArmyIndex === gameState_1.GameState.armies.length) {
-            controlVariables_1.Controls.selectedArmyIndex = -1;
+        if (types_1.Controls.selectedArmyIndex === types_1.GameState.armies.length) {
+            types_1.Controls.selectedArmyIndex = -1;
         }
     }
     ArmyFunctions.deleteArmy = deleteArmy;
     // returns the next armyId not yet assigned for the caller
     function generateArmyId(type, owner) {
-        let ownedArmies = gameState_1.GameState.armies.filter(army => army.owner === owner);
+        let ownedArmies = types_1.GameState.armies.filter(army => army.owner === owner);
         if (type === 1) { //foot armies
-            let ownedFootArmies = ownedArmies.filter(army => army instanceof footArmy_1.FootArmy);
+            let ownedFootArmies = ownedArmies.filter(army => army instanceof types_1.FootArmy);
             for (let result = 101; result < 200; result++) {
                 if (!ownedFootArmies.some(army => army.getErkenfaraID() === result)) {
                     return result;
@@ -8751,7 +8576,7 @@ var ArmyFunctions;
             throw new Error("Du hast die maximale Anzahl an Fußheeren erreicht.");
         }
         else if (type === 2) { //rider armies
-            let ownedRiderArmies = ownedArmies.filter(army => army instanceof riderArmy_1.RiderArmy);
+            let ownedRiderArmies = ownedArmies.filter(army => army instanceof types_1.RiderArmy);
             for (let result = 201; result < 300; result++) {
                 if (!ownedRiderArmies.some(army => army.getErkenfaraID() === result)) {
                     return result;
@@ -8760,7 +8585,7 @@ var ArmyFunctions;
             throw new Error("Du hast die maximale Anzahl an Reiterheeren erreicht.");
         }
         else if (type === 3) { //fleets
-            let ownedFleets = ownedArmies.filter(army => army instanceof fleet_1.Fleet);
+            let ownedFleets = ownedArmies.filter(army => army instanceof types_1.Fleet);
             for (let result = 301; result < 400; result++) {
                 if (!ownedFleets.some(army => army.getErkenfaraID() === result)) {
                     return result;
@@ -8775,14 +8600,14 @@ var ArmyFunctions;
     ArmyFunctions.generateArmyId = generateArmyId;
     function checkArmiesForLiveliness() {
         //find all dead armies
-        let deadArmies = gameState_1.GameState.armies.filter(army => !army.isAlive());
+        let deadArmies = types_1.GameState.armies.filter(army => !army.isAlive());
         //delete them
         deadArmies.forEach(deadArmy => deleteArmy(deadArmy));
     }
     ArmyFunctions.checkArmiesForLiveliness = checkArmiesForLiveliness;
 })(ArmyFunctions = exports.ArmyFunctions || (exports.ArmyFunctions = {}));
 
-},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/landArmy":6,"../armies/riderArmy":9,"../controls/controlVariables":18,"../gameState":28}],50:[function(require,module,exports){
+},{"../types":60}],50:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -8800,13 +8625,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gameState_1 = require("../gameState");
-const wall_1 = require("../buildings/wall");
-const constants_1 = require("../constants");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
+// contains helper functions to get information about a field out of the fields array with just its coordinates.
+const types_1 = require("../types");
 var HexFunction;
 (function (HexFunction) {
-    var SIN60 = constants_1.Constants.SIN60;
+    var SIN60 = types_1.Constants.SIN60;
     // this.id = function(){
     //     //TODO: GroßhexKleinhex Zahl bestimmen.
     // }
@@ -8827,7 +8650,7 @@ var HexFunction;
     function fluesse(hex) {
         let result = [false, false, false, false, false, false];
         let surroundings = neighbors(hex);
-        gameState_1.GameState.rivers.forEach(river => {
+        types_1.GameState.rivers.forEach(river => {
             if ((hex[0] === river.leftBank[0] && hex[1] === river.leftBank[1]) ||
                 (hex[0] === river.rightBank[0] && hex[1] === river.rightBank[1])) {
                 surroundings.forEach((surrounding, index) => {
@@ -8843,19 +8666,19 @@ var HexFunction;
     HexFunction.fluesse = fluesse;
     // where in the field list is this field
     function positionInList(hex) {
-        return gameState_1.GameState.fields.findIndex(field => field.coordinates[0] === hex[0] && field.coordinates[1] === hex[1]);
+        return types_1.GameState.fields.findIndex(field => field.coordinates[0] === hex[0] && field.coordinates[1] === hex[1]);
     }
     HexFunction.positionInList = positionInList;
     // what type is this field
     function fieldType(hex) {
-        let foundField = gameState_1.GameState.fields.find(field => field.coordinates[0] === hex[0] &&
+        let foundField = types_1.GameState.fields.find(field => field.coordinates[0] === hex[0] &&
             field.coordinates[1] === hex[1]);
         return (foundField != undefined) ? foundField.type : -1;
     }
     HexFunction.fieldType = fieldType;
     // what height is this field
     function height(hex) {
-        let field = gameState_1.GameState.fields.find(field => field.coordinates[0] === hex[0] && field.coordinates[1] === hex[1]);
+        let field = types_1.GameState.fields.find(field => field.coordinates[0] === hex[0] && field.coordinates[1] === hex[1]);
         return (field != undefined) ? field.getHeight() : -1;
     }
     HexFunction.height = height;
@@ -8939,7 +8762,7 @@ var HexFunction;
     HexFunction.findCommonNeighbor = findCommonNeighbor;
     // does the field has a street on it in any direction
     function hasStreet(hex) {
-        return gameState_1.GameState.buildings.some((elem) => elem.type === 8 /* STREET */ &&
+        return types_1.GameState.buildings.some((elem) => elem.type === 8 /* STREET */ &&
             ((elem.getPosition()[0] === hex[0] && elem.getPosition()[1] === hex[1]) ||
                 (elem.getSecondPosition()[0] === hex[0] &&
                     elem.getSecondPosition()[1] === hex[1])));
@@ -8948,7 +8771,7 @@ var HexFunction;
     // in which directions does this field have walls (order as above, only walls build on this field)
     function walls(hex) {
         let result = [false, false, false, false, false, false];
-        let walls = gameState_1.GameState.buildings.filter(elem => (elem instanceof wall_1.Wall &&
+        let walls = types_1.GameState.buildings.filter(elem => (elem instanceof types_1.Wall &&
             elem.getPosition()[0] === hex[0] && elem.getPosition()[1] === hex[1]));
         walls.forEach(wall => {
             switch (wall.facing) {
@@ -8979,7 +8802,7 @@ var HexFunction;
     function bridges(hex) {
         let result = [false, false, false, false, false, false];
         let neighbor = neighbors(hex);
-        gameState_1.GameState.buildings.forEach(elem => {
+        types_1.GameState.buildings.forEach(elem => {
             if (elem.type === 7 /* BRIDGE */) { //bridge type
                 if (elem.getPosition()[0] === hex[0] && elem.getPosition()[1] === hex[1]) { //bridge on this field
                     result[neighbor.indexOf(elem.getSecondPosition())] = true;
@@ -8998,7 +8821,7 @@ var HexFunction;
         //get the current field's x position
         let xpos = orig[0] + (curr[0] * scale * SIN60);
         //each odd row is offset half a hex to the left
-        return [(((curr[1] % 2) !== 0) ? (xpos - (0.5 * scale * SIN60)) : (xpos)), orig[1] + (curr[1] * drawingFunctions_1.Drawing.gH)];
+        return [(((curr[1] % 2) !== 0) ? (xpos - (0.5 * scale * SIN60)) : (xpos)), orig[1] + (curr[1] * types_1.Drawing.gH)];
     }
     HexFunction.computePosition = computePosition;
     //for all directions in the usual order (nw, ne, e, se, sw, w)
@@ -9069,9 +8892,9 @@ var HexFunction;
     HexFunction.findWallInWay = findWallInWay;
     //returns all walls on target field
     function getWallIndexOnFieldInDirection(hex, direction) {
-        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
-            if (gameState_1.GameState.buildings[i] instanceof wall_1.Wall) {
-                let thisIsAWall = gameState_1.GameState.buildings[i];
+        for (let i = 0; i < types_1.GameState.buildings.length; i++) {
+            if (types_1.GameState.buildings[i] instanceof types_1.Wall) {
+                let thisIsAWall = types_1.GameState.buildings[i];
                 if (thisIsAWall.getPosition()[0] === hex[0] &&
                     thisIsAWall.getPosition()[1] === hex[1] && thisIsAWall.facing === direction) {
                     return i;
@@ -9082,7 +8905,7 @@ var HexFunction;
     }
 })(HexFunction = exports.HexFunction || (exports.HexFunction = {}));
 
-},{"../buildings/wall":15,"../constants":16,"../gameState":28,"../gui/drawingFunctions":35}],51:[function(require,module,exports){
+},{"../types":60}],51:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -9253,25 +9076,22 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const mouseFunctions_1 = require("./controls/mouseFunctions");
-const drawingFunctions_1 = require("./gui/drawingFunctions");
-const gui_1 = require("./gui/gui");
-const loadingDataFunctions_1 = require("./serverInteraction/loadingDataFunctions");
+const types_1 = require("./types");
 // attach handlers to mouse events and canvas resizing
-window.addEventListener('resize', drawingFunctions_1.Drawing.resizeCanvas, false);
-gui_1.GUI.getCanvas().addEventListener('mousedown', mouseFunctions_1.MouseFunctions.mouseDown, true);
-document.addEventListener('mouseup', mouseFunctions_1.MouseFunctions.mouseUp, true);
-gui_1.GUI.getCanvas().addEventListener('mousemove', mouseFunctions_1.MouseFunctions.mouseMove, true);
-gui_1.GUI.getCanvas().addEventListener('wheel', mouseFunctions_1.MouseFunctions.mouseWheel, true);
+window.addEventListener('resize', types_1.Drawing.resizeCanvas, false);
+types_1.GUI.getCanvas().addEventListener('mousedown', types_1.MouseFunctions.mouseDown, true);
+document.addEventListener('mouseup', types_1.MouseFunctions.mouseUp, true);
+types_1.GUI.getCanvas().addEventListener('mousemove', types_1.MouseFunctions.mouseMove, true);
+types_1.GUI.getCanvas().addEventListener('wheel', types_1.MouseFunctions.mouseWheel, true);
 // initializing the tool
-loadingDataFunctions_1.Loading.getNewDataFromServer();
-loadingDataFunctions_1.Loading.loadTurnNumber();
-loadingDataFunctions_1.Loading.loadImages(drawingFunctions_1.Drawing.tileset);
-drawingFunctions_1.Drawing.setHexParts(drawingFunctions_1.Drawing.scale);
+types_1.Loading.getNewDataFromServer();
+types_1.Loading.loadTurnNumber();
+types_1.Loading.loadImages(types_1.Drawing.tileset);
+types_1.Drawing.setHexParts(types_1.Drawing.scale);
 // activating periodic reloading of data from server
-setInterval(loadingDataFunctions_1.Loading.getNewDataFromServer, 30000);
+setInterval(types_1.Loading.getNewDataFromServer, 30000);
 
-},{"./controls/mouseFunctions":19,"./gui/drawingFunctions":35,"./gui/gui":37,"./serverInteraction/loadingDataFunctions":58}],56:[function(require,module,exports){
+},{"./types":60}],56:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -9326,15 +9146,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gui_1 = require("../gui/gui");
-const boxVisibilty_1 = require("../gui/boxVisibilty");
-const loadingDataFunctions_1 = require("./loadingDataFunctions");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const gameState_1 = require("../gameState");
+const types_1 = require("../types");
 var Authentication;
 (function (Authentication) {
-    var show = boxVisibilty_1.BoxVisibility.show;
-    var hide = boxVisibilty_1.BoxVisibility.hide;
+    var show = types_1.BoxVisibility.show;
+    var hide = types_1.BoxVisibility.hide;
     //put the url/IP for the remote game server here
     // export let url = "http://phoenixserver.h2610265.stratoserver.net"; // online server
     Authentication.url = "http://localhost:8000"; // for local debug
@@ -9355,35 +9171,35 @@ var Authentication;
             success: (data) => {
                 // saving the authenticationToken
                 Authentication.authenticationToken = data.token;
-                gameState_1.GameState.login = data.group;
+                types_1.GameState.login = data.group;
                 // if the user is a GM, godmode possibility is displayed
-                if (gameState_1.GameState.login === 'sl') {
-                    gui_1.GUI.getToggleGMBarButton().style.display = "";
-                    if (gameState_1.GameState.currentTurn.status === 'fi') {
+                if (types_1.GameState.login === 'sl') {
+                    types_1.GUI.getToggleGMBarButton().style.display = "";
+                    if (types_1.GameState.currentTurn.status === 'fi') {
                         let btnToShow = document.getElementById("eventTabsButton");
                         if (btnToShow !== null) {
                             show(btnToShow);
                         }
-                        loadingDataFunctions_1.Loading.loadPendingEvents();
+                        types_1.Loading.loadPendingEvents();
                     }
                 }
                 // overwrite old known data
-                loadingDataFunctions_1.Loading.getNewDataFromServer();
+                types_1.Loading.getNewDataFromServer();
                 Authentication.logintime = 0;
-                hide(gui_1.GUI.getBigBox().getEventTabsButton());
-                gui_1.GUI.getBigBox().getEventsTab().innerHTML = "";
-                drawingFunctions_1.Drawing.writeTurnNumber();
+                hide(types_1.GUI.getBigBox().getEventTabsButton());
+                types_1.GUI.getBigBox().getEventsTab().innerHTML = "";
+                types_1.Drawing.writeTurnNumber();
             },
             error: (data) => {
                 // alert for a failed login
                 alert("Login failed and logged in as guest. Check username or password.");
-                loadingDataFunctions_1.Loading.getNewDataFromServer();
+                types_1.Loading.getNewDataFromServer();
             },
             dataType: "json"
         });
         // change loginBox to infoBox
-        show(gui_1.GUI.getInfoBox().getSelf());
-        hide(gui_1.GUI.getLoginBox());
+        show(types_1.GUI.getInfoBox().getSelf());
+        hide(types_1.GUI.getLoginBox());
     }
     Authentication.loginToServer = loginToServer;
     // logs out from Server, closes everything you need login for, deletes login time
@@ -9393,33 +9209,33 @@ var Authentication;
             url: Authentication.url + "/databaseLink/logout/"
         });
         // turning off godmode Box, and changing infoBox to Login Box
-        gameState_1.GameState.login = 'guest';
-        boxVisibilty_1.BoxVisibility.switchBtnBoxTo(gui_1.GUI.getButtonsBox());
-        boxVisibilty_1.BoxVisibility.switchModeTo("none");
+        types_1.GameState.login = 'guest';
+        types_1.BoxVisibility.switchBtnBoxTo(types_1.GUI.getButtonsBox());
+        types_1.BoxVisibility.switchModeTo("none");
         // Hide gm functionalities
-        hide(gui_1.GUI.getGodModeBox().getSelf());
-        hide(gui_1.GUI.getToggleGMBarButton());
-        hide(gui_1.GUI.getInfoBox().getSelf());
-        show(gui_1.GUI.getLoginBox());
+        hide(types_1.GUI.getGodModeBox().getSelf());
+        hide(types_1.GUI.getToggleGMBarButton());
+        hide(types_1.GUI.getInfoBox().getSelf());
+        show(types_1.GUI.getLoginBox());
         //change the info change box, back to the normal info Box
-        hide(gui_1.GUI.getInfoChangeBox().getSelf());
+        hide(types_1.GUI.getInfoChangeBox().getSelf());
         // forget old authenticationToken
         Authentication.authenticationToken = 0;
         // overwrite previously known data
-        loadingDataFunctions_1.Loading.getNewDataFromServer();
+        types_1.Loading.getNewDataFromServer();
         Authentication.logintime = 0;
-        hide(gui_1.GUI.getBigBox().getEventTabsButton());
-        let eventList = gui_1.GUI.getBigBox().getEventsTab();
+        hide(types_1.GUI.getBigBox().getEventTabsButton());
+        let eventList = types_1.GUI.getBigBox().getEventsTab();
         eventList.innerHTML = "";
-        gui_1.GUI.getBigBox().closeAllTabs();
-        gameState_1.GameState.newEvents = [];
-        gameState_1.GameState.loadedEvents = [];
-        drawingFunctions_1.Drawing.writeTurnNumber();
+        types_1.GUI.getBigBox().closeAllTabs();
+        types_1.GameState.newEvents = [];
+        types_1.GameState.loadedEvents = [];
+        types_1.Drawing.writeTurnNumber();
     }
     Authentication.logoutFromServer = logoutFromServer;
 })(Authentication = exports.Authentication || (exports.Authentication = {}));
 
-},{"../gameState":28,"../gui/boxVisibilty":32,"../gui/drawingFunctions":35,"../gui/gui":37,"./loadingDataFunctions":58}],58:[function(require,module,exports){
+},{"../types":60}],58:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -9437,103 +9253,82 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const authenticationFunctions_1 = require("./authenticationFunctions");
-const gameState_1 = require("../gameState");
-const moveEvent_1 = require("../events/moveEvent");
-const battleEvent_1 = require("../events/battleEvent");
-const shootEvent_1 = require("../events/shootEvent");
-const mergeEvent_1 = require("../events/mergeEvent");
-const mountEvent_1 = require("../events/mountEvent");
-const transferEvent_1 = require("../events/transferEvent");
-const splitEvent_1 = require("../events/splitEvent");
-const realm_1 = require("../realm");
-const riderArmy_1 = require("../armies/riderArmy");
-const river_1 = require("../map/river");
-const field_1 = require("../map/field");
-const footArmy_1 = require("../armies/footArmy");
-const fleet_1 = require("../armies/fleet");
-const direction_1 = require("../map/direction");
-const wall_1 = require("../buildings/wall");
-const productionBuilding_1 = require("../buildings/productionBuilding");
-const nonDestructibleBuilding_1 = require("../buildings/nonDestructibleBuilding");
-const images_1 = require("../gui/images");
-const gui_1 = require("../gui/gui");
+const types_1 = require("../types");
 var Loading;
 (function (Loading) {
     // help function to fetch current data from the server
-    var url = authenticationFunctions_1.Authentication.url;
+    var url = types_1.Authentication.url;
     function getNewDataFromServer() {
         loadMap();
     }
     Loading.getNewDataFromServer = getNewDataFromServer;
     function loadTurnNumber() {
         $.getJSON(url + "/databaseLink/getturn/", (json) => {
-            gameState_1.GameState.currentTurn = json;
-            drawingFunctions_1.Drawing.writeTurnNumber();
+            types_1.GameState.currentTurn = json;
+            types_1.Drawing.writeTurnNumber();
         });
     }
     Loading.loadTurnNumber = loadTurnNumber;
     function loadPendingEvents() {
         $.getJSON(url + "/databaseLink/getevents/", (json) => {
             let pendingEvents = json;
-            gameState_1.GameState.loadedEvents = [];
+            types_1.GameState.loadedEvents = [];
             pendingEvents.forEach((item, index) => {
                 let content = item.content;
                 let realm;
                 switch (item.type) {
                     case "move":
-                        realm = gameState_1.GameState.realms.find(realm => (realm.tag === content.realm));
+                        realm = types_1.GameState.realms.find(realm => (realm.tag === content.realm));
                         if (realm != undefined) {
-                            gameState_1.GameState.loadedEvents.push(new moveEvent_1.MoveEvent(index, 5 /* Undetermined */, realm, content.armyId, [content.fromX, content.fromY], [content.toX, content.toY], item.prerequisiteEvents, item.pk));
+                            types_1.GameState.loadedEvents.push(new types_1.MoveEvent(index, 5 /* Undetermined */, realm, content.armyId, [content.fromX, content.fromY], [content.toX, content.toY], item.prerequisiteEvents, item.pk));
                         }
                         else {
                             window.alert("Realm with tag " + content.realm + " not found.");
                         }
                         break;
                     case "battle":
-                        gameState_1.GameState.loadedEvents.push(new battleEvent_1.BattleEvent(index, 5 /* Undetermined */, content.participants, [content.x, content.y], item.prerequisiteEvents, item.pk));
+                        types_1.GameState.loadedEvents.push(new types_1.BattleEvent(index, 5 /* Undetermined */, content.participants, [content.x, content.y], item.prerequisiteEvents, item.pk));
                         break;
                     case "shoot":
-                        realm = gameState_1.GameState.realms.find(realm => (realm.tag === content.realm));
+                        realm = types_1.GameState.realms.find(realm => (realm.tag === content.realm));
                         if (realm != undefined) {
-                            gameState_1.GameState.loadedEvents.push(new shootEvent_1.ShootEvent(index, 5 /* Undetermined */, realm, content.armyId, [content.toX, content.toY], [content.fromX, content.fromY], content.LKPcount, content.SKPcount, content.target, item.prerequisiteEvents, item.pk));
+                            types_1.GameState.loadedEvents.push(new types_1.ShootEvent(index, 5 /* Undetermined */, realm, content.armyId, [content.toX, content.toY], [content.fromX, content.fromY], content.LKPcount, content.SKPcount, content.target, item.prerequisiteEvents, item.pk));
                         }
                         else {
                             window.alert("Realm with tag " + content.realm + " not found.");
                         }
                         break;
                     case "split":
-                        realm = gameState_1.GameState.realms.find(realm => (realm.tag === content.realm));
+                        realm = types_1.GameState.realms.find(realm => (realm.tag === content.realm));
                         if (realm != undefined) {
-                            gameState_1.GameState.loadedEvents.push(new splitEvent_1.SplitEvent(index, 5 /* Undetermined */, content.fromArmy, content.newArmy, realm, content.troops, content.leaders, content.mounts, content.lkp, content.skp, [content.x, content.y], item.prerequisiteEvents, item.pk));
+                            types_1.GameState.loadedEvents.push(new types_1.SplitEvent(index, 5 /* Undetermined */, content.fromArmy, content.newArmy, realm, content.troops, content.leaders, content.mounts, content.lkp, content.skp, [content.x, content.y], item.prerequisiteEvents, item.pk));
                         }
                         else {
                             window.alert("Realm with tag " + content.realm + " not found.");
                         }
                         break;
                     case "merge":
-                        realm = gameState_1.GameState.realms.find(realm => (realm.tag === content.realm));
+                        realm = types_1.GameState.realms.find(realm => (realm.tag === content.realm));
                         if (realm != undefined) {
-                            gameState_1.GameState.loadedEvents.push(new mergeEvent_1.MergeEvent(index, 5 /* Undetermined */, content.fromArmy, content.toArmy, realm, [content.x, content.y], item.prerequisiteEvents, item.pk));
+                            types_1.GameState.loadedEvents.push(new types_1.MergeEvent(index, 5 /* Undetermined */, content.fromArmy, content.toArmy, realm, [content.x, content.y], item.prerequisiteEvents, item.pk));
                         }
                         else {
                             window.alert("Realm with tag " + content.realm + " not found.");
                         }
                         break;
                     case "mount":
-                        realm = gameState_1.GameState.realms.find(realm => (realm.tag === content.realm));
+                        realm = types_1.GameState.realms.find(realm => (realm.tag === content.realm));
                         if (realm != undefined) {
-                            gameState_1.GameState.loadedEvents.push(new mountEvent_1.MountEvent(index, 5 /* Undetermined */, content.fromArmy, content.newArmy, realm, content.troops, content.leaders, [content.x, content.y], item.prerequisiteEvents, item.pk));
+                            types_1.GameState.loadedEvents.push(new types_1.MountEvent(index, 5 /* Undetermined */, content.fromArmy, content.newArmy, realm, content.troops, content.leaders, [content.x, content.y], item.prerequisiteEvents, item.pk));
                         }
                         else {
                             window.alert("Realm with tag " + content.realm + " not found.");
                         }
                         break;
                     case "transfer":
-                        realm = gameState_1.GameState.realms.find(realm => (realm.tag === content.realm));
+                        realm = types_1.GameState.realms.find(realm => (realm.tag === content.realm));
                         if (realm != undefined) {
-                            gameState_1.GameState.loadedEvents.push(new transferEvent_1.TransferEvent(index, 5 /* Undetermined */, content.fromArmy, content.toArmy, realm, content.troops, content.leaders, content.mounts, content.lkp, content.skp, [content.x, content.y], item.prerequisiteEvents, item.pk));
+                            types_1.GameState.loadedEvents.push(new types_1.TransferEvent(index, 5 /* Undetermined */, content.fromArmy, content.toArmy, realm, content.troops, content.leaders, content.mounts, content.lkp, content.skp, [content.x, content.y], item.prerequisiteEvents, item.pk));
                         }
                         else {
                             window.alert("Realm with tag " + content.realm + " not found.");
@@ -9544,7 +9339,7 @@ var Loading;
                         break;
                 }
             });
-            gui_1.GUI.getBigBox().fillEventList();
+            types_1.GUI.getBigBox().fillEventList();
         });
     }
     Loading.loadPendingEvents = loadPendingEvents;
@@ -9555,8 +9350,8 @@ var Loading;
             for (let i = 0; i < json.length; i++) {
                 timetest += json[i];
             }
-            if (authenticationFunctions_1.Authentication.logintime == undefined || authenticationFunctions_1.Authentication.logintime < Date.parse(timetest)) {
-                authenticationFunctions_1.Authentication.logintime = Date.now();
+            if (types_1.Authentication.logintime == undefined || types_1.Authentication.logintime < Date.parse(timetest)) {
+                types_1.Authentication.logintime = Date.now();
                 loadCSRFToken();
                 loadRealmData();
                 loadFieldData();
@@ -9564,14 +9359,14 @@ var Loading;
                 loadRiverData();
                 loadBuildingData();
                 loadBorderData();
-                drawingFunctions_1.Drawing.drawStuff();
+                types_1.Drawing.drawStuff();
             }
         });
     }
     Loading.loadMap = loadMap;
     function loadCSRFToken() {
         $.getJSON(url + "/databaseLink/gettoken/", (json) => {
-            authenticationFunctions_1.Authentication.currentCSRFToken = json;
+            types_1.Authentication.currentCSRFToken = json;
         });
     }
     Loading.loadCSRFToken = loadCSRFToken;
@@ -9580,18 +9375,18 @@ var Loading;
     function loadArmies() {
         $.post({
             url: url + "/databaseLink/armydata/",
-            data: { authorization: authenticationFunctions_1.Authentication.authenticationToken },
+            data: { authorization: types_1.Authentication.authenticationToken },
             success: (data) => {
-                gameState_1.GameState.armies = data.map(army => {
-                    let armyOwner = gameState_1.GameState.realms.find(realm => realm.tag === army.realm);
+                types_1.GameState.armies = data.map(army => {
+                    let armyOwner = types_1.GameState.realms.find(realm => realm.tag === army.realm);
                     if (armyOwner != undefined) {
                         switch (Math.floor(army.armyId / 100)) {
                             case 1:
-                                return new footArmy_1.FootArmy(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp, army.mounts, [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
+                                return new types_1.FootArmy(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp, army.mounts, [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
                             case 2:
-                                return new riderArmy_1.RiderArmy(army.armyId, armyOwner, army.count, army.leaders, [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
+                                return new types_1.RiderArmy(army.armyId, armyOwner, army.count, army.leaders, [army.x, army.y], army.movementPoints, army.heightPoints, army.isGuard);
                             case 3:
-                                return new fleet_1.Fleet(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp, [army.x, army.y], army.movementPoints, army.isGuard);
+                                return new types_1.Fleet(army.armyId, armyOwner, army.count, army.leaders, army.lkp, army.skp, [army.x, army.y], army.movementPoints, army.isGuard);
                             default:
                                 return undefined;
                         }
@@ -9604,13 +9399,13 @@ var Loading;
                 // if needed, load Troops into ships
                 data.forEach(army => {
                     if (army.isLoadedIn != undefined) {
-                        gameState_1.GameState.armies.find(transport => transport.getErkenfaraID() === army.isLoadedIn &&
-                            transport.owner.tag === army.realm).loadArmy(gameState_1.GameState.armies.find(transported => transported.getErkenfaraID() === army.armyId &&
+                        types_1.GameState.armies.find(transport => transport.getErkenfaraID() === army.isLoadedIn &&
+                            transport.owner.tag === army.realm).loadArmy(types_1.GameState.armies.find(transported => transported.getErkenfaraID() === army.armyId &&
                             transported.owner.tag === army.realm));
                     }
                 });
                 // if the event loading finishes before the army loading is is needed, eventlist may be wrong otherwise
-                gui_1.GUI.getBigBox().fillEventList();
+                types_1.GUI.getBigBox().fillEventList();
             },
             dataType: "json"
         });
@@ -9618,29 +9413,29 @@ var Loading;
     Loading.loadArmies = loadArmies;
     function loadFieldData() {
         $.getJSON(url + "/databaseLink/fielddata/", (json) => {
-            gameState_1.GameState.fields = json.map(field => new field_1.Field([field.x, field.y], field.type));
-            drawingFunctions_1.Drawing.resizeCanvas();
-            drawingFunctions_1.Drawing.drawStuff();
+            types_1.GameState.fields = json.map(field => new types_1.Field([field.x, field.y], field.type));
+            types_1.Drawing.resizeCanvas();
+            types_1.Drawing.drawStuff();
         });
     }
     Loading.loadFieldData = loadFieldData;
     function loadRealmData() {
         $.getJSON(url + "/databaseLink/getrealms/", (json) => {
-            gameState_1.GameState.realms = json.map(realm => new realm_1.Realm(realm.name, realm.tag, realm.color, Number(realm.homeTurf), realm.active));
+            types_1.GameState.realms = json.map(realm => new types_1.Realm(realm.name, realm.tag, realm.color, Number(realm.homeTurf), realm.active));
         });
     }
     Loading.loadRealmData = loadRealmData;
     function loadRiverData() {
         $.getJSON(url + "/databaseLink/getriverdata/", (json) => {
             //load the rivers from the database
-            gameState_1.GameState.rivers = json.map(river => new river_1.River([river.firstX, river.firstY], [river.secondX, river.secondY]));
+            types_1.GameState.rivers = json.map(river => new types_1.River([river.firstX, river.firstY], [river.secondX, river.secondY]));
         });
     }
     Loading.loadRiverData = loadRiverData;
     function loadBuildingData() {
         $.getJSON(url + "/databaseLink/buildingdata/", (json) => {
-            gameState_1.GameState.buildings = json.map(building => {
-                let owner = gameState_1.GameState.realms.find(realm => realm.tag === building.realm);
+            types_1.GameState.buildings = json.map(building => {
+                let owner = types_1.GameState.realms.find(realm => realm.tag === building.realm);
                 if (owner != undefined) {
                     switch (building.type) {
                         case 0:
@@ -9648,13 +9443,13 @@ var Loading;
                         case 2:
                         case 3:
                         case 4:
-                            return new productionBuilding_1.ProductionBuilding(building.type, building.name, [building.firstX, building.firstY], owner, building.buildPoints);
+                            return new types_1.ProductionBuilding(building.type, building.name, [building.firstX, building.firstY], owner, building.buildPoints);
                         case 5:
-                            return new wall_1.Wall(building.type, [building.firstX, building.firstY], owner, building.buildPoints, direction_1.stringToDirection(building.direction), building.guardCount);
+                            return new types_1.Wall(building.type, [building.firstX, building.firstY], owner, building.buildPoints, types_1.stringToDirection(building.direction), building.guardCount);
                         case 6:
                         case 7:
                         case 8:
-                            return new nonDestructibleBuilding_1.NonDestructibleBuilding(building.type, [building.firstX, building.firstY], [building.secondX, building.secondY], owner);
+                            return new types_1.NonDestructibleBuilding(building.type, [building.firstX, building.firstY], [building.secondX, building.secondY], owner);
                         default:
                             return undefined;
                     }
@@ -9671,9 +9466,9 @@ var Loading;
         $.getJSON(url + "/databaseLink/getborderdata/", (json) => {
             //load the borders from the database
             json.forEach(realm => {
-                let realmToFill = gameState_1.GameState.realms.find(candidate => candidate.tag === realm.tag);
+                let realmToFill = types_1.GameState.realms.find(candidate => candidate.tag === realm.tag);
                 if (realmToFill != undefined) {
-                    realmToFill.territory = realm.land.map(land => gameState_1.GameState.fields.find(field => field.coordinates === land)).filter(field => field != undefined);
+                    realmToFill.territory = realm.land.map(land => types_1.GameState.fields.find(field => field.coordinates === land)).filter(field => field != undefined);
                 }
                 else {
                     window.alert("Unknown realm with tag " + realm.tag + ".");
@@ -9684,47 +9479,47 @@ var Loading;
     Loading.loadBorderData = loadBorderData;
     function loadImages(tileset) {
         let pathPrefix = './tilesets/' + tileset; //build the path prefix common to all tile images
-        images_1.Images.shallows.src = pathPrefix + '/shallows.svg'; //terrain
-        images_1.Images.deepsea.src = pathPrefix + '/deepsea.svg';
-        images_1.Images.lowlands.src = pathPrefix + '/lowlands.svg';
-        images_1.Images.woods.src = pathPrefix + '/woods.svg';
-        images_1.Images.hills.src = pathPrefix + '/hills.svg';
-        images_1.Images.highlands.src = pathPrefix + '/highlands.svg';
-        images_1.Images.mountains.src = pathPrefix + '/mountains.svg';
-        images_1.Images.desert.src = pathPrefix + '/desert.svg';
-        images_1.Images.swamp.src = pathPrefix + '/swamp.svg';
-        images_1.Images.default.src = pathPrefix + '/default.svg';
-        images_1.Images.troops.src = pathPrefix + '/troops.svg'; //troops
-        images_1.Images.mounts.src = pathPrefix + '/mounts.svg';
-        images_1.Images.boats.src = pathPrefix + '/boat.svg';
-        images_1.Images.castle.src = pathPrefix + '/castle.svg'; //buildings
-        images_1.Images.city.src = pathPrefix + '/city.svg';
-        images_1.Images.fortress.src = pathPrefix + '/fortress.svg';
-        images_1.Images.capital.src = pathPrefix + '/capital_city.svg';
-        images_1.Images.capitalFort.src = pathPrefix + '/capital_fortress.svg';
-        images_1.Images.wallW.src = pathPrefix + '/wall_w.svg';
-        images_1.Images.wallE.src = pathPrefix + '/wall_e.svg';
-        images_1.Images.wallNW.src = pathPrefix + '/wall_nw.svg';
-        images_1.Images.wallSW.src = pathPrefix + '/wall_sw.svg';
-        images_1.Images.wallNE.src = pathPrefix + '/wall_ne.svg';
-        images_1.Images.wallSE.src = pathPrefix + '/wall_se.svg';
-        images_1.Images.harborW.src = pathPrefix + '/harbor_w.svg';
-        images_1.Images.harborE.src = pathPrefix + '/harbor_e.svg';
-        images_1.Images.harborNW.src = pathPrefix + '/harbor_nw.svg';
-        images_1.Images.harborSW.src = pathPrefix + '/harbor_sw.svg';
-        images_1.Images.harborNE.src = pathPrefix + '/harbor_ne.svg';
-        images_1.Images.harborSE.src = pathPrefix + '/harbor_se.svg';
-        images_1.Images.bridgeW.src = pathPrefix + '/bridge_w.svg';
-        images_1.Images.bridgeE.src = pathPrefix + '/bridge_e.svg';
-        images_1.Images.bridgeNW.src = pathPrefix + '/bridge_nw.svg';
-        images_1.Images.bridgeSW.src = pathPrefix + '/bridge_sw.svg';
-        images_1.Images.bridgeNE.src = pathPrefix + '/bridge_ne.svg';
-        images_1.Images.bridgeSE.src = pathPrefix + '/bridge_se.svg';
+        types_1.Images.shallows.src = pathPrefix + '/shallows.svg'; //terrain
+        types_1.Images.deepsea.src = pathPrefix + '/deepsea.svg';
+        types_1.Images.lowlands.src = pathPrefix + '/lowlands.svg';
+        types_1.Images.woods.src = pathPrefix + '/woods.svg';
+        types_1.Images.hills.src = pathPrefix + '/hills.svg';
+        types_1.Images.highlands.src = pathPrefix + '/highlands.svg';
+        types_1.Images.mountains.src = pathPrefix + '/mountains.svg';
+        types_1.Images.desert.src = pathPrefix + '/desert.svg';
+        types_1.Images.swamp.src = pathPrefix + '/swamp.svg';
+        types_1.Images.default.src = pathPrefix + '/default.svg';
+        types_1.Images.troops.src = pathPrefix + '/troops.svg'; //troops
+        types_1.Images.mounts.src = pathPrefix + '/mounts.svg';
+        types_1.Images.boats.src = pathPrefix + '/boat.svg';
+        types_1.Images.castle.src = pathPrefix + '/castle.svg'; //buildings
+        types_1.Images.city.src = pathPrefix + '/city.svg';
+        types_1.Images.fortress.src = pathPrefix + '/fortress.svg';
+        types_1.Images.capital.src = pathPrefix + '/capital_city.svg';
+        types_1.Images.capitalFort.src = pathPrefix + '/capital_fortress.svg';
+        types_1.Images.wallW.src = pathPrefix + '/wall_w.svg';
+        types_1.Images.wallE.src = pathPrefix + '/wall_e.svg';
+        types_1.Images.wallNW.src = pathPrefix + '/wall_nw.svg';
+        types_1.Images.wallSW.src = pathPrefix + '/wall_sw.svg';
+        types_1.Images.wallNE.src = pathPrefix + '/wall_ne.svg';
+        types_1.Images.wallSE.src = pathPrefix + '/wall_se.svg';
+        types_1.Images.harborW.src = pathPrefix + '/harbor_w.svg';
+        types_1.Images.harborE.src = pathPrefix + '/harbor_e.svg';
+        types_1.Images.harborNW.src = pathPrefix + '/harbor_nw.svg';
+        types_1.Images.harborSW.src = pathPrefix + '/harbor_sw.svg';
+        types_1.Images.harborNE.src = pathPrefix + '/harbor_ne.svg';
+        types_1.Images.harborSE.src = pathPrefix + '/harbor_se.svg';
+        types_1.Images.bridgeW.src = pathPrefix + '/bridge_w.svg';
+        types_1.Images.bridgeE.src = pathPrefix + '/bridge_e.svg';
+        types_1.Images.bridgeNW.src = pathPrefix + '/bridge_nw.svg';
+        types_1.Images.bridgeSW.src = pathPrefix + '/bridge_sw.svg';
+        types_1.Images.bridgeNE.src = pathPrefix + '/bridge_ne.svg';
+        types_1.Images.bridgeSE.src = pathPrefix + '/bridge_se.svg';
     }
     Loading.loadImages = loadImages;
 })(Loading = exports.Loading || (exports.Loading = {}));
 
-},{"../armies/fleet":4,"../armies/footArmy":5,"../armies/riderArmy":9,"../buildings/nonDestructibleBuilding":13,"../buildings/productionBuilding":14,"../buildings/wall":15,"../events/battleEvent":20,"../events/mergeEvent":22,"../events/mountEvent":23,"../events/moveEvent":24,"../events/shootEvent":25,"../events/splitEvent":26,"../events/transferEvent":27,"../gameState":28,"../gui/drawingFunctions":35,"../gui/gui":37,"../gui/images":39,"../map/direction":51,"../map/field":52,"../map/river":54,"../realm":56,"./authenticationFunctions":57}],59:[function(require,module,exports){
+},{"../types":60}],59:[function(require,module,exports){
 "use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
@@ -9742,24 +9537,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const gameState_1 = require("../gameState");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const controlVariables_1 = require("../controls/controlVariables");
-const authenticationFunctions_1 = require("./authenticationFunctions");
-const footArmy_1 = require("../armies/footArmy");
-const landArmy_1 = require("../armies/landArmy");
-const moveEvent_1 = require("../events/moveEvent");
-const battleEvent_1 = require("../events/battleEvent");
-const mergeEvent_1 = require("../events/mergeEvent");
-const transferEvent_1 = require("../events/transferEvent");
-const splitEvent_1 = require("../events/splitEvent");
-const mountEvent_1 = require("../events/mountEvent");
-const shootEvent_1 = require("../events/shootEvent");
+const types_1 = require("../types");
 var Saving;
 (function (Saving) {
     function sendEvents() {
         sendEventlistInOrder(0);
-        gameState_1.GameState.loadedEvents.forEach(event => {
+        types_1.GameState.loadedEvents.forEach(event => {
             if (event.getStatus() === 0 /* Checked */) {
                 sendCheckEvent(event.getDatabasePrimaryKey(), event.typeAsString());
             }
@@ -9771,14 +9554,14 @@ var Saving;
     }
     Saving.sendEvents = sendEvents;
     function sendEventlistInOrder(index) {
-        if (index !== gameState_1.GameState.newEvents.length) {
-            let cPE = gameState_1.GameState.newEvents[index];
+        if (index !== types_1.GameState.newEvents.length) {
+            let cPE = types_1.GameState.newEvents[index];
             let cPEContent = cPE.asStringifiedJSON();
-            if (cPE instanceof moveEvent_1.MoveEvent) {
+            if (cPE instanceof types_1.MoveEvent) {
                 $.post({
-                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/moveevent/",
+                    url: types_1.Authentication.url + "/databaseLink/moveevent/",
                     data: {
-                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
+                        authorization: types_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -9798,11 +9581,11 @@ var Saving;
                     }
                 });
             }
-            else if (cPE instanceof battleEvent_1.BattleEvent) {
+            else if (cPE instanceof types_1.BattleEvent) {
                 $.post({
-                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/battleevent/",
+                    url: types_1.Authentication.url + "/databaseLink/battleevent/",
                     data: {
-                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
+                        authorization: types_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -9822,11 +9605,11 @@ var Saving;
                     }
                 });
             }
-            else if (cPE instanceof mergeEvent_1.MergeEvent) {
+            else if (cPE instanceof types_1.MergeEvent) {
                 $.post({
-                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/mergeevent/",
+                    url: types_1.Authentication.url + "/databaseLink/mergeevent/",
                     data: {
-                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
+                        authorization: types_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -9846,11 +9629,11 @@ var Saving;
                     }
                 });
             }
-            else if (cPE instanceof transferEvent_1.TransferEvent) {
+            else if (cPE instanceof types_1.TransferEvent) {
                 $.post({
-                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/transferevent/",
+                    url: types_1.Authentication.url + "/databaseLink/transferevent/",
                     data: {
-                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
+                        authorization: types_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -9870,11 +9653,11 @@ var Saving;
                     }
                 });
             }
-            else if (cPE instanceof splitEvent_1.SplitEvent) {
+            else if (cPE instanceof types_1.SplitEvent) {
                 $.post({
-                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/splitevent/",
+                    url: types_1.Authentication.url + "/databaseLink/splitevent/",
                     data: {
-                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
+                        authorization: types_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -9894,11 +9677,11 @@ var Saving;
                     }
                 });
             }
-            else if (cPE instanceof mountEvent_1.MountEvent) {
+            else if (cPE instanceof types_1.MountEvent) {
                 $.post({
-                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/mountevent/",
+                    url: types_1.Authentication.url + "/databaseLink/mountevent/",
                     data: {
-                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
+                        authorization: types_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -9918,11 +9701,11 @@ var Saving;
                     }
                 });
             }
-            else if (cPE instanceof shootEvent_1.ShootEvent) {
+            else if (cPE instanceof types_1.ShootEvent) {
                 $.post({
-                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/shootevent/",
+                    url: types_1.Authentication.url + "/databaseLink/shootevent/",
                     data: {
-                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
+                        authorization: types_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -9943,7 +9726,7 @@ var Saving;
                 });
             }
             else {
-                gameState_1.GameState.newEvents = [];
+                types_1.GameState.newEvents = [];
             }
         }
     }
@@ -9951,16 +9734,16 @@ var Saving;
     function saveFields() {
         $(function () {
             $.ajaxSetup({
-                headers: { "X-CSRFToken": authenticationFunctions_1.Authentication.currentCSRFToken } // getCookie("csrftoken")
+                headers: { "X-CSRFToken": types_1.Authentication.currentCSRFToken } // getCookie("csrftoken")
             });
         });
-        let dataToServerString = JSON.stringify(controlVariables_1.Controls.changedFields.map(changedField => {
+        let dataToServerString = JSON.stringify(types_1.Controls.changedFields.map(changedField => {
             return { 'type': changedField.type, 'x': changedField.coordinates[0], 'y': changedField.coordinates[1] };
         }));
         $.post({
-            url: authenticationFunctions_1.Authentication.url + "/databaseLink/savefielddata/",
+            url: types_1.Authentication.url + "/databaseLink/savefielddata/",
             data: {
-                authorization: authenticationFunctions_1.Authentication.authenticationToken,
+                authorization: types_1.Authentication.authenticationToken,
                 map: dataToServerString
             },
             statusCode: {
@@ -9979,23 +9762,23 @@ var Saving;
     Saving.saveFields = saveFields;
     // probably deprecated
     function sendAllPreparedEvents() {
-        for (let i = 0; i < gameState_1.GameState.newEvents.length; i++) {
-            let cPE = gameState_1.GameState.newEvents[i];
+        for (let i = 0; i < types_1.GameState.newEvents.length; i++) {
+            let cPE = types_1.GameState.newEvents[i];
             let cPEContent = cPE.asStringifiedJSON();
             sendNewEvent(cPE.typeAsString(), cPEContent);
         }
     }
     Saving.sendAllPreparedEvents = sendAllPreparedEvents;
     function saveRivers() {
-        let dataToServerString = JSON.stringify(gameState_1.GameState.rivers.map(river => {
+        let dataToServerString = JSON.stringify(types_1.GameState.rivers.map(river => {
             return { 'firstX:': river.rightBank[0], 'firstY:': river.rightBank[1],
                 'secondX:': river.leftBank[0], 'secondY:': river.leftBank[1] };
         }));
         $.post({
-            url: authenticationFunctions_1.Authentication.url + "/databaseLink/saveriverdata/",
+            url: types_1.Authentication.url + "/databaseLink/saveriverdata/",
             data: {
                 river: dataToServerString,
-                authorization: authenticationFunctions_1.Authentication.authenticationToken
+                authorization: types_1.Authentication.authenticationToken
             },
             statusCode: {
                 200: function () {
@@ -10012,14 +9795,14 @@ var Saving;
     }
     Saving.saveRivers = saveRivers;
     function saveBuildings() {
-        let dataToServerString = JSON.stringify(controlVariables_1.Controls.changedBuildings.map(changedBuilding => {
+        let dataToServerString = JSON.stringify(types_1.Controls.changedBuildings.map(changedBuilding => {
             return { 'added/changed': changedBuilding[0], 'building': changedBuilding[1].buildingAsJSON() };
         }));
         $.post({
-            url: authenticationFunctions_1.Authentication.url + "/databaseLink/savebuildingdata/",
+            url: types_1.Authentication.url + "/databaseLink/savebuildingdata/",
             data: {
                 buildings: dataToServerString,
-                authorization: authenticationFunctions_1.Authentication.authenticationToken
+                authorization: types_1.Authentication.authenticationToken
             },
             statusCode: {
                 200: function () {
@@ -10036,27 +9819,27 @@ var Saving;
     }
     Saving.saveBuildings = saveBuildings;
     function saveArmies() {
-        let sensibleArmyList = gameState_1.GameState.armies.map(elem => {
+        let sensibleArmyList = types_1.GameState.armies.map(elem => {
             return {
                 armyId: elem.getErkenfaraID(),
                 count: elem.getTroopCount(),
                 leaders: elem.getOfficerCount(),
                 lkp: elem.getLightCatapultCount(),
                 skp: elem.getHeavyCatapultCount(),
-                mounts: (elem instanceof footArmy_1.FootArmy) ? elem.getMountCount() : 0,
+                mounts: (elem instanceof types_1.FootArmy) ? elem.getMountCount() : 0,
                 x: elem.getPosition()[0],
                 y: elem.getPosition()[1],
                 owner: elem.owner.tag,
                 movementPoints: elem.getMovePoints(),
                 heightPoints: elem.getHeightPoints(),
-                isLoadedIn: (elem instanceof landArmy_1.LandArmy) ? elem.isTransported() : false
+                isLoadedIn: (elem instanceof types_1.LandArmy) ? elem.isTransported() : false
             };
         });
         $.post({
-            url: authenticationFunctions_1.Authentication.url + "/databaseLink/savearmydata/",
+            url: types_1.Authentication.url + "/databaseLink/savearmydata/",
             data: {
                 armies: JSON.stringify(sensibleArmyList),
-                authorization: authenticationFunctions_1.Authentication.authenticationToken
+                authorization: types_1.Authentication.authenticationToken
             },
             statusCode: {
                 200: function () {
@@ -10074,9 +9857,9 @@ var Saving;
     Saving.saveArmies = saveArmies;
     function saveFactionsTerritories() {
         $.post({
-            url: authenticationFunctions_1.Authentication.url + "/databaseLink/saveborderdata/",
-            data: { borders: JSON.stringify(gameState_1.GameState.realms.map(realm => { return { 'tag': realm.tag, 'land': realm.getTerritoryCoordinates() }; })),
-                authorization: authenticationFunctions_1.Authentication.authenticationToken },
+            url: types_1.Authentication.url + "/databaseLink/saveborderdata/",
+            data: { borders: JSON.stringify(types_1.GameState.realms.map(realm => { return { 'tag': realm.tag, 'land': realm.getTerritoryCoordinates() }; })),
+                authorization: types_1.Authentication.authenticationToken },
             statusCode: {
                 200: function () {
                     console.log("Successfully saved borders.");
@@ -10093,9 +9876,9 @@ var Saving;
     Saving.saveFactionsTerritories = saveFactionsTerritories;
     function sendDeleteEvent(eventId, eventType) {
         $.post({
-            url: authenticationFunctions_1.Authentication.url + "/databaseLink/deleteevent/",
+            url: types_1.Authentication.url + "/databaseLink/deleteevent/",
             data: {
-                authorization: authenticationFunctions_1.Authentication.authenticationToken,
+                authorization: types_1.Authentication.authenticationToken,
                 eventId: eventId,
                 eventType: eventType
             },
@@ -10112,9 +9895,9 @@ var Saving;
     Saving.sendDeleteEvent = sendDeleteEvent;
     function sendCheckEvent(eventId, eventType) {
         $.post({
-            url: authenticationFunctions_1.Authentication.url + "/databaseLink/checkevent/",
+            url: types_1.Authentication.url + "/databaseLink/checkevent/",
             data: {
-                authorization: authenticationFunctions_1.Authentication.authenticationToken,
+                authorization: types_1.Authentication.authenticationToken,
                 eventId: eventId,
                 eventType: eventType
             },
@@ -10131,9 +9914,9 @@ var Saving;
     Saving.sendCheckEvent = sendCheckEvent;
     function sendNewEvent(type, content) {
         $.post({
-            url: authenticationFunctions_1.Authentication.url + "/databaseLink/" + type + "event/",
+            url: types_1.Authentication.url + "/databaseLink/" + type + "event/",
             data: {
-                authorization: authenticationFunctions_1.Authentication.authenticationToken,
+                authorization: types_1.Authentication.authenticationToken,
                 content: content
             },
             statusCode: {
@@ -10165,11 +9948,11 @@ var Saving;
     Saving.sendNewEvent = sendNewEvent;
     function sendNextTurn() {
         $.post({
-            url: authenticationFunctions_1.Authentication.url + "/databaseLink/nextturn/",
-            data: { authorization: authenticationFunctions_1.Authentication.authenticationToken },
+            url: types_1.Authentication.url + "/databaseLink/nextturn/",
+            data: { authorization: types_1.Authentication.authenticationToken },
             success: (data) => {
-                gameState_1.GameState.currentTurn = data;
-                drawingFunctions_1.Drawing.writeTurnNumber();
+                types_1.GameState.currentTurn = data;
+                types_1.Drawing.writeTurnNumber();
             },
             dataType: "json",
             statusCode: {
@@ -10183,13 +9966,150 @@ var Saving;
     Saving.sendNextTurn = sendNextTurn;
     // TODO: If we have multiple "clean-up functions" like this, they should have their own file/folder.
     function untagHitArmys() {
-        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
-            if (gameState_1.GameState.armies[i].owner.tag === gameState_1.GameState.login || gameState_1.GameState.login === "sl") {
-                gameState_1.GameState.armies[i].wasShotAt = false;
+        for (let i = 0; i < types_1.GameState.armies.length; i++) {
+            if (types_1.GameState.armies[i].owner.tag === types_1.GameState.login || types_1.GameState.login === "sl") {
+                types_1.GameState.armies[i].wasShotAt = false;
             }
         }
     }
     Saving.untagHitArmys = untagHitArmys;
 })(Saving = exports.Saving || (exports.Saving = {}));
 
-},{"../armies/footArmy":5,"../armies/landArmy":6,"../controls/controlVariables":18,"../events/battleEvent":20,"../events/mergeEvent":22,"../events/mountEvent":23,"../events/moveEvent":24,"../events/shootEvent":25,"../events/splitEvent":26,"../events/transferEvent":27,"../gameState":28,"../gui/drawingFunctions":35,"./authenticationFunctions":57}]},{},[55]);
+},{"../types":60}],60:[function(require,module,exports){
+"use strict";
+/*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
+This file is part of Phoenixclient.
+
+Phoenixclient is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Phoenixclient is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
+Object.defineProperty(exports, "__esModule", { value: true });
+const field_1 = require("./map/field");
+exports.Field = field_1.Field;
+const mouseFunctions_1 = require("./controls/mouseFunctions");
+exports.MouseFunctions = mouseFunctions_1.MouseFunctions;
+const drawingFunctions_1 = require("./gui/drawingFunctions");
+exports.Drawing = drawingFunctions_1.Drawing;
+const gui_1 = require("./gui/gui");
+exports.GUI = gui_1.GUI;
+const loadingDataFunctions_1 = require("./serverInteraction/loadingDataFunctions");
+exports.Loading = loadingDataFunctions_1.Loading;
+const army_1 = require("./armies/army");
+exports.Army = army_1.Army;
+const realm_1 = require("./realm");
+exports.Realm = realm_1.Realm;
+const river_1 = require("./map/river");
+exports.River = river_1.River;
+const building_1 = require("./buildings/building");
+exports.Building = building_1.Building;
+const event_1 = require("./events/event");
+exports.PhoenixEvent = event_1.PhoenixEvent;
+const constants_1 = require("./constants");
+exports.Constants = constants_1.Constants;
+const gameState_1 = require("./gameState");
+exports.GameState = gameState_1.GameState;
+const controlVariables_1 = require("./controls/controlVariables");
+exports.Controls = controlVariables_1.Controls;
+const authenticationFunctions_1 = require("./serverInteraction/authenticationFunctions");
+exports.Authentication = authenticationFunctions_1.Authentication;
+const footArmy_1 = require("./armies/footArmy");
+exports.FootArmy = footArmy_1.FootArmy;
+const landArmy_1 = require("./armies/landArmy");
+exports.LandArmy = landArmy_1.LandArmy;
+const moveEvent_1 = require("./events/moveEvent");
+exports.MoveEvent = moveEvent_1.MoveEvent;
+const battleEvent_1 = require("./events/battleEvent");
+exports.BattleEvent = battleEvent_1.BattleEvent;
+const mergeEvent_1 = require("./events/mergeEvent");
+exports.MergeEvent = mergeEvent_1.MergeEvent;
+const transferEvent_1 = require("./events/transferEvent");
+exports.TransferEvent = transferEvent_1.TransferEvent;
+const splitEvent_1 = require("./events/splitEvent");
+exports.SplitEvent = splitEvent_1.SplitEvent;
+const mountEvent_1 = require("./events/mountEvent");
+exports.MountEvent = mountEvent_1.MountEvent;
+const shootEvent_1 = require("./events/shootEvent");
+exports.ShootEvent = shootEvent_1.ShootEvent;
+const riderArmy_1 = require("./armies/riderArmy");
+exports.RiderArmy = riderArmy_1.RiderArmy;
+const fleet_1 = require("./armies/fleet");
+exports.Fleet = fleet_1.Fleet;
+const direction_1 = require("./map/direction");
+exports.stringToDirection = direction_1.stringToDirection;
+const wall_1 = require("./buildings/wall");
+exports.Wall = wall_1.Wall;
+const productionBuilding_1 = require("./buildings/productionBuilding");
+exports.ProductionBuilding = productionBuilding_1.ProductionBuilding;
+const nonDestructibleBuilding_1 = require("./buildings/nonDestructibleBuilding");
+exports.NonDestructibleBuilding = nonDestructibleBuilding_1.NonDestructibleBuilding;
+const images_1 = require("./gui/images");
+exports.Images = images_1.Images;
+const boxVisibilty_1 = require("./gui/boxVisibilty");
+exports.BoxVisibility = boxVisibilty_1.BoxVisibility;
+const godModeFunctions_1 = require("./godmode/godModeFunctions");
+exports.GodFunctions = godModeFunctions_1.GodFunctions;
+const battleHandler_1 = require("./armies/battleHandler");
+exports.BattleHandler = battleHandler_1.BattleHandler;
+const battleResult_1 = require("./armies/battleResult");
+exports.BattleResult = battleResult_1.BattleResult;
+const infoBox_1 = require("./gui/infoBox");
+exports.InfoBox = infoBox_1.InfoBox;
+const infoChangeBox_1 = require("./gui/infoChangeBox");
+exports.InfoChangeBox = infoChangeBox_1.InfoChangeBox;
+const buttonFunctions_1 = require("./controls/buttonFunctions");
+exports.ButtonFunctions = buttonFunctions_1.ButtonFunctions;
+const savingFunctions_1 = require("./serverInteraction/savingFunctions");
+exports.Saving = savingFunctions_1.Saving;
+const hexFunctions_1 = require("./libraries/hexFunctions");
+exports.HexFunction = hexFunctions_1.HexFunction;
+const multifieldFunctions_1 = require("./gui/multifieldFunctions");
+exports.MultiFieldFunctions = multifieldFunctions_1.MultiFieldFunctions;
+const mainBox_1 = require("./gui/mainBox");
+exports.MainBox = mainBox_1.MainBox;
+const battleBox_1 = require("./gui/battleBox");
+exports.BattleBox = battleBox_1.BattleBox;
+const shootingBigBox_1 = require("./gui/shootingBigBox");
+exports.ShootingBigBox = shootingBigBox_1.ShootingBigBox;
+const godModeBox_1 = require("./gui/godModeBox");
+exports.GodModeBox = godModeBox_1.GodModeBox;
+const armyGeneratorBox_1 = require("./gui/armyGeneratorBox");
+exports.ArmyGeneratorBox = armyGeneratorBox_1.ArmyGeneratorBox;
+const worldBenderBox_1 = require("./gui/worldBenderBox");
+exports.WorldBenderBox = worldBenderBox_1.WorldBenderBox;
+const riverBenderBox_1 = require("./gui/riverBenderBox");
+exports.RiverBenderBox = riverBenderBox_1.RiverBenderBox;
+const buildingCreationBox_1 = require("./gui/buildingCreationBox");
+exports.BuildingCreationBox = buildingCreationBox_1.BuildingCreationBox;
+const wallCreationBox_1 = require("./gui/wallCreationBox");
+exports.WallCreationBox = wallCreationBox_1.WallCreationBox;
+const harborCreationBox_1 = require("./gui/harborCreationBox");
+exports.HarborCreationBox = harborCreationBox_1.HarborCreationBox;
+const bridgeCreationBox_1 = require("./gui/bridgeCreationBox");
+exports.BridgeCreationBox = bridgeCreationBox_1.BridgeCreationBox;
+const streetCreationBox_1 = require("./gui/streetCreationBox");
+exports.StreetCreationBox = streetCreationBox_1.StreetCreationBox;
+const armyFunctions_1 = require("./libraries/armyFunctions");
+exports.ArmyFunctions = armyFunctions_1.ArmyFunctions;
+const shootingFunctions_1 = require("./armies/shootingFunctions");
+exports.ShootingFunctions = shootingFunctions_1.ShootingFunctions;
+const mapEntity_1 = require("./map/mapEntity");
+exports.MapEntity = mapEntity_1.MapEntity;
+const mobileEntity_1 = require("./armies/mobileEntity");
+exports.MobileEntity = mobileEntity_1.MobileEntity;
+const destructibleBuilding_1 = require("./buildings/destructibleBuilding");
+exports.DestructibleBuilding = destructibleBuilding_1.DestructibleBuilding;
+const direction_2 = require("./map/direction");
+exports.directionToString = direction_2.directionToString;
+const move_1 = require("./armies/move");
+exports.Move = move_1.Move;
+
+},{"./armies/army":1,"./armies/battleHandler":2,"./armies/battleResult":3,"./armies/fleet":4,"./armies/footArmy":5,"./armies/landArmy":6,"./armies/mobileEntity":7,"./armies/move":8,"./armies/riderArmy":9,"./armies/shootingFunctions":10,"./buildings/building":11,"./buildings/destructibleBuilding":12,"./buildings/nonDestructibleBuilding":13,"./buildings/productionBuilding":14,"./buildings/wall":15,"./constants":16,"./controls/buttonFunctions":17,"./controls/controlVariables":18,"./controls/mouseFunctions":19,"./events/battleEvent":20,"./events/event":21,"./events/mergeEvent":22,"./events/mountEvent":23,"./events/moveEvent":24,"./events/shootEvent":25,"./events/splitEvent":26,"./events/transferEvent":27,"./gameState":28,"./godmode/godModeFunctions":29,"./gui/armyGeneratorBox":30,"./gui/battleBox":31,"./gui/boxVisibilty":32,"./gui/bridgeCreationBox":33,"./gui/buildingCreationBox":34,"./gui/drawingFunctions":35,"./gui/godModeBox":36,"./gui/gui":37,"./gui/harborCreationBox":38,"./gui/images":39,"./gui/infoBox":40,"./gui/infoChangeBox":41,"./gui/mainBox":42,"./gui/multifieldFunctions":43,"./gui/riverBenderBox":44,"./gui/shootingBigBox":45,"./gui/streetCreationBox":46,"./gui/wallCreationBox":47,"./gui/worldBenderBox":48,"./libraries/armyFunctions":49,"./libraries/hexFunctions":50,"./map/direction":51,"./map/field":52,"./map/mapEntity":53,"./map/river":54,"./realm":56,"./serverInteraction/authenticationFunctions":57,"./serverInteraction/loadingDataFunctions":58,"./serverInteraction/savingFunctions":59}]},{},[55]);

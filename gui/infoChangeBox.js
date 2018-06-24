@@ -15,8 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const godModeFunctions_1 = require("../godmode/godModeFunctions");
-const authenticationFunctions_1 = require("../serverInteraction/authenticationFunctions");
+const types_1 = require("../types");
 class InfoChangeBox {
     getSelf() {
         if (this.self == undefined) {
@@ -141,14 +140,14 @@ class InfoChangeBox {
     getChangeArmyInfoButton() {
         if (this.changeArmyInfo == undefined) {
             this.changeArmyInfo = document.getElementById("changeArmyInfo");
-            this.changeArmyInfo.onclick = function () { godModeFunctions_1.GodFunctions.changeArmyInfo(); };
+            this.changeArmyInfo.onclick = function () { types_1.GodFunctions.changeArmyInfo(); };
         }
         return this.changeArmyInfo;
     }
     getLogoutButton() {
         if (this.logoutBtnChange == undefined) {
             this.logoutBtnChange = document.getElementById("logoutBtnChange");
-            this.logoutBtnChange.onclick = function () { authenticationFunctions_1.Authentication.logoutFromServer(); };
+            this.logoutBtnChange.onclick = function () { types_1.Authentication.logoutFromServer(); };
         }
         return this.logoutBtnChange;
     }

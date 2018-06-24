@@ -15,33 +15,28 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const controlVariables_1 = require("../controls/controlVariables");
-const gameState_1 = require("../gameState");
-const landArmy_1 = require("../armies/landArmy");
-const fleet_1 = require("../armies/fleet");
-const footArmy_1 = require("../armies/footArmy");
-const riderArmy_1 = require("../armies/riderArmy");
+const types_1 = require("../types");
 var ArmyFunctions;
 (function (ArmyFunctions) {
     function deleteArmy(army) {
-        gameState_1.GameState.armies.splice(gameState_1.GameState.armies.indexOf(army), 1);
+        types_1.GameState.armies.splice(types_1.GameState.armies.indexOf(army), 1);
         //if the army is loaded in a fleet, throw it out of it
-        if (army instanceof landArmy_1.LandArmy && army.isTransported()) {
+        if (army instanceof types_1.LandArmy && army.isTransported()) {
             let transportingFleet = army.transportingFleet;
             if (transportingFleet != undefined) {
                 transportingFleet.unloadArmy(army);
             }
         }
-        if (controlVariables_1.Controls.selectedArmyIndex === gameState_1.GameState.armies.length) {
-            controlVariables_1.Controls.selectedArmyIndex = -1;
+        if (types_1.Controls.selectedArmyIndex === types_1.GameState.armies.length) {
+            types_1.Controls.selectedArmyIndex = -1;
         }
     }
     ArmyFunctions.deleteArmy = deleteArmy;
     // returns the next armyId not yet assigned for the caller
     function generateArmyId(type, owner) {
-        let ownedArmies = gameState_1.GameState.armies.filter(army => army.owner === owner);
+        let ownedArmies = types_1.GameState.armies.filter(army => army.owner === owner);
         if (type === 1) { //foot armies
-            let ownedFootArmies = ownedArmies.filter(army => army instanceof footArmy_1.FootArmy);
+            let ownedFootArmies = ownedArmies.filter(army => army instanceof types_1.FootArmy);
             for (let result = 101; result < 200; result++) {
                 if (!ownedFootArmies.some(army => army.getErkenfaraID() === result)) {
                     return result;
@@ -50,7 +45,7 @@ var ArmyFunctions;
             throw new Error("Du hast die maximale Anzahl an Fußheeren erreicht.");
         }
         else if (type === 2) { //rider armies
-            let ownedRiderArmies = ownedArmies.filter(army => army instanceof riderArmy_1.RiderArmy);
+            let ownedRiderArmies = ownedArmies.filter(army => army instanceof types_1.RiderArmy);
             for (let result = 201; result < 300; result++) {
                 if (!ownedRiderArmies.some(army => army.getErkenfaraID() === result)) {
                     return result;
@@ -59,7 +54,7 @@ var ArmyFunctions;
             throw new Error("Du hast die maximale Anzahl an Reiterheeren erreicht.");
         }
         else if (type === 3) { //fleets
-            let ownedFleets = ownedArmies.filter(army => army instanceof fleet_1.Fleet);
+            let ownedFleets = ownedArmies.filter(army => army instanceof types_1.Fleet);
             for (let result = 301; result < 400; result++) {
                 if (!ownedFleets.some(army => army.getErkenfaraID() === result)) {
                     return result;
@@ -74,7 +69,7 @@ var ArmyFunctions;
     ArmyFunctions.generateArmyId = generateArmyId;
     function checkArmiesForLiveliness() {
         //find all dead armies
-        let deadArmies = gameState_1.GameState.armies.filter(army => !army.isAlive());
+        let deadArmies = types_1.GameState.armies.filter(army => !army.isAlive());
         //delete them
         deadArmies.forEach(deadArmy => deleteArmy(deadArmy));
     }

@@ -14,20 +14,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import { Controls } from "./controlVariables";
-import { GameState } from "../gameState";
-import { Drawing } from "../gui/drawingFunctions";
-import { GUI } from "../gui/gui";
-import { BoxVisibility } from "../gui/boxVisibilty";
-import { RiderArmy } from "../armies/riderArmy";
-import { HexFunction } from "../libraries/hexFunctions";
-import { FootArmy } from "../armies/footArmy";
-import { Realm } from "../realm";
-import { Fleet } from "../armies/fleet";
-import { Field } from "../map/field"
-import { MoveEvent } from "../events/moveEvent";
-import { EventStatus } from "../events/eventStatus";
-import { BattleEvent } from "../events/battleEvent";
+import {Controls, GameState, Drawing, GUI, BoxVisibility, RiderArmy, 
+    HexFunction, FootArmy, Realm, Fleet, Field, MoveEvent, EventStatus, 
+    BattleEvent} from "../types";
 
 export namespace MouseFunctions {
     import armyIdBuffer = BoxVisibility.armyIdBuffer;

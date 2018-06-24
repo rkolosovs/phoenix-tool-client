@@ -14,26 +14,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {Army} from "./army";
-import {Constants} from "../constants";
+import {Army, Constants, Realm, LandArmy, Direction, HexFunction, 
+    FieldType, Move, GameState, ArmyFunctions, FootArmy, 
+    ShootingCondition} from "../types";
 import SHIP_RP = Constants.SHIP_RP;
 import GUARD_RP_MULT = Constants.GUARD_RP_MULT;
-import {Realm} from "../realm";
 import LIGHT_WS_RP = Constants.LIGHT_WS_RP;
 import HEAVY_WS_RP = Constants.HEAVY_WS_RP;
-import {LandArmy} from "./landArmy";
-import {Direction} from "../map/direction";
-import {HexFunction} from "../libraries/hexFunctions";
-import {FieldType} from "../map/field";
-import {Move} from "./move";
 import SHIP_BP = Constants.SHIP_BP;
 import HEAVY_WS_BP = Constants.HEAVY_WS_BP;
 import LIGHT_WS_BP = Constants.LIGHT_WS_BP;
 import SHIP_TRANSPORT_CAPACITY = Constants.SHIP_TRANSPORT_CAPACITY;
-import {GameState} from "../gameState";
-import {ArmyFunctions} from "../libraries/armyFunctions";
-import {FootArmy} from "./footArmy";
-import {ShootingCondition} from "./shootingFunctions";
 
 export class Fleet extends Army{
     static readonly MAX_HEIGHT_POINTS: number = 0;

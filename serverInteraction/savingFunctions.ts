@@ -14,20 +14,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {GameState} from "../gameState";
-import {Drawing} from "../gui/drawingFunctions";
-import {Controls} from "../controls/controlVariables";
-import {Authentication} from "./authenticationFunctions";
-import {FootArmy} from "../armies/footArmy";
-import {LandArmy} from "../armies/landArmy";
-import {EventStatus} from "../events/eventStatus";
-import {MoveEvent} from "../events/moveEvent";
-import {BattleEvent} from "../events/battleEvent";
-import {MergeEvent} from "../events/mergeEvent";
-import {TransferEvent} from "../events/transferEvent";
-import {SplitEvent} from "../events/splitEvent";
-import {MountEvent} from "../events/mountEvent";
-import {ShootEvent} from "../events/shootEvent";
+import {GameState, Drawing, Controls, Authentication, FootArmy, LandArmy, 
+    EventStatus, MoveEvent, BattleEvent, MergeEvent, TransferEvent, SplitEvent, 
+    MountEvent, ShootEvent} from "../types";
 
 export namespace Saving{
 

@@ -14,17 +14,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {GameState} from "../gameState";
-import {HexFunction} from "../libraries/hexFunctions";
-import {Army} from "./army";
-import {Result, BattleResult} from "./battleResult";
-import {FieldType} from "../map/field";
-import {LandArmy} from "./landArmy";
-import {Fleet} from "./fleet";
-import {RiderArmy} from "./riderArmy";
-import {FootArmy} from "./footArmy";
-import {MobileEntity} from "./mobileEntity";
-import {ArmyFunctions} from "../libraries/armyFunctions";
+import {GameState, HexFunction, Army, Result, BattleResult, FieldType, 
+    LandArmy, Fleet, RiderArmy, FootArmy, MobileEntity, ArmyFunctions} from "../types";
 
 export class BattleHandler {
     unsortedArmies: Army[];

@@ -14,12 +14,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {Army} from "../armies/army";
-import {BattleHandler} from "../armies/battleHandler";
-import {FootArmy} from "../armies/footArmy";
-import {RiderArmy} from "../armies/riderArmy";
-import {Fleet} from "../armies/fleet";
-import {BattleResult, Result} from "../armies/battleResult";
+import {Army, BattleHandler, FootArmy, RiderArmy, Fleet, 
+    BattleResult, Result} from "../types";
 
 export class BattleBox {
     private self: HTMLDivElement|undefined;

@@ -15,14 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const event_1 = require("./event");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const gameState_1 = require("../gameState");
-const riderArmy_1 = require("../armies/riderArmy");
-const footArmy_1 = require("../armies/footArmy");
-const gui_1 = require("../gui/gui");
-const armyFunctions_1 = require("../libraries/armyFunctions");
-class MountEvent extends event_1.PhoenixEvent {
+const types_1 = require("../types");
+class MountEvent extends types_1.PhoenixEvent {
     constructor(listPosition, status, fromArmyId, newArmyId, realm, troops, leaders, position, prerequisiteEvents, databasePrimaryKey) {
         //protected mounts: number, protected lkp: number, protected skp: number,
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
@@ -43,7 +37,7 @@ class MountEvent extends event_1.PhoenixEvent {
     }
     validGameState() {
         //The from-army exists and is in position.
-        let fromArmy = gameState_1.GameState.armies.find(army => army.owner === this.realm &&
+        let fromArmy = types_1.GameState.armies.find(army => army.owner === this.realm &&
             army.getErkenfaraID() === this.fromArmyId &&
             army.getPosition()[0] === this.position[0] &&
             army.getPosition()[1] === this.position[1]);
@@ -51,11 +45,11 @@ class MountEvent extends event_1.PhoenixEvent {
             return false;
         }
         //The new army doesn't yet exist.
-        if (gameState_1.GameState.armies.some(army => army.owner === this.realm &&
+        if (types_1.GameState.armies.some(army => army.owner === this.realm &&
             army.getErkenfaraID() === this.newArmyId)) {
             return false;
         }
-        if (fromArmy instanceof footArmy_1.FootArmy) { //Mount case
+        if (fromArmy instanceof types_1.FootArmy) { //Mount case
             //There are enough troops, officers and mounts. No check for viability of the remaining army is made since
             //abandoning a few stragglers or the catapults is not prohibited by the rules.
             if (fromArmy.getTroopCount() < this.troops ||
@@ -74,24 +68,24 @@ class MountEvent extends event_1.PhoenixEvent {
         return true;
     }
     checkEvent() {
-        let fromArmy = gameState_1.GameState.armies.find(army => army.owner === this.realm &&
+        let fromArmy = types_1.GameState.armies.find(army => army.owner === this.realm &&
             army.getErkenfaraID() === this.fromArmyId &&
             army.getPosition()[0] === this.position[0] &&
             army.getPosition()[1] === this.position[1]);
         if (fromArmy != undefined) {
-            if (fromArmy instanceof footArmy_1.FootArmy) {
+            if (fromArmy instanceof types_1.FootArmy) {
                 fromArmy.mount(this.troops, this.leaders, this.newArmyId);
             }
-            else if (fromArmy instanceof riderArmy_1.RiderArmy) {
+            else if (fromArmy instanceof types_1.RiderArmy) {
                 fromArmy.dismount(this.troops, this.leaders, this.newArmyId);
             }
             else {
                 throw new Error("Army to mount/dismount from was neither a foot army nor a rider army.");
             }
             this.status = 0 /* Checked */;
-            armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
-            gui_1.GUI.getBigBox().fillEventList();
-            drawingFunctions_1.Drawing.drawStuff();
+            types_1.ArmyFunctions.checkArmiesForLiveliness();
+            types_1.GUI.getBigBox().fillEventList();
+            types_1.Drawing.drawStuff();
         }
         else {
             throw new Error("Army to mount/dismount from does not exist or isn't in position.");

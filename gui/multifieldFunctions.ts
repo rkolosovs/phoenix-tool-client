@@ -14,9 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {Army} from "../armies/army";
-import {GameState} from "../gameState";
-import {Drawing} from "./drawingFunctions";
+import {Army, GameState, Drawing} from "../types";
 
 export namespace MultiFieldFunctions{
 

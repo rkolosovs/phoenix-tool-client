@@ -15,13 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const event_1 = require("./event");
-const gameState_1 = require("../gameState");
-const footArmy_1 = require("../armies/footArmy");
-const drawingFunctions_1 = require("../gui/drawingFunctions");
-const gui_1 = require("../gui/gui");
-const armyFunctions_1 = require("../libraries/armyFunctions");
-class TransferEvent extends event_1.PhoenixEvent {
+const types_1 = require("../types");
+class TransferEvent extends types_1.PhoenixEvent {
     constructor(listPosition, status, fromArmyId, toArmyId, realm, troops, leaders, mounts, lkp, skp, position, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.fromArmyId = fromArmyId;
@@ -44,9 +39,9 @@ class TransferEvent extends event_1.PhoenixEvent {
             ", 'x': " + this.position[0] + ", 'y': " + this.position[1] + "}";
     }
     validGameState() {
-        let fromArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId && army.owner === this.realm &&
+        let fromArmy = types_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId && army.owner === this.realm &&
             army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]);
-        let toArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.toArmyId && army.owner === this.realm &&
+        let toArmy = types_1.GameState.armies.find(army => army.getErkenfaraID() === this.toArmyId && army.owner === this.realm &&
             army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]);
         //Both armies exist, are in position and have the same type.
         //There are enough troops, officers, catapults and if at least one mount has to be split, there are enough
@@ -59,21 +54,21 @@ class TransferEvent extends event_1.PhoenixEvent {
             this.leaders <= fromArmy.getOfficerCount() &&
             this.lkp <= fromArmy.getLightCatapultCount() &&
             this.skp <= fromArmy.getHeavyCatapultCount() &&
-            ((this.mounts > 0 && fromArmy instanceof footArmy_1.FootArmy && this.mounts <= fromArmy.getMountCount()) ||
+            ((this.mounts > 0 && fromArmy instanceof types_1.FootArmy && this.mounts <= fromArmy.getMountCount()) ||
                 this.mounts <= 0);
     }
     checkEvent() {
-        let fromArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId && army.owner === this.realm &&
+        let fromArmy = types_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId && army.owner === this.realm &&
             army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]);
-        let toArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.toArmyId && army.owner === this.realm &&
+        let toArmy = types_1.GameState.armies.find(army => army.getErkenfaraID() === this.toArmyId && army.owner === this.realm &&
             army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]);
         if (fromArmy != undefined && toArmy != undefined) {
             try {
                 fromArmy.transferTo(toArmy, this.troops, this.leaders, this.lkp, this.skp, this.mounts);
                 this.status = 0 /* Checked */;
-                armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
-                gui_1.GUI.getBigBox().fillEventList();
-                drawingFunctions_1.Drawing.drawStuff();
+                types_1.ArmyFunctions.checkArmiesForLiveliness();
+                types_1.GUI.getBigBox().fillEventList();
+                types_1.Drawing.drawStuff();
             }
             catch (e) {
                 window.alert(e.message);

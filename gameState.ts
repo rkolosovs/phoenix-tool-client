@@ -14,12 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {Army} from "./armies/army";
-import {Field} from "./map/field";
-import {Realm} from "./realm";
-import {River} from "./map/river";
-import {Building} from "./buildings/building";
-import {PhoenixEvent} from "./events/event";
+import {Army, Field, Realm, River, Building, PhoenixEvent} from "./types";
 
 export class GameState{
     static realms: Realm[] = [];

@@ -14,16 +14,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {HexFunction} from "../libraries/hexFunctions";
-import {PhoenixEvent} from "./event";
-import {Drawing} from "../gui/drawingFunctions";
-import {GameState} from "../gameState";
-import {Realm} from "../realm";
-import {GUI} from "../gui/gui";
-import {Army} from "../armies/army";
-import {Direction} from "../map/direction";
-import {EventStatus} from "./eventStatus";
-import {BattleEvent} from "./battleEvent";
+import {HexFunction, PhoenixEvent, Drawing, GameState, Realm, GUI, 
+    Army, Direction, EventStatus, BattleEvent} from "../types";
 
 export class MoveEvent extends PhoenixEvent{
     

@@ -15,23 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const mainBox_1 = require("./mainBox");
-const battleBox_1 = require("./battleBox");
-const shootingBigBox_1 = require("./shootingBigBox");
-const infoBox_1 = require("./infoBox");
-const godModeBox_1 = require("./godModeBox");
-const armyGeneratorBox_1 = require("./armyGeneratorBox");
-const worldBenderBox_1 = require("./worldBenderBox");
-const riverBenderBox_1 = require("./riverBenderBox");
-const buildingCreationBox_1 = require("./buildingCreationBox");
-const wallCreationBox_1 = require("./wallCreationBox");
-const harborCreationBox_1 = require("./harborCreationBox");
-const bridgeCreationBox_1 = require("./bridgeCreationBox");
-const streetCreationBox_1 = require("./streetCreationBox");
-const infoChangeBox_1 = require("./infoChangeBox");
-const boxVisibilty_1 = require("./boxVisibilty");
-const buttonFunctions_1 = require("../controls/buttonFunctions");
-const authenticationFunctions_1 = require("../serverInteraction/authenticationFunctions");
+const types_1 = require("../types");
 class GUI {
     static getCanvas() {
         if (GUI.canvas == undefined) {
@@ -54,7 +38,7 @@ class GUI {
     static getToggleGMBarButton() {
         if (GUI.toggleGMBarButton == undefined) {
             GUI.toggleGMBarButton = document.getElementById("ToggleGodModeBar");
-            GUI.toggleGMBarButton.onclick = function () { boxVisibilty_1.BoxVisibility.toggleGodModeBar(); };
+            GUI.toggleGMBarButton.onclick = function () { types_1.BoxVisibility.toggleGodModeBar(); };
         }
         return GUI.toggleGMBarButton;
     }
@@ -66,32 +50,32 @@ class GUI {
     }
     static getBigBox() {
         if (GUI.bigBox == undefined) {
-            GUI.bigBox = new mainBox_1.MainBox();
+            GUI.bigBox = new types_1.MainBox();
         }
         return GUI.bigBox;
     }
     static getMainButton() {
         if (GUI.mainButton == undefined) {
             GUI.mainButton = document.getElementById("mainButton");
-            GUI.mainButton.onclick = function () { buttonFunctions_1.ButtonFunctions.mainButton(); };
+            GUI.mainButton.onclick = function () { types_1.ButtonFunctions.mainButton(); };
         }
         return GUI.mainButton;
     }
     static getBattleBox() {
         if (GUI.battleBox == undefined) {
-            GUI.battleBox = new battleBox_1.BattleBox();
+            GUI.battleBox = new types_1.BattleBox();
         }
         return GUI.battleBox;
     }
     static getShootingBigBox() {
         if (GUI.shootingBigBox == undefined) {
-            GUI.shootingBigBox = new shootingBigBox_1.ShootingBigBox();
+            GUI.shootingBigBox = new types_1.ShootingBigBox();
         }
         return GUI.shootingBigBox;
     }
     static getInfoBox() {
         if (GUI.infoBox == undefined) {
-            GUI.infoBox = new infoBox_1.InfoBox();
+            GUI.infoBox = new types_1.InfoBox();
         }
         return GUI.infoBox;
     }
@@ -110,14 +94,14 @@ class GUI {
     static getBackToSplitBox() {
         if (GUI.backToSplitBox == undefined) {
             GUI.backToSplitBox = document.getElementById("backToSplitBox");
-            GUI.backToSplitBox.onclick = function () { boxVisibilty_1.BoxVisibility.backToSplitBox(); };
+            GUI.backToSplitBox.onclick = function () { types_1.BoxVisibility.backToSplitBox(); };
         }
         return GUI.backToSplitBox;
     }
     static getRestoreInfoBox() {
         if (GUI.restoreInfoBox == undefined) {
             GUI.restoreInfoBox = document.getElementById("restoreInfoBox");
-            GUI.restoreInfoBox.onclick = function () { boxVisibilty_1.BoxVisibility.restoreInfoBox(); };
+            GUI.restoreInfoBox.onclick = function () { types_1.BoxVisibility.restoreInfoBox(); };
         }
         return GUI.restoreInfoBox;
     }
@@ -166,21 +150,21 @@ class GUI {
     static getSplitSelectedArmy() {
         if (GUI.splitSelectedArmy == undefined) {
             GUI.splitSelectedArmy = document.getElementById("splitSelectedArmy");
-            GUI.splitSelectedArmy.onclick = function () { buttonFunctions_1.ButtonFunctions.splitSelectedArmy(); };
+            GUI.splitSelectedArmy.onclick = function () { types_1.ButtonFunctions.splitSelectedArmy(); };
         }
         return GUI.splitSelectedArmy;
     }
     static getActivateTransmuteBox() {
         if (GUI.activateTransmuteBox == undefined) {
             GUI.activateTransmuteBox = document.getElementById("activateTransmuteBox");
-            GUI.activateTransmuteBox.onclick = function () { boxVisibilty_1.BoxVisibility.activateTransmuteBox(); };
+            GUI.activateTransmuteBox.onclick = function () { types_1.BoxVisibility.activateTransmuteBox(); };
         }
         return GUI.activateTransmuteBox;
     }
     static getActivateMergeBox() {
         if (GUI.activateMergeBox == undefined) {
             GUI.activateMergeBox = document.getElementById("activateMergeBox");
-            GUI.activateMergeBox.onclick = function () { boxVisibilty_1.BoxVisibility.activateMergeBox(); };
+            GUI.activateMergeBox.onclick = function () { types_1.BoxVisibility.activateMergeBox(); };
         }
         return GUI.activateMergeBox;
     }
@@ -253,14 +237,14 @@ class GUI {
     static getMountButton() {
         if (GUI.mount == undefined) {
             GUI.mount = document.getElementById("mount");
-            GUI.mount.onclick = function () { buttonFunctions_1.ButtonFunctions.mountSelected(); };
+            GUI.mount.onclick = function () { types_1.ButtonFunctions.mountSelected(); };
         }
         return GUI.mount;
     }
     static getAllMountButton() {
         if (GUI.allMount == undefined) {
             GUI.allMount = document.getElementById("allMount");
-            GUI.allMount.onclick = function () { buttonFunctions_1.ButtonFunctions.allMountSelected(); };
+            GUI.allMount.onclick = function () { types_1.ButtonFunctions.allMountSelected(); };
         }
         return GUI.allMount;
     }
@@ -285,14 +269,14 @@ class GUI {
     static getUnMountButton() {
         if (GUI.unMount == undefined) {
             GUI.unMount = document.getElementById("unMount");
-            GUI.unMount.onclick = function () { buttonFunctions_1.ButtonFunctions.unMountSelected; };
+            GUI.unMount.onclick = function () { types_1.ButtonFunctions.unMountSelected; };
         }
         return GUI.unMount;
     }
     static getAllUnMountButton() {
         if (GUI.allUnMount == undefined) {
             GUI.allUnMount = document.getElementById("allUnMount");
-            GUI.allUnMount.onclick = function () { buttonFunctions_1.ButtonFunctions.allUnMountSelected; };
+            GUI.allUnMount.onclick = function () { types_1.ButtonFunctions.allUnMountSelected; };
         }
         return GUI.allUnMount;
     }
@@ -317,13 +301,13 @@ class GUI {
     static getFireButton() {
         if (GUI.fire == undefined) {
             GUI.fire = document.getElementById("fire");
-            GUI.fire.onclick = function () { buttonFunctions_1.ButtonFunctions.shootWithSelectedArmy(); };
+            GUI.fire.onclick = function () { types_1.ButtonFunctions.shootWithSelectedArmy(); };
         }
         return GUI.fire;
     }
     static getInfoChangeBox() {
         if (GUI.infoChangeBox == undefined) {
-            GUI.infoChangeBox = new infoChangeBox_1.InfoChangeBox();
+            GUI.infoChangeBox = new types_1.InfoChangeBox();
         }
         return GUI.infoChangeBox;
     }
@@ -348,7 +332,7 @@ class GUI {
     static getLoginButton() {
         if (GUI.loginBtn == undefined) {
             GUI.loginBtn = document.getElementById("loginBtn");
-            GUI.loginBtn.onclick = function () { authenticationFunctions_1.Authentication.loginToServer(); };
+            GUI.loginBtn.onclick = function () { types_1.Authentication.loginToServer(); };
         }
         return GUI.loginBtn;
     }
@@ -360,55 +344,55 @@ class GUI {
     }
     static getGodModeBox() {
         if (GUI.godmodeBox == undefined) {
-            GUI.godmodeBox = new godModeBox_1.GodModeBox();
+            GUI.godmodeBox = new types_1.GodModeBox();
         }
         return GUI.godmodeBox;
     }
     static getArmyGeneratorBox() {
         if (GUI.armyGeneratorBox == undefined) {
-            GUI.armyGeneratorBox = new armyGeneratorBox_1.ArmyGeneratorBox();
+            GUI.armyGeneratorBox = new types_1.ArmyGeneratorBox();
         }
         return GUI.armyGeneratorBox;
     }
     static getWorldBenderBox() {
         if (GUI.worldBenderBox == undefined) {
-            GUI.worldBenderBox = new worldBenderBox_1.WorldBenderBox();
+            GUI.worldBenderBox = new types_1.WorldBenderBox();
         }
         return GUI.worldBenderBox;
     }
     static getRiverBenderBox() {
         if (GUI.riverBenderBox == undefined) {
-            GUI.riverBenderBox = new riverBenderBox_1.RiverBenderBox();
+            GUI.riverBenderBox = new types_1.RiverBenderBox();
         }
         return GUI.riverBenderBox;
     }
     static getBuildingCreationBox() {
         if (GUI.buildingCreationBox == undefined) {
-            GUI.buildingCreationBox = new buildingCreationBox_1.BuildingCreationBox();
+            GUI.buildingCreationBox = new types_1.BuildingCreationBox();
         }
         return GUI.buildingCreationBox;
     }
     static getWallCreationBox() {
         if (GUI.wallCreationBox == undefined) {
-            GUI.wallCreationBox = new wallCreationBox_1.WallCreationBox();
+            GUI.wallCreationBox = new types_1.WallCreationBox();
         }
         return GUI.wallCreationBox;
     }
     static getHarborCreationBox() {
         if (GUI.harborCreationBox == undefined) {
-            GUI.harborCreationBox = new harborCreationBox_1.HarborCreationBox();
+            GUI.harborCreationBox = new types_1.HarborCreationBox();
         }
         return GUI.harborCreationBox;
     }
     static getBridgeCreationBox() {
         if (GUI.bridgeCreationBox == undefined) {
-            GUI.bridgeCreationBox = new bridgeCreationBox_1.BridgeCreationBox();
+            GUI.bridgeCreationBox = new types_1.BridgeCreationBox();
         }
         return GUI.bridgeCreationBox;
     }
     static getStreetCreationBox() {
         if (GUI.streetCreationBox == undefined) {
-            GUI.streetCreationBox = new streetCreationBox_1.StreetCreationBox();
+            GUI.streetCreationBox = new types_1.StreetCreationBox();
         }
         return GUI.streetCreationBox;
     }
