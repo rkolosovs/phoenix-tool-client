@@ -4617,56 +4617,72 @@ class BattleBox {
             this.defenseShips + this.defenseLightWarships + this.defenseHeavyWarships + this.defenseGuardShips > 0) {
             //naval combat
             if (this.attackShips > 0) {
-                this.getAttackBattleSide().innerHTML += "<p>Shiffe: " + this.attackShips + "</p>";
+                this.getAttackBattleSide().innerHTML +=
+                    "<p>Shiffe: " + this.attackShips + "</p>";
             }
             if (this.attackGuardShips > 0) {
-                this.getAttackBattleSide().innerHTML += "<p>Gardeschiffe: " + this.attackGuardShips + "</p>";
+                this.getAttackBattleSide().innerHTML +=
+                    "<p>Gardeschiffe: " + this.attackGuardShips + "</p>";
             }
             if (this.defenseShips > 0) {
-                this.getDefenseBattleSide().innerHTML += "<p>Shiffe: " + this.defenseShips + "</p>";
+                this.getDefenseBattleSide().innerHTML +=
+                    "<p>Shiffe: " + this.defenseShips + "</p>";
             }
             if (this.defenseGuardShips > 0) {
-                this.getDefenseBattleSide().innerHTML += "<p>Gardeschiffe: " + this.defenseGuardShips + "</p>";
+                this.getDefenseBattleSide().innerHTML +=
+                    "<p>Gardeschiffe: " + this.defenseGuardShips + "</p>";
             }
             if (this.defenseLightWarships > 0) {
-                this.getDefenseBattleSide().innerHTML += "<p>Leichte Kreigsschiffe: " + this.defenseLightWarships + "</p>";
+                this.getDefenseBattleSide().innerHTML +=
+                    "<p>Leichte Kreigsschiffe: " + this.defenseLightWarships + "</p>";
             }
             if (this.defenseHeavyWarships > 0) {
-                this.getDefenseBattleSide().innerHTML += "<p>Schwere Kriegsschiffe: " + this.defenseHeavyWarships + "</p>";
+                this.getDefenseBattleSide().innerHTML +=
+                    "<p>Schwere Kriegsschiffe: " + this.defenseHeavyWarships + "</p>";
             }
         }
         else {
             //land combat
             if (this.attackSoldiers > 0) {
-                this.getAttackBattleSide().innerHTML += "<p>Soldaten: " + this.attackSoldiers + "</p>";
+                this.getAttackBattleSide().innerHTML +=
+                    "<p>Soldaten: " + this.attackSoldiers + "</p>";
             }
             if (this.attackRiders > 0) {
-                this.getAttackBattleSide().innerHTML += "<p>Reiter: " + this.attackRiders + "</p>";
+                this.getAttackBattleSide().innerHTML +=
+                    "<p>Reiter: " + this.attackRiders + "</p>";
             }
             if (this.attackGuardSoldiers > 0) {
-                this.getAttackBattleSide().innerHTML += "<p>Gardesoldaten: " + this.attackGuardSoldiers + "</p>";
+                this.getAttackBattleSide().innerHTML +=
+                    "<p>Gardesoldaten: " + this.attackGuardSoldiers + "</p>";
             }
             if (this.attackGuardRiders > 0) {
-                this.getAttackBattleSide().innerHTML += "<p>Gardereiter: " + this.attackGuardRiders + "</p>";
+                this.getAttackBattleSide().innerHTML +=
+                    "<p>Gardereiter: " + this.attackGuardRiders + "</p>";
             }
             if (this.defenseSoldiers > 0) {
-                this.getDefenseBattleSide().innerHTML += "<p>Soldaten: " + this.defenseSoldiers + "</p>";
+                this.getDefenseBattleSide().innerHTML +=
+                    "<p>Soldaten: " + this.defenseSoldiers + "</p>";
             }
             if (this.defenseRiders > 0) {
-                this.getDefenseBattleSide().innerHTML += "<p>Reiter: " + this.defenseRiders + "</p>";
+                this.getDefenseBattleSide().innerHTML +=
+                    "<p>Reiter: " + this.defenseRiders + "</p>";
             }
             if (this.defenseGuardSoldiers > 0) {
-                this.getDefenseBattleSide().innerHTML += "<p>Gardesoldaten: " + this.defenseGuardSoldiers + "</p>";
+                this.getDefenseBattleSide().innerHTML +=
+                    "<p>Gardesoldaten: " + this.defenseGuardSoldiers + "</p>";
             }
             if (this.defenseGuardRiders > 0) {
-                this.getDefenseBattleSide().innerHTML += "<p>Gardereiter: " + this.defenseGuardRiders + "</p>";
+                this.getDefenseBattleSide().innerHTML +=
+                    "<p>Gardereiter: " + this.defenseGuardRiders + "</p>";
             }
         }
         if (this.attackOfficers > 0) {
-            this.getAttackBattleSide().innerHTML += "<p>Heerführer: " + this.attackOfficers + "</p>";
+            this.getAttackBattleSide().innerHTML +=
+                "<p>Heerführer: " + this.attackOfficers + "</p>";
         }
         if (this.defenseOfficers > 0) {
-            this.getDefenseBattleSide().innerHTML += "<p>Heerführer: " + this.defenseOfficers + "</p>";
+            this.getDefenseBattleSide().innerHTML +=
+                "<p>Heerführer: " + this.defenseOfficers + "</p>";
         }
         this.getAttackBattleSide().innerHTML += "<p>Würfelwurf: " + this.getAttackDiceRoll().value + "</p>";
         this.getDefenseBattleSide().innerHTML += "<p>Würfelwurf: " + this.getDefenseDiceRoll().value + "</p>";
@@ -4681,7 +4697,8 @@ class BattleBox {
             throw new Error("BattleHandler is not initialized before being used.");
         }
         let attackFootLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.FootArmy && !this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.FootArmy &&
+                !this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4689,7 +4706,8 @@ class BattleBox {
             }
         }, 0);
         let attackCavLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.RiderArmy && !this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.RiderArmy &&
+                !this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4697,7 +4715,8 @@ class BattleBox {
             }
         }, 0);
         let attackFleetLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.Fleet && !this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.Fleet &&
+                !this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4705,7 +4724,8 @@ class BattleBox {
             }
         }, 0);
         let attackGuardFootLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.FootArmy && this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.FootArmy &&
+                this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4713,7 +4733,8 @@ class BattleBox {
             }
         }, 0);
         let attackGuardCavLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.RiderArmy && this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.RiderArmy &&
+                this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4721,7 +4742,8 @@ class BattleBox {
             }
         }, 0);
         let attackGuardFleetLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.Fleet && this.battleHandler.attackerArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof types_1.Fleet &&
+                this.battleHandler.attackerArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4729,7 +4751,8 @@ class BattleBox {
             }
         }, 0);
         let defenseFootLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.FootArmy && !this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.FootArmy &&
+                !this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4737,7 +4760,8 @@ class BattleBox {
             }
         }, 0);
         let defenseCavLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.RiderArmy && !this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.RiderArmy &&
+                !this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4745,7 +4769,8 @@ class BattleBox {
             }
         }, 0);
         let defenseFleetLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.Fleet && !this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.Fleet &&
+                !this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4753,7 +4778,8 @@ class BattleBox {
             }
         }, 0);
         let defenseGuardFootLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.FootArmy && this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.FootArmy &&
+                this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4761,7 +4787,8 @@ class BattleBox {
             }
         }, 0);
         let defenseGuardCavLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.RiderArmy && this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.RiderArmy &&
+                this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -4769,7 +4796,8 @@ class BattleBox {
             }
         }, 0);
         let defenseGuardFleetLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.Fleet && this.battleHandler.defenderArmies[index].isGuard) {
+            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof types_1.Fleet &&
+                this.battleHandler.defenderArmies[index].isGuard) {
                 return total + Math.round(current);
             }
             else {
@@ -9993,38 +10021,64 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const field_1 = require("./map/field");
-exports.Field = field_1.Field;
-const mouseFunctions_1 = require("./controls/mouseFunctions");
-exports.MouseFunctions = mouseFunctions_1.MouseFunctions;
-const drawingFunctions_1 = require("./gui/drawingFunctions");
-exports.Drawing = drawingFunctions_1.Drawing;
-const gui_1 = require("./gui/gui");
-exports.GUI = gui_1.GUI;
-const loadingDataFunctions_1 = require("./serverInteraction/loadingDataFunctions");
-exports.Loading = loadingDataFunctions_1.Loading;
-const army_1 = require("./armies/army");
-exports.Army = army_1.Army;
-const realm_1 = require("./realm");
-exports.Realm = realm_1.Realm;
-const river_1 = require("./map/river");
-exports.River = river_1.River;
-const building_1 = require("./buildings/building");
-exports.Building = building_1.Building;
-const event_1 = require("./events/event");
-exports.PhoenixEvent = event_1.PhoenixEvent;
 const constants_1 = require("./constants");
 exports.Constants = constants_1.Constants;
-const gameState_1 = require("./gameState");
-exports.GameState = gameState_1.GameState;
-const controlVariables_1 = require("./controls/controlVariables");
-exports.Controls = controlVariables_1.Controls;
+const boxVisibilty_1 = require("./gui/boxVisibilty");
+exports.BoxVisibility = boxVisibilty_1.BoxVisibility;
 const authenticationFunctions_1 = require("./serverInteraction/authenticationFunctions");
 exports.Authentication = authenticationFunctions_1.Authentication;
-const footArmy_1 = require("./armies/footArmy");
-exports.FootArmy = footArmy_1.FootArmy;
+const loadingDataFunctions_1 = require("./serverInteraction/loadingDataFunctions");
+exports.Loading = loadingDataFunctions_1.Loading;
+const savingFunctions_1 = require("./serverInteraction/savingFunctions");
+exports.Saving = savingFunctions_1.Saving;
+const field_1 = require("./map/field");
+exports.Field = field_1.Field;
+const river_1 = require("./map/river");
+exports.River = river_1.River;
+const mapEntity_1 = require("./map/mapEntity");
+exports.MapEntity = mapEntity_1.MapEntity;
+const direction_1 = require("./map/direction");
+exports.stringToDirection = direction_1.stringToDirection;
+exports.directionToString = direction_1.directionToString;
+exports.reverseDirection = direction_1.reverseDirection;
+const mobileEntity_1 = require("./armies/mobileEntity");
+exports.MobileEntity = mobileEntity_1.MobileEntity;
+const army_1 = require("./armies/army");
+exports.Army = army_1.Army;
+const battleHandler_1 = require("./armies/battleHandler");
+exports.BattleHandler = battleHandler_1.BattleHandler;
+const battleResult_1 = require("./armies/battleResult");
+exports.BattleResult = battleResult_1.BattleResult;
+const fleet_1 = require("./armies/fleet");
+exports.Fleet = fleet_1.Fleet;
 const landArmy_1 = require("./armies/landArmy");
 exports.LandArmy = landArmy_1.LandArmy;
+const footArmy_1 = require("./armies/footArmy");
+exports.FootArmy = footArmy_1.FootArmy;
+const move_1 = require("./armies/move");
+exports.Move = move_1.Move;
+const riderArmy_1 = require("./armies/riderArmy");
+exports.RiderArmy = riderArmy_1.RiderArmy;
+const shootingFunctions_1 = require("./armies/shootingFunctions");
+exports.ShootingFunctions = shootingFunctions_1.ShootingFunctions;
+const building_1 = require("./buildings/building");
+exports.Building = building_1.Building;
+const nonDestructibleBuilding_1 = require("./buildings/nonDestructibleBuilding");
+exports.NonDestructibleBuilding = nonDestructibleBuilding_1.NonDestructibleBuilding;
+const destructibleBuilding_1 = require("./buildings/destructibleBuilding");
+exports.DestructibleBuilding = destructibleBuilding_1.DestructibleBuilding;
+const wall_1 = require("./buildings/wall");
+exports.Wall = wall_1.Wall;
+const productionBuilding_1 = require("./buildings/productionBuilding");
+exports.ProductionBuilding = productionBuilding_1.ProductionBuilding;
+const mouseFunctions_1 = require("./controls/mouseFunctions");
+exports.MouseFunctions = mouseFunctions_1.MouseFunctions;
+const controlVariables_1 = require("./controls/controlVariables");
+exports.Controls = controlVariables_1.Controls;
+const buttonFunctions_1 = require("./controls/buttonFunctions");
+exports.ButtonFunctions = buttonFunctions_1.ButtonFunctions;
+const event_1 = require("./events/event");
+exports.PhoenixEvent = event_1.PhoenixEvent;
 const moveEvent_1 = require("./events/moveEvent");
 exports.MoveEvent = moveEvent_1.MoveEvent;
 const battleEvent_1 = require("./events/battleEvent");
@@ -10039,38 +10093,16 @@ const mountEvent_1 = require("./events/mountEvent");
 exports.MountEvent = mountEvent_1.MountEvent;
 const shootEvent_1 = require("./events/shootEvent");
 exports.ShootEvent = shootEvent_1.ShootEvent;
-const riderArmy_1 = require("./armies/riderArmy");
-exports.RiderArmy = riderArmy_1.RiderArmy;
-const fleet_1 = require("./armies/fleet");
-exports.Fleet = fleet_1.Fleet;
-const direction_1 = require("./map/direction");
-exports.stringToDirection = direction_1.stringToDirection;
-const wall_1 = require("./buildings/wall");
-exports.Wall = wall_1.Wall;
-const productionBuilding_1 = require("./buildings/productionBuilding");
-exports.ProductionBuilding = productionBuilding_1.ProductionBuilding;
-const nonDestructibleBuilding_1 = require("./buildings/nonDestructibleBuilding");
-exports.NonDestructibleBuilding = nonDestructibleBuilding_1.NonDestructibleBuilding;
+const drawingFunctions_1 = require("./gui/drawingFunctions");
+exports.Drawing = drawingFunctions_1.Drawing;
+const gui_1 = require("./gui/gui");
+exports.GUI = gui_1.GUI;
 const images_1 = require("./gui/images");
 exports.Images = images_1.Images;
-const boxVisibilty_1 = require("./gui/boxVisibilty");
-exports.BoxVisibility = boxVisibilty_1.BoxVisibility;
-const godModeFunctions_1 = require("./godmode/godModeFunctions");
-exports.GodFunctions = godModeFunctions_1.GodFunctions;
-const battleHandler_1 = require("./armies/battleHandler");
-exports.BattleHandler = battleHandler_1.BattleHandler;
-const battleResult_1 = require("./armies/battleResult");
-exports.BattleResult = battleResult_1.BattleResult;
 const infoBox_1 = require("./gui/infoBox");
 exports.InfoBox = infoBox_1.InfoBox;
 const infoChangeBox_1 = require("./gui/infoChangeBox");
 exports.InfoChangeBox = infoChangeBox_1.InfoChangeBox;
-const buttonFunctions_1 = require("./controls/buttonFunctions");
-exports.ButtonFunctions = buttonFunctions_1.ButtonFunctions;
-const savingFunctions_1 = require("./serverInteraction/savingFunctions");
-exports.Saving = savingFunctions_1.Saving;
-const hexFunctions_1 = require("./libraries/hexFunctions");
-exports.HexFunction = hexFunctions_1.HexFunction;
 const multifieldFunctions_1 = require("./gui/multifieldFunctions");
 exports.MultiFieldFunctions = multifieldFunctions_1.MultiFieldFunctions;
 const mainBox_1 = require("./gui/mainBox");
@@ -10097,19 +10129,15 @@ const bridgeCreationBox_1 = require("./gui/bridgeCreationBox");
 exports.BridgeCreationBox = bridgeCreationBox_1.BridgeCreationBox;
 const streetCreationBox_1 = require("./gui/streetCreationBox");
 exports.StreetCreationBox = streetCreationBox_1.StreetCreationBox;
+const hexFunctions_1 = require("./libraries/hexFunctions");
+exports.HexFunction = hexFunctions_1.HexFunction;
 const armyFunctions_1 = require("./libraries/armyFunctions");
 exports.ArmyFunctions = armyFunctions_1.ArmyFunctions;
-const shootingFunctions_1 = require("./armies/shootingFunctions");
-exports.ShootingFunctions = shootingFunctions_1.ShootingFunctions;
-const mapEntity_1 = require("./map/mapEntity");
-exports.MapEntity = mapEntity_1.MapEntity;
-const mobileEntity_1 = require("./armies/mobileEntity");
-exports.MobileEntity = mobileEntity_1.MobileEntity;
-const destructibleBuilding_1 = require("./buildings/destructibleBuilding");
-exports.DestructibleBuilding = destructibleBuilding_1.DestructibleBuilding;
-const direction_2 = require("./map/direction");
-exports.directionToString = direction_2.directionToString;
-const move_1 = require("./armies/move");
-exports.Move = move_1.Move;
+const realm_1 = require("./realm");
+exports.Realm = realm_1.Realm;
+const gameState_1 = require("./gameState");
+exports.GameState = gameState_1.GameState;
+const godModeFunctions_1 = require("./godmode/godModeFunctions");
+exports.GodFunctions = godModeFunctions_1.GodFunctions;
 
 },{"./armies/army":1,"./armies/battleHandler":2,"./armies/battleResult":3,"./armies/fleet":4,"./armies/footArmy":5,"./armies/landArmy":6,"./armies/mobileEntity":7,"./armies/move":8,"./armies/riderArmy":9,"./armies/shootingFunctions":10,"./buildings/building":11,"./buildings/destructibleBuilding":12,"./buildings/nonDestructibleBuilding":13,"./buildings/productionBuilding":14,"./buildings/wall":15,"./constants":16,"./controls/buttonFunctions":17,"./controls/controlVariables":18,"./controls/mouseFunctions":19,"./events/battleEvent":20,"./events/event":21,"./events/mergeEvent":22,"./events/mountEvent":23,"./events/moveEvent":24,"./events/shootEvent":25,"./events/splitEvent":26,"./events/transferEvent":27,"./gameState":28,"./godmode/godModeFunctions":29,"./gui/armyGeneratorBox":30,"./gui/battleBox":31,"./gui/boxVisibilty":32,"./gui/bridgeCreationBox":33,"./gui/buildingCreationBox":34,"./gui/drawingFunctions":35,"./gui/godModeBox":36,"./gui/gui":37,"./gui/harborCreationBox":38,"./gui/images":39,"./gui/infoBox":40,"./gui/infoChangeBox":41,"./gui/mainBox":42,"./gui/multifieldFunctions":43,"./gui/riverBenderBox":44,"./gui/shootingBigBox":45,"./gui/streetCreationBox":46,"./gui/wallCreationBox":47,"./gui/worldBenderBox":48,"./libraries/armyFunctions":49,"./libraries/hexFunctions":50,"./map/direction":51,"./map/field":52,"./map/mapEntity":53,"./map/river":54,"./realm":56,"./serverInteraction/authenticationFunctions":57,"./serverInteraction/loadingDataFunctions":58,"./serverInteraction/savingFunctions":59}]},{},[55]);
