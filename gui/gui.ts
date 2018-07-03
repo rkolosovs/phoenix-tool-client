@@ -448,7 +448,7 @@ export class GUI{
     static getLoginButton(): HTMLButtonElement{
         if(GUI.loginBtn == undefined){
             GUI.loginBtn = document.getElementById("loginBtn") as HTMLButtonElement;
-            GUI.loginBtn.onclick = function(){Authentication.loginToServer();};
+            GUI.loginBtn.addEventListener('click', Authentication.loginToServer, true);
         }
         return GUI.loginBtn;
     }

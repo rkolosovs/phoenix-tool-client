@@ -58,6 +58,12 @@ import {SplitEvent} from "./events/splitEvent";
 import {MountEvent} from "./events/mountEvent";
 import {ShootEvent} from "./events/shootEvent";
 
+import {HexFunction} from "./libraries/hexFunctions";
+import {ArmyFunctions} from "./libraries/armyFunctions";
+
+import {Realm} from "./realm";
+import {GameState} from "./gameState";
+
 import {Drawing} from "./gui/drawingFunctions";
 import {GUI} from "./gui/gui";
 import {Images} from "./gui/images";
@@ -76,12 +82,6 @@ import {WallCreationBox} from "./gui/wallCreationBox";
 import {HarborCreationBox} from "./gui/harborCreationBox";
 import {BridgeCreationBox} from "./gui/bridgeCreationBox";
 import {StreetCreationBox} from "./gui/streetCreationBox";
-
-import {HexFunction} from "./libraries/hexFunctions";
-import {ArmyFunctions} from "./libraries/armyFunctions";
-
-import {Realm} from "./realm";
-import {GameState} from "./gameState";
 
 import {GodFunctions} from "./godmode/godModeFunctions";
 

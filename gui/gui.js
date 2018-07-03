@@ -332,7 +332,7 @@ class GUI {
     static getLoginButton() {
         if (GUI.loginBtn == undefined) {
             GUI.loginBtn = document.getElementById("loginBtn");
-            GUI.loginBtn.onclick = function () { types_1.Authentication.loginToServer(); };
+            GUI.loginBtn.addEventListener('click', types_1.Authentication.loginToServer, true);
         }
         return GUI.loginBtn;
     }

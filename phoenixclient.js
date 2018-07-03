@@ -22,6 +22,8 @@ types_1.GUI.getCanvas().addEventListener('mousedown', types_1.MouseFunctions.mou
 document.addEventListener('mouseup', types_1.MouseFunctions.mouseUp, true);
 types_1.GUI.getCanvas().addEventListener('mousemove', types_1.MouseFunctions.mouseMove, true);
 types_1.GUI.getCanvas().addEventListener('wheel', types_1.MouseFunctions.mouseWheel, true);
+// initialize the starting UI
+types_1.GUI.getLoginButton();
 // initializing the tool
 types_1.Loading.getNewDataFromServer();
 types_1.Loading.loadTurnNumber();

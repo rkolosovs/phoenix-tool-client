@@ -7238,7 +7238,7 @@ class GUI {
     static getLoginButton() {
         if (GUI.loginBtn == undefined) {
             GUI.loginBtn = document.getElementById("loginBtn");
-            GUI.loginBtn.onclick = function () { types_1.Authentication.loginToServer(); };
+            GUI.loginBtn.addEventListener('click', types_1.Authentication.loginToServer, true);
         }
         return GUI.loginBtn;
     }
@@ -9111,6 +9111,8 @@ types_1.GUI.getCanvas().addEventListener('mousedown', types_1.MouseFunctions.mou
 document.addEventListener('mouseup', types_1.MouseFunctions.mouseUp, true);
 types_1.GUI.getCanvas().addEventListener('mousemove', types_1.MouseFunctions.mouseMove, true);
 types_1.GUI.getCanvas().addEventListener('wheel', types_1.MouseFunctions.mouseWheel, true);
+// initialize the starting UI
+types_1.GUI.getLoginButton();
 // initializing the tool
 types_1.Loading.getNewDataFromServer();
 types_1.Loading.loadTurnNumber();
@@ -10093,6 +10095,14 @@ const mountEvent_1 = require("./events/mountEvent");
 exports.MountEvent = mountEvent_1.MountEvent;
 const shootEvent_1 = require("./events/shootEvent");
 exports.ShootEvent = shootEvent_1.ShootEvent;
+const hexFunctions_1 = require("./libraries/hexFunctions");
+exports.HexFunction = hexFunctions_1.HexFunction;
+const armyFunctions_1 = require("./libraries/armyFunctions");
+exports.ArmyFunctions = armyFunctions_1.ArmyFunctions;
+const realm_1 = require("./realm");
+exports.Realm = realm_1.Realm;
+const gameState_1 = require("./gameState");
+exports.GameState = gameState_1.GameState;
 const drawingFunctions_1 = require("./gui/drawingFunctions");
 exports.Drawing = drawingFunctions_1.Drawing;
 const gui_1 = require("./gui/gui");
@@ -10129,14 +10139,6 @@ const bridgeCreationBox_1 = require("./gui/bridgeCreationBox");
 exports.BridgeCreationBox = bridgeCreationBox_1.BridgeCreationBox;
 const streetCreationBox_1 = require("./gui/streetCreationBox");
 exports.StreetCreationBox = streetCreationBox_1.StreetCreationBox;
-const hexFunctions_1 = require("./libraries/hexFunctions");
-exports.HexFunction = hexFunctions_1.HexFunction;
-const armyFunctions_1 = require("./libraries/armyFunctions");
-exports.ArmyFunctions = armyFunctions_1.ArmyFunctions;
-const realm_1 = require("./realm");
-exports.Realm = realm_1.Realm;
-const gameState_1 = require("./gameState");
-exports.GameState = gameState_1.GameState;
 const godModeFunctions_1 = require("./godmode/godModeFunctions");
 exports.GodFunctions = godModeFunctions_1.GodFunctions;
 
