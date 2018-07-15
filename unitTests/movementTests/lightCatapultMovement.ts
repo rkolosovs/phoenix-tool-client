@@ -22,7 +22,7 @@ import { Move } from "../../armies/move";
 import { Direction } from "../../map/direction";
 import { NonDestructibleBuilding } from "../../buildings/nonDestructibleBuilding";
 import { BuildingType } from "../../buildings/building";
-import {QUnit} from "qunit";
+import {QUnit} from "../qunit";
 
 const { test } = QUnit;
 

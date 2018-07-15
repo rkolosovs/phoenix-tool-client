@@ -18,7 +18,7 @@ import {FootArmy} from "../../armies/footArmy";
 import {RiderArmy} from "../../armies/riderArmy";
 import {Fleet} from "../../armies/fleet";
 import {GameState} from "../../gameState";
-import {QUnit} from "qunit";
+import {QUnit} from "../qunit";
 
 const { test } = QUnit;
 const { module } = QUnit;

@@ -19,7 +19,7 @@ import {GameState} from "../../gameState";
 import { FieldType, Field } from "../../map/field";
 import { Move } from "../../armies/move";
 import { Direction } from "../../map/direction";
-import {QUnit} from "qunit";
+import {QUnit} from "../qunit";
 
 const { test } = QUnit;
 

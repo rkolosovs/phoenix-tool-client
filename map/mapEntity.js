@@ -1,4 +1,3 @@
-"use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
 
@@ -14,18 +13,21 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-Object.defineProperty(exports, "__esModule", { value: true });
-class MapEntity {
-    constructor(position, owner) {
-        this.position = [0, 0];
-        // copy the position so that this object doesn't share a reference with anything else
-        this.position[0] = position[0];
-        this.position[1] = position[1];
-        this.owner = owner;
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class MapEntity {
+        constructor(position, owner) {
+            this.position = [0, 0];
+            // copy the position so that this object doesn't share a reference with anything else
+            this.position[0] = position[0];
+            this.position[1] = position[1];
+            this.owner = owner;
+        }
+        getPosition() {
+            return [this.position[0], this.position[1]];
+        }
     }
-    getPosition() {
-        return [this.position[0], this.position[1]];
-    }
-}
-exports.MapEntity = MapEntity;
+    exports.MapEntity = MapEntity;
+});
 //# sourceMappingURL=mapEntity.js.map

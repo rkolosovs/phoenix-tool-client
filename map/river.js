@@ -1,4 +1,3 @@
-"use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
 
@@ -14,12 +13,15 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-Object.defineProperty(exports, "__esModule", { value: true });
-class River {
-    constructor(leftBank, rightBank) {
-        this.leftBank = leftBank;
-        this.rightBank = rightBank;
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class River {
+        constructor(leftBank, rightBank) {
+            this.leftBank = leftBank;
+            this.rightBank = rightBank;
+        }
     }
-}
-exports.River = River;
+    exports.River = River;
+});
 //# sourceMappingURL=river.js.map

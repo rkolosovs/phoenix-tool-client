@@ -1,4 +1,3 @@
-"use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
 
@@ -14,16 +13,19 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-Object.defineProperty(exports, "__esModule", { value: true });
-var UIMaker;
-(function (UIMaker) {
-    //this holds functions to make HTML UI elements
-    function makeElement(id, type, parent) {
-        let result = document.createElement(type);
-        result.setAttribute("id", id);
-        parent.appendChild(result);
-        return result;
-    }
-    UIMaker.makeElement = makeElement;
-})(UIMaker = exports.UIMaker || (exports.UIMaker = {}));
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var UIMaker;
+    (function (UIMaker) {
+        //this holds functions to make HTML UI elements
+        function makeElement(id, type, parent) {
+            let result = document.createElement(type);
+            result.setAttribute("id", id);
+            parent.appendChild(result);
+            return result;
+        }
+        UIMaker.makeElement = makeElement;
+    })(UIMaker = exports.UIMaker || (exports.UIMaker = {}));
+});
 //# sourceMappingURL=uiMaker.js.map

@@ -1,4 +1,3 @@
-"use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
 
@@ -14,23 +13,26 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-Object.defineProperty(exports, "__esModule", { value: true });
-class Realm {
-    constructor(name, tag, color, homeTurf, active) {
-        this.name = "";
-        this.tag = "";
-        this.color = "000,000,000";
-        this.homeTurf = 0 /* SHALLOWS */;
-        this.territory = [];
-        this.name = name;
-        this.tag = tag;
-        this.color = color;
-        this.homeTurf = homeTurf;
-        this.active = active;
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class Realm {
+        constructor(name, tag, color, homeTurf, active) {
+            this.name = "";
+            this.tag = "";
+            this.color = "000,000,000";
+            this.homeTurf = 0 /* SHALLOWS */;
+            this.territory = [];
+            this.name = name;
+            this.tag = tag;
+            this.color = color;
+            this.homeTurf = homeTurf;
+            this.active = active;
+        }
+        getTerritoryCoordinates() {
+            return this.territory.map(field => field.coordinates);
+        }
     }
-    getTerritoryCoordinates() {
-        return this.territory.map(field => field.coordinates);
-    }
-}
-exports.Realm = Realm;
+    exports.Realm = Realm;
+});
 //# sourceMappingURL=realm.js.map

@@ -1,4 +1,3 @@
-"use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
 
@@ -14,13 +13,16 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-Object.defineProperty(exports, "__esModule", { value: true });
-class BattleResult {
-    constructor(result, attackerLosses, defenderLosses) {
-        this.result = result;
-        this.attackerLosses = attackerLosses;
-        this.defenderLosses = defenderLosses;
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class BattleResult {
+        constructor(result, attackerLosses, defenderLosses) {
+            this.result = result;
+            this.attackerLosses = attackerLosses;
+            this.defenderLosses = defenderLosses;
+        }
     }
-}
-exports.BattleResult = BattleResult;
+    exports.BattleResult = BattleResult;
+});
 //# sourceMappingURL=battleResult.js.map

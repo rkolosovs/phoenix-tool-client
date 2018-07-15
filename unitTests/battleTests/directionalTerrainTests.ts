@@ -15,7 +15,7 @@ You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import {attackerArmies, defenderArmies} from "../battleTests";
-import {QUnit} from "qunit";
+import {QUnit} from "../qunit";
 import {Direction} from "../../map/direction";
 import {BattleHandler} from "../../armies/battleHandler";
 import {BattleResult, Result} from "../../armies/battleResult";

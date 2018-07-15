@@ -1,4 +1,3 @@
-"use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
 
@@ -14,22 +13,24 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-Object.defineProperty(exports, "__esModule", { value: true });
-const qunit_1 = require("qunit");
-const { test } = qunit_1.QUnit;
-function resultsTests() {
-    test("Light catas shooting.", function (t) {
-    });
-    test("Heavy catas shooting.", function (t) {
-    });
-    test("Mixed catas shooting.", function (t) {
-    });
-    test("Light warships shooting.", function (t) {
-    });
-    test("Heavy warships shooting.", function (t) {
-    });
-    test("Mixed warships shooting.", function (t) {
-    });
-}
-exports.resultsTests = resultsTests;
+define(["require", "exports", "../qunit"], function (require, exports, qunit_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    const { test } = qunit_1.QUnit;
+    function resultsTests() {
+        test("Light catas shooting.", function (t) {
+        });
+        test("Heavy catas shooting.", function (t) {
+        });
+        test("Mixed catas shooting.", function (t) {
+        });
+        test("Light warships shooting.", function (t) {
+        });
+        test("Heavy warships shooting.", function (t) {
+        });
+        test("Mixed warships shooting.", function (t) {
+        });
+    }
+    exports.resultsTests = resultsTests;
+});
 //# sourceMappingURL=resultsTests.js.map

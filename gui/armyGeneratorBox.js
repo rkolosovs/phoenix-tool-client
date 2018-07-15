@@ -1,4 +1,3 @@
-"use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
 
@@ -14,70 +13,72 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-Object.defineProperty(exports, "__esModule", { value: true });
-const godModeFunctions_1 = require("../godmode/godModeFunctions");
-class ArmyGeneratorBox {
-    getSelf() {
-        if (this.self == undefined) {
-            this.self = document.getElementById("armyGeneratorBox");
+define(["require", "exports", "../godmode/godModeFunctions"], function (require, exports, godModeFunctions_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class ArmyGeneratorBox {
+        getSelf() {
+            if (this.self == undefined) {
+                this.self = document.getElementById("armyGeneratorBox");
+            }
+            return this.self;
         }
-        return this.self;
-    }
-    getOwnerField() {
-        if (this.ownerField == undefined) {
-            this.ownerField = document.getElementById("ownerField");
+        getOwnerField() {
+            if (this.ownerField == undefined) {
+                this.ownerField = document.getElementById("ownerField");
+            }
+            return this.ownerField;
         }
-        return this.ownerField;
-    }
-    getArmyNumberField() {
-        if (this.armyNumberField == undefined) {
-            this.armyNumberField = document.getElementById("armyNumberField");
+        getArmyNumberField() {
+            if (this.armyNumberField == undefined) {
+                this.armyNumberField = document.getElementById("armyNumberField");
+            }
+            return this.armyNumberField;
         }
-        return this.armyNumberField;
-    }
-    getCountField() {
-        if (this.countField == undefined) {
-            this.countField = document.getElementById("countField");
+        getCountField() {
+            if (this.countField == undefined) {
+                this.countField = document.getElementById("countField");
+            }
+            return this.countField;
         }
-        return this.countField;
-    }
-    getLeaderField() {
-        if (this.leaderField == undefined) {
-            this.leaderField = document.getElementById("leaderField");
+        getLeaderField() {
+            if (this.leaderField == undefined) {
+                this.leaderField = document.getElementById("leaderField");
+            }
+            return this.leaderField;
         }
-        return this.leaderField;
-    }
-    getMountsField() {
-        if (this.mountsField == undefined) {
-            this.mountsField = document.getElementById("mountsField");
+        getMountsField() {
+            if (this.mountsField == undefined) {
+                this.mountsField = document.getElementById("mountsField");
+            }
+            return this.mountsField;
         }
-        return this.mountsField;
-    }
-    getLKPField() {
-        if (this.lkpField == undefined) {
-            this.lkpField = document.getElementById("lkpField");
+        getLKPField() {
+            if (this.lkpField == undefined) {
+                this.lkpField = document.getElementById("lkpField");
+            }
+            return this.lkpField;
         }
-        return this.lkpField;
-    }
-    getSKPField() {
-        if (this.skpField == undefined) {
-            this.skpField = document.getElementById("skpField");
+        getSKPField() {
+            if (this.skpField == undefined) {
+                this.skpField = document.getElementById("skpField");
+            }
+            return this.skpField;
         }
-        return this.skpField;
-    }
-    getGuardField() {
-        if (this.guardField == undefined) {
-            this.guardField = document.getElementById("guardField");
+        getGuardField() {
+            if (this.guardField == undefined) {
+                this.guardField = document.getElementById("guardField");
+            }
+            return this.guardField;
         }
-        return this.guardField;
-    }
-    getGenerateArmyBtn() {
-        if (this.generateArmyBtn == undefined) {
-            this.generateArmyBtn = document.getElementById("GenerateArmyBtn");
-            this.generateArmyBtn.onclick = function () { godModeFunctions_1.GodFunctions.generateArmyBtn(); };
+        getGenerateArmyBtn() {
+            if (this.generateArmyBtn == undefined) {
+                this.generateArmyBtn = document.getElementById("GenerateArmyBtn");
+                this.generateArmyBtn.onclick = function () { godModeFunctions_1.GodFunctions.generateArmyBtn(); };
+            }
+            return this.generateArmyBtn;
         }
-        return this.generateArmyBtn;
     }
-}
-exports.ArmyGeneratorBox = ArmyGeneratorBox;
+    exports.ArmyGeneratorBox = ArmyGeneratorBox;
+});
 //# sourceMappingURL=armyGeneratorBox.js.map

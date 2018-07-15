@@ -23,7 +23,7 @@ import { NonDestructibleBuilding } from "../../buildings/nonDestructibleBuilding
 import { BuildingType } from "../../buildings/building";
 import { River } from "../../map/river"
 import {RiderArmy} from "../../armies/riderArmy";
-import {QUnit} from "qunit";
+import {QUnit} from "../qunit";
 
 const { test } = QUnit;
 

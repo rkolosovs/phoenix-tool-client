@@ -1,4 +1,3 @@
-"use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
 
@@ -14,404 +13,390 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-Object.defineProperty(exports, "__esModule", { value: true });
-const mainBox_1 = require("./mainBox");
-const battleBox_1 = require("./battleBox");
-const shootingBigBox_1 = require("./shootingBigBox");
-const infoBox_1 = require("./infoBox");
-const godModeBox_1 = require("./godModeBox");
-const armyGeneratorBox_1 = require("./armyGeneratorBox");
-const worldBenderBox_1 = require("./worldBenderBox");
-const riverBenderBox_1 = require("./riverBenderBox");
-const buildingCreationBox_1 = require("./buildingCreationBox");
-const wallCreationBox_1 = require("./wallCreationBox");
-const harborCreationBox_1 = require("./harborCreationBox");
-const bridgeCreationBox_1 = require("./bridgeCreationBox");
-const streetCreationBox_1 = require("./streetCreationBox");
-const infoChangeBox_1 = require("./infoChangeBox");
-const boxVisibilty_1 = require("./boxVisibilty");
-const buttonFunctions_1 = require("../controls/buttonFunctions");
-const authenticationFunctions_1 = require("../serverInteraction/authenticationFunctions");
-class GUI {
-    static getCanvas() {
-        if (GUI.canvas == undefined) {
-            GUI.canvas = document.getElementById("hexCanvas");
+define(["require", "exports", "./mainBox", "./battleBox", "./shootingBigBox", "./infoBox", "./godModeBox", "./armyGeneratorBox", "./worldBenderBox", "./riverBenderBox", "./buildingCreationBox", "./wallCreationBox", "./harborCreationBox", "./bridgeCreationBox", "./streetCreationBox", "./infoChangeBox", "./boxVisibilty", "../controls/buttonFunctions", "../serverInteraction/authenticationFunctions"], function (require, exports, mainBox_1, battleBox_1, shootingBigBox_1, infoBox_1, godModeBox_1, armyGeneratorBox_1, worldBenderBox_1, riverBenderBox_1, buildingCreationBox_1, wallCreationBox_1, harborCreationBox_1, bridgeCreationBox_1, streetCreationBox_1, infoChangeBox_1, boxVisibilty_1, buttonFunctions_1, authenticationFunctions_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class GUI {
+        static getCanvas() {
+            if (GUI.canvas == undefined) {
+                GUI.canvas = document.getElementById("hexCanvas");
+            }
+            return GUI.canvas;
         }
-        return GUI.canvas;
-    }
-    static getContext() {
-        if (GUI.context == undefined) {
-            GUI.context = GUI.getCanvas().getContext('2d');
+        static getContext() {
+            if (GUI.context == undefined) {
+                GUI.context = GUI.getCanvas().getContext('2d');
+            }
+            return GUI.context;
         }
-        return GUI.context;
-    }
-    static getButtonsBox() {
-        if (GUI.buttonsBox == undefined) {
-            GUI.buttonsBox = document.getElementById("buttonsBox");
+        static getButtonsBox() {
+            if (GUI.buttonsBox == undefined) {
+                GUI.buttonsBox = document.getElementById("buttonsBox");
+            }
+            return GUI.buttonsBox;
         }
-        return GUI.buttonsBox;
-    }
-    static getToggleGMBarButton() {
-        if (GUI.toggleGMBarButton == undefined) {
-            GUI.toggleGMBarButton = document.getElementById("ToggleGodModeBar");
-            GUI.toggleGMBarButton.onclick = function () { boxVisibilty_1.BoxVisibility.toggleGodModeBar(); };
+        static getToggleGMBarButton() {
+            if (GUI.toggleGMBarButton == undefined) {
+                GUI.toggleGMBarButton = document.getElementById("ToggleGodModeBar");
+                GUI.toggleGMBarButton.onclick = function () { boxVisibilty_1.BoxVisibility.toggleGodModeBar(); };
+            }
+            return GUI.toggleGMBarButton;
         }
-        return GUI.toggleGMBarButton;
-    }
-    static getTopBar() {
-        if (GUI.topBar == undefined) {
-            GUI.topBar = document.getElementById("topBar");
+        static getTopBar() {
+            if (GUI.topBar == undefined) {
+                GUI.topBar = document.getElementById("topBar");
+            }
+            return GUI.topBar;
         }
-        return GUI.topBar;
-    }
-    static getBigBox() {
-        if (GUI.bigBox == undefined) {
-            GUI.bigBox = new mainBox_1.MainBox();
+        static getBigBox() {
+            if (GUI.bigBox == undefined) {
+                GUI.bigBox = new mainBox_1.MainBox();
+            }
+            return GUI.bigBox;
         }
-        return GUI.bigBox;
-    }
-    static getMainButton() {
-        if (GUI.mainButton == undefined) {
-            GUI.mainButton = document.getElementById("mainButton");
-            GUI.mainButton.onclick = function () { buttonFunctions_1.ButtonFunctions.mainButton(); };
+        static getMainButton() {
+            if (GUI.mainButton == undefined) {
+                GUI.mainButton = document.getElementById("mainButton");
+                GUI.mainButton.onclick = function () { buttonFunctions_1.ButtonFunctions.mainButton(); };
+            }
+            return GUI.mainButton;
         }
-        return GUI.mainButton;
-    }
-    static getBattleBox() {
-        if (GUI.battleBox == undefined) {
-            GUI.battleBox = new battleBox_1.BattleBox();
+        static getBattleBox() {
+            if (GUI.battleBox == undefined) {
+                GUI.battleBox = new battleBox_1.BattleBox();
+            }
+            return GUI.battleBox;
         }
-        return GUI.battleBox;
-    }
-    static getShootingBigBox() {
-        if (GUI.shootingBigBox == undefined) {
-            GUI.shootingBigBox = new shootingBigBox_1.ShootingBigBox();
+        static getShootingBigBox() {
+            if (GUI.shootingBigBox == undefined) {
+                GUI.shootingBigBox = new shootingBigBox_1.ShootingBigBox();
+            }
+            return GUI.shootingBigBox;
         }
-        return GUI.shootingBigBox;
-    }
-    static getInfoBox() {
-        if (GUI.infoBox == undefined) {
-            GUI.infoBox = new infoBox_1.InfoBox();
+        static getInfoBox() {
+            if (GUI.infoBox == undefined) {
+                GUI.infoBox = new infoBox_1.InfoBox();
+            }
+            return GUI.infoBox;
         }
-        return GUI.infoBox;
-    }
-    static getTransmuteBox() {
-        if (GUI.transmuteBox == undefined) {
-            GUI.transmuteBox = document.getElementById("transmuteBox");
+        static getTransmuteBox() {
+            if (GUI.transmuteBox == undefined) {
+                GUI.transmuteBox = document.getElementById("transmuteBox");
+            }
+            return GUI.transmuteBox;
         }
-        return GUI.transmuteBox;
-    }
-    static getTransmuteArmyButtonsPartition() {
-        if (GUI.transmuteArmyButtonsPartition == undefined) {
-            GUI.transmuteArmyButtonsPartition = document.getElementById("transmuteArmyButtonsPartition");
+        static getTransmuteArmyButtonsPartition() {
+            if (GUI.transmuteArmyButtonsPartition == undefined) {
+                GUI.transmuteArmyButtonsPartition = document.getElementById("transmuteArmyButtonsPartition");
+            }
+            return GUI.transmuteArmyButtonsPartition;
         }
-        return GUI.transmuteArmyButtonsPartition;
-    }
-    static getBackToSplitBox() {
-        if (GUI.backToSplitBox == undefined) {
-            GUI.backToSplitBox = document.getElementById("backToSplitBox");
-            GUI.backToSplitBox.onclick = function () { boxVisibilty_1.BoxVisibility.backToSplitBox(); };
+        static getBackToSplitBox() {
+            if (GUI.backToSplitBox == undefined) {
+                GUI.backToSplitBox = document.getElementById("backToSplitBox");
+                GUI.backToSplitBox.onclick = function () { boxVisibilty_1.BoxVisibility.backToSplitBox(); };
+            }
+            return GUI.backToSplitBox;
         }
-        return GUI.backToSplitBox;
-    }
-    static getRestoreInfoBox() {
-        if (GUI.restoreInfoBox == undefined) {
-            GUI.restoreInfoBox = document.getElementById("restoreInfoBox");
-            GUI.restoreInfoBox.onclick = function () { boxVisibilty_1.BoxVisibility.restoreInfoBox(); };
+        static getRestoreInfoBox() {
+            if (GUI.restoreInfoBox == undefined) {
+                GUI.restoreInfoBox = document.getElementById("restoreInfoBox");
+                GUI.restoreInfoBox.onclick = function () { boxVisibilty_1.BoxVisibility.restoreInfoBox(); };
+            }
+            return GUI.restoreInfoBox;
         }
-        return GUI.restoreInfoBox;
-    }
-    static getMergeBox() {
-        if (GUI.mergeBox == undefined) {
-            GUI.mergeBox = document.getElementById("mergeBox");
+        static getMergeBox() {
+            if (GUI.mergeBox == undefined) {
+                GUI.mergeBox = document.getElementById("mergeBox");
+            }
+            return GUI.mergeBox;
         }
-        return GUI.mergeBox;
-    }
-    static getSplitBox() {
-        if (GUI.splitBox == undefined) {
-            GUI.splitBox = document.getElementById("splitBox");
+        static getSplitBox() {
+            if (GUI.splitBox == undefined) {
+                GUI.splitBox = document.getElementById("splitBox");
+            }
+            return GUI.splitBox;
         }
-        return GUI.splitBox;
-    }
-    static getSplitInput() {
-        if (GUI.splitInput == undefined) {
-            GUI.splitInput = document.getElementById("splitInput");
+        static getSplitInput() {
+            if (GUI.splitInput == undefined) {
+                GUI.splitInput = document.getElementById("splitInput");
+            }
+            return GUI.splitInput;
         }
-        return GUI.splitInput;
-    }
-    static getSplitLeadersInput() {
-        if (GUI.splitLeadersInput == undefined) {
-            GUI.splitLeadersInput = document.getElementById("splitLeadersInput");
+        static getSplitLeadersInput() {
+            if (GUI.splitLeadersInput == undefined) {
+                GUI.splitLeadersInput = document.getElementById("splitLeadersInput");
+            }
+            return GUI.splitLeadersInput;
         }
-        return GUI.splitLeadersInput;
-    }
-    static getSplitMountsInput() {
-        if (GUI.splitMountsInput == undefined) {
-            GUI.splitMountsInput = document.getElementById("splitMountsInput");
+        static getSplitMountsInput() {
+            if (GUI.splitMountsInput == undefined) {
+                GUI.splitMountsInput = document.getElementById("splitMountsInput");
+            }
+            return GUI.splitMountsInput;
         }
-        return GUI.splitMountsInput;
-    }
-    static getSplitLkpInput() {
-        if (GUI.splitLkpInput == undefined) {
-            GUI.splitLkpInput = document.getElementById("splitLkpInput");
+        static getSplitLkpInput() {
+            if (GUI.splitLkpInput == undefined) {
+                GUI.splitLkpInput = document.getElementById("splitLkpInput");
+            }
+            return GUI.splitLkpInput;
         }
-        return GUI.splitLkpInput;
-    }
-    static getSplitSkpInput() {
-        if (GUI.splitSkpInput == undefined) {
-            GUI.splitSkpInput = document.getElementById("splitSkpInput");
+        static getSplitSkpInput() {
+            if (GUI.splitSkpInput == undefined) {
+                GUI.splitSkpInput = document.getElementById("splitSkpInput");
+            }
+            return GUI.splitSkpInput;
         }
-        return GUI.splitSkpInput;
-    }
-    static getSplitSelectedArmy() {
-        if (GUI.splitSelectedArmy == undefined) {
-            GUI.splitSelectedArmy = document.getElementById("splitSelectedArmy");
-            GUI.splitSelectedArmy.onclick = function () { buttonFunctions_1.ButtonFunctions.splitSelectedArmy(); };
+        static getSplitSelectedArmy() {
+            if (GUI.splitSelectedArmy == undefined) {
+                GUI.splitSelectedArmy = document.getElementById("splitSelectedArmy");
+                GUI.splitSelectedArmy.onclick = function () { buttonFunctions_1.ButtonFunctions.splitSelectedArmy(); };
+            }
+            return GUI.splitSelectedArmy;
         }
-        return GUI.splitSelectedArmy;
-    }
-    static getActivateTransmuteBox() {
-        if (GUI.activateTransmuteBox == undefined) {
-            GUI.activateTransmuteBox = document.getElementById("activateTransmuteBox");
-            GUI.activateTransmuteBox.onclick = function () { boxVisibilty_1.BoxVisibility.activateTransmuteBox(); };
+        static getActivateTransmuteBox() {
+            if (GUI.activateTransmuteBox == undefined) {
+                GUI.activateTransmuteBox = document.getElementById("activateTransmuteBox");
+                GUI.activateTransmuteBox.onclick = function () { boxVisibilty_1.BoxVisibility.activateTransmuteBox(); };
+            }
+            return GUI.activateTransmuteBox;
         }
-        return GUI.activateTransmuteBox;
-    }
-    static getActivateMergeBox() {
-        if (GUI.activateMergeBox == undefined) {
-            GUI.activateMergeBox = document.getElementById("activateMergeBox");
-            GUI.activateMergeBox.onclick = function () { boxVisibilty_1.BoxVisibility.activateMergeBox(); };
+        static getActivateMergeBox() {
+            if (GUI.activateMergeBox == undefined) {
+                GUI.activateMergeBox = document.getElementById("activateMergeBox");
+                GUI.activateMergeBox.onclick = function () { boxVisibilty_1.BoxVisibility.activateMergeBox(); };
+            }
+            return GUI.activateMergeBox;
         }
-        return GUI.activateMergeBox;
-    }
-    static getSplitMountedBox() {
-        if (GUI.splitMountedBox == undefined) {
-            GUI.splitMountedBox = document.getElementById("splitMountedBox");
+        static getSplitMountedBox() {
+            if (GUI.splitMountedBox == undefined) {
+                GUI.splitMountedBox = document.getElementById("splitMountedBox");
+            }
+            return GUI.splitMountedBox;
         }
-        return GUI.splitMountedBox;
-    }
-    static getSplitMountedInput() {
-        if (GUI.splitMountedInput == undefined) {
-            GUI.splitMountedInput = document.getElementById("splitMountedInput");
+        static getSplitMountedInput() {
+            if (GUI.splitMountedInput == undefined) {
+                GUI.splitMountedInput = document.getElementById("splitMountedInput");
+            }
+            return GUI.splitMountedInput;
         }
-        return GUI.splitMountedInput;
-    }
-    static getSplitMountedLeadersInput() {
-        if (GUI.splitMountedLeadersInput == undefined) {
-            GUI.splitMountedLeadersInput = document.getElementById("splitMountedLeadersInput");
+        static getSplitMountedLeadersInput() {
+            if (GUI.splitMountedLeadersInput == undefined) {
+                GUI.splitMountedLeadersInput = document.getElementById("splitMountedLeadersInput");
+            }
+            return GUI.splitMountedLeadersInput;
         }
-        return GUI.splitMountedLeadersInput;
-    }
-    static getSplitFleetBox() {
-        if (GUI.splitFleetBox == undefined) {
-            GUI.splitFleetBox = document.getElementById("splitFleetBox");
+        static getSplitFleetBox() {
+            if (GUI.splitFleetBox == undefined) {
+                GUI.splitFleetBox = document.getElementById("splitFleetBox");
+            }
+            return GUI.splitFleetBox;
         }
-        return GUI.splitFleetBox;
-    }
-    static getSplitFleetInput() {
-        if (GUI.splitFleetInput == undefined) {
-            GUI.splitFleetInput = document.getElementById("splitFleetInput");
+        static getSplitFleetInput() {
+            if (GUI.splitFleetInput == undefined) {
+                GUI.splitFleetInput = document.getElementById("splitFleetInput");
+            }
+            return GUI.splitFleetInput;
         }
-        return GUI.splitFleetInput;
-    }
-    static getSplitFleetLeadersInput() {
-        if (GUI.splitFleetLeadersInput == undefined) {
-            GUI.splitFleetLeadersInput = document.getElementById("splitFleetLeadersInput");
+        static getSplitFleetLeadersInput() {
+            if (GUI.splitFleetLeadersInput == undefined) {
+                GUI.splitFleetLeadersInput = document.getElementById("splitFleetLeadersInput");
+            }
+            return GUI.splitFleetLeadersInput;
         }
-        return GUI.splitFleetLeadersInput;
-    }
-    static getSplitFleetLkpInput() {
-        if (GUI.splitFleetLkpInput == undefined) {
-            GUI.splitFleetLkpInput = document.getElementById("splitFleetLkpInput");
+        static getSplitFleetLkpInput() {
+            if (GUI.splitFleetLkpInput == undefined) {
+                GUI.splitFleetLkpInput = document.getElementById("splitFleetLkpInput");
+            }
+            return GUI.splitFleetLkpInput;
         }
-        return GUI.splitFleetLkpInput;
-    }
-    static getSplitFleetSkpInput() {
-        if (GUI.splitFleetSkpInput == undefined) {
-            GUI.splitFleetSkpInput = document.getElementById("splitFleetSkpInput");
+        static getSplitFleetSkpInput() {
+            if (GUI.splitFleetSkpInput == undefined) {
+                GUI.splitFleetSkpInput = document.getElementById("splitFleetSkpInput");
+            }
+            return GUI.splitFleetSkpInput;
         }
-        return GUI.splitFleetSkpInput;
-    }
-    static getMountBox() {
-        if (GUI.mountBox == undefined) {
-            GUI.mountBox = document.getElementById("mountBox");
+        static getMountBox() {
+            if (GUI.mountBox == undefined) {
+                GUI.mountBox = document.getElementById("mountBox");
+            }
+            return GUI.mountBox;
         }
-        return GUI.mountBox;
-    }
-    static getMountInput() {
-        if (GUI.mountInput == undefined) {
-            GUI.mountInput = document.getElementById("mountInput");
+        static getMountInput() {
+            if (GUI.mountInput == undefined) {
+                GUI.mountInput = document.getElementById("mountInput");
+            }
+            return GUI.mountInput;
         }
-        return GUI.mountInput;
-    }
-    static getMountLeaderInput() {
-        if (GUI.mountLeaderInput == undefined) {
-            GUI.mountLeaderInput = document.getElementById("mountLeaderInput");
+        static getMountLeaderInput() {
+            if (GUI.mountLeaderInput == undefined) {
+                GUI.mountLeaderInput = document.getElementById("mountLeaderInput");
+            }
+            return GUI.mountLeaderInput;
         }
-        return GUI.mountLeaderInput;
-    }
-    static getMountButton() {
-        if (GUI.mount == undefined) {
-            GUI.mount = document.getElementById("mount");
-            GUI.mount.onclick = function () { buttonFunctions_1.ButtonFunctions.mountSelected(); };
+        static getMountButton() {
+            if (GUI.mount == undefined) {
+                GUI.mount = document.getElementById("mount");
+                GUI.mount.onclick = function () { buttonFunctions_1.ButtonFunctions.mountSelected(); };
+            }
+            return GUI.mount;
         }
-        return GUI.mount;
-    }
-    static getAllMountButton() {
-        if (GUI.allMount == undefined) {
-            GUI.allMount = document.getElementById("allMount");
-            GUI.allMount.onclick = function () { buttonFunctions_1.ButtonFunctions.allMountSelected(); };
+        static getAllMountButton() {
+            if (GUI.allMount == undefined) {
+                GUI.allMount = document.getElementById("allMount");
+                GUI.allMount.onclick = function () { buttonFunctions_1.ButtonFunctions.allMountSelected(); };
+            }
+            return GUI.allMount;
         }
-        return GUI.allMount;
-    }
-    static getUnMountBox() {
-        if (GUI.unMountBox == undefined) {
-            GUI.unMountBox = document.getElementById("unMountBox");
+        static getUnMountBox() {
+            if (GUI.unMountBox == undefined) {
+                GUI.unMountBox = document.getElementById("unMountBox");
+            }
+            return GUI.unMountBox;
         }
-        return GUI.unMountBox;
-    }
-    static getUnMountInput() {
-        if (GUI.unMountInput == undefined) {
-            GUI.unMountInput = document.getElementById("unMountInput");
+        static getUnMountInput() {
+            if (GUI.unMountInput == undefined) {
+                GUI.unMountInput = document.getElementById("unMountInput");
+            }
+            return GUI.unMountInput;
         }
-        return GUI.unMountInput;
-    }
-    static getUnMountLeaderInput() {
-        if (GUI.unMountLeaderInput == undefined) {
-            GUI.unMountLeaderInput = document.getElementById("unMountLeaderInput");
+        static getUnMountLeaderInput() {
+            if (GUI.unMountLeaderInput == undefined) {
+                GUI.unMountLeaderInput = document.getElementById("unMountLeaderInput");
+            }
+            return GUI.unMountLeaderInput;
         }
-        return GUI.unMountLeaderInput;
-    }
-    static getUnMountButton() {
-        if (GUI.unMount == undefined) {
-            GUI.unMount = document.getElementById("unMount");
-            GUI.unMount.onclick = function () { buttonFunctions_1.ButtonFunctions.unMountSelected; };
+        static getUnMountButton() {
+            if (GUI.unMount == undefined) {
+                GUI.unMount = document.getElementById("unMount");
+                GUI.unMount.onclick = function () { buttonFunctions_1.ButtonFunctions.unMountSelected; };
+            }
+            return GUI.unMount;
         }
-        return GUI.unMount;
-    }
-    static getAllUnMountButton() {
-        if (GUI.allUnMount == undefined) {
-            GUI.allUnMount = document.getElementById("allUnMount");
-            GUI.allUnMount.onclick = function () { buttonFunctions_1.ButtonFunctions.allUnMountSelected; };
+        static getAllUnMountButton() {
+            if (GUI.allUnMount == undefined) {
+                GUI.allUnMount = document.getElementById("allUnMount");
+                GUI.allUnMount.onclick = function () { buttonFunctions_1.ButtonFunctions.allUnMountSelected; };
+            }
+            return GUI.allUnMount;
         }
-        return GUI.allUnMount;
-    }
-    static getShootBox() {
-        if (GUI.shootBox == undefined) {
-            GUI.shootBox = document.getElementById("shootBox");
+        static getShootBox() {
+            if (GUI.shootBox == undefined) {
+                GUI.shootBox = document.getElementById("shootBox");
+            }
+            return GUI.shootBox;
         }
-        return GUI.shootBox;
-    }
-    static getShootingLKPInput() {
-        if (GUI.shootingLKPInput == undefined) {
-            GUI.shootingLKPInput = document.getElementById("shootingLKPInput");
+        static getShootingLKPInput() {
+            if (GUI.shootingLKPInput == undefined) {
+                GUI.shootingLKPInput = document.getElementById("shootingLKPInput");
+            }
+            return GUI.shootingLKPInput;
         }
-        return GUI.shootingLKPInput;
-    }
-    static getShootingSKPInput() {
-        if (GUI.shootingSKPInput == undefined) {
-            GUI.shootingSKPInput = document.getElementById("shootingSKPInput");
+        static getShootingSKPInput() {
+            if (GUI.shootingSKPInput == undefined) {
+                GUI.shootingSKPInput = document.getElementById("shootingSKPInput");
+            }
+            return GUI.shootingSKPInput;
         }
-        return GUI.shootingSKPInput;
-    }
-    static getFireButton() {
-        if (GUI.fire == undefined) {
-            GUI.fire = document.getElementById("fire");
-            GUI.fire.onclick = function () { buttonFunctions_1.ButtonFunctions.shootWithSelectedArmy(); };
+        static getFireButton() {
+            if (GUI.fire == undefined) {
+                GUI.fire = document.getElementById("fire");
+                GUI.fire.onclick = function () { buttonFunctions_1.ButtonFunctions.shootWithSelectedArmy(); };
+            }
+            return GUI.fire;
         }
-        return GUI.fire;
-    }
-    static getInfoChangeBox() {
-        if (GUI.infoChangeBox == undefined) {
-            GUI.infoChangeBox = new infoChangeBox_1.InfoChangeBox();
+        static getInfoChangeBox() {
+            if (GUI.infoChangeBox == undefined) {
+                GUI.infoChangeBox = new infoChangeBox_1.InfoChangeBox();
+            }
+            return GUI.infoChangeBox;
         }
-        return GUI.infoChangeBox;
-    }
-    static getLoginBox() {
-        if (GUI.loginBox == undefined) {
-            GUI.loginBox = document.getElementById("loginBox");
+        static getLoginBox() {
+            if (GUI.loginBox == undefined) {
+                GUI.loginBox = document.getElementById("loginBox");
+            }
+            return GUI.loginBox;
         }
-        return GUI.loginBox;
-    }
-    static getLoginNameInput() {
-        if (GUI.loginName == undefined) {
-            GUI.loginName = document.getElementById("loginName");
+        static getLoginNameInput() {
+            if (GUI.loginName == undefined) {
+                GUI.loginName = document.getElementById("loginName");
+            }
+            return GUI.loginName;
         }
-        return GUI.loginName;
-    }
-    static getLoginPasswordInput() {
-        if (GUI.loginPassword == undefined) {
-            GUI.loginPassword = document.getElementById("loginPassword");
+        static getLoginPasswordInput() {
+            if (GUI.loginPassword == undefined) {
+                GUI.loginPassword = document.getElementById("loginPassword");
+            }
+            return GUI.loginPassword;
         }
-        return GUI.loginPassword;
-    }
-    static getLoginButton() {
-        if (GUI.loginBtn == undefined) {
-            GUI.loginBtn = document.getElementById("loginBtn");
-            GUI.loginBtn.onclick = function () { authenticationFunctions_1.Authentication.loginToServer(); };
+        static getLoginButton() {
+            if (GUI.loginBtn == undefined) {
+                GUI.loginBtn = document.getElementById("loginBtn");
+                GUI.loginBtn.onclick = function () { authenticationFunctions_1.Authentication.loginToServer(); };
+            }
+            return GUI.loginBtn;
         }
-        return GUI.loginBtn;
-    }
-    static getMinimapBox() {
-        if (GUI.minimapBox == undefined) {
-            GUI.minimapBox = document.getElementById("minimapBox");
+        static getMinimapBox() {
+            if (GUI.minimapBox == undefined) {
+                GUI.minimapBox = document.getElementById("minimapBox");
+            }
+            return GUI.minimapBox;
         }
-        return GUI.minimapBox;
-    }
-    static getGodModeBox() {
-        if (GUI.godmodeBox == undefined) {
-            GUI.godmodeBox = new godModeBox_1.GodModeBox();
+        static getGodModeBox() {
+            if (GUI.godmodeBox == undefined) {
+                GUI.godmodeBox = new godModeBox_1.GodModeBox();
+            }
+            return GUI.godmodeBox;
         }
-        return GUI.godmodeBox;
-    }
-    static getArmyGeneratorBox() {
-        if (GUI.armyGeneratorBox == undefined) {
-            GUI.armyGeneratorBox = new armyGeneratorBox_1.ArmyGeneratorBox();
+        static getArmyGeneratorBox() {
+            if (GUI.armyGeneratorBox == undefined) {
+                GUI.armyGeneratorBox = new armyGeneratorBox_1.ArmyGeneratorBox();
+            }
+            return GUI.armyGeneratorBox;
         }
-        return GUI.armyGeneratorBox;
-    }
-    static getWorldBenderBox() {
-        if (GUI.worldBenderBox == undefined) {
-            GUI.worldBenderBox = new worldBenderBox_1.WorldBenderBox();
+        static getWorldBenderBox() {
+            if (GUI.worldBenderBox == undefined) {
+                GUI.worldBenderBox = new worldBenderBox_1.WorldBenderBox();
+            }
+            return GUI.worldBenderBox;
         }
-        return GUI.worldBenderBox;
-    }
-    static getRiverBenderBox() {
-        if (GUI.riverBenderBox == undefined) {
-            GUI.riverBenderBox = new riverBenderBox_1.RiverBenderBox();
+        static getRiverBenderBox() {
+            if (GUI.riverBenderBox == undefined) {
+                GUI.riverBenderBox = new riverBenderBox_1.RiverBenderBox();
+            }
+            return GUI.riverBenderBox;
         }
-        return GUI.riverBenderBox;
-    }
-    static getBuildingCreationBox() {
-        if (GUI.buildingCreationBox == undefined) {
-            GUI.buildingCreationBox = new buildingCreationBox_1.BuildingCreationBox();
+        static getBuildingCreationBox() {
+            if (GUI.buildingCreationBox == undefined) {
+                GUI.buildingCreationBox = new buildingCreationBox_1.BuildingCreationBox();
+            }
+            return GUI.buildingCreationBox;
         }
-        return GUI.buildingCreationBox;
-    }
-    static getWallCreationBox() {
-        if (GUI.wallCreationBox == undefined) {
-            GUI.wallCreationBox = new wallCreationBox_1.WallCreationBox();
+        static getWallCreationBox() {
+            if (GUI.wallCreationBox == undefined) {
+                GUI.wallCreationBox = new wallCreationBox_1.WallCreationBox();
+            }
+            return GUI.wallCreationBox;
         }
-        return GUI.wallCreationBox;
-    }
-    static getHarborCreationBox() {
-        if (GUI.harborCreationBox == undefined) {
-            GUI.harborCreationBox = new harborCreationBox_1.HarborCreationBox();
+        static getHarborCreationBox() {
+            if (GUI.harborCreationBox == undefined) {
+                GUI.harborCreationBox = new harborCreationBox_1.HarborCreationBox();
+            }
+            return GUI.harborCreationBox;
         }
-        return GUI.harborCreationBox;
-    }
-    static getBridgeCreationBox() {
-        if (GUI.bridgeCreationBox == undefined) {
-            GUI.bridgeCreationBox = new bridgeCreationBox_1.BridgeCreationBox();
+        static getBridgeCreationBox() {
+            if (GUI.bridgeCreationBox == undefined) {
+                GUI.bridgeCreationBox = new bridgeCreationBox_1.BridgeCreationBox();
+            }
+            return GUI.bridgeCreationBox;
         }
-        return GUI.bridgeCreationBox;
-    }
-    static getStreetCreationBox() {
-        if (GUI.streetCreationBox == undefined) {
-            GUI.streetCreationBox = new streetCreationBox_1.StreetCreationBox();
+        static getStreetCreationBox() {
+            if (GUI.streetCreationBox == undefined) {
+                GUI.streetCreationBox = new streetCreationBox_1.StreetCreationBox();
+            }
+            return GUI.streetCreationBox;
         }
-        return GUI.streetCreationBox;
     }
-}
-exports.GUI = GUI;
+    exports.GUI = GUI;
+});
 //# sourceMappingURL=gui.js.map

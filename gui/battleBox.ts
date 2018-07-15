@@ -68,40 +68,56 @@ export class BattleBox {
     moveToAttack(i: number): (() => void) {
         let ctx = this;
         return function () {
-            let t = ctx.battleHandler.unsortedArmies.splice(i, 1);
-            ctx.battleHandler.attackerArmies.push(t[0]);
-            ctx.updateTroopCounts();
-            ctx.updateDisplay();
+            if(ctx.battleHandler != undefined) {
+                let t = ctx.battleHandler.unsortedArmies.splice(i, 1);
+                ctx.battleHandler.attackerArmies.push(t[0]);
+                ctx.updateTroopCounts();
+                ctx.updateDisplay();
+            } else {
+                throw new Error("Battle Handler is undefined.");
+            }
         }
     }
 
     moveToDefense(i: number): (() => void) {
         let ctx = this;
         return function () {
-            let t = ctx.battleHandler.unsortedArmies.splice(i, 1);
-            ctx.battleHandler.defenderArmies.push(t[0]);
-            ctx.updateTroopCounts();
-            ctx.updateDisplay();
+            if(ctx.battleHandler != undefined) {
+                let t = ctx.battleHandler.unsortedArmies.splice(i, 1);
+                ctx.battleHandler.defenderArmies.push(t[0]);
+                ctx.updateTroopCounts();
+                ctx.updateDisplay();
+            } else {
+                throw new Error("Battle Handler is undefined.");
+            }
         }
     }
 
     removeFromDefense(i: number): (() => void) {
         let ctx = this;
         return function () {
-            let t = ctx.battleHandler.defenderArmies.splice(i, 1);
-            ctx.battleHandler.unsortedArmies.push(t[0]);
-            ctx.updateTroopCounts();
-            ctx.updateDisplay();
+            if(ctx.battleHandler != undefined) {
+                let t = ctx.battleHandler.defenderArmies.splice(i, 1);
+                ctx.battleHandler.unsortedArmies.push(t[0]);
+                ctx.updateTroopCounts();
+                ctx.updateDisplay();
+            } else {
+                throw new Error("Battle Handler is undefined.");
+            }
         }
     }
 
     removeFromAttack(i: number): (() => void) {
         let ctx = this;
         return function () {
-            let t = ctx.battleHandler.attackerArmies.splice(i, 1);
-            ctx.battleHandler.unsortedArmies.push(t[0]);
-            ctx.updateTroopCounts();
-            ctx.updateDisplay();
+            if(ctx.battleHandler != undefined) {
+                let t = ctx.battleHandler.attackerArmies.splice(i, 1);
+                ctx.battleHandler.unsortedArmies.push(t[0]);
+                ctx.updateTroopCounts();
+                ctx.updateDisplay();
+            } else {
+                throw new Error("Battle Handler is undefined.");
+            }
         }
     }
 
@@ -129,59 +145,64 @@ export class BattleBox {
         this.defenseGuardShips = 0;
         let ctx = this;
 
-        this.battleHandler.attackerArmies.forEach(function (item) {
-            if (item instanceof FootArmy) {//footman army
-                if (item.isGuard) {
-                    ctx.attackGuardSoldiers += item.getTroopCount();
-                } else {
-                    ctx.attackSoldiers += item.getTroopCount();
+        if(this.battleHandler != undefined) {
+            this.battleHandler.attackerArmies.forEach(function (item) {
+                if (item instanceof FootArmy) {//footman army
+                    if (item.isGuard) {
+                        ctx.attackGuardSoldiers += item.getTroopCount();
+                    } else {
+                        ctx.attackSoldiers += item.getTroopCount();
+                    }
+                } else if (item instanceof RiderArmy) {//rider army
+                    if (item.isGuard) {
+                        ctx.attackGuardRiders += item.getTroopCount();
+                    } else {
+                        ctx.attackRiders += item.getTroopCount();
+                    }
+                } else if (item instanceof Fleet) {//navy
+                    if (item.isGuard) {
+                        ctx.attackGuardShips += item.getTroopCount();
+                    } else {
+                        ctx.attackShips += item.getTroopCount();
+                    }
+                    ctx.attackLightWarships += item.getLightCatapultCount();
+                    ctx.attackHeavyWarships += item.getHeavyCatapultCount();
                 }
-            } else if (item instanceof RiderArmy) {//rider army
-                if (item.isGuard) {
-                    ctx.attackGuardRiders += item.getTroopCount();
-                } else {
-                    ctx.attackRiders += item.getTroopCount();
+                ctx.attackOfficers += (item as Army).getOfficerCount();
+            });
+            this.battleHandler.defenderArmies.forEach(function (item) {
+                if (item instanceof FootArmy) {//footman army
+                    if (item.isGuard) {
+                        ctx.defenseGuardSoldiers += item.getTroopCount();
+                    } else {
+                        ctx.defenseSoldiers += item.getTroopCount();
+                    }
+                } else if (item instanceof RiderArmy) {//rider army
+                    if (item.isGuard) {
+                        ctx.defenseGuardRiders += item.getTroopCount();
+                    } else {
+                        ctx.defenseRiders += item.getTroopCount();
+                    }
+                } else if (item instanceof Fleet) {//navy
+                    if (item.isGuard) {
+                        ctx.defenseGuardShips += item.getTroopCount();
+                    } else {
+                        ctx.defenseShips += item.getTroopCount();
+                    }
+                    ctx.defenseLightWarships += item.getLightCatapultCount();
+                    ctx.defenseHeavyWarships += item.getHeavyCatapultCount();
                 }
-            } else if (item instanceof Fleet) {//navy
-                if (item.isGuard) {
-                    ctx.attackGuardShips += item.getTroopCount();
-                } else {
-                    ctx.attackShips += item.getTroopCount();
-                }
-                ctx.attackLightWarships += item.getLightCatapultCount();
-                ctx.attackHeavyWarships += item.getHeavyCatapultCount();
-            }
-            ctx.attackOfficers += (item as Army).getOfficerCount();
-        });
-        this.battleHandler.defenderArmies.forEach(function (item) {
-            if (item instanceof FootArmy) {//footman army
-                if (item.isGuard) {
-                    ctx.defenseGuardSoldiers += item.getTroopCount();
-                } else {
-                    ctx.defenseSoldiers += item.getTroopCount();
-                }
-            } else if (item instanceof RiderArmy) {//rider army
-                if (item.isGuard) {
-                    ctx.defenseGuardRiders += item.getTroopCount();
-                } else {
-                    ctx.defenseRiders += item.getTroopCount();
-                }
-            } else if (item instanceof Fleet) {//navy
-                if (item.isGuard) {
-                    ctx.defenseGuardShips += item.getTroopCount();
-                } else {
-                    ctx.defenseShips += item.getTroopCount();
-                }
-                ctx.defenseLightWarships += item.getLightCatapultCount();
-                ctx.defenseHeavyWarships += item.getHeavyCatapultCount();
-            }
-            ctx.defenseOfficers += (item as Army).getOfficerCount();
-        });
+                ctx.defenseOfficers += (item as Army).getOfficerCount();
+            });
+        } else {
+            throw new Error("Battle Handler is undefined.");
+        }
     }
 
     updateDisplay(): void {
         //enable / disable the battle button
-        if (this.battleHandler.attackerArmies.length === 0 || this.battleHandler.defenderArmies.length === 0) {
+        if (this.battleHandler != undefined &&
+            (this.battleHandler.attackerArmies.length === 0 || this.battleHandler.defenderArmies.length === 0)) {
             this.getBattleButton().disabled = true;
             this.getBattleButton().style.cursor = "not-allowed";
         } else {
@@ -199,64 +220,68 @@ export class BattleBox {
     private updateArmyLists(): void {
         //fill the sortable lists of armies
         this.getAttackArmiesBox().innerHTML = "";
-        this.battleHandler.attackerArmies.forEach((item, index) => {
-            let listItem = document.createElement("DIV");
-            this.getAttackArmiesBox().appendChild(listItem);
-            listItem.classList.add("armyListItem");
+        if(this.battleHandler != undefined) {
+            this.battleHandler.attackerArmies.forEach((item, index) => {
+                let listItem = document.createElement("DIV");
+                this.getAttackArmiesBox().appendChild(listItem);
+                listItem.classList.add("armyListItem");
 
-            let div = document.createElement("DIV");
-            div.classList.add("center");
-            div.innerHTML = item.owner + " " + item.getErkenfaraID();
-            listItem.appendChild(div);
+                let div = document.createElement("DIV");
+                div.classList.add("center");
+                div.innerHTML = item.owner + " " + item.getErkenfaraID();
+                listItem.appendChild(div);
 
-            let moveBtn = document.createElement("BUTTON");
-            moveBtn.classList.add("armyListButton");
-            moveBtn.classList.add("moveRightButton");
-            moveBtn.onclick = this.removeFromAttack(index);
-            listItem.appendChild(moveBtn);
-        }, this);
+                let moveBtn = document.createElement("BUTTON");
+                moveBtn.classList.add("armyListButton");
+                moveBtn.classList.add("moveRightButton");
+                moveBtn.onclick = this.removeFromAttack(index);
+                listItem.appendChild(moveBtn);
+            }, this);
 
-        this.getUnsortedArmiesBox().innerHTML = "";
-        this.battleHandler.unsortedArmies.forEach((item, index) => {
-            let listItem = document.createElement("DIV");
-            this.getUnsortedArmiesBox().appendChild(listItem);
-            listItem.classList.add("armyListItem");
+            this.getUnsortedArmiesBox().innerHTML = "";
+            this.battleHandler.unsortedArmies.forEach((item, index) => {
+                let listItem = document.createElement("DIV");
+                this.getUnsortedArmiesBox().appendChild(listItem);
+                listItem.classList.add("armyListItem");
 
-            let moveLeftBtn = document.createElement("BUTTON");
-            moveLeftBtn.classList.add("armyListButton");
-            moveLeftBtn.classList.add("moveLeftButton");
-            moveLeftBtn.onclick = this.moveToAttack(index);
-            listItem.appendChild(moveLeftBtn);
+                let moveLeftBtn = document.createElement("BUTTON");
+                moveLeftBtn.classList.add("armyListButton");
+                moveLeftBtn.classList.add("moveLeftButton");
+                moveLeftBtn.onclick = this.moveToAttack(index);
+                listItem.appendChild(moveLeftBtn);
 
-            let div = document.createElement("DIV");
-            div.classList.add("center");
-            div.innerHTML = item.owner + " " + item.getErkenfaraID();
-            listItem.appendChild(div);
+                let div = document.createElement("DIV");
+                div.classList.add("center");
+                div.innerHTML = item.owner + " " + item.getErkenfaraID();
+                listItem.appendChild(div);
 
-            let moveRightBtn = document.createElement("BUTTON");
-            moveRightBtn.classList.add("armyListButton");
-            moveRightBtn.classList.add("moveRightButton");
-            moveRightBtn.onclick = this.moveToDefense(index);
-            listItem.appendChild(moveRightBtn);
-        }, this);
+                let moveRightBtn = document.createElement("BUTTON");
+                moveRightBtn.classList.add("armyListButton");
+                moveRightBtn.classList.add("moveRightButton");
+                moveRightBtn.onclick = this.moveToDefense(index);
+                listItem.appendChild(moveRightBtn);
+            }, this);
 
-        this.getDefenseArmiesBox().innerHTML = "";
-        this.battleHandler.defenderArmies.forEach((item, index) => {
-            let listItem = document.createElement("DIV");
-            this.getDefenseArmiesBox().appendChild(listItem);
-            listItem.classList.add("armyListItem");
+            this.getDefenseArmiesBox().innerHTML = "";
+            this.battleHandler.defenderArmies.forEach((item, index) => {
+                let listItem = document.createElement("DIV");
+                this.getDefenseArmiesBox().appendChild(listItem);
+                listItem.classList.add("armyListItem");
 
-            let moveBtn = document.createElement("BUTTON");
-            moveBtn.classList.add("armyListButton");
-            moveBtn.classList.add("moveLeftButton");
-            moveBtn.onclick = this.removeFromDefense(index);
-            listItem.appendChild(moveBtn);
+                let moveBtn = document.createElement("BUTTON");
+                moveBtn.classList.add("armyListButton");
+                moveBtn.classList.add("moveLeftButton");
+                moveBtn.onclick = this.removeFromDefense(index);
+                listItem.appendChild(moveBtn);
 
-            let div = document.createElement("DIV");
-            div.classList.add("center");
-            div.innerHTML = item.owner + " " + item.getErkenfaraID();
-            listItem.appendChild(div);
-        }, this);
+                let div = document.createElement("DIV");
+                div.classList.add("center");
+                div.innerHTML = item.owner + " " + item.getErkenfaraID();
+                listItem.appendChild(div);
+            }, this);
+        } else {
+            throw new Error("Battle Handler is undefined.");
+        }
     }
 
     private updateTroopSummaries(): void {
@@ -294,180 +319,232 @@ export class BattleBox {
 
     private updateResultPreview(): void {
         //Instant result preview (remove if not desired)
-        let battleResult: BattleResult = this.battleHandler.calculateResult(this.battleHandler.attackerArmies.map((val) => (val)),
-            this.battleHandler.defenderArmies.map((val) => (val)), [], [], this.battleHandler.location,
-            parseInt(this.getAttackDiceRoll().value), parseInt(this.getDefenseDiceRoll().value));
+        if(this.battleHandler != undefined) {
+            let battleResult: BattleResult = this.battleHandler.calculateResult(this.battleHandler.attackerArmies.map((val) => (val)),
+                this.battleHandler.defenderArmies.map((val) => (val)), [], [], this.battleHandler.location,
+                parseInt(this.getAttackDiceRoll().value), parseInt(this.getDefenseDiceRoll().value));
 
-        let attackFootLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof FootArmy && !this.battleHandler.attackerArmies[index].isGuard)
-            { return total + Math.round(current); }
-            else { return total; }
-        }, 0);
-        let attackCavLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof RiderArmy && !this.battleHandler.attackerArmies[index].isGuard)
-            { return total + Math.round(current); }
-            else { return total; }
-        }, 0);
-        let attackFleetLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof Fleet && !this.battleHandler.attackerArmies[index].isGuard)
-            { return total + Math.round(current); }
-            else { return total; }
-        }, 0);
-        let attackGuardFootLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof FootArmy && this.battleHandler.attackerArmies[index].isGuard)
-            { return total + Math.round(current); }
-            else { return total; }
-        }, 0);
-        let attackGuardCavLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof RiderArmy && this.battleHandler.attackerArmies[index].isGuard)
-            { return total + Math.round(current); }
-            else { return total; }
-        }, 0);
-        let attackGuardFleetLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler.attackerArmies[index] instanceof Fleet && this.battleHandler.attackerArmies[index].isGuard)
-            { return total + Math.round(current); }
-            else { return total; }
-        }, 0);
+            let attackFootLosses = battleResult.attackerLosses.reduce((total, current, index) => {
+                if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof FootArmy &&
+                    !this.battleHandler.attackerArmies[index].isGuard) {
+                    return total + Math.round(current);
+                }
+                else {
+                    return total;
+                }
+            }, 0);
+            let attackCavLosses = battleResult.attackerLosses.reduce((total, current, index) => {
+                if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof RiderArmy &&
+                    !this.battleHandler.attackerArmies[index].isGuard) {
+                    return total + Math.round(current);
+                }
+                else {
+                    return total;
+                }
+            }, 0);
+            let attackFleetLosses = battleResult.attackerLosses.reduce((total, current, index) => {
+                if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof Fleet &&
+                    !this.battleHandler.attackerArmies[index].isGuard) {
+                    return total + Math.round(current);
+                }
+                else {
+                    return total;
+                }
+            }, 0);
+            let attackGuardFootLosses = battleResult.attackerLosses.reduce((total, current, index) => {
+                if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof FootArmy &&
+                    this.battleHandler.attackerArmies[index].isGuard) {
+                    return total + Math.round(current);
+                }
+                else {
+                    return total;
+                }
+            }, 0);
+            let attackGuardCavLosses = battleResult.attackerLosses.reduce((total, current, index) => {
+                if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof RiderArmy &&
+                    this.battleHandler.attackerArmies[index].isGuard) {
+                    return total + Math.round(current);
+                }
+                else {
+                    return total;
+                }
+            }, 0);
+            let attackGuardFleetLosses = battleResult.attackerLosses.reduce((total, current, index) => {
+                if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof Fleet &&
+                    this.battleHandler.attackerArmies[index].isGuard) {
+                    return total + Math.round(current);
+                }
+                else {
+                    return total;
+                }
+            }, 0);
 
-        let defenseFootLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof FootArmy && !this.battleHandler.defenderArmies[index].isGuard)
-            { return total + Math.round(current); }
-            else { return total; }
-        }, 0);
-        let defenseCavLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof RiderArmy && !this.battleHandler.defenderArmies[index].isGuard)
-            { return total + Math.round(current); }
-            else { return total; }
-        }, 0);
-        let defenseFleetLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof Fleet && !this.battleHandler.defenderArmies[index].isGuard)
-            { return total + Math.round(current); }
-            else { return total; }
-        }, 0);
-        let defenseGuardFootLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof FootArmy && this.battleHandler.defenderArmies[index].isGuard)
-            { return total + Math.round(current); }
-            else { return total; }
-        }, 0);
-        let defenseGuardCavLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof RiderArmy && this.battleHandler.defenderArmies[index].isGuard)
-            { return total + Math.round(current); }
-            else { return total; }
-        }, 0);
-        let defenseGuardFleetLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler.defenderArmies[index] instanceof Fleet && this.battleHandler.defenderArmies[index].isGuard)
-            { return total + Math.round(current); }
-            else { return total; }
-        }, 0);
+            let defenseFootLosses = battleResult.defenderLosses.reduce((total, current, index) => {
+                if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof FootArmy &&
+                    !this.battleHandler.defenderArmies[index].isGuard) {
+                    return total + Math.round(current);
+                }
+                else {
+                    return total;
+                }
+            }, 0);
+            let defenseCavLosses = battleResult.defenderLosses.reduce((total, current, index) => {
+                if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof RiderArmy &&
+                    !this.battleHandler.defenderArmies[index].isGuard) {
+                    return total + Math.round(current);
+                }
+                else {
+                    return total;
+                }
+            }, 0);
+            let defenseFleetLosses = battleResult.defenderLosses.reduce((total, current, index) => {
+                if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof Fleet &&
+                    !this.battleHandler.defenderArmies[index].isGuard) {
+                    return total + Math.round(current);
+                }
+                else {
+                    return total;
+                }
+            }, 0);
+            let defenseGuardFootLosses = battleResult.defenderLosses.reduce((total, current, index) => {
+                if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof FootArmy &&
+                    this.battleHandler.defenderArmies[index].isGuard) {
+                    return total + Math.round(current);
+                }
+                else {
+                    return total;
+                }
+            }, 0);
+            let defenseGuardCavLosses = battleResult.defenderLosses.reduce((total, current, index) => {
+                if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof RiderArmy &&
+                    this.battleHandler.defenderArmies[index].isGuard) {
+                    return total + Math.round(current);
+                }
+                else {
+                    return total;
+                }
+            }, 0);
+            let defenseGuardFleetLosses = battleResult.defenderLosses.reduce((total, current, index) => {
+                if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof Fleet &&
+                    this.battleHandler.defenderArmies[index].isGuard) {
+                    return total + Math.round(current);
+                }
+                else {
+                    return total;
+                }
+            }, 0);
 
-        if (battleResult.result === Result.ATTACKER_OVERRUN || battleResult.result === Result.ATTACKER_VICTORY) {
-            if (battleResult.result === Result.ATTACKER_OVERRUN) {
-                this.getDefenseBattleSide().innerHTML += "<p class=\"red\">Überrant!</p>";
-            } else {
-                this.getDefenseBattleSide().innerHTML += "<p class=\"red\">Besiegt!</p>";
-                this.getAttackBattleSide().innerHTML = "";
-                if (this.attackShips + this.attackLightWarships + this.attackHeavyWarships + this.attackGuardShips > 0 ||
-                    this.defenseShips + this.defenseLightWarships + this.defenseHeavyWarships + this.defenseGuardShips > 0) {
-                    //naval battle
-                    let lossProportion = ((attackFleetLosses + attackGuardFleetLosses) / (this.attackShips + this.attackGuardShips));
-                    let officerLosses = Math.round(lossProportion * this.attackOfficers);
-                    if (this.attackShips > 0) {
-                        this.getAttackBattleSide().innerHTML += "<div>Schiffe: " +
-                            this.attackShips + "<div class=\"red inline\"> -" + attackFleetLosses + "</div></div>";
-                    }
-                    if (this.attackGuardShips > 0) {
-                        this.getAttackBattleSide().innerHTML += "<div>Gardeschiffe: " +
-                            this.attackGuardShips + "<div class=\"red inline\"> -" + attackGuardFleetLosses + "</div></div>";
-                    }
-                    if (this.attackOfficers > 0) {
-                        this.getAttackBattleSide().innerHTML += "<div>Heerführer: " +
-                            this.attackOfficers + "<div class=\"red inline\"> -" + officerLosses + "</div></div>";
-                    }
+            if (battleResult.result === Result.ATTACKER_OVERRUN || battleResult.result === Result.ATTACKER_VICTORY) {
+                if (battleResult.result === Result.ATTACKER_OVERRUN) {
+                    this.getDefenseBattleSide().innerHTML += "<p class=\"red\">Überrant!</p>";
                 } else {
-                    //land battle
-                    let officerLosses = Math.round(((attackFootLosses + attackCavLosses + attackGuardFootLosses + attackGuardCavLosses) /
-                        (this.attackSoldiers + this.attackRiders + this.attackGuardSoldiers + this.attackGuardRiders)) * this.attackOfficers);
-                    if (this.attackSoldiers > 0) {
-                        this.getAttackBattleSide().innerHTML += "<div>Soldaten: " +
-                            this.attackSoldiers + "<div class=\"red inline\"> -" + attackFootLosses + "</div></div>";
+                    this.getDefenseBattleSide().innerHTML += "<p class=\"red\">Besiegt!</p>";
+                    this.getAttackBattleSide().innerHTML = "";
+                    if (this.attackShips + this.attackLightWarships + this.attackHeavyWarships + this.attackGuardShips > 0 ||
+                        this.defenseShips + this.defenseLightWarships + this.defenseHeavyWarships + this.defenseGuardShips > 0) {
+                        //naval battle
+                        let lossProportion = ((attackFleetLosses + attackGuardFleetLosses) / (this.attackShips + this.attackGuardShips));
+                        let officerLosses = Math.round(lossProportion * this.attackOfficers);
+                        if (this.attackShips > 0) {
+                            this.getAttackBattleSide().innerHTML += "<div>Schiffe: " +
+                                this.attackShips + "<div class=\"red inline\"> -" + attackFleetLosses + "</div></div>";
+                        }
+                        if (this.attackGuardShips > 0) {
+                            this.getAttackBattleSide().innerHTML += "<div>Gardeschiffe: " +
+                                this.attackGuardShips + "<div class=\"red inline\"> -" + attackGuardFleetLosses + "</div></div>";
+                        }
+                        if (this.attackOfficers > 0) {
+                            this.getAttackBattleSide().innerHTML += "<div>Heerführer: " +
+                                this.attackOfficers + "<div class=\"red inline\"> -" + officerLosses + "</div></div>";
+                        }
+                    } else {
+                        //land battle
+                        let officerLosses = Math.round(((attackFootLosses + attackCavLosses + attackGuardFootLosses + attackGuardCavLosses) /
+                            (this.attackSoldiers + this.attackRiders + this.attackGuardSoldiers + this.attackGuardRiders)) * this.attackOfficers);
+                        if (this.attackSoldiers > 0) {
+                            this.getAttackBattleSide().innerHTML += "<div>Soldaten: " +
+                                this.attackSoldiers + "<div class=\"red inline\"> -" + attackFootLosses + "</div></div>";
+                        }
+                        if (this.attackRiders > 0) {
+                            this.getAttackBattleSide().innerHTML += "<div>Reiter: " +
+                                this.attackRiders + "<div class=\"red inline\"> -" + attackCavLosses + "</div></div>";
+                        }
+                        if (this.attackGuardSoldiers > 0) {
+                            this.getAttackBattleSide().innerHTML += "<div>Gardesoldaten: " +
+                                this.attackGuardSoldiers + "<div class=\"red inline\"> -" + attackGuardFootLosses + "</div></div>";
+                        }
+                        if (this.attackGuardRiders > 0) {
+                            this.getAttackBattleSide().innerHTML += "<div>Gardereiter: " +
+                                this.attackGuardRiders + "<div class=\"red inline\"> -" + attackGuardCavLosses + "</div></div>";
+                        }
+                        if (this.attackOfficers > 0) {
+                            this.getAttackBattleSide().innerHTML += "<div>Heerführer: " +
+                                this.attackOfficers + "<div class=\"red inline\"> -" + officerLosses + "</div></div>";
+                        }
                     }
-                    if (this.attackRiders > 0) {
-                        this.getAttackBattleSide().innerHTML += "<div>Reiter: " +
-                            this.attackRiders + "<div class=\"red inline\"> -" + attackCavLosses + "</div></div>";
-                    }
-                    if (this.attackGuardSoldiers > 0) {
-                        this.getAttackBattleSide().innerHTML += "<div>Gardesoldaten: " +
-                            this.attackGuardSoldiers + "<div class=\"red inline\"> -" + attackGuardFootLosses + "</div></div>";
-                    }
-                    if (this.attackGuardRiders > 0) {
-                        this.getAttackBattleSide().innerHTML += "<div>Gardereiter: " +
-                            this.attackGuardRiders + "<div class=\"red inline\"> -" + attackGuardCavLosses + "</div></div>";
-                    }
-                    if (this.attackOfficers > 0) {
-                        this.getAttackBattleSide().innerHTML += "<div>Heerführer: " +
-                            this.attackOfficers + "<div class=\"red inline\"> -" + officerLosses + "</div></div>";
+                }
+            } else if (battleResult.result === Result.DEFENDER_OVERRUN || battleResult.result === Result.DEFENDER_VICTORY) {
+                if (battleResult.result === Result.DEFENDER_OVERRUN) {
+                    this.getAttackBattleSide().innerHTML += "<p class=\"red\">Überrant!</p>";
+                } else {
+                    this.getAttackBattleSide().innerHTML += "<p class=\"red\">Besiegt!</p>";
+                    this.getDefenseBattleSide().innerHTML = "";
+                    if (this.attackShips + this.attackLightWarships + this.attackHeavyWarships + this.attackGuardShips > 0 ||
+                        this.defenseShips + this.defenseLightWarships + this.defenseHeavyWarships + this.defenseGuardShips > 0) {
+                        //naval battle
+                        let lossProportion = ((defenseFleetLosses + defenseGuardFleetLosses) / (this.defenseShips + this.defenseGuardShips));
+                        let officerLosses = Math.round(lossProportion * this.defenseOfficers);
+                        let lightWarshipLosses = Math.round(lossProportion * this.defenseLightWarships);
+                        let heavyWarshipLosses = Math.round(lossProportion * this.defenseHeavyWarships);
+                        if (this.defenseShips > 0) {
+                            this.getDefenseBattleSide().innerHTML += "<div>Schiffe: " +
+                                this.defenseShips + "<div class=\"red inline\"> -" + defenseFleetLosses + "</div></div>";
+                        }
+                        if (this.defenseGuardShips > 0) {
+                            this.getDefenseBattleSide().innerHTML += "<div>Gardeschiffe: " +
+                                this.defenseGuardShips + "<div class=\"red inline\"> -" + defenseGuardFleetLosses + "</div></div>";
+                        }
+                        if (this.defenseLightWarships > 0) {
+                            this.getDefenseBattleSide().innerHTML += "<div>Leichte Kriegsschiffe: " +
+                                this.defenseLightWarships + "<div class=\"red inline\"> -" + lightWarshipLosses + "</div></div>";
+                        }
+                        if (this.defenseHeavyWarships > 0) {
+                            this.getDefenseBattleSide().innerHTML += "<div>Schwere Kriegsschiffe: " +
+                                this.defenseHeavyWarships + "<div class=\"red inline\"> -" + heavyWarshipLosses + "</div></div>";
+                        }
+                        if (this.defenseOfficers > 0) {
+                            this.getDefenseBattleSide().innerHTML += "<div>Heerführer: " +
+                                this.defenseOfficers + "<div class=\"red inline\"> -" + officerLosses + "</div></div>";
+                        }
+                    } else {
+                        //land battle
+                        let officerLosses = Math.round(((defenseFootLosses + defenseCavLosses + defenseGuardFootLosses + defenseGuardCavLosses) /
+                            (this.defenseSoldiers + this.defenseRiders + this.defenseGuardSoldiers + this.defenseGuardRiders)) * this.defenseOfficers);
+                        if (this.defenseSoldiers > 0) {
+                            this.getDefenseBattleSide().innerHTML += "<div>Soldaten: " +
+                                this.defenseSoldiers + "<div class=\"red inline\"> -" + defenseFootLosses + "</div></div>";
+                        }
+                        if (this.defenseRiders > 0) {
+                            this.getDefenseBattleSide().innerHTML += "<div>Reiter: " +
+                                this.defenseRiders + "<div class=\"red inline\"> -" + defenseCavLosses + "</div></div>";
+                        }
+                        if (this.defenseGuardSoldiers > 0) {
+                            this.getDefenseBattleSide().innerHTML += "<div>Gardesoldaten: " +
+                                this.defenseGuardSoldiers + "<div class=\"red inline\"> -" + defenseGuardFootLosses + "</div></div>";
+                        }
+                        if (this.defenseGuardRiders > 0) {
+                            this.getDefenseBattleSide().innerHTML += "<div>Gardereiter: " +
+                                this.defenseGuardRiders + "<div class=\"red inline\"> -" + defenseGuardCavLosses + "</div></div>";
+                        }
+                        if (this.defenseOfficers > 0) {
+                            this.getDefenseBattleSide().innerHTML += "<div>Heerführer: " +
+                                this.defenseOfficers + "<div class=\"red inline\"> -" + officerLosses + "</div></div>";
+                        }
                     }
                 }
             }
-        } else if (battleResult.result === Result.DEFENDER_OVERRUN || battleResult.result === Result.DEFENDER_VICTORY) {
-            if (battleResult.result === Result.DEFENDER_OVERRUN) {
-                this.getAttackBattleSide().innerHTML += "<p class=\"red\">Überrant!</p>";
-            } else {
-                this.getAttackBattleSide().innerHTML += "<p class=\"red\">Besiegt!</p>";
-                this.getDefenseBattleSide().innerHTML = "";
-                if (this.attackShips + this.attackLightWarships + this.attackHeavyWarships + this.attackGuardShips > 0 ||
-                    this.defenseShips + this.defenseLightWarships + this.defenseHeavyWarships + this.defenseGuardShips > 0) {
-                    //naval battle
-                    let lossProportion = ((defenseFleetLosses + defenseGuardFleetLosses) / (this.defenseShips + this.defenseGuardShips));
-                    let officerLosses = Math.round(lossProportion * this.defenseOfficers);
-                    let lightWarshipLosses = Math.round(lossProportion * this.defenseLightWarships);
-                    let heavyWarshipLosses = Math.round(lossProportion * this.defenseHeavyWarships);
-                    if (this.defenseShips > 0) {
-                        this.getDefenseBattleSide().innerHTML += "<div>Schiffe: " +
-                            this.defenseShips + "<div class=\"red inline\"> -" + defenseFleetLosses + "</div></div>";
-                    }
-                    if (this.defenseGuardShips > 0) {
-                        this.getDefenseBattleSide().innerHTML += "<div>Gardeschiffe: " +
-                            this.defenseGuardShips + "<div class=\"red inline\"> -" + defenseGuardFleetLosses + "</div></div>";
-                    }
-                    if (this.defenseLightWarships > 0) {
-                        this.getDefenseBattleSide().innerHTML += "<div>Leichte Kriegsschiffe: " +
-                            this.defenseLightWarships + "<div class=\"red inline\"> -" + lightWarshipLosses + "</div></div>";
-                    }
-                    if (this.defenseHeavyWarships > 0) {
-                        this.getDefenseBattleSide().innerHTML += "<div>Schwere Kriegsschiffe: " +
-                            this.defenseHeavyWarships + "<div class=\"red inline\"> -" + heavyWarshipLosses + "</div></div>";
-                    }
-                    if (this.defenseOfficers > 0) {
-                        this.getDefenseBattleSide().innerHTML += "<div>Heerführer: " +
-                            this.defenseOfficers + "<div class=\"red inline\"> -" + officerLosses + "</div></div>";
-                    }
-                } else {
-                    //land battle
-                    let officerLosses = Math.round(((defenseFootLosses + defenseCavLosses + defenseGuardFootLosses + defenseGuardCavLosses) /
-                        (this.defenseSoldiers + this.defenseRiders + this.defenseGuardSoldiers + this.defenseGuardRiders)) * this.defenseOfficers);
-                    if (this.defenseSoldiers > 0) {
-                        this.getDefenseBattleSide().innerHTML += "<div>Soldaten: " +
-                            this.defenseSoldiers + "<div class=\"red inline\"> -" + defenseFootLosses + "</div></div>";
-                    }
-                    if (this.defenseRiders > 0) {
-                        this.getDefenseBattleSide().innerHTML += "<div>Reiter: " +
-                            this.defenseRiders + "<div class=\"red inline\"> -" + defenseCavLosses + "</div></div>";
-                    }
-                    if (this.defenseGuardSoldiers > 0) {
-                        this.getDefenseBattleSide().innerHTML += "<div>Gardesoldaten: " +
-                            this.defenseGuardSoldiers + "<div class=\"red inline\"> -" + defenseGuardFootLosses + "</div></div>";
-                    }
-                    if (this.defenseGuardRiders > 0) {
-                        this.getDefenseBattleSide().innerHTML += "<div>Gardereiter: " +
-                            this.defenseGuardRiders + "<div class=\"red inline\"> -" + defenseGuardCavLosses + "</div></div>";
-                    }
-                    if (this.defenseOfficers > 0) {
-                        this.getDefenseBattleSide().innerHTML += "<div>Heerführer: " +
-                            this.defenseOfficers + "<div class=\"red inline\"> -" + officerLosses + "</div></div>";
-                    }
-                }
-            }
+        } else {
+            throw new Error("Battle Handler is undefined.");
         }
     }
 

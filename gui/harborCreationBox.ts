@@ -16,7 +16,8 @@ along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import { GodFunctions } from "../godmode/godModeFunctions";
 import { Direction } from "../map/direction";
-import { Saving } from "../app";
+import { Saving } from "../serverInteraction/savingFunctions";
+
 export class HarborCreationBox{
     private self: HTMLDivElement|undefined;
     private buildHarbor: HTMLTableSectionElement|undefined;

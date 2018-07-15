@@ -1,4 +1,3 @@
-"use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
 
@@ -14,16 +13,19 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-Object.defineProperty(exports, "__esModule", { value: true });
-class Move {
-    constructor(movePoints, heightPoints, loading, unloading, destination, direction) {
-        this.movePoints = movePoints;
-        this.heightPoints = heightPoints;
-        this.loading = loading;
-        this.unloading = unloading;
-        this.destination = destination;
-        this.direction = direction;
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class Move {
+        constructor(movePoints, heightPoints, loading, unloading, destination, direction) {
+            this.movePoints = movePoints;
+            this.heightPoints = heightPoints;
+            this.loading = loading;
+            this.unloading = unloading;
+            this.destination = destination;
+            this.direction = direction;
+        }
     }
-}
-exports.Move = Move;
+    exports.Move = Move;
+});
 //# sourceMappingURL=move.js.map

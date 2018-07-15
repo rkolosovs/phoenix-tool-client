@@ -1,4 +1,3 @@
-"use strict";
 /*Copyright 2018 Janos Klieber, Roberts Kolosovs, Peter Spieler
 This file is part of Phoenixclient.
 
@@ -14,65 +13,66 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-Object.defineProperty(exports, "__esModule", { value: true });
-const godModeFunctions_1 = require("../godmode/godModeFunctions");
-const app_1 = require("../app");
-class BuildingCreationBox {
-    getSelf() {
-        if (this.self == undefined) {
-            this.self = document.getElementById("buildingCreationBox");
+define(["require", "exports", "../godmode/godModeFunctions", "../serverInteraction/savingFunctions"], function (require, exports, godModeFunctions_1, savingFunctions_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class BuildingCreationBox {
+        getSelf() {
+            if (this.self == undefined) {
+                this.self = document.getElementById("buildingCreationBox");
+            }
+            return this.self;
         }
-        return this.self;
-    }
-    getAddCastle() {
-        if (this.addCastle == undefined) {
-            this.addCastle = document.getElementById("addCastle");
-            this.addCastle.onclick = function () { godModeFunctions_1.GodFunctions.addCastle(); };
+        getAddCastle() {
+            if (this.addCastle == undefined) {
+                this.addCastle = document.getElementById("addCastle");
+                this.addCastle.onclick = function () { godModeFunctions_1.GodFunctions.addCastle(); };
+            }
+            return this.addCastle;
         }
-        return this.addCastle;
-    }
-    getAddCity() {
-        if (this.addCity == undefined) {
-            this.addCity = document.getElementById("addCity");
-            this.addCity.onclick = function () { godModeFunctions_1.GodFunctions.addCity(); };
+        getAddCity() {
+            if (this.addCity == undefined) {
+                this.addCity = document.getElementById("addCity");
+                this.addCity.onclick = function () { godModeFunctions_1.GodFunctions.addCity(); };
+            }
+            return this.addCity;
         }
-        return this.addCity;
-    }
-    getAddFortress() {
-        if (this.addFortress == undefined) {
-            this.addFortress = document.getElementById("addFortress");
-            this.addFortress.onclick = function () { godModeFunctions_1.GodFunctions.addFortress(); };
+        getAddFortress() {
+            if (this.addFortress == undefined) {
+                this.addFortress = document.getElementById("addFortress");
+                this.addFortress.onclick = function () { godModeFunctions_1.GodFunctions.addFortress(); };
+            }
+            return this.addFortress;
         }
-        return this.addFortress;
-    }
-    getAddCapital() {
-        if (this.addCapital == undefined) {
-            this.addCapital = document.getElementById("addCapital");
-            this.addCapital.onclick = function () { godModeFunctions_1.GodFunctions.addCapital(); };
+        getAddCapital() {
+            if (this.addCapital == undefined) {
+                this.addCapital = document.getElementById("addCapital");
+                this.addCapital.onclick = function () { godModeFunctions_1.GodFunctions.addCapital(); };
+            }
+            return this.addCapital;
         }
-        return this.addCapital;
-    }
-    getAddCapitalFortress() {
-        if (this.addCapitalFortress == undefined) {
-            this.addCapitalFortress = document.getElementById("addCapitalFortress");
-            this.addCapitalFortress.onclick = function () { godModeFunctions_1.GodFunctions.addCapitalFortress(); };
+        getAddCapitalFortress() {
+            if (this.addCapitalFortress == undefined) {
+                this.addCapitalFortress = document.getElementById("addCapitalFortress");
+                this.addCapitalFortress.onclick = function () { godModeFunctions_1.GodFunctions.addCapitalFortress(); };
+            }
+            return this.addCapitalFortress;
         }
-        return this.addCapitalFortress;
-    }
-    getDeleteBuilding() {
-        if (this.deleteBuilding == undefined) {
-            this.deleteBuilding = document.getElementById("deleteBuilding");
-            this.deleteBuilding.onclick = function () { godModeFunctions_1.GodFunctions.deleteSelectedProductionBuilding(); };
+        getDeleteBuilding() {
+            if (this.deleteBuilding == undefined) {
+                this.deleteBuilding = document.getElementById("deleteBuilding");
+                this.deleteBuilding.onclick = function () { godModeFunctions_1.GodFunctions.deleteSelectedProductionBuilding(); };
+            }
+            return this.deleteBuilding;
         }
-        return this.deleteBuilding;
-    }
-    getSaveBuildings() {
-        if (this.saveBuildings == undefined) {
-            this.saveBuildings = document.getElementById("SaveBuildings");
-            this.saveBuildings.onclick = function () { app_1.Saving.saveBuildings(); };
+        getSaveBuildings() {
+            if (this.saveBuildings == undefined) {
+                this.saveBuildings = document.getElementById("SaveBuildings");
+                this.saveBuildings.onclick = function () { savingFunctions_1.Saving.saveBuildings(); };
+            }
+            return this.saveBuildings;
         }
-        return this.saveBuildings;
     }
-}
-exports.BuildingCreationBox = BuildingCreationBox;
+    exports.BuildingCreationBox = BuildingCreationBox;
+});
 //# sourceMappingURL=buildingCreationBox.js.map
