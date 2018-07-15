@@ -13,10 +13,10 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-define(["require", "exports", "../../armies/footArmy", "../../armies/fleet", "../../gameState", "../../map/field", "../../armies/move", "../../buildings/nonDestructibleBuilding", "../qunit"], function (require, exports, footArmy_1, fleet_1, gameState_1, field_1, move_1, nonDestructibleBuilding_1, qunit_1) {
+define(["require", "exports", "../../armies/footArmy", "../../armies/fleet", "../../gameState", "../../map/field", "../../armies/move", "../../buildings/nonDestructibleBuilding"], function (require, exports, footArmy_1, fleet_1, gameState_1, field_1, move_1, nonDestructibleBuilding_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    const { test } = qunit_1.QUnit;
+    const test = QUnit.test;
     function lightCatapultMovementTests() {
         test("Lowlands -> lowlands", function (t) {
             let army = new footArmy_1.FootArmy(111, gameState_1.GameState.realms[0], 1000, 1, 1, 0, 0, [0, 0], footArmy_1.FootArmy.MAX_MOVE_POINTS, 2);

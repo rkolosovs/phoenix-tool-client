@@ -13,11 +13,11 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-define(["require", "exports", "../qunit"], function (require, exports, qunit_1) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    const { test } = qunit_1.QUnit;
-    const { module } = qunit_1.QUnit;
+    const test = QUnit.test;
+    const module = QUnit.module;
     function takingFireTests() {
         module("Regular", function () {
             test("Foot army decimation", function (t) {

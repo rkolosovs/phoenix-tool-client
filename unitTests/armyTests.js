@@ -13,11 +13,11 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-define(["require", "exports", "./qunit", "../armies/footArmy", "./armyTests/dataStructureTests", "./armyTests/decimationTests", "./armyTests/takingFireTests", "../gameState", "../realm"], function (require, exports, qunit_1, footArmy_1, dataStructureTests_1, decimationTests_1, takingFireTests_1, gameState_1, realm_1) {
+define(["require", "exports", "../armies/footArmy", "./armyTests/dataStructureTests", "./armyTests/decimationTests", "./armyTests/takingFireTests", "../gameState", "../realm"], function (require, exports, footArmy_1, dataStructureTests_1, decimationTests_1, takingFireTests_1, gameState_1, realm_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    const { module } = qunit_1.QUnit;
-    qunit_1.QUnit.assert.armyEquals = function (actual, expected) {
+    const { module } = QUnit;
+    QUnit.assert.armyEquals = function (actual, expected) {
         if (actual.constructor !== expected.constructor) {
             this.pushResult({ result: false, actual: actual, expected: expected,
                 message: "Wrong result: Type mismatch." });

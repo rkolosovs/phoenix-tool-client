@@ -13,7 +13,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-define(["require", "exports", "./qunit", "../gameState", "../realm", "./battleTests/navalOverrunTests", "./battleTests/landOverrunTests", "./battleTests/directionalTerrainTests", "./battleTests/guardBattleTests", "./battleTests/navalBattleTests", "./battleTests/landBattleTests", "./battleTests/complexBattleTests", "../map/river", "../buildings/productionBuilding", "../constants", "../buildings/wall", "../buildings/nonDestructibleBuilding", "../map/field", "../armies/footArmy", "../armies/riderArmy", "../armies/fleet"], function (require, exports, qunit_1, gameState_1, realm_1, navalOverrunTests_1, landOverrunTests_1, directionalTerrainTests_1, guardBattleTests_1, navalBattleTests_1, landBattleTests_1, complexBattleTests_1, river_1, productionBuilding_1, constants_1, wall_1, nonDestructibleBuilding_1, field_1, footArmy_1, riderArmy_1, fleet_1) {
+define(["require", "exports", "../gameState", "../realm", "./battleTests/navalOverrunTests", "./battleTests/landOverrunTests", "./battleTests/directionalTerrainTests", "./battleTests/guardBattleTests", "./battleTests/navalBattleTests", "./battleTests/landBattleTests", "./battleTests/complexBattleTests", "../map/river", "../buildings/productionBuilding", "../constants", "../buildings/wall", "../buildings/nonDestructibleBuilding", "../map/field", "../armies/footArmy", "../armies/riderArmy", "../armies/fleet"], function (require, exports, gameState_1, realm_1, navalOverrunTests_1, landOverrunTests_1, directionalTerrainTests_1, guardBattleTests_1, navalBattleTests_1, landBattleTests_1, complexBattleTests_1, river_1, productionBuilding_1, constants_1, wall_1, nonDestructibleBuilding_1, field_1, footArmy_1, riderArmy_1, fleet_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var CASTLE_BP = constants_1.Constants.CASTLE_BP;
@@ -23,8 +23,8 @@ define(["require", "exports", "./qunit", "../gameState", "../realm", "./battleTe
     var CAPITAL_FORTRESS_BP = constants_1.Constants.CAPITAL_FORTRESS_BP;
     var WALL_BP = constants_1.Constants.WALL_BP;
     var WALL_MAX_GUARD = constants_1.Constants.WALL_MAX_GUARD;
-    const { module } = qunit_1.QUnit;
-    qunit_1.QUnit.assert.resultEquals = function (actual, expected) {
+    const module = QUnit.module;
+    QUnit.assert.resultEquals = function (actual, expected) {
         if (actual.result !== expected.result) {
             this.pushResult({ result: false, actual: actual, expected: expected,
                 message: "Wrong result: result should be " + expected.result + " was " + actual.result });

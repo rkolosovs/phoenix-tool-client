@@ -13,10 +13,10 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-define(["require", "exports", "../qunit", "../../armies/footArmy", "../../gameState", "../../armies/riderArmy", "../../armies/battleHandler", "../../armies/battleResult", "../../armies/fleet"], function (require, exports, qunit_1, footArmy_1, gameState_1, riderArmy_1, battleHandler_1, battleResult_1, fleet_1) {
+define(["require", "exports", "../../armies/footArmy", "../../gameState", "../../armies/riderArmy", "../../armies/battleHandler", "../../armies/battleResult", "../../armies/fleet"], function (require, exports, footArmy_1, gameState_1, riderArmy_1, battleHandler_1, battleResult_1, fleet_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    const { test } = qunit_1.QUnit;
+    const test = QUnit.test;
     function complexBattleTest() {
         test("Large land battle at the defenders castle.", function (t) {
             let attackingArmies = [

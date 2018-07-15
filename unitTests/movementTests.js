@@ -13,11 +13,11 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-define(["require", "exports", "./qunit", "../gameState", "../realm", "./movementTests/footMovementTests", "./movementTests/lightCatapultMovement", "./movementTests/heavyCatapultMovement", "./movementTests/riderMovementTests", "./movementTests/fleetMovementTests", "./movementTests/lightWarshipMovement", "./movementTests/heavyWarshipMovement", "./movementTests/movementWithRivers"], function (require, exports, qunit_1, gameState_1, realm_1, footMovementTests_1, lightCatapultMovement_1, heavyCatapultMovement_1, riderMovementTests_1, fleetMovementTests_1, lightWarshipMovement_1, heavyWarshipMovement_1, movementWithRivers_1) {
+define(["require", "exports", "../gameState", "../realm", "./movementTests/footMovementTests", "./movementTests/lightCatapultMovement", "./movementTests/heavyCatapultMovement", "./movementTests/riderMovementTests", "./movementTests/fleetMovementTests", "./movementTests/lightWarshipMovement", "./movementTests/heavyWarshipMovement", "./movementTests/movementWithRivers"], function (require, exports, gameState_1, realm_1, footMovementTests_1, lightCatapultMovement_1, heavyCatapultMovement_1, riderMovementTests_1, fleetMovementTests_1, lightWarshipMovement_1, heavyWarshipMovement_1, movementWithRivers_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    const { module } = qunit_1.QUnit;
-    qunit_1.QUnit.assert.movePossible = function (actual, expected) {
+    const module = QUnit.module;
+    QUnit.assert.movePossible = function (actual, expected) {
         if (actual.some(possibleMove => possibleMove.heightPoints === expected.heightPoints &&
             possibleMove.movePoints === expected.movePoints &&
             possibleMove.direction === expected.direction &&
@@ -34,7 +34,7 @@ define(["require", "exports", "./qunit", "../gameState", "../realm", "./movement
             return false;
         }
     };
-    qunit_1.QUnit.assert.moveImpossible = function (actual, expected) {
+    QUnit.assert.moveImpossible = function (actual, expected) {
         if (actual.some(possibleMove => possibleMove.direction === expected.direction &&
             possibleMove.destination[0] === expected.destination[0] &&
             possibleMove.destination[1] === expected.destination[1])) {

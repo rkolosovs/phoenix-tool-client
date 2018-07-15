@@ -22,9 +22,8 @@ import { Direction } from "../../map/direction";
 import { NonDestructibleBuilding } from "../../buildings/nonDestructibleBuilding";
 import { BuildingType } from "../../buildings/building";
 import { Fleet } from "../../armies/fleet";
-import { QUnit } from "../qunit";
 
-const { test } = QUnit;
+const test  = QUnit.test;
 
 export function footMovementTests() {
     test("Lowlands -> lowlands (nw direction)", function (t: any) {

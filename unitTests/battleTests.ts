@@ -14,7 +14,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {QUnit} from "./qunit";
 import {BattleResult} from "../armies/battleResult";
 import {GameState} from "../gameState";
 import {Realm} from "../realm";
@@ -45,7 +44,7 @@ import {FootArmy} from "../armies/footArmy";
 import {RiderArmy} from "../armies/riderArmy";
 import {Fleet} from "../armies/fleet";
 
-const { module } = QUnit;
+const module = QUnit.module;
 
 QUnit.assert.resultEquals = function(actual: BattleResult, expected: BattleResult) {
 	if(actual.result !== expected.result){

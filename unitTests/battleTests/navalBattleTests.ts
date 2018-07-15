@@ -15,11 +15,10 @@ You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import {attackerArmies, defenderArmies} from "../battleTests";
-import {QUnit} from "../qunit";
 import {BattleHandler} from "../../armies/battleHandler";
 import {BattleResult, Result} from "../../armies/battleResult";
 
-const { test } = QUnit;
+const test  = QUnit.test;
 
 export function navalBattleTests() {
     test( "Basic fleet combat.", function(t:any) {

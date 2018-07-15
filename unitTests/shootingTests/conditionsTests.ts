@@ -14,9 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {QUnit} from "../qunit";
-
-const { test } = QUnit;
+const test  = QUnit.test;
 
 export function conditionsTests() {
     test( "Light catas conditions.", function(t: any) {

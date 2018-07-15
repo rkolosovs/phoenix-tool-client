@@ -13,11 +13,11 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-define(["require", "exports", "../../realm", "../../armies/footArmy", "../../armies/riderArmy", "../../armies/fleet", "../qunit"], function (require, exports, realm_1, footArmy_1, riderArmy_1, fleet_1, qunit_1) {
+define(["require", "exports", "../../realm", "../../armies/footArmy", "../../armies/riderArmy", "../../armies/fleet"], function (require, exports, realm_1, footArmy_1, riderArmy_1, fleet_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    const { test } = qunit_1.QUnit;
-    const { module } = qunit_1.QUnit;
+    const test = QUnit.test;
+    const module = QUnit.module;
     function dataStructureTests() {
         module("Maximum MP and HP", function () {
             test("Foot army respects MP maximum", function (t) {

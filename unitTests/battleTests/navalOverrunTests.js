@@ -13,10 +13,10 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-define(["require", "exports", "../battleTests", "../qunit", "../../armies/battleHandler"], function (require, exports, battleTests_1, qunit_1, battleHandler_1) {
+define(["require", "exports", "../battleTests", "../../armies/battleHandler"], function (require, exports, battleTests_1, battleHandler_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    const { test } = qunit_1.QUnit;
+    const test = QUnit.test;
     function navalOverrunTests() {
         test("Fleet outnumbered 10:1.", function (t) {
             let battleHandler = new battleHandler_1.BattleHandler([], [1, 1]);

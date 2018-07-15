@@ -13,12 +13,12 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
-define(["require", "exports", "./qunit", "./shootingTests/resultsTests", "./shootingTests/conditionsTests", "../gameState", "../realm", "../buildings/productionBuilding", "../constants", "../map/field"], function (require, exports, qunit_1, resultsTests_1, conditionsTests_1, gameState_1, realm_1, productionBuilding_1, constants_1, field_1) {
+define(["require", "exports", "./shootingTests/resultsTests", "./shootingTests/conditionsTests", "../gameState", "../realm", "../buildings/productionBuilding", "../constants", "../map/field"], function (require, exports, resultsTests_1, conditionsTests_1, gameState_1, realm_1, productionBuilding_1, constants_1, field_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.defenderArmies = [];
     exports.attackerArmies = [];
-    const { module } = qunit_1.QUnit;
+    const module = QUnit.module;
     module("Shooting", function () {
         module("Results", {
             before: function () {

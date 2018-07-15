@@ -14,7 +14,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {QUnit} from "./qunit";
 import {Move} from "../armies/move";
 import {GameState} from "../gameState";
 import {Realm} from "../realm";
@@ -27,7 +26,7 @@ import {lightWarshipMovementTests} from "./movementTests/lightWarshipMovement";
 import {heavyWarshipMovementTests} from "./movementTests/heavyWarshipMovement";
 import {movementWithRiversTests} from "./movementTests/movementWithRivers";
 
-const { module } = QUnit;
+const module = QUnit.module;
 
 QUnit.assert.movePossible = function(actual: Move[], expected: Move): boolean {
     if(actual.some(possibleMove =>

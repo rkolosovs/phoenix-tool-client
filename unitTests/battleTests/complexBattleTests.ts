@@ -14,7 +14,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {QUnit} from "../qunit";
 import {FootArmy} from "../../armies/footArmy";
 import {GameState} from "../../gameState";
 import {RiderArmy} from "../../armies/riderArmy";
@@ -22,7 +21,7 @@ import {BattleHandler} from "../../armies/battleHandler";
 import {BattleResult, Result} from "../../armies/battleResult";
 import {Fleet} from "../../armies/fleet";
 
-const { test } = QUnit;
+const test  = QUnit.test;
 
 export function complexBattleTest() {
     test( "Large land battle at the defenders castle.", function(t:any) {
