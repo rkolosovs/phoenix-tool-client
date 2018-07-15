@@ -14,11 +14,26 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {Constants, GUI, Controls, GameState, Direction, 
-	BoxVisibility, Army, HexFunction, Field, FieldType, 
-	BuildingType, Building, Images, Wall, NonDestructibleBuilding, 
-	FootArmy, RiderArmy, Fleet, Saving, Loading, MultiFieldFunctions, 
-	EventStatus} from "../types"
+import { Constants } from "../constants";
+import { GUI } from "./gui";
+import { Controls } from "../controls/controlVariables";
+import { GameState } from "../gameState";
+import { Direction } from "../map/direction";
+import { BoxVisibility } from "./boxVisibilty";
+import { Army } from "../armies/army";
+import { HexFunction } from "../libraries/hexFunctions";
+import { Field, FieldType } from "../map/field";
+import { BuildingType, Building } from "../buildings/building";
+import { Images } from "./images";
+import { Wall } from "../buildings/wall";
+import { NonDestructibleBuilding } from "../buildings/nonDestructibleBuilding";
+import { FootArmy } from "../armies/footArmy";
+import { RiderArmy } from "../armies/riderArmy";
+import { Fleet } from "../armies/fleet";
+import { Saving } from "../serverInteraction/savingFunctions";
+import { Loading } from "../serverInteraction/loadingDataFunctions";
+import { MultiFieldFunctions } from "./multifieldFunctions";
+import { EventStatus } from "../events/eventStatus"
 
 export namespace Drawing {
 	export let c: number = 1;

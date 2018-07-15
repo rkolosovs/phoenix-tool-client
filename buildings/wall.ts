@@ -14,8 +14,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {Direction, directionToString, DestructibleBuilding, BuildingType, 
-    Realm, Constants, GameState} from "../types";
+import {Direction, directionToString} from "../map/direction";
+import {DestructibleBuilding} from "./destructibleBuilding";
+import {BuildingType} from "./building";
+import {Realm} from "../realm";
+import {Constants} from "../constants";
+import {GameState} from "../gameState";
 
 export class Wall extends DestructibleBuilding{
 

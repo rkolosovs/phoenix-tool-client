@@ -14,8 +14,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {GameState, HexFunction, Constants, MobileEntity, Field, Realm, 
-    ShootingCondition, ShootingTarget} from "../types";
+import {GameState} from "../gameState";
+import {HexFunction} from "../libraries/hexFunctions";
+import {Constants} from "../constants";
+import {MobileEntity} from "./mobileEntity";
+import {Field} from "../map/field";
+import {Realm} from "../realm";
+import {ShootingCondition, ShootingTarget} from "./shootingFunctions";
 
 export abstract class Army extends MobileEntity{
     protected troopCount: number;

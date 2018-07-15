@@ -15,8 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
-class NonDestructibleBuilding extends types_1.Building {
+const building_1 = require("./building");
+class NonDestructibleBuilding extends building_1.Building {
     constructor(type, position, secondPosition, owner) {
         super(type, position, owner);
         //as per Erkenfara rules all non-destructible buildings go over two fields

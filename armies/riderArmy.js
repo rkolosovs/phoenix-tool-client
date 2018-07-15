@@ -15,11 +15,22 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
-var RIDER_RP = types_1.Constants.RIDER_RP;
-var OFFICER_RP = types_1.Constants.OFFICER_RP;
-var RIDER_BP = types_1.Constants.RIDER_BP;
-class RiderArmy extends types_1.LandArmy {
+const hexFunctions_1 = require("../libraries/hexFunctions");
+const landArmy_1 = require("./landArmy");
+const gameState_1 = require("../gameState");
+const fleet_1 = require("./fleet");
+const constants_1 = require("../constants");
+var RIDER_RP = constants_1.Constants.RIDER_RP;
+var OFFICER_RP = constants_1.Constants.OFFICER_RP;
+var RIDER_BP = constants_1.Constants.RIDER_BP;
+const controlVariables_1 = require("../controls/controlVariables");
+const multifieldFunctions_1 = require("../gui/multifieldFunctions");
+const boxVisibilty_1 = require("../gui/boxVisibilty");
+const footArmy_1 = require("./footArmy");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const armyFunctions_1 = require("../libraries/armyFunctions");
+const mountEvent_1 = require("../events/mountEvent");
+class RiderArmy extends landArmy_1.LandArmy {
     constructor(id, owner, troopCount, officerCount, position, movePoints, heightPoints, isGuard) {
         if (isGuard != undefined) {
             super(id, owner, troopCount, officerCount, 0, 0, position, movePoints, heightPoints, isGuard);
@@ -38,7 +49,7 @@ class RiderArmy extends types_1.LandArmy {
         return RiderArmy.MAX_HEIGHT_POINTS;
     }
     computeMoveCost(thereIsAStreet, thereIsAHarbor, thereIsARiver, thereIsABridge, rightOfPassage, target) {
-        switch (types_1.HexFunction.fieldType(target)) {
+        switch (hexFunctions_1.HexFunction.fieldType(target)) {
             case 0 /* SHALLOWS */:
             case 1 /* DEEPSEA */: //watter
                 //already embarked
@@ -46,7 +57,7 @@ class RiderArmy extends types_1.LandArmy {
                     throw new Error("You are already embarked on a Fleet.");
                     // there are no viable fleets on destination
                 }
-                else if (types_1.GameState.armies.filter(army => army instanceof types_1.Fleet && army.getPosition()[0] === target[0] &&
+                else if (gameState_1.GameState.armies.filter(army => army instanceof fleet_1.Fleet && army.getPosition()[0] === target[0] &&
                     army.getPosition()[1] === target[1] && army.owner === this.owner && army.canLoad(this)).length === 0) {
                     throw new Error("You can't walk on Water.");
                     // at least one fleet on destination
@@ -199,7 +210,7 @@ class RiderArmy extends types_1.LandArmy {
         if (leadersToSplit < 1) {
             throw new Error("New army must have at least 1 officer.");
         }
-        types_1.GameState.armies.push(new types_1.FootArmy(newArmyId, this.owner, troopsToSplit, leadersToSplit, 0, 0, 0, this.getPosition(), this.movePoints, this.heightPoints));
+        gameState_1.GameState.armies.push(new footArmy_1.FootArmy(newArmyId, this.owner, troopsToSplit, leadersToSplit, 0, 0, 0, this.getPosition(), this.movePoints, this.heightPoints));
         this.troopCount -= troopsToSplit;
         this.officerCount -= leadersToSplit;
     }
@@ -215,7 +226,7 @@ class RiderArmy extends types_1.LandArmy {
         if (fromArmy.getHeightPoints() < this.getHeightPoints()) {
             this.setHeightPoints(fromArmy.getHeightPoints());
         }
-        types_1.ArmyFunctions.deleteArmy(fromArmy);
+        armyFunctions_1.ArmyFunctions.deleteArmy(fromArmy);
     }
     shootAt(targetCoordinate, target, lkpToShootCount, skpToShootCount) {
         throw new Error("Riders can't have catapults.");
@@ -230,7 +241,7 @@ class RiderArmy extends types_1.LandArmy {
     dismount(toUnMount, leadersToUnMount, newArmyId) {
         // generiere armyId falls keine vorhanden
         if (newArmyId == undefined) {
-            newArmyId = types_1.ArmyFunctions.generateArmyId(1, this.owner);
+            newArmyId = armyFunctions_1.ArmyFunctions.generateArmyId(1, this.owner);
         }
         // sitzen genug Truppen ab?
         if (toUnMount < 100) {
@@ -260,25 +271,25 @@ class RiderArmy extends types_1.LandArmy {
         }
         else if ((toUnMount == this.troopCount)) {
             // neues Heer mit generierter Id an selben Koordinaten
-            let newArmy = new types_1.FootArmy(newArmyId, this.owner, toUnMount, this.officerCount, 0, 0, toUnMount, this.position, 0, this.heightPoints, this.isGuard);
+            let newArmy = new footArmy_1.FootArmy(newArmyId, this.owner, toUnMount, this.officerCount, 0, 0, toUnMount, this.position, 0, this.heightPoints, this.isGuard);
             if (this.movePoints !== this.getMaxMovePoints()) {
                 newArmy.setMovePoints(0);
             }
             else
                 newArmy.setMovePoints(newArmy.getMaxMovePoints());
             // in GameState.armies einfügen und alte Armee löschen, ist dann automatisch armyIndex
-            types_1.GameState.armies.push(newArmy);
+            gameState_1.GameState.armies.push(newArmy);
             if (this.multiArmyField === true) {
-                types_1.MultiFieldFunctions.addToMultifield(this, newArmy);
+                multifieldFunctions_1.MultiFieldFunctions.addToMultifield(this, newArmy);
                 // deleteFromMultifield(this);
             }
             //in GameState.events pushen
-            let eventToPush = new types_1.MountEvent(types_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, [this.position[0], this.position[1]]);
-            types_1.GameState.newEvents.push(eventToPush);
-            types_1.ArmyFunctions.deleteArmy(this);
-            types_1.Drawing.drawStuff();
-            types_1.BoxVisibility.restoreInfoBox();
-            types_1.BoxVisibility.updateInfoBox();
+            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, [this.position[0], this.position[1]]);
+            gameState_1.GameState.newEvents.push(eventToPush);
+            armyFunctions_1.ArmyFunctions.deleteArmy(this);
+            drawingFunctions_1.Drawing.drawStuff();
+            boxVisibilty_1.BoxVisibility.restoreInfoBox();
+            boxVisibilty_1.BoxVisibility.updateInfoBox();
             return true;
             // genug Heerführer?
         }
@@ -292,7 +303,7 @@ class RiderArmy extends types_1.LandArmy {
         }
         else {
             // neues Heer mit generierter Id an selben Koordinaten
-            let newArmy = new types_1.FootArmy(newArmyId, this.owner, toUnMount, leadersToUnMount, 0, 0, toUnMount, this.position, 0, this.heightPoints, false);
+            let newArmy = new footArmy_1.FootArmy(newArmyId, this.owner, toUnMount, leadersToUnMount, 0, 0, toUnMount, this.position, 0, this.heightPoints, false);
             if (this.getMovePoints() !== this.getMaxMovePoints()) {
                 newArmy.setMovePoints(0);
             }
@@ -302,19 +313,19 @@ class RiderArmy extends types_1.LandArmy {
             this.setTroopCount(this.troopCount - toUnMount);
             this.setOfficerCount(this.officerCount - leadersToUnMount);
             // in GameState.armies einfügen
-            types_1.GameState.armies.push(newArmy);
+            gameState_1.GameState.armies.push(newArmy);
             if (this.multiArmyField === true) {
-                types_1.MultiFieldFunctions.addToMultifield(this, newArmy);
+                multifieldFunctions_1.MultiFieldFunctions.addToMultifield(this, newArmy);
                 // deleteFromMultifield(this);
             }
             //in GameState.events pushen
-            let eventToPush = new types_1.MountEvent(types_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, [this.position[0], this.position[1]]);
-            types_1.GameState.newEvents.push(eventToPush);
+            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toUnMount, leadersToUnMount, [this.position[0], this.position[1]]);
+            gameState_1.GameState.newEvents.push(eventToPush);
             // armyIndex zeigt auf neues Heer
-            types_1.Controls.selectedArmyIndex = types_1.GameState.armies.length - 1;
-            types_1.Drawing.drawStuff();
-            types_1.BoxVisibility.restoreInfoBox();
-            types_1.BoxVisibility.updateInfoBox();
+            controlVariables_1.Controls.selectedArmyIndex = gameState_1.GameState.armies.length - 1;
+            drawingFunctions_1.Drawing.drawStuff();
+            boxVisibilty_1.BoxVisibility.restoreInfoBox();
+            boxVisibilty_1.BoxVisibility.updateInfoBox();
             return true;
         }
     }

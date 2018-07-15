@@ -15,8 +15,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
-class BattleEvent extends types_1.PhoenixEvent {
+const gui_1 = require("../gui/gui");
+const boxVisibilty_1 = require("../gui/boxVisibilty");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const gameState_1 = require("../gameState");
+const event_1 = require("./event");
+class BattleEvent extends event_1.PhoenixEvent {
     constructor(listPosition, status, participants, position, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.participants = participants;
@@ -40,16 +44,16 @@ class BattleEvent extends types_1.PhoenixEvent {
     }
     validGameState() {
         //Every participating army exists and is located at the position of the battle.
-        return this.participants.every(participant => types_1.GameState.armies.some(army => army.getErkenfaraID() === participant.id &&
+        return this.participants.every(participant => gameState_1.GameState.armies.some(army => army.getErkenfaraID() === participant.id &&
             army.owner.tag === participant.realm &&
             army.getPosition()[0] === this.position[0] && army.getPosition()[1] === this.position[1]));
     }
     checkEvent() {
-        let battleBox = types_1.GUI.getBattleBox();
-        types_1.BoxVisibility.show(battleBox.getSelf());
+        let battleBox = gui_1.GUI.getBattleBox();
+        boxVisibilty_1.BoxVisibility.show(battleBox.getSelf());
         let participatingArmies = [];
         this.participants.forEach(participant => {
-            let army = types_1.GameState.armies.find(candidate => {
+            let army = gameState_1.GameState.armies.find(candidate => {
                 return (participant.realm === candidate.owner.tag && (participant.id === candidate.getErkenfaraID()));
             });
             if (army != undefined) {
@@ -62,12 +66,12 @@ class BattleEvent extends types_1.PhoenixEvent {
         battleBox.newBattle(participatingArmies, this.position);
         battleBox.getAttackDiceRoll().onchange = function () { battleBox.updateDisplay(); };
         battleBox.getDefenseDiceRoll().onchange = function () { battleBox.updateDisplay(); };
-        let battleButton = types_1.GUI.getBattleBox().getBattleButton();
+        let battleButton = gui_1.GUI.getBattleBox().getBattleButton();
         battleButton.addEventListener("click", (e) => this.battleButtonLogic(battleBox));
         battleButton.disabled = true;
         battleButton.style.cursor = "not-allowed";
-        types_1.GUI.getBattleBox().getCloseBattleButton().onclick = function () {
-            types_1.BoxVisibility.hide(battleBox.getSelf());
+        gui_1.GUI.getBattleBox().getCloseBattleButton().onclick = function () {
+            boxVisibilty_1.BoxVisibility.hide(battleBox.getSelf());
         };
     }
     makeEventListItemText() {
@@ -80,10 +84,10 @@ class BattleEvent extends types_1.PhoenixEvent {
     battleButtonLogic(battleBox) {
         if (battleBox.battleHandler != undefined) {
             battleBox.battleHandler.resolve(parseInt(battleBox.getAttackDiceRoll().value), parseInt(battleBox.getDefenseDiceRoll().value));
-            types_1.BoxVisibility.hide(battleBox.getSelf());
+            boxVisibilty_1.BoxVisibility.hide(battleBox.getSelf());
             this.status = 0 /* Checked */;
-            types_1.GUI.getBigBox().fillEventList();
-            types_1.Drawing.drawStuff();
+            gui_1.GUI.getBigBox().fillEventList();
+            drawingFunctions_1.Drawing.drawStuff();
         }
         else {
             throw new Error("BattleHandler is not instantiated prior to use.");

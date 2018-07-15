@@ -14,7 +14,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {Move, Direction, Realm, MapEntity, GameState} from "../types";
+import {Move} from "./move";
+import {Direction} from "../map/direction";
+import {Realm} from "../realm";
+import {MapEntity} from "../map/mapEntity";
+import {GameState} from "../gameState";
 
 export abstract class MobileEntity extends MapEntity{
     static readonly MAX_MOVE_POINTS: number = 42;

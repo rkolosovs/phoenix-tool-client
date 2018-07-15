@@ -14,7 +14,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {BuildingType, Realm, DestructibleBuilding} from "../types";
+import {BuildingType} from "./building";
+import {Realm} from "../realm";
+import {DestructibleBuilding} from "./destructibleBuilding";
 
 export class ProductionBuilding extends DestructibleBuilding{
     constructor(type: BuildingType, protected name: string, position: [number, number], owner: Realm,

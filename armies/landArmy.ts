@@ -14,8 +14,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {GameState, Army, Direction, Move, Fleet, Realm, HexFunction, 
-    BuildingType, NonDestructibleBuilding, FieldType} from "../types";
+import {GameState} from "../gameState";
+import {Army} from "./army";
+import {Direction} from "../map/direction";
+import {Move} from "./move";
+import {Fleet} from "./fleet";
+import {Realm} from "../realm";
+import {HexFunction} from "../libraries/hexFunctions";
+import {BuildingType} from "../buildings/building";
+import {NonDestructibleBuilding} from "../buildings/nonDestructibleBuilding";
+import {FieldType} from "../map/field";
 
 export abstract class LandArmy extends Army{
     transportingFleet: Fleet|undefined;

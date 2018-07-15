@@ -15,8 +15,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
-class LandArmy extends types_1.Army {
+const gameState_1 = require("../gameState");
+const army_1 = require("./army");
+const move_1 = require("./move");
+const fleet_1 = require("./fleet");
+const hexFunctions_1 = require("../libraries/hexFunctions");
+class LandArmy extends army_1.Army {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
         if (isGuard != undefined) {
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard);
@@ -41,7 +45,7 @@ class LandArmy extends types_1.Army {
                 this.transportingFleet.unloadArmy(this);
             }
             else if (move.loading && !this.isTransported()) {
-                let fleetsOnDestination = types_1.GameState.armies.filter(army => army instanceof types_1.Fleet && army.getPosition()[0] === move.destination[0] &&
+                let fleetsOnDestination = gameState_1.GameState.armies.filter(army => army instanceof fleet_1.Fleet && army.getPosition()[0] === move.destination[0] &&
                     army.getPosition()[1] === move.destination[1]).map(army => army);
                 if (fleetsOnDestination.length === 0) {
                     throw new Error("You can't walk on Water.");
@@ -78,18 +82,18 @@ class LandArmy extends types_1.Army {
         }
     }
     checkForPossibleMove(direction) {
-        let neighborCoords = types_1.HexFunction.neighbors(this.position);
+        let neighborCoords = hexFunctions_1.HexFunction.neighbors(this.position);
         let target = neighborCoords[direction];
         let heightCost = 0;
         let thereIsAStreet = false;
         let thereIsABridge = false;
         let thereIsAHarbor = false;
         // TODO: effects of diplomacy go here
-        let rightOfPassage = types_1.GameState.realms.some((realm) => (realm === this.owner && realm.territory.some((field) => (target[0] === field.coordinates[0] && target[1] === field.coordinates[1]))));
-        let thereIsARiver = types_1.GameState.rivers.some((river) => (river.leftBank[0] === this.position[0] && river.leftBank[1] === this.position[1] && river.rightBank[0] === target[0] && river.rightBank[1] === target[1]) ||
+        let rightOfPassage = gameState_1.GameState.realms.some((realm) => (realm === this.owner && realm.territory.some((field) => (target[0] === field.coordinates[0] && target[1] === field.coordinates[1]))));
+        let thereIsARiver = gameState_1.GameState.rivers.some((river) => (river.leftBank[0] === this.position[0] && river.leftBank[1] === this.position[1] && river.rightBank[0] === target[0] && river.rightBank[1] === target[1]) ||
             (river.leftBank[0] === target[0] && river.leftBank[1] === target[1] && river.rightBank[0] === this.position[0] && river.rightBank[1] === this.position[1]));
         // check if there is a steet, a harbor or a bridge on the route
-        types_1.GameState.buildings.forEach(building => {
+        gameState_1.GameState.buildings.forEach(building => {
             if (building.type === 8 /* STREET */ &&
                 ((building.getPosition() === this.position && building.getSecondPosition() === target) ||
                     (building.getSecondPosition() === this.position && building.getPosition() === target))) {
@@ -108,8 +112,8 @@ class LandArmy extends types_1.Army {
             //TODO: Walls!
         });
         // check if there is a change in height on the route
-        if (types_1.HexFunction.height(this.position) != types_1.HexFunction.height(target)) {
-            if (Math.abs(types_1.HexFunction.height(this.position) - types_1.HexFunction.height(target)) >= 2) {
+        if (hexFunctions_1.HexFunction.height(this.position) != hexFunctions_1.HexFunction.height(target)) {
+            if (Math.abs(hexFunctions_1.HexFunction.height(this.position) - hexFunctions_1.HexFunction.height(target)) >= 2) {
                 throw new Error("The height difference is too big.");
             }
             else if ((this.heightPoints < 2 && (!thereIsAStreet || !thereIsAHarbor)) || this.heightPoints < 1) {
@@ -123,9 +127,9 @@ class LandArmy extends types_1.Army {
             }
         }
         let moveCost = this.computeMoveCost(thereIsAStreet, thereIsAHarbor, thereIsARiver, thereIsABridge, rightOfPassage, target);
-        return new types_1.Move(moveCost, heightCost, (types_1.HexFunction.fieldType(target) === 0 /* SHALLOWS */ ||
-            types_1.HexFunction.fieldType(target) === 1 /* DEEPSEA */), (types_1.HexFunction.fieldType(this.position) === 0 /* SHALLOWS */ ||
-            types_1.HexFunction.fieldType(this.position) === 1 /* DEEPSEA */), target, direction);
+        return new move_1.Move(moveCost, heightCost, (hexFunctions_1.HexFunction.fieldType(target) === 0 /* SHALLOWS */ ||
+            hexFunctions_1.HexFunction.fieldType(target) === 1 /* DEEPSEA */), (hexFunctions_1.HexFunction.fieldType(this.position) === 0 /* SHALLOWS */ ||
+            hexFunctions_1.HexFunction.fieldType(this.position) === 1 /* DEEPSEA */), target, direction);
     }
     canConquer() {
         return this.getRoomPointsSansOfficers() >= 1000 && this.officerCount >= 1;

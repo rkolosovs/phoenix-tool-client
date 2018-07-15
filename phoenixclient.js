@@ -15,20 +15,21 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("./types");
+const mouseFunctions_1 = require("./controls/mouseFunctions");
+const drawingFunctions_1 = require("./gui/drawingFunctions");
+const gui_1 = require("./gui/gui");
+const loadingDataFunctions_1 = require("./serverInteraction/loadingDataFunctions");
 // attach handlers to mouse events and canvas resizing
-window.addEventListener('resize', types_1.Drawing.resizeCanvas, false);
-types_1.GUI.getCanvas().addEventListener('mousedown', types_1.MouseFunctions.mouseDown, true);
-document.addEventListener('mouseup', types_1.MouseFunctions.mouseUp, true);
-types_1.GUI.getCanvas().addEventListener('mousemove', types_1.MouseFunctions.mouseMove, true);
-types_1.GUI.getCanvas().addEventListener('wheel', types_1.MouseFunctions.mouseWheel, true);
-// initialize the starting UI
-types_1.GUI.getLoginButton();
+window.addEventListener('resize', drawingFunctions_1.Drawing.resizeCanvas, false);
+gui_1.GUI.getCanvas().addEventListener('mousedown', mouseFunctions_1.MouseFunctions.mouseDown, true);
+document.addEventListener('mouseup', mouseFunctions_1.MouseFunctions.mouseUp, true);
+gui_1.GUI.getCanvas().addEventListener('mousemove', mouseFunctions_1.MouseFunctions.mouseMove, true);
+gui_1.GUI.getCanvas().addEventListener('wheel', mouseFunctions_1.MouseFunctions.mouseWheel, true);
 // initializing the tool
-types_1.Loading.getNewDataFromServer();
-types_1.Loading.loadTurnNumber();
-types_1.Loading.loadImages(types_1.Drawing.tileset);
-types_1.Drawing.setHexParts(types_1.Drawing.scale);
+loadingDataFunctions_1.Loading.getNewDataFromServer();
+loadingDataFunctions_1.Loading.loadTurnNumber();
+loadingDataFunctions_1.Loading.loadImages(drawingFunctions_1.Drawing.tileset);
+drawingFunctions_1.Drawing.setHexParts(drawingFunctions_1.Drawing.scale);
 // activating periodic reloading of data from server
-setInterval(types_1.Loading.getNewDataFromServer, 30000);
+setInterval(loadingDataFunctions_1.Loading.getNewDataFromServer, 30000);
 //# sourceMappingURL=phoenixclient.js.map

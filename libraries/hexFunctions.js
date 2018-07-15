@@ -15,11 +15,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-// contains helper functions to get information about a field out of the fields array with just its coordinates.
-const types_1 = require("../types");
+const gameState_1 = require("../gameState");
+const wall_1 = require("../buildings/wall");
+const constants_1 = require("../constants");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
 var HexFunction;
 (function (HexFunction) {
-    var SIN60 = types_1.Constants.SIN60;
+    var SIN60 = constants_1.Constants.SIN60;
     // this.id = function(){
     //     //TODO: GroßhexKleinhex Zahl bestimmen.
     // }
@@ -40,7 +42,7 @@ var HexFunction;
     function fluesse(hex) {
         let result = [false, false, false, false, false, false];
         let surroundings = neighbors(hex);
-        types_1.GameState.rivers.forEach(river => {
+        gameState_1.GameState.rivers.forEach(river => {
             if ((hex[0] === river.leftBank[0] && hex[1] === river.leftBank[1]) ||
                 (hex[0] === river.rightBank[0] && hex[1] === river.rightBank[1])) {
                 surroundings.forEach((surrounding, index) => {
@@ -56,19 +58,19 @@ var HexFunction;
     HexFunction.fluesse = fluesse;
     // where in the field list is this field
     function positionInList(hex) {
-        return types_1.GameState.fields.findIndex(field => field.coordinates[0] === hex[0] && field.coordinates[1] === hex[1]);
+        return gameState_1.GameState.fields.findIndex(field => field.coordinates[0] === hex[0] && field.coordinates[1] === hex[1]);
     }
     HexFunction.positionInList = positionInList;
     // what type is this field
     function fieldType(hex) {
-        let foundField = types_1.GameState.fields.find(field => field.coordinates[0] === hex[0] &&
+        let foundField = gameState_1.GameState.fields.find(field => field.coordinates[0] === hex[0] &&
             field.coordinates[1] === hex[1]);
         return (foundField != undefined) ? foundField.type : -1;
     }
     HexFunction.fieldType = fieldType;
     // what height is this field
     function height(hex) {
-        let field = types_1.GameState.fields.find(field => field.coordinates[0] === hex[0] && field.coordinates[1] === hex[1]);
+        let field = gameState_1.GameState.fields.find(field => field.coordinates[0] === hex[0] && field.coordinates[1] === hex[1]);
         return (field != undefined) ? field.getHeight() : -1;
     }
     HexFunction.height = height;
@@ -152,7 +154,7 @@ var HexFunction;
     HexFunction.findCommonNeighbor = findCommonNeighbor;
     // does the field has a street on it in any direction
     function hasStreet(hex) {
-        return types_1.GameState.buildings.some((elem) => elem.type === 8 /* STREET */ &&
+        return gameState_1.GameState.buildings.some((elem) => elem.type === 8 /* STREET */ &&
             ((elem.getPosition()[0] === hex[0] && elem.getPosition()[1] === hex[1]) ||
                 (elem.getSecondPosition()[0] === hex[0] &&
                     elem.getSecondPosition()[1] === hex[1])));
@@ -161,7 +163,7 @@ var HexFunction;
     // in which directions does this field have walls (order as above, only walls build on this field)
     function walls(hex) {
         let result = [false, false, false, false, false, false];
-        let walls = types_1.GameState.buildings.filter(elem => (elem instanceof types_1.Wall &&
+        let walls = gameState_1.GameState.buildings.filter(elem => (elem instanceof wall_1.Wall &&
             elem.getPosition()[0] === hex[0] && elem.getPosition()[1] === hex[1]));
         walls.forEach(wall => {
             switch (wall.facing) {
@@ -192,7 +194,7 @@ var HexFunction;
     function bridges(hex) {
         let result = [false, false, false, false, false, false];
         let neighbor = neighbors(hex);
-        types_1.GameState.buildings.forEach(elem => {
+        gameState_1.GameState.buildings.forEach(elem => {
             if (elem.type === 7 /* BRIDGE */) { //bridge type
                 if (elem.getPosition()[0] === hex[0] && elem.getPosition()[1] === hex[1]) { //bridge on this field
                     result[neighbor.indexOf(elem.getSecondPosition())] = true;
@@ -211,7 +213,7 @@ var HexFunction;
         //get the current field's x position
         let xpos = orig[0] + (curr[0] * scale * SIN60);
         //each odd row is offset half a hex to the left
-        return [(((curr[1] % 2) !== 0) ? (xpos - (0.5 * scale * SIN60)) : (xpos)), orig[1] + (curr[1] * types_1.Drawing.gH)];
+        return [(((curr[1] % 2) !== 0) ? (xpos - (0.5 * scale * SIN60)) : (xpos)), orig[1] + (curr[1] * drawingFunctions_1.Drawing.gH)];
     }
     HexFunction.computePosition = computePosition;
     //for all directions in the usual order (nw, ne, e, se, sw, w)
@@ -282,9 +284,9 @@ var HexFunction;
     HexFunction.findWallInWay = findWallInWay;
     //returns all walls on target field
     function getWallIndexOnFieldInDirection(hex, direction) {
-        for (let i = 0; i < types_1.GameState.buildings.length; i++) {
-            if (types_1.GameState.buildings[i] instanceof types_1.Wall) {
-                let thisIsAWall = types_1.GameState.buildings[i];
+        for (let i = 0; i < gameState_1.GameState.buildings.length; i++) {
+            if (gameState_1.GameState.buildings[i] instanceof wall_1.Wall) {
+                let thisIsAWall = gameState_1.GameState.buildings[i];
                 if (thisIsAWall.getPosition()[0] === hex[0] &&
                     thisIsAWall.getPosition()[1] === hex[1] && thisIsAWall.facing === direction) {
                     return i;

@@ -14,7 +14,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {BuildingType, Building, Realm, Constants} from "../types";
+import {BuildingType, Building} from "./building";
+import {Realm} from "../realm";
+import {Constants} from "../constants";
 
 export abstract class DestructibleBuilding extends Building{
 

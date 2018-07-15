@@ -15,7 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
+const godModeFunctions_1 = require("../godmode/godModeFunctions");
+const app_1 = require("../app");
 class HarborCreationBox {
     getSelf() {
         if (this.self == undefined) {
@@ -32,42 +33,42 @@ class HarborCreationBox {
     getAddHarborNW() {
         if (this.addHarborNW == undefined) {
             this.addHarborNW = document.getElementById("addHarborNW");
-            this.addHarborNW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 0 /* NW */, true); };
+            this.addHarborNW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 0 /* NW */, true); };
         }
         return this.addHarborNW;
     }
     getAddHarborNE() {
         if (this.addHarborNE == undefined) {
             this.addHarborNE = document.getElementById("addHarborNE");
-            this.addHarborNE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 1 /* NE */, true); };
+            this.addHarborNE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 1 /* NE */, true); };
         }
         return this.addHarborNE;
     }
     getAddHarborE() {
         if (this.addHarborE == undefined) {
             this.addHarborE = document.getElementById("addHarborE");
-            this.addHarborE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 2 /* E */, true); };
+            this.addHarborE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 2 /* E */, true); };
         }
         return this.addHarborE;
     }
     getAddHarborSE() {
         if (this.addHarborSE == undefined) {
             this.addHarborSE = document.getElementById("addHarborSE");
-            this.addHarborSE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 3 /* SE */, true); };
+            this.addHarborSE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 3 /* SE */, true); };
         }
         return this.addHarborSE;
     }
     getAddHarborSW() {
         if (this.addHarborSW == undefined) {
             this.addHarborSW = document.getElementById("addHarborSW");
-            this.addHarborSW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 4 /* SW */, true); };
+            this.addHarborSW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 4 /* SW */, true); };
         }
         return this.addHarborSW;
     }
     getAddHarborW() {
         if (this.addHarborW == undefined) {
             this.addHarborW = document.getElementById("addHarborW");
-            this.addHarborW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 5 /* W */, true); };
+            this.addHarborW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 5 /* W */, true); };
         }
         return this.addHarborW;
     }
@@ -80,49 +81,49 @@ class HarborCreationBox {
     getRemoveHarborNW() {
         if (this.removeHarborNW == undefined) {
             this.removeHarborNW = document.getElementById("removeHarborNW");
-            this.removeHarborNW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 0 /* NW */, false); };
+            this.removeHarborNW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 0 /* NW */, false); };
         }
         return this.removeHarborNW;
     }
     getRemoveHarborNE() {
         if (this.removeHarborNE == undefined) {
             this.removeHarborNE = document.getElementById("removeHarborNE");
-            this.removeHarborNE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 1 /* NE */, false); };
+            this.removeHarborNE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 1 /* NE */, false); };
         }
         return this.removeHarborNE;
     }
     getRemoveHarborE() {
         if (this.removeHarborE == undefined) {
             this.removeHarborE = document.getElementById("removeHarborE");
-            this.removeHarborE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 2 /* E */, false); };
+            this.removeHarborE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 2 /* E */, false); };
         }
         return this.removeHarborE;
     }
     getRemoveHarborSE() {
         if (this.removeHarborSE == undefined) {
             this.removeHarborSE = document.getElementById("removeHarborSE");
-            this.removeHarborSE.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 3 /* SE */, false); };
+            this.removeHarborSE.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 3 /* SE */, false); };
         }
         return this.removeHarborSE;
     }
     getRemoveHarborSW() {
         if (this.removeHarborSW == undefined) {
             this.removeHarborSW = document.getElementById("removeHarborSW");
-            this.removeHarborSW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 4 /* SW */, false); };
+            this.removeHarborSW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 4 /* SW */, false); };
         }
         return this.removeHarborSW;
     }
     getRemoveHarborW() {
         if (this.removeHarborW == undefined) {
             this.removeHarborW = document.getElementById("removeHarborW");
-            this.removeHarborW.onclick = function () { types_1.GodFunctions.manipulateBorderBuilding(6, 5 /* W */, false); };
+            this.removeHarborW.onclick = function () { godModeFunctions_1.GodFunctions.manipulateBorderBuilding(6, 5 /* W */, false); };
         }
         return this.removeHarborW;
     }
     getSaveBuildings() {
         if (this.saveBuildings == undefined) {
             this.saveBuildings = document.getElementById("SaveBuildings");
-            this.saveBuildings.onclick = function () { types_1.Saving.saveBuildings(); };
+            this.saveBuildings.onclick = function () { app_1.Saving.saveBuildings(); };
         }
         return this.saveBuildings;
     }

@@ -14,9 +14,18 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {GUI, GameState, Drawing, Controls, InfoBox, 
-    InfoChangeBox, FootArmy, RiderArmy, Fleet, LandArmy, 
-    Army, ButtonFunctions} from "../types";
+import {GUI} from "./gui";
+import {GameState} from "../gameState";
+import {Drawing} from "./drawingFunctions";
+import {Controls} from "../controls/controlVariables";
+import {InfoBox} from "./infoBox";
+import {InfoChangeBox} from "./infoChangeBox";
+import {FootArmy} from "../armies/footArmy";
+import {RiderArmy} from "../armies/riderArmy";
+import {Fleet} from "../armies/fleet";
+import {LandArmy} from "../armies/landArmy";
+import {Army} from "../armies/army";
+import {ButtonFunctions} from "../controls/buttonFunctions";
 
 export namespace BoxVisibility {
     export let worldCreationModeOn = false;

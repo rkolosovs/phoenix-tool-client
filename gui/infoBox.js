@@ -15,7 +15,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
+const buttonFunctions_1 = require("../controls/buttonFunctions");
+const boxVisibilty_1 = require("./boxVisibilty");
+const app_1 = require("../app");
 class InfoBox {
     getSelf() {
         if (this.self == undefined) {
@@ -86,35 +88,35 @@ class InfoBox {
     getMountButton() {
         if (this.mount == undefined) {
             this.mount = document.getElementById("mount");
-            this.mount.onclick = function () { types_1.BoxVisibility.activateMountBox(); };
+            this.mount.onclick = function () { boxVisibilty_1.BoxVisibility.activateMountBox(); };
         }
         return this.mount;
     }
     getUnMountButton() {
         if (this.unMount == undefined) {
             this.unMount = document.getElementById("unMount");
-            this.unMount.onclick = function () { types_1.BoxVisibility.activateUnMountBox(); };
+            this.unMount.onclick = function () { boxVisibilty_1.BoxVisibility.activateUnMountBox(); };
         }
         return this.unMount;
     }
     getSplitButton() {
         if (this.splitBtn == undefined) {
             this.splitBtn = document.getElementById("splitBtn");
-            this.splitBtn.onclick = function () { types_1.ButtonFunctions.activateSplitbox(); };
+            this.splitBtn.onclick = function () { buttonFunctions_1.ButtonFunctions.activateSplitbox(); };
         }
         return this.splitBtn;
     }
     getShootButton() {
         if (this.shoot == undefined) {
             this.shoot = document.getElementById("shoot");
-            this.shoot.onclick = function () { types_1.ButtonFunctions.toggleShootingMode(); };
+            this.shoot.onclick = function () { buttonFunctions_1.ButtonFunctions.toggleShootingMode(); };
         }
         return this.shoot;
     }
     getLogoutButton() {
         if (this.logoutBtn == undefined) {
             this.logoutBtn = document.getElementById("logoutBtn");
-            this.logoutBtn.onclick = function () { types_1.Authentication.logoutFromServer(); };
+            this.logoutBtn.onclick = function () { app_1.Authentication.logoutFromServer(); };
         }
         return this.logoutBtn;
     }

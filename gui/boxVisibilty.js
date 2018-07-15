@@ -15,7 +15,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
+const gui_1 = require("./gui");
+const gameState_1 = require("../gameState");
+const drawingFunctions_1 = require("./drawingFunctions");
+const controlVariables_1 = require("../controls/controlVariables");
+const footArmy_1 = require("../armies/footArmy");
+const riderArmy_1 = require("../armies/riderArmy");
+const fleet_1 = require("../armies/fleet");
+const buttonFunctions_1 = require("../controls/buttonFunctions");
 var BoxVisibility;
 (function (BoxVisibility) {
     BoxVisibility.worldCreationModeOn = false;
@@ -64,16 +71,16 @@ var BoxVisibility;
     BoxVisibility.hide = hide;
     // switches bunttonBoxContent.style.visibility to "" and all others to "none"
     function switchBtnBoxTo(buttonBoxContent) {
-        hide(types_1.GUI.getWorldBenderBox().getSelf());
-        hide(types_1.GUI.getRiverBenderBox().getSelf());
-        hide(types_1.GUI.getWorldBenderBox().getCreationWarning());
-        hide(types_1.GUI.getBuildingCreationBox().getSelf());
-        hide(types_1.GUI.getStreetCreationBox().getSelf());
-        hide(types_1.GUI.getHarborCreationBox().getSelf());
-        hide(types_1.GUI.getBridgeCreationBox().getSelf());
-        hide(types_1.GUI.getWallCreationBox().getSelf());
-        hide(types_1.GUI.getButtonsBox());
-        hide(types_1.GUI.getArmyGeneratorBox().getSelf());
+        hide(gui_1.GUI.getWorldBenderBox().getSelf());
+        hide(gui_1.GUI.getRiverBenderBox().getSelf());
+        hide(gui_1.GUI.getWorldBenderBox().getCreationWarning());
+        hide(gui_1.GUI.getBuildingCreationBox().getSelf());
+        hide(gui_1.GUI.getStreetCreationBox().getSelf());
+        hide(gui_1.GUI.getHarborCreationBox().getSelf());
+        hide(gui_1.GUI.getBridgeCreationBox().getSelf());
+        hide(gui_1.GUI.getWallCreationBox().getSelf());
+        hide(gui_1.GUI.getButtonsBox());
+        hide(gui_1.GUI.getArmyGeneratorBox().getSelf());
         show(buttonBoxContent);
     }
     BoxVisibility.switchBtnBoxTo = switchBtnBoxTo;
@@ -131,43 +138,43 @@ var BoxVisibility;
     function toggleArmyCreationMode() {
         if (BoxVisibility.armyCreationModeOn) {
             switchModeTo("none");
-            switchBtnBoxTo(types_1.GUI.getButtonsBox());
+            switchBtnBoxTo(gui_1.GUI.getButtonsBox());
         }
         else if (!BoxVisibility.armyCreationModeOn) {
             switchModeTo("armyCreationModeOn");
-            switchBtnBoxTo(types_1.GUI.getArmyGeneratorBox().getSelf());
+            switchBtnBoxTo(gui_1.GUI.getArmyGeneratorBox().getSelf());
         }
     }
     BoxVisibility.toggleArmyCreationMode = toggleArmyCreationMode;
     function toggleWorldCreationMode() {
         if (BoxVisibility.worldCreationModeOn) {
             switchModeTo("none");
-            switchBtnBoxTo(types_1.GUI.getButtonsBox());
+            switchBtnBoxTo(gui_1.GUI.getButtonsBox());
         }
         else if (!BoxVisibility.worldCreationModeOn) {
             switchModeTo("worldCreationModeOn");
-            switchBtnBoxTo(types_1.GUI.getWorldBenderBox().getSelf());
+            switchBtnBoxTo(gui_1.GUI.getWorldBenderBox().getSelf());
         }
     }
     BoxVisibility.toggleWorldCreationMode = toggleWorldCreationMode;
     function toggleRiverCreationMode() {
         if (BoxVisibility.riverCreationModeOn) {
             switchModeTo("none");
-            switchBtnBoxTo(types_1.GUI.getButtonsBox());
+            switchBtnBoxTo(gui_1.GUI.getButtonsBox());
         }
         else if (!BoxVisibility.riverCreationModeOn) {
             switchModeTo("riverCreationModeOn");
-            switchBtnBoxTo(types_1.GUI.getRiverBenderBox().getSelf());
+            switchBtnBoxTo(gui_1.GUI.getRiverBenderBox().getSelf());
         }
     }
     BoxVisibility.toggleRiverCreationMode = toggleRiverCreationMode;
     function toggleBuildingCreationMode() {
         if (BoxVisibility.buildingCreationModeOn) {
             switchModeTo("none");
-            switchBtnBoxTo(types_1.GUI.getButtonsBox());
+            switchBtnBoxTo(gui_1.GUI.getButtonsBox());
         }
         else if (!BoxVisibility.buildingCreationModeOn) {
-            switchBtnBoxTo(types_1.GUI.getBuildingCreationBox().getSelf());
+            switchBtnBoxTo(gui_1.GUI.getBuildingCreationBox().getSelf());
             switchModeTo("buildingCreationModeOn");
         }
     }
@@ -175,67 +182,67 @@ var BoxVisibility;
     function toggleStreetBuildingMode() {
         if (BoxVisibility.streetBuildingModeOn) {
             switchModeTo("none");
-            switchBtnBoxTo(types_1.GUI.getButtonsBox());
+            switchBtnBoxTo(gui_1.GUI.getButtonsBox());
         }
         else if (!BoxVisibility.streetBuildingModeOn) {
             switchModeTo("streetBuildingModeOn");
-            switchBtnBoxTo(types_1.GUI.getStreetCreationBox().getSelf());
+            switchBtnBoxTo(gui_1.GUI.getStreetCreationBox().getSelf());
         }
     }
     BoxVisibility.toggleStreetBuildingMode = toggleStreetBuildingMode;
     function toggleHarborBuildingMode() {
         if (BoxVisibility.harborBuildingModeOn) {
             switchModeTo("none");
-            switchBtnBoxTo(types_1.GUI.getButtonsBox());
+            switchBtnBoxTo(gui_1.GUI.getButtonsBox());
         }
         else if (!BoxVisibility.harborBuildingModeOn) {
             switchModeTo("harborBuildingModeOn");
-            switchBtnBoxTo(types_1.GUI.getHarborCreationBox().getSelf());
+            switchBtnBoxTo(gui_1.GUI.getHarborCreationBox().getSelf());
         }
     }
     BoxVisibility.toggleHarborBuildingMode = toggleHarborBuildingMode;
     function toggleBridgeBuildingMode() {
         if (BoxVisibility.bridgeBuildingModeOn) {
             switchModeTo("none");
-            switchBtnBoxTo(types_1.GUI.getButtonsBox());
+            switchBtnBoxTo(gui_1.GUI.getButtonsBox());
         }
         else if (!BoxVisibility.bridgeBuildingModeOn) {
             switchModeTo("bridgeBuildingModeOn");
-            switchBtnBoxTo(types_1.GUI.getBridgeCreationBox().getSelf());
+            switchBtnBoxTo(gui_1.GUI.getBridgeCreationBox().getSelf());
         }
     }
     BoxVisibility.toggleBridgeBuildingMode = toggleBridgeBuildingMode;
     function toggleWallBuildingMode() {
         if (BoxVisibility.wallBuildingModeOn) {
             switchModeTo("none");
-            switchBtnBoxTo(types_1.GUI.getButtonsBox());
+            switchBtnBoxTo(gui_1.GUI.getButtonsBox());
         }
         else if (!BoxVisibility.wallBuildingModeOn) {
             switchModeTo("wallBuildingModeOn");
-            switchBtnBoxTo(types_1.GUI.getWallCreationBox().getSelf());
+            switchBtnBoxTo(gui_1.GUI.getWallCreationBox().getSelf());
         }
     }
     BoxVisibility.toggleWallBuildingMode = toggleWallBuildingMode;
     function toggleGodModeBar() {
-        if (types_1.GUI.getGodModeBox().getSelf().classList.contains("invisible")) {
+        if (gui_1.GUI.getGodModeBox().getSelf().classList.contains("invisible")) {
             restoreInfoBox();
             writeRealmDropdown();
-            show(types_1.GUI.getGodModeBox().getSelf());
-            show(types_1.GUI.getInfoChangeBox().getSelf());
-            hide(types_1.GUI.getInfoBox().getSelf());
+            show(gui_1.GUI.getGodModeBox().getSelf());
+            show(gui_1.GUI.getInfoChangeBox().getSelf());
+            hide(gui_1.GUI.getInfoBox().getSelf());
         }
         else {
-            hide(types_1.GUI.getGodModeBox().getSelf());
-            hide(types_1.GUI.getInfoChangeBox().getSelf());
-            show(types_1.GUI.getInfoBox().getSelf());
+            hide(gui_1.GUI.getGodModeBox().getSelf());
+            hide(gui_1.GUI.getInfoChangeBox().getSelf());
+            show(gui_1.GUI.getInfoBox().getSelf());
             updateInfoBox();
         }
     }
     BoxVisibility.toggleGodModeBar = toggleGodModeBar;
     function writeRealmDropdown() {
-        let factionsDropdown = types_1.GUI.getGodModeBox().getFactionToCreateBuildingsFor();
+        let factionsDropdown = gui_1.GUI.getGodModeBox().getFactionToCreateBuildingsFor();
         let factionOptions = "";
-        types_1.GameState.realms.forEach(realm => {
+        gameState_1.GameState.realms.forEach(realm => {
             if (realm.active) {
                 factionOptions += "<option value=" + "'" + realm.tag + "'" + ">" + realm.name + "</option>";
             }
@@ -245,27 +252,27 @@ var BoxVisibility;
     BoxVisibility.writeRealmDropdown = writeRealmDropdown;
     // this is used to update the infoBox and the infoChangeBox with the currently selected Army
     function updateInfoBox() {
-        let infoBox = types_1.GUI.getInfoBox();
-        let changeBox = types_1.GUI.getInfoChangeBox();
-        if (types_1.Controls.selectedArmyIndex != undefined) {
+        let infoBox = gui_1.GUI.getInfoBox();
+        let changeBox = gui_1.GUI.getInfoChangeBox();
+        if (controlVariables_1.Controls.selectedArmyIndex != undefined) {
             // info Box
-            let infoArmy = types_1.GameState.armies[types_1.Controls.selectedArmyIndex];
+            let infoArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
             if (infoArmy.isGuard) {
                 infoBox.getGuardText().innerHTML = "Garde";
             }
             else {
                 infoBox.getGuardText().innerHTML = "";
             }
-            if (infoArmy instanceof types_1.FootArmy || infoArmy instanceof types_1.RiderArmy) {
+            if (infoArmy instanceof footArmy_1.FootArmy || infoArmy instanceof riderArmy_1.RiderArmy) {
                 infoBox.getArmyIdText().innerHTML = "Heer " + infoArmy.getErkenfaraID();
             }
-            else if (infoArmy instanceof types_1.Fleet) {
+            else if (infoArmy instanceof fleet_1.Fleet) {
                 infoBox.getArmyIdText().innerHTML = "Flotte " + infoArmy.getErkenfaraID();
             }
             infoBox.getCountText().innerHTML = "Truppen: " + infoArmy.getTroopCount();
             infoBox.getLeadersText().innerHTML = "Heerführer: " + infoArmy.getOfficerCount();
             infoBox.getMountsText().innerHTML = "mitgeführte Reittiere: " + infoArmy.getMountCount();
-            if (infoArmy instanceof types_1.RiderArmy) {
+            if (infoArmy instanceof riderArmy_1.RiderArmy) {
                 hide(infoBox.getLKPText());
                 hide(infoBox.getSKPText());
             }
@@ -280,11 +287,11 @@ var BoxVisibility;
             infoBox.getMovePointsText().innerHTML = "Bewegungspunkte: " + infoArmy.getMovePoints();
             infoBox.getHeightPointsText().innerHTML = "Höhenstufen: " + infoArmy.getHeightPoints();
             show(infoBox.getSplitButton());
-            if (infoArmy instanceof types_1.FootArmy) {
+            if (infoArmy instanceof footArmy_1.FootArmy) {
                 show(infoBox.getMountButton());
                 hide(infoBox.getUnMountButton());
             }
-            else if (infoArmy instanceof types_1.RiderArmy) {
+            else if (infoArmy instanceof riderArmy_1.RiderArmy) {
                 hide(infoBox.getMountButton());
                 show(infoBox.getUnMountButton());
             }
@@ -354,22 +361,22 @@ var BoxVisibility;
     }
     BoxVisibility.updateInfoBox = updateInfoBox;
     function activateMountBox() {
-        hide(types_1.GUI.getInfoBox().getSelf());
-        show(types_1.GUI.getMountBox());
+        hide(gui_1.GUI.getInfoBox().getSelf());
+        show(gui_1.GUI.getMountBox());
     }
     BoxVisibility.activateMountBox = activateMountBox;
     function activateUnMountBox() {
-        hide(types_1.GUI.getInfoBox().getSelf());
-        show(types_1.GUI.getUnMountBox());
+        hide(gui_1.GUI.getInfoBox().getSelf());
+        show(gui_1.GUI.getUnMountBox());
     }
     BoxVisibility.activateUnMountBox = activateUnMountBox;
     function closeShootBox() {
-        hide(types_1.GUI.getShootBox());
+        hide(gui_1.GUI.getShootBox());
         switchModeTo("none");
-        if (types_1.Controls.shootingTarget != undefined) {
-            types_1.Controls.shootingTarget = undefined;
+        if (controlVariables_1.Controls.shootingTarget != undefined) {
+            controlVariables_1.Controls.shootingTarget = undefined;
         }
-        types_1.Drawing.drawStuff();
+        drawingFunctions_1.Drawing.drawStuff();
     }
     BoxVisibility.closeShootBox = closeShootBox;
     function activateTransmuteBox() {
@@ -379,115 +386,115 @@ var BoxVisibility;
         let lkpToSplit = 0;
         let skpToSplit = 0;
         // depending on army type different fields are needed
-        if (types_1.GameState.armies[types_1.Controls.selectedArmyIndex] instanceof types_1.FootArmy) {
-            toSplit = parseInt(types_1.GUI.getSplitInput().value);
-            leadersToSplit = parseInt(types_1.GUI.getSplitLeadersInput().value);
-            mountsToSplit = parseInt(types_1.GUI.getSplitMountsInput().value);
-            lkpToSplit = parseInt(types_1.GUI.getSplitLkpInput().value);
-            skpToSplit = parseInt(types_1.GUI.getSplitSkpInput().value);
-            if (toSplit > (types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getTroopCount() - 100)) {
+        if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof footArmy_1.FootArmy) {
+            toSplit = parseInt(gui_1.GUI.getSplitInput().value);
+            leadersToSplit = parseInt(gui_1.GUI.getSplitLeadersInput().value);
+            mountsToSplit = parseInt(gui_1.GUI.getSplitMountsInput().value);
+            lkpToSplit = parseInt(gui_1.GUI.getSplitLkpInput().value);
+            skpToSplit = parseInt(gui_1.GUI.getSplitSkpInput().value);
+            if (toSplit > (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getTroopCount() - 100)) {
                 window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.");
                 return false;
             }
-            if (mountsToSplit > types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getMountCount()) {
+            if (mountsToSplit > gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getMountCount()) {
                 window.alert("So viele Reittiere hast du nicht.");
                 return false;
             }
-            if (lkpToSplit > types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getLightCatapultCount()) {
+            if (lkpToSplit > gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getLightCatapultCount()) {
                 window.alert("So viele leichte Katapulte hast du nicht.");
                 return false;
             }
-            if (skpToSplit > types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getHeavyCatapultCount()) {
+            if (skpToSplit > gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getHeavyCatapultCount()) {
                 window.alert("So viele schwere Katapulte hast du nicht.");
                 return false;
             }
         }
-        else if (types_1.GameState.armies[types_1.Controls.selectedArmyIndex] instanceof types_1.RiderArmy) {
-            toSplit = parseInt(types_1.GUI.getSplitMountedInput().value);
-            leadersToSplit = parseInt(types_1.GUI.getSplitMountedLeadersInput().value);
-            if (toSplit > (types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getTroopCount() - 50)) {
+        else if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof riderArmy_1.RiderArmy) {
+            toSplit = parseInt(gui_1.GUI.getSplitMountedInput().value);
+            leadersToSplit = parseInt(gui_1.GUI.getSplitMountedLeadersInput().value);
+            if (toSplit > (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getTroopCount() - 50)) {
                 window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.");
                 return false;
             }
         }
-        else if (types_1.GameState.armies[types_1.Controls.selectedArmyIndex] instanceof types_1.Fleet) {
-            toSplit = parseInt(types_1.GUI.getSplitFleetInput().value);
-            leadersToSplit = parseInt(types_1.GUI.getSplitFleetLeadersInput().value);
-            lkpToSplit = parseInt(types_1.GUI.getSplitFleetLkpInput().value);
-            skpToSplit = parseInt(types_1.GUI.getSplitFleetSkpInput().value);
-            if (toSplit > (types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getTroopCount() - 1)) {
+        else if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof fleet_1.Fleet) {
+            toSplit = parseInt(gui_1.GUI.getSplitFleetInput().value);
+            leadersToSplit = parseInt(gui_1.GUI.getSplitFleetLeadersInput().value);
+            lkpToSplit = parseInt(gui_1.GUI.getSplitFleetLkpInput().value);
+            skpToSplit = parseInt(gui_1.GUI.getSplitFleetSkpInput().value);
+            if (toSplit > (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getTroopCount() - 1)) {
                 window.alert("Es müssen mindestens 100 Heeresstärke beim Ursprungsheer verbleiben.");
                 return false;
             }
-            if (toSplit * 100 > (types_1.GameState.armies[types_1.Controls.selectedArmyIndex].freeTransportCapacity())) {
+            if (toSplit * 100 > (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].freeTransportCapacity())) {
                 window.alert("Du kannst keine beladenen Schiffe verschieben.");
                 return false;
             }
-            if (lkpToSplit > types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getLightCatapultCount()) {
+            if (lkpToSplit > gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getLightCatapultCount()) {
                 window.alert("So viele leichte Kriegsschiffe hast du nicht.");
                 return false;
             }
-            if (skpToSplit > types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getHeavyCatapultCount()) {
+            if (skpToSplit > gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getHeavyCatapultCount()) {
                 window.alert("So viele schwere Kriegsschiffe hast du nicht.");
                 return false;
             }
         }
-        if (leadersToSplit > (types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getOfficerCount() - 1)) {
+        if (leadersToSplit > (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getOfficerCount() - 1)) {
             window.alert("Es muss mindestens 1 Heerführer beim Ursprungsheer verbleiben.");
             return false;
         }
-        types_1.GUI.getTransmuteBox().style.display = "";
-        let selectedArmy = types_1.GameState.armies[types_1.Controls.selectedArmyIndex];
-        if (selectedArmy instanceof types_1.FootArmy) {
-            hide(types_1.GUI.getSplitBox());
+        gui_1.GUI.getTransmuteBox().style.display = "";
+        let selectedArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
+        if (selectedArmy instanceof footArmy_1.FootArmy) {
+            hide(gui_1.GUI.getSplitBox());
         }
-        else if (selectedArmy instanceof types_1.RiderArmy) {
-            hide(types_1.GUI.getSplitMountedBox());
+        else if (selectedArmy instanceof riderArmy_1.RiderArmy) {
+            hide(gui_1.GUI.getSplitMountedBox());
         }
-        else if (selectedArmy instanceof types_1.Fleet) {
-            hide(types_1.GUI.getSplitFleetBox());
+        else if (selectedArmy instanceof fleet_1.Fleet) {
+            hide(gui_1.GUI.getSplitFleetBox());
         }
         let onlyLeaders = false;
-        if (selectedArmy instanceof types_1.FootArmy) {
-            if (parseInt(types_1.GUI.getSplitInput().value) === 0 &&
-                parseInt(types_1.GUI.getSplitLeadersInput().value) > 0 &&
-                parseInt(types_1.GUI.getSplitMountsInput().value) === 0 &&
-                parseInt(types_1.GUI.getSplitLkpInput().value) === 0 &&
-                parseInt(types_1.GUI.getSplitSkpInput().value) === 0) {
+        if (selectedArmy instanceof footArmy_1.FootArmy) {
+            if (parseInt(gui_1.GUI.getSplitInput().value) === 0 &&
+                parseInt(gui_1.GUI.getSplitLeadersInput().value) > 0 &&
+                parseInt(gui_1.GUI.getSplitMountsInput().value) === 0 &&
+                parseInt(gui_1.GUI.getSplitLkpInput().value) === 0 &&
+                parseInt(gui_1.GUI.getSplitSkpInput().value) === 0) {
                 onlyLeaders = true;
             }
         }
-        else if (selectedArmy instanceof types_1.RiderArmy) {
-            if (parseInt(types_1.GUI.getSplitMountedInput().value) === 0 &&
-                parseInt(types_1.GUI.getSplitMountedLeadersInput().value) > 0) {
+        else if (selectedArmy instanceof riderArmy_1.RiderArmy) {
+            if (parseInt(gui_1.GUI.getSplitMountedInput().value) === 0 &&
+                parseInt(gui_1.GUI.getSplitMountedLeadersInput().value) > 0) {
                 onlyLeaders = true;
             }
         }
-        else if (selectedArmy instanceof types_1.Fleet) {
-            if (parseInt(types_1.GUI.getSplitFleetInput().value) === 0 &&
-                parseInt(types_1.GUI.getSplitFleetLeadersInput().value) > 0 &&
-                parseInt(types_1.GUI.getSplitFleetLkpInput().value) === 0 &&
-                parseInt(types_1.GUI.getSplitFleetSkpInput().value) === 0) {
+        else if (selectedArmy instanceof fleet_1.Fleet) {
+            if (parseInt(gui_1.GUI.getSplitFleetInput().value) === 0 &&
+                parseInt(gui_1.GUI.getSplitFleetLeadersInput().value) > 0 &&
+                parseInt(gui_1.GUI.getSplitFleetLkpInput().value) === 0 &&
+                parseInt(gui_1.GUI.getSplitFleetSkpInput().value) === 0) {
                 onlyLeaders = true;
             }
         }
-        let selectedPos = types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getPosition();
+        let selectedPos = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition();
         let possibleTargets = [];
-        let targetOwner = types_1.GameState.armies[types_1.Controls.selectedArmyIndex].owner;
-        for (let i = 0; i < types_1.GameState.armies.length; i++) {
-            if (i != types_1.Controls.selectedArmyIndex) {
+        let targetOwner = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner;
+        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
+            if (i != controlVariables_1.Controls.selectedArmyIndex) {
                 if (onlyLeaders) {
-                    if (types_1.GameState.armies[i].owner === targetOwner &&
-                        types_1.GameState.armies[i].getPosition()[0] === selectedPos[0] &&
-                        types_1.GameState.armies[i].getPosition()[1] === selectedPos[1]) {
+                    if (gameState_1.GameState.armies[i].owner === targetOwner &&
+                        gameState_1.GameState.armies[i].getPosition()[0] === selectedPos[0] &&
+                        gameState_1.GameState.armies[i].getPosition()[1] === selectedPos[1]) {
                         possibleTargets.push(i);
                     }
                 }
                 else {
-                    if (types_1.GameState.armies[i].owner === targetOwner &&
-                        types_1.GameState.armies[i].getPosition()[0] === selectedPos[0] &&
-                        types_1.GameState.armies[i].getPosition()[1] === selectedPos[1] &&
-                        types_1.GameState.armies[i].constructor === types_1.GameState.armies[types_1.Controls.selectedArmyIndex].constructor) {
+                    if (gameState_1.GameState.armies[i].owner === targetOwner &&
+                        gameState_1.GameState.armies[i].getPosition()[0] === selectedPos[0] &&
+                        gameState_1.GameState.armies[i].getPosition()[1] === selectedPos[1] &&
+                        gameState_1.GameState.armies[i].constructor === gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].constructor) {
                         possibleTargets.push(i);
                     }
                 }
@@ -495,8 +502,8 @@ var BoxVisibility;
         }
         if (possibleTargets != []) {
             if (document.getElementById("transmuteArmyButtonsSection") != undefined) {
-                let d = types_1.GUI.getTransmuteArmyButtonsPartition();
-                d.removeChild(types_1.GUI.getActivateTransmuteBox());
+                let d = gui_1.GUI.getTransmuteArmyButtonsPartition();
+                d.removeChild(gui_1.GUI.getActivateTransmuteBox());
             }
             if (possibleTargets.length !== 0) {
                 let x = document.createElement("SECTION");
@@ -505,57 +512,57 @@ var BoxVisibility;
                     let btn = document.createElement("BUTTON");
                     btn.setAttribute("class", "fixedPrettyButton");
                     btn.name = "transmuteBtn " + possibleTargets[i];
-                    let t = document.createTextNode("" + types_1.GameState.armies[possibleTargets[i]].getErkenfaraID());
+                    let t = document.createTextNode("" + gameState_1.GameState.armies[possibleTargets[i]].getErkenfaraID());
                     btn.appendChild(t);
                     btn.addEventListener('click', function (event) {
                         let posiInList = this.name.split(" ")[1];
-                        types_1.ButtonFunctions.transferTroopsFromSelectedArmy(parseInt(posiInList));
+                        buttonFunctions_1.ButtonFunctions.transferTroopsFromSelectedArmy(parseInt(posiInList));
                     });
                     x.appendChild(btn);
                 }
-                types_1.GUI.getTransmuteArmyButtonsPartition().appendChild(x);
+                gui_1.GUI.getTransmuteArmyButtonsPartition().appendChild(x);
                 return true;
             }
             return false;
         }
         else {
             if (document.getElementById("transmuteArmyButtonsSection") != undefined) {
-                let d = types_1.GUI.getTransmuteArmyButtonsPartition();
-                d.removeChild(types_1.GUI.getActivateTransmuteBox());
+                let d = gui_1.GUI.getTransmuteArmyButtonsPartition();
+                d.removeChild(gui_1.GUI.getActivateTransmuteBox());
             }
             return false;
         }
     }
     BoxVisibility.activateTransmuteBox = activateTransmuteBox;
     function activateMergeBox() {
-        show(types_1.GUI.getMergeBox());
-        let selectedArmy = types_1.GameState.armies[types_1.Controls.selectedArmyIndex];
-        if (selectedArmy instanceof types_1.FootArmy) {
-            hide(types_1.GUI.getSplitBox());
+        show(gui_1.GUI.getMergeBox());
+        let selectedArmy = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex];
+        if (selectedArmy instanceof footArmy_1.FootArmy) {
+            hide(gui_1.GUI.getSplitBox());
         }
-        else if (selectedArmy instanceof types_1.RiderArmy) {
-            hide(types_1.GUI.getSplitMountedBox());
+        else if (selectedArmy instanceof riderArmy_1.RiderArmy) {
+            hide(gui_1.GUI.getSplitMountedBox());
         }
-        else if (selectedArmy instanceof types_1.Fleet) {
-            hide(types_1.GUI.getSplitFleetBox());
+        else if (selectedArmy instanceof fleet_1.Fleet) {
+            hide(gui_1.GUI.getSplitFleetBox());
         }
-        let selectedPos = types_1.GameState.armies[types_1.Controls.selectedArmyIndex].getPosition();
+        let selectedPos = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].getPosition();
         let possibleTargets = [];
-        let targetOwner = types_1.GameState.armies[types_1.Controls.selectedArmyIndex].owner;
-        for (let i = 0; i < types_1.GameState.armies.length; i++) {
-            if (i != types_1.Controls.selectedArmyIndex) {
-                if (types_1.GameState.armies[i].owner === targetOwner &&
-                    types_1.GameState.armies[i].getPosition()[0] === selectedPos[0] &&
-                    types_1.GameState.armies[i].getPosition()[1] === selectedPos[1] &&
-                    types_1.GameState.armies[i].constructor === selectedArmy.constructor) {
+        let targetOwner = gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner;
+        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
+            if (i != controlVariables_1.Controls.selectedArmyIndex) {
+                if (gameState_1.GameState.armies[i].owner === targetOwner &&
+                    gameState_1.GameState.armies[i].getPosition()[0] === selectedPos[0] &&
+                    gameState_1.GameState.armies[i].getPosition()[1] === selectedPos[1] &&
+                    gameState_1.GameState.armies[i].constructor === selectedArmy.constructor) {
                     possibleTargets.push(i);
                 }
             }
         }
         if (possibleTargets != []) {
-            if (types_1.GUI.getActivateMergeBox() != undefined) {
-                let d = types_1.GUI.getTransmuteArmyButtonsPartition();
-                d.removeChild(types_1.GUI.getActivateMergeBox());
+            if (gui_1.GUI.getActivateMergeBox() != undefined) {
+                let d = gui_1.GUI.getTransmuteArmyButtonsPartition();
+                d.removeChild(gui_1.GUI.getActivateMergeBox());
             }
             if (possibleTargets.length !== 0) {
                 let x = document.createElement("SECTION");
@@ -564,52 +571,52 @@ var BoxVisibility;
                     let btn = document.createElement("BUTTON");
                     btn.setAttribute("class", "fixedPrettyButton");
                     btn.name = "mergeBtn " + possibleTargets[i];
-                    let t = document.createTextNode("" + types_1.GameState.armies[possibleTargets[i]].getErkenfaraID());
+                    let t = document.createTextNode("" + gameState_1.GameState.armies[possibleTargets[i]].getErkenfaraID());
                     btn.appendChild(t);
                     btn.addEventListener('click', function (event) {
                         let posiInList = this.name.split(" ")[1];
-                        types_1.ButtonFunctions.mergeSelectedArmy(parseInt(posiInList));
+                        buttonFunctions_1.ButtonFunctions.mergeSelectedArmy(parseInt(posiInList));
                     });
                     x.appendChild(btn);
                 }
-                types_1.GUI.getTransmuteArmyButtonsPartition().appendChild(x);
+                gui_1.GUI.getTransmuteArmyButtonsPartition().appendChild(x);
             }
         }
         else {
             if (document.getElementById("mergeArmyButtonsSection") != undefined) {
-                let d = types_1.GUI.getTransmuteArmyButtonsPartition();
-                d.removeChild(types_1.GUI.getActivateMergeBox());
+                let d = gui_1.GUI.getTransmuteArmyButtonsPartition();
+                d.removeChild(gui_1.GUI.getActivateMergeBox());
             }
         }
     }
     BoxVisibility.activateMergeBox = activateMergeBox;
     function backToSplitBox() {
-        hide(types_1.GUI.getMergeBox());
-        hide(types_1.GUI.getTransmuteBox());
-        if (types_1.GameState.armies[types_1.Controls.selectedArmyIndex] instanceof types_1.FootArmy) {
-            show(types_1.GUI.getSplitBox());
-            types_1.GUI.getSplitBox().style.display = "";
+        hide(gui_1.GUI.getMergeBox());
+        hide(gui_1.GUI.getTransmuteBox());
+        if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof footArmy_1.FootArmy) {
+            show(gui_1.GUI.getSplitBox());
+            gui_1.GUI.getSplitBox().style.display = "";
         }
-        else if (types_1.GameState.armies[types_1.Controls.selectedArmyIndex] instanceof types_1.RiderArmy) {
-            show(types_1.GUI.getSplitMountedBox());
+        else if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof riderArmy_1.RiderArmy) {
+            show(gui_1.GUI.getSplitMountedBox());
         }
-        else if (types_1.GameState.armies[types_1.Controls.selectedArmyIndex] instanceof types_1.Fleet) {
-            show(types_1.GUI.getSplitFleetBox());
+        else if (gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex] instanceof fleet_1.Fleet) {
+            show(gui_1.GUI.getSplitFleetBox());
         }
     }
     BoxVisibility.backToSplitBox = backToSplitBox;
     // this is the cancel function for the mount/unmount and split boxes
     function restoreInfoBox() {
-        hide(types_1.GUI.getMountBox());
-        hide(types_1.GUI.getUnMountBox());
-        hide(types_1.GUI.getSplitBox());
-        hide(types_1.GUI.getSplitMountedBox());
-        hide(types_1.GUI.getSplitFleetBox());
-        hide(types_1.GUI.getTransmuteBox());
-        hide(types_1.GUI.getMergeBox());
+        hide(gui_1.GUI.getMountBox());
+        hide(gui_1.GUI.getUnMountBox());
+        hide(gui_1.GUI.getSplitBox());
+        hide(gui_1.GUI.getSplitMountedBox());
+        hide(gui_1.GUI.getSplitFleetBox());
+        hide(gui_1.GUI.getTransmuteBox());
+        hide(gui_1.GUI.getMergeBox());
         closeShootBox();
-        if (types_1.GUI.getGodModeBox().getSelf().classList.contains("invisible")) {
-            show(types_1.GUI.getInfoBox().getSelf());
+        if (gui_1.GUI.getGodModeBox().getSelf().classList.contains("invisible")) {
+            show(gui_1.GUI.getInfoBox().getSelf());
         }
     }
     BoxVisibility.restoreInfoBox = restoreInfoBox;

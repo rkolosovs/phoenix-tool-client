@@ -15,8 +15,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
-class MergeEvent extends types_1.PhoenixEvent {
+const event_1 = require("./event");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const gameState_1 = require("../gameState");
+const gui_1 = require("../gui/gui");
+class MergeEvent extends event_1.PhoenixEvent {
     constructor(listPosition, status, fromArmyId, toArmyId, realm, position, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.fromArmyId = fromArmyId;
@@ -33,15 +36,15 @@ class MergeEvent extends types_1.PhoenixEvent {
     }
     validGameState() {
         //Both armies exist and are in position.
-        let ownArmiesOnCorrectField = types_1.GameState.armies.filter(army => army.owner === this.realm &&
+        let ownArmiesOnCorrectField = gameState_1.GameState.armies.filter(army => army.owner === this.realm &&
             army.getPosition()[0] === this.position[0] &&
             army.getPosition()[1] === this.position[1]);
         return ownArmiesOnCorrectField.some(army => army.getErkenfaraID() === this.fromArmyId) &&
             ownArmiesOnCorrectField.some(army => army.getErkenfaraID() === this.toArmyId);
     }
     checkEvent() {
-        let fromArmy = types_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId && army.owner === this.realm);
-        let toArmy = types_1.GameState.armies.find(army => army.getErkenfaraID() === this.toArmyId && army.owner === this.realm);
+        let fromArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId && army.owner === this.realm);
+        let toArmy = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.toArmyId && army.owner === this.realm);
         if (fromArmy != undefined && toArmy != undefined) {
             toArmy.merge(fromArmy);
         }
@@ -49,8 +52,8 @@ class MergeEvent extends types_1.PhoenixEvent {
             throw new Error("One of the armies to be merged does not exist.");
         }
         this.status = 0 /* Checked */;
-        types_1.GUI.getBigBox().fillEventList();
-        types_1.Drawing.drawStuff();
+        gui_1.GUI.getBigBox().fillEventList();
+        drawingFunctions_1.Drawing.drawStuff();
     }
     makeEventListItemText() {
         return "" + this.realm.tag + "'s army " + this.fromArmyId + " merges with army " + this.toArmyId + " in (" +

@@ -14,8 +14,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {PhoenixEvent, Drawing, Realm, GameState, RiderArmy, FootArmy, 
-    Army, GUI, EventStatus, ArmyFunctions} from "../types";
+import {PhoenixEvent} from "./event";
+import {Drawing} from "../gui/drawingFunctions";
+import {Realm} from "../realm";
+import {GameState} from "../gameState";
+import {RiderArmy} from "../armies/riderArmy";
+import {FootArmy} from "../armies/footArmy";
+import {Army} from "../armies/army";
+import {GUI} from "../gui/gui";
+import {EventStatus} from "./eventStatus";
+import {ArmyFunctions} from "../libraries/armyFunctions";
 
 export class MountEvent extends PhoenixEvent{
     

@@ -15,19 +15,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
-class DestructibleBuilding extends types_1.Building {
+const building_1 = require("./building");
+const constants_1 = require("../constants");
+class DestructibleBuilding extends building_1.Building {
     constructor(type, position, owner, buildPoints) {
         super(type, position, owner);
         this.buildPoints = buildPoints;
     }
     getMaxBP() {
         switch (this.type) {
-            case 0 /* CASTLE */: return types_1.Constants.CASTLE_BP;
-            case 1 /* CITY */: return types_1.Constants.CITY_BP;
-            case 2 /* FORTRESS */: return types_1.Constants.FORTRESS_BP;
-            case 3 /* CAPITAL */: return types_1.Constants.CAPITAL_BP;
-            case 4 /* CAPITAL_FORT */: return types_1.Constants.CAPITAL_FORTRESS_BP;
+            case 0 /* CASTLE */: return constants_1.Constants.CASTLE_BP;
+            case 1 /* CITY */: return constants_1.Constants.CITY_BP;
+            case 2 /* FORTRESS */: return constants_1.Constants.FORTRESS_BP;
+            case 3 /* CAPITAL */: return constants_1.Constants.CAPITAL_BP;
+            case 4 /* CAPITAL_FORT */: return constants_1.Constants.CAPITAL_FORTRESS_BP;
             default: return 0;
         }
     }

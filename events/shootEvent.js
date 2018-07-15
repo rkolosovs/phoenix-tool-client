@@ -15,8 +15,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
-class ShootEvent extends types_1.PhoenixEvent {
+const gui_1 = require("../gui/gui");
+const boxVisibilty_1 = require("../gui/boxVisibilty");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const gameState_1 = require("../gameState");
+const event_1 = require("./event");
+const buttonFunctions_1 = require("../controls/buttonFunctions");
+class ShootEvent extends event_1.PhoenixEvent {
     constructor(listPosition, status, realm, shooterId, to, from, lkpCount, skpCount, target, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.realm = realm;
@@ -39,7 +44,7 @@ class ShootEvent extends types_1.PhoenixEvent {
     }
     validGameState() {
         //Shooter exists, is positioned on the from-field, has enough catapults and the target is valid
-        let shooter = types_1.GameState.armies.find(army => army.owner === this.realm &&
+        let shooter = gameState_1.GameState.armies.find(army => army.owner === this.realm &&
             army.getErkenfaraID() === this.shooterId &&
             army.getPosition()[0] === this.from[0] &&
             army.getPosition()[1] === this.from[1]);
@@ -72,8 +77,8 @@ class ShootEvent extends types_1.PhoenixEvent {
         return this.realm;
     }
     checkEvent() {
-        let shootBox = types_1.GUI.getShootingBigBox();
-        types_1.BoxVisibility.show(shootBox.getSelf());
+        let shootBox = gui_1.GUI.getShootingBigBox();
+        boxVisibilty_1.BoxVisibility.show(shootBox.getSelf());
         shootBox.getShooterTitleText().innerHTML = this.shooterId + ", " + this.realm.tag;
         ;
         shootBox.getAttackersLKPText().innerHTML = this.lkpCount.toString();
@@ -82,13 +87,13 @@ class ShootEvent extends types_1.PhoenixEvent {
         shootBox.getXTargetText().innerHTML = this.to[0].toString();
         shootBox.getYTargetText().innerHTML = this.to[1].toString();
         let shootButton = shootBox.getRangedBattleButton();
-        shootButton.addEventListener("click", (e) => types_1.ButtonFunctions.shootButtonLogic(this));
+        shootButton.addEventListener("click", (e) => buttonFunctions_1.ButtonFunctions.shootButtonLogic(this));
         shootBox.getCloseRangedBattleButton().onclick = function () {
-            types_1.BoxVisibility.hide(shootBox.getSelf());
+            boxVisibilty_1.BoxVisibility.hide(shootBox.getSelf());
         };
-        types_1.GUI.getBigBox().fillEventList();
+        gui_1.GUI.getBigBox().fillEventList();
         //sendCheckEvent(event.pk, event.type);
-        types_1.Drawing.drawStuff();
+        drawingFunctions_1.Drawing.drawStuff();
     }
     makeEventListItemText() {
         return "" + this.realm.tag + "'s army " + this.shooterId + " shoots a Field (" + this.to[0] + ", " + this.to[1] + ") with " +

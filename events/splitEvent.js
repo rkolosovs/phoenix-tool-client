@@ -15,8 +15,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
-class SplitEvent extends types_1.PhoenixEvent {
+const event_1 = require("./event");
+const gameState_1 = require("../gameState");
+const footArmy_1 = require("../armies/footArmy");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const gui_1 = require("../gui/gui");
+const armyFunctions_1 = require("../libraries/armyFunctions");
+class SplitEvent extends event_1.PhoenixEvent {
     constructor(listPosition, status, fromArmyId, newArmyId, realm, troops, leaders, mounts, lkp, skp, position, prerequisiteEvents, databasePrimaryKey) {
         super(listPosition, status, prerequisiteEvents, databasePrimaryKey);
         this.fromArmyId = fromArmyId;
@@ -40,7 +45,7 @@ class SplitEvent extends types_1.PhoenixEvent {
     }
     validGameState() {
         //The from-army exists and is in position.
-        let fromArmy = types_1.GameState.armies.find(army => army.owner === this.realm &&
+        let fromArmy = gameState_1.GameState.armies.find(army => army.owner === this.realm &&
             army.getErkenfaraID() === this.fromArmyId &&
             army.getPosition()[0] === this.position[0] &&
             army.getPosition()[1] === this.position[1]);
@@ -48,7 +53,7 @@ class SplitEvent extends types_1.PhoenixEvent {
             return false;
         }
         //The new army doesn't yet exist.
-        if (types_1.GameState.armies.some(army => army.owner === this.realm &&
+        if (gameState_1.GameState.armies.some(army => army.owner === this.realm &&
             army.getErkenfaraID() === this.newArmyId)) {
             return false;
         }
@@ -59,11 +64,11 @@ class SplitEvent extends types_1.PhoenixEvent {
             this.leaders <= fromArmy.getOfficerCount() &&
             this.lkp <= fromArmy.getLightCatapultCount() &&
             this.skp <= fromArmy.getHeavyCatapultCount() &&
-            ((this.mounts > 0 && fromArmy instanceof types_1.FootArmy && this.mounts <= fromArmy.getMountCount()) ||
+            ((this.mounts > 0 && fromArmy instanceof footArmy_1.FootArmy && this.mounts <= fromArmy.getMountCount()) ||
                 this.mounts <= 0);
     }
     checkEvent() {
-        let armyToSplitFrom = types_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId &&
+        let armyToSplitFrom = gameState_1.GameState.armies.find(army => army.getErkenfaraID() === this.fromArmyId &&
             army.owner === this.realm &&
             army.getPosition()[0] === this.position[0] &&
             army.getPosition()[1] === this.position[1]);
@@ -76,9 +81,9 @@ class SplitEvent extends types_1.PhoenixEvent {
                 window.alert(e.message);
             }
         }
-        types_1.ArmyFunctions.checkArmiesForLiveliness();
-        types_1.GUI.getBigBox().fillEventList();
-        types_1.Drawing.drawStuff();
+        armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
+        gui_1.GUI.getBigBox().fillEventList();
+        drawingFunctions_1.Drawing.drawStuff();
     }
     makeEventListItemText() {
         // TODO: detailed explanation

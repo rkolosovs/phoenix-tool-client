@@ -16,8 +16,14 @@ along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
 // contains helper functions to get information about a field out of the fields array with just its coordinates.
 
-import {Direction, FieldType, Field, GameState, BuildingType, 
-    NonDestructibleBuilding, Wall, Constants, Drawing} from "../types";
+import {Direction} from "../map/direction";
+import {FieldType, Field} from "../map/field";
+import {GameState} from "../gameState";
+import {BuildingType} from "../buildings/building";
+import {NonDestructibleBuilding} from "../buildings/nonDestructibleBuilding";
+import {Wall} from "../buildings/wall";
+import {Constants} from "../constants";
+import {Drawing} from "../gui/drawingFunctions";
 
 export namespace HexFunction {
     import SIN60 = Constants.SIN60;

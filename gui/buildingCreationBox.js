@@ -15,7 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
+const godModeFunctions_1 = require("../godmode/godModeFunctions");
+const app_1 = require("../app");
 class BuildingCreationBox {
     getSelf() {
         if (this.self == undefined) {
@@ -26,49 +27,49 @@ class BuildingCreationBox {
     getAddCastle() {
         if (this.addCastle == undefined) {
             this.addCastle = document.getElementById("addCastle");
-            this.addCastle.onclick = function () { types_1.GodFunctions.addCastle(); };
+            this.addCastle.onclick = function () { godModeFunctions_1.GodFunctions.addCastle(); };
         }
         return this.addCastle;
     }
     getAddCity() {
         if (this.addCity == undefined) {
             this.addCity = document.getElementById("addCity");
-            this.addCity.onclick = function () { types_1.GodFunctions.addCity(); };
+            this.addCity.onclick = function () { godModeFunctions_1.GodFunctions.addCity(); };
         }
         return this.addCity;
     }
     getAddFortress() {
         if (this.addFortress == undefined) {
             this.addFortress = document.getElementById("addFortress");
-            this.addFortress.onclick = function () { types_1.GodFunctions.addFortress(); };
+            this.addFortress.onclick = function () { godModeFunctions_1.GodFunctions.addFortress(); };
         }
         return this.addFortress;
     }
     getAddCapital() {
         if (this.addCapital == undefined) {
             this.addCapital = document.getElementById("addCapital");
-            this.addCapital.onclick = function () { types_1.GodFunctions.addCapital(); };
+            this.addCapital.onclick = function () { godModeFunctions_1.GodFunctions.addCapital(); };
         }
         return this.addCapital;
     }
     getAddCapitalFortress() {
         if (this.addCapitalFortress == undefined) {
             this.addCapitalFortress = document.getElementById("addCapitalFortress");
-            this.addCapitalFortress.onclick = function () { types_1.GodFunctions.addCapitalFortress(); };
+            this.addCapitalFortress.onclick = function () { godModeFunctions_1.GodFunctions.addCapitalFortress(); };
         }
         return this.addCapitalFortress;
     }
     getDeleteBuilding() {
         if (this.deleteBuilding == undefined) {
             this.deleteBuilding = document.getElementById("deleteBuilding");
-            this.deleteBuilding.onclick = function () { types_1.GodFunctions.deleteSelectedProductionBuilding(); };
+            this.deleteBuilding.onclick = function () { godModeFunctions_1.GodFunctions.deleteSelectedProductionBuilding(); };
         }
         return this.deleteBuilding;
     }
     getSaveBuildings() {
         if (this.saveBuildings == undefined) {
             this.saveBuildings = document.getElementById("SaveBuildings");
-            this.saveBuildings.onclick = function () { types_1.Saving.saveBuildings(); };
+            this.saveBuildings.onclick = function () { app_1.Saving.saveBuildings(); };
         }
         return this.saveBuildings;
     }

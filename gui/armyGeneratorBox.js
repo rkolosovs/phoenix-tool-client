@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
+const godModeFunctions_1 = require("../godmode/godModeFunctions");
 class ArmyGeneratorBox {
     getSelf() {
         if (this.self == undefined) {
@@ -74,7 +74,7 @@ class ArmyGeneratorBox {
     getGenerateArmyBtn() {
         if (this.generateArmyBtn == undefined) {
             this.generateArmyBtn = document.getElementById("GenerateArmyBtn");
-            this.generateArmyBtn.onclick = function () { types_1.GodFunctions.generateArmyBtn(); };
+            this.generateArmyBtn.onclick = function () { godModeFunctions_1.GodFunctions.generateArmyBtn(); };
         }
         return this.generateArmyBtn;
     }

@@ -15,11 +15,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
+const gui_1 = require("../gui/gui");
+const boxVisibilty_1 = require("../gui/boxVisibilty");
+const loadingDataFunctions_1 = require("./loadingDataFunctions");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const gameState_1 = require("../gameState");
 var Authentication;
 (function (Authentication) {
-    var show = types_1.BoxVisibility.show;
-    var hide = types_1.BoxVisibility.hide;
+    var show = boxVisibilty_1.BoxVisibility.show;
+    var hide = boxVisibilty_1.BoxVisibility.hide;
     //put the url/IP for the remote game server here
     // export let url = "http://phoenixserver.h2610265.stratoserver.net"; // online server
     Authentication.url = "http://localhost:8000"; // for local debug
@@ -40,35 +44,35 @@ var Authentication;
             success: (data) => {
                 // saving the authenticationToken
                 Authentication.authenticationToken = data.token;
-                types_1.GameState.login = data.group;
+                gameState_1.GameState.login = data.group;
                 // if the user is a GM, godmode possibility is displayed
-                if (types_1.GameState.login === 'sl') {
-                    types_1.GUI.getToggleGMBarButton().style.display = "";
-                    if (types_1.GameState.currentTurn.status === 'fi') {
+                if (gameState_1.GameState.login === 'sl') {
+                    gui_1.GUI.getToggleGMBarButton().style.display = "";
+                    if (gameState_1.GameState.currentTurn.status === 'fi') {
                         let btnToShow = document.getElementById("eventTabsButton");
                         if (btnToShow !== null) {
                             show(btnToShow);
                         }
-                        types_1.Loading.loadPendingEvents();
+                        loadingDataFunctions_1.Loading.loadPendingEvents();
                     }
                 }
                 // overwrite old known data
-                types_1.Loading.getNewDataFromServer();
+                loadingDataFunctions_1.Loading.getNewDataFromServer();
                 Authentication.logintime = 0;
-                hide(types_1.GUI.getBigBox().getEventTabsButton());
-                types_1.GUI.getBigBox().getEventsTab().innerHTML = "";
-                types_1.Drawing.writeTurnNumber();
+                hide(gui_1.GUI.getBigBox().getEventTabsButton());
+                gui_1.GUI.getBigBox().getEventsTab().innerHTML = "";
+                drawingFunctions_1.Drawing.writeTurnNumber();
             },
             error: (data) => {
                 // alert for a failed login
                 alert("Login failed and logged in as guest. Check username or password.");
-                types_1.Loading.getNewDataFromServer();
+                loadingDataFunctions_1.Loading.getNewDataFromServer();
             },
             dataType: "json"
         });
         // change loginBox to infoBox
-        show(types_1.GUI.getInfoBox().getSelf());
-        hide(types_1.GUI.getLoginBox());
+        show(gui_1.GUI.getInfoBox().getSelf());
+        hide(gui_1.GUI.getLoginBox());
     }
     Authentication.loginToServer = loginToServer;
     // logs out from Server, closes everything you need login for, deletes login time
@@ -78,28 +82,28 @@ var Authentication;
             url: Authentication.url + "/databaseLink/logout/"
         });
         // turning off godmode Box, and changing infoBox to Login Box
-        types_1.GameState.login = 'guest';
-        types_1.BoxVisibility.switchBtnBoxTo(types_1.GUI.getButtonsBox());
-        types_1.BoxVisibility.switchModeTo("none");
+        gameState_1.GameState.login = 'guest';
+        boxVisibilty_1.BoxVisibility.switchBtnBoxTo(gui_1.GUI.getButtonsBox());
+        boxVisibilty_1.BoxVisibility.switchModeTo("none");
         // Hide gm functionalities
-        hide(types_1.GUI.getGodModeBox().getSelf());
-        hide(types_1.GUI.getToggleGMBarButton());
-        hide(types_1.GUI.getInfoBox().getSelf());
-        show(types_1.GUI.getLoginBox());
+        hide(gui_1.GUI.getGodModeBox().getSelf());
+        hide(gui_1.GUI.getToggleGMBarButton());
+        hide(gui_1.GUI.getInfoBox().getSelf());
+        show(gui_1.GUI.getLoginBox());
         //change the info change box, back to the normal info Box
-        hide(types_1.GUI.getInfoChangeBox().getSelf());
+        hide(gui_1.GUI.getInfoChangeBox().getSelf());
         // forget old authenticationToken
         Authentication.authenticationToken = 0;
         // overwrite previously known data
-        types_1.Loading.getNewDataFromServer();
+        loadingDataFunctions_1.Loading.getNewDataFromServer();
         Authentication.logintime = 0;
-        hide(types_1.GUI.getBigBox().getEventTabsButton());
-        let eventList = types_1.GUI.getBigBox().getEventsTab();
+        hide(gui_1.GUI.getBigBox().getEventTabsButton());
+        let eventList = gui_1.GUI.getBigBox().getEventsTab();
         eventList.innerHTML = "";
-        types_1.GUI.getBigBox().closeAllTabs();
-        types_1.GameState.newEvents = [];
-        types_1.GameState.loadedEvents = [];
-        types_1.Drawing.writeTurnNumber();
+        gui_1.GUI.getBigBox().closeAllTabs();
+        gameState_1.GameState.newEvents = [];
+        gameState_1.GameState.loadedEvents = [];
+        drawingFunctions_1.Drawing.writeTurnNumber();
     }
     Authentication.logoutFromServer = logoutFromServer;
 })(Authentication = exports.Authentication || (exports.Authentication = {}));

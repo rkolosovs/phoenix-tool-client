@@ -14,7 +14,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {GodFunctions, Direction, Saving} from "../types";
+import { GodFunctions } from "../godmode/godModeFunctions";
+import { Direction } from "../map/direction";
+import { Saving } from "../app";
 
 export class BridgeCreationBox {
     private self: HTMLDivElement|undefined;

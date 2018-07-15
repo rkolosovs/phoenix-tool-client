@@ -15,8 +15,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
-class Army extends types_1.MobileEntity {
+const gameState_1 = require("../gameState");
+const hexFunctions_1 = require("../libraries/hexFunctions");
+const constants_1 = require("../constants");
+const mobileEntity_1 = require("./mobileEntity");
+class Army extends mobileEntity_1.MobileEntity {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard) {
         super(id, owner, position, movePoints, heightPoints);
         this.lightCatapultCount = 0;
@@ -115,10 +118,10 @@ class Army extends types_1.MobileEntity {
         this.targetList = [];
         let tilesInRange = [];
         if (this.heavyCatapultCount - this.heavyCatapultsShot > 0) { //in a 2 tile range
-            tilesInRange = types_1.HexFunction.neighborInRange(this.position, 2);
+            tilesInRange = hexFunctions_1.HexFunction.neighborInRange(this.position, 2);
         }
         else if (this.lightCatapultCount - this.lightCatapultsShot > 0) { //one tile range
-            tilesInRange = types_1.HexFunction.neighborInRange(this.position, 1);
+            tilesInRange = hexFunctions_1.HexFunction.neighborInRange(this.position, 1);
         }
         this.targetList = this.checkAllShootingConditions(tilesInRange);
     }
@@ -157,53 +160,53 @@ class Army extends types_1.MobileEntity {
     }
     checkShootingCondition(target, skpShot) {
         let condition = 5 /* Impossible */;
-        let range = types_1.HexFunction.distance(this.position, target);
+        let range = hexFunctions_1.HexFunction.distance(this.position, target);
         if (skpShot) { //skp shooting
             if (range === 1) { //for range of 1
-                if (types_1.HexFunction.height(target) - types_1.HexFunction.height(this.position) <= 2) {
+                if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) <= 2) {
                     condition = 3 /* High */;
                 }
-                if (types_1.HexFunction.height(target) - types_1.HexFunction.height(this.position) <= 1) {
+                if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) <= 1) {
                     condition = 1 /* Near */;
                 }
-                if (types_1.HexFunction.height(target) - types_1.HexFunction.height(this.position) === 1 &&
-                    types_1.HexFunction.findWallInWay(this.position, target).length > 0) {
+                if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) === 1 &&
+                    hexFunctions_1.HexFunction.findWallInWay(this.position, target).length > 0) {
                     condition = 3 /* High */;
                 }
             }
             else if (range === 2) { //for range of 2
-                if (types_1.HexFunction.height(target) - types_1.HexFunction.height(this.position) <= 1) {
+                if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) <= 1) {
                     condition = 2 /* FarAndHigh */;
                 }
-                if (types_1.HexFunction.height(target) - types_1.HexFunction.height(this.position) < 1) {
+                if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) < 1) {
                     condition = 0 /* Far */;
                 }
-                if (types_1.HexFunction.height(target) - types_1.HexFunction.height(this.position) === 0 &&
-                    types_1.HexFunction.findWallInWay(this.position, target).length > 0) {
+                if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) === 0 &&
+                    hexFunctions_1.HexFunction.findWallInWay(this.position, target).length > 0) {
                     condition = 2 /* FarAndHigh */;
                 }
                 //if neighbor with range 1 has height diff of 2(in case a high mountain is not allowed)
-                let commonNeig = types_1.HexFunction.findCommonNeighbor(this.position, target);
-                let walls = types_1.HexFunction.findWallInWay(this.position, target);
+                let commonNeig = hexFunctions_1.HexFunction.findCommonNeighbor(this.position, target);
+                let walls = hexFunctions_1.HexFunction.findWallInWay(this.position, target);
                 for (let i = 0; i < commonNeig.length; i++) {
                     if (walls.length > 0) {
                         for (let j = 0; j < walls.length; j++) {
-                            if (((types_1.HexFunction.height([commonNeig[i][0], commonNeig[i][1]]) -
-                                types_1.HexFunction.height(this.position) === 1)
-                                && types_1.GameState.buildings[walls[j]].getPosition()[0] === commonNeig[i][0] &&
-                                types_1.GameState.buildings[walls[j]].getPosition()[1] === commonNeig[i][1])) {
+                            if (((hexFunctions_1.HexFunction.height([commonNeig[i][0], commonNeig[i][1]]) -
+                                hexFunctions_1.HexFunction.height(this.position) === 1)
+                                && gameState_1.GameState.buildings[walls[j]].getPosition()[0] === commonNeig[i][0] &&
+                                gameState_1.GameState.buildings[walls[j]].getPosition()[1] === commonNeig[i][1])) {
                                 condition = 5 /* Impossible */;
                             }
                         }
                     }
-                    if (types_1.HexFunction.height(commonNeig[i]) - types_1.HexFunction.height(this.position) > 1) {
+                    if (hexFunctions_1.HexFunction.height(commonNeig[i]) - hexFunctions_1.HexFunction.height(this.position) > 1) {
                         condition = 5 /* Impossible */;
                     }
                 }
             }
         }
         else { //for lkp shooting
-            if (types_1.HexFunction.height(target) - types_1.HexFunction.height(this.position) <= 1) {
+            if (hexFunctions_1.HexFunction.height(target) - hexFunctions_1.HexFunction.height(this.position) <= 1) {
                 condition = 6 /* LightCatapults */;
             }
         }
@@ -211,8 +214,8 @@ class Army extends types_1.MobileEntity {
     }
     conquer() {
         if (this.canConquer()) {
-            let field = types_1.GameState.fields[types_1.HexFunction.positionInList(this.position)];
-            types_1.GameState.realms.forEach(realm => {
+            let field = gameState_1.GameState.fields[hexFunctions_1.HexFunction.positionInList(this.position)];
+            gameState_1.GameState.realms.forEach(realm => {
                 let index = realm.territory.indexOf(field);
                 if (index !== -1) {
                     realm.territory.splice(index, 1);
@@ -229,7 +232,7 @@ class Army extends types_1.MobileEntity {
         this.setHeavyCatapultCount(this.heavyCatapultCount - Math.floor(this.heavyCatapultCount * factor));
     }
     getRoomPoints() {
-        return this.getRoomPointsSansOfficers() + this.officerCount * types_1.Constants.OFFICER_RP;
+        return this.getRoomPointsSansOfficers() + this.officerCount * constants_1.Constants.OFFICER_RP;
     }
     leaderGp() {
         let gp = 0;

@@ -15,7 +15,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
+const gameState_1 = require("../gameState");
+const hexFunctions_1 = require("../libraries/hexFunctions");
+const battleResult_1 = require("./battleResult");
+const landArmy_1 = require("./landArmy");
+const fleet_1 = require("./fleet");
+const riderArmy_1 = require("./riderArmy");
+const footArmy_1 = require("./footArmy");
+const armyFunctions_1 = require("../libraries/armyFunctions");
 class BattleHandler {
     constructor(participants, location) {
         this.attackerArmies = [];
@@ -75,14 +82,14 @@ class BattleHandler {
                 console.log("Battle resolution error.");
             }
         }
-        types_1.ArmyFunctions.checkArmiesForLiveliness();
+        armyFunctions_1.ArmyFunctions.checkArmiesForLiveliness();
     }
     static armyArrayCount(armyArray, fieldType) {
-        return armyArray.filter((val) => ((val instanceof types_1.Fleet && fieldType <= 1) || (fieldType >= 2 && val instanceof types_1.LandArmy)), this).
+        return armyArray.filter((val) => ((val instanceof fleet_1.Fleet && fieldType <= 1) || (fieldType >= 2 && val instanceof landArmy_1.LandArmy)), this).
             reduce((total, elem) => (elem.getTroopCount() + total), 0);
     }
     static terrainGP(army, attacker, fieldType, location) {
-        let buildingsOnTheField = types_1.GameState.buildings.filter(current => (current.getPosition()[0] === location[0] && current.getPosition()[1] === location[1] && current.type <= 4));
+        let buildingsOnTheField = gameState_1.GameState.buildings.filter(current => (current.getPosition()[0] === location[0] && current.getPosition()[1] === location[1] && current.type <= 4));
         if (buildingsOnTheField.length > 0) { //production buildings on field negate usual terrain bonus
             if (attacker) {
                 return 0;
@@ -101,7 +108,7 @@ class BattleHandler {
         }
         else { //usual terrain bonus applies
             let terrainGPBonus = 0;
-            let findRealm = types_1.GameState.realms.find(realm => (realm === army.owner));
+            let findRealm = gameState_1.GameState.realms.find(realm => (realm === army.owner));
             let homeTurf = 0 /* SHALLOWS */;
             if (findRealm != undefined) {
                 homeTurf = findRealm.homeTurf;
@@ -110,8 +117,8 @@ class BattleHandler {
                 (homeTurf === 6 /* MOUNTAINS */ && fieldType === 5 /* HIGHLANDS */)) { //home terrain bonus applies
                 terrainGPBonus += 50;
             }
-            if ((army instanceof types_1.FootArmy && (fieldType === 3 /* WOODS */ || fieldType === 8 /* SWAMP */)) ||
-                (army instanceof types_1.RiderArmy && (fieldType === 2 /* LOWLANDS */ || fieldType === 4 /* HILLS */ ||
+            if ((army instanceof footArmy_1.FootArmy && (fieldType === 3 /* WOODS */ || fieldType === 8 /* SWAMP */)) ||
+                (army instanceof riderArmy_1.RiderArmy && (fieldType === 2 /* LOWLANDS */ || fieldType === 4 /* HILLS */ ||
                     fieldType === 7 /* DESERT */))) { //footmen/rider terrain bonus
                 terrainGPBonus += 140;
             }
@@ -128,32 +135,32 @@ class BattleHandler {
         let armyPosition = army.getPosition();
         let oldArmyPosition = army.getOldPosition();
         if (attacker) {
-            if (types_1.HexFunction.height(oldArmyPosition) >
-                types_1.HexFunction.height(armyPosition)) {
+            if (hexFunctions_1.HexFunction.height(oldArmyPosition) >
+                hexFunctions_1.HexFunction.height(armyPosition)) {
                 result += 20;
             } //fighting downhill
-            if (types_1.HexFunction.fieldType(armyPosition) === 7 /* DESERT */ ||
-                types_1.HexFunction.fieldType(armyPosition) === 8 /* SWAMP */) {
+            if (hexFunctions_1.HexFunction.fieldType(armyPosition) === 7 /* DESERT */ ||
+                hexFunctions_1.HexFunction.fieldType(armyPosition) === 8 /* SWAMP */) {
                 result += 20;
             } //attacking into swamp or desert
-            if (types_1.HexFunction.fieldType(oldArmyPosition) === 3 /* WOODS */) {
+            if (hexFunctions_1.HexFunction.fieldType(oldArmyPosition) === 3 /* WOODS */) {
                 result += 20;
             } //attacking out of a forest
-            if (types_1.HexFunction.hasStreet(armyPosition)) {
+            if (hexFunctions_1.HexFunction.hasStreet(armyPosition)) {
                 result += 20;
             } //attacking onto a street
         }
         else {
-            let adjacentWalls = types_1.HexFunction.walls(armyPosition);
-            let adjacentRivers = types_1.HexFunction.fluesse(armyPosition);
-            let adjacentBridges = types_1.HexFunction.bridges(armyPosition);
-            let neighbor = types_1.HexFunction.neighbors(armyPosition);
+            let adjacentWalls = hexFunctions_1.HexFunction.walls(armyPosition);
+            let adjacentRivers = hexFunctions_1.HexFunction.fluesse(armyPosition);
+            let adjacentBridges = hexFunctions_1.HexFunction.bridges(armyPosition);
+            let neighbor = hexFunctions_1.HexFunction.neighbors(armyPosition);
             let downhillBonus = false;
             let wallBonus = false;
             let bridgeBonus = false;
             let riverBonus = false;
             attackingArmies.forEach((attackingArmy) => {
-                if (types_1.HexFunction.height(oldArmyPosition) < types_1.HexFunction.height(armyPosition)) {
+                if (hexFunctions_1.HexFunction.height(oldArmyPosition) < hexFunctions_1.HexFunction.height(armyPosition)) {
                     downhillBonus = true;
                 }
                 neighbor.forEach((neighbor, index) => {
@@ -202,7 +209,7 @@ class BattleHandler {
         return (lossesWithGP / totalStrength) * armyStrength;
     }
     calculateResult(armiesAttack, armiesDefense, charsAttack, charsDefense, location, attackDieRoll, defenseDieRoll) {
-        let fieldType = types_1.HexFunction.fieldType(location);
+        let fieldType = hexFunctions_1.HexFunction.fieldType(location);
         let overrunAttack = BattleHandler.armyArrayCount(armiesAttack, fieldType) >=
             10 * BattleHandler.armyArrayCount(armiesDefense, fieldType) &&
             armiesDefense.filter((elem) => (elem.isGuard)).length === 0 &&
@@ -213,7 +220,7 @@ class BattleHandler {
             BattleHandler.armyArrayCount(armiesDefense, fieldType) > 0;
         let totalStrengthAttackerArmy = armiesAttack.map((elem) => (elem.getTroopCount()));
         let totalStrengthDefenderArmy = armiesDefense.map((elem) => {
-            if (elem instanceof types_1.Fleet) {
+            if (elem instanceof fleet_1.Fleet) {
                 return elem.getTroopCount() + elem.getLightCatapultCount() * 5 + elem.getHeavyCatapultCount() * 10;
             }
             else {
@@ -261,7 +268,7 @@ class BattleHandler {
         let defenderGPDiffArmy = totalDefenderArmyGP.map((elem) => ((elem / 200) - (attackerMeanGP / 100)));
         let finalLossesAttackerArmy = baseLossesAttackerArmy.map((elem, index) => (BattleHandler.computeFinalLosses(elem, attackerGPDiffArmy[index], totalStrengthAttackerArmy[index], totalStrengthAttackerArmy[index])));
         let finalLossesDefenderArmy = baseLossesDefenderArmy.map((elem, index) => (BattleHandler.computeFinalLosses(elem, defenderGPDiffArmy[index], armiesDefense[index].getTroopCount(), totalStrengthDefenderArmy[index])));
-        return new types_1.BattleResult(result, finalLossesAttackerArmy, finalLossesDefenderArmy);
+        return new battleResult_1.BattleResult(result, finalLossesAttackerArmy, finalLossesDefenderArmy);
     }
 }
 exports.BattleHandler = BattleHandler;

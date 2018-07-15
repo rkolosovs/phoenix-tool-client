@@ -15,12 +15,24 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
+const gameState_1 = require("../gameState");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const controlVariables_1 = require("../controls/controlVariables");
+const authenticationFunctions_1 = require("./authenticationFunctions");
+const footArmy_1 = require("../armies/footArmy");
+const landArmy_1 = require("../armies/landArmy");
+const moveEvent_1 = require("../events/moveEvent");
+const battleEvent_1 = require("../events/battleEvent");
+const mergeEvent_1 = require("../events/mergeEvent");
+const transferEvent_1 = require("../events/transferEvent");
+const splitEvent_1 = require("../events/splitEvent");
+const mountEvent_1 = require("../events/mountEvent");
+const shootEvent_1 = require("../events/shootEvent");
 var Saving;
 (function (Saving) {
     function sendEvents() {
         sendEventlistInOrder(0);
-        types_1.GameState.loadedEvents.forEach(event => {
+        gameState_1.GameState.loadedEvents.forEach(event => {
             if (event.getStatus() === 0 /* Checked */) {
                 sendCheckEvent(event.getDatabasePrimaryKey(), event.typeAsString());
             }
@@ -32,14 +44,14 @@ var Saving;
     }
     Saving.sendEvents = sendEvents;
     function sendEventlistInOrder(index) {
-        if (index !== types_1.GameState.newEvents.length) {
-            let cPE = types_1.GameState.newEvents[index];
+        if (index !== gameState_1.GameState.newEvents.length) {
+            let cPE = gameState_1.GameState.newEvents[index];
             let cPEContent = cPE.asStringifiedJSON();
-            if (cPE instanceof types_1.MoveEvent) {
+            if (cPE instanceof moveEvent_1.MoveEvent) {
                 $.post({
-                    url: types_1.Authentication.url + "/databaseLink/moveevent/",
+                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/moveevent/",
                     data: {
-                        authorization: types_1.Authentication.authenticationToken,
+                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -59,11 +71,11 @@ var Saving;
                     }
                 });
             }
-            else if (cPE instanceof types_1.BattleEvent) {
+            else if (cPE instanceof battleEvent_1.BattleEvent) {
                 $.post({
-                    url: types_1.Authentication.url + "/databaseLink/battleevent/",
+                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/battleevent/",
                     data: {
-                        authorization: types_1.Authentication.authenticationToken,
+                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -83,11 +95,11 @@ var Saving;
                     }
                 });
             }
-            else if (cPE instanceof types_1.MergeEvent) {
+            else if (cPE instanceof mergeEvent_1.MergeEvent) {
                 $.post({
-                    url: types_1.Authentication.url + "/databaseLink/mergeevent/",
+                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/mergeevent/",
                     data: {
-                        authorization: types_1.Authentication.authenticationToken,
+                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -107,11 +119,11 @@ var Saving;
                     }
                 });
             }
-            else if (cPE instanceof types_1.TransferEvent) {
+            else if (cPE instanceof transferEvent_1.TransferEvent) {
                 $.post({
-                    url: types_1.Authentication.url + "/databaseLink/transferevent/",
+                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/transferevent/",
                     data: {
-                        authorization: types_1.Authentication.authenticationToken,
+                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -131,11 +143,11 @@ var Saving;
                     }
                 });
             }
-            else if (cPE instanceof types_1.SplitEvent) {
+            else if (cPE instanceof splitEvent_1.SplitEvent) {
                 $.post({
-                    url: types_1.Authentication.url + "/databaseLink/splitevent/",
+                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/splitevent/",
                     data: {
-                        authorization: types_1.Authentication.authenticationToken,
+                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -155,11 +167,11 @@ var Saving;
                     }
                 });
             }
-            else if (cPE instanceof types_1.MountEvent) {
+            else if (cPE instanceof mountEvent_1.MountEvent) {
                 $.post({
-                    url: types_1.Authentication.url + "/databaseLink/mountevent/",
+                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/mountevent/",
                     data: {
-                        authorization: types_1.Authentication.authenticationToken,
+                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -179,11 +191,11 @@ var Saving;
                     }
                 });
             }
-            else if (cPE instanceof types_1.ShootEvent) {
+            else if (cPE instanceof shootEvent_1.ShootEvent) {
                 $.post({
-                    url: types_1.Authentication.url + "/databaseLink/shootevent/",
+                    url: authenticationFunctions_1.Authentication.url + "/databaseLink/shootevent/",
                     data: {
-                        authorization: types_1.Authentication.authenticationToken,
+                        authorization: authenticationFunctions_1.Authentication.authenticationToken,
                         content: cPEContent
                     },
                     success: function () { sendEventlistInOrder(index + 1); },
@@ -204,7 +216,7 @@ var Saving;
                 });
             }
             else {
-                types_1.GameState.newEvents = [];
+                gameState_1.GameState.newEvents = [];
             }
         }
     }
@@ -212,16 +224,16 @@ var Saving;
     function saveFields() {
         $(function () {
             $.ajaxSetup({
-                headers: { "X-CSRFToken": types_1.Authentication.currentCSRFToken } // getCookie("csrftoken")
+                headers: { "X-CSRFToken": authenticationFunctions_1.Authentication.currentCSRFToken } // getCookie("csrftoken")
             });
         });
-        let dataToServerString = JSON.stringify(types_1.Controls.changedFields.map(changedField => {
+        let dataToServerString = JSON.stringify(controlVariables_1.Controls.changedFields.map(changedField => {
             return { 'type': changedField.type, 'x': changedField.coordinates[0], 'y': changedField.coordinates[1] };
         }));
         $.post({
-            url: types_1.Authentication.url + "/databaseLink/savefielddata/",
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/savefielddata/",
             data: {
-                authorization: types_1.Authentication.authenticationToken,
+                authorization: authenticationFunctions_1.Authentication.authenticationToken,
                 map: dataToServerString
             },
             statusCode: {
@@ -240,23 +252,23 @@ var Saving;
     Saving.saveFields = saveFields;
     // probably deprecated
     function sendAllPreparedEvents() {
-        for (let i = 0; i < types_1.GameState.newEvents.length; i++) {
-            let cPE = types_1.GameState.newEvents[i];
+        for (let i = 0; i < gameState_1.GameState.newEvents.length; i++) {
+            let cPE = gameState_1.GameState.newEvents[i];
             let cPEContent = cPE.asStringifiedJSON();
             sendNewEvent(cPE.typeAsString(), cPEContent);
         }
     }
     Saving.sendAllPreparedEvents = sendAllPreparedEvents;
     function saveRivers() {
-        let dataToServerString = JSON.stringify(types_1.GameState.rivers.map(river => {
+        let dataToServerString = JSON.stringify(gameState_1.GameState.rivers.map(river => {
             return { 'firstX:': river.rightBank[0], 'firstY:': river.rightBank[1],
                 'secondX:': river.leftBank[0], 'secondY:': river.leftBank[1] };
         }));
         $.post({
-            url: types_1.Authentication.url + "/databaseLink/saveriverdata/",
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/saveriverdata/",
             data: {
                 river: dataToServerString,
-                authorization: types_1.Authentication.authenticationToken
+                authorization: authenticationFunctions_1.Authentication.authenticationToken
             },
             statusCode: {
                 200: function () {
@@ -273,14 +285,14 @@ var Saving;
     }
     Saving.saveRivers = saveRivers;
     function saveBuildings() {
-        let dataToServerString = JSON.stringify(types_1.Controls.changedBuildings.map(changedBuilding => {
+        let dataToServerString = JSON.stringify(controlVariables_1.Controls.changedBuildings.map(changedBuilding => {
             return { 'added/changed': changedBuilding[0], 'building': changedBuilding[1].buildingAsJSON() };
         }));
         $.post({
-            url: types_1.Authentication.url + "/databaseLink/savebuildingdata/",
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/savebuildingdata/",
             data: {
                 buildings: dataToServerString,
-                authorization: types_1.Authentication.authenticationToken
+                authorization: authenticationFunctions_1.Authentication.authenticationToken
             },
             statusCode: {
                 200: function () {
@@ -297,27 +309,27 @@ var Saving;
     }
     Saving.saveBuildings = saveBuildings;
     function saveArmies() {
-        let sensibleArmyList = types_1.GameState.armies.map(elem => {
+        let sensibleArmyList = gameState_1.GameState.armies.map(elem => {
             return {
                 armyId: elem.getErkenfaraID(),
                 count: elem.getTroopCount(),
                 leaders: elem.getOfficerCount(),
                 lkp: elem.getLightCatapultCount(),
                 skp: elem.getHeavyCatapultCount(),
-                mounts: (elem instanceof types_1.FootArmy) ? elem.getMountCount() : 0,
+                mounts: (elem instanceof footArmy_1.FootArmy) ? elem.getMountCount() : 0,
                 x: elem.getPosition()[0],
                 y: elem.getPosition()[1],
                 owner: elem.owner.tag,
                 movementPoints: elem.getMovePoints(),
                 heightPoints: elem.getHeightPoints(),
-                isLoadedIn: (elem instanceof types_1.LandArmy) ? elem.isTransported() : false
+                isLoadedIn: (elem instanceof landArmy_1.LandArmy) ? elem.isTransported() : false
             };
         });
         $.post({
-            url: types_1.Authentication.url + "/databaseLink/savearmydata/",
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/savearmydata/",
             data: {
                 armies: JSON.stringify(sensibleArmyList),
-                authorization: types_1.Authentication.authenticationToken
+                authorization: authenticationFunctions_1.Authentication.authenticationToken
             },
             statusCode: {
                 200: function () {
@@ -335,9 +347,9 @@ var Saving;
     Saving.saveArmies = saveArmies;
     function saveFactionsTerritories() {
         $.post({
-            url: types_1.Authentication.url + "/databaseLink/saveborderdata/",
-            data: { borders: JSON.stringify(types_1.GameState.realms.map(realm => { return { 'tag': realm.tag, 'land': realm.getTerritoryCoordinates() }; })),
-                authorization: types_1.Authentication.authenticationToken },
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/saveborderdata/",
+            data: { borders: JSON.stringify(gameState_1.GameState.realms.map(realm => { return { 'tag': realm.tag, 'land': realm.getTerritoryCoordinates() }; })),
+                authorization: authenticationFunctions_1.Authentication.authenticationToken },
             statusCode: {
                 200: function () {
                     console.log("Successfully saved borders.");
@@ -354,9 +366,9 @@ var Saving;
     Saving.saveFactionsTerritories = saveFactionsTerritories;
     function sendDeleteEvent(eventId, eventType) {
         $.post({
-            url: types_1.Authentication.url + "/databaseLink/deleteevent/",
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/deleteevent/",
             data: {
-                authorization: types_1.Authentication.authenticationToken,
+                authorization: authenticationFunctions_1.Authentication.authenticationToken,
                 eventId: eventId,
                 eventType: eventType
             },
@@ -373,9 +385,9 @@ var Saving;
     Saving.sendDeleteEvent = sendDeleteEvent;
     function sendCheckEvent(eventId, eventType) {
         $.post({
-            url: types_1.Authentication.url + "/databaseLink/checkevent/",
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/checkevent/",
             data: {
-                authorization: types_1.Authentication.authenticationToken,
+                authorization: authenticationFunctions_1.Authentication.authenticationToken,
                 eventId: eventId,
                 eventType: eventType
             },
@@ -392,9 +404,9 @@ var Saving;
     Saving.sendCheckEvent = sendCheckEvent;
     function sendNewEvent(type, content) {
         $.post({
-            url: types_1.Authentication.url + "/databaseLink/" + type + "event/",
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/" + type + "event/",
             data: {
-                authorization: types_1.Authentication.authenticationToken,
+                authorization: authenticationFunctions_1.Authentication.authenticationToken,
                 content: content
             },
             statusCode: {
@@ -426,11 +438,11 @@ var Saving;
     Saving.sendNewEvent = sendNewEvent;
     function sendNextTurn() {
         $.post({
-            url: types_1.Authentication.url + "/databaseLink/nextturn/",
-            data: { authorization: types_1.Authentication.authenticationToken },
+            url: authenticationFunctions_1.Authentication.url + "/databaseLink/nextturn/",
+            data: { authorization: authenticationFunctions_1.Authentication.authenticationToken },
             success: (data) => {
-                types_1.GameState.currentTurn = data;
-                types_1.Drawing.writeTurnNumber();
+                gameState_1.GameState.currentTurn = data;
+                drawingFunctions_1.Drawing.writeTurnNumber();
             },
             dataType: "json",
             statusCode: {
@@ -444,9 +456,9 @@ var Saving;
     Saving.sendNextTurn = sendNextTurn;
     // TODO: If we have multiple "clean-up functions" like this, they should have their own file/folder.
     function untagHitArmys() {
-        for (let i = 0; i < types_1.GameState.armies.length; i++) {
-            if (types_1.GameState.armies[i].owner.tag === types_1.GameState.login || types_1.GameState.login === "sl") {
-                types_1.GameState.armies[i].wasShotAt = false;
+        for (let i = 0; i < gameState_1.GameState.armies.length; i++) {
+            if (gameState_1.GameState.armies[i].owner.tag === gameState_1.GameState.login || gameState_1.GameState.login === "sl") {
+                gameState_1.GameState.armies[i].wasShotAt = false;
             }
         }
     }

@@ -14,8 +14,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {Army, BattleHandler, FootArmy, RiderArmy, Fleet, 
-    BattleResult, Result} from "../types";
+import {Army} from "../armies/army";
+import {BattleHandler} from "../armies/battleHandler";
+import {FootArmy} from "../armies/footArmy";
+import {RiderArmy} from "../armies/riderArmy";
+import {Fleet} from "../armies/fleet";
+import {BattleResult, Result} from "../armies/battleResult";
 
 export class BattleBox {
     private self: HTMLDivElement|undefined;
@@ -64,56 +68,40 @@ export class BattleBox {
     moveToAttack(i: number): (() => void) {
         let ctx = this;
         return function () {
-            if(ctx.battleHandler != undefined) {
-                let t = ctx.battleHandler.unsortedArmies.splice(i, 1);
-                ctx.battleHandler.attackerArmies.push(t[0]);
-                ctx.updateTroopCounts();
-                ctx.updateDisplay();
-            } else {
-                throw new Error("BattleHandler is not initialized before being used.");
-            }
+            let t = ctx.battleHandler.unsortedArmies.splice(i, 1);
+            ctx.battleHandler.attackerArmies.push(t[0]);
+            ctx.updateTroopCounts();
+            ctx.updateDisplay();
         }
     }
 
     moveToDefense(i: number): (() => void) {
         let ctx = this;
         return function () {
-            if(ctx.battleHandler != undefined) {
-                let t = ctx.battleHandler.unsortedArmies.splice(i, 1);
-                ctx.battleHandler.defenderArmies.push(t[0]);
-                ctx.updateTroopCounts();
-                ctx.updateDisplay();
-            } else {
-                throw new Error("BattleHandler is not initialized before being used.");
-            }
+            let t = ctx.battleHandler.unsortedArmies.splice(i, 1);
+            ctx.battleHandler.defenderArmies.push(t[0]);
+            ctx.updateTroopCounts();
+            ctx.updateDisplay();
         }
     }
 
     removeFromDefense(i: number): (() => void) {
         let ctx = this;
         return function () {
-            if(ctx.battleHandler != undefined) {
-                let t = ctx.battleHandler.defenderArmies.splice(i, 1);
-                ctx.battleHandler.unsortedArmies.push(t[0]);
-                ctx.updateTroopCounts();
-                ctx.updateDisplay();
-            } else {
-                throw new Error("BattleHandler is not initialized before being used.");
-            }
+            let t = ctx.battleHandler.defenderArmies.splice(i, 1);
+            ctx.battleHandler.unsortedArmies.push(t[0]);
+            ctx.updateTroopCounts();
+            ctx.updateDisplay();
         }
     }
 
     removeFromAttack(i: number): (() => void) {
         let ctx = this;
         return function () {
-            if(ctx.battleHandler != undefined) {
-                let t = ctx.battleHandler.attackerArmies.splice(i, 1);
-                ctx.battleHandler.unsortedArmies.push(t[0]);
-                ctx.updateTroopCounts();
-                ctx.updateDisplay();
-            } else {
-                throw new Error("BattleHandler is not initialized before being used.");
-            }
+            let t = ctx.battleHandler.attackerArmies.splice(i, 1);
+            ctx.battleHandler.unsortedArmies.push(t[0]);
+            ctx.updateTroopCounts();
+            ctx.updateDisplay();
         }
     }
 
@@ -141,72 +129,64 @@ export class BattleBox {
         this.defenseGuardShips = 0;
         let ctx = this;
 
-        if(this.battleHandler != undefined) {
-            this.battleHandler.attackerArmies.forEach(function (item) {
-                if (item instanceof FootArmy) {//footman army
-                    if (item.isGuard) {
-                        ctx.attackGuardSoldiers += item.getTroopCount();
-                    } else {
-                        ctx.attackSoldiers += item.getTroopCount();
-                    }
-                } else if (item instanceof RiderArmy) {//rider army
-                    if (item.isGuard) {
-                        ctx.attackGuardRiders += item.getTroopCount();
-                    } else {
-                        ctx.attackRiders += item.getTroopCount();
-                    }
-                } else if (item instanceof Fleet) {//navy
-                    if (item.isGuard) {
-                        ctx.attackGuardShips += item.getTroopCount();
-                    } else {
-                        ctx.attackShips += item.getTroopCount();
-                    }
-                    ctx.attackLightWarships += item.getLightCatapultCount();
-                    ctx.attackHeavyWarships += item.getHeavyCatapultCount();
+        this.battleHandler.attackerArmies.forEach(function (item) {
+            if (item instanceof FootArmy) {//footman army
+                if (item.isGuard) {
+                    ctx.attackGuardSoldiers += item.getTroopCount();
+                } else {
+                    ctx.attackSoldiers += item.getTroopCount();
                 }
-                ctx.attackOfficers += (item as Army).getOfficerCount();
-            });
-            this.battleHandler.defenderArmies.forEach(function (item) {
-                if (item instanceof FootArmy) {//footman army
-                    if (item.isGuard) {
-                        ctx.defenseGuardSoldiers += item.getTroopCount();
-                    } else {
-                        ctx.defenseSoldiers += item.getTroopCount();
-                    }
-                } else if (item instanceof RiderArmy) {//rider army
-                    if (item.isGuard) {
-                        ctx.defenseGuardRiders += item.getTroopCount();
-                    } else {
-                        ctx.defenseRiders += item.getTroopCount();
-                    }
-                } else if (item instanceof Fleet) {//navy
-                    if (item.isGuard) {
-                        ctx.defenseGuardShips += item.getTroopCount();
-                    } else {
-                        ctx.defenseShips += item.getTroopCount();
-                    }
-                    ctx.defenseLightWarships += item.getLightCatapultCount();
-                    ctx.defenseHeavyWarships += item.getHeavyCatapultCount();
+            } else if (item instanceof RiderArmy) {//rider army
+                if (item.isGuard) {
+                    ctx.attackGuardRiders += item.getTroopCount();
+                } else {
+                    ctx.attackRiders += item.getTroopCount();
                 }
-                ctx.defenseOfficers += (item as Army).getOfficerCount();
-            });
-        } else {
-            throw new Error("BattleHandler is not initialized before being used.");
-        }
+            } else if (item instanceof Fleet) {//navy
+                if (item.isGuard) {
+                    ctx.attackGuardShips += item.getTroopCount();
+                } else {
+                    ctx.attackShips += item.getTroopCount();
+                }
+                ctx.attackLightWarships += item.getLightCatapultCount();
+                ctx.attackHeavyWarships += item.getHeavyCatapultCount();
+            }
+            ctx.attackOfficers += (item as Army).getOfficerCount();
+        });
+        this.battleHandler.defenderArmies.forEach(function (item) {
+            if (item instanceof FootArmy) {//footman army
+                if (item.isGuard) {
+                    ctx.defenseGuardSoldiers += item.getTroopCount();
+                } else {
+                    ctx.defenseSoldiers += item.getTroopCount();
+                }
+            } else if (item instanceof RiderArmy) {//rider army
+                if (item.isGuard) {
+                    ctx.defenseGuardRiders += item.getTroopCount();
+                } else {
+                    ctx.defenseRiders += item.getTroopCount();
+                }
+            } else if (item instanceof Fleet) {//navy
+                if (item.isGuard) {
+                    ctx.defenseGuardShips += item.getTroopCount();
+                } else {
+                    ctx.defenseShips += item.getTroopCount();
+                }
+                ctx.defenseLightWarships += item.getLightCatapultCount();
+                ctx.defenseHeavyWarships += item.getHeavyCatapultCount();
+            }
+            ctx.defenseOfficers += (item as Army).getOfficerCount();
+        });
     }
 
     updateDisplay(): void {
         //enable / disable the battle button
-        if(this.battleHandler != undefined) {
-            if (this.battleHandler.attackerArmies.length === 0 || this.battleHandler.defenderArmies.length === 0) {
-                this.getBattleButton().disabled = true;
-                this.getBattleButton().style.cursor = "not-allowed";
-            } else {
-                this.getBattleButton().disabled = false;
-                this.getBattleButton().style.cursor = "initial";
-            }
+        if (this.battleHandler.attackerArmies.length === 0 || this.battleHandler.defenderArmies.length === 0) {
+            this.getBattleButton().disabled = true;
+            this.getBattleButton().style.cursor = "not-allowed";
         } else {
-            throw new Error("BattleHandler is not initialized before being used.");
+            this.getBattleButton().disabled = false;
+            this.getBattleButton().style.cursor = "initial";
         }
 
         this.updateArmyLists();
@@ -219,26 +199,22 @@ export class BattleBox {
     private updateArmyLists(): void {
         //fill the sortable lists of armies
         this.getAttackArmiesBox().innerHTML = "";
-        if(this.battleHandler != undefined) {
-            this.battleHandler.attackerArmies.forEach((item, index) => {
-                let listItem = document.createElement("DIV");
-                this.getAttackArmiesBox().appendChild(listItem);
-                listItem.classList.add("armyListItem");
+        this.battleHandler.attackerArmies.forEach((item, index) => {
+            let listItem = document.createElement("DIV");
+            this.getAttackArmiesBox().appendChild(listItem);
+            listItem.classList.add("armyListItem");
 
-                let div = document.createElement("DIV");
-                div.classList.add("center");
-                div.innerHTML = item.owner + " " + item.getErkenfaraID();
-                listItem.appendChild(div);
+            let div = document.createElement("DIV");
+            div.classList.add("center");
+            div.innerHTML = item.owner + " " + item.getErkenfaraID();
+            listItem.appendChild(div);
 
-                let moveBtn = document.createElement("BUTTON");
-                moveBtn.classList.add("armyListButton");
-                moveBtn.classList.add("moveRightButton");
-                moveBtn.onclick = this.removeFromAttack(index);
-                listItem.appendChild(moveBtn);
-            }, this);
-        } else {
-            throw new Error("BattleHandler is not initialized before being used.");
-        }
+            let moveBtn = document.createElement("BUTTON");
+            moveBtn.classList.add("armyListButton");
+            moveBtn.classList.add("moveRightButton");
+            moveBtn.onclick = this.removeFromAttack(index);
+            listItem.appendChild(moveBtn);
+        }, this);
 
         this.getUnsortedArmiesBox().innerHTML = "";
         this.battleHandler.unsortedArmies.forEach((item, index) => {
@@ -290,43 +266,27 @@ export class BattleBox {
         if (this.attackShips + this.attackLightWarships + this.attackHeavyWarships + this.attackGuardShips > 0 ||
             this.defenseShips + this.defenseLightWarships + this.defenseHeavyWarships + this.defenseGuardShips > 0) {
             //naval combat
-            if (this.attackShips > 0) { this.getAttackBattleSide().innerHTML +=
-                "<p>Shiffe: " + this.attackShips + "</p>"; }
-            if (this.attackGuardShips > 0) { this.getAttackBattleSide().innerHTML +=
-                "<p>Gardeschiffe: " + this.attackGuardShips + "</p>"; }
+            if (this.attackShips > 0) { this.getAttackBattleSide().innerHTML += "<p>Shiffe: " + this.attackShips + "</p>"; }
+            if (this.attackGuardShips > 0) { this.getAttackBattleSide().innerHTML += "<p>Gardeschiffe: " + this.attackGuardShips + "</p>"; }
 
-            if (this.defenseShips > 0) { this.getDefenseBattleSide().innerHTML +=
-                "<p>Shiffe: " + this.defenseShips + "</p>"; }
-            if (this.defenseGuardShips > 0) { this.getDefenseBattleSide().innerHTML +=
-                "<p>Gardeschiffe: " + this.defenseGuardShips + "</p>"; }
-            if (this.defenseLightWarships > 0) { this.getDefenseBattleSide().innerHTML +=
-                "<p>Leichte Kreigsschiffe: " + this.defenseLightWarships + "</p>"; }
-            if (this.defenseHeavyWarships > 0) { this.getDefenseBattleSide().innerHTML +=
-                "<p>Schwere Kriegsschiffe: " + this.defenseHeavyWarships + "</p>"; }
+            if (this.defenseShips > 0) { this.getDefenseBattleSide().innerHTML += "<p>Shiffe: " + this.defenseShips + "</p>"; }
+            if (this.defenseGuardShips > 0) { this.getDefenseBattleSide().innerHTML += "<p>Gardeschiffe: " + this.defenseGuardShips + "</p>"; }
+            if (this.defenseLightWarships > 0) { this.getDefenseBattleSide().innerHTML += "<p>Leichte Kreigsschiffe: " + this.defenseLightWarships + "</p>"; }
+            if (this.defenseHeavyWarships > 0) { this.getDefenseBattleSide().innerHTML += "<p>Schwere Kriegsschiffe: " + this.defenseHeavyWarships + "</p>"; }
         } else {
             //land combat
-            if (this.attackSoldiers > 0) { this.getAttackBattleSide().innerHTML +=
-                "<p>Soldaten: " + this.attackSoldiers + "</p>"; }
-            if (this.attackRiders > 0) { this.getAttackBattleSide().innerHTML +=
-                "<p>Reiter: " + this.attackRiders + "</p>"; }
-            if (this.attackGuardSoldiers > 0) { this.getAttackBattleSide().innerHTML +=
-                "<p>Gardesoldaten: " + this.attackGuardSoldiers + "</p>"; }
-            if (this.attackGuardRiders > 0) { this.getAttackBattleSide().innerHTML +=
-                "<p>Gardereiter: " + this.attackGuardRiders + "</p>"; }
+            if (this.attackSoldiers > 0) { this.getAttackBattleSide().innerHTML += "<p>Soldaten: " + this.attackSoldiers + "</p>"; }
+            if (this.attackRiders > 0) { this.getAttackBattleSide().innerHTML += "<p>Reiter: " + this.attackRiders + "</p>"; }
+            if (this.attackGuardSoldiers > 0) { this.getAttackBattleSide().innerHTML += "<p>Gardesoldaten: " + this.attackGuardSoldiers + "</p>"; }
+            if (this.attackGuardRiders > 0) { this.getAttackBattleSide().innerHTML += "<p>Gardereiter: " + this.attackGuardRiders + "</p>"; }
 
-            if (this.defenseSoldiers > 0) { this.getDefenseBattleSide().innerHTML +=
-                "<p>Soldaten: " + this.defenseSoldiers + "</p>"; }
-            if (this.defenseRiders > 0) { this.getDefenseBattleSide().innerHTML +=
-                "<p>Reiter: " + this.defenseRiders + "</p>"; }
-            if (this.defenseGuardSoldiers > 0) { this.getDefenseBattleSide().innerHTML +=
-                "<p>Gardesoldaten: " + this.defenseGuardSoldiers + "</p>"; }
-            if (this.defenseGuardRiders > 0) { this.getDefenseBattleSide().innerHTML +=
-                "<p>Gardereiter: " + this.defenseGuardRiders + "</p>"; }
+            if (this.defenseSoldiers > 0) { this.getDefenseBattleSide().innerHTML += "<p>Soldaten: " + this.defenseSoldiers + "</p>"; }
+            if (this.defenseRiders > 0) { this.getDefenseBattleSide().innerHTML += "<p>Reiter: " + this.defenseRiders + "</p>"; }
+            if (this.defenseGuardSoldiers > 0) { this.getDefenseBattleSide().innerHTML += "<p>Gardesoldaten: " + this.defenseGuardSoldiers + "</p>"; }
+            if (this.defenseGuardRiders > 0) { this.getDefenseBattleSide().innerHTML += "<p>Gardereiter: " + this.defenseGuardRiders + "</p>"; }
         }
-        if (this.attackOfficers > 0) { this.getAttackBattleSide().innerHTML +=
-            "<p>Heerführer: " + this.attackOfficers + "</p>"; }
-        if (this.defenseOfficers > 0) { this.getDefenseBattleSide().innerHTML +=
-            "<p>Heerführer: " + this.defenseOfficers + "</p>"; }
+        if (this.attackOfficers > 0) { this.getAttackBattleSide().innerHTML += "<p>Heerführer: " + this.attackOfficers + "</p>"; }
+        if (this.defenseOfficers > 0) { this.getDefenseBattleSide().innerHTML += "<p>Heerführer: " + this.defenseOfficers + "</p>"; }
 
         this.getAttackBattleSide().innerHTML += "<p>Würfelwurf: " + this.getAttackDiceRoll().value + "</p>";
         this.getDefenseBattleSide().innerHTML += "<p>Würfelwurf: " + this.getDefenseDiceRoll().value + "</p>";
@@ -334,85 +294,68 @@ export class BattleBox {
 
     private updateResultPreview(): void {
         //Instant result preview (remove if not desired)
-        let battleResult: BattleResult = new BattleResult(Result.TIE, [0], [0]);
-        if(this.battleHandler != undefined) {
-            let battleResult: BattleResult = this.battleHandler.calculateResult(this.battleHandler.attackerArmies.map((val) => (val)),
-                this.battleHandler.defenderArmies.map((val) => (val)), [], [], this.battleHandler.location,
-                parseInt(this.getAttackDiceRoll().value), parseInt(this.getDefenseDiceRoll().value));
-        } else {
-            throw new Error("BattleHandler is not initialized before being used.");
-        }
+        let battleResult: BattleResult = this.battleHandler.calculateResult(this.battleHandler.attackerArmies.map((val) => (val)),
+            this.battleHandler.defenderArmies.map((val) => (val)), [], [], this.battleHandler.location,
+            parseInt(this.getAttackDiceRoll().value), parseInt(this.getDefenseDiceRoll().value));
 
         let attackFootLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof FootArmy &&
-                !this.battleHandler.attackerArmies[index].isGuard)
+            if (this.battleHandler.attackerArmies[index] instanceof FootArmy && !this.battleHandler.attackerArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let attackCavLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof RiderArmy &&
-                !this.battleHandler.attackerArmies[index].isGuard)
+            if (this.battleHandler.attackerArmies[index] instanceof RiderArmy && !this.battleHandler.attackerArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let attackFleetLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof Fleet &&
-                !this.battleHandler.attackerArmies[index].isGuard)
+            if (this.battleHandler.attackerArmies[index] instanceof Fleet && !this.battleHandler.attackerArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let attackGuardFootLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof FootArmy &&
-                this.battleHandler.attackerArmies[index].isGuard)
+            if (this.battleHandler.attackerArmies[index] instanceof FootArmy && this.battleHandler.attackerArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let attackGuardCavLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof RiderArmy &&
-                this.battleHandler.attackerArmies[index].isGuard)
+            if (this.battleHandler.attackerArmies[index] instanceof RiderArmy && this.battleHandler.attackerArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let attackGuardFleetLosses = battleResult.attackerLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.attackerArmies[index] instanceof Fleet &&
-                this.battleHandler.attackerArmies[index].isGuard)
+            if (this.battleHandler.attackerArmies[index] instanceof Fleet && this.battleHandler.attackerArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
 
         let defenseFootLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof FootArmy &&
-                !this.battleHandler.defenderArmies[index].isGuard)
+            if (this.battleHandler.defenderArmies[index] instanceof FootArmy && !this.battleHandler.defenderArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let defenseCavLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof RiderArmy &&
-                !this.battleHandler.defenderArmies[index].isGuard)
+            if (this.battleHandler.defenderArmies[index] instanceof RiderArmy && !this.battleHandler.defenderArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let defenseFleetLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof Fleet &&
-                !this.battleHandler.defenderArmies[index].isGuard)
+            if (this.battleHandler.defenderArmies[index] instanceof Fleet && !this.battleHandler.defenderArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let defenseGuardFootLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof FootArmy &&
-                this.battleHandler.defenderArmies[index].isGuard)
+            if (this.battleHandler.defenderArmies[index] instanceof FootArmy && this.battleHandler.defenderArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let defenseGuardCavLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof RiderArmy &&
-                this.battleHandler.defenderArmies[index].isGuard)
+            if (this.battleHandler.defenderArmies[index] instanceof RiderArmy && this.battleHandler.defenderArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);
         let defenseGuardFleetLosses = battleResult.defenderLosses.reduce((total, current, index) => {
-            if (this.battleHandler != undefined && this.battleHandler.defenderArmies[index] instanceof Fleet &&
-                this.battleHandler.defenderArmies[index].isGuard)
+            if (this.battleHandler.defenderArmies[index] instanceof Fleet && this.battleHandler.defenderArmies[index].isGuard)
             { return total + Math.round(current); }
             else { return total; }
         }, 0);

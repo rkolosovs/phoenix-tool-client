@@ -14,7 +14,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {GUI, BoxVisibility, Loading, Drawing, GameState} from "../types";
+import {GUI} from "../gui/gui";
+import {BoxVisibility} from "../gui/boxVisibilty";
+import {Loading} from "./loadingDataFunctions";
+import {Drawing} from "../gui/drawingFunctions";
+import {GameState} from "../gameState";
 
 export namespace Authentication{
     import show = BoxVisibility.show;

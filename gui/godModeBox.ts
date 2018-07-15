@@ -14,7 +14,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {BoxVisibility, Saving, GodFunctions} from "../types";
+import {BoxVisibility} from "./boxVisibilty";
+import {Saving} from "../serverInteraction/savingFunctions";
+import { GodFunctions } from "../godmode/godModeFunctions";
 
 export class GodModeBox{
     private self: HTMLDivElement|undefined;

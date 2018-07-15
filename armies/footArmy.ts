@@ -14,9 +14,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {HexFunction, FieldType, Realm, LandArmy, GameState, Fleet, 
-    Constants, RiderArmy, Controls, BoxVisibility, Drawing, ArmyFunctions, 
-    MountEvent, EventStatus, Army, ShootingCondition} from "../types";
+import {HexFunction} from "../libraries/hexFunctions";
+import {FieldType} from "../map/field";
+import {Realm} from "../realm";
+import {LandArmy} from "./landArmy";
+import {GameState} from "../gameState";
+import {Fleet} from "./fleet";
+import {Constants} from "../constants";
 import FOOTMAN_RP = Constants.FOOTMAN_RP;
 import LIGHT_CATA_RP = Constants.LIGHT_CATA_RP;
 import HEAVY_CATA_RP = Constants.HEAVY_CATA_RP;
@@ -26,6 +30,15 @@ import MOUNT_BP = Constants.MOUNT_BP;
 import LIGHT_CATA_BP = Constants.LIGHT_CATA_BP;
 import HEAVY_CATA_BP = Constants.HEAVY_CATA_BP;
 import OFFICER_RP = Constants.OFFICER_RP;
+import {RiderArmy} from "./riderArmy";
+import {Controls} from "../controls/controlVariables";
+import {BoxVisibility} from "../gui/boxVisibilty";
+import {Drawing} from "../gui/drawingFunctions";
+import {ArmyFunctions} from "../libraries/armyFunctions";
+import { MountEvent } from "../events/mountEvent";
+import { EventStatus } from "../events/eventStatus";
+import {Army} from "./army";
+import {ShootingCondition} from "./shootingFunctions";
 
 export class FootArmy extends LandArmy{
     static readonly MAX_MOVE_POINTS = 9;

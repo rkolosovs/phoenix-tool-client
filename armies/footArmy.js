@@ -15,17 +15,27 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
-var FOOTMAN_RP = types_1.Constants.FOOTMAN_RP;
-var LIGHT_CATA_RP = types_1.Constants.LIGHT_CATA_RP;
-var HEAVY_CATA_RP = types_1.Constants.HEAVY_CATA_RP;
-var MOUNT_RP = types_1.Constants.MOUNT_RP;
-var FOOTMAN_BP = types_1.Constants.FOOTMAN_BP;
-var MOUNT_BP = types_1.Constants.MOUNT_BP;
-var LIGHT_CATA_BP = types_1.Constants.LIGHT_CATA_BP;
-var HEAVY_CATA_BP = types_1.Constants.HEAVY_CATA_BP;
-var OFFICER_RP = types_1.Constants.OFFICER_RP;
-class FootArmy extends types_1.LandArmy {
+const hexFunctions_1 = require("../libraries/hexFunctions");
+const landArmy_1 = require("./landArmy");
+const gameState_1 = require("../gameState");
+const fleet_1 = require("./fleet");
+const constants_1 = require("../constants");
+var FOOTMAN_RP = constants_1.Constants.FOOTMAN_RP;
+var LIGHT_CATA_RP = constants_1.Constants.LIGHT_CATA_RP;
+var HEAVY_CATA_RP = constants_1.Constants.HEAVY_CATA_RP;
+var MOUNT_RP = constants_1.Constants.MOUNT_RP;
+var FOOTMAN_BP = constants_1.Constants.FOOTMAN_BP;
+var MOUNT_BP = constants_1.Constants.MOUNT_BP;
+var LIGHT_CATA_BP = constants_1.Constants.LIGHT_CATA_BP;
+var HEAVY_CATA_BP = constants_1.Constants.HEAVY_CATA_BP;
+var OFFICER_RP = constants_1.Constants.OFFICER_RP;
+const riderArmy_1 = require("./riderArmy");
+const controlVariables_1 = require("../controls/controlVariables");
+const boxVisibilty_1 = require("../gui/boxVisibilty");
+const drawingFunctions_1 = require("../gui/drawingFunctions");
+const armyFunctions_1 = require("../libraries/armyFunctions");
+const mountEvent_1 = require("../events/mountEvent");
+class FootArmy extends landArmy_1.LandArmy {
     constructor(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, mountCount, position, movePoints, heightPoints, isGuard) {
         if (isGuard != undefined) {
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position, movePoints, heightPoints, isGuard);
@@ -53,7 +63,7 @@ class FootArmy extends types_1.LandArmy {
         }
     }
     computeMoveCost(thereIsAStreet, thereIsAHarbor, thereIsARiver, thereIsABridge, rightOfPassage, target) {
-        switch (types_1.HexFunction.fieldType(target)) {
+        switch (hexFunctions_1.HexFunction.fieldType(target)) {
             case 0 /* SHALLOWS */:
             case 1 /* DEEPSEA */: //watter
                 //already embarked
@@ -61,7 +71,7 @@ class FootArmy extends types_1.LandArmy {
                     throw new Error("You are already embarked on a Fleet.");
                     // there are no viable fleets on destination
                 }
-                else if (types_1.GameState.armies.filter(army => army instanceof types_1.Fleet && army.getPosition()[0] === target[0] &&
+                else if (gameState_1.GameState.armies.filter(army => army instanceof fleet_1.Fleet && army.getPosition()[0] === target[0] &&
                     army.getPosition()[1] === target[1] && army.owner === this.owner && army.canLoad(this)).length === 0) {
                     throw new Error("You can't walk on Water.");
                     // at least one fleet on destination
@@ -385,7 +395,7 @@ class FootArmy extends types_1.LandArmy {
         if (heavyCatapultsToSplit > this.heavyCatapultCount) {
             throw new Error("Not enough heavy catapults.");
         }
-        types_1.GameState.armies.push(new FootArmy(newArmyId, this.owner, troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, mountsToSplit, this.getPosition(), this.movePoints, this.heightPoints));
+        gameState_1.GameState.armies.push(new FootArmy(newArmyId, this.owner, troopsToSplit, leadersToSplit, lightCatapultsToSplit, heavyCatapultsToSplit, mountsToSplit, this.getPosition(), this.movePoints, this.heightPoints));
         this.troopCount -= troopsToSplit;
         this.officerCount -= leadersToSplit;
         this.mountCount -= mountsToSplit;
@@ -407,11 +417,11 @@ class FootArmy extends types_1.LandArmy {
         if (fromArmy.getHeightPoints() < this.getHeightPoints()) {
             this.setHeightPoints(fromArmy.getHeightPoints());
         }
-        types_1.ArmyFunctions.deleteArmy(fromArmy);
+        armyFunctions_1.ArmyFunctions.deleteArmy(fromArmy);
     }
     getLightCatapultDamage(diceRolls, conditions) {
         if (conditions === 6 /* LightCatapults */) {
-            return diceRolls.map(roll => types_1.Constants.LIGHT_CATA_DAMAGE[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => constants_1.Constants.LIGHT_CATA_DAMAGE[roll]).reduce((total, current) => total + current, 0);
         }
         else {
             return 0;
@@ -419,16 +429,16 @@ class FootArmy extends types_1.LandArmy {
     }
     getHeavyCatapultDamage(diceRolls, conditions) {
         if (conditions === 1 /* Near */) {
-            return diceRolls.map(roll => types_1.Constants.HEAVY_CATA_DAMAGE_NEAR[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => constants_1.Constants.HEAVY_CATA_DAMAGE_NEAR[roll]).reduce((total, current) => total + current, 0);
         }
         else if (conditions === 3 /* High */) {
-            return diceRolls.map(roll => types_1.Constants.HEAVY_CATA_DAMAGE_HIGH[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => constants_1.Constants.HEAVY_CATA_DAMAGE_HIGH[roll]).reduce((total, current) => total + current, 0);
         }
         else if (conditions === 2 /* FarAndHigh */) {
-            return diceRolls.map(roll => types_1.Constants.HEAVY_CATA_DAMAGE_FARANDHIGH[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => constants_1.Constants.HEAVY_CATA_DAMAGE_FARANDHIGH[roll]).reduce((total, current) => total + current, 0);
         }
         else if (conditions === 0 /* Far */) {
-            return diceRolls.map(roll => types_1.Constants.HEAVY_CATA_DAMAGE_FAR[roll]).reduce((total, current) => total + current, 0);
+            return diceRolls.map(roll => constants_1.Constants.HEAVY_CATA_DAMAGE_FAR[roll]).reduce((total, current) => total + current, 0);
         }
         else {
             return 0;
@@ -438,7 +448,7 @@ class FootArmy extends types_1.LandArmy {
     mount(toMount, leadersToMount, newArmyId) {
         // generiere armyId falls keine vorhanden
         if (newArmyId == undefined) {
-            newArmyId = types_1.ArmyFunctions.generateArmyId(2, this.owner);
+            newArmyId = armyFunctions_1.ArmyFunctions.generateArmyId(2, this.owner);
         }
         // sitzen genug Truppen auf?
         if (toMount < 50) {
@@ -474,7 +484,7 @@ class FootArmy extends types_1.LandArmy {
         }
         else if (toMount === this.troopCount) {
             // neues Reiterheer mit generierter Id an selben Koordinaten
-            let newArmy = new types_1.RiderArmy(newArmyId, this.owner, toMount, this.officerCount, this.getPosition(), 0, this.heightPoints, this.isGuard);
+            let newArmy = new riderArmy_1.RiderArmy(newArmyId, this.owner, toMount, this.officerCount, this.getPosition(), 0, this.heightPoints, this.isGuard);
             if (this.movePoints !== this.getMaxMovePoints()) {
                 newArmy.setMovePoints(0);
             }
@@ -486,14 +496,14 @@ class FootArmy extends types_1.LandArmy {
                 window.alert("Da kein Fußheer mehr bestehen bleibt, wurden die Katapulte zerstört.");
             }
             // in GameState.armies einfügen und alte Armee löschen, ist dann automatisch armyIndex
-            types_1.GameState.armies.push(newArmy);
+            gameState_1.GameState.armies.push(newArmy);
             //in GameState.events pushen
-            let eventToPush = new types_1.MountEvent(types_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, [this.position[0], this.position[1]]);
-            types_1.GameState.newEvents.push(eventToPush);
-            types_1.ArmyFunctions.deleteArmy(this);
-            types_1.BoxVisibility.restoreInfoBox();
-            types_1.Drawing.drawStuff();
-            types_1.BoxVisibility.updateInfoBox();
+            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, [this.position[0], this.position[1]]);
+            gameState_1.GameState.newEvents.push(eventToPush);
+            armyFunctions_1.ArmyFunctions.deleteArmy(this);
+            boxVisibilty_1.BoxVisibility.restoreInfoBox();
+            drawingFunctions_1.Drawing.drawStuff();
+            boxVisibilty_1.BoxVisibility.updateInfoBox();
             return true;
         }
         else if (leadersToMount >= this.officerCount) {
@@ -506,7 +516,7 @@ class FootArmy extends types_1.LandArmy {
         }
         else {
             // neues Reiterheer mit generierter Id an selben Koordinaten
-            let newArmy = new types_1.RiderArmy(newArmyId, types_1.GameState.armies[types_1.Controls.selectedArmyIndex].owner, toMount, leadersToMount, this.getPosition(), 0, this.heightPoints, false);
+            let newArmy = new riderArmy_1.RiderArmy(newArmyId, gameState_1.GameState.armies[controlVariables_1.Controls.selectedArmyIndex].owner, toMount, leadersToMount, this.getPosition(), 0, this.heightPoints, false);
             if (this.movePoints !== this.getMaxMovePoints()) {
                 newArmy.setMovePoints(0);
             }
@@ -518,15 +528,15 @@ class FootArmy extends types_1.LandArmy {
             this.setOfficerCount(this.officerCount - leadersToMount);
             this.setMountCount(this.mountCount - toMount);
             // in GameState.armies einfügen
-            types_1.GameState.armies.push(newArmy);
+            gameState_1.GameState.armies.push(newArmy);
             //in GameState.events pushen
-            let eventToPush = new types_1.MountEvent(types_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, [this.position[0], this.position[1]]);
-            types_1.GameState.newEvents.push(eventToPush);
+            let eventToPush = new mountEvent_1.MountEvent(gameState_1.GameState.newEvents.length, 0 /* Checked */, this.getErkenfaraID(), newArmy.getErkenfaraID(), this.owner, toMount, leadersToMount, [this.position[0], this.position[1]]);
+            gameState_1.GameState.newEvents.push(eventToPush);
             // Controls.selectedArmyIndex zeigt auf neues Heer
-            types_1.Controls.selectedArmyIndex = types_1.GameState.armies.length - 1;
-            types_1.Drawing.drawStuff();
-            types_1.BoxVisibility.restoreInfoBox();
-            types_1.BoxVisibility.updateInfoBox();
+            controlVariables_1.Controls.selectedArmyIndex = gameState_1.GameState.armies.length - 1;
+            drawingFunctions_1.Drawing.drawStuff();
+            boxVisibilty_1.BoxVisibility.restoreInfoBox();
+            boxVisibilty_1.BoxVisibility.updateInfoBox();
             return true;
         }
     }

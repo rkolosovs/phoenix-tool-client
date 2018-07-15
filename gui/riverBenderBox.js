@@ -15,7 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 Object.defineProperty(exports, "__esModule", { value: true });
-const types_1 = require("../types");
+const godModeFunctions_1 = require("../godmode/godModeFunctions");
+const app_1 = require("../app");
 class RiverBenderBox {
     getSelf() {
         if (this.self == undefined) {
@@ -32,42 +33,42 @@ class RiverBenderBox {
     getAddRiverNW() {
         if (this.addRiverNW == undefined) {
             this.addRiverNW = document.getElementById("addRiverNW");
-            this.addRiverNW.onclick = function () { types_1.GodFunctions.addRiver(0 /* NW */); };
+            this.addRiverNW.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(0 /* NW */); };
         }
         return this.addRiverNW;
     }
     getAddRiverNE() {
         if (this.addRiverNE == undefined) {
             this.addRiverNE = document.getElementById("addRiverNE");
-            this.addRiverNE.onclick = function () { types_1.GodFunctions.addRiver(1 /* NE */); };
+            this.addRiverNE.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(1 /* NE */); };
         }
         return this.addRiverNE;
     }
     getAddRiverE() {
         if (this.addRiverE == undefined) {
             this.addRiverE = document.getElementById("addRiverE");
-            this.addRiverE.onclick = function () { types_1.GodFunctions.addRiver(2 /* E */); };
+            this.addRiverE.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(2 /* E */); };
         }
         return this.addRiverE;
     }
     getAddRiverSE() {
         if (this.addRiverSE == undefined) {
             this.addRiverSE = document.getElementById("addRiverSE");
-            this.addRiverSE.onclick = function () { types_1.GodFunctions.addRiver(3 /* SE */); };
+            this.addRiverSE.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(3 /* SE */); };
         }
         return this.addRiverSE;
     }
     getAddRiverSW() {
         if (this.addRiverSW == undefined) {
             this.addRiverSW = document.getElementById("addRiverSW");
-            this.addRiverSW.onclick = function () { types_1.GodFunctions.addRiver(4 /* SW */); };
+            this.addRiverSW.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(4 /* SW */); };
         }
         return this.addRiverSW;
     }
     getAddRiverW() {
         if (this.addRiverW == undefined) {
             this.addRiverW = document.getElementById("addRiverW");
-            this.addRiverW.onclick = function () { types_1.GodFunctions.addRiver(5 /* W */); };
+            this.addRiverW.onclick = function () { godModeFunctions_1.GodFunctions.addRiver(5 /* W */); };
         }
         return this.addRiverW;
     }
@@ -80,49 +81,49 @@ class RiverBenderBox {
     getRemoveRiverNW() {
         if (this.removeRiverNW == undefined) {
             this.removeRiverNW = document.getElementById("removeRiverNW");
-            this.removeRiverNW.onclick = function () { types_1.GodFunctions.removeRiver(0 /* NW */); };
+            this.removeRiverNW.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(0 /* NW */); };
         }
         return this.removeRiverNW;
     }
     getRemoveRiverNE() {
         if (this.removeRiverNE == undefined) {
             this.removeRiverNE = document.getElementById("removeRiverNE");
-            this.removeRiverNE.onclick = function () { types_1.GodFunctions.removeRiver(1 /* NE */); };
+            this.removeRiverNE.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(1 /* NE */); };
         }
         return this.removeRiverNE;
     }
     getRemoveRiverE() {
         if (this.removeRiverE == undefined) {
             this.removeRiverE = document.getElementById("removeRiverE");
-            this.removeRiverE.onclick = function () { types_1.GodFunctions.removeRiver(2 /* E */); };
+            this.removeRiverE.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(2 /* E */); };
         }
         return this.removeRiverE;
     }
     getRemoveRiverSE() {
         if (this.removeRiverSE == undefined) {
             this.removeRiverSE = document.getElementById("removeRiverSE");
-            this.removeRiverSE.onclick = function () { types_1.GodFunctions.removeRiver(3 /* SE */); };
+            this.removeRiverSE.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(3 /* SE */); };
         }
         return this.removeRiverSE;
     }
     getRemoveRiverSW() {
         if (this.removeRiverSW == undefined) {
             this.removeRiverSW = document.getElementById("removeRiverSW");
-            this.removeRiverSW.onclick = function () { types_1.GodFunctions.removeRiver(4 /* SW */); };
+            this.removeRiverSW.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(4 /* SW */); };
         }
         return this.removeRiverSW;
     }
     getRemoveRiverW() {
         if (this.removeRiverW == undefined) {
             this.removeRiverW = document.getElementById("removeRiverW");
-            this.removeRiverW.onclick = function () { types_1.GodFunctions.removeRiver(5 /* W */); };
+            this.removeRiverW.onclick = function () { godModeFunctions_1.GodFunctions.removeRiver(5 /* W */); };
         }
         return this.removeRiverW;
     }
     getSaveRivers() {
         if (this.saveRivers == undefined) {
             this.saveRivers = document.getElementById("SaveRivers");
-            this.saveRivers.onclick = function () { types_1.Saving.saveRivers(); };
+            this.saveRivers.onclick = function () { app_1.Saving.saveRivers(); };
         }
         return this.saveRivers;
     }

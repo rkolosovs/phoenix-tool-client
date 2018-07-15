@@ -203,7 +203,7 @@
 		<button id="unMount" class="fixedPrettyButton" onclick="activateUnMountBox()">Absitzen</button>
 		<button id="splitBtn" class="fixedPrettyButton" onclick="activateSplitbox()">Aufteilen</button>
 		<button id="shoot" class="fixedPrettyButton" onclick="toggleShootingMode()">Schie&szlig;en</button>
-		<button id="logoutBtn" class="fixedPrettyButton">Logout</button>
+		<button id="logoutBtn" class="fixedPrettyButton" onclick="Authentication.logoutFromServer()">Logout</button>
 	</div>
 
 	<div id="transmuteBox" class="prettyBox invisible">
@@ -365,7 +365,7 @@
 			<input id="heightPointsChangeInput"/>
 		</p>
 		<button id="changeArmyInfo" class="fixedPrettyButton invisible" onclick="GodFunctions.changeArmyInfo()">Apply changed Stats</button>
-		<button id="logoutBtnChange" class="fixedPrettyButton">Logout</button>
+		<button id="logoutBtnChange" class="fixedPrettyButton" onclick="Authentication.logoutFromServer()">Logout</button>
 	</div>
 
 	<div id="loginBox" class="prettyBox">
@@ -374,7 +374,7 @@
 		<label for="loginPassword">Passwort:</label> <input id="loginPassword"
 			type="password">
 		<p></p>
-		<button id="loginBtn" class="prettyButton">Login</button>
+		<button id="loginBtn" class="prettyButton" onclick="Authentication.loginToServer()">Login</button>
 	</div>
 
 	<div id="minimapBox" class="prettyBox">
@@ -669,7 +669,6 @@
 			buildings</button>
 	</div>
 
-	<script src="libraries/jquery-2.2.3.js"></script>
 	<script src="app.js"></script>
 </body>
 </html>
