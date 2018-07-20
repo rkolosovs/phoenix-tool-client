@@ -20,5 +20,6 @@ import {mouseUp} from "./controls/mouseFunctions";
 
 // initialize the tool gui
 window.addEventListener('resize', resizeCanvas, false);
-GUI.getMapCanvas();
+GUI.getMapCanvas(); // force canvas to be fetched and initialized
 document.addEventListener('mouseup', mouseUp, true );
+resizeCanvas();

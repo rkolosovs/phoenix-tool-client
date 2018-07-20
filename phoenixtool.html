@@ -21,7 +21,18 @@
     <link rel="stylesheet" href="phoenixtool.css">
 </head>
 <body oncontextmenu="return false;">
-    <canvas id="mapCanvas"></canvas>
+    <div id="content">
+        <canvas id="mapCanvas"></canvas>
+        <div id="windows">
+            <div id="loginWindow">
+                <label for="usernameInput">Name:</label>
+                <input id="usernameInput">
+                <label for="passwordInput">Passwort:</label>
+                <input id="passwordInput" type="password">
+                <button id="loginButton">Login</button>
+            </div>
+        </div>
+    </div>
 
     <script data-main="src/phoenixtool" src="require.js"></script>
 </body>

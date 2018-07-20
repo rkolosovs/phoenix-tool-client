@@ -18,6 +18,7 @@ import {mouseDown, mouseMove, mouseWheel} from "../controls/mouseFunctions";
 
 export class PhoenixCanvas{
     private element: HTMLCanvasElement;
+    private context: CanvasRenderingContext2D;
 
     constructor(id: string){
         this.element = document.getElementById(id) as HTMLCanvasElement;
@@ -26,13 +27,19 @@ export class PhoenixCanvas{
         this.element.addEventListener('wheel', mouseWheel, true );
     }
 
+    getContext():CanvasRenderingContext2D{
+        if(this.context == undefined){
+            this.context = this.element.getContext('2d') as CanvasRenderingContext2D;
+        }
+        return this.context;
+    }
+
     resize(): void{
         this.element.width = window.innerWidth;
         this.element.height = window.innerHeight;
     }
 
     clear(): void{
-        (this.element.getContext('2d') as CanvasRenderingContext2D).
-            clearRect(0, 0, this.element.width, this.element.height);
+        this.getContext().clearRect(0, 0, this.element.width, this.element.height);
     }
 }
