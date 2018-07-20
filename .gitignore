@@ -1,7 +1,10 @@
-.fuse_hidden0000471000000027
+# project files created by IDEs
 .gitignore~
 .idea/*
 .project
 .settings/*
-node_modules/*
-README.txt~
+
+# folders containing .ts files
+src/*.js
+src/controls/*.js
+src/gui/*.js
