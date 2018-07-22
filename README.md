@@ -19,7 +19,7 @@ The icons and graphics used in this program are licensed under the
 
 **BUILD**
 
-Build with a TS transpiler using the tsconfig.json config file.
+npm run build
 
 **RUN**
 
@@ -27,4 +27,7 @@ Open phoenixtool.html in a browser.
 
 **CONTRIBUTION POLICY**
 
+Do not commit build artifacts:
 * Do not commit .js files transpiled from .ts files (include any new folder into .gitignore).
+* Do not commit the node_modules folder
+* Do not commit the build folder

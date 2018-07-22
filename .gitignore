@@ -4,7 +4,13 @@
 .project
 .settings/*
 
+# node modules should be installed, not checked in
+node_modules
+
 # folders containing .ts files
 src/*.js
 src/controls/*.js
 src/gui/*.js
+
+# webpack build folder
+build
