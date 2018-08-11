@@ -9,8 +9,7 @@ node_modules
 
 # folders containing .ts files
 src/*.js
-src/controls/*.js
-src/gui/*.js
+src/gui/*/*.js
 
 # webpack build folder
 build

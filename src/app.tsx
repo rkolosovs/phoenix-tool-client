@@ -1,12 +1,14 @@
-
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import LoginWindow from "./gui/windows/loginWindow";
+import Canvas from "./gui/canvas/canvas";
+
+let body: HTMLElement = document.getElementById("body");
+
 ReactDOM.render(
     <div id={'root'}>
-        <canvas id={'canvas'}></canvas>
-        <div id={'loginWindow'}>
-            <h1>Hello, Welcome to my test page</h1>
-        </div>
+        <Canvas/>
+        <LoginWindow/>
     </div>,
-  document.getElementById("body")
+  body
 );
