@@ -52,15 +52,18 @@ class LoginWindow extends React.Component<HomeProps, any> {
 
     handleSubmit = event => {
         event.preventDefault();
-        //Do server communication here?
+        //Do server communication here!
         // ...
 
-        //Side effect free change of state
+        //Side effect free change of redux state
         if(this.props.user == undefined){
             this.props.onLoginClick(this.state.username);
         } else {
             this.props.onLogoutClick();
         }
+
+        //Reset component local state
+        this.setState({username: "", password: ""})
     };
 
     render() {
@@ -68,8 +71,8 @@ class LoginWindow extends React.Component<HomeProps, any> {
 
         return (
             <div id={'loginWindow'}>
-                <h1>Hello{loggedIn?', '+this.props.user:''}!</h1>
-                <h2>Welcome to the test page!</h2>
+                <h1>Hello{loggedIn?', '+this.props.user:', stranger'}!</h1>
+                <h2>{loggedIn?'Welcome to the test page':'Please log in'}!</h2>
                 <form onSubmit={this.handleSubmit}>
                     <label>Username:</label>
                     <input
@@ -87,7 +90,7 @@ class LoginWindow extends React.Component<HomeProps, any> {
                     />
                     <br/>
                     <button
-                        disabled={!this.validateForm()}
+                        disabled={!this.validateForm() && !loggedIn}
                         type="submit"
                     >
                         {loggedIn?'Logout':'Login'}

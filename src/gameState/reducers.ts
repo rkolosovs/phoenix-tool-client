@@ -2,7 +2,7 @@ import {combineReducers} from "redux";
 import {LOG_IN, LOG_OUT, Action} from "./actions";
 import {initialState} from "./gameState";
 
-function loginReducer (state = initialState, action: Action<any>) {
+function userReducer (state = initialState, action: Action<any>) {
     switch (action.type) {
         case LOG_IN:
             return Object.assign({}, state, {
@@ -21,4 +21,4 @@ function loginReducer (state = initialState, action: Action<any>) {
 // export const reducers = combineReducers({
 //     loginReducer
 // });
-export const reducers = loginReducer;
+export const reducers = userReducer;
