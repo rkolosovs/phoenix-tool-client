@@ -19,6 +19,7 @@ The icons and graphics used in this program are licensed under the
 
 **BUILD**
 
+npm install
 npm run build
 
 **RUN**
