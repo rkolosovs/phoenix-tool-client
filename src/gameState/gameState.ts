@@ -1,8 +1,12 @@
-import {createStore, DeepPartial} from "redux";
+import {createStore} from "redux";
 import {reducers} from "./reducers";
 
-export const initialState = {
+type GameState = {
+    user: string|undefined;
+};
+
+export const initialState: GameState = {
     user: undefined
 };
 
-export const store = createStore(reducers);
+export const store = createStore(reducers, initialState);
