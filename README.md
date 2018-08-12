@@ -22,6 +22,10 @@ The icons and graphics used in this program are licensed under the
 npm install
 npm run build
 
+**TEST**
+
+npm run test
+
 **RUN**
 
 Open phoenixtool.html in a browser.
