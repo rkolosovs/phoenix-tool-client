@@ -8,9 +8,13 @@
 node_modules
 
 # folders containing .ts files
+# (not all .js files since webpack.config.js has to stay)
 src/*.js
 src/*/*.js
 src/*/*/*.js
+test/*.js
+
+# source map files
 *.map
 
 # webpack build folder
