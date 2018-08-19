@@ -14,26 +14,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {LOG_IN, LOG_OUT, Action} from "./actions";
-import {initialState} from "./gameState";
+import {Realm} from "../realm";
 
-function userReducer (state = initialState, action: Action<any>) {
-    switch (action.type) {
-        case LOG_IN:
-            return Object.assign({}, state, {
-                login: (action as Action<LOG_IN>).payload.login
-            });
-        case LOG_OUT:
-            return Object.assign({}, state, {
-                login: initialState.login
-            });
-        default:
-            return state;
+export class MapEntity{
+    protected position: [number, number] = [0, 0];
+    owner: Realm;
+
+    constructor(position: [number, number], owner: Realm){
+        // copy the position so that this object doesn't share a reference with anything else
+        this.position[0] = position[0];
+        this.position[1] = position[1];
+        this.owner = owner;
+    }
+
+    getPosition(): [number, number]{
+        return [this.position[0], this.position[1]];
     }
 }
-
-// for when there is a need to separate the reducers into multiple modules
-// export const reducers = combineReducers({
-//     loginReducer
-// });
-export const reducers = userReducer;

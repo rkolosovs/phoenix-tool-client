@@ -17,9 +17,10 @@ along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 import * as React from "react";
 import {connect} from "react-redux";
 import {logIn, logOut} from "../../gameState/actions";
+import {Login, UserGroup} from "../../gameState/gameState";
 
 interface StateProps {
-    user: string
+    login: Login
 }
 
 interface DispatchProps {
@@ -31,7 +32,7 @@ type HomeProps = StateProps & DispatchProps;
 
 function mapStateToProps(state) {
     return {
-        user: state.user
+        login: state.login
     }
 }
 
@@ -72,7 +73,7 @@ class LoginWindow extends React.Component<HomeProps, any> {
         // ...
 
         //Side effect free change of redux state
-        if(this.props.user == undefined){
+        if(this.props.login.group === UserGroup.GUEST){
             this.props.onLoginClick(this.state.username);
         } else {
             this.props.onLogoutClick();
@@ -83,11 +84,11 @@ class LoginWindow extends React.Component<HomeProps, any> {
     };
 
     render() {
-        const loggedIn = this.props.user != undefined;
+        const loggedIn = this.props.login.group === UserGroup.GUEST;
 
         return (
             <div id={'loginWindow'}>
-                <h1>Hello{loggedIn?', '+this.props.user:', stranger'}!</h1>
+                <h1>Hello{this.props.login.name}!</h1>
                 <h2>{loggedIn?'Welcome to the test page':'Please log in'}!</h2>
                 <form onSubmit={this.handleSubmit}>
                     <label>Username:</label>

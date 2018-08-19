@@ -14,26 +14,18 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {LOG_IN, LOG_OUT, Action} from "./actions";
-import {initialState} from "./gameState";
-
-function userReducer (state = initialState, action: Action<any>) {
-    switch (action.type) {
-        case LOG_IN:
-            return Object.assign({}, state, {
-                login: (action as Action<LOG_IN>).payload.login
-            });
-        case LOG_OUT:
-            return Object.assign({}, state, {
-                login: initialState.login
-            });
-        default:
-            return state;
-    }
+export const enum EventStatus{
+    Checked,
+    Deleted,
+    Impossible,
+    Withheld,
+    Available,
+    Undetermined
 }
 
-// for when there is a need to separate the reducers into multiple modules
-// export const reducers = combineReducers({
-//     loginReducer
-// });
-export const reducers = userReducer;
+export abstract class PhoenixEvent{
+
+    constructor(protected listPosition: number, protected status: EventStatus,
+                protected prerequisiteEvents: number[]|undefined, protected databasePrimaryKey: number|undefined){
+    }
+}

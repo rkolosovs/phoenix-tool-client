@@ -14,6 +14,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
+import {Login} from "./gameState";
+
 export interface Action<T>{
     type: string;
     payload: T;
@@ -23,16 +25,16 @@ export interface Action<T>{
 
 // Action types
 export const LOG_IN: string = 'LOG_IN';
-export type LOG_IN = {username: string};
+export type LOG_IN = {login: Login};
 export const LOG_OUT: string = 'LOG_OUT';
 export type LOG_OUT = {};
 
 // Action creators
-export function logIn(user: string): Action<LOG_IN> {
+export function logIn(login: Login): Action<LOG_IN> {
     return {
         type: LOG_IN,
         payload: {
-            username: user
+            login: login
         }
     };
 }

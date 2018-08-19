@@ -16,13 +16,58 @@ along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import {createStore} from "redux";
 import {reducers} from "./reducers";
+import {Realm} from "../model/realm";
+import {Field} from "../model/map/field";
+import {River} from "../model/map/river";
+import {PhoenixEvent} from "../model/events/event";
+import {Army} from "../model/armies/army";
+import {Building} from "../model/buildings/building";
 
-type GameState = {
-    user: string|undefined;
+export const enum TurnStatus {
+    STARTED = "st",
+    FINISHED = "fi"
+}
+
+export const enum UserGroup {
+    PLAYER = "player",
+    GAME_MASTER = "sl",
+    GUEST = "guest"
+}
+
+export type Turn = {
+    'turn': number,
+    'realm': string,
+    'status': TurnStatus
+}
+
+export type Login = {
+    'name': string,
+    'group': UserGroup,
+    'realm': Realm|undefined
+}
+
+export type GameState = {
+    realms: Realm[];
+    fields: Field[];
+    rivers: River[];
+    armies: Army[];
+    buildings: Building[];
+    newEvents: PhoenixEvent[];
+    loadedEvents: PhoenixEvent[];
+    currentTurn: Turn;
+    login: Login;
 };
 
 export const initialState: GameState = {
-    user: undefined
+    realms: [],
+    fields: [],
+    rivers: [],
+    armies: [],
+    buildings: [],
+    newEvents: [],
+    loadedEvents: [],
+    currentTurn: {'turn': 0, 'realm': "sl", 'status': TurnStatus.STARTED},
+    login: {'name': 'stranger', 'group': UserGroup.GUEST, 'realm': undefined}
 };
 
 export const store = createStore(reducers, initialState);
