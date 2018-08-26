@@ -40,7 +40,22 @@ function realmsReducer (state: Realm[] = [], action: Action<any>) {
                 return (action as Action<REMOVE_REALMS>).payload.idsToRemove.indexOf(index) === -1;
             });
         case UPDATE_REALMS:
-
+            let updatedRealms = (action as Action<UPDATE_REALMS>).payload.updatedRealms;
+            return state.map((realm, index) => {
+                const updateInstr = updatedRealms.find(rlm => rlm.id === index);
+                if (updateInstr != undefined){
+                    const updatedRealm = updateInstr.updatedRealm;
+                    realm.name = updatedRealm.name;
+                    realm.tag = updatedRealm.tag;
+                    realm.territory = updatedRealm.territory;
+                    realm.color = updatedRealm.color;
+                    realm.homeTurf = updatedRealm.homeTurf;
+                    realm.active = updatedRealm.active;
+                    return realm;
+                } else {
+                    return realm;
+                }
+            });
         default:
             return state;
     }
