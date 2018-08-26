@@ -41,6 +41,7 @@ export const LOG_IN: string = 'LOG_IN';
 export type LOG_IN = {login: Login};
 export const LOG_OUT: string = 'LOG_OUT';
 export type LOG_OUT = {};
+
 export const ADD_REALMS: string = 'ADD_REALMS';
 export type ADD_REALMS = {newRealms: Realm[]};
 export const SET_REALMS: string = 'SET_REALMS';
@@ -51,9 +52,9 @@ export const UPDATE_REALMS: string = 'UPDATE_REALMS';
 export type UPDATE_REALMS = {updatedRealms: UpdatedRealm[]};
 
 export const ADD_FIELDS: string = 'ADD_FIELDS';
-export type ADD_FIELDS = {newFields: Building[]};
+export type ADD_FIELDS = {newFields: Field[]};
 export const SET_FIELDS: string = 'SET_FIELDS';
-export type SET_FIELDS = {newFields: Building[]};
+export type SET_FIELDS = {newFields: Field[]};
 export const REMOVE_FIELDS: string = 'REMOVE_FIELDS';
 export type REMOVE_FIELDS = {idsToRemove: number[]};
 export const UPDATE_FIELDS: string = 'UPDATE_FIELDS';
@@ -94,7 +95,7 @@ export const UPDATE_NEW_EVENTS: string = 'UPDATE_NEW_EVENTS';
 export type UPDATE_NEW_EVENTS = {updatedNewEvents: UpdatedEvent[]};
 
 export const SET_LOADED_EVENTS: string = 'SET_LOADED_EVENTS';
-export type SET_LOADED_EVENTS = {newEvents: PhoenixEvent[]};
+export type SET_LOADED_EVENTS = {newLoadedEvents: PhoenixEvent[]};
 export const UPDATE_LOADED_EVENTS: string = 'UPDATE_LOADED_EVENTS';
 export type UPDATE_LOADED_EVENTS = {updatedLoadedEvents: UpdatedLoadedEvent[]};
 
@@ -155,89 +156,199 @@ export function updateRealms(updatedRealms: UpdatedRealm[]): Action<UPDATE_REALM
 }
 
 export function addFields(newFields: Field[]): Action<ADD_FIELDS> {
-    return {};
+    return {
+        type: ADD_FIELDS,
+        payload: {
+            newFields: newFields
+        }
+    };
 }
 
 export function setFields(newFields: Field[]): Action<SET_FIELDS> {
-    return {};
+    return {
+        type: SET_FIELDS,
+        payload: {
+            newFields: newFields
+        }
+    };
 }
 
 export function removeFields(idsToRemove: number[]): Action<REMOVE_FIELDS> {
-    return {};
+    return {
+        type: REMOVE_FIELDS,
+        payload: {
+            idsToRemove: idsToRemove
+        }
+    };
 }
 
 export function updateFields(updatedFields: UpdatedField[]): Action<UPDATE_FIELDS> {
-    return {};
+    return {
+        type: UPDATE_FIELDS,
+        payload: {
+            updatedFields: updatedFields
+        }
+    };
 }
 
 export function addRivers(newRivers: River[]): Action<ADD_RIVERS> {
-    return {};
+    return {
+        type: ADD_RIVERS,
+        payload: {
+            newRivers: newRivers
+        }
+    };
 }
 
 export function setRivers(newRivers: River[]): Action<SET_RIVERS> {
-    return {};
+    return {
+        type: SET_RIVERS,
+        payload: {
+            newRivers: newRivers
+        }
+    };
 }
 
 export function removeRivers(idsToRemove: number[]): Action<REMOVE_RIVERS> {
-    return {};
+    return {
+        type: REMOVE_RIVERS,
+        payload: {
+            idsToRemove: idsToRemove
+        }
+    };
 }
 
 export function addArmies(newArmies: Army[]): Action<ADD_ARMIES> {
-    return {};
+    return {
+        type: ADD_ARMIES,
+        payload: {
+            newArmies: newArmies
+        }
+    };
 }
 
 export function setArmies(newArmies: Army[]): Action<SET_ARMIES> {
-    return {};
+    return {
+        type: SET_ARMIES,
+        payload: {
+            newArmies: newArmies
+        }
+    };
 }
 
 export function removeArmies(idsToRemove: number[]): Action<REMOVE_ARMIES> {
-    return {};
+    return {
+        type: REMOVE_ARMIES,
+        payload: {
+            idsToRemove: idsToRemove
+        }
+    };
 }
 
 export function updateArmies(updatedArmies: UpdatedArmy[]): Action<UPDATE_ARMIES> {
-    return {};
+    return {
+        type: UPDATE_ARMIES,
+        payload: {
+            updatedArmies: updatedArmies
+        }
+    };
 }
 
 export function addBuildings(newBuildings: Building[]): Action<ADD_BUILDINGS> {
-    return {};
+    return {
+        type: ADD_BUILDINGS,
+        payload: {
+            newBuildings: newBuildings
+        }
+    };
 }
 
 export function setBuildings(newBuildings: Building[]): Action<SET_BUILDINGS> {
-    return {};
+    return {
+        type: SET_BUILDINGS,
+        payload: {
+            newBuildings: newBuildings
+        }
+    };
 }
 
 export function removeBuildings(idsToRemove: number[]): Action<REMOVE_BUILDINGS> {
-    return {};
+    return {
+        type: REMOVE_BUILDINGS,
+        payload: {
+            idsToRemove: idsToRemove
+        }
+    };
 }
 
 export function updateBuildings(updatedBuildings: UpdatedBuilding[]): Action<UPDATE_BUILDINGS> {
-    return {};
+    return {
+        type: UPDATE_BUILDINGS,
+        payload: {
+            updatedBuildings: updatedBuildings
+        }
+    };
 }
 
 export function addNewEvents(newEvents: PhoenixEvent[]): Action<ADD_NEW_EVENTS> {
-    return {};
+    return {
+        type: ADD_NEW_EVENTS,
+        payload: {
+            newEvents: newEvents
+        }
+    };
 }
 
 export function setNewEvents(newEvents: PhoenixEvent[]): Action<SET_NEW_EVENTS> {
-    return {};
+    return {
+        type: SET_NEW_EVENTS,
+        payload: {
+            newEvents: newEvents
+        }
+    };
 }
 
 export function removeNewEvents(idsToRemove: number[]): Action<REMOVE_NEW_EVENTS> {
-    return {};
+    return {
+        type: REMOVE_NEW_EVENTS,
+        payload: {
+            idsToRemove: idsToRemove
+        }
+    };
 }
 
 export function updateNewEvents(updatedNewEvents: UpdatedEvent[]): Action<UPDATE_NEW_EVENTS> {
-    return {};
+    return {
+        type: UPDATE_NEW_EVENTS,
+        payload: {
+            updatedNewEvents: updatedNewEvents
+        }
+    };
 }
 
 export function setLoadedEvents(newLoadedEvents: PhoenixEvent[]): Action<SET_LOADED_EVENTS> {
-    return {};
+    return {
+        type: SET_LOADED_EVENTS,
+        payload: {
+            newLoadedEvents: newLoadedEvents
+        }
+    };
 }
 
 export function updateLoadedEvents(updatedLoadedEvents: UpdatedLoadedEvent[]): Action<UPDATE_LOADED_EVENTS> {
-    return {};
+    return {
+        type: UPDATE_LOADED_EVENTS,
+        payload: {
+            updatedLoadedEvents: updatedLoadedEvents
+        }
+    };
 }
 
 export function setCurrentTurn(newCurrentTurn: Turn): Action<SET_CURRENT_TURN> {
-    return {};
+    return {
+        type: SET_CURRENT_TURN,
+        payload: {
+            newCurrentTurn: newCurrentTurn
+        }
+    };
 }

@@ -226,7 +226,7 @@ module("Game state", function () {
             t.deepEqual(result, {
                     type: SET_RIVERS,
                     payload: {
-                        newRivers: [new Field([1, 1], FieldType.DESERT)
+                        newRivers: [new River([0, 0], [0, 1])
                         ]}
                 },
                 "Action creator setRivers should create an action of type SET_RIVERS with the correct payload.");
@@ -366,7 +366,7 @@ module("Game state", function () {
                     type: UPDATE_BUILDINGS,
                     payload: {
                         updatedBuildings: [{
-                            'id': 0, 'updatedBulding':
+                            'id': 0, 'updatedBuilding':
                                 new ProductionBuilding(BuildingType.CASTLE, "", [0, 0], realm, 10)
                         }]}
                 },
