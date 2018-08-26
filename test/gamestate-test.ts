@@ -16,8 +16,21 @@ along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import {test, module} from "../node_modules/qunit";
 import {
-    Action, ADD_REALMS, addRealms, LOG_IN, LOG_OUT, logIn, logOut, REMOVE_REALMS, removeRealms, SET_REALMS, setRealms,
-    UPDATE_REALMS, updateRealms
+    Action, ADD_ARMIES, ADD_BUILDINGS, ADD_FIELDS, ADD_NEW_EVENTS, ADD_REALMS, ADD_RIVERS, addArmies, addBuildings,
+    addFields,
+    addNewEvents,
+    addRealms,
+    addRivers, LOG_IN,
+    LOG_OUT, logIn,
+    logOut, REMOVE_ARMIES, REMOVE_BUILDINGS, REMOVE_FIELDS, REMOVE_NEW_EVENTS,
+    REMOVE_REALMS, REMOVE_RIVERS,
+    removeArmies, removeBuildings,
+    removeFields, removeNewEvents,
+    removeRealms,
+    removeRivers, SET_ARMIES, SET_BUILDINGS, SET_CURRENT_TURN, SET_FIELDS, SET_LOADED_EVENTS, SET_NEW_EVENTS,
+    SET_REALMS, SET_RIVERS, setArmies, setBuildings, setCurrentTurn, setFields, setLoadedEvents, setNewEvents,
+    setRealms, setRivers, UPDATE_ARMIES, UPDATE_BUILDINGS, UPDATE_FIELDS, UPDATE_LOADED_EVENTS, UPDATE_NEW_EVENTS,
+    UPDATE_REALMS, updateArmies, updateBuildings, updateFields, updateLoadedEvents, updateNewEvents, updateRealms
 } from "../src/gameState/actions";
 import {TurnStatus, UserGroup} from "../src/gameState/gameState";
 import {Realm} from "../src/model/realm";
@@ -27,7 +40,7 @@ import {FootArmy} from "../src/model/armies/footArmy";
 import {ProductionBuilding} from "../src/model/buildings/productionBuilding";
 import {BuildingType} from "../src/model/buildings/building";
 import {MoveEvent} from "../src/model/events/moveEvent";
-import {EventStatus} from "../src/model/events/event";
+import {EventStatus, PhoenixEvent} from "../src/model/events/event";
 
 module("Game state", function () {
     module("Action creators", function () {
@@ -256,7 +269,7 @@ module("Game state", function () {
                 "usa", "000,000,000",
                 FieldType.DESERT,
                 true);
-            const result: Action<ADD_ARMIES> = addArmies([
+            const result: Action<SET_ARMIES> = setArmies([
                 new FootArmy(101, realm, 1000, 1,
                     0, 0, 0,
                     [0, 0], 0, 0)
@@ -347,7 +360,7 @@ module("Game state", function () {
                 FieldType.DESERT,
                 true);
             const result: Action<UPDATE_BUILDINGS> = updateBuildings([{'id': 0,
-                'updatedArmy': new ProductionBuilding(BuildingType.CASTLE, "", [0, 0], realm, 10)
+                'updatedBuilding': new ProductionBuilding(BuildingType.CASTLE, "", [0, 0], realm, 10)
             }]);
             t.deepEqual(result, {
                     type: UPDATE_BUILDINGS,
@@ -457,7 +470,7 @@ module("Game state", function () {
             const result: Action<UPDATE_LOADED_EVENTS> = updateLoadedEvents([{'id': 0,
                 'updatedLoadedEvent': new MoveEvent(0, EventStatus.Impossible, realm,
                     101, [0, 0], [0, 1],
-                    [], 1)
+                    [], 1) as PhoenixEvent
             }]);
             t.deepEqual(result, {
                     type: UPDATE_LOADED_EVENTS,

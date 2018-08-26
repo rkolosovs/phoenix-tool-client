@@ -14,8 +14,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {Login} from "./gameState";
+import {Login, Turn} from "./gameState";
 import {Realm} from "../model/realm";
+import {Field} from "../model/map/field";
+import {River} from "../model/map/river";
+import {Army} from "../model/armies/army";
+import {Building} from "../model/buildings/building";
+import {PhoenixEvent} from "../model/events/event";
 
 export interface Action<T>{
     type: string;
@@ -25,6 +30,11 @@ export interface Action<T>{
 }
 
 export type UpdatedRealm = {id: number, updatedRealm: Realm};
+export type UpdatedBuilding = {id: number, updatedBuilding: Building};
+export type UpdatedField = {id: number, updatedField: Field};
+export type UpdatedArmy = {id: number, updatedArmy: Army};
+export type UpdatedEvent = {id: number, updatedNewEvent: PhoenixEvent};
+export type UpdatedLoadedEvent = {id: number, updatedLoadedEvent: PhoenixEvent};
 
 // Action types
 export const LOG_IN: string = 'LOG_IN';
@@ -39,6 +49,57 @@ export const REMOVE_REALMS: string = 'REMOVE_REALMS';
 export type REMOVE_REALMS = {idsToRemove: number[]};
 export const UPDATE_REALMS: string = 'UPDATE_REALMS';
 export type UPDATE_REALMS = {updatedRealms: UpdatedRealm[]};
+
+export const ADD_FIELDS: string = 'ADD_FIELDS';
+export type ADD_FIELDS = {newFields: Building[]};
+export const SET_FIELDS: string = 'SET_FIELDS';
+export type SET_FIELDS = {newFields: Building[]};
+export const REMOVE_FIELDS: string = 'REMOVE_FIELDS';
+export type REMOVE_FIELDS = {idsToRemove: number[]};
+export const UPDATE_FIELDS: string = 'UPDATE_FIELDS';
+export type UPDATE_FIELDS = {updatedFields: UpdatedField[]};
+
+export const ADD_RIVERS: string = 'ADD_RIVERS';
+export type ADD_RIVERS = {newRivers: River[]};
+export const SET_RIVERS: string = 'SET_RIVERS';
+export type SET_RIVERS = {newRivers: River[]};
+export const REMOVE_RIVERS: string = 'REMOVE_RIVERS';
+export type REMOVE_RIVERS = {idsToRemove: number[]};
+
+export const ADD_ARMIES: string = 'ADD_ARMIES';
+export type ADD_ARMIES = {newArmies: Army[]};
+export const SET_ARMIES: string = 'SET_ARMIES';
+export type SET_ARMIES = {newArmies: Army[]};
+export const REMOVE_ARMIES: string = 'REMOVE_ARMIES';
+export type REMOVE_ARMIES = {idsToRemove: number[]};
+export const UPDATE_ARMIES: string = 'UPDATE_ARMIES';
+export type UPDATE_ARMIES = {updatedArmies: UpdatedArmy[]};
+
+export const ADD_BUILDINGS: string = 'ADD_BUILDINGS';
+export type ADD_BUILDINGS = {newBuildings: Building[]};
+export const SET_BUILDINGS: string = 'SET_BUILDINGS';
+export type SET_BUILDINGS = {newBuildings: Building[]};
+export const REMOVE_BUILDINGS: string = 'REMOVE_BUILDINGS';
+export type REMOVE_BUILDINGS = {idsToRemove: number[]};
+export const UPDATE_BUILDINGS: string = 'UPDATE_BUILDINGS';
+export type UPDATE_BUILDINGS = {updatedBuildings: UpdatedBuilding[]};
+
+export const ADD_NEW_EVENTS: string = 'ADD_NEW_EVENTS';
+export type ADD_NEW_EVENTS = {newEvents: PhoenixEvent[]};
+export const SET_NEW_EVENTS: string = 'SET_NEW_EVENTS';
+export type SET_NEW_EVENTS = {newEvents: PhoenixEvent[]};
+export const REMOVE_NEW_EVENTS: string = 'REMOVE_NEW_EVENTS';
+export type REMOVE_NEW_EVENTS = {idsToRemove: number[]};
+export const UPDATE_NEW_EVENTS: string = 'UPDATE_NEW_EVENTS';
+export type UPDATE_NEW_EVENTS = {updatedNewEvents: UpdatedEvent[]};
+
+export const SET_LOADED_EVENTS: string = 'SET_LOADED_EVENTS';
+export type SET_LOADED_EVENTS = {newEvents: PhoenixEvent[]};
+export const UPDATE_LOADED_EVENTS: string = 'UPDATE_LOADED_EVENTS';
+export type UPDATE_LOADED_EVENTS = {updatedLoadedEvents: UpdatedLoadedEvent[]};
+
+export const SET_CURRENT_TURN: string = 'SET_CURRENT_TURN';
+export type SET_CURRENT_TURN = {newCurrentTurn: Turn};
 
 // Action creators
 export function logIn(login: Login): Action<LOG_IN> {
@@ -91,4 +152,92 @@ export function updateRealms(updatedRealms: UpdatedRealm[]): Action<UPDATE_REALM
             updatedRealms: updatedRealms
         }
     };
+}
+
+export function addFields(newFields: Field[]): Action<ADD_FIELDS> {
+    return {};
+}
+
+export function setFields(newFields: Field[]): Action<SET_FIELDS> {
+    return {};
+}
+
+export function removeFields(idsToRemove: number[]): Action<REMOVE_FIELDS> {
+    return {};
+}
+
+export function updateFields(updatedFields: UpdatedField[]): Action<UPDATE_FIELDS> {
+    return {};
+}
+
+export function addRivers(newRivers: River[]): Action<ADD_RIVERS> {
+    return {};
+}
+
+export function setRivers(newRivers: River[]): Action<SET_RIVERS> {
+    return {};
+}
+
+export function removeRivers(idsToRemove: number[]): Action<REMOVE_RIVERS> {
+    return {};
+}
+
+export function addArmies(newArmies: Army[]): Action<ADD_ARMIES> {
+    return {};
+}
+
+export function setArmies(newArmies: Army[]): Action<SET_ARMIES> {
+    return {};
+}
+
+export function removeArmies(idsToRemove: number[]): Action<REMOVE_ARMIES> {
+    return {};
+}
+
+export function updateArmies(updatedArmies: UpdatedArmy[]): Action<UPDATE_ARMIES> {
+    return {};
+}
+
+export function addBuildings(newBuildings: Building[]): Action<ADD_BUILDINGS> {
+    return {};
+}
+
+export function setBuildings(newBuildings: Building[]): Action<SET_BUILDINGS> {
+    return {};
+}
+
+export function removeBuildings(idsToRemove: number[]): Action<REMOVE_BUILDINGS> {
+    return {};
+}
+
+export function updateBuildings(updatedBuildings: UpdatedBuilding[]): Action<UPDATE_BUILDINGS> {
+    return {};
+}
+
+export function addNewEvents(newEvents: PhoenixEvent[]): Action<ADD_NEW_EVENTS> {
+    return {};
+}
+
+export function setNewEvents(newEvents: PhoenixEvent[]): Action<SET_NEW_EVENTS> {
+    return {};
+}
+
+export function removeNewEvents(idsToRemove: number[]): Action<REMOVE_NEW_EVENTS> {
+    return {};
+}
+
+export function updateNewEvents(updatedNewEvents: UpdatedEvent[]): Action<UPDATE_NEW_EVENTS> {
+    return {};
+}
+
+export function setLoadedEvents(newLoadedEvents: PhoenixEvent[]): Action<SET_LOADED_EVENTS> {
+    return {};
+}
+
+export function updateLoadedEvents(updatedLoadedEvents: UpdatedLoadedEvent[]): Action<UPDATE_LOADED_EVENTS> {
+    return {};
+}
+
+export function setCurrentTurn(newCurrentTurn: Turn): Action<SET_CURRENT_TURN> {
+    return {};
 }
