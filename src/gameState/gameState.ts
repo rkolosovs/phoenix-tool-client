@@ -15,7 +15,7 @@ You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import {createStore} from "redux";
-import {reducers} from "./reducers";
+import reducers from "./reducers";
 import {Realm} from "../model/realm";
 import {Field} from "../model/map/field";
 import {River} from "../model/map/river";
@@ -66,8 +66,8 @@ export const initialState: GameState = {
     buildings: [],
     newEvents: [],
     loadedEvents: [],
-    currentTurn: {'turn': 0, 'realm': "sl", 'status': TurnStatus.STARTED},
-    login: {'name': 'stranger', 'group': UserGroup.GUEST, 'realm': undefined}
+    currentTurn: {turn: 0, realm: "sl", status: TurnStatus.STARTED},
+    login: {name: 'stranger', group: UserGroup.GUEST, realm: undefined}
 };
 
 export const store = createStore(reducers, initialState);

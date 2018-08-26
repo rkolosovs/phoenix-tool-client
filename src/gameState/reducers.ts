@@ -14,26 +14,46 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {LOG_IN, LOG_OUT, Action} from "./actions";
-import {initialState} from "./gameState";
+import {LOG_IN, LOG_OUT, Action, ADD_REALMS, SET_REALMS, REMOVE_REALMS, UPDATE_REALMS} from "./actions";
+import {GameState, initialState, Login, TurnStatus, UserGroup} from "./gameState";
+import {Realm} from "../model/realm";
 
-function userReducer (state = initialState, action: Action<any>) {
+function loginReducer (state: Login = {name: 'stranger', group: UserGroup.GUEST, realm: undefined}, action: Action<any>) {
     switch (action.type) {
         case LOG_IN:
-            return Object.assign({}, state, {
-                login: (action as Action<LOG_IN>).payload.login
-            });
+            return Object.assign({}, state, (action as Action<LOG_IN>).payload.login);
         case LOG_OUT:
-            return Object.assign({}, state, {
-                login: initialState.login
-            });
+            return Object.assign({}, state, initialState.login);
         default:
             return state;
     }
 }
 
-// for when there is a need to separate the reducers into multiple modules
-// export const reducers = combineReducers({
-//     loginReducer
-// });
-export const reducers = userReducer;
+function realmsReducer (state: Realm[] = [], action: Action<any>) {
+    switch (action.type) {
+        case ADD_REALMS:
+
+        case SET_REALMS:
+
+        case REMOVE_REALMS:
+
+        case UPDATE_REALMS:
+
+        default:
+            return state;
+    }
+}
+
+export default (state: GameState = initialState, action: Action<any>): GameState => {
+    return {
+        realms: realmsReducer(state.realms, action),
+        fields: [],
+        rivers: [],
+        armies: [],
+        buildings: [],
+        newEvents: [],
+        loadedEvents: [],
+        currentTurn: {turn: 0, realm: "sl", status: TurnStatus.STARTED},
+        login: loginReducer(state.login, action)
+    };
+}

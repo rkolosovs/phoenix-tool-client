@@ -41,7 +41,7 @@ import {ProductionBuilding} from "../src/model/buildings/productionBuilding";
 import {BuildingType} from "../src/model/buildings/building";
 import {MoveEvent} from "../src/model/events/moveEvent";
 import {EventStatus, PhoenixEvent} from "../src/model/events/event";
-import {reducers} from "../src/gameState/reducers";
+import reducers from "../src/gameState/reducers";
 
 module("Game state", function () {
     module("Action creators", function () {
@@ -511,20 +511,116 @@ module("Game state", function () {
                     }
                 }
             });
-            let expected: GameState = initialState;
-            expected.login = {name: "Peter", group: UserGroup.GAME_MASTER, realm: undefined};
-            t.deepEqual(result, expected,
-                "Reducers should handle the LOG_IN action properly.");
+            const expected: GameState = Object.assign({}, initialState, {
+                login: {name: "Peter", group: UserGroup.GAME_MASTER, realm: undefined}
+            });
+            t.deepEqual(result, expected, "Reducers should handle the LOG_IN action properly.");
         });
         test("LOG_OUT", function (t: any) {
-            let previousState: GameState = initialState;
-            previousState.login = {name: "Peter", group: UserGroup.GAME_MASTER, realm: undefined};
+            const previousState: GameState = Object.assign({}, initialState, {
+                login: {name: "Peter", group: UserGroup.GAME_MASTER, realm: undefined}
+            });
             const result: GameState = reducers(previousState, {
                 type: LOG_OUT,
                 payload: {}
             });
-            t.deepEqual(result, initialState,
-                "Reducers should handle the LOG_OUT action properly.");
+            t.deepEqual(result, initialState, "Reducers should handle the LOG_OUT action properly.");
+        });
+        test("ADD_REALMS", function (t: any) {
+            const previousState: GameState = Object.assign({}, initialState, {
+                realms: [
+                    new Realm("Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: ADD_REALMS,
+                payload: {
+                    newRealms: [
+                        new Realm("VirVahal", "vvh", "100,100,100", FieldType.WOODS, true),
+                        new Realm("Eoganachta", "eos", "200,200,200", FieldType.SWAMP, true)
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                realms: [
+                    new Realm("Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true),
+                    new Realm("VirVahal", "vvh", "100,100,100", FieldType.WOODS, true),
+                    new Realm("Eoganachta", "eos", "200,200,200", FieldType.SWAMP, true)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the ADD_REALMS action properly.");
+        });
+        test("SET_REALMS", function (t: any) {
+            const previousState: GameState = Object.assign({}, initialState, {
+                realms: [
+                    new Realm("Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: SET_REALMS,
+                payload: {
+                    newRealms: [
+                        new Realm("VirVahal", "vvh", "100,100,100", FieldType.WOODS, true),
+                        new Realm("Eoganachta", "eos", "200,200,200", FieldType.SWAMP, true)
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                realms: [
+                    new Realm("VirVahal", "vvh", "100,100,100", FieldType.WOODS, true),
+                    new Realm("Eoganachta", "eos", "200,200,200", FieldType.SWAMP, true)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the SET_REALMS action properly.");
+        });
+        test("REMOVE_REALMS", function (t: any) {
+            const previousState: GameState = Object.assign({}, initialState, {
+                realms: [
+                    new Realm("Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true),
+                    new Realm("VirVahal", "vvh", "100,100,100", FieldType.WOODS, true),
+                    new Realm("Eoganachta", "eos", "200,200,200", FieldType.SWAMP, true),
+                    new Realm("Helborn", "hbn", "300,300,300", FieldType.HILLS, true)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: REMOVE_REALMS,
+                payload: {
+                    idsToRemove: [0, 2]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                realms: [
+                    new Realm("VirVahal", "vvh", "100,100,100", FieldType.WOODS, true),
+                    new Realm("Helborn", "hbn", "300,300,300", FieldType.HILLS, true)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the REMOVE_REALMS action properly.");
+        });
+        test("UPDATE_REALMS", function (t: any) {
+            const previousState: GameState = Object.assign({}, initialState, {
+                realms: [
+                    new Realm("VirVahal", "vvh", "100,100,100", FieldType.WOODS, true),
+                    new Realm("Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true),
+                    new Realm("Helborn", "hbn", "300,300,300", FieldType.HILLS, true)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: UPDATE_REALMS,
+                payload: {
+                    updatedRealms: [
+                        {id: 0, updatedRealm: new Realm("VirVahal", "vvh", "100,100,100", FieldType.WOODS, false)},
+                        {id: 2, updatedRealm: new Realm("Eoganachta", "eos", "555,100,250", FieldType.LOWLANDS, true)}
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                realms: [
+                    new Realm("VirVahal", "vvh", "100,100,100", FieldType.WOODS, false),
+                    new Realm("Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true),
+                    new Realm("Eoganachta", "eos", "555,100,250", FieldType.LOWLANDS, true)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the UPDATE_REALMS action properly.");
         });
     });
 });
