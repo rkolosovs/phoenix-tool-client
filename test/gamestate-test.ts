@@ -622,5 +622,103 @@ module("Game state", function () {
             });
             t.deepEqual(result, expected, "Reducers should handle the UPDATE_REALMS action properly.");
         });
+        test("ADD_FIELDS", function (t: any) {
+            const previousState: GameState = Object.assign({}, initialState, {
+                fields: [
+                    new Field([0, 0], FieldType.LOWLANDS)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: ADD_FIELDS,
+                payload: {
+                    newFields: [
+                        new Field([1, 2], FieldType.HILLS),
+                        new Field([2, 1], FieldType.WOODS)
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                fields: [
+                    new Field([0, 0], FieldType.LOWLANDS),
+                    new Field([1, 2], FieldType.HILLS),
+                    new Field([2, 1], FieldType.WOODS)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the ADD_FIELDS action properly.");
+        });
+        test("SET_FIELDS", function (t: any) {
+            const previousState: GameState = Object.assign({}, initialState, {
+                fields: [
+                    new Field([0, 0], FieldType.LOWLANDS)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: SET_FIELDS,
+                payload: {
+                    newFields: [
+                        new Field([1, 2], FieldType.HILLS),
+                        new Field([2, 1], FieldType.WOODS)
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                fields: [
+                    new Field([1, 2], FieldType.HILLS),
+                    new Field([2, 1], FieldType.WOODS)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the SET_FIELDS action properly.");
+        });
+        test("REMOVE_FIELDS", function (t: any) {
+            const previousState: GameState = Object.assign({}, initialState, {
+                fields: [
+                    new Field([1, 2], FieldType.HILLS),
+                    new Field([2, 1], FieldType.WOODS),
+                    new Field([0, 0], FieldType.LOWLANDS),
+                    new Field([-2, -2], FieldType.SHALLOWS)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: REMOVE_FIELDS,
+                payload: {
+                    idsToRemove: [0, 2]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                fields: [
+                    new Field([2, 1], FieldType.WOODS),
+                    new Field([-2, -2], FieldType.SHALLOWS)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the REMOVE_FIELDS action properly.");
+        });
+        test("UPDATE_FIELDS", function (t: any) {
+            const previousState: GameState = Object.assign({}, initialState, {
+                fields: [
+                    new Field([1, 2], FieldType.HILLS),
+                    new Field([2, 1], FieldType.WOODS),
+                    new Field([0, 0], FieldType.LOWLANDS),
+                    new Field([-2, -2], FieldType.SHALLOWS)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: UPDATE_FIELDS,
+                payload: {
+                    updatedRealms: [
+                        {id: 0, updatedRealm: new Field([1, 2], FieldType.MOUNTAINS)},
+                        {id: 2, updatedRealm: new Field([5, 5], FieldType.LOWLANDS)}
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                realms: [
+                    new Field([1, 2], FieldType.HILLS),
+                    new Field([2, 1], FieldType.MOUNTAINS),
+                    new Field([0, 0], FieldType.LOWLANDS),
+                    new Field([-2, -2], FieldType.SHALLOWS)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the UPDATE_FIELDS action properly.");
+        });
     });
 });
