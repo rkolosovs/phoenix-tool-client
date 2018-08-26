@@ -790,5 +790,142 @@ module("Game state", function () {
             });
             t.deepEqual(result, expected, "Reducers should handle the REMOVE_RIVERS action properly.");
         });
+        test("ADD_ARMIES", function (t: any) {
+            const realm = new Realm(
+                "Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true);
+            const previousState: GameState = Object.assign({}, initialState, {
+                armies: [
+                    new FootArmy(101, realm, 1000, 1, 0,
+                        0, 0, [0, 0], 0, 0)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: ADD_ARMIES,
+                payload: {
+                    newArmies: [
+                        new FootArmy(102, realm, 2000, 11, 0,
+                            0, 0, [1, 1], 0, 0),
+                        new FootArmy(103, realm, 1500, 2, 5,
+                            3, 500, [2, 1], 0, 0)
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                armies: [
+                    new FootArmy(101, realm, 1000, 1, 0,
+                        0, 0, [0, 0], 0, 0),
+                    new FootArmy(102, realm, 2000, 11, 0,
+                        0, 0, [1, 1], 0, 0),
+                    new FootArmy(103, realm, 1500, 2, 5,
+                        3, 500, [2, 1], 0, 0)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the ADD_ARMIES action properly.");
+        });
+        test("SET_ARMIES", function (t: any) {
+            const realm = new Realm(
+                "Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true);
+            const previousState: GameState = Object.assign({}, initialState, {
+                armies: [
+                    new FootArmy(101, realm, 1000, 1, 0,
+                        0, 0, [0, 0], 0, 0)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: ADD_ARMIES,
+                payload: {
+                    newArmies: [
+                        new FootArmy(102, realm, 2000, 11, 0,
+                            0, 0, [1, 1], 0, 0),
+                        new FootArmy(103, realm, 1500, 2, 5,
+                            3, 500, [2, 1], 0, 0)
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                armies: [
+                    new FootArmy(102, realm, 2000, 11, 0,
+                        0, 0, [1, 1], 0, 0),
+                    new FootArmy(103, realm, 1500, 2, 5,
+                        3, 500, [2, 1], 0, 0)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the SET_ARMIES action properly.");
+        });
+        test("REMOVE_ARMIES", function (t: any) {
+            const realm = new Realm(
+                "Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true);
+            const previousState: GameState = Object.assign({}, initialState, {
+                armies: [
+                    new FootArmy(101, realm, 1000, 1, 0,
+                        0, 0, [0, 0], 0, 0),
+                    new FootArmy(102, realm, 2000, 11, 0,
+                        0, 0, [1, 1], 0, 0),
+                    new FootArmy(103, realm, 1500, 2, 5,
+                        3, 500, [2, 1], 0, 0),
+                    new FootArmy(104, realm, 2000, 3, 0,
+                        0, 2000, [0, 1], 0, 0)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: REMOVE_FIELDS,
+                payload: {
+                    idsToRemove: [0, 2]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                armies: [
+                    new FootArmy(102, realm, 2000, 11, 0,
+                        0, 0, [1, 1], 0, 0),
+                    new FootArmy(104, realm, 2000, 3, 0,
+                        0, 2000, [0, 1], 0, 0)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the REMOVE_ARMIES action properly.");
+        });
+        test("UPDATE_ARMIES", function (t: any) {
+            const realm = new Realm(
+                "Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true);
+            const otherRealm = new Realm(
+                "Eoganachta", "eos", "300,300,300", FieldType.SWAMP, true);
+            const previousState: GameState = Object.assign({}, initialState, {
+                armies: [
+                    new FootArmy(101, realm, 1000, 1, 0,
+                        0, 0, [0, 0], 0, 0),
+                    new FootArmy(102, realm, 2000, 11, 0,
+                        0, 0, [1, 1], 0, 0),
+                    new FootArmy(103, realm, 1500, 2, 5,
+                        3, 500, [2, 1], 0, 0),
+                    new FootArmy(104, realm, 2000, 3, 0,
+                        0, 2000, [0, 1], 0, 0)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: UPDATE_FIELDS,
+                payload: {
+                    updatedArmies: [
+                        {id: 0, updatedArmy:
+                                new FootArmy(101, otherRealm, 1000, 1, 0,
+                                    0, 0, [0, 0], 0, 0)},
+                        {id: 2, updatedArmy:
+                                new FootArmy(103, realm, 1356, 1, 4,
+                                2, 500, [2, 1], 0, 0)}
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                armies: [
+                    new FootArmy(101, otherRealm, 1000, 1, 0,
+                        0, 0, [0, 0], 0, 0),
+                    new FootArmy(102, realm, 2000, 11, 0,
+                        0, 0, [1, 1], 0, 0),
+                    new FootArmy(103, realm, 1356, 1, 4,
+                        2, 500, [2, 1], 0, 0),
+                    new FootArmy(104, realm, 2000, 3, 0,
+                        0, 2000, [0, 1], 0, 0)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the UPDATE_ARMIES action properly.");
+        });
     });
 });
