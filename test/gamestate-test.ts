@@ -704,14 +704,14 @@ module("Game state", function () {
             const result: GameState = reducers(previousState, {
                 type: UPDATE_FIELDS,
                 payload: {
-                    updatedRealms: [
-                        {id: 0, updatedRealm: new Field([1, 2], FieldType.MOUNTAINS)},
-                        {id: 2, updatedRealm: new Field([5, 5], FieldType.LOWLANDS)}
+                    updatedFields: [
+                        {id: 0, updatedField: new Field([1, 2], FieldType.MOUNTAINS)},
+                        {id: 2, updatedField: new Field([5, 5], FieldType.LOWLANDS)}
                     ]
                 }
             });
             const expected: GameState = Object.assign({}, initialState, {
-                realms: [
+                fields: [
                     new Field([1, 2], FieldType.HILLS),
                     new Field([2, 1], FieldType.MOUNTAINS),
                     new Field([0, 0], FieldType.LOWLANDS),
@@ -719,6 +719,76 @@ module("Game state", function () {
                 ]
             });
             t.deepEqual(result, expected, "Reducers should handle the UPDATE_FIELDS action properly.");
+        });
+        test("ADD_RIVERS", function (t: any) {
+            const previousState: GameState = Object.assign({}, initialState, {
+                rivers: [
+                    new River([0, 0], [0, 1])
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: ADD_RIVERS,
+                payload: {
+                    newRivers: [
+                        new River([1, 0], [0, 0]),
+                        new River([2, 2], [2, 1])
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                rivers: [
+                    new River([0, 0], [0, 1]),
+                    new River([1, 0], [0, 0]),
+                    new River([2, 2], [2, 1])
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the ADD_RIVERS action properly.");
+        });
+        test("SET_RIVERS", function (t: any) {
+            const previousState: GameState = Object.assign({}, initialState, {
+                rivers: [
+                    new River([0, 0], [0, 1])
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: SET_RIVERS,
+                payload: {
+                    newRivers: [
+                        new River([1, 0], [0, 0]),
+                        new River([2, 2], [2, 1])
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                rivers: [
+                    new River([1, 0], [0, 0]),
+                    new River([2, 2], [2, 1])
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the SET_RIVERS action properly.");
+        });
+        test("REMOVE_RIVERS", function (t: any) {
+            const previousState: GameState = Object.assign({}, initialState, {
+                rivers: [
+                    new River([0, 0], [0, 1]),
+                    new River([1, 0], [0, 0]),
+                    new River([2, 2], [2, 1]),
+                    new River([1, 2], [2, 2])
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: REMOVE_RIVERS,
+                payload: {
+                    idsToRemove: [0, 2]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                rivers: [
+                    new River([1, 0], [0, 0]),
+                    new River([1, 2], [2, 2])
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the REMOVE_RIVERS action properly.");
         });
     });
 });
