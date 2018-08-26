@@ -32,7 +32,7 @@ function loginReducer (state: Login = {name: 'stranger', group: UserGroup.GUEST,
 function realmsReducer (state: Realm[] = [], action: Action<any>) {
     switch (action.type) {
         case ADD_REALMS:
-
+            return state.concat(action.payload.newRealms);
         case SET_REALMS:
 
         case REMOVE_REALMS:
