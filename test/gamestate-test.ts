@@ -32,7 +32,7 @@ import {
     setRealms, setRivers, UPDATE_ARMIES, UPDATE_BUILDINGS, UPDATE_FIELDS, UPDATE_LOADED_EVENTS, UPDATE_NEW_EVENTS,
     UPDATE_REALMS, updateArmies, updateBuildings, updateFields, updateLoadedEvents, updateNewEvents, updateRealms
 } from "../src/gameState/actions";
-import {TurnStatus, UserGroup} from "../src/gameState/gameState";
+import {GameState, initialState, TurnStatus, UserGroup} from "../src/gameState/gameState";
 import {Realm} from "../src/model/realm";
 import {Field, FieldType} from "../src/model/map/field";
 import {River} from "../src/model/map/river";
@@ -41,6 +41,7 @@ import {ProductionBuilding} from "../src/model/buildings/productionBuilding";
 import {BuildingType} from "../src/model/buildings/building";
 import {MoveEvent} from "../src/model/events/moveEvent";
 import {EventStatus, PhoenixEvent} from "../src/model/events/event";
+import {reducers} from "../src/gameState/reducers";
 
 module("Game state", function () {
     module("Action creators", function () {
@@ -493,6 +494,37 @@ module("Game state", function () {
                         newCurrentTurn: {'turn': 1, 'realm': "sl", 'status': TurnStatus.STARTED}}
                 },
                 "Action creator setCurrentTurn should create an action of type SET_CURRENT_TURN with the correct payload.");
+        });
+    });
+    module("Reducers", function () {
+        test("unknown action", function (t: any) {
+            const result: GameState = reducers(undefined, {type: undefined, payload: undefined});
+            t.deepEqual(result, initialState,
+                "Given no current state and unknown action the reducers should produce the initial state.");
+        });
+        test("LOG_IN", function (t: any) {
+            const result: GameState = reducers(undefined, {
+                type: LOG_IN,
+                payload: {
+                    login: {
+                        name: "Peter", group: UserGroup.GAME_MASTER, realm: undefined
+                    }
+                }
+            });
+            let expected: GameState = initialState;
+            expected.login = {name: "Peter", group: UserGroup.GAME_MASTER, realm: undefined};
+            t.deepEqual(result, expected,
+                "Reducers should handle the LOG_IN action properly.");
+        });
+        test("LOG_OUT", function (t: any) {
+            let previousState: GameState = initialState;
+            previousState.login = {name: "Peter", group: UserGroup.GAME_MASTER, realm: undefined};
+            const result: GameState = reducers(previousState, {
+                type: LOG_OUT,
+                payload: {}
+            });
+            t.deepEqual(result, initialState,
+                "Reducers should handle the LOG_OUT action properly.");
         });
     });
 });
