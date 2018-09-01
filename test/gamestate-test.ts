@@ -497,10 +497,33 @@ module("Game state", function () {
         });
     });
     module("Reducers", function () {
-        test("unknown action", function (t: any) {
+        test("no current state", function (t: any) {
             const result: GameState = reducers(undefined, {type: undefined, payload: undefined});
             t.deepEqual(result, initialState,
-                "Given no current state and unknown action the reducers should produce the initial state.");
+                "Given no current state and an unknown action the reducers should produce the initial state.");
+        });
+        test("unknown action", function (t: any) {
+            const realm = new Realm(
+                "Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true);
+            const previousState: GameState = reducers(undefined, {
+                type: LOG_IN,
+                payload: {
+                    realms: [realm],
+                    fields: [new Field([0, 0], FieldType.LOWLANDS)],
+                    rivers: [new River([0, 0], [0, 1])],
+                    armies: [new FootArmy(101, realm, 1000, 1, 0,
+                        0, 0, [0, 0], 0, 0)],
+                    buildings: [new ProductionBuilding(BuildingType.CASTLE, "", [0, 0], realm, 1)],
+                    newEvents: [new MoveEvent(0, EventStatus.Impossible, realm, 101, [0, 0], [1, 1])],
+                    loadedEvents: [new MoveEvent(0, EventStatus.Impossible, realm, 101, [0, 0], [1, 1],
+                        [], 1)],
+                    currentTurn: {turn: 3, realm: "usa", status: TurnStatus.FINISHED},
+                    login: {name: "Peter", group: UserGroup.GAME_MASTER, realm: undefined}
+                }
+            });
+            const result: GameState = reducers(previousState, {type: undefined, payload: undefined});
+            t.deepEqual(result, previousState,
+                "Given an unknown action the reducers should preserve the given current state.");
         });
         test("LOG_IN", function (t: any) {
             const result: GameState = reducers(undefined, {
