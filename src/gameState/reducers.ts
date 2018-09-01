@@ -31,7 +31,7 @@ import {PhoenixEvent} from "../model/events/event";
 function loginReducer (state: Login = {name: 'stranger', group: UserGroup.GUEST, realm: undefined}, action: Action<any>) {
     switch (action.type) {
         case LOG_IN:
-            return Object.assign({}, state, (action as Action<LOG_IN>).payload.login);
+            return Object.assign({}, state, action.payload.login);
         case LOG_OUT:
             return Object.assign({}, state, initialState.login);
         default:
@@ -42,15 +42,15 @@ function loginReducer (state: Login = {name: 'stranger', group: UserGroup.GUEST,
 function realmsReducer (state: Realm[] = [], action: Action<any>) {
     switch (action.type) {
         case ADD_REALMS:
-            return [].concat(state.concat((action as Action<ADD_REALMS>).payload.newRealms));
+            return [].concat(state.concat(action.payload.newRealms));
         case SET_REALMS:
-            return [].concat((action as Action<SET_REALMS>).payload.newRealms);
+            return [].concat(action.payload.newRealms);
         case REMOVE_REALMS:
             return state.filter((realm, index) => {
-                return (action as Action<REMOVE_REALMS>).payload.idsToRemove.indexOf(index) === -1;
+                return action.payload.idsToRemove.indexOf(index) === -1;
             });
         case UPDATE_REALMS:
-            let updatedRealms = (action as Action<UPDATE_REALMS>).payload.updatedRealms;
+            let updatedRealms = action.payload.updatedRealms;
             return state.map((realm, index) => {
                 const updateInstr = updatedRealms.find(rlm => rlm.id === index);
                 if (updateInstr != undefined){
@@ -74,9 +74,25 @@ function realmsReducer (state: Realm[] = [], action: Action<any>) {
 function fieldsReducer (state: Field[] = [], action: Action<any>) {
     switch (action.type) {
         case ADD_FIELDS:
+            return [].concat(state.concat(action.payload.newFields));
         case SET_FIELDS:
+            return action.payload.newFields;
         case REMOVE_FIELDS:
+            return state.filter((realm, index) => {
+                return action.payload.idsToRemove.indexOf(index) === -1;
+            });
         case UPDATE_FIELDS:
+            let updatedFields = action.payload.updatedFields;
+            return state.map((field, index) => {
+                const updateInstr = updatedFields.find(fld => fld.id === index);
+                if (updateInstr != undefined){
+                    const updatedField = updateInstr.updatedField;
+                    field.type = updatedField.type;
+                    return field;
+                } else {
+                    return field;
+                }
+            });
         default:
             return state;
     }
@@ -85,8 +101,13 @@ function fieldsReducer (state: Field[] = [], action: Action<any>) {
 function riversReducer (state: River[] = [], action: Action<any>) {
     switch (action.type) {
         case ADD_RIVERS:
+            return [].concat(state.concat(action.payload.newRivers));
         case SET_RIVERS:
+            return action.payload.newRivers;
         case REMOVE_RIVERS:
+            return state.filter((realm, index) => {
+                return action.payload.idsToRemove.indexOf(index) === -1;
+            });
         default:
             return state;
     }
@@ -95,9 +116,23 @@ function riversReducer (state: River[] = [], action: Action<any>) {
 function armiesReducer (state: Army[] = [], action: Action<any>) {
     switch (action.type) {
         case ADD_ARMIES:
+            return [].concat(state.concat(action.payload.newArmies));
         case SET_ARMIES:
+            return action.payload.newArmies;
         case REMOVE_ARMIES:
+            return state.filter((realm, index) => {
+                return action.payload.idsToRemove.indexOf(index) === -1;
+            });
         case UPDATE_ARMIES:
+            let updatedArmies = action.payload.updatedArmies;
+            return state.map((army, index) => {
+                const updateInstr = updatedArmies.find(arm => arm.id === index);
+                if (updateInstr != undefined){
+                    return updateInstr.updatedArmy;
+                } else {
+                    return army;
+                }
+            });
         default:
             return state;
     }
@@ -106,9 +141,23 @@ function armiesReducer (state: Army[] = [], action: Action<any>) {
 function buildingsReducer (state: Building[] = [], action: Action<any>) {
     switch (action.type) {
         case ADD_BUILDINGS:
+            return [].concat(state.concat(action.payload.newBuildings));
         case SET_BUILDINGS:
+            return action.payload.newBuildings;
         case REMOVE_BUILDINGS:
+            return state.filter((realm, index) => {
+                return action.payload.idsToRemove.indexOf(index) === -1;
+            });
         case UPDATE_BUILDINGS:
+            let updatedBuildings = action.payload.updatedBuildings;
+            return state.map((building, index) => {
+                const updateInstr = updatedBuildings.find(bld => bld.id === index);
+                if (updateInstr != undefined){
+                    return updateInstr.updatedBuilding;
+                } else {
+                    return building;
+                }
+            });
         default:
             return state;
     }
@@ -117,9 +166,23 @@ function buildingsReducer (state: Building[] = [], action: Action<any>) {
 function newEventsReducer (state: PhoenixEvent[] = [], action: Action<any>) {
     switch (action.type) {
         case ADD_NEW_EVENTS:
+            return [].concat(state.concat(action.payload.newEvents));
         case SET_NEW_EVENTS:
+            return action.payload.newEvents;
         case REMOVE_NEW_EVENTS:
+            return state.filter((realm, index) => {
+                return action.payload.idsToRemove.indexOf(index) === -1;
+            });
         case UPDATE_NEW_EVENTS:
+            let updatedNewEvents = action.payload.updatedNewEvents;
+            return state.map((newEvent, index) => {
+                const updateInstr = updatedNewEvents.find(evt => evt.id === index);
+                if (updateInstr != undefined){
+                    return updateInstr.updatedNewEvent;
+                } else {
+                    return newEvent;
+                }
+            });
         default:
             return state;
     }
@@ -128,7 +191,17 @@ function newEventsReducer (state: PhoenixEvent[] = [], action: Action<any>) {
 function loadedEventsReducer (state: PhoenixEvent[] = [], action: Action<any>) {
     switch (action.type) {
         case SET_LOADED_EVENTS:
+            return action.payload.newLoadedEvents;
         case UPDATE_LOADED_EVENTS:
+            let updatedLoadedEvents = action.payload.updatedLoadedEvents;
+            return state.map((loadedEvent, index) => {
+                const updateInstr = updatedLoadedEvents.find(evt => evt.id === index);
+                if (updateInstr != undefined){
+                    return updateInstr.updatedLoadedEvent;
+                } else {
+                    return loadedEvent;
+                }
+            });
         default:
             return state;
     }
@@ -137,6 +210,7 @@ function loadedEventsReducer (state: PhoenixEvent[] = [], action: Action<any>) {
 function currentTurnReducer (state: Turn = {turn: 0, realm: "sl", status: TurnStatus.STARTED}, action: Action<any>) {
     switch (action.type) {
         case SET_CURRENT_TURN:
+            return action.payload.newCurrentTurn;
         default:
             return state;
     }

@@ -729,15 +729,15 @@ module("Game state", function () {
                 payload: {
                     updatedFields: [
                         {id: 0, updatedField: new Field([1, 2], FieldType.MOUNTAINS)},
-                        {id: 2, updatedField: new Field([5, 5], FieldType.LOWLANDS)}
+                        {id: 2, updatedField: new Field([0, 0], FieldType.DEEPSEA)}
                     ]
                 }
             });
             const expected: GameState = Object.assign({}, initialState, {
                 fields: [
-                    new Field([1, 2], FieldType.HILLS),
-                    new Field([2, 1], FieldType.MOUNTAINS),
-                    new Field([0, 0], FieldType.LOWLANDS),
+                    new Field([1, 2], FieldType.MOUNTAINS),
+                    new Field([2, 1], FieldType.WOODS),
+                    new Field([0, 0], FieldType.DEEPSEA),
                     new Field([-2, -2], FieldType.SHALLOWS)
                 ]
             });
@@ -855,7 +855,7 @@ module("Game state", function () {
                 ]
             });
             const result: GameState = reducers(previousState, {
-                type: ADD_ARMIES,
+                type: SET_ARMIES,
                 payload: {
                     newArmies: [
                         new FootArmy(102, realm, 2000, 11, 0,
@@ -891,7 +891,7 @@ module("Game state", function () {
                 ]
             });
             const result: GameState = reducers(previousState, {
-                type: REMOVE_FIELDS,
+                type: REMOVE_ARMIES,
                 payload: {
                     idsToRemove: [0, 2]
                 }
@@ -924,7 +924,7 @@ module("Game state", function () {
                 ]
             });
             const result: GameState = reducers(previousState, {
-                type: UPDATE_FIELDS,
+                type: UPDATE_ARMIES,
                 payload: {
                     updatedArmies: [
                         {id: 0, updatedArmy:
@@ -1130,7 +1130,7 @@ module("Game state", function () {
             });
             const expected: GameState = Object.assign({}, initialState, {
                 newEvents: [
-                    new MoveEvent(1, EventStatus.Impossible, realm, 101, [0, 0], [1, 1]),
+                    new MoveEvent(1, EventStatus.Impossible, realm, 102, [0, 0], [1, 1]),
                     new MoveEvent(3, EventStatus.Impossible, realm, 104, [0, 0], [1, 1])
                 ]
             });
