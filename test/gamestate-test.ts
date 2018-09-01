@@ -1147,5 +1147,79 @@ module("Game state", function () {
             });
             t.deepEqual(result, expected, "Reducers should handle the UPDATE_NEW_EVENTS action properly.");
         });
+        test("SET_LOADED_EVENTS", function (t: any) {
+            const realm = new Realm(
+                "Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true);
+            const previousState: GameState = Object.assign({}, initialState, {
+                loadedEvents: [
+                    new MoveEvent(0, EventStatus.Impossible, realm, 101, [0, 0], [1, 1],
+                        [], 1)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: SET_LOADED_EVENTS,
+                payload: {
+                    newLoadedEvents: [
+                        new MoveEvent(1, EventStatus.Impossible, realm, 102, [0, 0], [1, 1],
+                            [], 2),
+                        new MoveEvent(2, EventStatus.Impossible, realm, 103, [0, 0], [1, 1],
+                            [], 3)
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                loadedEvents: [
+                    new MoveEvent(1, EventStatus.Impossible, realm, 102, [0, 0], [1, 1],
+                        [], 2),
+                    new MoveEvent(2, EventStatus.Impossible, realm, 103, [0, 0], [1, 1],
+                        [], 3)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the SET_LOADED_EVENTS action properly.");
+        });
+        test("UPDATE_LOADED_EVENTS", function (t: any) {
+            const realm = new Realm(
+                "Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true);
+            const otherRealm = new Realm(
+                "Eoganachta", "eos", "300,300,300", FieldType.SWAMP, true);
+            const previousState: GameState = Object.assign({}, initialState, {
+                loadedEvents: [
+                    new MoveEvent(0, EventStatus.Impossible, realm, 101, [0, 0], [1, 1],
+                        [], 1),
+                    new MoveEvent(1, EventStatus.Impossible, realm, 102, [0, 0], [1, 1],
+                        [], 2),
+                    new MoveEvent(2, EventStatus.Impossible, realm, 103, [0, 0], [1, 1],
+                        [], 3),
+                    new MoveEvent(3, EventStatus.Impossible, realm, 104, [0, 0], [1, 1],
+                        [], 4)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: UPDATE_LOADED_EVENTS,
+                payload: {
+                    updatedLoadedEvents: [
+                        {id: 0, updatedLoadedEvent:
+                                new MoveEvent(0, EventStatus.Impossible, otherRealm, 101, [0, 0], [1, 1],
+                                    [], 1)},
+                        {id: 2, updatedLoadedEvent:
+                                new MoveEvent(2, EventStatus.Deleted, realm, 103, [0, 0], [1, 1],
+                                    [], 3)}
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                loadedEvents: [
+                    new MoveEvent(0, EventStatus.Impossible, otherRealm, 101, [0, 0], [1, 1],
+                        [], 1),
+                    new MoveEvent(1, EventStatus.Impossible, realm, 102, [0, 0], [1, 1],
+                        [], 2),
+                    new MoveEvent(2, EventStatus.Deleted, realm, 103, [0, 0], [1, 1],
+                        [], 3),
+                    new MoveEvent(3, EventStatus.Impossible, realm, 104, [0, 0], [1, 1],
+                        [], 4)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the UPDATE_LOADED_EVENTS action properly.");
+        });
     });
 });
