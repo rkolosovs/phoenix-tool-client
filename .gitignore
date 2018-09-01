@@ -13,6 +13,7 @@ src/*.js
 src/*/*.js
 src/*/*/*.js
 test/*.js
+config/*.js
 
 # source map files
 *.map

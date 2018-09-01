@@ -35,15 +35,15 @@ export const enum UserGroup {
 }
 
 export type Turn = {
-    'turn': number,
-    'realm': string,
-    'status': TurnStatus
+    turn: number,
+    realm: string,
+    status: TurnStatus
 }
 
 export type Login = {
-    'name': string,
-    'group': UserGroup,
-    'realm': Realm|undefined
+    name: string,
+    group: UserGroup,
+    realm: Realm|undefined
 }
 
 export type GameState = {
