@@ -1221,5 +1221,20 @@ module("Game state", function () {
             });
             t.deepEqual(result, expected, "Reducers should handle the UPDATE_LOADED_EVENTS action properly.");
         });
+        test("SET_CURRENT_TURN", function (t: any) {
+            const previousState: GameState = Object.assign({}, initialState, {
+                currentTurn: {turn: 0, realm: "sl", status: TurnStatus.STARTED}
+            });
+            const result: GameState = reducers(previousState, {
+                type: SET_CURRENT_TURN,
+                payload: {
+                    newCurrentTurn: {turn: 42, realm: "usa", status: TurnStatus.FINISHED}
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                currentTurn: {turn: 42, realm: "usa", status: TurnStatus.FINISHED}
+            });
+            t.deepEqual(result, expected, "Reducers should handle the SET_CURRENT_TURN action properly.");
+        });
     });
 });
