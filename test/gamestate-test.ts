@@ -1037,5 +1037,115 @@ module("Game state", function () {
             });
             t.deepEqual(result, expected, "Reducers should handle the UPDATE_BUILDINGS action properly.");
         });
+        test("ADD_NEW_EVENTS", function (t: any) {
+            const realm = new Realm(
+                "Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true);
+            const previousState: GameState = Object.assign({}, initialState, {
+                newEvents: [
+                    new MoveEvent(0, EventStatus.Impossible, realm, 101, [0, 0], [1, 1])
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: ADD_NEW_EVENTS,
+                payload: {
+                    newEvents: [
+                        new MoveEvent(1, EventStatus.Impossible, realm, 102, [0, 0], [1, 1]),
+                        new MoveEvent(2, EventStatus.Impossible, realm, 103, [0, 0], [1, 1])
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                newEvents: [
+                    new MoveEvent(0, EventStatus.Impossible, realm, 101, [0, 0], [1, 1]),
+                    new MoveEvent(1, EventStatus.Impossible, realm, 102, [0, 0], [1, 1]),
+                    new MoveEvent(2, EventStatus.Impossible, realm, 103, [0, 0], [1, 1])
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the ADD_NEW_EVENTS action properly.");
+        });
+        test("SET_NEW_EVENTS", function (t: any) {
+            const realm = new Realm(
+                "Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true);
+            const previousState: GameState = Object.assign({}, initialState, {
+                newEvents: [
+                    new MoveEvent(0, EventStatus.Impossible, realm, 101, [0, 0], [1, 1])
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: SET_NEW_EVENTS,
+                payload: {
+                    newEvents: [
+                        new MoveEvent(1, EventStatus.Impossible, realm, 102, [0, 0], [1, 1]),
+                        new MoveEvent(2, EventStatus.Impossible, realm, 103, [0, 0], [1, 1])
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                newEvents: [
+                    new MoveEvent(1, EventStatus.Impossible, realm, 102, [0, 0], [1, 1]),
+                    new MoveEvent(2, EventStatus.Impossible, realm, 103, [0, 0], [1, 1])
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the SET_NEW_EVENTS action properly.");
+        });
+        test("REMOVE_NEW_EVENTS", function (t: any) {
+            const realm = new Realm(
+                "Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true);
+            const previousState: GameState = Object.assign({}, initialState, {
+                newEvents: [
+                    new MoveEvent(0, EventStatus.Impossible, realm, 101, [0, 0], [1, 1]),
+                    new MoveEvent(1, EventStatus.Impossible, realm, 102, [0, 0], [1, 1]),
+                    new MoveEvent(2, EventStatus.Impossible, realm, 103, [0, 0], [1, 1]),
+                    new MoveEvent(3, EventStatus.Impossible, realm, 104, [0, 0], [1, 1])
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: REMOVE_NEW_EVENTS,
+                payload: {
+                    idsToRemove: [0, 2]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                newEvents: [
+                    new MoveEvent(1, EventStatus.Impossible, realm, 101, [0, 0], [1, 1]),
+                    new MoveEvent(3, EventStatus.Impossible, realm, 104, [0, 0], [1, 1])
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the REMOVE_NEW_EVENTS action properly.");
+        });
+        test("UPDATE_NEW_EVENTS", function (t: any) {
+            const realm = new Realm(
+                "Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true);
+            const otherRealm = new Realm(
+                "Eoganachta", "eos", "300,300,300", FieldType.SWAMP, true);
+            const previousState: GameState = Object.assign({}, initialState, {
+                newEvents: [
+                    new MoveEvent(0, EventStatus.Impossible, realm, 101, [0, 0], [1, 1]),
+                    new MoveEvent(1, EventStatus.Impossible, realm, 102, [0, 0], [1, 1]),
+                    new MoveEvent(2, EventStatus.Impossible, realm, 103, [0, 0], [1, 1]),
+                    new MoveEvent(3, EventStatus.Impossible, realm, 104, [0, 0], [1, 1])
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: UPDATE_NEW_EVENTS,
+                payload: {
+                    updatedNewEvents: [
+                        {id: 0, updatedNewEvent:
+                                new MoveEvent(0, EventStatus.Impossible, otherRealm, 101, [0, 0], [1, 1])},
+                        {id: 2, updatedNewEvent:
+                                new MoveEvent(2, EventStatus.Deleted, realm, 103, [0, 0], [1, 1])}
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                newEvents: [
+                    new MoveEvent(0, EventStatus.Impossible, otherRealm, 101, [0, 0], [1, 1]),
+                    new MoveEvent(1, EventStatus.Impossible, realm, 102, [0, 0], [1, 1]),
+                    new MoveEvent(2, EventStatus.Deleted, realm, 103, [0, 0], [1, 1]),
+                    new MoveEvent(3, EventStatus.Impossible, realm, 104, [0, 0], [1, 1])
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the UPDATE_NEW_EVENTS action properly.");
+        });
     });
 });
