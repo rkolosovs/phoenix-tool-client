@@ -927,5 +927,115 @@ module("Game state", function () {
             });
             t.deepEqual(result, expected, "Reducers should handle the UPDATE_ARMIES action properly.");
         });
+        test("ADD_BUILDINGS", function (t: any) {
+            const realm = new Realm(
+                "Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true);
+            const previousState: GameState = Object.assign({}, initialState, {
+                buildings: [
+                    new ProductionBuilding(BuildingType.CASTLE, "", [0, 0], realm, 1)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: ADD_BUILDINGS,
+                payload: {
+                    newBuildings: [
+                        new ProductionBuilding(BuildingType.CASTLE, "", [1, 1], realm, 1),
+                        new ProductionBuilding(BuildingType.CASTLE, "", [2, 2], realm, 1)
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                buildings: [
+                    new ProductionBuilding(BuildingType.CASTLE, "", [0, 0], realm, 1),
+                    new ProductionBuilding(BuildingType.CASTLE, "", [1, 1], realm, 1),
+                    new ProductionBuilding(BuildingType.CASTLE, "", [2, 2], realm, 1)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the ADD_BUILDINGS action properly.");
+        });
+        test("SET_BUILDINGS", function (t: any) {
+            const realm = new Realm(
+                "Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true);
+            const previousState: GameState = Object.assign({}, initialState, {
+                buildings: [
+                    new ProductionBuilding(BuildingType.CASTLE, "", [0, 0], realm, 1)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: SET_BUILDINGS,
+                payload: {
+                    newBuildings: [
+                        new ProductionBuilding(BuildingType.CASTLE, "", [1, 1], realm, 1),
+                        new ProductionBuilding(BuildingType.CASTLE, "", [2, 2], realm, 1)
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                buildings: [
+                    new ProductionBuilding(BuildingType.CASTLE, "", [1, 1], realm, 1),
+                    new ProductionBuilding(BuildingType.CASTLE, "", [2, 2], realm, 1)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the SET_BUILDINGS action properly.");
+        });
+        test("REMOVE_BUILDINGS", function (t: any) {
+            const realm = new Realm(
+                "Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true);
+            const previousState: GameState = Object.assign({}, initialState, {
+                buildings: [
+                    new ProductionBuilding(BuildingType.CASTLE, "", [0, 0], realm, 1),
+                    new ProductionBuilding(BuildingType.CASTLE, "", [1, 1], realm, 1),
+                    new ProductionBuilding(BuildingType.CASTLE, "", [2, 2], realm, 1),
+                    new ProductionBuilding(BuildingType.CASTLE, "", [3, 3], realm, 1)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: REMOVE_BUILDINGS,
+                payload: {
+                    idsToRemove: [0, 2]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                buildings: [
+                    new ProductionBuilding(BuildingType.CASTLE, "", [1, 1], realm, 1),
+                    new ProductionBuilding(BuildingType.CASTLE, "", [3, 3], realm, 1)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the REMOVE_BUILDINGS action properly.");
+        });
+        test("UPDATE_BUILDINGS", function (t: any) {
+            const realm = new Realm(
+                "Unabhängige Stämme Assimilans", "usa", "000,000,000", FieldType.DESERT, true);
+            const otherRealm = new Realm(
+                "Eoganachta", "eos", "300,300,300", FieldType.SWAMP, true);
+            const previousState: GameState = Object.assign({}, initialState, {
+                buildings: [
+                    new ProductionBuilding(BuildingType.CASTLE, "", [0, 0], realm, 1),
+                    new ProductionBuilding(BuildingType.CASTLE, "", [1, 1], realm, 1),
+                    new ProductionBuilding(BuildingType.CASTLE, "", [2, 2], realm, 1),
+                    new ProductionBuilding(BuildingType.CASTLE, "", [3, 3], realm, 1)
+                ]
+            });
+            const result: GameState = reducers(previousState, {
+                type: UPDATE_BUILDINGS,
+                payload: {
+                    updatedBuildings: [
+                        {id: 0, updatedBuilding:
+                                new ProductionBuilding(BuildingType.CASTLE, "", [0, 0], otherRealm, 1)},
+                        {id: 2, updatedBuilding:
+                                new ProductionBuilding(BuildingType.CITY, "", [2, 2], realm, 1)}
+                    ]
+                }
+            });
+            const expected: GameState = Object.assign({}, initialState, {
+                buildings: [
+                    new ProductionBuilding(BuildingType.CASTLE, "", [0, 0], otherRealm, 1),
+                    new ProductionBuilding(BuildingType.CASTLE, "", [1, 1], realm, 1),
+                    new ProductionBuilding(BuildingType.CITY, "", [2, 2], realm, 1),
+                    new ProductionBuilding(BuildingType.CASTLE, "", [3, 3], realm, 1)
+                ]
+            });
+            t.deepEqual(result, expected, "Reducers should handle the UPDATE_BUILDINGS action properly.");
+        });
     });
 });
