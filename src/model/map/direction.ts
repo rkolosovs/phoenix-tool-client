@@ -22,3 +22,15 @@ export const enum Direction{
     SW, //South-west
     W //West
 }
+
+export function directionToString(dir: Direction): string{
+    switch(dir){
+        case Direction.NW: return "nw";
+        case Direction.NE: return "ne";
+        case Direction.E: return "e";
+        case Direction.SE: return "se";
+        case Direction.SW: return "sw";
+        case Direction.W: return "w";
+        default: throw new Error("Invalid direction.");
+    }
+}

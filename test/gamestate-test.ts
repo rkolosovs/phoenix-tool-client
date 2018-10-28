@@ -42,6 +42,7 @@ import {BuildingType} from "../src/model/buildings/building";
 import {MoveEvent} from "../src/model/events/moveEvent";
 import {EventStatus, PhoenixEvent} from "../src/model/events/event";
 import reducers from "../src/gameState/reducers";
+import {Direction, directionToString } from "../src/model/map/direction";
 
 module("Game state", function () {
     module("Action creators", function () {
@@ -1258,6 +1259,22 @@ module("Game state", function () {
                 currentTurn: {turn: 42, realm: "usa", status: TurnStatus.FINISHED}
             });
             t.deepEqual(result, expected, "Reducers should handle the SET_CURRENT_TURN action properly.");
+        });
+    });
+    module("Direction", function () {
+        test("DIRECTION_TO_STRING", function (t: any) {
+            const northWest: String = directionToString(Direction.NW);
+            const northEast: String = directionToString(Direction.NE);
+            const east: String = directionToString(Direction.E);
+            const southEast: String = directionToString(Direction.SE);
+            const southWest: String = directionToString(Direction.SW);
+            const west: String = directionToString(Direction.W);
+            t.strictEqual(northWest, "nw", "DirectionToString with Direction NW should return 'nw'.");
+            t.strictEqual(northEast, "ne", "DirectionToString with Direction NE should return 'ne'.");
+            t.strictEqual(east, "e", "DirectionToString with Direction E should return 'e'.");
+            t.strictEqual(southEast, "se", "DirectionToString with Direction SE should return 'se'.");
+            t.strictEqual(southWest, "sw", "DirectionToString with Direction SW should return 'SW'.");
+            t.strictEqual(west, "w", "DirectionToString with Direction W should return 'W'.");
         });
     });
 });

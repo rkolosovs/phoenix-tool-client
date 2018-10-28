@@ -14,16 +14,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import {LandArmy} from "./landArmy";
+import {Army} from "./army";
 import {Realm} from "../realm";
 
-export class FootArmy extends LandArmy{
-    static readonly MAX_MOVE_POINTS = 9;
-    static readonly MAX_HEIGHT_POINTS = 2;
-    protected mountCount: number;
+export class Fleet extends Army{
+    static readonly MAX_MOVE_POINTS = 42;
 
     constructor(id: number, owner: Realm, troopCount: number, officerCount: number, lightCatapultCount: number,
-                heavyCatapultCount: number, mountCount: number, position: [number, number], movePoints: number,
+                heavyCatapultCount: number, position: [number, number], movePoints: number,
                 heightPoints: number, isGuard?: boolean){
         if(isGuard != undefined){
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position,
@@ -32,7 +30,6 @@ export class FootArmy extends LandArmy{
             super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position,
                 movePoints, heightPoints);
         }
-        this.mountCount = mountCount;
     }
 
     canHaveCatapults(): boolean{
@@ -40,10 +37,6 @@ export class FootArmy extends LandArmy{
     }
 
     getMaxMovePoints(): number{
-        return FootArmy.MAX_MOVE_POINTS;
-    }
-
-    getMaxHeightPoints(): number{
-        return FootArmy.MAX_HEIGHT_POINTS;
+        return Fleet.MAX_MOVE_POINTS;
     }
 }

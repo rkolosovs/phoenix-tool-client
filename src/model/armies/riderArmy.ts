@@ -17,33 +17,28 @@ along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 import {LandArmy} from "./landArmy";
 import {Realm} from "../realm";
 
-export class FootArmy extends LandArmy{
-    static readonly MAX_MOVE_POINTS = 9;
+export class RiderArmy extends LandArmy{
+    static readonly MAX_MOVE_POINTS = 21;
     static readonly MAX_HEIGHT_POINTS = 2;
-    protected mountCount: number;
 
-    constructor(id: number, owner: Realm, troopCount: number, officerCount: number, lightCatapultCount: number,
-                heavyCatapultCount: number, mountCount: number, position: [number, number], movePoints: number,
-                heightPoints: number, isGuard?: boolean){
+    constructor(id: number, owner: Realm, troopCount: number, officerCount: number, position: [number, number], 
+        movePoints: number, heightPoints: number, isGuard?: boolean){
         if(isGuard != undefined){
-            super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position,
-                movePoints, heightPoints, isGuard);
+            super(id, owner, troopCount, officerCount, 0, 0, position, movePoints, heightPoints, isGuard);
         } else {
-            super(id, owner, troopCount, officerCount, lightCatapultCount, heavyCatapultCount, position,
-                movePoints, heightPoints);
+            super(id, owner, troopCount, officerCount, 0, 0, position, movePoints, heightPoints);
         }
-        this.mountCount = mountCount;
     }
 
     canHaveCatapults(): boolean{
-        return !this.isGuard;
+        return false;
     }
 
     getMaxMovePoints(): number{
-        return FootArmy.MAX_MOVE_POINTS;
+        return RiderArmy.MAX_MOVE_POINTS;
     }
 
     getMaxHeightPoints(): number{
-        return FootArmy.MAX_HEIGHT_POINTS;
+        return RiderArmy.MAX_HEIGHT_POINTS;
     }
 }
