@@ -88,7 +88,7 @@ class LoginWindow extends React.Component<HomeProps, any> {
 
         return (
             <div id={'loginWindow'}>
-                <h1>Hello{this.props.login.name}!</h1>
+                <h1>Hello {this.props.login.name}!</h1>
                 <h2>{loggedIn?'Welcome to the test page':'Please log in'}!</h2>
                 <form onSubmit={this.handleSubmit}>
                     <label>Username:</label>
