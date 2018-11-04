@@ -17,22 +17,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 The icons and graphics used in this program are licensed under the
 [CC BY-NC-SA 4.0] (https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
+**SETUP / REQUIREMENTS**
+
+Install docker version 17.05 or later
+
 **BUILD**
 
-npm install \
-npm run build
+docker build -t <image_name>:<version_tag> .
 
 **TEST**
 
+TODO: Dockerize unit test \
 npm run test
 
 **RUN**
 
-Open phoenixtool.html in a browser.
+docker run -d -p 80:80 <image_name>:<version_tag> \
+The frontend is now accessible via http://0.0.0.0:80. To see container details use docker ps
 
 **CONTRIBUTION POLICY**
 
 Do not commit build artifacts:
-* Do not commit .js files transpiled from .ts files (include any new folder into .gitignore).
-* Do not commit the node_modules folder
-* Do not commit the build folder
+* In case you build the application by hand instead of using docker (which you shouldn't do):
+    * Do not commit .js files transpiled from .ts files (include any new folder into .gitignore).
+    * Do not commit the node_modules folder
+    * Do not commit the build folder

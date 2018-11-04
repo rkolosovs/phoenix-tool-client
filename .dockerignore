@@ -1,1 +1,9 @@
+.dockerignore
+.gitignore
+Dockerfile
+README.md
+LICENSE
+package-lock.json
+
 node_modules
+build
