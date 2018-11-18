@@ -7,3 +7,9 @@ package-lock.json
 
 node_modules
 build
+src/*.js
+src/*/*.js
+test/*.js
+src/*.js.map
+src/*/*.js.map
+test/*.js.map
