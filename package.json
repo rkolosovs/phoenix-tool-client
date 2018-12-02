@@ -5,7 +5,8 @@
   "main": "bundle.js",
   "scripts": {
     "test": "qunit",
-    "build": "webpack"
+    "build": "webpack",
+    "tsc": "tsc"
   },
   "repository": {
     "type": "git",
@@ -25,9 +26,9 @@
     "@types/react": "^16.4.6",
     "@types/react-dom": "^16.0.6",
     "@types/react-redux": "^6.0.6",
+    "typescript": "^3.0.1",
     "qunit": "^2.6.1",
     "ts-loader": "^4.4.2",
-    "typescript": "^3.0.1",
     "webpack": "^4.16.1",
     "webpack-cli": "^3.1.0"
   }

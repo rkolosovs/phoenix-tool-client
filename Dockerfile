@@ -11,8 +11,8 @@ COPY config /tmp/config
 COPY tsconfig.json /tmp/
 COPY test /tmp/test
 
+RUN npm run tsc
 RUN npm run test
-
 RUN npm run build
 
 # Serve the static webpage with the JS App via nginx
