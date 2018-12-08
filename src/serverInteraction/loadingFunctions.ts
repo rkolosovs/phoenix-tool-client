@@ -16,7 +16,7 @@ along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import {initialState, Turn} from "../gameState/gameState";
 import config from "../../config/config";
-import {XMLHttpRequest} from "xmlhttprequest"
+import {XMLHttpRequest} from "xmlhttprequest";
 
 export async function loadCurrentTurn(): Promise<Turn> {
     return new Promise<Turn>((resolve, reject) => {
@@ -24,7 +24,7 @@ export async function loadCurrentTurn(): Promise<Turn> {
         xhr.open('GET', config.server_url + "/databaseLink/getturn/");
         xhr.onload = function () {
             if (xhr.status === 200) {
-                console.log("Response text is " + xhr.responseText)
+                console.log("Response text is " + xhr.responseText);
                 resolve(JSON.parse(xhr.responseText));
             }
             else {
