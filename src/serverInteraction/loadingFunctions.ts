@@ -19,19 +19,24 @@ import config from "../../config/config";
 import {XMLHttpRequest} from "xmlhttprequest";
 
 export async function loadCurrentTurn(): Promise<Turn> {
+    console.log("Loading current turn");
     return new Promise<Turn>((resolve, reject) => {
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', config.server_url + "/databaseLink/getturn/");
-        xhr.onload = function () {
-            if (xhr.status === 200) {
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && this.status === 200) {
                 console.log("Response text is " + xhr.responseText);
                 resolve(JSON.parse(xhr.responseText));
             }
-            else {
-                console.log('Request failed.  Returned status of ' + xhr.status);
+            else if (xhr.readyState === 4) {
+                console.log('Request failed.  Returned status of ' + this.status);
                 reject(initialState.currentTurn);
+            } else {
+                console.log('Waiting for request to be done. Current ready state is ' + xhr.readyState);
             }
         };
+
+        xhr.open('GET', config.server_url + "/databaseLink/getturn/");
         xhr.send();
     });
 }
