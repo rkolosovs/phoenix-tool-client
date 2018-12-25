@@ -15,5 +15,6 @@ You should have received a copy of the GNU General Public License
 along with Phoenixclient.  If not, see <http://www.gnu.org/licenses/>.*/
 
 export default {
-    server_url: "http://localhost:8000"
+    server_url: "http://server:8000",
+    max_retries: 1000
 }

@@ -18,8 +18,8 @@ import {initialState, Turn} from "../gameState/gameState";
 import config from "../../config/config";
 import {XMLHttpRequest} from "xmlhttprequest";
 
-export async function loadCurrentTurn(): Promise<Turn> {
-    console.log("Loading current turn");
+export async function loadCurrentTurn(retries: number = 0): Promise<Turn> {
+    console.log("Loading current turn. Attempt ", retries);
     return new Promise<Turn>((resolve, reject) => {
         let xhr = new XMLHttpRequest();
 
@@ -30,7 +30,11 @@ export async function loadCurrentTurn(): Promise<Turn> {
             }
             else if (xhr.readyState === 4) {
                 console.log('Request failed.  Returned status of ' + this.status);
-                reject(initialState.currentTurn);
+                if (this.status === 0 && retries < config.max_retries){
+                    setTimeout(() => loadCurrentTurn(retries+1), 100);
+                } else {
+                    reject(initialState.currentTurn);
+                }
             } else {
                 console.log('Waiting for request to be done. Current ready state is ' + xhr.readyState);
             }
