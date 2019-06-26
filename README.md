@@ -43,6 +43,9 @@ The frontend is now accessible via http://0.0.0.0:80. To see container details u
 
 ## CONTRIBUTION POLICY
 
+This project is run for the benefit of the Erkenfara community and with its specific technical and functional requirements in mind. Please refrain from issuing pull requests to this project if you are not part of it. Just fork the project and develop it independantly of this project (as permitted by the license) if you find some worth while in this repository and wish to contribute. And feel free to give me a note if you build something cool based on this.
+
+**For the Erkenfara community:**
 Do not commit build artifacts:
 * In case you build the application by hand instead of using docker (which you shouldn't do):
     * Do not commit .js files transpiled from .ts files (include any new folder into .gitignore).
